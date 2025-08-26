@@ -1,0 +1,137 @@
+{
+  "testMode": {
+    "enabled": true,
+    "description": "Safe testing configuration that won't block real internet",
+    "modes": {
+      "monitor_only": {
+        "description": "Monitor traffic but don't block anything",
+        "block_traffic": false,
+        "log_traffic": true,
+        "analyze_patterns": true
+      },
+      "log_only": {
+        "description": "Log all traffic for analysis without blocking",
+        "block_traffic": false,
+        "log_traffic": true,
+        "detailed_logging": true
+      },
+      "safe_domains": {
+        "description": "Only block safe test domains",
+        "block_traffic": true,
+        "whitelist_mode": false,
+        "test_domains_only": true
+      },
+      "simulation": {
+        "description": "Generate fake traffic for testing",
+        "block_traffic": false,
+        "generate_fake_traffic": true,
+        "simulate_blocks": true
+      },
+      "dry_run": {
+        "description": "Service runs but doesn't actually filter",
+        "block_traffic": false,
+        "service_active": true,
+        "mock_filtering": true
+      }
+    }
+  },
+  "safeDomains": {
+    "description": "Safe test domains that can be blocked without affecting real browsing",
+    "domains": [
+      "test.example.com",
+      "blocked.test.local",
+      "safe-test-domain.com",
+      "filter-test.example.org",
+      "block-me.test.net",
+      "demo.blocked.site",
+      "testing.filter.example",
+      "safe-block-test.com"
+    ]
+  },
+  "realDomainProtection": {
+    "description": "Domains that should NEVER be blocked during testing",
+    "always_allow": [
+      "google.com",
+      "*.google.com",
+      "microsoft.com",
+      "*.microsoft.com",
+      "github.com",
+      "*.github.com",
+      "stackoverflow.com",
+      "*.stackoverflow.com",
+      "youtube.com",
+      "*.youtube.com",
+      "facebook.com",
+      "*.facebook.com",
+      "twitter.com",
+      "*.twitter.com",
+      "amazon.com",
+      "*.amazon.com",
+      "wikipedia.org",
+      "*.wikipedia.org",
+      "reddit.com",
+      "*.reddit.com"
+    ]
+  },
+  "testUsers": {
+    "description": "Test user profiles for safe testing",
+    "users": [
+      {
+        "username": "test_user_child",
+        "display_name": "Test Child User",
+        "user_type": "child",
+        "age": 8,
+        "test_profile": true
+      },
+      {
+        "username": "test_user_teen",
+        "display_name": "Test Teen User", 
+        "user_type": "teen",
+        "age": 15,
+        "test_profile": true
+      },
+      {
+        "username": "test_user_adult",
+        "display_name": "Test Adult User",
+        "user_type": "adult",
+        "test_profile": true
+      }
+    ]
+  },
+  "simulationPatterns": {
+    "basic_web": {
+      "requests_per_minute": 30,
+      "domains": [
+        "example.com",
+        "test-site.example",
+        "demo.example.org"
+      ],
+      "user_agents": [
+        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36",
+        "Mozilla/5.0 (Android 10; Mobile; rv:81.0) Gecko/81.0"
+      ]
+    },
+    "youtube_simulation": {
+      "requests_per_minute": 15,
+      "patterns": [
+        "youtube.test.example/watch?v=test123",
+        "youtube.test.example/channel/TestChannel",
+        "youtube.test.example/playlist?list=TestPlaylist"
+      ]
+    },
+    "blocked_attempts": {
+      "requests_per_minute": 10,
+      "test_blocked_sites": [
+        "blocked.test.example",
+        "should-block.test.com", 
+        "filter-me.test.org"
+      ]
+    }
+  },
+  "logging": {
+    "test_mode_verbosity": "trace",
+    "log_simulated_traffic": true,
+    "separate_test_logs": true,
+    "test_log_prefix": "TEST_"
+  }
+}

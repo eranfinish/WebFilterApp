@@ -1,0 +1,5 @@
+C:\Users\finis\source\Projects\WebFilterApp\windows\UrlFilterService\obj\Release\net6.0-windows\UrlFilterService.csproj.AssemblyReference.cache
+C:\Users\finis\source\Projects\WebFilterApp\windows\UrlFilterService\obj\Release\net6.0-windows\UrlFilterService.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\finis\source\Projects\WebFilterApp\windows\UrlFilterService\obj\Release\net6.0-windows\UrlFilterService.AssemblyInfoInputs.cache
+C:\Users\finis\source\Projects\WebFilterApp\windows\UrlFilterService\obj\Release\net6.0-windows\UrlFilterService.AssemblyInfo.cs
+C:\Users\finis\source\Projects\WebFilterApp\windows\UrlFilterService\obj\Release\net6.0-windows\UrlFilterService.csproj.CoreCompileInputs.cache

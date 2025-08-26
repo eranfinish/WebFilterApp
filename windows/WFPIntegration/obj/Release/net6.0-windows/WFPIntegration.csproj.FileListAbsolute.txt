@@ -1,0 +1,15 @@
+C:\Users\finis\source\Projects\WebFilterApp\windows\WFPIntegration\obj\Release\net6.0-windows\WFPIntegration.csproj.AssemblyReference.cache
+C:\Users\finis\source\Projects\WebFilterApp\windows\WFPIntegration\obj\Release\net6.0-windows\WFPIntegration.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\finis\source\Projects\WebFilterApp\windows\WFPIntegration\obj\Release\net6.0-windows\WFPIntegration.AssemblyInfoInputs.cache
+C:\Users\finis\source\Projects\WebFilterApp\windows\WFPIntegration\obj\Release\net6.0-windows\WFPIntegration.AssemblyInfo.cs
+C:\Users\finis\source\Projects\WebFilterApp\windows\WFPIntegration\obj\Release\net6.0-windows\WFPIntegration.csproj.CoreCompileInputs.cache
+C:\Users\finis\source\Projects\WebFilterApp\build\Service\WFPIntegration.deps.json
+C:\Users\finis\source\Projects\WebFilterApp\build\Service\WFPIntegration.runtimeconfig.json
+C:\Users\finis\source\Projects\WebFilterApp\build\Service\WFPIntegration.dll
+C:\Users\finis\source\Projects\WebFilterApp\build\Service\WFPIntegration.pdb
+C:\Users\finis\source\Projects\WebFilterApp\windows\WFPIntegration\obj\Release\net6.0-windows\WFPInteg.CBC2E594.Up2Date
+C:\Users\finis\source\Projects\WebFilterApp\windows\WFPIntegration\obj\Release\net6.0-windows\WFPIntegration.dll
+C:\Users\finis\source\Projects\WebFilterApp\windows\WFPIntegration\obj\Release\net6.0-windows\refint\WFPIntegration.dll
+C:\Users\finis\source\Projects\WebFilterApp\windows\WFPIntegration\obj\Release\net6.0-windows\WFPIntegration.pdb
+C:\Users\finis\source\Projects\WebFilterApp\windows\WFPIntegration\obj\Release\net6.0-windows\WFPIntegration.genruntimeconfig.cache
+C:\Users\finis\source\Projects\WebFilterApp\windows\WFPIntegration\obj\Release\net6.0-windows\ref\WFPIntegration.dll

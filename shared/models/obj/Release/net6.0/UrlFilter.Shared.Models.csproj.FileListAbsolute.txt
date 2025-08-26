@@ -1,0 +1,14 @@
+C:\Users\finis\source\Projects\WebFilterApp\shared\models\bin\Release\net6.0\UrlFilter.Shared.Models.deps.json
+C:\Users\finis\source\Projects\WebFilterApp\shared\models\bin\Release\net6.0\UrlFilter.Shared.Models.dll
+C:\Users\finis\source\Projects\WebFilterApp\shared\models\bin\Release\net6.0\UrlFilter.Shared.Models.pdb
+C:\Users\finis\source\Projects\WebFilterApp\shared\models\obj\Release\net6.0\UrlFilter.Shared.Models.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\finis\source\Projects\WebFilterApp\shared\models\obj\Release\net6.0\UrlFilter.Shared.Models.AssemblyInfoInputs.cache
+C:\Users\finis\source\Projects\WebFilterApp\shared\models\obj\Release\net6.0\UrlFilter.Shared.Models.AssemblyInfo.cs
+C:\Users\finis\source\Projects\WebFilterApp\shared\models\obj\Release\net6.0\UrlFilter.Shared.Models.csproj.CoreCompileInputs.cache
+C:\Users\finis\source\Projects\WebFilterApp\shared\models\obj\Release\net6.0\UrlFilter.Shared.Models.dll
+C:\Users\finis\source\Projects\WebFilterApp\shared\models\obj\Release\net6.0\refint\UrlFilter.Shared.Models.dll
+C:\Users\finis\source\Projects\WebFilterApp\shared\models\obj\Release\net6.0\UrlFilter.Shared.Models.pdb
+C:\Users\finis\source\Projects\WebFilterApp\shared\models\obj\Release\net6.0\ref\UrlFilter.Shared.Models.dll
+C:\Users\finis\source\Projects\WebFilterApp\build\Service\UrlFilter.Shared.Models.deps.json
+C:\Users\finis\source\Projects\WebFilterApp\build\Service\UrlFilter.Shared.Models.dll
+C:\Users\finis\source\Projects\WebFilterApp\build\Service\UrlFilter.Shared.Models.pdb
