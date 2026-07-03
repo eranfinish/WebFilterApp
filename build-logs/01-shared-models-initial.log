@@ -1,0 +1,16 @@
+  Determining projects to restore...
+  All projects are up-to-date for restore.
+C:\Users\finis\source\Projects\WebFilterApp\shared\models\DataModels.cs(441,77): warning CS8625: Cannot convert null literal to non-nullable reference type. [C:\Users\finis\source\Projects\WebFilterApp\shared\models\UrlFilter.Shared.Models.csproj]
+C:\Users\finis\source\Projects\WebFilterApp\shared\models\DataModels.cs(510,23): warning CS8618: Non-nullable property 'Url' must contain a non-null value when exiting constructor. Consider adding the 'required' modifier or declaring the property as nullable. [C:\Users\finis\source\Projects\WebFilterApp\shared\models\UrlFilter.Shared.Models.csproj]
+C:\Users\finis\source\Projects\WebFilterApp\shared\models\DataModels.cs(488,29): warning CS8618: Non-nullable property 'SystemStatus' must contain a non-null value when exiting constructor. Consider adding the 'required' modifier or declaring the property as nullable. [C:\Users\finis\source\Projects\WebFilterApp\shared\models\UrlFilter.Shared.Models.csproj]
+  UrlFilter.Shared.Models -> C:\Users\finis\source\Projects\WebFilterApp\shared\models\bin\Debug\net6.0\UrlFilter.Shared.Models.dll
+
+Build succeeded.
+
+C:\Users\finis\source\Projects\WebFilterApp\shared\models\DataModels.cs(441,77): warning CS8625: Cannot convert null literal to non-nullable reference type. [C:\Users\finis\source\Projects\WebFilterApp\shared\models\UrlFilter.Shared.Models.csproj]
+C:\Users\finis\source\Projects\WebFilterApp\shared\models\DataModels.cs(510,23): warning CS8618: Non-nullable property 'Url' must contain a non-null value when exiting constructor. Consider adding the 'required' modifier or declaring the property as nullable. [C:\Users\finis\source\Projects\WebFilterApp\shared\models\UrlFilter.Shared.Models.csproj]
+C:\Users\finis\source\Projects\WebFilterApp\shared\models\DataModels.cs(488,29): warning CS8618: Non-nullable property 'SystemStatus' must contain a non-null value when exiting constructor. Consider adding the 'required' modifier or declaring the property as nullable. [C:\Users\finis\source\Projects\WebFilterApp\shared\models\UrlFilter.Shared.Models.csproj]
+    3 Warning(s)
+    0 Error(s)
+
+Time Elapsed 00:00:05.91
