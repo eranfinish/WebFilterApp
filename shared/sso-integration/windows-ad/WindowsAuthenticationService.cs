@@ -1,6 +1,7 @@
 using System;
 using System.DirectoryServices;
 using System.DirectoryServices.AccountManagement;
+using System.Runtime.Versioning;
 using System.Security.Principal;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
@@ -49,6 +50,7 @@ namespace UrlFilterService.Services
         /// <summary>
         /// Authenticates user using Windows Integrated Authentication
         /// </summary>
+        [SupportedOSPlatform("windows")]
         public async Task<AuthenticationResult> AuthenticateWindowsUserAsync()
         {
             try
@@ -241,6 +243,7 @@ namespace UrlFilterService.Services
             }
         }
 
+        [SupportedOSPlatform("windows")]
         private async Task<bool> IsUserInAdminGroupAsync(WindowsIdentity identity)
         {
             try

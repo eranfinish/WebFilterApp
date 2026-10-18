@@ -1,7 +1,7 @@
 # Repair Status — Cross-Platform URL Filtering System
 
 Branch: `fix/stabilization`
-Last update: Phase 0 complete (initial triage; no code changes)
+Last update: Phase 2 + Phase 3 Windows complete. Phase 1 Android scaffold **done**, `assembleDebug` **fails at 72 javac errors** (all business-logic classes never written) — stopped at attempt 2, awaiting user direction.
 
 ---
 
@@ -36,29 +36,42 @@ Solution: `WebFilterApp.sln` (Windows only). Android sources live under `android
 
 **All warnings are cosmetic** (nullable-annotation contexts CS8632, non-nullable init CS8618/8625, EOL-framework warning NETSDK1138, and `9.0.0` NuGet packages hitched to `net6.0`). None block compilation.
 
-### Android — **not buildable in current state (ARCHITECTURAL)**
+### Android — **scaffold built, javac fails at 72 errors (was 100)** — stopped at attempt 2, needs user direction
+
+Post-Phase 1 Android scaffold status:
 
 | Item | Status |
 | ---- | ------ |
-| `android/app/src/main/java/**` | 9 `.java` source files exist under `com/urlfilter/{auth,devtools,models,services,utils,vpn}`. |
-| `AndroidManifest.xml` | Present, references classes that **do not exist as source files** (see below). |
-| `build.gradle` / `build.gradle.kts` (project + module) | **Missing.** |
-| `settings.gradle` | **Missing.** |
-| `gradle.properties`, `gradlew`, `gradlew.bat`, `gradle/wrapper/` | **Missing.** |
-| `android/app/src/main/res/` (drawables, strings, styles, xml) | **Missing.** Manifest references `@drawable/ic_shield`, `@string/app_name`, `@style/Theme.UrlFilter`, `@xml/device_admin`, `@xml/data_extraction_rules`, `@xml/backup_rules`, `@xml/file_paths`. |
-| Classes referenced in Manifest but not in source | `UrlFilterApplication`, `admin.MainActivity`, `admin.AdminAuthActivity`, `admin.AdminDeviceAdminReceiver`, `vpn.MonitoringService`, `receivers.BootReceiver`, `receivers.NetworkStateReceiver`, `receivers.AppUsageReceiver`, `database.UrlFilterContentProvider`. |
-| JDK on PATH | Java 8 JRE only — no `javac`. AGP requires JDK 17+. |
-| `ANDROID_HOME` env var | Not set. SDK exists at `%LOCALAPPDATA%\Android\Sdk`. |
+| `settings.gradle`, `build.gradle` (root + `:app`), `gradle.properties`, `local.properties` | **Present.** AGP 8.7.2, `compileSdk 34`, `minSdk 26`, Java 17. |
+| `gradlew`, `gradlew.bat`, `gradle/wrapper/gradle-wrapper.jar+properties` | **Present.** Generated via local Gradle 8.11.1. |
+| `res/values/{strings,themes}.xml`, `res/drawable/{ic_shield,ic_stop}.xml`, `res/xml/{device_admin,data_extraction_rules,backup_rules,file_paths}.xml` | **Present.** All Manifest resource references resolve; `mergeDebugResources` and `processDebugResources` pass. |
+| Manifest-referenced classes (9) | **Stubbed.** `UrlFilterApplication`, `admin.{MainActivity,AdminAuthActivity,AdminDeviceAdminReceiver}`, `vpn.MonitoringService`, `receivers.{BootReceiver,NetworkStateReceiver,AppUsageReceiver}`, `database.UrlFilterContentProvider`. |
+| Top-level `models.DeviceUser`, `models.UserType` | **Added.** Fixes existing sources' broken imports of nested types inside `DataModels`. |
+| Business classes referenced by existing sources but never written | **Still missing.** `database.DatabaseHelper`, `utils.{UserDetector, FilterEngine, NetworkUtils, YouTubeUrlParser, DomainClassifier}`, `vpn.LocalProxyServer`, DTOs `models.{UserDetectionResult, TrafficAnalysis}`. |
+| Method/ctor signatures on existing classes | **Mismatched.** `IpPacket` ctor and `AndroidLogger.getInstance` are called with args they don't accept. |
+| `./gradlew assembleDebug` | **FAILS.** 72 javac errors; log `build-logs/22-android-assemble-attempt2.log`. |
+| JDK/SDK config | Uses `C:\Program Files\Android\Android Studio\jbr` (OpenJDK 21) as `JAVA_HOME` and `%LOCALAPPDATA%\Android\Sdk` as `ANDROID_HOME` at build time. |
 
 ---
 
 ## Categorised status
 
-### Working (Phase 0 verified — builds only, not yet run)
-- All 8 Windows/.NET projects compile clean against SDK 10.0.201 targeting `net6.0` / `net6.0-windows`.
+### Working (verified)
+
+- **Phase 0** — All 8 Windows/.NET projects compile clean against SDK 10.0.201 targeting `net6.0` / `net6.0-windows`.
+- **Phase 2** — Windows service starts, DB initializes from `schema.sql` idempotently, DNS interceptor binds `127.0.0.1:53`, IPC pipe active, PolicyEnforcementService running. Log: `build-logs/19-service-console-wfp-gated.log`. See `FIX_LOG.md` Phase 2 for fix details.
+- **Phase 3** — DNS filtering end-to-end **PASS**: blocked domain → `0.0.0.0`; allowed domain → real upstream A record. Automated test: `tests/dns-filter-smoke.ps1`. Evidence: `build-logs/20-phase3-dns-smoke-PASS.log`.
 
 ### Blocked / needs Phase 1 investigation
-- None found in Windows components at compile level. Phase 2 (run/init) is next test.
+
+- Windows: none at compile or run level for the DNS-filtering slice. Phase 4 will exercise remaining features (WFP filter add, browser policy enforcement, admin panel, installer) individually with elevated runs.
+
+### Elevation-gated (per protocol rule 7 — not "bugs", preserved for production)
+
+- WFP filter add (`FwpmFilterAdd0`) — requires admin. Gated with `IsProcessElevated()` in `WfpFilterService.Start`.
+- Set adapter DNS to `127.0.0.1` — WMI `SetDNSServerSearchOrder` returns 91 for non-admin.
+- DoH GPO registry writes under `HKLM\SOFTWARE\Policies\*` — requires admin.
+- `PolicyEnforcementService.KillUnauthorizedBrowsers` — non-admin cannot terminate other-session processes.
 
 ### Disabled — needs work
 - (none — nothing was disabled or removed in Phase 0)

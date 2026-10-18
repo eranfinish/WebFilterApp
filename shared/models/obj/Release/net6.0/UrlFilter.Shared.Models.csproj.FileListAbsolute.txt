@@ -12,3 +12,16 @@ C:\Users\finis\source\Projects\WebFilterApp\shared\models\obj\Release\net6.0\ref
 C:\Users\finis\source\Projects\WebFilterApp\build\Service\UrlFilter.Shared.Models.deps.json
 C:\Users\finis\source\Projects\WebFilterApp\build\Service\UrlFilter.Shared.Models.dll
 C:\Users\finis\source\Projects\WebFilterApp\build\Service\UrlFilter.Shared.Models.pdb
+C:\Users\finis\source\Projects\WebFilterApp\shared\models\obj\Release\net6.0\UrlFilter.Shared.Models.sourcelink.json
+C:\Users\finis\source\Projects\WebFilterApp\build\WFP\UrlFilter.Shared.Models.deps.json
+C:\Users\finis\source\Projects\WebFilterApp\build\WFP\UrlFilter.Shared.Models.dll
+C:\Users\finis\source\Projects\WebFilterApp\build\WFP\UrlFilter.Shared.Models.pdb
+C:\Users\finis\source\Projects\WebFilterApp\build\AdminPanel\UrlFilter.Shared.Models.deps.json
+C:\Users\finis\source\Projects\WebFilterApp\build\AdminPanel\UrlFilter.Shared.Models.dll
+C:\Users\finis\source\Projects\WebFilterApp\build\AdminPanel\UrlFilter.Shared.Models.pdb
+C:\Users\finis\source\Projects\WebFilterApp\build\Installer\UrlFilter.Shared.Models.deps.json
+C:\Users\finis\source\Projects\WebFilterApp\build\Installer\UrlFilter.Shared.Models.dll
+C:\Users\finis\source\Projects\WebFilterApp\build\Installer\UrlFilter.Shared.Models.pdb
+C:\Users\finis\source\Projects\WebFilterApp\build\DevTools\UrlFilter.Shared.Models.deps.json
+C:\Users\finis\source\Projects\WebFilterApp\build\DevTools\UrlFilter.Shared.Models.dll
+C:\Users\finis\source\Projects\WebFilterApp\build\DevTools\UrlFilter.Shared.Models.pdb

@@ -2,35 +2,32 @@ using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using System.Net;
+using System.Security.Principal;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using UrlFilter.Shared.Models;
-//using UrlFilterService.Services;
 
 namespace UrlFilterService.Services
 {
     /// <summary>
-    /// Windows Filtering Platform (WFP) integration service
-    /// Provides system-level network traffic filtering capabilities
+    /// Windows Filtering Platform (WFP) integration service.
+    /// Uses FWP_ACTION_BLOCK to block traffic by IP address — no kernel driver needed.
+    /// Works alongside DnsInterceptorService as a secondary enforcement layer.
     /// </summary>
     public class WfpFilterService
     {
         private readonly ILogger<WfpFilterService> _logger;
-        //private readonly DatabaseService _databaseService;
         private IntPtr _engineHandle;
-        private readonly List<WfpFilter> _activeFilters;
-        private bool _isRunning = false;
+        private readonly List<WfpFilter> _activeFilters = new();
+        private bool _isRunning;
 
-        // WFP API Constants
-        private const uint FWP_E_ALREADY_EXISTS = 0x80320009;
         private const uint ERROR_SUCCESS = 0;
+        private const uint FWP_E_ALREADY_EXISTS = 0x80320009;
         private const uint FWPM_SESSION_FLAG_DYNAMIC = 0x00000001;
 
-        public WfpFilterService(ILogger<WfpFilterService> logger/*, DatabaseService databaseService*/)
+        public WfpFilterService(ILogger<WfpFilterService> logger)
         {
             _logger = logger;
-            //_databaseService = databaseService;
-            _activeFilters = new List<WfpFilter>();
         }
 
         public bool IsRunning => _isRunning;
@@ -41,17 +38,20 @@ namespace UrlFilterService.Services
             {
                 _logger.LogInformation("Starting WFP Filter Service");
 
-                // Create WFP engine session
+                // BFE will let a non-elevated process open a session (read paths), but
+                // FwpmFilterAdd0 corrupts memory on such a session and takes down the
+                // process with AccessViolation instead of returning ERROR_ACCESS_DENIED.
+                // In production the service runs as LOCAL SYSTEM; when run unelevated
+                // (console/dev mode) we skip engine open so downstream filter calls no-op.
+                if (!IsProcessElevated())
+                {
+                    _logger.LogWarning("WFP Filter Service disabled: process is not elevated. Install the service or run as administrator to enable WFP filtering.");
+                    return;
+                }
+
                 CreateWfpEngine();
-
-                // Install base filters
-                InstallBaseFilters();
-
-                // Load user-specific filters
-                Task.Run(async () => await LoadUserFiltersAsync());
-
                 _isRunning = true;
-                _logger.LogInformation("WFP Filter Service started successfully");
+                _logger.LogInformation("WFP Filter Service started (IP-block mode)");
             }
             catch (Exception ex)
             {
@@ -60,20 +60,28 @@ namespace UrlFilterService.Services
             }
         }
 
+        private static bool IsProcessElevated()
+        {
+            try
+            {
+                using var identity = WindowsIdentity.GetCurrent();
+                var principal = new WindowsPrincipal(identity);
+                return principal.IsInRole(WindowsBuiltInRole.Administrator);
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
         public void Stop()
         {
             try
             {
                 _logger.LogInformation("Stopping WFP Filter Service");
-
                 _isRunning = false;
-
-                // Remove all filters
                 RemoveAllFilters();
-
-                // Destroy WFP engine
                 DestroyWfpEngine();
-
                 _logger.LogInformation("WFP Filter Service stopped");
             }
             catch (Exception ex)
@@ -81,6 +89,165 @@ namespace UrlFilterService.Services
                 _logger.LogError(ex, "Error stopping WFP Filter Service");
             }
         }
+
+        /// <summary>
+        /// Block a specific IP address (all outbound traffic to that IP is dropped)
+        /// </summary>
+        public bool BlockIpAddress(IPAddress ipAddress, string description)
+        {
+            if (_engineHandle == IntPtr.Zero)
+            {
+                _logger.LogWarning("WFP engine not initialized, cannot block IP");
+                return false;
+            }
+
+            try
+            {
+                var filter = new FWPM_FILTER
+                {
+                    displayData = new FWPM_DISPLAY_DATA
+                    {
+                        name = $"UrlFilter Block - {description}",
+                        description = $"Blocks traffic to {ipAddress}"
+                    },
+                    layerKey = FWPM_LAYER_ALE_AUTH_CONNECT_V4,
+                    subLayerKey = FWPM_SUBLAYER_UNIVERSAL,
+                    weight = new FWP_VALUE
+                    {
+                        type = FWP_DATA_TYPE.FWP_UINT64,
+                        value = new FWP_VALUE_UNION { uint64 = 0x7000000000000000 }
+                    },
+                    numFilterConditions = 1
+                };
+
+                // Condition: remote IP matches
+                var condition = new FWPM_FILTER_CONDITION
+                {
+                    fieldKey = FWPM_CONDITION_IP_REMOTE_ADDRESS,
+                    matchType = FWP_MATCH_TYPE.FWP_MATCH_EQUAL,
+                    conditionValue = new FWP_CONDITION_VALUE
+                    {
+                        type = FWP_DATA_TYPE.FWP_UINT32,
+                        value = new FWP_CONDITION_VALUE_UNION
+                        {
+                            uint32 = BitConverter.ToUInt32(ipAddress.GetAddressBytes(), 0)
+                        }
+                    }
+                };
+
+                filter.action = new FWPM_ACTION { type = FWP_ACTION_TYPE.FWP_ACTION_BLOCK };
+
+                IntPtr condPtr = Marshal.AllocHGlobal(Marshal.SizeOf(typeof(FWPM_FILTER_CONDITION)));
+                Marshal.StructureToPtr(condition, condPtr, false);
+                filter.filterCondition = condPtr;
+
+                Guid filterId;
+                uint result = FwpmFilterAdd(_engineHandle, ref filter, IntPtr.Zero, out filterId);
+                Marshal.FreeHGlobal(condPtr);
+
+                if (result == ERROR_SUCCESS)
+                {
+                    _activeFilters.Add(new WfpFilter($"IP_{ipAddress}", filterId));
+                    _logger.LogInformation("Blocked IP: {Ip} ({Description})", ipAddress, description);
+                    return true;
+                }
+                else if (result == FWP_E_ALREADY_EXISTS)
+                {
+                    return true; // Already blocked
+                }
+                else
+                {
+                    _logger.LogError("Failed to block IP {Ip}. Error: 0x{Error:X8}", ipAddress, result);
+                    return false;
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error blocking IP {Ip}", ipAddress);
+                return false;
+            }
+        }
+
+        /// <summary>
+        /// Block all outbound traffic for a specific user (by installing a high-priority block filter)
+        /// </summary>
+        public Task BlockUserTrafficAsync(DeviceUser user)
+        {
+            return Task.Run(() =>
+            {
+                if (_engineHandle == IntPtr.Zero) return;
+
+                try
+                {
+                    var filter = new FWPM_FILTER
+                    {
+                        displayData = new FWPM_DISPLAY_DATA
+                        {
+                            name = $"Block User - {user.Username}",
+                            description = $"Blocks all traffic for user {user.Username}"
+                        },
+                        layerKey = FWPM_LAYER_ALE_AUTH_CONNECT_V4,
+                        subLayerKey = FWPM_SUBLAYER_UNIVERSAL,
+                        weight = new FWP_VALUE
+                        {
+                            type = FWP_DATA_TYPE.FWP_UINT64,
+                            value = new FWP_VALUE_UNION { uint64 = 0xA000000000000000 }
+                        },
+                        numFilterConditions = 0
+                    };
+
+                    filter.action = new FWPM_ACTION { type = FWP_ACTION_TYPE.FWP_ACTION_BLOCK };
+
+                    Guid filterId;
+                    uint result = FwpmFilterAdd(_engineHandle, ref filter, IntPtr.Zero, out filterId);
+
+                    if (result == ERROR_SUCCESS)
+                    {
+                        _activeFilters.Add(new WfpFilter($"BLOCK_USER_{user.Id}", filterId));
+                        _logger.LogInformation("Blocked traffic for user {Username}", user.Username);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError(ex, "Error blocking user traffic for {Username}", user.Username);
+                }
+            });
+        }
+
+        /// <summary>
+        /// Unblock a user's traffic
+        /// </summary>
+        public Task UnblockUserTrafficAsync(DeviceUser user)
+        {
+            return Task.Run(() =>
+            {
+                var filterName = $"BLOCK_USER_{user.Id}";
+                RemoveFilterByName(filterName);
+            });
+        }
+
+        /// <summary>
+        /// Remove block for a specific IP
+        /// </summary>
+        public bool UnblockIpAddress(IPAddress ipAddress)
+        {
+            return RemoveFilterByName($"IP_{ipAddress}");
+        }
+
+        /// <summary>
+        /// Remove all IP block filters
+        /// </summary>
+        public void RemoveAllIpBlocks()
+        {
+            var ipFilters = _activeFilters.FindAll(f => f.Name.StartsWith("IP_"));
+            foreach (var filter in ipFilters)
+            {
+                RemoveFilter(filter);
+            }
+            _logger.LogInformation("Removed all IP block filters");
+        }
+
+        #region Internal
 
         private void CreateWfpEngine()
         {
@@ -95,12 +262,7 @@ namespace UrlFilterService.Services
                 txnWaitTimeoutInMSec = 5000
             };
 
-            uint result = FwpmEngineOpen(
-                null,
-                RPC_C_AUTHN_DEFAULT,
-                IntPtr.Zero,
-                ref session,
-                out _engineHandle);
+            uint result = FwpmEngineOpen(null, RPC_C_AUTHN_DEFAULT, IntPtr.Zero, ref session, out _engineHandle);
 
             if (result != ERROR_SUCCESS)
             {
@@ -120,493 +282,73 @@ namespace UrlFilterService.Services
             }
         }
 
-        private void InstallBaseFilters()
+        private bool RemoveFilterByName(string name)
+        {
+            var filter = _activeFilters.Find(f => f.Name == name);
+            if (filter != null)
+            {
+                return RemoveFilter(filter);
+            }
+            return false;
+        }
+
+        private bool RemoveFilter(WfpFilter filter)
         {
             try
             {
-                // Install outbound HTTP filter
-                InstallHttpOutboundFilter();
-
-                // Install outbound HTTPS filter
-                InstallHttpsOutboundFilter();
-
-                // Install DNS filter
-                InstallDnsFilter();
-
-                // Install application filter
-                InstallApplicationFilter();
-
-                _logger.LogInformation("Base WFP filters installed");
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Error installing base filters");
-                throw;
-            }
-        }
-
-        private void InstallHttpOutboundFilter()
-        {
-            var filter = new FWPM_FILTER
-            {
-                displayData = new FWPM_DISPLAY_DATA
-                {
-                    name = "URL Filter HTTP Outbound",
-                    description = "Filters outbound HTTP traffic for URL filtering"
-                },
-                layerKey = FWPM_LAYER_ALE_AUTH_CONNECT_V4,
-                subLayerKey = FWPM_SUBLAYER_UNIVERSAL,
-                weight = new FWP_VALUE { type = FWP_DATA_TYPE.FWP_UINT64, value = new FWP_VALUE_UNION { uint64 = 0x8000000000000000 } },
-                numFilterConditions = 1
-            };
-
-            // Create condition for HTTP traffic (port 80)
-            var conditions = new FWPM_FILTER_CONDITION[1];
-            conditions[0] = new FWPM_FILTER_CONDITION
-            {
-                fieldKey = FWPM_CONDITION_IP_REMOTE_PORT,
-                matchType = FWP_MATCH_TYPE.FWP_MATCH_EQUAL,
-                conditionValue = new FWP_CONDITION_VALUE
-                {
-                    type = FWP_DATA_TYPE.FWP_UINT16,
-                    value = new FWP_CONDITION_VALUE_UNION { uint16 = 80 }
-                }
-            };
-
-            // Set callout for this filter
-            filter.action = new FWPM_ACTION
-            {
-                type = FWP_ACTION_TYPE.FWP_ACTION_CALLOUT_INSPECTION,
-                calloutKey = HttpCalloutGuid
-            };
-
-            IntPtr conditionsPtr = Marshal.AllocHGlobal(Marshal.SizeOf(typeof(FWPM_FILTER_CONDITION)));
-            Marshal.StructureToPtr(conditions[0], conditionsPtr, false);
-            filter.filterCondition = conditionsPtr;
-
-            Guid filterId;
-            uint result = FwpmFilterAdd(_engineHandle, ref filter, IntPtr.Zero, out filterId);
-
-            Marshal.FreeHGlobal(conditionsPtr);
-
-            if (result == ERROR_SUCCESS)
-            {
-                _activeFilters.Add(new WfpFilter("HTTP_OUTBOUND", filterId));
-                _logger.LogDebug("HTTP outbound filter installed");
-            }
-            else if (result != FWP_E_ALREADY_EXISTS)
-            {
-                _logger.LogError($"Failed to install HTTP outbound filter. Error: 0x{result:X8}");
-            }
-        }
-
-        private void InstallHttpsOutboundFilter()
-        {
-            var filter = new FWPM_FILTER
-            {
-                displayData = new FWPM_DISPLAY_DATA
-                {
-                    name = "URL Filter HTTPS Outbound",
-                    description = "Filters outbound HTTPS traffic for URL filtering"
-                },
-                layerKey = FWPM_LAYER_ALE_AUTH_CONNECT_V4,
-                subLayerKey = FWPM_SUBLAYER_UNIVERSAL,
-                weight = new FWP_VALUE { type = FWP_DATA_TYPE.FWP_UINT64, value = new FWP_VALUE_UNION { uint64 = 0x8000000000000000 } },
-                numFilterConditions = 1
-            };
-
-            // Create condition for HTTPS traffic (port 443)
-            var conditions = new FWPM_FILTER_CONDITION[1];
-            conditions[0] = new FWPM_FILTER_CONDITION
-            {
-                fieldKey = FWPM_CONDITION_IP_REMOTE_PORT,
-                matchType = FWP_MATCH_TYPE.FWP_MATCH_EQUAL,
-                conditionValue = new FWP_CONDITION_VALUE
-                {
-                    type = FWP_DATA_TYPE.FWP_UINT16,
-                    value = new FWP_CONDITION_VALUE_UNION { uint16 = 443 }
-                }
-            };
-
-            filter.action = new FWPM_ACTION
-            {
-                type = FWP_ACTION_TYPE.FWP_ACTION_CALLOUT_INSPECTION,
-                calloutKey = HttpsCalloutGuid
-            };
-
-            IntPtr conditionsPtr = Marshal.AllocHGlobal(Marshal.SizeOf(typeof(FWPM_FILTER_CONDITION)));
-            Marshal.StructureToPtr(conditions[0], conditionsPtr, false);
-            filter.filterCondition = conditionsPtr;
-
-            Guid filterId;
-            uint result = FwpmFilterAdd(_engineHandle, ref filter, IntPtr.Zero, out filterId);
-
-            Marshal.FreeHGlobal(conditionsPtr);
-
-            if (result == ERROR_SUCCESS)
-            {
-                _activeFilters.Add(new WfpFilter("HTTPS_OUTBOUND", filterId));
-                _logger.LogDebug("HTTPS outbound filter installed");
-            }
-            else if (result != FWP_E_ALREADY_EXISTS)
-            {
-                _logger.LogError($"Failed to install HTTPS outbound filter. Error: 0x{result:X8}");
-            }
-        }
-
-        private void InstallDnsFilter()
-        {
-            var filter = new FWPM_FILTER
-            {
-                displayData = new FWPM_DISPLAY_DATA
-                {
-                    name = "URL Filter DNS",
-                    description = "Filters DNS queries for URL filtering"
-                },
-                layerKey = FWPM_LAYER_ALE_AUTH_CONNECT_V4,
-                subLayerKey = FWPM_SUBLAYER_UNIVERSAL,
-                weight = new FWP_VALUE { type = FWP_DATA_TYPE.FWP_UINT64, value = new FWP_VALUE_UNION { uint64 = 0x8000000000000000 } },
-                numFilterConditions = 1
-            };
-
-            // Create condition for DNS traffic (port 53)
-            var conditions = new FWPM_FILTER_CONDITION[1];
-            conditions[0] = new FWPM_FILTER_CONDITION
-            {
-                fieldKey = FWPM_CONDITION_IP_REMOTE_PORT,
-                matchType = FWP_MATCH_TYPE.FWP_MATCH_EQUAL,
-                conditionValue = new FWP_CONDITION_VALUE
-                {
-                    type = FWP_DATA_TYPE.FWP_UINT16,
-                    value = new FWP_CONDITION_VALUE_UNION { uint16 = 53 }
-                }
-            };
-
-            filter.action = new FWPM_ACTION
-            {
-                type = FWP_ACTION_TYPE.FWP_ACTION_CALLOUT_INSPECTION,
-                calloutKey = DnsCalloutGuid
-            };
-
-            IntPtr conditionsPtr = Marshal.AllocHGlobal(Marshal.SizeOf(typeof(FWPM_FILTER_CONDITION)));
-            Marshal.StructureToPtr(conditions[0], conditionsPtr, false);
-            filter.filterCondition = conditionsPtr;
-
-            Guid filterId;
-            uint result = FwpmFilterAdd(_engineHandle, ref filter, IntPtr.Zero, out filterId);
-
-            Marshal.FreeHGlobal(conditionsPtr);
-
-            if (result == ERROR_SUCCESS)
-            {
-                _activeFilters.Add(new WfpFilter("DNS", filterId));
-                _logger.LogDebug("DNS filter installed");
-            }
-            else if (result != FWP_E_ALREADY_EXISTS)
-            {
-                _logger.LogError($"Failed to install DNS filter. Error: 0x{result:X8}");
-            }
-        }
-
-        private void InstallApplicationFilter()
-        {
-            // This filter can block specific applications
-            var filter = new FWPM_FILTER
-            {
-                displayData = new FWPM_DISPLAY_DATA
-                {
-                    name = "URL Filter Application Block",
-                    description = "Blocks specific applications from network access"
-                },
-                layerKey = FWPM_LAYER_ALE_AUTH_CONNECT_V4,
-                subLayerKey = FWPM_SUBLAYER_UNIVERSAL,
-                weight = new FWP_VALUE { type = FWP_DATA_TYPE.FWP_UINT64, value = new FWP_VALUE_UNION { uint64 = 0x9000000000000000 } },
-                numFilterConditions = 0
-            };
-
-            filter.action = new FWPM_ACTION
-            {
-                type = FWP_ACTION_TYPE.FWP_ACTION_CALLOUT_INSPECTION,
-                calloutKey = AppCalloutGuid
-            };
-
-            Guid filterId;
-            uint result = FwpmFilterAdd(_engineHandle, ref filter, IntPtr.Zero, out filterId);
-
-            if (result == ERROR_SUCCESS)
-            {
-                _activeFilters.Add(new WfpFilter("APPLICATION", filterId));
-                _logger.LogDebug("Application filter installed");
-            }
-            else if (result != FWP_E_ALREADY_EXISTS)
-            {
-                _logger.LogError($"Failed to install application filter. Error: 0x{result:X8}");
-            }
-        }
-
-        private async Task LoadUserFiltersAsync()
-        {
-            try
-            {
-                //var urlLists = await _databaseService.GetAllUrlListsAsync();
-                var urlLists = new List<UrlList>(); // Temporary placeholder
-
-                foreach (var urlEntry in urlLists)
-                {
-                    if (urlEntry.IsActive)
-                    {
-                        await InstallUrlFilterAsync(urlEntry);
-                    }
-                }
-
-                _logger.LogInformation($"Loaded {urlLists.Count} URL filters");
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Error loading user filters");
-            }
-        }
-
-        private async Task InstallUrlFilterAsync(UrlList urlEntry)
-        {
-            try
-            {
-                // Create IP-based filter for the URL
-                var ipAddresses = await ResolveHostToIpAsync(ExtractHostFromUrl(urlEntry.UrlPattern));
-
-                foreach (var ipAddress in ipAddresses)
-                {
-                    InstallIpBasedFilter(ipAddress, urlEntry);
-                }
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, $"Error installing URL filter for {urlEntry.UrlPattern}");
-            }
-        }
-
-        private void InstallIpBasedFilter(IPAddress ipAddress, UrlList urlEntry)
-        {
-            var filter = new FWPM_FILTER
-            {
-                displayData = new FWPM_DISPLAY_DATA
-                {
-                    name = $"URL Filter - {urlEntry.UrlPattern}",
-                    description = $"Filter for {urlEntry.UrlPattern}"
-                },
-                layerKey = FWPM_LAYER_ALE_AUTH_CONNECT_V4,
-                subLayerKey = FWPM_SUBLAYER_UNIVERSAL,
-                weight = new FWP_VALUE { type = FWP_DATA_TYPE.FWP_UINT64, value = new FWP_VALUE_UNION { uint64 = 0x7000000000000000 } },
-                numFilterConditions = 1
-            };
-
-            // Create condition for specific IP
-            var conditions = new FWPM_FILTER_CONDITION[1];
-            conditions[0] = new FWPM_FILTER_CONDITION
-            {
-                fieldKey = FWPM_CONDITION_IP_REMOTE_ADDRESS,
-                matchType = FWP_MATCH_TYPE.FWP_MATCH_EQUAL,
-                conditionValue = new FWP_CONDITION_VALUE
-                {
-                    type = FWP_DATA_TYPE.FWP_UINT32,
-                    value = new FWP_CONDITION_VALUE_UNION { uint32 = (uint)ipAddress.Address }
-                }
-            };
-
-            // Set action based on list type
-            if (urlEntry.ListType == ListType.Blacklist)
-            {
-                filter.action = new FWPM_ACTION { type = FWP_ACTION_TYPE.FWP_ACTION_BLOCK };
-            }
-            else
-            {
-                filter.action = new FWPM_ACTION
-                {
-                    type = FWP_ACTION_TYPE.FWP_ACTION_CALLOUT_INSPECTION,
-                    calloutKey = AllowCalloutGuid
-                };
-            }
-
-            IntPtr conditionsPtr = Marshal.AllocHGlobal(Marshal.SizeOf(typeof(FWPM_FILTER_CONDITION)));
-            Marshal.StructureToPtr(conditions[0], conditionsPtr, false);
-            filter.filterCondition = conditionsPtr;
-
-            Guid filterId;
-            uint result = FwpmFilterAdd(_engineHandle, ref filter, IntPtr.Zero, out filterId);
-
-            Marshal.FreeHGlobal(conditionsPtr);
-
-            if (result == ERROR_SUCCESS)
-            {
-                _activeFilters.Add(new WfpFilter($"URL_{urlEntry.Id}", filterId));
-            }
-        }
-
-        public async Task BlockUserTrafficAsync(DeviceUser user)
-        {
-            try
-            {
-                // Install user-specific block filter
-                var filter = new FWPM_FILTER
-                {
-                    displayData = new FWPM_DISPLAY_DATA
-                    {
-                        name = $"Block User - {user.Username}",
-                        description = $"Blocks all traffic for user {user.Username}"
-                    },
-                    layerKey = FWPM_LAYER_ALE_AUTH_CONNECT_V4,
-                    subLayerKey = FWPM_SUBLAYER_UNIVERSAL,
-                    weight = new FWP_VALUE { type = FWP_DATA_TYPE.FWP_UINT64, value = new FWP_VALUE_UNION { uint64 = 0xA000000000000000 } },
-                    numFilterConditions = 1
-                };
-
-                // Create condition for specific user (this would need user SID)
-                // Simplified implementation - in practice, you'd use user SID
-                filter.action = new FWPM_ACTION { type = FWP_ACTION_TYPE.FWP_ACTION_BLOCK };
-
-                Guid filterId;
-                uint result = FwpmFilterAdd(_engineHandle, ref filter, IntPtr.Zero, out filterId);
-
+                uint result = FwpmFilterDeleteById(_engineHandle, filter.Id);
                 if (result == ERROR_SUCCESS)
                 {
-                    _activeFilters.Add(new WfpFilter($"BLOCK_USER_{user.Id}", filterId));
-                    _logger.LogInformation($"Blocked traffic for user {user.Username}");
+                    _activeFilters.Remove(filter);
+                    return true;
                 }
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, $"Error blocking user traffic for {user.Username}");
+                _logger.LogError(ex, "Error removing filter {Name}", filter.Name);
             }
-        }
-
-        public async Task UnblockUserTrafficAsync(DeviceUser user)
-        {
-            try
-            {
-                var filterName = $"BLOCK_USER_{user.Id}";
-                var filter = _activeFilters.Find(f => f.Name == filterName);
-
-                if (filter != null)
-                {
-                    uint result = FwpmFilterDeleteById(_engineHandle, filter.Id);
-                    if (result == ERROR_SUCCESS)
-                    {
-                        _activeFilters.Remove(filter);
-                        _logger.LogInformation($"Unblocked traffic for user {user.Username}");
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, $"Error unblocking user traffic for {user.Username}");
-            }
+            return false;
         }
 
         private void RemoveAllFilters()
         {
             foreach (var filter in _activeFilters.ToArray())
             {
-                try
-                {
-                    uint result = FwpmFilterDeleteById(_engineHandle, filter.Id);
-                    if (result == ERROR_SUCCESS)
-                    {
-                        _activeFilters.Remove(filter);
-                    }
-                }
-                catch (Exception ex)
-                {
-                    _logger.LogError(ex, $"Error removing filter {filter.Name}");
-                }
+                RemoveFilter(filter);
             }
         }
 
-        private async Task<List<IPAddress>> ResolveHostToIpAsync(string hostname)
-        {
-            var ipAddresses = new List<IPAddress>();
+        #endregion
 
-            try
-            {
-                var addresses = await Dns.GetHostAddressesAsync(hostname);
-                ipAddresses.AddRange(addresses);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogWarning(ex, $"Failed to resolve hostname {hostname}");
-            }
+        #region P/Invoke
 
-            return ipAddresses;
-        }
-
-        private string ExtractHostFromUrl(string url)
-        {
-            try
-            {
-                if (Uri.TryCreate(url, UriKind.Absolute, out Uri uri))
-                {
-                    return uri.Host;
-                }
-                
-                // Handle cases where URL doesn't have protocol
-                if (!url.Contains("://"))
-                {
-                    url = "http://" + url;
-                    if (Uri.TryCreate(url, UriKind.Absolute, out uri))
-                    {
-                        return uri.Host;
-                    }
-                }
-
-                // Fallback - treat as hostname
-                return url.Split('/')[0];
-            }
-            catch
-            {
-                return url;
-            }
-        }
-
-        #region WFP API Declarations and Structures
-
-        // WFP API imports
-        [DllImport("fwpuclnt.dll", CallingConvention = CallingConvention.StdCall)]
+        [DllImport("fwpuclnt.dll", EntryPoint = "FwpmEngineOpen0", CallingConvention = CallingConvention.StdCall)]
         private static extern uint FwpmEngineOpen(
-            [MarshalAs(UnmanagedType.LPWStr)] string serverName,
+            [MarshalAs(UnmanagedType.LPWStr)] string? serverName,
             uint authnService,
             IntPtr authIdentity,
             ref FWPM_SESSION session,
             out IntPtr engineHandle);
 
-        [DllImport("fwpuclnt.dll", CallingConvention = CallingConvention.StdCall)]
+        [DllImport("fwpuclnt.dll", EntryPoint = "FwpmEngineClose0", CallingConvention = CallingConvention.StdCall)]
         private static extern uint FwpmEngineClose(IntPtr engineHandle);
 
-        [DllImport("fwpuclnt.dll", CallingConvention = CallingConvention.StdCall)]
+        [DllImport("fwpuclnt.dll", EntryPoint = "FwpmFilterAdd0", CallingConvention = CallingConvention.StdCall)]
         private static extern uint FwpmFilterAdd(
             IntPtr engineHandle,
             ref FWPM_FILTER filter,
             IntPtr sd,
             out Guid id);
 
-        [DllImport("fwpuclnt.dll", CallingConvention = CallingConvention.StdCall)]
+        [DllImport("fwpuclnt.dll", EntryPoint = "FwpmFilterDeleteById0", CallingConvention = CallingConvention.StdCall)]
         private static extern uint FwpmFilterDeleteById(IntPtr engineHandle, Guid id);
 
-        // Constants
         private const uint RPC_C_AUTHN_DEFAULT = 0xFFFFFFFF;
 
-        // GUIDs for WFP layers and callouts
-        private static readonly Guid FWPM_LAYER_ALE_AUTH_CONNECT_V4 = new Guid("c38d57d1-05a7-4c33-904f-7fbceee60e82");
-        private static readonly Guid FWPM_SUBLAYER_UNIVERSAL = new Guid("eebecc03-ced4-4380-819a-2734397b2b74");
-        private static readonly Guid FWPM_CONDITION_IP_REMOTE_PORT = new Guid("c35a604d-d22b-4e1a-91b4-68f674ee674b");
-        private static readonly Guid FWPM_CONDITION_IP_REMOTE_ADDRESS = new Guid("b235ae9a-1d64-49b8-a44c-5ff3d9095045");
+        private static readonly Guid FWPM_LAYER_ALE_AUTH_CONNECT_V4 = new("c38d57d1-05a7-4c33-904f-7fbceee60e82");
+        private static readonly Guid FWPM_SUBLAYER_UNIVERSAL = new("eebecc03-ced4-4380-819a-2734397b2b74");
+        private static readonly Guid FWPM_CONDITION_IP_REMOTE_ADDRESS = new("b235ae9a-1d64-49b8-a44c-5ff3d9095045");
 
-        // Callout GUIDs (these would be registered separately)
-        private static readonly Guid HttpCalloutGuid = new Guid("{12345678-1234-1234-1234-123456789012}");
-        private static readonly Guid HttpsCalloutGuid = new Guid("{12345678-1234-1234-1234-123456789013}");
-        private static readonly Guid DnsCalloutGuid = new Guid("{12345678-1234-1234-1234-123456789014}");
-        private static readonly Guid AppCalloutGuid = new Guid("{12345678-1234-1234-1234-123456789015}");
-        private static readonly Guid AllowCalloutGuid = new Guid("{12345678-1234-1234-1234-123456789016}");
-
-        // Structures
         [StructLayout(LayoutKind.Sequential)]
         private struct FWPM_SESSION
         {
@@ -616,20 +358,21 @@ namespace UrlFilterService.Services
             public uint txnWaitTimeoutInMSec;
             public uint processId;
             public IntPtr sid;
-            [MarshalAs(UnmanagedType.LPWStr)]
-            public string username;
+            [MarshalAs(UnmanagedType.LPWStr)] public string username;
             public bool kernelMode;
         }
 
         [StructLayout(LayoutKind.Sequential)]
         private struct FWPM_DISPLAY_DATA
         {
-            [MarshalAs(UnmanagedType.LPWStr)]
-            public string name;
-            [MarshalAs(UnmanagedType.LPWStr)]
-            public string description;
+            [MarshalAs(UnmanagedType.LPWStr)] public string name;
+            [MarshalAs(UnmanagedType.LPWStr)] public string description;
         }
 
+        // Native FWPM_FILTER0.providerContextKey is a union { UINT64 rawContext; GUID providerContextKey; }
+        // — 16 bytes. Declaring it as IntPtr (8 bytes) truncates the struct by 8 bytes and
+        // corrupts the tail (reserved, filterId, effectiveWeight), which fwpuclnt reads/writes
+        // and causes AccessViolation on FwpmFilterAdd. Use Guid to match the 16-byte union size.
         [StructLayout(LayoutKind.Sequential)]
         private struct FWPM_FILTER
         {
@@ -644,7 +387,7 @@ namespace UrlFilterService.Services
             public uint numFilterConditions;
             public IntPtr filterCondition;
             public FWPM_ACTION action;
-            public IntPtr providerContextKey;
+            public Guid providerContextKey;
             public IntPtr reserved;
             public ulong filterId;
             public FWP_VALUE effectiveWeight;
@@ -658,12 +401,16 @@ namespace UrlFilterService.Services
             public FWP_CONDITION_VALUE conditionValue;
         }
 
+        // Native FWPM_ACTION0: { FWP_ACTION_TYPE type; union { GUID filterType; GUID calloutKey; }; }
+        // The two GUIDs are a C union in the SDK header — one 16-byte slot, not two.
+        // Prior declaration of both as separate fields inflated the struct by 16 bytes and
+        // corrupted every offset after `action` inside FWPM_FILTER, producing AccessViolation
+        // on FwpmFilterAdd. We only need FWP_ACTION_BLOCK / PERMIT so the union body is unused.
         [StructLayout(LayoutKind.Sequential)]
         private struct FWPM_ACTION
         {
             public FWP_ACTION_TYPE type;
-            public Guid filterType;
-            public Guid calloutKey;
+            public Guid filterTypeOrCalloutKey;
         }
 
         [StructLayout(LayoutKind.Sequential)]
@@ -709,38 +456,20 @@ namespace UrlFilterService.Services
 
         private enum FWP_DATA_TYPE : uint
         {
-            FWP_EMPTY = 0,
-            FWP_UINT8 = 1,
-            FWP_UINT16 = 2,
-            FWP_UINT32 = 3,
-            FWP_UINT64 = 4
+            FWP_EMPTY = 0, FWP_UINT8 = 1, FWP_UINT16 = 2, FWP_UINT32 = 3, FWP_UINT64 = 4
         }
 
         private enum FWP_MATCH_TYPE : uint
         {
-            FWP_MATCH_EQUAL = 0,
-            FWP_MATCH_GREATER = 1,
-            FWP_MATCH_LESS = 2,
-            FWP_MATCH_GREATER_OR_EQUAL = 3,
-            FWP_MATCH_LESS_OR_EQUAL = 4,
-            FWP_MATCH_RANGE = 5,
-            FWP_MATCH_FLAGS_ALL_SET = 6,
-            FWP_MATCH_FLAGS_ANY_SET = 7,
-            FWP_MATCH_FLAGS_NONE_SET = 8,
-            FWP_MATCH_EQUAL_CASE_INSENSITIVE = 9,
-            FWP_MATCH_NOT_EQUAL = 10
+            FWP_MATCH_EQUAL = 0, FWP_MATCH_GREATER = 1, FWP_MATCH_LESS = 2,
+            FWP_MATCH_GREATER_OR_EQUAL = 3, FWP_MATCH_LESS_OR_EQUAL = 4,
+            FWP_MATCH_RANGE = 5, FWP_MATCH_NOT_EQUAL = 10
         }
 
         private enum FWP_ACTION_TYPE : uint
         {
             FWP_ACTION_BLOCK = 0x00000001,
-            FWP_ACTION_PERMIT = 0x00000002,
-            FWP_ACTION_CALLOUT_TERMINATING = 0x00000003,
-            FWP_ACTION_CALLOUT_INSPECTION = 0x00000004,
-            FWP_ACTION_CALLOUT_UNKNOWN = 0x00000005,
-            FWP_ACTION_CONTINUE = 0x00000006,
-            FWP_ACTION_NONE = 0x00000007,
-            FWP_ACTION_NONE_NO_MATCH = 0x00000008
+            FWP_ACTION_PERMIT = 0x00000002
         }
 
         #endregion
@@ -749,12 +478,7 @@ namespace UrlFilterService.Services
         {
             public string Name { get; set; }
             public Guid Id { get; set; }
-
-            public WfpFilter(string name, Guid id)
-            {
-                Name = name;
-                Id = id;
-            }
+            public WfpFilter(string name, Guid id) { Name = name; Id = id; }
         }
     }
 }

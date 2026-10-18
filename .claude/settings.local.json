@@ -5,8 +5,28 @@
       "Bash(ls:*)",
       "Bash(find:*)",
       "Bash(grep:*)",
-      "Bash(sed:*)"
+      "Bash(sed:*)",
+      "Bash(pgrep:*)",
+      "Bash(kill:*)",
+      "Bash(scriptsbuild.bat)",
+      "Bash(./scripts/build.bat)",
+      "Bash(pwsh:*)",
+      "Bash(dotnet build:*)",
+      "Bash(scriptsbuild.bat make build debug)",
+      "Bash(./scripts/build.bat make:*)",
+      "Bash(cmd.exe:*)",
+      "Bash(scripts/build.bat)",
+      "Bash(./build/build.bat)",
+      "Bash(start \"\" \"windows\\AdminControlPanel\\bin\\Debug\\net6.0-windows\\AdminControlPanel.exe\")",
+      "Bash(taskkill:*)",
+      "Bash(start \"\" \"C:\\Users\\finis\\source\\Projects\\WebFilterApp\\windows\\AdminControlPanel\\bin\\Debug\\net6.0-windows\\AdminControlPanel.exe\")",
+      "Bash(AdminControlPanel.exe)",
+      "Bash(wc -l /c/Users/finis/source/Projects/WebFilterApp/android/app/src/main/java/com/urlfilter/**/*.java)",
+      "Bash(exit 0)",
+      "Bash(cmd //c \"taskkill /F /IM UrlFilterService.exe & taskkill /F /IM AdminControlPanel.exe & exit 0\")",
+      "PowerShell(& \"C:\\\\Users\\\\finis\\\\source\\\\Projects\\\\WebFilterApp\\\\tests\\\\dns-filter-smoke.ps1\"; Write-Host \"SCRIPT EXIT CODE: $LASTEXITCODE\")"
     ],
     "deny": []
-  }
+  },
+  "model": "opus"
 }

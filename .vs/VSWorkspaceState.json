@@ -1,16 +1,15 @@
 {
   "ExpandedNodes": [
     "",
+    "\\android",
+    "\\android\\app",
+    "\\scripts",
+    "\\shared",
+    "\\shared\\logging",
     "\\windows",
     "\\windows\\AdminControlPanel",
-    "\\windows\\AdminControlPanel\\obj",
-    "\\windows\\AdminControlPanel\\obj\\Debug",
-    "\\windows\\AdminControlPanel\\obj\\Debug\\net6.0-windows",
-    "\\windows\\AdminControlPanel\\obj\\Release",
-    "\\windows\\AdminControlPanel\\obj\\Release\\net6.0-windows",
-    "\\windows\\AdminControlPanel\\Views",
-    "\\windows\\Common"
+    "\\windows\\AdminControlPanel\\Controls",
+    "\\windows\\DevTools"
   ],
-  "SelectedNode": "\\windows\\AdminControlPanel\\obj\\Release\\net6.0-windows",
   "PreviewInSolutionExplorer": false
 }

@@ -2,7 +2,7 @@
 -- Comprehensive schema for cross-platform URL filtering with user management
 
 -- Device Users Management
-CREATE TABLE device_users (
+CREATE TABLE IF NOT EXISTS device_users (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     username TEXT UNIQUE NOT NULL, -- Windows username or Android user ID
     display_name TEXT NOT NULL,
@@ -17,7 +17,7 @@ CREATE TABLE device_users (
 );
 
 -- User-Specific URL Permissions
-CREATE TABLE user_url_permissions (
+CREATE TABLE IF NOT EXISTS user_url_permissions (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     user_id INTEGER NOT NULL REFERENCES device_users(id) ON DELETE CASCADE,
     url_pattern TEXT NOT NULL,
@@ -31,7 +31,7 @@ CREATE TABLE user_url_permissions (
 );
 
 -- Time-Based Access Control
-CREATE TABLE user_time_restrictions (
+CREATE TABLE IF NOT EXISTS user_time_restrictions (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     user_id INTEGER NOT NULL REFERENCES device_users(id) ON DELETE CASCADE,
     day_of_week INTEGER CHECK(day_of_week BETWEEN 0 AND 6), -- 0=Sunday, 6=Saturday
@@ -44,7 +44,7 @@ CREATE TABLE user_time_restrictions (
 );
 
 -- Daily Usage Tracking
-CREATE TABLE daily_usage_log (
+CREATE TABLE IF NOT EXISTS daily_usage_log (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     user_id INTEGER NOT NULL REFERENCES device_users(id) ON DELETE CASCADE,
     usage_date DATE NOT NULL,
@@ -59,7 +59,7 @@ CREATE TABLE daily_usage_log (
 );
 
 -- Internet Sessions
-CREATE TABLE internet_sessions (
+CREATE TABLE IF NOT EXISTS internet_sessions (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     user_id INTEGER NOT NULL REFERENCES device_users(id) ON DELETE CASCADE,
     session_start TIMESTAMP NOT NULL,
@@ -74,7 +74,7 @@ CREATE TABLE internet_sessions (
 );
 
 -- URL Lists Table (Enhanced)
-CREATE TABLE url_lists (
+CREATE TABLE IF NOT EXISTS url_lists (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     url_pattern TEXT NOT NULL,
     list_type TEXT CHECK(list_type IN ('whitelist', 'blacklist')) NOT NULL,
@@ -88,7 +88,7 @@ CREATE TABLE url_lists (
 );
 
 -- YouTube Channel Management (Enhanced)
-CREATE TABLE youtube_channels (
+CREATE TABLE IF NOT EXISTS youtube_channels (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     channel_id TEXT UNIQUE NOT NULL,
     channel_name TEXT NOT NULL,
@@ -108,7 +108,7 @@ CREATE TABLE youtube_channels (
 );
 
 -- User-Specific YouTube Access
-CREATE TABLE user_youtube_permissions (
+CREATE TABLE IF NOT EXISTS user_youtube_permissions (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     user_id INTEGER NOT NULL REFERENCES device_users(id) ON DELETE CASCADE,
     channel_id INTEGER NOT NULL REFERENCES youtube_channels(id) ON DELETE CASCADE,
@@ -122,7 +122,7 @@ CREATE TABLE user_youtube_permissions (
 );
 
 -- YouTube Video Patterns (for granular control)
-CREATE TABLE youtube_patterns (
+CREATE TABLE IF NOT EXISTS youtube_patterns (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     pattern_type TEXT CHECK(pattern_type IN ('channel_id', 'channel_name', 'video_id', 'playlist_id', 'search_term')) NOT NULL,
     pattern_value TEXT NOT NULL,
@@ -134,7 +134,7 @@ CREATE TABLE youtube_patterns (
 );
 
 -- Blocked Attempts Log (Enhanced)
-CREATE TABLE blocked_attempts (
+CREATE TABLE IF NOT EXISTS blocked_attempts (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     user_id INTEGER REFERENCES device_users(id),
     url TEXT NOT NULL,
@@ -149,7 +149,7 @@ CREATE TABLE blocked_attempts (
 );
 
 -- Admin Users and Permissions
-CREATE TABLE admin_users (
+CREATE TABLE IF NOT EXISTS admin_users (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     user_identifier TEXT UNIQUE NOT NULL, -- AD username, Azure AD object ID, or Android account email
     display_name TEXT,
@@ -165,7 +165,7 @@ CREATE TABLE admin_users (
 );
 
 -- SSO Authentication Sessions
-CREATE TABLE auth_sessions (
+CREATE TABLE IF NOT EXISTS auth_sessions (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     user_id INTEGER NOT NULL REFERENCES admin_users(id) ON DELETE CASCADE,
     session_token TEXT UNIQUE NOT NULL,
@@ -179,7 +179,7 @@ CREATE TABLE auth_sessions (
 );
 
 -- Admin Settings
-CREATE TABLE admin_settings (
+CREATE TABLE IF NOT EXISTS admin_settings (
     key TEXT PRIMARY KEY,
     value TEXT,
     value_type TEXT CHECK(value_type IN ('string', 'integer', 'boolean', 'json')) DEFAULT 'string',
@@ -191,7 +191,7 @@ CREATE TABLE admin_settings (
 );
 
 -- Content Categories for easy management
-CREATE TABLE content_categories (
+CREATE TABLE IF NOT EXISTS content_categories (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     category_name TEXT UNIQUE NOT NULL,
     description TEXT,
@@ -204,7 +204,7 @@ CREATE TABLE content_categories (
 );
 
 -- Device Information and Management
-CREATE TABLE managed_devices (
+CREATE TABLE IF NOT EXISTS managed_devices (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     device_id TEXT UNIQUE NOT NULL, -- Hardware ID or UUID
     device_name TEXT NOT NULL,
@@ -219,7 +219,7 @@ CREATE TABLE managed_devices (
 );
 
 -- Emergency Override Codes
-CREATE TABLE emergency_codes (
+CREATE TABLE IF NOT EXISTS emergency_codes (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     code TEXT UNIQUE NOT NULL,
     created_by INTEGER NOT NULL REFERENCES admin_users(id),
@@ -233,7 +233,7 @@ CREATE TABLE emergency_codes (
 );
 
 -- Emergency Usage Log
-CREATE TABLE emergency_usage_log (
+CREATE TABLE IF NOT EXISTS emergency_usage_log (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     code_id INTEGER NOT NULL REFERENCES emergency_codes(id),
     user_id INTEGER REFERENCES device_users(id),
@@ -245,7 +245,7 @@ CREATE TABLE emergency_usage_log (
 );
 
 -- System Audit Log
-CREATE TABLE audit_log (
+CREATE TABLE IF NOT EXISTS audit_log (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     table_name TEXT NOT NULL,
     record_id INTEGER,
@@ -260,7 +260,7 @@ CREATE TABLE audit_log (
 );
 
 -- Notification Templates
-CREATE TABLE notification_templates (
+CREATE TABLE IF NOT EXISTS notification_templates (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     template_name TEXT UNIQUE NOT NULL,
     template_type TEXT CHECK(template_type IN ('email', 'sms', 'push', 'in_app')) NOT NULL,
@@ -272,7 +272,7 @@ CREATE TABLE notification_templates (
 );
 
 -- User Notifications
-CREATE TABLE user_notifications (
+CREATE TABLE IF NOT EXISTS user_notifications (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     user_id INTEGER NOT NULL REFERENCES device_users(id) ON DELETE CASCADE,
     template_id INTEGER REFERENCES notification_templates(id),
@@ -287,26 +287,26 @@ CREATE TABLE user_notifications (
 );
 
 -- Create Indexes for Performance
-CREATE INDEX idx_device_users_username ON device_users(username);
-CREATE INDEX idx_device_users_type ON device_users(user_type);
-CREATE INDEX idx_user_url_permissions_user_id ON user_url_permissions(user_id);
-CREATE INDEX idx_user_time_restrictions_user_id ON user_time_restrictions(user_id);
-CREATE INDEX idx_daily_usage_log_user_date ON daily_usage_log(user_id, usage_date);
-CREATE INDEX idx_internet_sessions_user_start ON internet_sessions(user_id, session_start);
-CREATE INDEX idx_url_lists_pattern ON url_lists(url_pattern);
-CREATE INDEX idx_url_lists_type ON url_lists(list_type);
-CREATE INDEX idx_youtube_channels_channel_id ON youtube_channels(channel_id);
-CREATE INDEX idx_user_youtube_permissions_user_channel ON user_youtube_permissions(user_id, channel_id);
-CREATE INDEX idx_blocked_attempts_user_timestamp ON blocked_attempts(user_id, timestamp);
-CREATE INDEX idx_blocked_attempts_timestamp ON blocked_attempts(timestamp);
-CREATE INDEX idx_auth_sessions_token ON auth_sessions(session_token);
-CREATE INDEX idx_audit_log_table_record ON audit_log(table_name, record_id);
-CREATE INDEX idx_audit_log_date ON audit_log(change_date);
+CREATE INDEX IF NOT EXISTS idx_device_users_username ON device_users(username);
+CREATE INDEX IF NOT EXISTS idx_device_users_type ON device_users(user_type);
+CREATE INDEX IF NOT EXISTS idx_user_url_permissions_user_id ON user_url_permissions(user_id);
+CREATE INDEX IF NOT EXISTS idx_user_time_restrictions_user_id ON user_time_restrictions(user_id);
+CREATE INDEX IF NOT EXISTS idx_daily_usage_log_user_date ON daily_usage_log(user_id, usage_date);
+CREATE INDEX IF NOT EXISTS idx_internet_sessions_user_start ON internet_sessions(user_id, session_start);
+CREATE INDEX IF NOT EXISTS idx_url_lists_pattern ON url_lists(url_pattern);
+CREATE INDEX IF NOT EXISTS idx_url_lists_type ON url_lists(list_type);
+CREATE INDEX IF NOT EXISTS idx_youtube_channels_channel_id ON youtube_channels(channel_id);
+CREATE INDEX IF NOT EXISTS idx_user_youtube_permissions_user_channel ON user_youtube_permissions(user_id, channel_id);
+CREATE INDEX IF NOT EXISTS idx_blocked_attempts_user_timestamp ON blocked_attempts(user_id, timestamp);
+CREATE INDEX IF NOT EXISTS idx_blocked_attempts_timestamp ON blocked_attempts(timestamp);
+CREATE INDEX IF NOT EXISTS idx_auth_sessions_token ON auth_sessions(session_token);
+CREATE INDEX IF NOT EXISTS idx_audit_log_table_record ON audit_log(table_name, record_id);
+CREATE INDEX IF NOT EXISTS idx_audit_log_date ON audit_log(change_date);
 
 -- Insert Default Data
 
 -- Default admin settings
-INSERT INTO admin_settings (key, value, value_type, description, category) VALUES
+INSERT OR IGNORE INTO admin_settings (key, value, value_type, description, category) VALUES
 ('default_adult_policy', 'allow', 'string', 'Default internet access policy for adults', 'security'),
 ('default_teen_policy', 'filtered', 'string', 'Default internet access policy for teenagers', 'security'),
 ('default_child_policy', 'restricted', 'string', 'Default internet access policy for children', 'security'),
@@ -319,7 +319,7 @@ INSERT INTO admin_settings (key, value, value_type, description, category) VALUE
 ('block_vpn_access', '1', 'boolean', 'Block access to VPN services', 'security');
 
 -- Default content categories
-INSERT INTO content_categories (category_name, description, age_appropriate, default_action, color_code, icon_name, is_system) VALUES
+INSERT OR IGNORE INTO content_categories (category_name, description, age_appropriate, default_action, color_code, icon_name, is_system) VALUES
 ('Educational', 'Educational websites and content', 'all_ages', 'allow', '#4CAF50', 'school', 1),
 ('Social Media', 'Social networking platforms', 'teen_plus', 'block', '#2196F3', 'people', 1),
 ('Gaming', 'Online games and gaming platforms', 'teen_plus', 'block', '#FF9800', 'games', 1),
@@ -330,7 +330,7 @@ INSERT INTO content_categories (category_name, description, age_appropriate, def
 ('Security Risk', 'Potentially malicious or unsafe sites', 'all_ages', 'block', '#D32F2F', 'security', 1);
 
 -- Default notification templates
-INSERT INTO notification_templates (template_name, template_type, subject, body_template) VALUES
+INSERT OR IGNORE INTO notification_templates (template_name, template_type, subject, body_template) VALUES
 ('time_limit_warning', 'in_app', 'Time Limit Warning', 'You have {{remaining_minutes}} minutes of internet time remaining today.'),
 ('time_limit_exceeded', 'in_app', 'Internet Time Used Up', 'Your daily internet time limit has been reached. Try again tomorrow!'),
 ('blocked_attempt', 'in_app', 'Website Blocked', 'Access to {{url}} was blocked due to {{reason}}.'),

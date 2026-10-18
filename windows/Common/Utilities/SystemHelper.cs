@@ -1,6 +1,7 @@
 using System;
 using System.Diagnostics;
 using System.IO;
+using System.Runtime.Versioning;
 using System.Security.Principal;
 using System.ServiceProcess;
 using Microsoft.Extensions.Logging;
@@ -15,6 +16,7 @@ namespace Common.Utilities
         /// <summary>
         /// Check if current process is running as administrator
         /// </summary>
+        [SupportedOSPlatform("windows")]
         public static bool IsRunningAsAdministrator()
         {
             try
@@ -32,6 +34,7 @@ namespace Common.Utilities
         /// <summary>
         /// Check if Windows service exists and is running
         /// </summary>
+        [SupportedOSPlatform("windows")]
         public static bool IsServiceRunning(string serviceName)
         {
             try
@@ -48,6 +51,7 @@ namespace Common.Utilities
         /// <summary>
         /// Start Windows service
         /// </summary>
+        [SupportedOSPlatform("windows")]
         public static bool StartService(string serviceName, ILogger logger = null)
         {
             try
@@ -72,6 +76,7 @@ namespace Common.Utilities
         /// <summary>
         /// Stop Windows service
         /// </summary>
+        [SupportedOSPlatform("windows")]
         public static bool StopService(string serviceName, ILogger logger = null)
         {
             try
@@ -95,6 +100,7 @@ namespace Common.Utilities
         /// <summary>
         /// Execute command with administrator privileges
         /// </summary>
+        [SupportedOSPlatform("windows")]
         public static bool ExecuteAsAdmin(string fileName, string arguments = "", ILogger logger = null)
         {
             try

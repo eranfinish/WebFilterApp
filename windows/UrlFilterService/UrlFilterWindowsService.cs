@@ -1,37 +1,38 @@
 using System;
 using System.ServiceProcess;
 using System.ComponentModel;
-using System.Configuration.Install;
 using System.Timers;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using UrlFilterService.Services;
-//using UrlFilterService.Models;
 using UrlFilter.Shared.Models;
 
 namespace UrlFilterService
 {
     /// <summary>
-    /// Windows Service implementation for URL filtering using Windows Filtering Platform
+    /// Windows Service implementation for URL filtering.
+    /// Primary filtering: DNS interception (blocks domains by returning 0.0.0.0).
+    /// Secondary filtering: WFP IP-based blocking (backup enforcement).
+    /// IPC: Named pipe server for admin panel communication.
     /// </summary>
     public partial class UrlFilterWindowsService : ServiceBase
     {
         private ILogger<UrlFilterWindowsService> _logger;
         private IServiceProvider _serviceProvider;
         private WfpFilterService _wfpService;
+        private DnsInterceptorService _dnsService;
+        private ServiceCommandHandler _commandHandler;
         private UserDetectionService _userDetectionService;
         private FilterEngine _filterEngine;
-        //private ProxyService _proxyService;
         private DatabaseService _databaseService;
-        //private AuthenticationService _authService;
+        private PolicyEnforcementService _policyService;
         private Timer _monitoringTimer;
         private bool _isRunning = false;
 
         public UrlFilterWindowsService()
         {
-            InitializeComponent();
             SetupDependencyInjection();
         }
 
@@ -54,12 +55,12 @@ namespace UrlFilterService
             // Core services
             services.AddSingleton<DatabaseService>();
             services.AddSingleton<WfpFilterService>();
+            services.AddSingleton<DnsInterceptorService>();
+            services.AddSingleton<ServiceCommandHandler>();
             services.AddSingleton<UserDetectionService>();
             services.AddSingleton<FilterEngine>();
-            //services.AddSingleton<ProxyService>();
-            //services.AddSingleton<AuthenticationService>();
-            //services.AddSingleton<ConfigurationService>();
-            //services.AddSingleton<AuditService>();
+            services.AddSingleton<AuditService>();
+            services.AddSingleton<PolicyEnforcementService>();
 
             _serviceProvider = services.BuildServiceProvider();
             _logger = _serviceProvider.GetService<ILogger<UrlFilterWindowsService>>();
@@ -88,36 +89,47 @@ namespace UrlFilterService
                 _userDetectionService = _serviceProvider.GetService<UserDetectionService>();
                 _filterEngine = _serviceProvider.GetService<FilterEngine>();
                 _wfpService = _serviceProvider.GetService<WfpFilterService>();
-                //_proxyService = _serviceProvider.GetService<ProxyService>();
-                //_authService = _serviceProvider.GetService<AuthenticationService>();
+                _dnsService = _serviceProvider.GetService<DnsInterceptorService>();
+                _commandHandler = _serviceProvider.GetService<ServiceCommandHandler>();
+                _policyService = _serviceProvider.GetService<PolicyEnforcementService>();
 
                 // Initialize database
                 InitializeDatabaseAsync().Wait();
 
                 // Initialize user detection
                 _logger.LogInformation("Initializing user detection service");
-                _userDetectionService.InvalidateUserCache(); // Ensure fresh detection
+                _userDetectionService.InvalidateUserCache();
 
-                // Start Windows Filtering Platform service
+                // Start WFP service (IP-based blocking backup)
                 _wfpService.Start();
 
-                // Start proxy service for HTTPS inspection
-                //_proxyService.Start(8080);
+                // Start DNS interceptor (primary filtering)
+                _dnsService.StartAsync().Wait();
+
+                // Start IPC command handler (admin panel communication)
+                _commandHandler.Start();
 
                 // Start user detection
                 _userDetectionService.Start();
+
+                // Start policy enforcement (DoH block, browser policies, process kill)
+                _policyService.Start();
 
                 // Setup periodic monitoring
                 SetupMonitoring();
 
                 _logger.LogInformation("URL Filter Service started successfully");
+                _logger.LogInformation("  DNS filtering: ACTIVE on 127.0.0.1:53");
+                _logger.LogInformation("  WFP IP blocking: ACTIVE");
+                _logger.LogInformation("  IPC command handler: ACTIVE");
 
-                // Log service start event
                 LogServiceEvent("SERVICE_STARTED");
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Failed to start URL Filter Service");
+                // Attempt graceful cleanup
+                TestStop();
                 throw;
             }
         }
@@ -133,13 +145,14 @@ namespace UrlFilterService
                 _monitoringTimer?.Dispose();
 
                 // Stop services in reverse order
+                _policyService?.Stop();
+                _commandHandler?.Stop();
                 _userDetectionService?.Stop();
-                //_proxyService?.Stop();
+                _dnsService?.Stop();  // This restores original DNS settings
                 _wfpService?.Stop();
 
                 _logger.LogInformation("URL Filter Service stopped successfully");
 
-                // Log service stop event
                 LogServiceEvent("SERVICE_STOPPED");
             }
             catch (Exception ex)
@@ -313,19 +326,19 @@ namespace UrlFilterService
                 bool isHealthy = true;
                 var healthIssues = new System.Collections.Generic.List<string>();
 
+                // Check DNS interceptor
+                if (!_dnsService.IsRunning)
+                {
+                    isHealthy = false;
+                    healthIssues.Add("DNS Interceptor not running");
+                }
+
                 // Check WFP service
                 if (!_wfpService.IsRunning)
                 {
                     isHealthy = false;
                     healthIssues.Add("WFP Filter Service not running");
                 }
-
-                // Check proxy service
-                /*if (!_proxyService.IsRunning)
-                {
-                    isHealthy = false;
-                    healthIssues.Add("Proxy Service not running");
-                }*/
 
                 // Check database connectivity
                 if (!_databaseService.IsConnected)
@@ -356,6 +369,14 @@ namespace UrlFilterService
         {
             try
             {
+                if (!_dnsService.IsRunning)
+                {
+                    _logger.LogInformation("Restarting DNS Interceptor Service");
+                    _dnsService.Stop();
+                    await Task.Delay(2000);
+                    await _dnsService.StartAsync();
+                }
+
                 if (!_wfpService.IsRunning)
                 {
                     _logger.LogInformation("Restarting WFP Filter Service");
@@ -363,14 +384,6 @@ namespace UrlFilterService
                     await Task.Delay(2000);
                     _wfpService.Start();
                 }
-
-                /*if (!_proxyService.IsRunning)
-                {
-                    _logger.LogInformation("Restarting Proxy Service");
-                    _proxyService.Stop();
-                    await Task.Delay(2000);
-                    _proxyService.Start(8080);
-                }*/
 
                 if (!_databaseService.IsConnected)
                 {
@@ -391,7 +404,7 @@ namespace UrlFilterService
                 try
                 {
                     var auditService = _serviceProvider.GetService<AuditService>();
-                    await auditService.LogEventAsync("service", eventType, $"URL Filter Service event: {eventType}");
+                    await auditService.LogEventAsync(eventType, $"URL Filter Service event: {eventType}");
                 }
                 catch (Exception ex)
                 {
@@ -452,7 +465,8 @@ namespace UrlFilterService
         }
     }
 
-    // Service installer
+    // Service installer - Commented out as modern .NET services use different installation approach
+    /*
     [RunInstaller(true)]
     public partial class UrlFilterServiceInstaller : Installer
     {
@@ -480,4 +494,5 @@ namespace UrlFilterService
             Installers.Add(serviceInstaller);
         }
     }
+    */
 }

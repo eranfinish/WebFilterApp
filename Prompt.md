@@ -802,22 +802,890 @@ class MDMAuthProvider(private val context: Context) {
         }
     }
 }
-Implement certificate pinning for admin communications
-Use code obfuscation to prevent reverse engineering
-Add integrity checks to prevent tampering
-Implement secure key exchange for multi-device sync
-Testing Requirements
-Unit tests for URL matching algorithms
-Integration tests for network filtering
-Performance tests under high traffic loads
-Security penetration testing
-Cross-platform compatibility testing
-Deployment Strategy
-Create installer packages for Windows (.msi)
-Build signed APK for Android with proper permissions
-Provide deployment scripts for enterprise environments
-Include documentation for IT administrators
-Create troubleshooting guides
+## Security Implementation Details
+
+### Certificate Management
+```csharp
+// Certificate pinning for admin communications
+public class SecureCommunicationManager
+{
+    private readonly X509Certificate2 trustedCertificate;
+    
+    public async Task<bool> ValidateServerCertificate(X509Certificate2 serverCert)
+    {
+        // Pin certificate to prevent MITM attacks
+        return serverCert.Thumbprint.Equals(trustedCertificate.Thumbprint, StringComparison.OrdinalIgnoreCase);
+    }
+    
+    public async Task<string> EncryptAdminData(string data, string adminId)
+    {
+        using (var rsa = trustedCertificate.GetRSAPublicKey())
+        {
+            var encrypted = rsa.Encrypt(Encoding.UTF8.GetBytes(data), RSAEncryptionPadding.OaepSHA256);
+            return Convert.ToBase64String(encrypted);
+        }
+    }
+}
+```
+
+### Code Obfuscation and Protection
+```csharp
+// Anti-tampering measures
+[System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.NoInlining)]
+public class IntegrityChecker
+{
+    private static readonly byte[] expectedHash = { /* Assembly hash */ };
+    
+    public static bool ValidateAssemblyIntegrity()
+    {
+        var currentAssembly = Assembly.GetExecutingAssembly();
+        using (var stream = File.OpenRead(currentAssembly.Location))
+        {
+            using (var sha256 = SHA256.Create())
+            {
+                var computedHash = sha256.ComputeHash(stream);
+                return computedHash.SequenceEqual(expectedHash);
+            }
+        }
+    }
+    
+    public static void InitializeSecurityChecks()
+    {
+        if (!ValidateAssemblyIntegrity())
+        {
+            Environment.Exit(-1); // Terminate if tampered
+        }
+        
+        // Additional runtime checks
+        DetectDebuggerAndVirtualization();
+    }
+    
+    private static void DetectDebuggerAndVirtualization()
+    {
+        if (Debugger.IsAttached || IsRunningInVirtualMachine())
+        {
+            // Log security event and potentially restrict functionality
+            LogSecurityEvent("Debugging or virtualization detected");
+        }
+    }
+}
+```
+
+### Secure Key Exchange
+```csharp
+// Multi-device synchronization security
+public class SecureConfigSync
+{
+    private readonly byte[] deviceKey;
+    
+    public async Task<EncryptedConfig> EncryptConfigForSync(FilterConfig config)
+    {
+        using (var aes = Aes.Create())
+        {
+            aes.Key = deviceKey;
+            aes.GenerateIV();
+            
+            using (var encryptor = aes.CreateEncryptor())
+            {
+                var configJson = JsonSerializer.Serialize(config);
+                var encrypted = encryptor.TransformFinalBlock(Encoding.UTF8.GetBytes(configJson), 0, configJson.Length);
+                
+                return new EncryptedConfig
+                {
+                    Data = encrypted,
+                    IV = aes.IV,
+                    Timestamp = DateTimeOffset.UtcNow,
+                    DeviceId = Environment.MachineName
+                };
+            }
+        }
+    }
+}
+```
+
+### Bypass Protection Implementation
+```csharp
+// Windows Registry Protection
+public class RegistryProtectionManager
+{
+    private readonly string[] protectedKeys = {
+        @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Internet Settings",
+        @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Internet Settings",
+        @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\WinHttpAutoProxySvc"
+    };
+    
+    public void EnableRegistryProtection()
+    {
+        foreach (var keyPath in protectedKeys)
+        {
+            try
+            {
+                using (var key = Registry.LocalMachine.OpenSubKey(keyPath.Replace("HKEY_LOCAL_MACHINE\\", ""), true))
+                {
+                    if (key != null)
+                    {
+                        // Set registry permissions to prevent modification
+                        var security = key.GetAccessControl();
+                        security.SetAccessRule(new RegistryAccessRule(
+                            WindowsIdentity.GetCurrent().Name,
+                            RegistryRights.SetValue | RegistryRights.CreateSubKey | RegistryRights.Delete,
+                            AccessControlType.Deny));
+                        key.SetAccessControl(security);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                LogSecurityEvent($"Failed to protect registry key {keyPath}: {ex.Message}");
+            }
+        }
+    }
+}
+```
+
+### Android Root Detection and Protection
+```kotlin
+// Android security measures
+class AndroidSecurityManager(private val context: Context) {
+    
+    fun checkDeviceSecurity(): SecurityStatus {
+        val issues = mutableListOf<String>()
+        
+        if (isDeviceRooted()) {
+            issues.add("Device is rooted")
+        }
+        
+        if (isDeveloperOptionsEnabled()) {
+            issues.add("Developer options enabled")
+        }
+        
+        if (isAdbEnabled()) {
+            issues.add("ADB debugging enabled")
+        }
+        
+        if (hasXposedFramework()) {
+            issues.add("Xposed framework detected")
+        }
+        
+        return SecurityStatus(
+            isSecure = issues.isEmpty(),
+            securityIssues = issues
+        )
+    }
+    
+    private fun isDeviceRooted(): Boolean {
+        val rootPaths = arrayOf(
+            "/system/app/Superuser.apk",
+            "/sbin/su",
+            "/system/bin/su",
+            "/system/xbin/su"
+        )
+        
+        return rootPaths.any { File(it).exists() } ||
+               canExecuteCommand("su") ||
+               checkForRootApps()
+    }
+    
+    private fun checkForRootApps(): Boolean {
+        val rootApps = arrayOf(
+            "com.noshufou.android.su",
+            "com.thirdparty.superuser",
+            "eu.chainfire.supersu",
+            "com.koushikdutta.superuser"
+        )
+        
+        val pm = context.packageManager
+        return rootApps.any { packageName ->
+            try {
+                pm.getPackageInfo(packageName, 0)
+                true
+            } catch (e: PackageManager.NameNotFoundException) {
+                false
+            }
+        }
+    }
+}
+```
+## Testing Requirements
+
+### Unit Tests
+```csharp
+// URL Pattern Matching Tests
+[TestClass]
+public class UrlFilterTests
+{
+    [TestMethod]
+    public void TestWildcardMatching()
+    {
+        var filter = new UrlFilter();
+        
+        // Test wildcard patterns
+        Assert.IsTrue(filter.IsBlocked("*.facebook.com", "www.facebook.com"));
+        Assert.IsTrue(filter.IsBlocked("*.facebook.com", "mobile.facebook.com"));
+        Assert.IsFalse(filter.IsBlocked("*.facebook.com", "google.com"));
+    }
+    
+    [TestMethod]
+    public void TestRegexPatterns()
+    {
+        var filter = new UrlFilter();
+        
+        // Test regex patterns for social media
+        var socialMediaPattern = @".*\.(facebook|twitter|instagram|tiktok)\.com.*";
+        Assert.IsTrue(filter.MatchesPattern(socialMediaPattern, "www.facebook.com/profile"));
+        Assert.IsTrue(filter.MatchesPattern(socialMediaPattern, "mobile.twitter.com/home"));
+    }
+    
+    [TestMethod]
+    public void TestYouTubeChannelExtraction()
+    {
+        var parser = new YouTubeUrlParser();
+        
+        var channelId = parser.ExtractChannelId("https://www.youtube.com/channel/UC_x5XG1OV2P6uZZ5FSM9Ttw");
+        Assert.AreEqual("UC_x5XG1OV2P6uZZ5FSM9Ttw", channelId);
+        
+        var handleUrl = parser.ExtractChannelId("https://www.youtube.com/@GoogleDevelopers");
+        Assert.IsNotNull(handleUrl);
+    }
+}
+```
+
+### Integration Tests
+```csharp
+[TestClass]
+public class NetworkFilteringIntegrationTests
+{
+    private TestHttpProxy testProxy;
+    private FilterEngine filterEngine;
+    
+    [TestInitialize]
+    public void Setup()
+    {
+        testProxy = new TestHttpProxy(8888);
+        filterEngine = new FilterEngine();
+    }
+    
+    [TestMethod]
+    public async Task TestHttpsTrafficFiltering()
+    {
+        // Configure blocked site
+        filterEngine.AddBlockedUrl("badsite.com");
+        
+        // Attempt to access blocked site through proxy
+        var client = new HttpClient(new HttpClientHandler { Proxy = testProxy });
+        var response = await client.GetAsync("https://badsite.com");
+        
+        Assert.AreEqual(HttpStatusCode.Forbidden, response.StatusCode);
+    }
+    
+    [TestMethod]
+    public async Task TestUserSpecificFiltering()
+    {
+        // Setup child user with restricted access
+        var childUser = new DeviceUser { Id = 1, UserType = UserType.Child };
+        filterEngine.SetCurrentUser(childUser);
+        filterEngine.AddUserBlockedUrl(1, "mature-content.com");
+        
+        var client = CreateProxiedHttpClient();
+        var response = await client.GetAsync("https://mature-content.com");
+        
+        Assert.AreEqual(HttpStatusCode.Forbidden, response.StatusCode);
+        
+        // Verify adult can access same site
+        var adultUser = new DeviceUser { Id = 2, UserType = UserType.Adult };
+        filterEngine.SetCurrentUser(adultUser);
+        
+        response = await client.GetAsync("https://mature-content.com");
+        Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
+    }
+    
+    [TestMethod]
+    public async Task TestTimeBasedRestrictions()
+    {
+        var childUser = new DeviceUser { Id = 1, UserType = UserType.Child };
+        
+        // Set restriction: only 9 AM to 5 PM
+        filterEngine.AddTimeRestriction(1, TimeSpan.FromHours(9), TimeSpan.FromHours(17));
+        
+        // Test outside allowed hours (simulate 8 PM)
+        filterEngine.SetCurrentTime(new DateTime(2024, 1, 1, 20, 0, 0));
+        
+        var client = CreateProxiedHttpClient();
+        var response = await client.GetAsync("https://google.com");
+        
+        Assert.AreEqual(HttpStatusCode.Forbidden, response.StatusCode);
+    }
+}
+```
+
+### Performance Tests
+```csharp
+[TestClass]
+public class PerformanceTests
+{
+    [TestMethod]
+    public async Task TestHighVolumeTrafficHandling()
+    {
+        var filterEngine = new FilterEngine();
+        var tasks = new List<Task<FilterResult>>();
+        
+        // Simulate 1000 concurrent requests
+        for (int i = 0; i < 1000; i++)
+        {
+            tasks.Add(filterEngine.CheckUrlAsync($"https://testsite{i % 100}.com"));
+        }
+        
+        var stopwatch = Stopwatch.StartNew();
+        var results = await Task.WhenAll(tasks);
+        stopwatch.Stop();
+        
+        // Should handle 1000 requests in under 5 seconds
+        Assert.IsTrue(stopwatch.ElapsedMilliseconds < 5000);
+        Assert.AreEqual(1000, results.Length);
+    }
+    
+    [TestMethod]
+    public void TestMemoryUsageUnderLoad()
+    {
+        var filterEngine = new FilterEngine();
+        
+        // Add 10,000 URL patterns
+        for (int i = 0; i < 10000; i++)
+        {
+            filterEngine.AddBlockedUrl($"blocked{i}.com");
+        }
+        
+        var initialMemory = GC.GetTotalMemory(true);
+        
+        // Perform 10,000 URL checks
+        for (int i = 0; i < 10000; i++)
+        {
+            filterEngine.IsBlocked($"testsite{i}.com");
+        }
+        
+        var finalMemory = GC.GetTotalMemory(true);
+        var memoryIncrease = finalMemory - initialMemory;
+        
+        // Memory increase should be less than 50MB
+        Assert.IsTrue(memoryIncrease < 50 * 1024 * 1024);
+    }
+}
+```
+
+### Security Penetration Tests
+```csharp
+[TestClass]
+public class SecurityTests
+{
+    [TestMethod]
+    public void TestBypassAttempts()
+    {
+        var filterEngine = new FilterEngine();
+        filterEngine.AddBlockedUrl("blocked.com");
+        
+        // Test various bypass techniques
+        var bypassAttempts = new[]
+        {
+            "https://blocked.com.evil.com",  // Domain spoofing
+            "https://bl0cked.com",           // Character substitution
+            "https://blocked.com:8080",      // Port manipulation
+            "https://1.2.3.4",              // IP address instead of domain
+            "https://blocked.com/../allowed.com", // Path traversal
+            "https://blocked.com%2eevil.com" // URL encoding
+        };
+        
+        foreach (var attempt in bypassAttempts)
+        {
+            var result = filterEngine.IsBlocked(attempt);
+            
+            // Should detect and block bypass attempts
+            if (attempt.Contains("blocked"))
+            {
+                Assert.IsTrue(result, $"Failed to block bypass attempt: {attempt}");
+            }
+        }
+    }
+    
+    [TestMethod]
+    public void TestSQLInjectionAttempts()
+    {
+        var database = new FilterDatabase();
+        
+        // Test SQL injection in admin functions
+        var maliciousInput = "'; DROP TABLE admin_users; --";
+        
+        Assert.ThrowsException<ArgumentException>(() =>
+        {
+            database.AddAdminUser(maliciousInput, "test@test.com");
+        });
+    }
+    
+    [TestMethod]
+    public void TestCertificatePinning()
+    {
+        var commManager = new SecureCommunicationManager();
+        
+        // Test with invalid certificate
+        var fakeCert = new X509Certificate2(/* fake cert data */);
+        
+        Assert.IsFalse(commManager.ValidateServerCertificate(fakeCert));
+    }
+}
+```
+
+### Cross-Platform Compatibility Tests
+```csharp
+[TestClass]
+public class CompatibilityTests
+{
+    [TestMethod]
+    public void TestWindowsVersionCompatibility()
+    {
+        var versions = new[] { "Windows 10", "Windows 11", "Windows Server 2019", "Windows Server 2022" };
+        
+        foreach (var version in versions)
+        {
+            var compatibility = SystemCompatibility.CheckWindowsVersion(version);
+            Assert.IsTrue(compatibility.IsSupported, $"Unsupported Windows version: {version}");
+        }
+    }
+    
+    [TestMethod]
+    public void TestBrowserCompatibility()
+    {
+        var browsers = new[] { "Chrome", "Firefox", "Edge", "Safari" };
+        var proxyConfig = new ProxyConfiguration();
+        
+        foreach (var browser in browsers)
+        {
+            var success = proxyConfig.ConfigureBrowser(browser);
+            Assert.IsTrue(success, $"Failed to configure {browser}");
+        }
+    }
+    
+    [TestMethod]
+    public void TestAndroidAPILevelCompatibility()
+    {
+        // Test API levels 21 (Android 5.0) through 34 (Android 14)
+        for (int apiLevel = 21; apiLevel <= 34; apiLevel++)
+        {
+            var compatibility = AndroidCompatibility.CheckAPILevel(apiLevel);
+            Assert.IsTrue(compatibility.IsSupported, $"API level {apiLevel} not supported");
+        }
+    }
+}
+```
+
+### Load Testing
+```bash
+# Apache Bench testing for proxy performance
+ab -n 10000 -c 100 -H "Host: testsite.com" http://localhost:8080/
+
+# Expected results:
+# - Requests per second: > 1000
+# - Average response time: < 100ms
+# - 99th percentile: < 500ms
+# - Zero failed requests
+```
+## Deployment Strategy
+
+### Windows MSI Installer Configuration
+```xml
+<!-- Product.wxs - WiX installer configuration -->
+<?xml version="1.0" encoding="UTF-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+  <Product Id="*" Name="URL Filter System" Language="1033" Version="1.0.0.0" 
+           Manufacturer="Your Company" UpgradeCode="PUT-GUID-HERE">
+    
+    <Package InstallerVersion="200" Compressed="yes" InstallScope="perMachine" 
+             Platform="x64" AdminImage="no"/>
+    
+    <MajorUpgrade DowngradeErrorMessage="A newer version is already installed." />
+    <MediaTemplate />
+    
+    <Feature Id="ProductFeature" Title="URL Filter System" Level="1">
+      <ComponentGroupRef Id="ServiceComponents" />
+      <ComponentGroupRef Id="AdminUIComponents" />
+      <ComponentGroupRef Id="CertificateComponents" />
+    </Feature>
+    
+    <!-- Custom Actions -->
+    <Binary Id="ServiceInstaller" SourceFile="ServiceInstaller.CA.dll" />
+    
+    <CustomAction Id="InstallService" BinaryKey="ServiceInstaller" 
+                  DllEntry="InstallUrlFilterService" Execute="deferred" 
+                  Return="check" Impersonate="no" />
+                  
+    <CustomAction Id="StartService" BinaryKey="ServiceInstaller" 
+                  DllEntry="StartUrlFilterService" Execute="deferred" 
+                  Return="check" Impersonate="no" />
+                  
+    <CustomAction Id="ConfigureFirewall" BinaryKey="ServiceInstaller" 
+                  DllEntry="ConfigureWindowsFirewall" Execute="deferred" 
+                  Return="check" Impersonate="no" />
+    
+    <InstallExecuteSequence>
+      <Custom Action="InstallService" After="InstallFiles">NOT Installed</Custom>
+      <Custom Action="ConfigureFirewall" After="InstallService">NOT Installed</Custom>
+      <Custom Action="StartService" After="ConfigureFirewall">NOT Installed</Custom>
+    </InstallExecuteSequence>
+  </Product>
+</Wix>
+```
+
+### PowerShell Enterprise Deployment Script
+```powershell
+# deploy-enterprise.ps1 - Enterprise deployment automation
+[CmdletBinding()]
+param(
+    [Parameter(Mandatory=$true)]
+    [string]$Domain,
+    
+    [Parameter(Mandatory=$true)]
+    [string]$AdminGroup,
+    
+    [string]$InstallPath = "C:\Program Files\UrlFilterSystem",
+    [string]$ConfigPath = "C:\ProgramData\UrlFilterSystem",
+    [switch]$Silent,
+    [switch]$ConfigureGPO
+)
+
+Write-Host "Starting URL Filter System Enterprise Deployment" -ForegroundColor Green
+
+# Check if running as administrator
+if (-NOT ([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole] "Administrator")) {
+    Write-Error "This script must be run as Administrator"
+    exit 1
+}
+
+# Download and verify installer
+$InstallerUrl = "https://releases.company.com/urlfilter/UrlFilterSystem.msi"
+$InstallerPath = "$env:TEMP\UrlFilterSystem.msi"
+$ExpectedHash = "SHA256HASHHERE"
+
+Write-Host "Downloading installer..." -ForegroundColor Yellow
+Invoke-WebRequest -Uri $InstallerUrl -OutFile $InstallerPath
+
+$ActualHash = (Get-FileHash -Path $InstallerPath -Algorithm SHA256).Hash
+if ($ActualHash -ne $ExpectedHash) {
+    Write-Error "Installer hash verification failed!"
+    exit 1
+}
+
+# Install MSI package
+$InstallArgs = @(
+    "/i"
+    $InstallerPath
+    "/quiet"
+    "/norestart"
+    "INSTALLFOLDER=`"$InstallPath`""
+    "CONFIGFOLDER=`"$ConfigPath`""
+    "ADMIN_GROUP=`"$Domain\$AdminGroup`""
+)
+
+Write-Host "Installing URL Filter System..." -ForegroundColor Yellow
+$Process = Start-Process -FilePath "msiexec.exe" -ArgumentList $InstallArgs -Wait -PassThru
+
+if ($Process.ExitCode -ne 0) {
+    Write-Error "Installation failed with exit code: $($Process.ExitCode)"
+    exit 1
+}
+
+# Configure Active Directory integration
+Write-Host "Configuring Active Directory integration..." -ForegroundColor Yellow
+$ConfigFile = "$ConfigPath\appsettings.json"
+
+$Config = @{
+    "Authentication" = @{
+        "Type" = "ActiveDirectory"
+        "Domain" = $Domain
+        "AdminGroups" = @($AdminGroup)
+    }
+    "Database" = @{
+        "ConnectionString" = "Data Source=$ConfigPath\urlfilter.db"
+    }
+    "Logging" = @{
+        "Level" = "Information"
+        "EventLog" = $true
+    }
+} | ConvertTo-Json -Depth 3
+
+Set-Content -Path $ConfigFile -Value $Config
+
+# Configure Group Policy if requested
+if ($ConfigureGPO) {
+    Write-Host "Configuring Group Policy..." -ForegroundColor Yellow
+    
+    $GPOPath = "$ConfigPath\GroupPolicy"
+    New-Item -ItemType Directory -Path $GPOPath -Force | Out-Null
+    
+    # Copy ADMX templates
+    Copy-Item -Path ".\templates\UrlFilterSystem.admx" -Destination "$env:SystemRoot\PolicyDefinitions\" -Force
+    Copy-Item -Path ".\templates\UrlFilterSystem.adml" -Destination "$env:SystemRoot\PolicyDefinitions\en-US\" -Force
+    
+    Write-Host "Group Policy templates installed. Configure via Group Policy Management Console." -ForegroundColor Green
+}
+
+# Start services
+Write-Host "Starting URL Filter Service..." -ForegroundColor Yellow
+Start-Service -Name "UrlFilterService" -ErrorAction Stop
+
+Write-Host "Verifying service status..." -ForegroundColor Yellow
+$Service = Get-Service -Name "UrlFilterService"
+if ($Service.Status -eq "Running") {
+    Write-Host "URL Filter System deployed successfully!" -ForegroundColor Green
+} else {
+    Write-Error "Service failed to start. Check Windows Event Log for details."
+    exit 1
+}
+
+Write-Host "Deployment completed. Access admin panel at: http://localhost:8080/admin" -ForegroundColor Green
+```
+
+### Android APK Build Configuration
+```gradle
+// app/build.gradle - Android build configuration
+android {
+    compileSdkVersion 34
+    buildToolsVersion "34.0.0"
+    
+    defaultConfig {
+        applicationId "com.company.urlfilter"
+        minSdkVersion 21
+        targetSdkVersion 34
+        versionCode 1
+        versionName "1.0.0"
+        
+        // Enable multidex for enterprise features
+        multiDexEnabled true
+    }
+    
+    signingConfigs {
+        release {
+            storeFile file("../certificates/release-keystore.jks")
+            storePassword System.getenv("KEYSTORE_PASSWORD")
+            keyAlias "urlfilter-release"
+            keyPassword System.getenv("KEY_PASSWORD")
+        }
+        enterprise {
+            storeFile file("../certificates/enterprise-keystore.jks")
+            storePassword System.getenv("ENTERPRISE_KEYSTORE_PASSWORD")
+            keyAlias "urlfilter-enterprise"
+            keyPassword System.getenv("ENTERPRISE_KEY_PASSWORD")
+        }
+    }
+    
+    buildTypes {
+        debug {
+            applicationIdSuffix ".debug"
+            debuggable true
+            minifyEnabled false
+        }
+        
+        release {
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
+        }
+        
+        enterprise {
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.enterprise
+            applicationIdSuffix ".enterprise"
+            
+            // Enterprise-specific features
+            buildConfigField "boolean", "ENTERPRISE_MODE", "true"
+            buildConfigField "String", "MDM_PACKAGE", '"com.company.urlfilter.mdm"'
+        }
+    }
+    
+    productFlavors {
+        consumer {
+            dimension "deployment"
+            applicationIdSuffix ".consumer"
+        }
+        
+        enterprise {
+            dimension "deployment"
+            applicationIdSuffix ".enterprise"
+        }
+    }
+}
+
+dependencies {
+    implementation 'androidx.core:core-ktx:1.12.0'
+    implementation 'androidx.appcompat:appcompat:1.6.1'
+    implementation 'com.google.android.material:material:1.10.0'
+    
+    // VPN service dependencies
+    implementation 'org.pcap4j:pcap4j-core:1.8.2'
+    implementation 'org.pcap4j:pcap4j-packetfactory-static:1.8.2'
+    
+    // Security and authentication
+    implementation 'com.google.android.gms:play-services-auth:20.7.0'
+    implementation 'com.microsoft.identity.client:msal:4.9.0'
+    
+    // Database
+    implementation 'androidx.room:room-runtime:2.5.0'
+    implementation 'androidx.room:room-ktx:2.5.0'
+    kapt 'androidx.room:room-compiler:2.5.0'
+    
+    // Enterprise MDM integration
+    enterpriseImplementation 'com.google.android.enterprise:enterprise-sdk:1.0.0'
+}
+```
+
+### Docker Container Deployment
+```dockerfile
+# Dockerfile for centralized management server
+FROM mcr.microsoft.com/dotnet/aspnet:6.0 AS base
+WORKDIR /app
+EXPOSE 80
+EXPOSE 443
+
+FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
+WORKDIR /src
+COPY ["ManagementServer/ManagementServer.csproj", "ManagementServer/"]
+COPY ["Shared/Models/UrlFilter.Shared.Models.csproj", "Shared/Models/"]
+COPY ["Shared/Logging/UrlFilter.Shared.Logging.csproj", "Shared/Logging/"]
+RUN dotnet restore "ManagementServer/ManagementServer.csproj"
+COPY . .
+WORKDIR "/src/ManagementServer"
+RUN dotnet build "ManagementServer.csproj" -c Release -o /app/build
+
+FROM build AS publish
+RUN dotnet publish "ManagementServer.csproj" -c Release -o /app/publish
+
+FROM base AS final
+WORKDIR /app
+COPY --from=publish /app/publish .
+
+# Install SSL certificates
+COPY certificates/ssl.crt /usr/local/share/ca-certificates/
+RUN update-ca-certificates
+
+# Create non-root user for security
+RUN adduser --disabled-password --gecos '' appuser
+USER appuser
+
+ENTRYPOINT ["dotnet", "ManagementServer.dll"]
+```
+
+### Kubernetes Deployment Configuration
+```yaml
+# kubernetes-deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: urlfilter-management
+  namespace: urlfilter-system
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: urlfilter-management
+  template:
+    metadata:
+      labels:
+        app: urlfilter-management
+    spec:
+      containers:
+      - name: management-server
+        image: company/urlfilter-management:1.0.0
+        ports:
+        - containerPort: 80
+        - containerPort: 443
+        env:
+        - name: DATABASE_CONNECTION
+          valueFrom:
+            secretKeyRef:
+              name: urlfilter-secrets
+              key: database-connection
+        - name: JWT_SECRET
+          valueFrom:
+            secretKeyRef:
+              name: urlfilter-secrets
+              key: jwt-secret
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "250m"
+          limits:
+            memory: "512Mi"
+            cpu: "500m"
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 80
+          initialDelaySeconds: 30
+          periodSeconds: 10
+        readinessProbe:
+          httpGet:
+            path: /ready
+            port: 80
+          initialDelaySeconds: 5
+          periodSeconds: 5
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: urlfilter-management-service
+  namespace: urlfilter-system
+spec:
+  selector:
+    app: urlfilter-management
+  ports:
+  - name: http
+    port: 80
+    targetPort: 80
+  - name: https
+    port: 443
+    targetPort: 443
+  type: LoadBalancer
+```
+
+### Configuration Templates
+```json
+// enterprise-config-template.json
+{
+  "deployment": {
+    "type": "enterprise",
+    "domain": "COMPANY.COM",
+    "adminGroups": ["Domain Admins", "IT Security"],
+    "certificateAuthority": "COMPANY-CA",
+    "logLevel": "Information"
+  },
+  "authentication": {
+    "provider": "ActiveDirectory",
+    "azureAdTenantId": "tenant-id-here",
+    "allowedDomains": ["company.com", "subsidiary.com"]
+  },
+  "filtering": {
+    "defaultPolicy": "block-all",
+    "allowedCategories": ["business", "educational", "productivity"],
+    "timeRestrictions": {
+      "enabled": true,
+      "businessHours": "08:00-18:00",
+      "weekendsEnabled": false
+    }
+  },
+  "youtube": {
+    "enabled": true,
+    "defaultAccess": "blocked",
+    "allowedChannels": ["educational-channels-list"],
+    "ageRestrictedContent": "blocked"
+  },
+  "monitoring": {
+    "enabled": true,
+    "alertThresholds": {
+      "bypassAttempts": 5,
+      "excessiveBlocking": 100
+    },
+    "reportingInterval": "daily"
+  }
+}
+```
 Advanced Features (Optional)
 Cloud Management: Web-based admin panel for remote management
 AI-based Content Analysis: Automatic categorization of blocked content
@@ -867,31 +1735,186 @@ Use YouTube Data API v3 to fetch channel information
 Validate channel IDs and resolve channel names to IDs
 Cache channel metadata to reduce API calls
 Handle API rate limits and quota management
-File Structure
+## File Structure
+```
 url-filter-system/
 ├── android/
-│   ├── app/src/main/java/com/company/urlfilter/
-│   ├── vpn-service/
-│   ├── admin-ui/
-│   └── database/
+│   ├── app/
+│   │   ├── src/main/java/com/company/urlfilter/
+│   │   │   ├── vpn/VpnService.kt
+│   │   │   ├── proxy/HttpProxy.kt
+│   │   │   ├── filter/FilterEngine.kt
+│   │   │   ├── auth/SSOManager.kt
+│   │   │   ├── ui/AdminActivity.kt
+│   │   │   ├── database/FilterDatabase.kt
+│   │   │   ├── security/SecurityManager.kt
+│   │   │   └── models/
+│   │   │       ├── DeviceUser.kt
+│   │   │       ├── FilterResult.kt
+│   │   │       └── TimeRestriction.kt
+│   │   ├── src/main/res/
+│   │   │   ├── layout/
+│   │   │   ├── values/
+│   │   │   └── xml/device_admin.xml
+│   │   └── AndroidManifest.xml
+│   ├── build.gradle
+│   └── proguard-rules.pro
 ├── windows/
 │   ├── UrlFilterService/
+│   │   ├── Program.cs
+│   │   ├── FilterService.cs
+│   │   ├── NetworkMonitor.cs
+│   │   ├── UserDetector.cs
+│   │   └── UrlFilterService.csproj
 │   ├── AdminControlPanel/
+│   │   ├── Views/
+│   │   │   ├── MainWindow.xaml
+│   │   │   ├── UserManagement.xaml
+│   │   │   ├── FilterSettings.xaml
+│   │   │   └── YouTubeManager.xaml
+│   │   ├── ViewModels/
+│   │   │   ├── MainViewModel.cs
+│   │   │   ├── UserViewModel.cs
+│   │   │   └── FilterViewModel.cs
+│   │   ├── Models/
+│   │   │   ├── DeviceUser.cs
+│   │   │   ├── FilterRule.cs
+│   │   │   └── YouTubeChannel.cs
+│   │   ├── Services/
+│   │   │   ├── SSOService.cs
+│   │   │   ├── DatabaseService.cs
+│   │   │   └── ConfigurationService.cs
+│   │   ├── App.xaml
+│   │   └── AdminControlPanel.csproj
 │   ├── WFPIntegration/
-│   └── Installer/
+│   │   ├── WfpManager.cs
+│   │   ├── NetworkFilter.cs
+│   │   ├── ProxyConfiguration.cs
+│   │   └── WFPIntegration.csproj
+│   ├── Common/
+│   │   ├── Models/
+│   │   │   ├── FilterConfiguration.cs
+│   │   │   ├── AdminUser.cs
+│   │   │   └── SecurityContext.cs
+│   │   ├── Services/
+│   │   │   ├── DatabaseManager.cs
+│   │   │   ├── CryptoService.cs
+│   │   │   └── LoggingService.cs
+│   │   ├── Utilities/
+│   │   │   ├── UrlParser.cs
+│   │   │   ├── PatternMatcher.cs
+│   │   │   └── YouTubeHelper.cs
+│   │   └── Common.csproj
+│   ├── Installer/
+│   │   ├── Product.wxs
+│   │   ├── ServiceInstaller.cs
+│   │   ├── RegistrySetup.cs
+│   │   ├── CertificateInstaller.cs
+│   │   └── UrlFilterInstaller.wixproj
+│   └── WebFilterApp.sln
 ├── shared/
-│   ├── database-schema/
-│   ├── url-patterns/
-│   ├── sso-integration/
-│   │   ├── windows-ad-config/
-│   │   ├── azure-ad-config/
-│   │   ├── android-account-config/
-│   │   └── mdm-integration/
-│   └── configuration/
+│   ├── database/
+│   │   ├── schema.sql
+│   │   ├── initial-data.sql
+│   │   ├── migrations/
+│   │   │   ├── 001_initial_schema.sql
+│   │   │   ├── 002_add_youtube_features.sql
+│   │   │   └── 003_add_time_restrictions.sql
+│   │   └── stored-procedures/
+│   │       ├── sp_CheckUrlAccess.sql
+│   │       ├── sp_LogBlockedAttempt.sql
+│   │       └── sp_UpdateUsageStats.sql
+│   ├── models/
+│   │   ├── UrlFilter.Shared.Models.csproj
+│   │   ├── DeviceUser.cs
+│   │   ├── FilterRule.cs
+│   │   ├── TimeRestriction.cs
+│   │   ├── YouTubeChannel.cs
+│   │   ├── AdminUser.cs
+│   │   ├── FilterResult.cs
+│   │   └── SecurityContext.cs
+│   ├── logging/
+│   │   ├── UrlFilter.Shared.Logging.csproj
+│   │   ├── ILogger.cs
+│   │   ├── FileLogger.cs
+│   │   ├── EventLogLogger.cs
+│   │   └── SecurityEventLogger.cs
+│   ├── configuration/
+│   │   ├── default-filters.json
+│   │   ├── youtube-categories.json
+│   │   ├── educational-sites.json
+│   │   ├── family-friendly-channels.json
+│   │   └── enterprise-templates.json
+│   └── sso-integration/
+│       ├── windows-ad/
+│       │   ├── ADAuthProvider.cs
+│       │   ├── GroupPolicyTemplates.admx
+│       │   └── deployment-scripts.ps1
+│       ├── azure-ad/
+│       │   ├── AzureADAuthProvider.cs
+│       │   ├── app-registration.json
+│       │   └── conditional-access-policy.json
+│       ├── android-sso/
+│       │   ├── GoogleAuthProvider.kt
+│       │   ├── WorkProfileAuth.kt
+│       │   └── MDMIntegration.kt
+│       └── enterprise-mdm/
+│           ├── IntuneProvider.cs
+│           ├── WorkspaceONEProvider.cs
+│           └── policy-templates/
+├── build/
+│   ├── scripts/
+│   │   ├── build-windows.ps1
+│   │   ├── build-android.sh
+│   │   ├── package-installer.ps1
+│   │   └── deploy-enterprise.ps1
+│   ├── certificates/
+│   │   ├── root-ca.crt
+│   │   ├── intermediate.crt
+│   │   └── code-signing.p12
+│   └── logs/
+├── tests/
+│   ├── windows/
+│   │   ├── FilterEngineTests.cs
+│   │   ├── NetworkFilterTests.cs
+│   │   ├── SecurityTests.cs
+│   │   ├── PerformanceTests.cs
+│   │   └── IntegrationTests.cs
+│   ├── android/
+│   │   ├── VpnServiceTest.kt
+│   │   ├── FilterEngineTest.kt
+│   │   ├── SecurityTest.kt
+│   │   └── UITests.kt
+│   └── shared/
+│       ├── DatabaseTests.cs
+│       ├── PatternMatchingTests.cs
+│       └── YouTubeParsingTests.cs
 └── docs/
     ├── installation/
+    │   ├── windows-install.md
+    │   ├── android-install.md
+    │   ├── enterprise-deployment.md
+    │   └── certificate-setup.md
     ├── configuration/
-    └── troubleshooting/
+    │   ├── admin-guide.md
+    │   ├── sso-setup.md
+    │   ├── family-setup-wizard.md
+    │   └── youtube-management.md
+    ├── troubleshooting/
+    │   ├── common-issues.md
+    │   ├── performance-tuning.md
+    │   ├── security-incidents.md
+    │   └── bypass-detection.md
+    ├── api/
+    │   ├── filter-engine-api.md
+    │   ├── admin-api.md
+    │   └── database-schema.md
+    └── development/
+        ├── building-from-source.md
+        ├── testing-guide.md
+        ├── security-review.md
+        └── contribution-guidelines.md
+```
 Success Criteria
 Block 99.9% of blacklisted URLs across all supported browsers and apps
 Admin interface allows easy management of 10,000+ URL entries

@@ -42,11 +42,11 @@ namespace UrlFilterService.Services
                 // Check cache first
                 if (_cachedCurrentUser != null && DateTime.Now - _lastUserCheck < _userCacheExpiry)
                 {
-                    _logger.LogTrace($"Returning cached current user: {_cachedCurrentUser.Username}");
+                    _logger.LogTrace("Returning cached current user: {Username}", _cachedCurrentUser.Username);
                     return _cachedCurrentUser;
                 }
 
-                _logger.LogDebug("Detecting current active user", "UserDetection");
+                _logger.LogDebug("Detecting current active user");
 
                 // Get current Windows user
                 var windowsIdentity = WindowsIdentity.GetCurrent();
@@ -61,14 +61,14 @@ namespace UrlFilterService.Services
                 var username = windowsIdentity.Name;
                 var displayName = userPrincipal?.DisplayName ?? ExtractUsernameFromIdentity(username);
 
-                _logger.LogTrace($"Windows user detected: {username} ({displayName})");
+                _logger.LogTrace("Windows user detected: {Username} ({DisplayName})", username, displayName);
 
                 // Look up user in database
                 var deviceUser = await _databaseService.GetDeviceUserByUsernameAsync(username);
                 
                 if (deviceUser == null)
                 {
-                    _logger.LogDebug($"User {username} not found in database, creating new user profile");
+                    _logger.LogDebug("User {Username} not found in database, creating new user profile", username);
                     
                     // Create new user profile
                     deviceUser = new DeviceUser
@@ -81,14 +81,14 @@ namespace UrlFilterService.Services
                     };
 
                     deviceUser.Id = await _databaseService.InsertDeviceUserAsync(deviceUser);
-                    _logger.LogInformation($"Created new user profile: {username} (ID: {deviceUser.Id})");
+                    _logger.LogInformation("Created new user profile: {Username} (ID: {UserId})", username, deviceUser.Id);
                 }
 
                 // Update cache
                 _cachedCurrentUser = deviceUser;
                 _lastUserCheck = DateTime.Now;
 
-                _logger.LogDebug($"Current user identified: {deviceUser.Username} (Type: {deviceUser.UserType})");
+                _logger.LogDebug("Current user identified: {Username} (Type: {UserType})", deviceUser.Username, deviceUser.UserType);
                 return deviceUser;
             }
             catch (Exception ex)
@@ -105,14 +105,14 @@ namespace UrlFilterService.Services
         {
             try
             {
-                _logger.LogTrace($"Getting user for process ID: {processId}");
+                _logger.LogTrace("Getting user for process ID: {ProcessId}", processId);
 
                 // Get process owner using WMI
                 var processOwner = GetProcessOwner(processId);
                 
                 if (string.IsNullOrEmpty(processOwner))
                 {
-                    _logger.LogWarning($"Could not determine owner for process {processId}");
+                    _logger.LogWarning("Could not determine owner for process {ProcessId}", processId);
                     return await GetCurrentUserAsync(); // Fallback to current user
                 }
 
@@ -121,7 +121,7 @@ namespace UrlFilterService.Services
                 
                 if (deviceUser == null)
                 {
-                    _logger.LogDebug($"Process owner {processOwner} not found in database, using current user");
+                    _logger.LogDebug("Process owner {ProcessOwner} not found in database, using current user", processOwner);
                     return await GetCurrentUserAsync(); // Fallback to current user
                 }
 
@@ -129,7 +129,7 @@ namespace UrlFilterService.Services
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, $"Error getting user from process {processId}");
+                _logger.LogError(ex, "Error getting user from process {ProcessId}", processId);
                 return await GetCurrentUserAsync(); // Fallback to current user
             }
         }
@@ -160,11 +160,11 @@ namespace UrlFilterService.Services
                     }
                     catch (Exception ex)
                     {
-                        _logger.LogWarning(ex, $"Error getting user data for {username}");
+                        _logger.LogWarning(ex, "Error getting user data for {Username}", username);
                     }
                 }
 
-                _logger.LogDebug($"Found {activeUsers.Count} active system users");
+                _logger.LogDebug("Found {Count} active system users", activeUsers.Count);
                 return activeUsers;
             }
             catch (Exception ex)
@@ -216,7 +216,7 @@ namespace UrlFilterService.Services
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, $"Error checking permission {permission} for user {user?.Username}");
+                _logger.LogError(ex, "Error checking permission {Permission} for user {Username}", permission, user?.Username);
                 return false; // Fail secure
             }
         }
@@ -319,7 +319,7 @@ namespace UrlFilterService.Services
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, $"Error getting process owner for PID {processId}");
+                _logger.LogError(ex, "Error getting process owner for PID {ProcessId}", processId);
             }
 
             return null;
@@ -382,6 +382,23 @@ namespace UrlFilterService.Services
         }
 
         #endregion
+
+        /// <summary>
+        /// Alias for GetActiveSystemUsersAsync to maintain compatibility
+        /// </summary>
+        public async Task<List<DeviceUser>> GetActiveUsersAsync()
+        {
+            return await GetActiveSystemUsersAsync();
+        }
+
+        /// <summary>
+        /// Get count of active users
+        /// </summary>
+        public async Task<int> GetActiveUserCountAsync()
+        {
+            var activeUsers = await GetActiveSystemUsersAsync();
+            return activeUsers.Count;
+        }
     }
 
     /// <summary>

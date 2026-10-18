@@ -12,7 +12,8 @@ namespace UrlFilter.Shared.Models
         Adult,
         Teen,
         Child,
-        Guest
+        Guest,
+        Admin
     }
 
     public enum PermissionType
@@ -57,10 +58,10 @@ namespace UrlFilter.Shared.Models
         public int Id { get; set; }
         
         [Required]
-        public string Username { get; set; }
+        public string Username { get; set; } = string.Empty;
         
         [Required]
-        public string DisplayName { get; set; }
+        public string? DisplayName { get; set; } = string.Empty;
         
         public UserType UserType { get; set; } = UserType.Adult;
         
@@ -72,14 +73,14 @@ namespace UrlFilter.Shared.Models
         
         public int? ParentUserId { get; set; }
         
-        public string AvatarPath { get; set; }
+        public string? AvatarPath { get; set; }
         
         public DateTime? LastLogin { get; set; }
         
         public int? CreatedBy { get; set; }
 
         // Navigation properties
-        public DeviceUser ParentUser { get; set; }
+        public DeviceUser? ParentUser { get; set; }
         public List<DeviceUser> ChildUsers { get; set; } = new List<DeviceUser>();
         public List<UserUrlPermission> UrlPermissions { get; set; } = new List<UserUrlPermission>();
         public List<UserTimeRestriction> TimeRestrictions { get; set; } = new List<UserTimeRestriction>();
@@ -93,11 +94,11 @@ namespace UrlFilter.Shared.Models
         public int UserId { get; set; }
         
         [Required]
-        public string UrlPattern { get; set; }
+        public string UrlPattern { get; set; } = string.Empty;
         
         public PermissionType PermissionType { get; set; } = PermissionType.Inherit;
         
-        public string Category { get; set; }
+        public string? Category { get; set; }
         
         public int? GrantedBy { get; set; }
         
@@ -105,13 +106,13 @@ namespace UrlFilter.Shared.Models
         
         public DateTime? ExpiresDate { get; set; }
         
-        public string Notes { get; set; }
+        public string? Notes { get; set; }
         
         public bool IsActive { get; set; } = true;
 
         // Navigation properties
-        public DeviceUser User { get; set; }
-        public AdminUser GrantedByAdmin { get; set; }
+        public DeviceUser? User { get; set; }
+        public AdminUser? GrantedByAdmin { get; set; }
     }
 
     public class UserTimeRestriction
@@ -135,7 +136,7 @@ namespace UrlFilter.Shared.Models
         public DateTime ModifiedDate { get; set; } = DateTime.UtcNow;
 
         // Navigation properties
-        public DeviceUser User { get; set; }
+        public DeviceUser? User { get; set; }
     }
 
     public class DailyUsageLog
@@ -161,7 +162,7 @@ namespace UrlFilter.Shared.Models
         public int GamingMinutes { get; set; } = 0;
 
         // Navigation properties
-        public DeviceUser User { get; set; }
+        public DeviceUser? User { get; set; }
     }
 
     public class InternetSession
@@ -182,14 +183,16 @@ namespace UrlFilter.Shared.Models
         
         public int AllowedRequests { get; set; } = 0;
         
-        public string TopDomains { get; set; } // JSON array
+        public string? TopDomains { get; set; } // JSON array
         
-        public string DeviceInfo { get; set; }
+        public string? DeviceInfo { get; set; }
         
-        public string IpAddress { get; set; }
+        public string? IpAddress { get; set; }
+
+        public DateTime? LastActivityTime { get; set; }
 
         // Navigation properties
-        public DeviceUser User { get; set; }
+        public DeviceUser? User { get; set; }
     }
 
     public class UrlList
@@ -197,11 +200,11 @@ namespace UrlFilter.Shared.Models
         public int Id { get; set; }
         
         [Required]
-        public string UrlPattern { get; set; }
+        public string UrlPattern { get; set; } = string.Empty;
         
         public ListType ListType { get; set; }
         
-        public string Category { get; set; }
+        public string? Category { get; set; }
         
         public AgeRating AgeAppropriate { get; set; } = AgeRating.AllAges;
         
@@ -211,12 +214,12 @@ namespace UrlFilter.Shared.Models
         
         public bool IsActive { get; set; } = true;
         
-        public string Description { get; set; }
+        public string? Description { get; set; }
         
         public string MatchType { get; set; } = "domain"; // exact, wildcard, regex, domain
 
         // Navigation properties
-        public AdminUser AddedByAdmin { get; set; }
+        public AdminUser? AddedByAdmin { get; set; }
     }
 
     public class YouTubeChannel
@@ -224,19 +227,19 @@ namespace UrlFilter.Shared.Models
         public int Id { get; set; }
         
         [Required]
-        public string ChannelId { get; set; }
+        public string ChannelId { get; set; } = string.Empty;
         
         [Required]
-        public string ChannelName { get; set; }
+        public string ChannelName { get; set; } = string.Empty;
         
         [Required]
-        public string ChannelUrl { get; set; }
+        public string ChannelUrl { get; set; } = string.Empty;
         
-        public string ChannelHandle { get; set; } // @channel_handle format
+        public string? ChannelHandle { get; set; } // @channel_handle format
         
         public string AccessType { get; set; } = "blocked"; // allowed, blocked
         
-        public string Category { get; set; }
+        public string? Category { get; set; }
         
         public string AgeRating { get; set; } = "adult"; // kids, family, teen, adult
         
@@ -244,9 +247,9 @@ namespace UrlFilter.Shared.Models
         
         public int? SubscriberCount { get; set; }
         
-        public string Description { get; set; }
+        public string? Description { get; set; }
         
-        public string ThumbnailUrl { get; set; }
+        public string? ThumbnailUrl { get; set; }
         
         public DateTime AddedDate { get; set; } = DateTime.UtcNow;
         
@@ -257,7 +260,7 @@ namespace UrlFilter.Shared.Models
         public bool IsActive { get; set; } = true;
 
         // Navigation properties
-        public AdminUser AddedByAdmin { get; set; }
+        public AdminUser? AddedByAdmin { get; set; }
         public List<UserYouTubePermission> UserPermissions { get; set; } = new List<UserYouTubePermission>();
     }
 
@@ -282,9 +285,9 @@ namespace UrlFilter.Shared.Models
         public bool IsActive { get; set; } = true;
 
         // Navigation properties
-        public DeviceUser User { get; set; }
-        public YouTubeChannel Channel { get; set; }
-        public AdminUser GrantedByAdmin { get; set; }
+        public DeviceUser? User { get; set; }
+        public YouTubeChannel? Channel { get; set; }
+        public AdminUser? GrantedByAdmin { get; set; }
     }
 
     public class BlockedAttempt
@@ -294,27 +297,27 @@ namespace UrlFilter.Shared.Models
         public int? UserId { get; set; }
         
         [Required]
-        public string Url { get; set; }
+        public string Url { get; set; } = string.Empty;
         
         public string ContentType { get; set; } = "website"; // youtube_channel, youtube_video, website, social_media, gaming, adult, other
         
         [Required]
-        public string BlockReason { get; set; } // time_limit, blacklist, age_restriction, schedule, user_block, youtube_time_limit, parental_control
+        public string BlockReason { get; set; } = string.Empty; // time_limit, blacklist, age_restriction, schedule, user_block, youtube_time_limit, parental_control
         
-        public string ChannelInfo { get; set; } // JSON with channel details if YouTube content
+        public string? ChannelInfo { get; set; } // JSON with channel details if YouTube content
         
         public DateTime Timestamp { get; set; } = DateTime.UtcNow;
         
-        public string DeviceInfo { get; set; }
+        public string? DeviceInfo { get; set; }
         
-        public string UserAgent { get; set; }
+        public string? UserAgent { get; set; }
         
-        public string IpAddress { get; set; }
+        public string? IpAddress { get; set; }
         
         public string SeverityLevel { get; set; } = "medium"; // low, medium, high, critical
 
         // Navigation properties
-        public DeviceUser User { get; set; }
+        public DeviceUser? User { get; set; }
     }
 
     public class AdminUser
@@ -322,11 +325,11 @@ namespace UrlFilter.Shared.Models
         public int Id { get; set; }
         
         [Required]
-        public string UserIdentifier { get; set; } // AD username, Azure AD object ID, or Android account email
+        public string UserIdentifier { get; set; } = string.Empty; // AD username, Azure AD object ID, or Android account email
         
-        public string DisplayName { get; set; }
+        public string? DisplayName { get; set; }
         
-        public string Email { get; set; }
+        public string? Email { get; set; }
         
         public AuthProvider AuthenticationProvider { get; set; }
         
@@ -338,11 +341,11 @@ namespace UrlFilter.Shared.Models
         
         public bool IsActive { get; set; } = true;
         
-        public string ProfilePictureUrl { get; set; }
+        public string? ProfilePictureUrl { get; set; }
         
-        public string PhoneNumber { get; set; }
+        public string? PhoneNumber { get; set; }
         
-        public string EmergencyContactEmail { get; set; }
+        public string? EmergencyContactEmail { get; set; }
 
         // Navigation properties
         public List<AuthSession> AuthSessions { get; set; } = new List<AuthSession>();
@@ -357,9 +360,9 @@ namespace UrlFilter.Shared.Models
         public int UserId { get; set; }
         
         [Required]
-        public string SessionToken { get; set; }
+        public string SessionToken { get; set; } = string.Empty;
         
-        public string DeviceInfo { get; set; }
+        public string? DeviceInfo { get; set; }
         
         public DateTime LoginTimestamp { get; set; } = DateTime.UtcNow;
         
@@ -369,26 +372,26 @@ namespace UrlFilter.Shared.Models
         
         public bool IsValid { get; set; } = true;
         
-        public string IpAddress { get; set; }
+        public string? IpAddress { get; set; }
         
-        public string UserAgent { get; set; }
+        public string? UserAgent { get; set; }
 
         // Navigation properties
-        public AdminUser User { get; set; }
+        public AdminUser? User { get; set; }
     }
 
     public class AdminSetting
     {
         [Key]
-        public string Key { get; set; }
+        public string Key { get; set; } = string.Empty;
         
-        public string Value { get; set; }
+        public string? Value { get; set; }
         
         public string ValueType { get; set; } = "string"; // string, integer, boolean, json
         
-        public string Description { get; set; }
+        public string? Description { get; set; }
         
-        public string Category { get; set; }
+        public string? Category { get; set; }
         
         public bool IsSensitive { get; set; } = false;
         
@@ -397,7 +400,7 @@ namespace UrlFilter.Shared.Models
         public int? ModifiedBy { get; set; }
 
         // Navigation properties
-        public AdminUser ModifiedByAdmin { get; set; }
+        public AdminUser? ModifiedByAdmin { get; set; }
     }
 
     public class ContentCategory
@@ -405,17 +408,17 @@ namespace UrlFilter.Shared.Models
         public int Id { get; set; }
         
         [Required]
-        public string CategoryName { get; set; }
+        public string CategoryName { get; set; } = string.Empty;
         
-        public string Description { get; set; }
+        public string? Description { get; set; }
         
         public AgeRating AgeAppropriate { get; set; } = AgeRating.AllAges;
         
         public string DefaultAction { get; set; } = "block"; // allow, block
         
-        public string ColorCode { get; set; } // For UI color coding
+        public string? ColorCode { get; set; } // For UI color coding
         
-        public string IconName { get; set; } // For UI icons
+        public string? IconName { get; set; } // For UI icons
         
         public bool IsSystem { get; set; } = false; // System categories cannot be deleted
         
@@ -426,8 +429,8 @@ namespace UrlFilter.Shared.Models
     public class FilterResult
     {
         public bool IsAllowed { get; set; }
-        public string Reason { get; set; }
-        public string Category { get; set; }
+        public string? Reason { get; set; }
+        public string? Category { get; set; }
         public int? RemainingMinutes { get; set; }
 
         public static FilterResult Allowed(string reason = "Access granted", int? remainingMinutes = null)
@@ -444,7 +447,7 @@ namespace UrlFilter.Shared.Models
     public class AccessResult
     {
         public bool IsAllowed { get; set; }
-        public string Reason { get; set; }
+        public string? Reason { get; set; }
         public int? RemainingMinutes { get; set; }
 
         public static AccessResult Allowed(int? remainingMinutes = null)
@@ -472,7 +475,7 @@ namespace UrlFilter.Shared.Models
         public int MaxDailyHoursTeen { get; set; } = 4;
         public int SessionTimeoutMinutes { get; set; } = 120;
         public bool BlockVpnAccess { get; set; } = true;
-        public string YouTubeApiKey { get; set; }
+        public string? YouTubeApiKey { get; set; }
     }
 
     // Dashboard data classes
@@ -488,31 +491,59 @@ namespace UrlFilter.Shared.Models
     public class UserStatusInfo
     {
         public int UserId { get; set; }
-        public string Name { get; set; }
+        public string Name { get; set; } = string.Empty;
         public int Age { get; set; }
         public UserType UserType { get; set; }
         public bool IsOnline { get; set; }
         public int MinutesLeftToday { get; set; }
-        public string Status { get; set; } // Online, Time Up, Blocked, Offline
-        public string StatusColor { get; set; } // For UI
+        public string Status { get; set; } = string.Empty; // Online, Time Up, Blocked, Offline
+        public string StatusColor { get; set; } = string.Empty; // For UI
     }
 
     public class RecentAlert
     {
         public int UserId { get; set; }
-        public string UserName { get; set; }
-        public string AlertMessage { get; set; }
+        public string UserName { get; set; } = string.Empty;
+        public string AlertMessage { get; set; } = string.Empty;
         public DateTime Timestamp { get; set; }
-        public string Severity { get; set; }
+        public string Severity { get; set; } = string.Empty;
         public string Url { get; set; }
     }
 
     public class SystemStatus
     {
         public bool IsRunning { get; set; }
-        public string Version { get; set; }
+        public string Version { get; set; } = string.Empty;
         public DateTime LastUpdate { get; set; }
         public int ActiveUsers { get; set; }
         public int TotalBlocksToday { get; set; }
+    }
+
+    public class AuditLog
+    {
+        public int Id { get; set; }
+        
+        [Required]
+        public string EventType { get; set; } = string.Empty;
+        
+        [Required]
+        public string Description { get; set; } = string.Empty;
+        
+        public int? UserId { get; set; }
+        
+        public string Username { get; set; } = string.Empty;
+        
+        public DateTime Timestamp { get; set; } = DateTime.UtcNow;
+        
+        public string? IpAddress { get; set; }
+        
+        public string? DeviceInfo { get; set; }
+        
+        public string Severity { get; set; } = "Information"; // Information, Warning, Error, Critical
+        
+        public string? AdditionalData { get; set; } // JSON for extra context
+
+        // Navigation properties
+        public DeviceUser? User { get; set; }
     }
 }

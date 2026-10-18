@@ -24,15 +24,55 @@ namespace UrlFilterService.Services
         public DatabaseService(ILogger<DatabaseService> logger)
         {
             _logger = logger;
-            
-            // Set database path
-            var dataDir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), "UrlFilter", "Database");
-            Directory.CreateDirectory(dataDir);
-            
-            _databasePath = Path.Combine(dataDir, "urlfilter.db");
+
+            _databasePath = ResolveDatabasePath();
             _connectionString = $"Data Source={_databasePath};Version=3;";
-            
+
             _logger.LogInformation($"Database path: {_databasePath}");
+        }
+
+        // Service runs as LOCAL SYSTEM in production → ProgramData is writable.
+        // Console/dev mode runs as the interactive user → ProgramData may be read-only
+        // (Users:RX by default), so fall back to LocalAppData when we cannot write there.
+        private static string ResolveDatabasePath()
+        {
+            var programData = Path.Combine(
+                Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData),
+                "UrlFilter", "Database");
+            var pdDb = Path.Combine(programData, "urlfilter.db");
+            if (CanUseDbLocation(programData, pdDb))
+                return pdDb;
+
+            var localAppData = Path.Combine(
+                Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
+                "UrlFilter", "Database");
+            Directory.CreateDirectory(localAppData);
+            return Path.Combine(localAppData, "urlfilter.db");
+        }
+
+        // Directory must be creatable + writable, AND (if the DB file already exists) it must
+        // be openable for read+write. Otherwise a stale DB created by an elevated run will
+        // block a subsequent non-admin console/dev run.
+        private static bool CanUseDbLocation(string dir, string dbPath)
+        {
+            try
+            {
+                Directory.CreateDirectory(dir);
+                var probe = Path.Combine(dir, $".writetest-{Guid.NewGuid():N}");
+                File.WriteAllText(probe, "");
+                File.Delete(probe);
+            }
+            catch { return false; }
+
+            if (File.Exists(dbPath))
+            {
+                try
+                {
+                    using var fs = new FileStream(dbPath, FileMode.Open, FileAccess.ReadWrite, FileShare.ReadWrite);
+                }
+                catch { return false; }
+            }
+            return true;
         }
 
         public async Task InitializeAsync()
@@ -56,6 +96,18 @@ namespace UrlFilterService.Services
                 IsConnected = false;
                 throw;
             }
+        }
+
+        /// <summary>
+        /// Open a new dedicated connection (caller disposes). Used when a service
+        /// needs to run its own short-lived queries without contending on the
+        /// shared connection.
+        /// </summary>
+        public SQLiteConnection OpenConnection()
+        {
+            var conn = new SQLiteConnection(_connectionString);
+            conn.Open();
+            return conn;
         }
 
         public async Task ReconnectAsync()
@@ -93,7 +145,7 @@ namespace UrlFilterService.Services
                 
                 if (await reader.ReadAsync())
                 {
-                    return MapDeviceUser(reader);
+                    return MapDeviceUser((SQLiteDataReader)reader);
                 }
                 
                 return null;
@@ -118,7 +170,7 @@ namespace UrlFilterService.Services
                 
                 if (await reader.ReadAsync())
                 {
-                    return MapDeviceUser(reader);
+                    return MapDeviceUser((SQLiteDataReader)reader);
                 }
                 
                 return null;
@@ -142,7 +194,7 @@ namespace UrlFilterService.Services
                 var users = new List<DeviceUser>();
                 while (await reader.ReadAsync())
                 {
-                    users.Add(MapDeviceUser(reader));
+                    users.Add(MapDeviceUser((SQLiteDataReader)reader));
                 }
                 
                 return users;
@@ -198,7 +250,7 @@ namespace UrlFilterService.Services
                 var urlLists = new List<UrlList>();
                 while (await reader.ReadAsync())
                 {
-                    urlLists.Add(MapUrlList(reader));
+                    urlLists.Add(MapUrlList((SQLiteDataReader)reader));
                 }
                 
                 return urlLists;
@@ -224,7 +276,7 @@ namespace UrlFilterService.Services
                 var urlLists = new List<UrlList>();
                 while (await reader.ReadAsync())
                 {
-                    urlLists.Add(MapUrlList(reader));
+                    urlLists.Add(MapUrlList((SQLiteDataReader)reader));
                 }
                 
                 return urlLists;
@@ -253,7 +305,7 @@ namespace UrlFilterService.Services
                 
                 if (await reader.ReadAsync())
                 {
-                    return MapYouTubeChannel(reader);
+                    return MapYouTubeChannel((SQLiteDataReader)reader);
                 }
                 
                 return null;
@@ -285,7 +337,7 @@ namespace UrlFilterService.Services
                 
                 if (await reader.ReadAsync())
                 {
-                    return MapInternetSession(reader);
+                    return MapInternetSession((SQLiteDataReader)reader);
                 }
                 
                 return null;
@@ -345,7 +397,7 @@ namespace UrlFilterService.Services
                 
                 if (await reader.ReadAsync())
                 {
-                    return MapUserTimeRestriction(reader);
+                    return MapUserTimeRestriction((SQLiteDataReader)reader);
                 }
                 
                 return null;
@@ -374,7 +426,7 @@ namespace UrlFilterService.Services
                 
                 if (await reader.ReadAsync())
                 {
-                    return MapAdminUser(reader);
+                    return MapAdminUser((SQLiteDataReader)reader);
                 }
                 
                 return null;
@@ -399,7 +451,7 @@ namespace UrlFilterService.Services
                 
                 if (await reader.ReadAsync())
                 {
-                    return MapAdminUser(reader);
+                    return MapAdminUser((SQLiteDataReader)reader);
                 }
                 
                 return null;
@@ -471,7 +523,7 @@ namespace UrlFilterService.Services
                 
                 if (await reader.ReadAsync())
                 {
-                    return MapAuthSession(reader);
+                    return MapAuthSession((SQLiteDataReader)reader);
                 }
                 
                 return null;
@@ -534,6 +586,70 @@ namespace UrlFilterService.Services
 
         #endregion
 
+        #region Audit Logs
+
+        public async Task InsertAuditLogAsync(AuditLog auditEntry)
+        {
+            try
+            {
+                const string sql = @"
+                    INSERT INTO audit_logs (event_type, description, user_id, username, ip_address, device_info, severity, additional_data)
+                    VALUES (@eventType, @description, @userId, @username, @ipAddress, @deviceInfo, @severity, @additionalData)";
+                
+                using var command = new SQLiteCommand(sql, _connection);
+                command.Parameters.AddWithValue("@eventType", auditEntry.EventType);
+                command.Parameters.AddWithValue("@description", auditEntry.Description);
+                command.Parameters.AddWithValue("@userId", (object)auditEntry.UserId ?? DBNull.Value);
+                command.Parameters.AddWithValue("@username", auditEntry.Username);
+                command.Parameters.AddWithValue("@ipAddress", auditEntry.IpAddress ?? "");
+                command.Parameters.AddWithValue("@deviceInfo", auditEntry.DeviceInfo ?? "");
+                command.Parameters.AddWithValue("@severity", auditEntry.Severity);
+                command.Parameters.AddWithValue("@additionalData", auditEntry.AdditionalData ?? "");
+                
+                await command.ExecuteNonQueryAsync();
+                _logger.LogDebug($"Audit log inserted: {auditEntry.EventType} - {auditEntry.Description}");
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error inserting audit log");
+                throw;
+            }
+        }
+
+        public async Task<List<AuditLog>> GetAuditLogsAsync(DateTime fromDate, DateTime toDate, int limit = 1000)
+        {
+            try
+            {
+                const string sql = @"
+                    SELECT * FROM audit_logs 
+                    WHERE timestamp BETWEEN @fromDate AND @toDate 
+                    ORDER BY timestamp DESC 
+                    LIMIT @limit";
+                
+                using var command = new SQLiteCommand(sql, _connection);
+                command.Parameters.AddWithValue("@fromDate", fromDate);
+                command.Parameters.AddWithValue("@toDate", toDate);
+                command.Parameters.AddWithValue("@limit", limit);
+                
+                using var reader = await command.ExecuteReaderAsync();
+                
+                var auditLogs = new List<AuditLog>();
+                while (await reader.ReadAsync())
+                {
+                    auditLogs.Add(MapAuditLog((SQLiteDataReader)reader));
+                }
+                
+                return auditLogs;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error getting audit logs");
+                throw;
+            }
+        }
+
+        #endregion
+
         #region Blocked Attempts
 
         public async Task InsertBlockedAttemptAsync(BlockedAttempt attempt)
@@ -573,11 +689,11 @@ namespace UrlFilterService.Services
             try
             {
                 const string sql = @"
-                    SELECT 
+                    SELECT
                         COUNT(DISTINCT user_id) as ActiveUsers,
                         COUNT(*) as TotalRequests,
-                        SUM(CASE WHEN block_reason IS NOT NULL THEN 1 ELSE 0 END) as BlockedRequests
-                    FROM blocked_attempts 
+                        COALESCE(SUM(CASE WHEN block_reason IS NOT NULL THEN 1 ELSE 0 END), 0) as BlockedRequests
+                    FROM blocked_attempts
                     WHERE DATE(timestamp) = DATE(@date)";
                 
                 using var command = new SQLiteCommand(sql, _connection);
@@ -590,10 +706,10 @@ namespace UrlFilterService.Services
                     return new SystemStatistics
                     {
                         Date = date,
-                        ActiveUsers = reader.GetInt32("ActiveUsers"),
-                        TotalRequests = reader.GetInt32("TotalRequests"),
-                        BlockedRequests = reader.GetInt32("BlockedRequests"),
-                        AllowedRequests = reader.GetInt32("TotalRequests") - reader.GetInt32("BlockedRequests")
+                        ActiveUsers = Convert.ToInt32(reader["ActiveUsers"]),
+                        TotalRequests = Convert.ToInt32(reader["TotalRequests"]),
+                        BlockedRequests = Convert.ToInt32(reader["BlockedRequests"]),
+                        AllowedRequests = Convert.ToInt32(reader["TotalRequests"]) - Convert.ToInt32(reader["BlockedRequests"])
                     };
                 }
                 
@@ -688,17 +804,22 @@ namespace UrlFilterService.Services
                 if (File.Exists(schemaFile))
                 {
                     var schema = await File.ReadAllTextAsync(schemaFile);
-                    
+
                     using var command = new SQLiteCommand(schema, _connection);
                     await command.ExecuteNonQueryAsync();
-                    
-                    _logger.LogInformation("Database tables created/verified");
+
+                    _logger.LogInformation("Database tables created/verified from schema.sql");
                 }
                 else
                 {
                     _logger.LogWarning("Schema file not found - creating basic tables");
-                    await CreateBasicTablesAsync();
                 }
+
+                // Always run app-events schema in addition to the row-change tracking
+                // schema.sql. CreateBasicTablesAsync uses IF NOT EXISTS everywhere and
+                // provides the app-events tables (audit_logs, etc.) that the service code
+                // references but that schema.sql does not define.
+                await CreateBasicTablesAsync();
             }
             catch (Exception ex)
             {
@@ -743,6 +864,125 @@ namespace UrlFilterService.Services
                     device_info TEXT,
                     ip_address TEXT,
                     user_agent TEXT
+                );
+
+                CREATE TABLE IF NOT EXISTS audit_logs (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    event_type TEXT NOT NULL,
+                    description TEXT NOT NULL,
+                    user_id INTEGER,
+                    username TEXT NOT NULL DEFAULT 'System',
+                    timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                    ip_address TEXT,
+                    device_info TEXT,
+                    severity TEXT DEFAULT 'Information',
+                    additional_data TEXT,
+                    FOREIGN KEY (user_id) REFERENCES device_users(id)
+                );
+
+                CREATE TABLE IF NOT EXISTS admin_settings (
+                    key TEXT PRIMARY KEY,
+                    value TEXT,
+                    value_type TEXT DEFAULT 'string',
+                    description TEXT,
+                    category TEXT,
+                    is_sensitive BOOLEAN DEFAULT 0,
+                    modified_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                    modified_by INTEGER,
+                    FOREIGN KEY (modified_by) REFERENCES admin_users(id)
+                );
+
+                CREATE TABLE IF NOT EXISTS url_lists (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    url_pattern TEXT NOT NULL,
+                    list_type TEXT NOT NULL,
+                    category TEXT,
+                    age_appropriate TEXT DEFAULT 'all_ages',
+                    added_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                    added_by INTEGER,
+                    is_active BOOLEAN DEFAULT 1,
+                    description TEXT,
+                    match_type TEXT DEFAULT 'domain',
+                    FOREIGN KEY (added_by) REFERENCES admin_users(id)
+                );
+
+                CREATE TABLE IF NOT EXISTS blocked_attempts (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    user_id INTEGER,
+                    url TEXT NOT NULL,
+                    content_type TEXT DEFAULT 'website',
+                    block_reason TEXT NOT NULL,
+                    channel_info TEXT,
+                    timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                    device_info TEXT,
+                    user_agent TEXT,
+                    ip_address TEXT,
+                    severity_level TEXT DEFAULT 'medium',
+                    FOREIGN KEY (user_id) REFERENCES device_users(id)
+                );
+
+                CREATE TABLE IF NOT EXISTS internet_sessions (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    user_id INTEGER NOT NULL,
+                    session_start TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                    session_end TIMESTAMP,
+                    duration_minutes INTEGER,
+                    total_requests INTEGER DEFAULT 0,
+                    blocked_requests INTEGER DEFAULT 0,
+                    allowed_requests INTEGER DEFAULT 0,
+                    top_domains TEXT,
+                    device_info TEXT,
+                    ip_address TEXT,
+                    last_activity_time TIMESTAMP,
+                    FOREIGN KEY (user_id) REFERENCES device_users(id)
+                );
+
+                CREATE TABLE IF NOT EXISTS user_time_restrictions (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    user_id INTEGER NOT NULL,
+                    day_of_week INTEGER CHECK(day_of_week BETWEEN 0 AND 6),
+                    allowed_start_time TIME,
+                    allowed_end_time TIME,
+                    daily_limit_minutes INTEGER,
+                    is_active BOOLEAN DEFAULT 1,
+                    created_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                    modified_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                    FOREIGN KEY (user_id) REFERENCES device_users(id)
+                );
+
+                CREATE TABLE IF NOT EXISTS youtube_channels (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    channel_id TEXT UNIQUE NOT NULL,
+                    channel_name TEXT NOT NULL,
+                    channel_url TEXT NOT NULL,
+                    channel_handle TEXT,
+                    access_type TEXT DEFAULT 'blocked',
+                    category TEXT,
+                    age_rating TEXT DEFAULT 'adult',
+                    educational_content BOOLEAN DEFAULT 0,
+                    subscriber_count INTEGER,
+                    description TEXT,
+                    thumbnail_url TEXT,
+                    added_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                    added_by INTEGER,
+                    last_updated TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                    is_active BOOLEAN DEFAULT 1,
+                    FOREIGN KEY (added_by) REFERENCES admin_users(id)
+                );
+
+                CREATE TABLE IF NOT EXISTS daily_usage_log (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    user_id INTEGER NOT NULL,
+                    usage_date DATE NOT NULL,
+                    minutes_used INTEGER DEFAULT 0,
+                    last_activity_time TIMESTAMP,
+                    sessions_count INTEGER DEFAULT 0,
+                    youtube_minutes INTEGER DEFAULT 0,
+                    educational_minutes INTEGER DEFAULT 0,
+                    social_minutes INTEGER DEFAULT 0,
+                    gaming_minutes INTEGER DEFAULT 0,
+                    UNIQUE(user_id, usage_date),
+                    FOREIGN KEY (user_id) REFERENCES device_users(id)
                 );";
             
             using var command = new SQLiteCommand(basicSchema, _connection);
@@ -787,13 +1027,13 @@ namespace UrlFilterService.Services
         {
             return new DeviceUser
             {
-                Id = reader.GetInt32("id"),
-                Username = reader.GetString("username"),
-                DisplayName = reader.GetString("display_name"),
-                UserType = Enum.Parse<UserType>(reader.GetString("user_type"), true),
-                Age = reader.IsDBNull("age") ? null : reader.GetInt32("age"),
-                IsActive = reader.GetBoolean("is_active"),
-                ProfileCreatedDate = reader.GetDateTime("profile_created_date")
+                Id = Convert.ToInt32(reader["id"]),
+                Username = reader["username"].ToString(),
+                DisplayName = reader["display_name"].ToString(),
+                UserType = Enum.Parse<UserType>(reader["user_type"].ToString(), true),
+                Age = reader.IsDBNull(reader.GetOrdinal("age")) ? null : Convert.ToInt32(reader["age"]),
+                IsActive = Convert.ToBoolean(reader["is_active"]),
+                ProfileCreatedDate = Convert.ToDateTime(reader["profile_created_date"])
             };
         }
 
@@ -801,12 +1041,12 @@ namespace UrlFilterService.Services
         {
             return new UrlList
             {
-                Id = reader.GetInt32("id"),
-                UrlPattern = reader.GetString("url_pattern"),
-                ListType = Enum.Parse<ListType>(reader.GetString("list_type"), true),
-                Category = reader.IsDBNull("category") ? null : reader.GetString("category"),
-                IsActive = reader.GetBoolean("is_active"),
-                AddedDate = reader.GetDateTime("added_date")
+                Id = Convert.ToInt32(reader["id"]),
+                UrlPattern = reader["url_pattern"].ToString(),
+                ListType = Enum.Parse<ListType>(reader["list_type"].ToString(), true),
+                Category = reader.IsDBNull(reader.GetOrdinal("category")) ? null : reader["category"].ToString(),
+                IsActive = Convert.ToBoolean(reader["is_active"]),
+                AddedDate = Convert.ToDateTime(reader["added_date"])
             };
         }
 
@@ -814,13 +1054,13 @@ namespace UrlFilterService.Services
         {
             return new YouTubeChannel
             {
-                Id = reader.GetInt32("id"),
-                ChannelId = reader.GetString("channel_id"),
-                ChannelName = reader.GetString("channel_name"),
-                ChannelUrl = reader.GetString("channel_url"),
-                AccessType = reader.GetString("access_type"),
-                Category = reader.IsDBNull("category") ? null : reader.GetString("category"),
-                IsActive = reader.GetBoolean("is_active")
+                Id = Convert.ToInt32(reader["id"]),
+                ChannelId = reader["channel_id"].ToString(),
+                ChannelName = reader["channel_name"].ToString(),
+                ChannelUrl = reader["channel_url"].ToString(),
+                AccessType = reader["access_type"].ToString(),
+                Category = reader.IsDBNull(reader.GetOrdinal("category")) ? null : reader["category"].ToString(),
+                IsActive = Convert.ToBoolean(reader["is_active"])
             };
         }
 
@@ -828,13 +1068,13 @@ namespace UrlFilterService.Services
         {
             return new InternetSession
             {
-                Id = reader.GetInt32("id"),
-                UserId = reader.GetInt32("user_id"),
-                SessionStart = reader.GetDateTime("session_start"),
-                SessionEnd = reader.IsDBNull("session_end") ? null : reader.GetDateTime("session_end"),
-                TotalRequests = reader.GetInt32("total_requests"),
-                BlockedRequests = reader.GetInt32("blocked_requests"),
-                AllowedRequests = reader.GetInt32("allowed_requests")
+                Id = Convert.ToInt32(reader["id"]),
+                UserId = Convert.ToInt32(reader["user_id"]),
+                SessionStart = Convert.ToDateTime(reader["session_start"]),
+                SessionEnd = reader.IsDBNull(reader.GetOrdinal("session_end")) ? null : Convert.ToDateTime(reader["session_end"]),
+                TotalRequests = Convert.ToInt32(reader["total_requests"]),
+                BlockedRequests = Convert.ToInt32(reader["blocked_requests"]),
+                AllowedRequests = Convert.ToInt32(reader["allowed_requests"])
             };
         }
 
@@ -842,13 +1082,13 @@ namespace UrlFilterService.Services
         {
             return new UserTimeRestriction
             {
-                Id = reader.GetInt32("id"),
-                UserId = reader.GetInt32("user_id"),
-                DayOfWeek = reader.GetInt32("day_of_week"),
-                AllowedStartTime = reader.IsDBNull("allowed_start_time") ? null : TimeSpan.Parse(reader.GetString("allowed_start_time")),
-                AllowedEndTime = reader.IsDBNull("allowed_end_time") ? null : TimeSpan.Parse(reader.GetString("allowed_end_time")),
-                DailyLimitMinutes = reader.IsDBNull("daily_limit_minutes") ? null : reader.GetInt32("daily_limit_minutes"),
-                IsActive = reader.GetBoolean("is_active")
+                Id = Convert.ToInt32(reader["id"]),
+                UserId = Convert.ToInt32(reader["user_id"]),
+                DayOfWeek = Convert.ToInt32(reader["day_of_week"]),
+                AllowedStartTime = reader.IsDBNull(reader.GetOrdinal("allowed_start_time")) ? null : TimeSpan.Parse(reader["allowed_start_time"].ToString()),
+                AllowedEndTime = reader.IsDBNull(reader.GetOrdinal("allowed_end_time")) ? null : TimeSpan.Parse(reader["allowed_end_time"].ToString()),
+                DailyLimitMinutes = reader.IsDBNull(reader.GetOrdinal("daily_limit_minutes")) ? null : Convert.ToInt32(reader["daily_limit_minutes"]),
+                IsActive = Convert.ToBoolean(reader["is_active"])
             };
         }
 
@@ -856,15 +1096,15 @@ namespace UrlFilterService.Services
         {
             return new AdminUser
             {
-                Id = reader.GetInt32("id"),
-                UserIdentifier = reader.GetString("user_identifier"),
-                DisplayName = reader.IsDBNull("display_name") ? null : reader.GetString("display_name"),
-                Email = reader.IsDBNull("email") ? null : reader.GetString("email"),
-                AuthenticationProvider = Enum.Parse<AuthProvider>(reader.GetString("authentication_provider"), true),
-                PermissionLevel = Enum.Parse<PermissionLevel>(reader.GetString("permission_level"), true),
-                IsActive = reader.GetBoolean("is_active"),
-                LastLogin = reader.IsDBNull("last_login") ? null : reader.GetDateTime("last_login"),
-                CreatedDate = reader.GetDateTime("created_date")
+                Id = Convert.ToInt32(reader["id"]),
+                UserIdentifier = reader["user_identifier"].ToString(),
+                DisplayName = reader.IsDBNull(reader.GetOrdinal("display_name")) ? null : reader["display_name"].ToString(),
+                Email = reader.IsDBNull(reader.GetOrdinal("email")) ? null : reader["email"].ToString(),
+                AuthenticationProvider = Enum.Parse<AuthProvider>(reader["authentication_provider"].ToString(), true),
+                PermissionLevel = Enum.Parse<PermissionLevel>(reader["permission_level"].ToString(), true),
+                IsActive = Convert.ToBoolean(reader["is_active"]),
+                LastLogin = reader.IsDBNull(reader.GetOrdinal("last_login")) ? null : Convert.ToDateTime(reader["last_login"]),
+                CreatedDate = Convert.ToDateTime(reader["created_date"])
             };
         }
 
@@ -872,16 +1112,33 @@ namespace UrlFilterService.Services
         {
             return new AuthSession
             {
-                Id = reader.GetInt32("id"),
-                UserId = reader.GetInt32("user_id"),
-                SessionToken = reader.GetString("session_token"),
-                LoginTimestamp = reader.GetDateTime("login_timestamp"),
-                LastActivity = reader.GetDateTime("last_activity"),
-                ExpiresAt = reader.GetDateTime("expires_at"),
-                IsValid = reader.GetBoolean("is_valid"),
-                DeviceInfo = reader.IsDBNull("device_info") ? null : reader.GetString("device_info"),
-                IpAddress = reader.IsDBNull("ip_address") ? null : reader.GetString("ip_address"),
-                UserAgent = reader.IsDBNull("user_agent") ? null : reader.GetString("user_agent")
+                Id = Convert.ToInt32(reader["id"]),
+                UserId = Convert.ToInt32(reader["user_id"]),
+                SessionToken = reader["session_token"].ToString(),
+                LoginTimestamp = Convert.ToDateTime(reader["login_timestamp"]),
+                LastActivity = Convert.ToDateTime(reader["last_activity"]),
+                ExpiresAt = Convert.ToDateTime(reader["expires_at"]),
+                IsValid = Convert.ToBoolean(reader["is_valid"]),
+                DeviceInfo = reader.IsDBNull(reader.GetOrdinal("device_info")) ? null : reader["device_info"].ToString(),
+                IpAddress = reader.IsDBNull(reader.GetOrdinal("ip_address")) ? null : reader["ip_address"].ToString(),
+                UserAgent = reader.IsDBNull(reader.GetOrdinal("user_agent")) ? null : reader["user_agent"].ToString()
+            };
+        }
+
+        private AuditLog MapAuditLog(SQLiteDataReader reader)
+        {
+            return new AuditLog
+            {
+                Id = Convert.ToInt32(reader["id"]),
+                EventType = reader["event_type"].ToString(),
+                Description = reader["description"].ToString(),
+                UserId = reader.IsDBNull(reader.GetOrdinal("user_id")) ? null : Convert.ToInt32(reader["user_id"]),
+                Username = reader["username"].ToString(),
+                Timestamp = Convert.ToDateTime(reader["timestamp"]),
+                IpAddress = reader.IsDBNull(reader.GetOrdinal("ip_address")) ? null : reader["ip_address"].ToString(),
+                DeviceInfo = reader.IsDBNull(reader.GetOrdinal("device_info")) ? null : reader["device_info"].ToString(),
+                Severity = reader["severity"].ToString(),
+                AdditionalData = reader.IsDBNull(reader.GetOrdinal("additional_data")) ? null : reader["additional_data"].ToString()
             };
         }
 

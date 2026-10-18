@@ -1,12 +1,554 @@
 {
   "Version": 1,
   "WorkspaceRootPath": "C:\\Users\\finis\\source\\Projects\\WebFilterApp\\",
-  "Documents": [],
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{6BC44633-5730-3E87-5C8F-5BBB0030D87E}|windows\\DevTools\\DevTools.csproj|c:\\users\\finis\\source\\projects\\webfilterapp\\windows\\devtools\\devcommandline.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{6BC44633-5730-3E87-5C8F-5BBB0030D87E}|windows\\DevTools\\DevTools.csproj|solutionrelative:windows\\devtools\\devcommandline.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{6BC44633-5730-3E87-5C8F-5BBB0030D87E}|windows\\DevTools\\DevTools.csproj|c:\\users\\finis\\source\\projects\\webfilterapp\\windows\\devtools\\safetesting.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{6BC44633-5730-3E87-5C8F-5BBB0030D87E}|windows\\DevTools\\DevTools.csproj|solutionrelative:windows\\devtools\\safetesting.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{5F8921CD-A6EA-C92B-7A22-7C1D95771DB1}|windows\\Installer\\UrlFilterInstaller.csproj|c:\\users\\finis\\source\\projects\\webfilterapp\\windows\\installer\\urlfilterinstaller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{5F8921CD-A6EA-C92B-7A22-7C1D95771DB1}|windows\\Installer\\UrlFilterInstaller.csproj|solutionrelative:windows\\installer\\urlfilterinstaller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{660875AB-A6BE-3587-6382-4C03A347C9D0}|windows\\AdminControlPanel\\AdminControlPanel.csproj|c:\\users\\finis\\source\\projects\\webfilterapp\\windows\\admincontrolpanel\\views\\websitelistsdialog.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{660875AB-A6BE-3587-6382-4C03A347C9D0}|windows\\AdminControlPanel\\AdminControlPanel.csproj|solutionrelative:windows\\admincontrolpanel\\views\\websitelistsdialog.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A854DCCD-FDE4-9E9D-6F53-970EC4F422CE}|windows\\WFPIntegration\\WFPIntegration.csproj|c:\\users\\finis\\source\\projects\\webfilterapp\\windows\\wfpintegration\\wfpfilterservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A854DCCD-FDE4-9E9D-6F53-970EC4F422CE}|windows\\WFPIntegration\\WFPIntegration.csproj|solutionrelative:windows\\wfpintegration\\wfpfilterservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{33DAB0BF-490A-C83E-67C7-C81361C66E38}|windows\\UrlFilterService\\UrlFilterService.csproj|c:\\users\\finis\\source\\projects\\webfilterapp\\windows\\urlfilterservice\\urlfilterwindowsservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{33DAB0BF-490A-C83E-67C7-C81361C66E38}|windows\\UrlFilterService\\UrlFilterService.csproj|solutionrelative:windows\\urlfilterservice\\urlfilterwindowsservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{0971349A-5506-5622-E2D1-0161A7B97E5B}|windows\\Common\\Common.csproj|c:\\users\\finis\\source\\projects\\webfilterapp\\windows\\common\\utilities\\systemhelper.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{0971349A-5506-5622-E2D1-0161A7B97E5B}|windows\\Common\\Common.csproj|solutionrelative:windows\\common\\utilities\\systemhelper.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{0971349A-5506-5622-E2D1-0161A7B97E5B}|windows\\Common\\Common.csproj|c:\\users\\finis\\source\\projects\\webfilterapp\\windows\\common\\services\\configurationservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{0971349A-5506-5622-E2D1-0161A7B97E5B}|windows\\Common\\Common.csproj|solutionrelative:windows\\common\\services\\configurationservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{33DAB0BF-490A-C83E-67C7-C81361C66E38}|windows\\UrlFilterService\\UrlFilterService.csproj|c:\\users\\finis\\source\\projects\\webfilterapp\\windows\\urlfilterservice\\services\\filterengine.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{33DAB0BF-490A-C83E-67C7-C81361C66E38}|windows\\UrlFilterService\\UrlFilterService.csproj|solutionrelative:windows\\urlfilterservice\\services\\filterengine.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{33DAB0BF-490A-C83E-67C7-C81361C66E38}|windows\\UrlFilterService\\UrlFilterService.csproj|c:\\users\\finis\\source\\projects\\webfilterapp\\windows\\urlfilterservice\\services\\databaseservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{33DAB0BF-490A-C83E-67C7-C81361C66E38}|windows\\UrlFilterService\\UrlFilterService.csproj|solutionrelative:windows\\urlfilterservice\\services\\databaseservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{33DAB0BF-490A-C83E-67C7-C81361C66E38}|windows\\UrlFilterService\\UrlFilterService.csproj|c:\\users\\finis\\source\\projects\\webfilterapp\\windows\\urlfilterservice\\services\\auditservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{33DAB0BF-490A-C83E-67C7-C81361C66E38}|windows\\UrlFilterService\\UrlFilterService.csproj|solutionrelative:windows\\urlfilterservice\\services\\auditservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{660875AB-A6BE-3587-6382-4C03A347C9D0}|windows\\AdminControlPanel\\AdminControlPanel.csproj|c:\\users\\finis\\source\\projects\\webfilterapp\\windows\\admincontrolpanel\\services\\userdatabaseservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{660875AB-A6BE-3587-6382-4C03A347C9D0}|windows\\AdminControlPanel\\AdminControlPanel.csproj|solutionrelative:windows\\admincontrolpanel\\services\\userdatabaseservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{39DED836-AE27-3D8B-68AD-B0805DF02023}|shared\\logging\\UrlFilter.Shared.Logging.csproj|c:\\users\\finis\\source\\projects\\webfilterapp\\shared\\logging\\universallogger.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{39DED836-AE27-3D8B-68AD-B0805DF02023}|shared\\logging\\UrlFilter.Shared.Logging.csproj|solutionrelative:shared\\logging\\universallogger.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{660875AB-A6BE-3587-6382-4C03A347C9D0}|windows\\AdminControlPanel\\AdminControlPanel.csproj|c:\\users\\finis\\source\\projects\\webfilterapp\\windows\\admincontrolpanel\\views\\logviewerdialog.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{660875AB-A6BE-3587-6382-4C03A347C9D0}|windows\\AdminControlPanel\\AdminControlPanel.csproj|solutionrelative:windows\\admincontrolpanel\\views\\logviewerdialog.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{660875AB-A6BE-3587-6382-4C03A347C9D0}|windows\\AdminControlPanel\\AdminControlPanel.csproj|c:\\users\\finis\\source\\projects\\webfilterapp\\windows\\admincontrolpanel\\controls\\quickactionspanel.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
+      "RelativeMoniker": "D:0:0:{660875AB-A6BE-3587-6382-4C03A347C9D0}|windows\\AdminControlPanel\\AdminControlPanel.csproj|solutionrelative:windows\\admincontrolpanel\\controls\\quickactionspanel.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{660875AB-A6BE-3587-6382-4C03A347C9D0}|windows\\AdminControlPanel\\AdminControlPanel.csproj|c:\\users\\finis\\source\\projects\\webfilterapp\\windows\\admincontrolpanel\\views\\sitemanagementdialog.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
+      "RelativeMoniker": "D:0:0:{660875AB-A6BE-3587-6382-4C03A347C9D0}|windows\\AdminControlPanel\\AdminControlPanel.csproj|solutionrelative:windows\\admincontrolpanel\\views\\sitemanagementdialog.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{660875AB-A6BE-3587-6382-4C03A347C9D0}|windows\\AdminControlPanel\\AdminControlPanel.csproj|c:\\users\\finis\\source\\projects\\webfilterapp\\windows\\admincontrolpanel\\views\\mainwindow.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
+      "RelativeMoniker": "D:0:0:{660875AB-A6BE-3587-6382-4C03A347C9D0}|windows\\AdminControlPanel\\AdminControlPanel.csproj|solutionrelative:windows\\admincontrolpanel\\views\\mainwindow.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{660875AB-A6BE-3587-6382-4C03A347C9D0}|windows\\AdminControlPanel\\AdminControlPanel.csproj|c:\\users\\finis\\source\\projects\\webfilterapp\\windows\\admincontrolpanel\\controls\\youtubechannelcard.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
+      "RelativeMoniker": "D:0:0:{660875AB-A6BE-3587-6382-4C03A347C9D0}|windows\\AdminControlPanel\\AdminControlPanel.csproj|solutionrelative:windows\\admincontrolpanel\\controls\\youtubechannelcard.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{660875AB-A6BE-3587-6382-4C03A347C9D0}|windows\\AdminControlPanel\\AdminControlPanel.csproj|c:\\users\\finis\\source\\projects\\webfilterapp\\windows\\admincontrolpanel\\controls\\userprofilecard.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
+      "RelativeMoniker": "D:0:0:{660875AB-A6BE-3587-6382-4C03A347C9D0}|windows\\AdminControlPanel\\AdminControlPanel.csproj|solutionrelative:windows\\admincontrolpanel\\controls\\userprofilecard.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{660875AB-A6BE-3587-6382-4C03A347C9D0}|windows\\AdminControlPanel\\AdminControlPanel.csproj|c:\\users\\finis\\source\\projects\\webfilterapp\\windows\\admincontrolpanel\\controls\\timeslidercontrol.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
+      "RelativeMoniker": "D:0:0:{660875AB-A6BE-3587-6382-4C03A347C9D0}|windows\\AdminControlPanel\\AdminControlPanel.csproj|solutionrelative:windows\\admincontrolpanel\\controls\\timeslidercontrol.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\finis\\source\\Projects\\WebFilterApp\\scripts\\safe-test.bat||{3B902123-F8A7-4915-9F01-361F908088D0}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:scripts\\safe-test.bat||{3B902123-F8A7-4915-9F01-361F908088D0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\finis\\source\\Projects\\WebFilterApp\\scripts\\dev-tools.bat||{3B902123-F8A7-4915-9F01-361F908088D0}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:scripts\\dev-tools.bat||{3B902123-F8A7-4915-9F01-361F908088D0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\finis\\AppData\\Local\\Temp\\.vsdbgsrc\\83616927926d14a9d63ba91b611a12293ac61079cc74be5d9c8aaec5dc9ed161\\XamlReader.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Program Files\\dotnet\\sdk\\9.0.100-rc.1.24452.12\\Sdks\\Microsoft.NET.Sdk\\targets\\Microsoft.NET.Sdk.targets||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\finis\\source\\Projects\\WebFilterApp\\windows\\AdminControlPanel\\obj\\Debug\\net6.0-windows\\apphost.exe||{177559E0-D141-11D0-92DF-00A0C9138C45}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:windows\\AdminControlPanel\\obj\\Debug\\net6.0-windows\\apphost.exe||{177559E0-D141-11D0-92DF-00A0C9138C45}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{660875AB-A6BE-3587-6382-4C03A347C9D0}|windows\\AdminControlPanel\\AdminControlPanel.csproj|c:\\users\\finis\\source\\projects\\webfilterapp\\windows\\admincontrolpanel\\controls\\youtubechannelcard.xaml||{FA3CD31E-987B-443A-9B81-186104E8DAC1}",
+      "RelativeMoniker": "D:0:0:{660875AB-A6BE-3587-6382-4C03A347C9D0}|windows\\AdminControlPanel\\AdminControlPanel.csproj|solutionrelative:windows\\admincontrolpanel\\controls\\youtubechannelcard.xaml||{FA3CD31E-987B-443A-9B81-186104E8DAC1}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{6BC44633-5730-3E87-5C8F-5BBB0030D87E}|windows\\DevTools\\DevTools.csproj|c:\\users\\finis\\source\\projects\\webfilterapp\\windows\\devtools\\devtools.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}",
+      "RelativeMoniker": "D:0:0:{6BC44633-5730-3E87-5C8F-5BBB0030D87E}|windows\\DevTools\\DevTools.csproj|solutionrelative:windows\\devtools\\devtools.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{FB31A122-EAC1-168E-7465-655E67962810}|shared\\models\\UrlFilter.Shared.Models.csproj|c:\\users\\finis\\source\\projects\\webfilterapp\\shared\\models\\urlfilter.shared.models.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}",
+      "RelativeMoniker": "D:0:0:{FB31A122-EAC1-168E-7465-655E67962810}|shared\\models\\UrlFilter.Shared.Models.csproj|solutionrelative:shared\\models\\urlfilter.shared.models.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{660875AB-A6BE-3587-6382-4C03A347C9D0}|windows\\AdminControlPanel\\AdminControlPanel.csproj|c:\\users\\finis\\source\\projects\\webfilterapp\\windows\\admincontrolpanel\\views\\mainwindow.xaml||{FA3CD31E-987B-443A-9B81-186104E8DAC1}",
+      "RelativeMoniker": "D:0:0:{660875AB-A6BE-3587-6382-4C03A347C9D0}|windows\\AdminControlPanel\\AdminControlPanel.csproj|solutionrelative:windows\\admincontrolpanel\\views\\mainwindow.xaml||{FA3CD31E-987B-443A-9B81-186104E8DAC1}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{0971349A-5506-5622-E2D1-0161A7B97E5B}|windows\\Common\\Common.csproj|c:\\users\\finis\\source\\projects\\webfilterapp\\windows\\common\\common.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}",
+      "RelativeMoniker": "D:0:0:{0971349A-5506-5622-E2D1-0161A7B97E5B}|windows\\Common\\Common.csproj|solutionrelative:windows\\common\\common.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{660875AB-A6BE-3587-6382-4C03A347C9D0}|windows\\AdminControlPanel\\AdminControlPanel.csproj|c:\\users\\finis\\source\\projects\\webfilterapp\\windows\\admincontrolpanel\\views\\logviewerdialog.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
+      "RelativeMoniker": "D:0:0:{660875AB-A6BE-3587-6382-4C03A347C9D0}|windows\\AdminControlPanel\\AdminControlPanel.csproj|solutionrelative:windows\\admincontrolpanel\\views\\logviewerdialog.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{660875AB-A6BE-3587-6382-4C03A347C9D0}|windows\\AdminControlPanel\\AdminControlPanel.csproj|c:\\users\\finis\\source\\projects\\webfilterapp\\windows\\admincontrolpanel\\views\\userselectiondialog.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
+      "RelativeMoniker": "D:0:0:{660875AB-A6BE-3587-6382-4C03A347C9D0}|windows\\AdminControlPanel\\AdminControlPanel.csproj|solutionrelative:windows\\admincontrolpanel\\views\\userselectiondialog.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{660875AB-A6BE-3587-6382-4C03A347C9D0}|windows\\AdminControlPanel\\AdminControlPanel.csproj|c:\\users\\finis\\source\\projects\\webfilterapp\\windows\\admincontrolpanel\\views\\timeextensiondialog.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
+      "RelativeMoniker": "D:0:0:{660875AB-A6BE-3587-6382-4C03A347C9D0}|windows\\AdminControlPanel\\AdminControlPanel.csproj|solutionrelative:windows\\admincontrolpanel\\views\\timeextensiondialog.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{660875AB-A6BE-3587-6382-4C03A347C9D0}|windows\\AdminControlPanel\\AdminControlPanel.csproj|c:\\users\\finis\\source\\projects\\webfilterapp\\windows\\admincontrolpanel\\views\\homeworkmodedialog.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
+      "RelativeMoniker": "D:0:0:{660875AB-A6BE-3587-6382-4C03A347C9D0}|windows\\AdminControlPanel\\AdminControlPanel.csproj|solutionrelative:windows\\admincontrolpanel\\views\\homeworkmodedialog.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
+    }
+  ],
   "DocumentGroupContainers": [
     {
       "Orientation": 0,
       "VerticalTabListWidth": 256,
-      "DocumentGroups": []
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 0,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "DevCommandLine.cs",
+              "DocumentMoniker": "C:\\Users\\finis\\source\\Projects\\WebFilterApp\\windows\\DevTools\\DevCommandLine.cs",
+              "RelativeDocumentMoniker": "windows\\DevTools\\DevCommandLine.cs",
+              "ToolTip": "C:\\Users\\finis\\source\\Projects\\WebFilterApp\\windows\\DevTools\\DevCommandLine.cs",
+              "RelativeToolTip": "windows\\DevTools\\DevCommandLine.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAACoAAABGAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-08T20:20:40.924Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "WfpFilterService.cs",
+              "DocumentMoniker": "C:\\Users\\finis\\source\\Projects\\WebFilterApp\\windows\\WFPIntegration\\WfpFilterService.cs",
+              "RelativeDocumentMoniker": "windows\\WFPIntegration\\WfpFilterService.cs",
+              "ToolTip": "C:\\Users\\finis\\source\\Projects\\WebFilterApp\\windows\\WFPIntegration\\WfpFilterService.cs",
+              "RelativeToolTip": "windows\\WFPIntegration\\WfpFilterService.cs",
+              "ViewState": "AgIAADoAAAAAAAAAAAAqwG0AAAAjAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-08T20:02:08.021Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "UrlFilterWindowsService.cs",
+              "DocumentMoniker": "C:\\Users\\finis\\source\\Projects\\WebFilterApp\\windows\\UrlFilterService\\UrlFilterWindowsService.cs",
+              "RelativeDocumentMoniker": "windows\\UrlFilterService\\UrlFilterWindowsService.cs",
+              "ToolTip": "C:\\Users\\finis\\source\\Projects\\WebFilterApp\\windows\\UrlFilterService\\UrlFilterWindowsService.cs",
+              "RelativeToolTip": "windows\\UrlFilterService\\UrlFilterWindowsService.cs",
+              "ViewState": "AgIAADUAAAAAAAAAAAAWwEQAAAAjAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-08T19:54:10.926Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "FilterEngine.cs",
+              "DocumentMoniker": "C:\\Users\\finis\\source\\Projects\\WebFilterApp\\windows\\UrlFilterService\\Services\\FilterEngine.cs",
+              "RelativeDocumentMoniker": "windows\\UrlFilterService\\Services\\FilterEngine.cs",
+              "ToolTip": "C:\\Users\\finis\\source\\Projects\\WebFilterApp\\windows\\UrlFilterService\\Services\\FilterEngine.cs",
+              "RelativeToolTip": "windows\\UrlFilterService\\Services\\FilterEngine.cs",
+              "ViewState": "AgIAAEoAAAAAAAAAAAAAAFUAAAAvAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-08T19:51:01.795Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
+              "Title": "DatabaseService.cs",
+              "DocumentMoniker": "C:\\Users\\finis\\source\\Projects\\WebFilterApp\\windows\\UrlFilterService\\Services\\DatabaseService.cs",
+              "RelativeDocumentMoniker": "windows\\UrlFilterService\\Services\\DatabaseService.cs",
+              "ToolTip": "C:\\Users\\finis\\source\\Projects\\WebFilterApp\\windows\\UrlFilterService\\Services\\DatabaseService.cs",
+              "RelativeToolTip": "windows\\UrlFilterService\\Services\\DatabaseService.cs",
+              "ViewState": "AgIAAOECAAAAAAAAAAAzwDkEAAAnAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-08T19:50:47.423Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "UrlFilterInstaller.cs",
+              "DocumentMoniker": "C:\\Users\\finis\\source\\Projects\\WebFilterApp\\windows\\Installer\\UrlFilterInstaller.cs",
+              "RelativeDocumentMoniker": "windows\\Installer\\UrlFilterInstaller.cs",
+              "ToolTip": "C:\\Users\\finis\\source\\Projects\\WebFilterApp\\windows\\Installer\\UrlFilterInstaller.cs",
+              "RelativeToolTip": "windows\\Installer\\UrlFilterInstaller.cs",
+              "ViewState": "AgIAAAADAAAAAAAAAAAYwA0DAABgAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-08T19:44:14.102Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "ConfigurationService.cs",
+              "DocumentMoniker": "C:\\Users\\finis\\source\\Projects\\WebFilterApp\\windows\\Common\\Services\\ConfigurationService.cs",
+              "RelativeDocumentMoniker": "windows\\Common\\Services\\ConfigurationService.cs",
+              "ToolTip": "C:\\Users\\finis\\source\\Projects\\WebFilterApp\\windows\\Common\\Services\\ConfigurationService.cs",
+              "RelativeToolTip": "windows\\Common\\Services\\ConfigurationService.cs",
+              "ViewState": "AgIAAE0AAAAAAAAAAAAywFoAAAAnAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-08T19:42:56.833Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "SystemHelper.cs",
+              "DocumentMoniker": "C:\\Users\\finis\\source\\Projects\\WebFilterApp\\windows\\Common\\Utilities\\SystemHelper.cs",
+              "RelativeDocumentMoniker": "windows\\Common\\Utilities\\SystemHelper.cs",
+              "ToolTip": "C:\\Users\\finis\\source\\Projects\\WebFilterApp\\windows\\Common\\Utilities\\SystemHelper.cs",
+              "RelativeToolTip": "windows\\Common\\Utilities\\SystemHelper.cs",
+              "ViewState": "AgIAAGUAAAAAAAAAAAAAAHcAAAAmAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-08T19:42:32.367Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "WebsiteListsDialog.xaml.cs",
+              "DocumentMoniker": "C:\\Users\\finis\\source\\Projects\\WebFilterApp\\windows\\AdminControlPanel\\Views\\WebsiteListsDialog.xaml.cs",
+              "RelativeDocumentMoniker": "windows\\AdminControlPanel\\Views\\WebsiteListsDialog.xaml.cs",
+              "ToolTip": "C:\\Users\\finis\\source\\Projects\\WebFilterApp\\windows\\AdminControlPanel\\Views\\WebsiteListsDialog.xaml.cs",
+              "RelativeToolTip": "windows\\AdminControlPanel\\Views\\WebsiteListsDialog.xaml.cs",
+              "ViewState": "AgIAABYAAAAAAAAAAAA2wBAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-08T18:38:58.208Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "SafeTesting.cs",
+              "DocumentMoniker": "C:\\Users\\finis\\source\\Projects\\WebFilterApp\\windows\\DevTools\\SafeTesting.cs",
+              "RelativeDocumentMoniker": "windows\\DevTools\\SafeTesting.cs",
+              "ToolTip": "C:\\Users\\finis\\source\\Projects\\WebFilterApp\\windows\\DevTools\\SafeTesting.cs",
+              "RelativeToolTip": "windows\\DevTools\\SafeTesting.cs",
+              "ViewState": "AgIAAKYAAAAAAAAAAAAAALcAAABUAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-01T21:20:04.485Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 10,
+              "Title": "AuditService.cs",
+              "DocumentMoniker": "C:\\Users\\finis\\source\\Projects\\WebFilterApp\\windows\\UrlFilterService\\Services\\AuditService.cs",
+              "RelativeDocumentMoniker": "windows\\UrlFilterService\\Services\\AuditService.cs",
+              "ToolTip": "C:\\Users\\finis\\source\\Projects\\WebFilterApp\\windows\\UrlFilterService\\Services\\AuditService.cs",
+              "RelativeToolTip": "windows\\UrlFilterService\\Services\\AuditService.cs",
+              "ViewState": "AgIAABAAAAAAAAAAAAAgwB0AAAAnAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-08T19:46:00.403Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 11,
+              "Title": "UserDatabaseService.cs",
+              "DocumentMoniker": "C:\\Users\\finis\\source\\Projects\\WebFilterApp\\windows\\AdminControlPanel\\Services\\UserDatabaseService.cs",
+              "RelativeDocumentMoniker": "windows\\AdminControlPanel\\Services\\UserDatabaseService.cs",
+              "ToolTip": "C:\\Users\\finis\\source\\Projects\\WebFilterApp\\windows\\AdminControlPanel\\Services\\UserDatabaseService.cs",
+              "RelativeToolTip": "windows\\AdminControlPanel\\Services\\UserDatabaseService.cs",
+              "ViewState": "AgIAAAEAAAAAAAAAAAAYwA0AAAAkAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-08T19:35:59.328Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 13,
+              "Title": "LogViewerDialog.xaml.cs",
+              "DocumentMoniker": "C:\\Users\\finis\\source\\Projects\\WebFilterApp\\windows\\AdminControlPanel\\Views\\LogViewerDialog.xaml.cs",
+              "RelativeDocumentMoniker": "windows\\AdminControlPanel\\Views\\LogViewerDialog.xaml.cs",
+              "ToolTip": "C:\\Users\\finis\\source\\Projects\\WebFilterApp\\windows\\AdminControlPanel\\Views\\LogViewerDialog.xaml.cs",
+              "RelativeToolTip": "windows\\AdminControlPanel\\Views\\LogViewerDialog.xaml.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAkAAAATAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-08T18:39:04.197Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 30,
+              "Title": "LogViewerDialog.xaml",
+              "DocumentMoniker": "C:\\Users\\finis\\source\\Projects\\WebFilterApp\\windows\\AdminControlPanel\\Views\\LogViewerDialog.xaml",
+              "RelativeDocumentMoniker": "windows\\AdminControlPanel\\Views\\LogViewerDialog.xaml",
+              "ToolTip": "C:\\Users\\finis\\source\\Projects\\WebFilterApp\\windows\\AdminControlPanel\\Views\\LogViewerDialog.xaml",
+              "RelativeToolTip": "windows\\AdminControlPanel\\Views\\LogViewerDialog.xaml",
+              "ViewState": "AgIAAAkAAAAAAAAAAAAAACIAAAAvAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
+              "WhenOpened": "2025-09-06T20:18:04.099Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 31,
+              "Title": "UserSelectionDialog.xaml",
+              "DocumentMoniker": "C:\\Users\\finis\\source\\Projects\\WebFilterApp\\windows\\AdminControlPanel\\Views\\UserSelectionDialog.xaml",
+              "RelativeDocumentMoniker": "windows\\AdminControlPanel\\Views\\UserSelectionDialog.xaml",
+              "ToolTip": "C:\\Users\\finis\\source\\Projects\\WebFilterApp\\windows\\AdminControlPanel\\Views\\UserSelectionDialog.xaml",
+              "RelativeToolTip": "windows\\AdminControlPanel\\Views\\UserSelectionDialog.xaml",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
+              "WhenOpened": "2025-09-06T19:35:17.123Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 32,
+              "Title": "TimeExtensionDialog.xaml",
+              "DocumentMoniker": "C:\\Users\\finis\\source\\Projects\\WebFilterApp\\windows\\AdminControlPanel\\Views\\TimeExtensionDialog.xaml",
+              "RelativeDocumentMoniker": "windows\\AdminControlPanel\\Views\\TimeExtensionDialog.xaml",
+              "ToolTip": "C:\\Users\\finis\\source\\Projects\\WebFilterApp\\windows\\AdminControlPanel\\Views\\TimeExtensionDialog.xaml",
+              "RelativeToolTip": "windows\\AdminControlPanel\\Views\\TimeExtensionDialog.xaml",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
+              "WhenOpened": "2025-09-06T19:35:14.465Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 15,
+              "Title": "SiteManagementDialog.xaml",
+              "DocumentMoniker": "C:\\Users\\finis\\source\\Projects\\WebFilterApp\\windows\\AdminControlPanel\\Views\\SiteManagementDialog.xaml",
+              "RelativeDocumentMoniker": "windows\\AdminControlPanel\\Views\\SiteManagementDialog.xaml",
+              "ToolTip": "C:\\Users\\finis\\source\\Projects\\WebFilterApp\\windows\\AdminControlPanel\\Views\\SiteManagementDialog.xaml",
+              "RelativeToolTip": "windows\\AdminControlPanel\\Views\\SiteManagementDialog.xaml",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
+              "WhenOpened": "2025-09-06T19:35:08.313Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 12,
+              "Title": "UniversalLogger.cs",
+              "DocumentMoniker": "C:\\Users\\finis\\source\\Projects\\WebFilterApp\\shared\\logging\\UniversalLogger.cs",
+              "RelativeDocumentMoniker": "shared\\logging\\UniversalLogger.cs",
+              "ToolTip": "C:\\Users\\finis\\source\\Projects\\WebFilterApp\\shared\\logging\\UniversalLogger.cs",
+              "RelativeToolTip": "shared\\logging\\UniversalLogger.cs",
+              "ViewState": "AgIAAJ4BAAAAAAAAAAAzwMoBAAAXAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-01T21:20:34.862Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 14,
+              "Title": "QuickActionsPanel.xaml",
+              "DocumentMoniker": "C:\\Users\\finis\\source\\Projects\\WebFilterApp\\windows\\AdminControlPanel\\Controls\\QuickActionsPanel.xaml",
+              "RelativeDocumentMoniker": "windows\\AdminControlPanel\\Controls\\QuickActionsPanel.xaml",
+              "ToolTip": "C:\\Users\\finis\\source\\Projects\\WebFilterApp\\windows\\AdminControlPanel\\Controls\\QuickActionsPanel.xaml",
+              "RelativeToolTip": "windows\\AdminControlPanel\\Controls\\QuickActionsPanel.xaml",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
+              "WhenOpened": "2025-09-06T18:12:34.42Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 16,
+              "Title": "MainWindow.xaml",
+              "DocumentMoniker": "C:\\Users\\finis\\source\\Projects\\WebFilterApp\\windows\\AdminControlPanel\\Views\\MainWindow.xaml",
+              "RelativeDocumentMoniker": "windows\\AdminControlPanel\\Views\\MainWindow.xaml",
+              "ToolTip": "C:\\Users\\finis\\source\\Projects\\WebFilterApp\\windows\\AdminControlPanel\\Views\\MainWindow.xaml",
+              "RelativeToolTip": "windows\\AdminControlPanel\\Views\\MainWindow.xaml",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
+              "WhenOpened": "2025-09-06T19:35:04.417Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 33,
+              "Title": "HomeworkModeDialog.xaml",
+              "DocumentMoniker": "C:\\Users\\finis\\source\\Projects\\WebFilterApp\\windows\\AdminControlPanel\\Views\\HomeworkModeDialog.xaml",
+              "RelativeDocumentMoniker": "windows\\AdminControlPanel\\Views\\HomeworkModeDialog.xaml",
+              "ToolTip": "C:\\Users\\finis\\source\\Projects\\WebFilterApp\\windows\\AdminControlPanel\\Views\\HomeworkModeDialog.xaml",
+              "RelativeToolTip": "windows\\AdminControlPanel\\Views\\HomeworkModeDialog.xaml",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
+              "WhenOpened": "2025-09-06T19:34:58.99Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 17,
+              "Title": "YouTubeChannelCard.xaml",
+              "DocumentMoniker": "C:\\Users\\finis\\source\\Projects\\WebFilterApp\\windows\\AdminControlPanel\\Controls\\YouTubeChannelCard.xaml",
+              "RelativeDocumentMoniker": "windows\\AdminControlPanel\\Controls\\YouTubeChannelCard.xaml",
+              "ToolTip": "C:\\Users\\finis\\source\\Projects\\WebFilterApp\\windows\\AdminControlPanel\\Controls\\YouTubeChannelCard.xaml",
+              "RelativeToolTip": "windows\\AdminControlPanel\\Controls\\YouTubeChannelCard.xaml",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
+              "WhenOpened": "2025-09-06T19:34:44.511Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 18,
+              "Title": "UserProfileCard.xaml",
+              "DocumentMoniker": "C:\\Users\\finis\\source\\Projects\\WebFilterApp\\windows\\AdminControlPanel\\Controls\\UserProfileCard.xaml",
+              "RelativeDocumentMoniker": "windows\\AdminControlPanel\\Controls\\UserProfileCard.xaml",
+              "ToolTip": "C:\\Users\\finis\\source\\Projects\\WebFilterApp\\windows\\AdminControlPanel\\Controls\\UserProfileCard.xaml",
+              "RelativeToolTip": "windows\\AdminControlPanel\\Controls\\UserProfileCard.xaml",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
+              "WhenOpened": "2025-09-06T19:34:37.772Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 19,
+              "Title": "TimeSliderControl.xaml",
+              "DocumentMoniker": "C:\\Users\\finis\\source\\Projects\\WebFilterApp\\windows\\AdminControlPanel\\Controls\\TimeSliderControl.xaml",
+              "RelativeDocumentMoniker": "windows\\AdminControlPanel\\Controls\\TimeSliderControl.xaml",
+              "ToolTip": "C:\\Users\\finis\\source\\Projects\\WebFilterApp\\windows\\AdminControlPanel\\Controls\\TimeSliderControl.xaml",
+              "RelativeToolTip": "windows\\AdminControlPanel\\Controls\\TimeSliderControl.xaml",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
+              "WhenOpened": "2025-09-06T19:34:31.135Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 25,
+              "Title": "YouTubeChannelCard.xaml",
+              "DocumentMoniker": "C:\\Users\\finis\\source\\Projects\\WebFilterApp\\windows\\AdminControlPanel\\Controls\\YouTubeChannelCard.xaml",
+              "RelativeDocumentMoniker": "windows\\AdminControlPanel\\Controls\\YouTubeChannelCard.xaml",
+              "ToolTip": "C:\\Users\\finis\\source\\Projects\\WebFilterApp\\windows\\AdminControlPanel\\Controls\\YouTubeChannelCard.xaml",
+              "RelativeToolTip": "windows\\AdminControlPanel\\Controls\\YouTubeChannelCard.xaml",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA0AAAAlAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
+              "WhenOpened": "2025-09-03T18:05:48.165Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 20,
+              "Title": "safe-test.bat",
+              "DocumentMoniker": "C:\\Users\\finis\\source\\Projects\\WebFilterApp\\scripts\\safe-test.bat",
+              "RelativeDocumentMoniker": "scripts\\safe-test.bat",
+              "ToolTip": "C:\\Users\\finis\\source\\Projects\\WebFilterApp\\scripts\\safe-test.bat",
+              "RelativeToolTip": "scripts\\safe-test.bat",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABkAAAAFAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000614|",
+              "WhenOpened": "2025-08-27T19:29:49.491Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 21,
+              "Title": "dev-tools.bat",
+              "DocumentMoniker": "C:\\Users\\finis\\source\\Projects\\WebFilterApp\\scripts\\dev-tools.bat",
+              "RelativeDocumentMoniker": "scripts\\dev-tools.bat",
+              "ToolTip": "C:\\Users\\finis\\source\\Projects\\WebFilterApp\\scripts\\dev-tools.bat",
+              "RelativeToolTip": "scripts\\dev-tools.bat",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000614|",
+              "WhenOpened": "2025-08-27T19:29:46.539Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 26,
+              "Title": "DevTools.csproj",
+              "DocumentMoniker": "C:\\Users\\finis\\source\\Projects\\WebFilterApp\\windows\\DevTools\\DevTools.csproj",
+              "RelativeDocumentMoniker": "windows\\DevTools\\DevTools.csproj",
+              "ToolTip": "C:\\Users\\finis\\source\\Projects\\WebFilterApp\\windows\\DevTools\\DevTools.csproj",
+              "RelativeToolTip": "windows\\DevTools\\DevTools.csproj",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
+              "WhenOpened": "2025-08-27T19:28:21.842Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 27,
+              "Title": "UrlFilter.Shared.Models.csproj",
+              "DocumentMoniker": "C:\\Users\\finis\\source\\Projects\\WebFilterApp\\shared\\models\\UrlFilter.Shared.Models.csproj",
+              "RelativeDocumentMoniker": "shared\\models\\UrlFilter.Shared.Models.csproj",
+              "ToolTip": "C:\\Users\\finis\\source\\Projects\\WebFilterApp\\shared\\models\\UrlFilter.Shared.Models.csproj",
+              "RelativeToolTip": "shared\\models\\UrlFilter.Shared.Models.csproj",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
+              "WhenOpened": "2025-08-27T19:25:53.886Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 22,
+              "Title": "XamlReader.cs",
+              "DocumentMoniker": "C:\\Users\\finis\\AppData\\Local\\Temp\\.vsdbgsrc\\83616927926d14a9d63ba91b611a12293ac61079cc74be5d9c8aaec5dc9ed161\\XamlReader.cs",
+              "RelativeDocumentMoniker": "..\\..\\..\\AppData\\Local\\Temp\\.vsdbgsrc\\83616927926d14a9d63ba91b611a12293ac61079cc74be5d9c8aaec5dc9ed161\\XamlReader.cs",
+              "ToolTip": "C:\\Users\\finis\\AppData\\Local\\Temp\\.vsdbgsrc\\83616927926d14a9d63ba91b611a12293ac61079cc74be5d9c8aaec5dc9ed161\\XamlReader.cs [Read Only]",
+              "RelativeToolTip": "..\\..\\..\\AppData\\Local\\Temp\\.vsdbgsrc\\83616927926d14a9d63ba91b611a12293ac61079cc74be5d9c8aaec5dc9ed161\\XamlReader.cs [Read Only]",
+              "ViewState": "AgIAAIYBAAAAAAAAAAAAAJABAAACAAAAAQAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-08-27T19:20:04.176Z",
+              "EditorCaption": " [Read Only]"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 23,
+              "Title": "Microsoft.NET.Sdk.targets",
+              "DocumentMoniker": "C:\\Program Files\\dotnet\\sdk\\9.0.100-rc.1.24452.12\\Sdks\\Microsoft.NET.Sdk\\targets\\Microsoft.NET.Sdk.targets",
+              "RelativeDocumentMoniker": "..\\..\\..\\..\\..\\Program Files\\dotnet\\sdk\\9.0.100-rc.1.24452.12\\Sdks\\Microsoft.NET.Sdk\\targets\\Microsoft.NET.Sdk.targets",
+              "ToolTip": "C:\\Program Files\\dotnet\\sdk\\9.0.100-rc.1.24452.12\\Sdks\\Microsoft.NET.Sdk\\targets\\Microsoft.NET.Sdk.targets",
+              "RelativeToolTip": "..\\..\\..\\..\\..\\Program Files\\dotnet\\sdk\\9.0.100-rc.1.24452.12\\Sdks\\Microsoft.NET.Sdk\\targets\\Microsoft.NET.Sdk.targets",
+              "ViewState": "AgIAACwDAAAAAAAAAIA1wDwDAAAEAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003801|",
+              "WhenOpened": "2025-08-27T19:14:10.49Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 28,
+              "Title": "MainWindow.xaml",
+              "DocumentMoniker": "C:\\Users\\finis\\source\\Projects\\WebFilterApp\\windows\\AdminControlPanel\\Views\\MainWindow.xaml",
+              "RelativeDocumentMoniker": "windows\\AdminControlPanel\\Views\\MainWindow.xaml",
+              "ToolTip": "C:\\Users\\finis\\source\\Projects\\WebFilterApp\\windows\\AdminControlPanel\\Views\\MainWindow.xaml",
+              "RelativeToolTip": "windows\\AdminControlPanel\\Views\\MainWindow.xaml",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
+              "WhenOpened": "2025-08-27T19:12:16.019Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 24,
+              "Title": "apphost.exe",
+              "DocumentMoniker": "C:\\Users\\finis\\source\\Projects\\WebFilterApp\\windows\\AdminControlPanel\\obj\\Debug\\net6.0-windows\\apphost.exe",
+              "RelativeDocumentMoniker": "windows\\AdminControlPanel\\obj\\Debug\\net6.0-windows\\apphost.exe",
+              "ToolTip": "C:\\Users\\finis\\source\\Projects\\WebFilterApp\\windows\\AdminControlPanel\\obj\\Debug\\net6.0-windows\\apphost.exe",
+              "RelativeToolTip": "windows\\AdminControlPanel\\obj\\Debug\\net6.0-windows\\apphost.exe",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000165|",
+              "WhenOpened": "2025-08-27T19:12:06.87Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 29,
+              "Title": "Common.csproj",
+              "DocumentMoniker": "C:\\Users\\finis\\source\\Projects\\WebFilterApp\\windows\\Common\\Common.csproj",
+              "RelativeDocumentMoniker": "windows\\Common\\Common.csproj",
+              "ToolTip": "C:\\Users\\finis\\source\\Projects\\WebFilterApp\\windows\\Common\\Common.csproj",
+              "RelativeToolTip": "windows\\Common\\Common.csproj",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
+              "WhenOpened": "2025-08-27T18:42:09.639Z"
+            }
+          ]
+        }
+      ]
     }
   ]
 }

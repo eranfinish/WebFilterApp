@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("WFPIntegration")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Release")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+5034405322641367510b15bb16026052e286c27e")]
 [assembly: System.Reflection.AssemblyProductAttribute("WFPIntegration")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Windows Filtering Platform Integration")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

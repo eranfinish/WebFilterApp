@@ -8,13 +8,13 @@ C:\Users\finis\source\Projects\WebFilterApp\windows\AdminControlPanel\obj\Debug\
 AdminControlPanel
 none
 false
-TRACE;DEBUG;NET;NET6_0;NETCOREAPP
+TRACE;DEBUG;NET;NET6_0;NETCOREAPP;WINDOWS;WINDOWS7_0;NET5_0_OR_GREATER;NET6_0_OR_GREATER;NETCOREAPP3_0_OR_GREATER;NETCOREAPP3_1_OR_GREATER;WINDOWS7_0_OR_GREATER
 C:\Users\finis\source\Projects\WebFilterApp\windows\AdminControlPanel\App.xaml
-1-1644662438
+15-2138178381
 
-3-325196435
-196-756459609
-Views\MainWindow.xaml;
+20-1324811882
+2252015001530
+Controls\QuickActionsPanel.xaml;Controls\TimeSliderControl.xaml;Controls\UserProfileCard.xaml;Controls\YouTubeChannelCard.xaml;Views\AddUserDialog.xaml;Views\AdminSetupDialog.xaml;Views\HomeworkModeDialog.xaml;Views\LoginDialog.xaml;Views\LogViewerDialog.xaml;Views\MainWindow.xaml;Views\PasswordResetDialog.xaml;Views\SiteManagementDialog.xaml;Views\TimeExtensionDialog.xaml;Views\UserSelectionDialog.xaml;Views\WebsiteListsDialog.xaml;
 
 False
 

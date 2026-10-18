@@ -1,0 +1,183 @@
+Starting URL Filter Service in console mode...
+Press Ctrl+C to stop.
+
+info: UrlFilterService.Services.DatabaseService[0]
+      Database path: C:\Users\finis\AppData\Local\UrlFilter\Database\urlfilter.db
+info: UrlFilterService.Services.DatabaseService[0]
+      Initializing database connection
+info: UrlFilterService.Services.DatabaseService[0]
+      Database tables created/verified from schema.sql
+info: UrlFilterService.Services.DatabaseService[0]
+      Database initialized successfully
+info: UrlFilterService.UrlFilterWindowsService[0]
+      Database initialized successfully
+info: UrlFilterService.UrlFilterWindowsService[0]
+      Initializing user detection service
+info: UrlFilterService.Services.WfpFilterService[0]
+      Starting WFP Filter Service
+warn: UrlFilterService.Services.WfpFilterService[0]
+      WFP Filter Service disabled: process is not elevated. Install the service or run as administrator to enable WFP filtering.
+info: UrlFilterService.Services.DnsInterceptorService[0]
+      Starting DNS Interceptor Service...
+info: UrlFilterService.Services.DnsInterceptorService[0]
+      DNS filter rules reloaded: 0 blocked domains, 0 allowed domains, 0 patterns
+info: UrlFilterService.Services.DnsInterceptorService[0]
+      Saved DNS for adapter 'Intel(R) Wireless-AC 9462' (idx 3): 213.57.2.5, 213.57.22.5
+warn: UrlFilterService.Services.DnsInterceptorService[0]
+      Failed to set DNS for adapter 'Intel(R) Wireless-AC 9462'. Return code: 91
+info: UrlFilterService.Services.DnsInterceptorService[0]
+      DNS Interceptor Service started. Listening on 127.0.0.1:53
+info: UrlFilterService.Services.ServiceCommandHandler[0]
+      ServiceCommandHandler started on pipe: UrlFilterServicePipe
+info: UrlFilterService.Services.UserDetectionService[0]
+      Starting User Detection Service
+info: UrlFilterService.Services.DnsInterceptorService[0]
+      DNS listen loop started
+info: UrlFilterService.Services.PolicyEnforcementService[0]
+      Starting Policy Enforcement Service
+warn: UrlFilterService.Services.PolicyEnforcementService[0]
+      Failed to apply DoH registry policies (admin rights required)
+      System.UnauthorizedAccessException: Access to the registry key 'HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Google\Chrome' is denied.
+         at Microsoft.Win32.RegistryKey.Win32Error(Int32 errorCode, String str)
+         at Microsoft.Win32.RegistryKey.CreateSubKeyInternalCore(String subkey, RegistryKeyPermissionCheck permissionCheck, RegistryOptions registryOptions)
+         at Microsoft.Win32.RegistryKey.CreateSubKey(String subkey, RegistryKeyPermissionCheck permissionCheck, RegistryOptions registryOptions)
+         at Microsoft.Win32.RegistryKey.CreateSubKey(String subkey, Boolean writable)
+         at UrlFilterService.Services.PolicyEnforcementService.SetPolicyKey(String subKey, String valueName, Object value, RegistryValueKind kind) in C:\Users\finis\source\Projects\WebFilterApp\windows\UrlFilterService\Services\PolicyEnforcementService.cs:line 201
+         at UrlFilterService.Services.PolicyEnforcementService.ApplyDoHBlockingPolicies() in C:\Users\finis\source\Projects\WebFilterApp\windows\UrlFilterService\Services\PolicyEnforcementService.cs:line 173
+warn: UrlFilterService.Services.WfpFilterService[0]
+      WFP engine not initialized, cannot block IP
+warn: UrlFilterService.Services.WfpFilterService[0]
+      WFP engine not initialized, cannot block IP
+warn: UrlFilterService.Services.WfpFilterService[0]
+      WFP engine not initialized, cannot block IP
+warn: UrlFilterService.Services.WfpFilterService[0]
+      WFP engine not initialized, cannot block IP
+warn: UrlFilterService.Services.WfpFilterService[0]
+      WFP engine not initialized, cannot block IP
+warn: UrlFilterService.Services.WfpFilterService[0]
+      WFP engine not initialized, cannot block IP
+warn: UrlFilterService.Services.WfpFilterService[0]
+      WFP engine not initialized, cannot block IP
+warn: UrlFilterService.Services.WfpFilterService[0]
+      WFP engine not initialized, cannot block IP
+warn: UrlFilterService.Services.WfpFilterService[0]
+      WFP engine not initialized, cannot block IP
+warn: UrlFilterService.Services.WfpFilterService[0]
+      WFP engine not initialized, cannot block IP
+info: UrlFilterService.Services.PolicyEnforcementService[0]
+      Seeded 27 browser-download domains into blacklist
+info: UrlFilterService.Services.DnsInterceptorService[0]
+      DNS filter rules reloaded: 27 blocked domains, 0 allowed domains, 0 patterns
+warn: UrlFilterService.Services.PolicyEnforcementService[0]
+      Terminating unauthorized browser: chrome (PID 13824)
+warn: UrlFilterService.Services.PolicyEnforcementService[0]
+      Terminating unauthorized browser: chrome (PID 7240)
+warn: UrlFilterService.Services.PolicyEnforcementService[0]
+      Terminating unauthorized browser: chrome (PID 14036)
+warn: UrlFilterService.Services.PolicyEnforcementService[0]
+      Terminating unauthorized browser: chrome (PID 14012)
+warn: UrlFilterService.Services.PolicyEnforcementService[0]
+      Terminating unauthorized browser: chrome (PID 8956)
+warn: UrlFilterService.Services.PolicyEnforcementService[0]
+      Terminating unauthorized browser: chrome (PID 17368)
+warn: UrlFilterService.Services.PolicyEnforcementService[0]
+      Terminating unauthorized browser: chrome (PID 17664)
+warn: UrlFilterService.Services.PolicyEnforcementService[0]
+      Terminating unauthorized browser: chrome (PID 18384)
+warn: UrlFilterService.Services.PolicyEnforcementService[0]
+      Terminating unauthorized browser: chrome (PID 19104)
+warn: UrlFilterService.Services.PolicyEnforcementService[0]
+      Terminating unauthorized browser: chrome (PID 19004)
+warn: UrlFilterService.Services.PolicyEnforcementService[0]
+      Terminating unauthorized browser: chrome (PID 19048)
+warn: UrlFilterService.Services.PolicyEnforcementService[0]
+      Terminating unauthorized browser: chrome (PID 19612)
+warn: UrlFilterService.Services.PolicyEnforcementService[0]
+      Terminating unauthorized browser: chrome (PID 20608)
+warn: UrlFilterService.Services.PolicyEnforcementService[0]
+      Terminating unauthorized browser: chrome (PID 18064)
+warn: UrlFilterService.Services.PolicyEnforcementService[0]
+      Terminating unauthorized browser: chrome (PID 20744)
+warn: UrlFilterService.Services.PolicyEnforcementService[0]
+      Terminating unauthorized browser: chrome (PID 5052)
+warn: UrlFilterService.Services.PolicyEnforcementService[0]
+      Terminating unauthorized browser: chrome (PID 20624)
+warn: UrlFilterService.Services.PolicyEnforcementService[0]
+      Terminating unauthorized browser: chrome (PID 9744)
+warn: UrlFilterService.Services.PolicyEnforcementService[0]
+      Terminating unauthorized browser: chrome (PID 7312)
+warn: UrlFilterService.Services.PolicyEnforcementService[0]
+      Terminating unauthorized browser: chrome (PID 13236)
+warn: UrlFilterService.Services.PolicyEnforcementService[0]
+      Terminating unauthorized browser: chrome (PID 2868)
+warn: UrlFilterService.Services.PolicyEnforcementService[0]
+      Terminating unauthorized browser: chrome (PID 21600)
+warn: UrlFilterService.Services.PolicyEnforcementService[0]
+      Terminating unauthorized browser: chrome (PID 17720)
+warn: UrlFilterService.Services.PolicyEnforcementService[0]
+      Terminating unauthorized browser: chrome (PID 20444)
+warn: UrlFilterService.Services.PolicyEnforcementService[0]
+      Terminating unauthorized browser: chrome (PID 6984)
+warn: UrlFilterService.Services.PolicyEnforcementService[0]
+      Terminating unauthorized browser: chrome (PID 10732)
+warn: UrlFilterService.Services.PolicyEnforcementService[0]
+      Terminating unauthorized browser: chrome (PID 20100)
+warn: UrlFilterService.Services.PolicyEnforcementService[0]
+      Terminating unauthorized browser: chrome (PID 14276)
+warn: UrlFilterService.Services.PolicyEnforcementService[0]
+      Terminating unauthorized browser: chrome (PID 20932)
+warn: UrlFilterService.Services.PolicyEnforcementService[0]
+      Terminating unauthorized browser: chrome (PID 12144)
+warn: UrlFilterService.Services.PolicyEnforcementService[0]
+      Terminating unauthorized browser: chrome (PID 5812)
+warn: UrlFilterService.Services.PolicyEnforcementService[0]
+      Terminating unauthorized browser: chrome (PID 9644)
+warn: UrlFilterService.Services.PolicyEnforcementService[0]
+      Terminating unauthorized browser: chrome (PID 19016)
+warn: UrlFilterService.Services.PolicyEnforcementService[0]
+      Terminating unauthorized browser: chrome (PID 25808)
+warn: UrlFilterService.Services.PolicyEnforcementService[0]
+      Terminating unauthorized browser: chrome (PID 5720)
+warn: UrlFilterService.Services.PolicyEnforcementService[0]
+      Terminating unauthorized browser: chrome (PID 26600)
+warn: UrlFilterService.Services.PolicyEnforcementService[0]
+      Terminating unauthorized browser: chrome (PID 1336)
+warn: UrlFilterService.Services.PolicyEnforcementService[0]
+      Terminating unauthorized browser: chrome (PID 26760)
+warn: UrlFilterService.Services.PolicyEnforcementService[0]
+      Terminating unauthorized browser: chrome (PID 29600)
+warn: UrlFilterService.Services.PolicyEnforcementService[0]
+      Terminating unauthorized browser: chrome (PID 27864)
+warn: UrlFilterService.Services.PolicyEnforcementService[0]
+      Terminating unauthorized browser: chrome (PID 8748)
+warn: UrlFilterService.Services.PolicyEnforcementService[0]
+      Terminating unauthorized browser: chrome (PID 8492)
+warn: UrlFilterService.Services.PolicyEnforcementService[0]
+      Terminating unauthorized browser: chrome (PID 27428)
+warn: UrlFilterService.Services.PolicyEnforcementService[0]
+      Terminating unauthorized browser: chrome (PID 23804)
+warn: UrlFilterService.Services.PolicyEnforcementService[0]
+      Terminating unauthorized browser: chrome (PID 6424)
+warn: UrlFilterService.Services.PolicyEnforcementService[0]
+      Terminating unauthorized browser: chrome (PID 22132)
+warn: UrlFilterService.Services.PolicyEnforcementService[0]
+      Terminating unauthorized browser: chrome (PID 30604)
+warn: UrlFilterService.Services.PolicyEnforcementService[0]
+      Terminating unauthorized browser: chrome (PID 28936)
+warn: UrlFilterService.Services.PolicyEnforcementService[0]
+      Terminating unauthorized browser: chrome (PID 30336)
+info: UrlFilterService.UrlFilterWindowsService[0]
+      Monitoring timer started
+info: UrlFilterService.UrlFilterWindowsService[0]
+      URL Filter Service started successfully
+info: UrlFilterService.UrlFilterWindowsService[0]
+        DNS filtering: ACTIVE on 127.0.0.1:53
+info: UrlFilterService.UrlFilterWindowsService[0]
+        WFP IP blocking: ACTIVE
+info: UrlFilterService.UrlFilterWindowsService[0]
+        IPC command handler: ACTIVE
+
+=== Service is running. Press Ctrl+C to stop. ===
+
+info: UrlFilterService.Services.AuditService[0]
+      Audit Event [SERVICE_STARTED]: URL Filter Service event: SERVICE_STARTED - User: System

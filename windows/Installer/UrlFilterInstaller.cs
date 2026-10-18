@@ -104,7 +104,7 @@ namespace UrlFilterInstaller
         private static void InstallSystem()
         {
             Console.WriteLine("Installing URL Filter System...");
-            _logger.LogInformation("Starting system installation", "Installer");
+            _logger.LogInfo("Starting system installation", "Installer");
             
             var steps = new List<InstallStep>
             {
@@ -133,7 +133,7 @@ namespace UrlFilterInstaller
             Console.WriteLine();
             Console.WriteLine("The service is now running and monitoring network traffic.");
             
-            _logger.LogInformation("System installation completed successfully", "Installer");
+            _logger.LogInfo("System installation completed successfully", "Installer");
         }
         
         private static bool CheckPrerequisites()
@@ -548,7 +548,7 @@ namespace UrlFilterInstaller
         private static void UninstallSystem()
         {
             Console.WriteLine("Uninstalling URL Filter System...");
-            _logger.LogInformation("Starting system uninstallation", "Installer");
+            _logger.LogInfo("Starting system uninstallation", "Installer");
             
             var steps = new List<InstallStep>
             {
@@ -571,7 +571,7 @@ namespace UrlFilterInstaller
             Console.WriteLine("Note: User data and logs have been preserved in C:\\ProgramData\\UrlFilter");
             Console.WriteLine("You can safely delete this directory if you don't need the data.");
             
-            _logger.LogInformation("System uninstallation completed successfully", "Installer");
+            _logger.LogInfo("System uninstallation completed successfully", "Installer");
         }
         
         private static bool StopServices()
@@ -779,7 +779,7 @@ namespace UrlFilterInstaller
                 catch (Exception ex)
                 {
                     Console.WriteLine($"ERROR in step '{step.Description}': {ex.Message}");
-                    _logger.LogError($"Installation step failed: {step.Description}", ex, "Installer");
+                    _logger.LogError($"Installation step failed: {step.Description}", ex.Message, "Installer");
                     throw;
                 }
             }

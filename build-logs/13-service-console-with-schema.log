@@ -1,0 +1,140 @@
+Starting URL Filter Service in console mode...
+Press Ctrl+C to stop.
+
+info: UrlFilterService.Services.DatabaseService[0]
+      Database path: C:\ProgramData\UrlFilter\Database\urlfilter.db
+info: UrlFilterService.Services.DatabaseService[0]
+      Initializing database connection
+fail: UrlFilterService.Services.DatabaseService[0]
+      Error creating database tables
+      code = Error (1), message = System.Data.SQLite.SQLiteException (0x87AF001F): SQL logic error
+      table device_users already exists
+         at System.Data.SQLite.SQLite3.Prepare(SQLiteConnection cnn, SQLiteCommand command, String strSql, SQLiteStatement previous, UInt32 timeoutMS, String& strRemain)
+         at System.Data.SQLite.SQLiteCommand.BuildNextCommand()
+         at System.Data.SQLite.SQLiteCommand.GetStatement(Int32 index)
+         at System.Data.SQLite.SQLiteDataReader.NextResult()
+         at System.Data.SQLite.SQLiteDataReader..ctor(SQLiteCommand cmd, CommandBehavior behave)
+         at System.Data.SQLite.SQLiteCommand.ExecuteReader(CommandBehavior behavior)
+         at System.Data.SQLite.SQLiteCommand.ExecuteNonQuery(CommandBehavior behavior)
+         at System.Data.SQLite.SQLiteCommand.ExecuteNonQuery()
+         at System.Data.Common.DbCommand.ExecuteNonQueryAsync(CancellationToken cancellationToken)
+      --- End of stack trace from previous location ---
+         at UrlFilterService.Services.DatabaseService.CreateTablesIfNotExistAsync() in C:\Users\finis\source\Projects\WebFilterApp\windows\UrlFilterService\Services\DatabaseService.cs:line 769
+fail: UrlFilterService.Services.DatabaseService[0]
+      Failed to initialize database
+      code = Error (1), message = System.Data.SQLite.SQLiteException (0x87AF001F): SQL logic error
+      table device_users already exists
+         at System.Data.SQLite.SQLite3.Prepare(SQLiteConnection cnn, SQLiteCommand command, String strSql, SQLiteStatement previous, UInt32 timeoutMS, String& strRemain)
+         at System.Data.SQLite.SQLiteCommand.BuildNextCommand()
+         at System.Data.SQLite.SQLiteCommand.GetStatement(Int32 index)
+         at System.Data.SQLite.SQLiteDataReader.NextResult()
+         at System.Data.SQLite.SQLiteDataReader..ctor(SQLiteCommand cmd, CommandBehavior behave)
+         at System.Data.SQLite.SQLiteCommand.ExecuteReader(CommandBehavior behavior)
+         at System.Data.SQLite.SQLiteCommand.ExecuteNonQuery(CommandBehavior behavior)
+         at System.Data.SQLite.SQLiteCommand.ExecuteNonQuery()
+         at System.Data.Common.DbCommand.ExecuteNonQueryAsync(CancellationToken cancellationToken)
+      --- End of stack trace from previous location ---
+         at UrlFilterService.Services.DatabaseService.CreateTablesIfNotExistAsync() in C:\Users\finis\source\Projects\WebFilterApp\windows\UrlFilterService\Services\DatabaseService.cs:line 769
+         at UrlFilterService.Services.DatabaseService.InitializeAsync() in C:\Users\finis\source\Projects\WebFilterApp\windows\UrlFilterService\Services\DatabaseService.cs:line 47
+fail: UrlFilterService.UrlFilterWindowsService[0]
+      Failed to initialize database
+      code = Error (1), message = System.Data.SQLite.SQLiteException (0x87AF001F): SQL logic error
+      table device_users already exists
+         at System.Data.SQLite.SQLite3.Prepare(SQLiteConnection cnn, SQLiteCommand command, String strSql, SQLiteStatement previous, UInt32 timeoutMS, String& strRemain)
+         at System.Data.SQLite.SQLiteCommand.BuildNextCommand()
+         at System.Data.SQLite.SQLiteCommand.GetStatement(Int32 index)
+         at System.Data.SQLite.SQLiteDataReader.NextResult()
+         at System.Data.SQLite.SQLiteDataReader..ctor(SQLiteCommand cmd, CommandBehavior behave)
+         at System.Data.SQLite.SQLiteCommand.ExecuteReader(CommandBehavior behavior)
+         at System.Data.SQLite.SQLiteCommand.ExecuteNonQuery(CommandBehavior behavior)
+         at System.Data.SQLite.SQLiteCommand.ExecuteNonQuery()
+         at System.Data.Common.DbCommand.ExecuteNonQueryAsync(CancellationToken cancellationToken)
+      --- End of stack trace from previous location ---
+         at UrlFilterService.Services.DatabaseService.CreateTablesIfNotExistAsync() in C:\Users\finis\source\Projects\WebFilterApp\windows\UrlFilterService\Services\DatabaseService.cs:line 769
+         at UrlFilterService.Services.DatabaseService.InitializeAsync() in C:\Users\finis\source\Projects\WebFilterApp\windows\UrlFilterService\Services\DatabaseService.cs:line 47
+         at UrlFilterService.UrlFilterWindowsService.InitializeDatabaseAsync() in C:\Users\finis\source\Projects\WebFilterApp\windows\UrlFilterService\UrlFilterWindowsService.cs:line 168
+fail: UrlFilterService.UrlFilterWindowsService[0]
+      Failed to start URL Filter Service
+      System.AggregateException: One or more errors occurred. (SQL logic error
+      table device_users already exists)
+       ---> code = Error (1), message = System.Data.SQLite.SQLiteException (0x87AF001F): SQL logic error
+      table device_users already exists
+         at System.Data.SQLite.SQLite3.Prepare(SQLiteConnection cnn, SQLiteCommand command, String strSql, SQLiteStatement previous, UInt32 timeoutMS, String& strRemain)
+         at System.Data.SQLite.SQLiteCommand.BuildNextCommand()
+         at System.Data.SQLite.SQLiteCommand.GetStatement(Int32 index)
+         at System.Data.SQLite.SQLiteDataReader.NextResult()
+         at System.Data.SQLite.SQLiteDataReader..ctor(SQLiteCommand cmd, CommandBehavior behave)
+         at System.Data.SQLite.SQLiteCommand.ExecuteReader(CommandBehavior behavior)
+         at System.Data.SQLite.SQLiteCommand.ExecuteNonQuery(CommandBehavior behavior)
+         at System.Data.SQLite.SQLiteCommand.ExecuteNonQuery()
+         at System.Data.Common.DbCommand.ExecuteNonQueryAsync(CancellationToken cancellationToken)
+      --- End of stack trace from previous location ---
+         at UrlFilterService.Services.DatabaseService.CreateTablesIfNotExistAsync() in C:\Users\finis\source\Projects\WebFilterApp\windows\UrlFilterService\Services\DatabaseService.cs:line 769
+         at UrlFilterService.Services.DatabaseService.InitializeAsync() in C:\Users\finis\source\Projects\WebFilterApp\windows\UrlFilterService\Services\DatabaseService.cs:line 47
+         at UrlFilterService.UrlFilterWindowsService.InitializeDatabaseAsync() in C:\Users\finis\source\Projects\WebFilterApp\windows\UrlFilterService\UrlFilterWindowsService.cs:line 168
+         --- End of inner exception stack trace ---
+         at System.Threading.Tasks.Task.ThrowIfExceptional(Boolean includeTaskCanceledExceptions)
+         at System.Threading.Tasks.Task.Wait(Int32 millisecondsTimeout, CancellationToken cancellationToken)
+         at System.Threading.Tasks.Task.Wait()
+         at UrlFilterService.UrlFilterWindowsService.TestStart() in C:\Users\finis\source\Projects\WebFilterApp\windows\UrlFilterService\UrlFilterWindowsService.cs:line 97
+info: UrlFilterService.Services.PolicyEnforcementService[0]
+      Policy Enforcement Service stopped
+info: UrlFilterService.Services.ServiceCommandHandler[0]
+      ServiceCommandHandler stopped
+info: UrlFilterService.Services.UserDetectionService[0]
+      Stopping User Detection Service
+info: UrlFilterService.Services.WfpFilterService[0]
+      Stopping WFP Filter Service
+info: UrlFilterService.Services.WfpFilterService[0]
+      WFP Filter Service stopped
+info: UrlFilterService.UrlFilterWindowsService[0]
+      URL Filter Service stopped successfully
+
+=== SERVICE FAILED TO START ===
+Error: One or more errors occurred. (SQL logic error
+table device_users already exists)
+Inner: SQL logic error
+table device_users already exists
+
+Stack trace:
+   at System.Threading.Tasks.Task.ThrowIfExceptional(Boolean includeTaskCanceledExceptions)
+   at System.Threading.Tasks.Task.Wait(Int32 millisecondsTimeout, CancellationToken cancellationToken)
+   at System.Threading.Tasks.Task.Wait()
+   at UrlFilterService.UrlFilterWindowsService.TestStart() in C:\Users\finis\source\Projects\WebFilterApp\windows\UrlFilterService\UrlFilterWindowsService.cs:line 97
+   at UrlFilterService.Program.RunAsConsole() in C:\Users\finis\source\Projects\WebFilterApp\windows\UrlFilterService\Program.cs:line 125
+
+Press any key to exit...
+info: UrlFilterService.Services.AuditService[0]
+      Audit Event [SERVICE_STOPPED]: URL Filter Service event: SERVICE_STOPPED - User: System
+fail: UrlFilterService.Services.DatabaseService[0]
+      Error inserting audit log
+      code = ReadOnly (8), message = System.Data.SQLite.SQLiteException (0x87AF1779): attempt to write a readonly database
+      attempt to write a readonly database
+         at System.Data.SQLite.SQLite3.Step(SQLiteStatement stmt)
+         at System.Data.SQLite.SQLiteDataReader.NextResult()
+         at System.Data.SQLite.SQLiteDataReader..ctor(SQLiteCommand cmd, CommandBehavior behave)
+         at System.Data.SQLite.SQLiteCommand.ExecuteReader(CommandBehavior behavior)
+         at System.Data.SQLite.SQLiteCommand.ExecuteNonQuery(CommandBehavior behavior)
+         at System.Data.SQLite.SQLiteCommand.ExecuteNonQuery()
+         at System.Data.Common.DbCommand.ExecuteNonQueryAsync(CancellationToken cancellationToken)
+      --- End of stack trace from previous location ---
+         at UrlFilterService.Services.DatabaseService.InsertAuditLogAsync(AuditLog auditEntry) in C:\Users\finis\source\Projects\WebFilterApp\windows\UrlFilterService\Services\DatabaseService.cs:line 569
+fail: UrlFilterService.Services.AuditService[0]
+      Failed to log audit event
+      code = ReadOnly (8), message = System.Data.SQLite.SQLiteException (0x87AF1779): attempt to write a readonly database
+      attempt to write a readonly database
+         at System.Data.SQLite.SQLite3.Step(SQLiteStatement stmt)
+         at System.Data.SQLite.SQLiteDataReader.NextResult()
+         at System.Data.SQLite.SQLiteDataReader..ctor(SQLiteCommand cmd, CommandBehavior behave)
+         at System.Data.SQLite.SQLiteCommand.ExecuteReader(CommandBehavior behavior)
+         at System.Data.SQLite.SQLiteCommand.ExecuteNonQuery(CommandBehavior behavior)
+         at System.Data.SQLite.SQLiteCommand.ExecuteNonQuery()
+         at System.Data.Common.DbCommand.ExecuteNonQueryAsync(CancellationToken cancellationToken)
+      --- End of stack trace from previous location ---
+         at UrlFilterService.Services.DatabaseService.InsertAuditLogAsync(AuditLog auditEntry) in C:\Users\finis\source\Projects\WebFilterApp\windows\UrlFilterService\Services\DatabaseService.cs:line 569
+         at UrlFilterService.Services.AuditService.LogEventAsync(String eventType, String description, DeviceUser user) in C:\Users\finis\source\Projects\WebFilterApp\windows\UrlFilterService\Services\AuditService.cs:line 45
+Unhandled exception. System.InvalidOperationException: Cannot read keys when either application does not have a console or when console input has been redirected. Try Console.Read.
+   at System.ConsolePal.ReadKey(Boolean intercept)
+   at System.Console.ReadKey()
+   at UrlFilterService.Program.RunAsConsole() in C:\Users\finis\source\Projects\WebFilterApp\windows\UrlFilterService\Program.cs:line 153
+   at UrlFilterService.Program.Main(String[] args) in C:\Users\finis\source\Projects\WebFilterApp\windows\UrlFilterService\Program.cs:line 33

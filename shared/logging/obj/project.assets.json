@@ -444,11 +444,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\finis\\source\\Projects\\WebFilterApp\\shared\\logging\\UrlFilter.Shared.Logging.csproj",
+      "projectUniqueName": "c:\\Users\\finis\\source\\Projects\\WebFilterApp\\shared\\logging\\UrlFilter.Shared.Logging.csproj",
       "projectName": "UrlFilter.Shared.Logging",
-      "projectPath": "C:\\Users\\finis\\source\\Projects\\WebFilterApp\\shared\\logging\\UrlFilter.Shared.Logging.csproj",
+      "projectPath": "c:\\Users\\finis\\source\\Projects\\WebFilterApp\\shared\\logging\\UrlFilter.Shared.Logging.csproj",
       "packagesPath": "C:\\Users\\finis\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\finis\\source\\Projects\\WebFilterApp\\shared\\logging\\obj\\",
+      "outputPath": "c:\\Users\\finis\\source\\Projects\\WebFilterApp\\shared\\logging\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -480,9 +480,9 @@
       "restoreAuditProperties": {
         "enableAudit": "true",
         "auditLevel": "low",
-        "auditMode": "all"
+        "auditMode": "direct"
       },
-      "SdkAnalysisLevel": "9.0.100"
+      "SdkAnalysisLevel": "10.0.200"
     },
     "frameworks": {
       "net6.0": {
@@ -513,7 +513,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.100-rc.1.24452.12\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.201\\RuntimeIdentifierGraph.json"
       }
     }
   }

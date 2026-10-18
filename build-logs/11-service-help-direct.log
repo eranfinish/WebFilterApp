@@ -1,0 +1,13 @@
+URL Filter Service - Cross-Platform URL Filtering System
+
+Usage:
+  UrlFilterService.exe                 - Run as Windows service
+  UrlFilterService.exe /install        - Install Windows service
+  UrlFilterService.exe /uninstall      - Uninstall Windows service
+  UrlFilterService.exe /console        - Run in console mode for testing
+  UrlFilterService.exe /block <domain> - Add a domain to the blacklist
+  UrlFilterService.exe /unblock <domain> - Remove a domain from the blacklist
+  UrlFilterService.exe /list           - List all URL list entries
+  UrlFilterService.exe /help           - Show this help
+
+Administrator privileges are required for install/uninstall operations.

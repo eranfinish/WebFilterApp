@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Runtime.Versioning;
 using System.ServiceProcess;
 using System.Text;
 using System.Threading.Tasks;
@@ -39,7 +40,7 @@ namespace UrlFilter.DevTools
             catch (Exception ex)
             {
                 Console.WriteLine($"ERROR: {ex.Message}");
-                _logger.LogError("DevTools command failed", ex, "DevTools");
+                _logger.LogError("DevTools command failed", ex.Message, "DevTools");
                 Environment.Exit(1);
             }
         }
@@ -454,24 +455,28 @@ namespace UrlFilter.DevTools
             string simType = args.Length > 0 ? args[0] : "basic";
             int duration = args.Length > 1 ? int.Parse(args[1]) : 60;
             
-            var simulator = new TrafficSimulator();
+            var simulator = new TrafficSimulator(UniversalLogger.Instance);
             
             switch (simType.ToLower())
             {
                 case "basic":
-                    await simulator.SimulateBasicTraffic(duration);
-                    break;
-                case "burst":
-                    await simulator.SimulateBurstTraffic(duration);
+                    await simulator.SimulateBasicWebTraffic(duration);
                     break;
                 case "youtube":
                     await simulator.SimulateYouTubeTraffic(duration);
                     break;
+                case "social":
+                    await simulator.SimulateSocialMediaTraffic(duration);
+                    break;
                 case "blocked":
                     await simulator.SimulateBlockedTraffic(duration);
                     break;
+                case "mixed":
+                    await simulator.SimulateMixedTraffic(duration);
+                    break;
                 default:
                     Console.WriteLine($"Unknown simulation type: {simType}");
+                    Console.WriteLine("Available: basic, youtube, social, blocked, mixed");
                     break;
             }
         }
@@ -807,6 +812,7 @@ namespace UrlFilter.DevTools
         
         #region Helper Methods
         
+        [SupportedOSPlatform("windows")]
         private static async Task StopService()
         {
             try
@@ -824,6 +830,7 @@ namespace UrlFilter.DevTools
             }
         }
         
+        [SupportedOSPlatform("windows")]
         private static async Task StartService()
         {
             try
@@ -885,14 +892,6 @@ namespace UrlFilter.DevTools
         public async Task RunDatabaseTests() => Console.WriteLine("Running database tests...");
         public async Task RunAuthenticationTests() => Console.WriteLine("Running authentication tests...");
         public async Task RunWfpTests() => Console.WriteLine("Running WFP tests...");
-    }
-    
-    public class TrafficSimulator
-    {
-        public async Task SimulateBasicTraffic(int duration) => Console.WriteLine($"Simulating basic traffic for {duration}s...");
-        public async Task SimulateBurstTraffic(int duration) => Console.WriteLine($"Simulating burst traffic for {duration}s...");
-        public async Task SimulateYouTubeTraffic(int duration) => Console.WriteLine($"Simulating YouTube traffic for {duration}s...");
-        public async Task SimulateBlockedTraffic(int duration) => Console.WriteLine($"Simulating blocked traffic for {duration}s...");
     }
     
     public class PerformanceBenchmark

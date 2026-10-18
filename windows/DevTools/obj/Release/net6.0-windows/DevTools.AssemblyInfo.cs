@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("DevTools")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Release")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+5034405322641367510b15bb16026052e286c27e")]
 [assembly: System.Reflection.AssemblyProductAttribute("DevTools")]
 [assembly: System.Reflection.AssemblyTitleAttribute("URL Filter Development Tools")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

@@ -51,9 +51,9 @@ namespace UrlFilter.Shared.Logging
             _logWriterTask = Task.Run(ProcessLogQueue, _cancellationTokenSource.Token);
 
             // Log startup
-            LogInformation("UniversalLogger initialized", "Logger");
-            LogInformation($"Log directory: {_logDirectory}", "Logger");
-            LogInformation($"Current log file: {_currentLogFile}", "Logger");
+            LogInfo("UniversalLogger initialized", "Logger");
+            LogInfo($"Log directory: {_logDirectory}", "Logger");
+            LogInfo($"Current log file: {_currentLogFile}", "Logger");
         }
 
         #region Public Logging Methods
@@ -68,7 +68,7 @@ namespace UrlFilter.Shared.Logging
             Log(LogLevel.Debug, message, category, null, memberName, filePath, lineNumber);
         }
 
-        public void LogInformation(string message, string category = null, [CallerMemberName] string memberName = "", [CallerFilePath] string filePath = "", [CallerLineNumber] int lineNumber = 0)
+        public void LogInfo(string message, string category = null, [CallerMemberName] string memberName = "", [CallerFilePath] string filePath = "", [CallerLineNumber] int lineNumber = 0)
         {
             Log(LogLevel.Information, message, category, null, memberName, filePath, lineNumber);
         }
@@ -78,9 +78,9 @@ namespace UrlFilter.Shared.Logging
             Log(LogLevel.Warning, message, category, null, memberName, filePath, lineNumber);
         }
 
-        public void LogError(string message, Exception exception = null, string category = null, [CallerMemberName] string memberName = "", [CallerFilePath] string filePath = "", [CallerLineNumber] int lineNumber = 0)
+        public void LogError(string message, string exception = null, string category = null, [CallerMemberName] string memberName = "", [CallerFilePath] string filePath = "", [CallerLineNumber] int lineNumber = 0)
         {
-            Log(LogLevel.Error, message, category, exception, memberName, filePath, lineNumber);
+            Log(LogLevel.Error, message, category, new Exception( exception), memberName, filePath, lineNumber);
         }
 
         public void LogCritical(string message, Exception exception = null, string category = null, [CallerMemberName] string memberName = "", [CallerFilePath] string filePath = "", [CallerLineNumber] int lineNumber = 0)
@@ -371,7 +371,7 @@ namespace UrlFilter.Shared.Logging
                 // Create new log file name
                 var newLogFile = Path.Combine(directory, $"{baseFileName}_{DateTime.Now:yyyyMMdd_HHmmss}.log");
                 
-                LogInformation($"Rotating log file to: {newLogFile}", "Logger");
+                LogInfo($"Rotating log file to: {newLogFile}", "Logger");
             }
             catch (Exception ex)
             {
@@ -456,7 +456,7 @@ namespace UrlFilter.Shared.Logging
         {
             if (!_disposed)
             {
-                LogInformation("UniversalLogger shutting down", "Logger");
+                LogInfo("UniversalLogger shutting down", "Logger");
                 
                 _disposed = true;
                 _cancellationTokenSource?.Cancel();

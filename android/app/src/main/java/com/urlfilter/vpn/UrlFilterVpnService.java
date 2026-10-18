@@ -28,6 +28,11 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.nio.ByteBuffer;
+import java.nio.channels.SelectionKey;
+import java.nio.channels.Selector;
+import java.nio.channels.SocketChannel;
+import java.util.Iterator;
+import java.util.Set;
 import java.nio.channels.FileChannel;
 import java.nio.channels.SocketChannel;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -309,18 +314,127 @@ public class UrlFilterVpnService extends VpnService {
                     packet.getDestinationPort()
             );
             
-            socketChannel.connect(destination);
+            boolean connected = socketChannel.connect(destination);
+            if (!connected) {
+                // Wait for connection to complete (non-blocking)
+                while (!socketChannel.finishConnect()) {
+                    Thread.sleep(10);
+                }
+            }
             
-            // Forward data
-            ByteBuffer buffer = ByteBuffer.wrap(packet.getData());
-            socketChannel.write(buffer);
+            // Forward original packet data
+            ByteBuffer outgoingBuffer = ByteBuffer.wrap(packet.getData());
+            socketChannel.write(outgoingBuffer);
             
-            // TODO: Handle response and write back to VPN interface
+            // Handle response and write back to VPN interface
+            handleSocketResponse(socketChannel, packet);
+            
+        } catch (IOException | InterruptedException e) {
+            Log.e(TAG, "Error forwarding packet", e);
+            Thread.currentThread().interrupt();
+        }
+    }
+    
+    private void handleSocketResponse(SocketChannel socketChannel, IpPacket originalPacket) {
+        try {
+            // Create buffer for response data
+            ByteBuffer responseBuffer = ByteBuffer.allocate(8192); // 8KB buffer
+            int totalBytesRead = 0;
+            long startTime = System.currentTimeMillis();
+            long timeout = 5000; // 5 second timeout
+            
+            // Set up selector for non-blocking read
+            Selector selector = Selector.open();
+            socketChannel.register(selector, SelectionKey.OP_READ);
+            
+            while (System.currentTimeMillis() - startTime < timeout) {
+                if (selector.select(100) > 0) { // 100ms timeout on select
+                    Set<SelectionKey> selectedKeys = selector.selectedKeys();
+                    Iterator<SelectionKey> keyIterator = selectedKeys.iterator();
+                    
+                    while (keyIterator.hasNext()) {
+                        SelectionKey key = keyIterator.next();
+                        
+                        if (key.isReadable()) {
+                            int bytesRead = socketChannel.read(responseBuffer);
+                            
+                            if (bytesRead > 0) {
+                                totalBytesRead += bytesRead;
+                                
+                                // Process response data and create response packet
+                                byte[] responseData = new byte[totalBytesRead];
+                                responseBuffer.flip();
+                                responseBuffer.get(responseData, 0, totalBytesRead);
+                                
+                                // Create response packet with swapped source/destination
+                                IpPacket responsePacket = createResponsePacket(originalPacket, responseData);
+                                
+                                // Write response back to VPN interface
+                                writePacketToVpn(responsePacket.toByteArray(), responsePacket.getTotalLength());
+                                
+                                // Update session statistics
+                                updateSessionStats(userDetector.getCurrentUser(), originalPacket, true);
+                                
+                                // Reset buffer for potential additional data
+                                responseBuffer.clear();
+                            } else if (bytesRead == -1) {
+                                // End of stream - connection closed by remote
+                                break;
+                            }
+                        }
+                        
+                        keyIterator.remove();
+                    }
+                }
+            }
+            
+            selector.close();
             socketChannel.close();
             
         } catch (IOException e) {
-            Log.e(TAG, "Error forwarding packet", e);
+            Log.e(TAG, "Error handling socket response", e);
+            try {
+                socketChannel.close();
+            } catch (IOException closeEx) {
+                Log.e(TAG, "Error closing socket", closeEx);
+            }
         }
+    }
+    
+    private IpPacket createResponsePacket(IpPacket originalPacket, byte[] responseData) {
+        try {
+            // Create a new IP packet with swapped addresses for the response
+            IpPacket responsePacket = new IpPacket();
+            
+            // Swap source and destination addresses
+            responsePacket.setSourceAddress(originalPacket.getDestinationAddress());
+            responsePacket.setDestinationAddress(originalPacket.getSourceAddress());
+            responsePacket.setSourcePort(originalPacket.getDestinationPort());
+            responsePacket.setDestinationPort(originalPacket.getSourcePort());
+            
+            // Set protocol and other headers
+            responsePacket.setProtocol(originalPacket.getProtocol());
+            responsePacket.setData(responseData);
+            
+            // Calculate checksums and finalize packet
+            responsePacket.finalizePacket();
+            
+            return responsePacket;
+            
+        } catch (Exception e) {
+            Log.e(TAG, "Error creating response packet", e);
+            // Return a simple response packet as fallback
+            return createSimpleResponsePacket(originalPacket, responseData);
+        }
+    }
+    
+    private IpPacket createSimpleResponsePacket(IpPacket originalPacket, byte[] responseData) {
+        // Simplified response packet creation for error cases
+        IpPacket responsePacket = new IpPacket();
+        responsePacket.setSourceAddress(originalPacket.getDestinationAddress());
+        responsePacket.setDestinationAddress(originalPacket.getSourceAddress());
+        responsePacket.setData(responseData);
+        return responsePacket;
     }
     
     private void blockPacket(IpPacket packet, DataModels.FilterResult filterResult, DataModels.DeviceUser user) {

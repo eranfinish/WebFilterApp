@@ -21,9 +21,9 @@ namespace UrlFilter.DevTools
         /// </summary>
         public async Task TestMonitorOnlyMode(int durationMinutes = 5)
         {
-            _logger.LogInformation("Starting Monitor-Only Mode Test", "SafeTesting");
-            _logger.LogInformation("Duration: " + durationMinutes + " minutes", "SafeTesting");
-            _logger.LogInformation("Your internet will work normally - no blocking will occur", "SafeTesting");
+            _logger.LogInfo("Starting Monitor-Only Mode Test", "SafeTesting");
+            _logger.LogInfo("Duration: " + durationMinutes + " minutes", "SafeTesting");
+            _logger.LogInfo("Your internet will work normally - no blocking will occur", "SafeTesting");
             
             // Set system to monitor-only mode
             await SetTestMode("monitor_only");
@@ -50,7 +50,7 @@ namespace UrlFilter.DevTools
             }
             
             await RestoreNormalMode();
-            _logger.LogInformation("Monitor-Only Mode Test Completed", "SafeTesting");
+            _logger.LogInfo("Monitor-Only Mode Test Completed", "SafeTesting");
             
             Console.WriteLine("\nTest completed successfully!");
             Console.WriteLine("Check logs for captured traffic data.");
@@ -62,7 +62,7 @@ namespace UrlFilter.DevTools
         /// </summary>
         public async Task TestSafeDomainsOnly()
         {
-            _logger.LogInformation("Starting Safe Domains Only Test", "SafeTesting");
+            _logger.LogInfo("Starting Safe Domains Only Test", "SafeTesting");
             
             var safeDomains = new[]
             {
@@ -103,7 +103,7 @@ namespace UrlFilter.DevTools
             // Cleanup
             await RemoveSafeDomainsFromBlockList(safeDomains);
             
-            _logger.LogInformation("Safe Domains Only Test Completed", "SafeTesting");
+            _logger.LogInfo("Safe Domains Only Test Completed", "SafeTesting");
             Console.WriteLine("\nSafe domain testing completed!");
             Console.WriteLine("All test domains removed - your system is back to normal.");
         }
@@ -113,7 +113,7 @@ namespace UrlFilter.DevTools
         /// </summary>
         public async Task SimulateTraffic(string trafficType, int durationSeconds = 60)
         {
-            _logger.LogInformation($"Starting Traffic Simulation: {trafficType}", "SafeTesting");
+            _logger.LogInfo($"Starting Traffic Simulation: {trafficType}", "SafeTesting");
             
             Console.WriteLine($"Simulating {trafficType} traffic for {durationSeconds} seconds...");
             Console.WriteLine("This generates fake traffic data - no real network impact!");
@@ -142,7 +142,7 @@ namespace UrlFilter.DevTools
                     return;
             }
             
-            _logger.LogInformation("Traffic Simulation Completed", "SafeTesting");
+            _logger.LogInfo("Traffic Simulation Completed", "SafeTesting");
             Console.WriteLine("\nSimulation completed! Check logs for generated data.");
         }
         
@@ -151,11 +151,11 @@ namespace UrlFilter.DevTools
         /// </summary>
         public async Task TestDatabaseOperations()
         {
-            _logger.LogInformation("Starting Database Operations Test", "SafeTesting");
+            _logger.LogInfo("Starting Database Operations Test", "SafeTesting");
             
             Console.WriteLine("Testing database operations (no network impact)...");
             
-            var tests = new[]
+            var tests = new (string, Func<Task<bool>>)[]
             {
                 ("User Management", TestUserOperations),
                 ("URL List Management", TestUrlListOperations),
@@ -181,12 +181,12 @@ namespace UrlFilter.DevTools
                 catch (Exception ex)
                 {
                     Console.WriteLine($"✗ FAILED: {ex.Message}");
-                    _logger.LogError($"Database test failed: {testName}", ex, "SafeTesting");
+                    _logger.LogError($"Database test failed: {testName}", ex.Message, "SafeTesting");
                 }
             }
             
-            Console.WriteLine($"\nDatabase testing completed: {passed}/{total} tests passed");
-            _logger.LogInformation($"Database Operations Test Completed: {passed}/{total} passed", "SafeTesting");
+            Console.WriteLine($"\nDatabase testing completed: {passed.ToString()}/{total.ToString()} tests passed");
+            _logger.LogInfo($"Database Operations Test Completed: {passed}/{total} passed", "SafeTesting");
         }
         
         /// <summary>
@@ -194,7 +194,7 @@ namespace UrlFilter.DevTools
         /// </summary>
         public async Task TestServiceDryRun()
         {
-            _logger.LogInformation("Starting Service Dry Run Test", "SafeTesting");
+            _logger.LogInfo("Starting Service Dry Run Test", "SafeTesting");
             
             Console.WriteLine("Testing service in dry-run mode...");
             Console.WriteLine("Service will start but won't actually filter traffic.");
@@ -228,7 +228,7 @@ namespace UrlFilter.DevTools
             Console.WriteLine("\nDry-run testing completed!");
             Console.WriteLine("No actual traffic filtering occurred during this test.");
             
-            _logger.LogInformation("Service Dry Run Test Completed", "SafeTesting");
+            _logger.LogInfo("Service Dry Run Test Completed", "SafeTesting");
         }
         
         /// <summary>
@@ -274,7 +274,7 @@ namespace UrlFilter.DevTools
             if (successful == testSites.Length)
             {
                 Console.WriteLine($"\n✓ Internet connectivity verified ({successful}/{testSites.Length} sites accessible)");
-                _logger.LogInformation("Internet connectivity verification passed", "SafeTesting");
+                _logger.LogInfo("Internet connectivity verification passed", "SafeTesting");
             }
             else
             {
@@ -285,37 +285,42 @@ namespace UrlFilter.DevTools
         
         // Private helper methods
         
-        private async Task SetTestMode(string mode)
+        private Task SetTestMode(string mode)
         {
             // Implementation would set the system into specific test mode
-            _logger.LogInformation($"Setting test mode: {mode}", "SafeTesting");
+            _logger.LogInfo($"Setting test mode: {mode}", "SafeTesting");
             Environment.SetEnvironmentVariable("URLFILTER_TEST_MODE", mode);
+            return Task.CompletedTask;
         }
         
-        private async Task RestoreNormalMode()
+        private Task RestoreNormalMode()
         {
-            _logger.LogInformation("Restoring normal operating mode", "SafeTesting");
+            _logger.LogInfo("Restoring normal operating mode", "SafeTesting");
             Environment.SetEnvironmentVariable("URLFILTER_TEST_MODE", "");
+            return Task.CompletedTask;
         }
         
-        private async Task LogMonitoringStatus()
+        private Task LogMonitoringStatus()
         {
             // Implementation would log current monitoring statistics
-            _logger.LogInformation("Monitor status: Traffic being logged, no blocking active", "SafeTesting");
+            _logger.LogInfo("Monitor status: Traffic being logged, no blocking active", "SafeTesting");
+            return Task.CompletedTask;
         }
         
-        private async Task AddSafeDomainToBlockList(string domain)
+        private Task AddSafeDomainToBlockList(string domain)
         {
-            _logger.LogInformation($"Adding safe test domain to block list: {domain}", "SafeTesting");
+            _logger.LogInfo($"Adding safe test domain to block list: {domain}", "SafeTesting");
             // Implementation would add domain to test block list
+            return Task.CompletedTask;
         }
         
-        private async Task RemoveSafeDomainsFromBlockList(string[] domains)
+        private Task RemoveSafeDomainsFromBlockList(string[] domains)
         {
             foreach (var domain in domains)
             {
-                _logger.LogInformation($"Removing safe test domain: {domain}", "SafeTesting");
+                _logger.LogInfo($"Removing safe test domain: {domain}", "SafeTesting");
             }
+            return Task.CompletedTask;
         }
         
         private async Task TestDomainBlocking(string domain, bool shouldBeBlocked)
@@ -347,19 +352,20 @@ namespace UrlFilter.DevTools
             }
         }
         
-        private async Task SimulateServiceOperation(string operation)
+        private Task SimulateServiceOperation(string operation)
         {
-            _logger.LogInformation($"Simulating service operation: {operation}", "SafeTesting");
+            _logger.LogInfo($"Simulating service operation: {operation}", "SafeTesting");
             // Implementation would simulate the service operation
+            return Task.CompletedTask;
         }
         
         // Database test methods (stubs - would be implemented)
-        private async Task TestUserOperations() { await Task.Delay(100); }
-        private async Task TestUrlListOperations() { await Task.Delay(100); }
-        private async Task TestYouTubeOperations() { await Task.Delay(100); }
-        private async Task TestTimeRestrictions() { await Task.Delay(100); }
-        private async Task TestSessionOperations() { await Task.Delay(100); }
-        private async Task TestAuditOperations() { await Task.Delay(100); }
+        private async Task<bool> TestUserOperations() { await Task.Delay(100); return true; }
+        private async Task<bool> TestUrlListOperations() { await Task.Delay(100); return true; }
+        private async Task<bool> TestYouTubeOperations() { await Task.Delay(100); return true; }
+        private async Task<bool> TestTimeRestrictions() { await Task.Delay(100); return true; }
+        private async Task<bool> TestSessionOperations() { await Task.Delay(100); return true; }
+        private async Task<bool> TestAuditOperations() { await Task.Delay(100); return true; }
     }
     
     /// <summary>
@@ -413,7 +419,7 @@ namespace UrlFilter.DevTools
         
         private async Task GenerateTrafficPattern(string trafficType, string[] targets, int durationSeconds, int requestsPerMinute)
         {
-            _logger.LogInformation($"Generating {trafficType} traffic pattern", "TrafficSimulator");
+            _logger.LogInfo($"Generating {trafficType} traffic pattern", "TrafficSimulator");
             
             var interval = TimeSpan.FromMinutes(1.0 / requestsPerMinute);
             var endTime = DateTime.Now.AddSeconds(durationSeconds);
@@ -427,5 +433,6 @@ namespace UrlFilter.DevTools
                 await Task.Delay(interval);
             }
         }
+
     }
 }

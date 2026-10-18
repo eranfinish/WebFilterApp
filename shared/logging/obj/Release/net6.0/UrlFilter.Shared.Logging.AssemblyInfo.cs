@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("UrlFilter.Shared.Logging")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Release")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+5034405322641367510b15bb16026052e286c27e")]
 [assembly: System.Reflection.AssemblyProductAttribute("UrlFilter.Shared.Logging")]
 [assembly: System.Reflection.AssemblyTitleAttribute("URL Filter Shared Logging")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
