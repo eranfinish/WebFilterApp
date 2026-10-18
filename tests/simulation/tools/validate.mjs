@@ -111,6 +111,9 @@ for (const file of files) {
       if (!fixture.categories[c.category]) fail(`${where} setup.memberCategories`, `unknown category '${c.category}'`);
     }
 
+    const requests = new Map(); // alias -> kind
+    const checkAlias = (alias, w) => { if (alias && !requests.has(alias)) fail(w, `unknown request alias '${alias}'`); };
+
     let now = toLocal(sc.start, "1970-01-01T00:00");
     const advance = (value, w) => {
       const t = toLocal(value, now);
@@ -168,7 +171,28 @@ for (const file of files) {
         case "setTime":
           advance(step.to, w);
           break;
+        case "requestAccess": {
+          const { result, sameAs } = step.expect;
+          if (step.as) {
+            if (requests.has(step.as)) fail(w, `request alias '${step.as}' already used`);
+            if (!["created", "queued"].includes(result)) fail(w, `'as' only makes sense when the result is created or queued, not '${result}'`);
+            requests.set(step.as, step.kind);
+          }
+          if (result === "merged") { if (!sameAs) fail(w, "a merged result needs 'sameAs'"); checkAlias(sameAs, w); }
+          else if (sameAs) fail(w, "'sameAs' is only for merged results");
+          break;
+        }
+        case "expectRequests":
+          for (const item of step.expect.items ?? []) checkAlias(item.request, w);
+          break;
         case "admin":
+          if (step.action === "approveRequest" || step.action === "denyRequest") checkAlias(step.request, w);
+          if (step.action === "approveRequest" && requests.has(step.request)) {
+            const kind = requests.get(step.request);
+            if (kind !== "time" && step.minutes === undefined && step.duration === undefined) fail(w, `approving a '${kind}' request needs 'minutes' or 'duration'`);
+            if (step.minutes !== undefined && step.duration !== undefined) fail(w, "use either 'minutes' or 'duration', not both");
+            if (step.approveAs && kind !== "url") fail(w, "'approveAs' applies to url requests only");
+          }
           if (step.action === "addRule") { checkMember(step.rule.member, w); addRuleId(step.rule.id, w); }
           if (step.action === "removeRule" && !ruleIds.has(step.ruleId)) fail(w, `removes unknown rule '${step.ruleId}'`);
           if (step.action === "setMember") checkMember(step.patch.id, w);

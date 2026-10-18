@@ -343,6 +343,25 @@
 - **פעולות הורה:** +15/+30/+60 להיום, השהייה, **מצב שיעורי בית** (לזמן קצוב: רק חינוכי, לא נספר)
 - כל התאמה נרשמת (`time_adjustments`): מי, מתי, למה
 
+### 8.1 בקשות גישה
+
+הילד מבקש, ההורה מחליט מלוח הבקרה. ההחלטה מגיעה לכל המחשבים של הילד תוך פחות מ-5 שניות, ומסך החסימה נטען מחדש לבד.
+
+| סוג | מאיפה מבקשים | מה קורה באישור |
+|-----|--------------|----------------|
+| `url` | מסך החסימה של אתר | כלל היתר אישי: **לאתר** (`domain` על המארח בלי `www.`, ברירת מחדל) או **לדף** (`prefix` על מארח + נתיב) |
+| `youtube` | מסך החסימה של ערוץ | הערוץ נוסף כמאושר לבן המשפחה |
+| `app` | התראה על אפליקציה שנחסמה | כלל אפליקציה מאושרת (לפי נתיב / package) |
+| `time` | מסך "הזמן נגמר" — 15 או 30 דקות | הארכת זמן (ההורה יכול לאשר פחות ממה שהתבקש) |
+
+- **משך האישור** (`url`, `youtube`, `app`): מספר דקות, **עד סוף היום**, או **תמיד**. אישור מוגבל יוצר כלל עם `expiresAt`
+- **דחייה:** הילד רואה "הבקשה נדחתה" במסך החסימה. אותו מארח/ערוץ/אפליקציה לא ניתן לבקש שוב במשך 60 דקות (`cooldown`)
+- **מניעת הצפה:** בקשה פתוחה אחת לכל יעד — בקשה חוזרת מתמזגת (`merged`); לכל היותר 5 בקשות חדשות ב-60 דקות מתגלגלות לכל בן משפחה (`rate_limited`)
+- **Hub לא זמין:** הבקשה נשמרת בתור של הסוכן (`queued`) ונשלחת כשהחיבור חוזר
+- **שירות לא זמין:** אין כפתור בקשה (`unavailable`)
+- **התראה להורה:** ב-MVP — בלוח הבקרה, והתראת Windows במחשב ה-Hub כשממשק הניהול פתוח. התראה לטלפון — שלב 2
+- כל בקשה נרשמת כאירוע `access_request`, וכל החלטה כ-`admin_change`
+
 ---
 
 ## 9. מודל נתונים
@@ -382,8 +401,11 @@ youtube_channels(id PK, channel_id, handle, title, thumbnail_url, member_id NULL
 
 usage_minutes(member_id, device_id, minute_utc, PK(member_id, device_id, minute_utc))  -- מאוחסן 35 יום
 events(id PK, device_id, ts, member_id NULL, type, url NULL, app NULL, reason NULL, details_json NULL)
-access_requests(id PK, member_id, device_id, kind CHECK(IN('url','app')), target, note, ts,
-                status CHECK(IN('pending','approved','denied')), decided_by, decided_at)
+access_requests(id PK, member_id, device_id, kind CHECK(IN('url','youtube','app','time')),
+                target, target_key,   -- target_key: מארח בלי www. / channelId / נתיב אפליקציה; לאיחוד ול-cooldown
+                minutes NULL, note, ts,
+                status CHECK(IN('pending','approved','denied')), decided_by, decided_at,
+                approved_scope NULL, approved_until NULL, created_rule_id NULL)
 pairing_codes(code_hash PK, created_at, expires_at, used_at NULL)
 config_versions(version PK, created_at, created_by, summary)
 settings(key PK, value) · schema_version(version, applied_at)
@@ -416,7 +438,8 @@ Retention של `events`: 90 יום כברירת מחדל.
 | `getRules` | → | ← `{version, dnrRules[], youtube:{mode, allowed[], blocked[]}, alwaysAllowed[], time:{state, remaining}}` |
 | `heartbeat` | → | `{focused, idle, hasWebTab}` ← `{state, remainingMinutes}` |
 | `reportBlock` | → | `{url, reason, ruleId}` |
-| `requestAccess` | → | `{url, note}` |
+| `requestAccess` | → | `{kind, target, minutes?, note}` ← `{result: created\|merged\|rate_limited\|cooldown\|queued, requestId?}` |
+| `accessDecided` | ← push | `{requestId, status, until?}` — מסך החסימה נטען מחדש באישור |
 | `resolveYouTube` | → | `{handle\|videoId}` ← `{channelId}` |
 | `rulesChanged` | ← push | `{version}` |
 | `timeState` | ← push | `{state: ok\|warn\|expired, remainingMinutes}` |
@@ -425,7 +448,7 @@ Retention של `events`: 90 יום כברירת מחדל.
 
 ### 10.2 Admin (ממשק ↔ שירות)
 
-אותה מסגרת. CRUD לכל ישות + `getDashboard`, `extendTime`, `pause`, `startHomework`, `getEvents`, `decideAccessRequest`, `createPairingCode`, `getDevices`, `getDiagnostics`. כל שינוי נרשם כ-`admin_change` עם שם המנהל (מה-token).
+אותה מסגרת. CRUD לכל ישות + `getDashboard`, `extendTime`, `pause`, `startHomework`, `getEvents`, `decideAccessRequest {id, decision, scope?, minutes?\|today\|always}`, `createPairingCode`, `getDevices`, `getDiagnostics`. כל שינוי נרשם כ-`admin_change` עם שם המנהל (מה-token).
 
 ### 10.3 Hub ↔ Agent (HTTPS, TLS הדדי)
 

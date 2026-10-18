@@ -134,7 +134,22 @@ cd tests/simulation/tools && npm install && npm run validate
 | יש `ProfileCache`, משתמש מוגבל | "מותר תמיד" → `allowed_always`; כל השאר → `blocked_service_unavailable` |
 | אין `ProfileCache` | `blocked_service_unavailable` |
 
-## 10. כתיבת תרחיש חדש
+## 10. בקשות גישה (`requestAccess`, `approveRequest`, `denyRequest`)
+
+| נושא | כלל |
+|------|-----|
+| יעד (`target_key`) | `url` → המארח באותיות קטנות, בלי `www.` בתחילתו · `youtube` → channelId · `app` → נתיב (לא רגיש לאותיות) · `time` → אחד ליום |
+| תוצאה | `created` · `merged` (יש כבר בקשה פתוחה לאותו יעד; מחזיר את אותה בקשה) · `rate_limited` · `cooldown` · `queued` (הסוכן מנותק מה-Hub) · `unavailable` (השירות לא פועל) |
+| הצפה | לכל היותר 5 בקשות `created` בחלון מתגלגל של 60 דקות לכל בן משפחה. `merged` לא נספר |
+| `cooldown` | 60 דקות אחרי דחייה, לאותו יעד |
+| `as` | שם מקומי לבקשה בתוך התרחיש, כדי לאשר/לדחות אותה בהמשך |
+| אישור `url` | `approveAs: host` (ברירת מחדל) → כלל `domain` אישי על ה-`target_key`; `approveAs: page` → כלל `prefix` על מארח + נתיב (בלי query). סיבה בהמשך: `allowed_rule` |
+| אישור `youtube` / `app` | ערוץ מאושר (`allowed_youtube_channel`) / כלל אפליקציה (`allowed_rule`) לבן המשפחה |
+| משך | `minutes: N` → פג אחרי N דקות · `duration: today` → פג בחצות המקומית · `duration: always` → בלי תפוגה |
+| אישור `time` | כמו `extendTime`, עם `minutes` מהבקשה או ממה שההורה בחר |
+| `expectRequests` | בודק את רשימת הבקשות ב-Hub (או בסוכן, עם `device`) |
+
+## 11. כתיבת תרחיש חדש
 
 1. מזהה ייחודי בתבנית `<SUITE>-<NNN>`.
 2. `title` אומר מה מוכח, לא איך.
