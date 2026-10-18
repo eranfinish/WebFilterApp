@@ -87,6 +87,7 @@ tests/simulation/
     engine/                 רמות 1–3 (מנוע, ומשם גם אינטגרציה ודפדפן)
     system/                 רמה 4 (יתווסף ב-M4)
   tools/validate.mjs        בדיקת סכמה + עקביות (מזהים, זמנים, הפניות)
+  lab/                      סקריפטים להקמת מעבדת Hyper-V (ראו docs/LAB-AND-ACCOUNTS.md)
   runners/                  (יתווספו לפי אבני הדרך)
     engine/  integration/  browser/  lab/  load/
   web-fixtures/             דפי אתרים ו-YouTube מדומים (M3)
