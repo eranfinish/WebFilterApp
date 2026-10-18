@@ -1,0 +1,8 @@
+{
+  "manifest_version": 3,
+  "name": "WebFilter Spike S2",
+  "version": "0.0.1",
+  "description": "Throwaway spike: native messaging host lifecycle, identity and service worker keep-alive.",
+  "permissions": ["nativeMessaging"],
+  "background": { "service_worker": "background.js" }
+}

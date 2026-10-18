@@ -1,0 +1,39 @@
+{
+  "name": "s2-keepalive",
+  "ranAt": "2026-10-18T16:43:12.477Z",
+  "passed": 2,
+  "failed": 0,
+  "checks": [
+    {
+      "id": "K1 with a native port open the worker keeps running past the 30 s idle limit",
+      "ok": true,
+      "note": "last beat at 131s, worker boots=1"
+    },
+    {
+      "id": "K2 control: without a port the idle worker is terminated (the 90 s report never arrives)",
+      "ok": true,
+      "note": "terminated as expected"
+    }
+  ],
+  "metrics": {
+    "keepalive.beats": [
+      "1s:01191850:keepalive-start",
+      "11s:01191850:keepalive",
+      "21s:01191850:keepalive",
+      "31s:01191850:keepalive",
+      "41s:01191850:keepalive",
+      "51s:01191850:keepalive",
+      "61s:01191850:keepalive",
+      "71s:01191850:keepalive",
+      "81s:01191850:keepalive",
+      "91s:01191850:keepalive",
+      "101s:01191850:keepalive",
+      "111s:01191850:keepalive",
+      "121s:01191850:keepalive",
+      "131s:01191850:keepalive"
+    ],
+    "control.beats": [
+      "1s:8ea0b2bb:control-start"
+    ]
+  }
+}

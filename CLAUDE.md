@@ -50,6 +50,6 @@ cd tests/simulation/tools && npm install && npm run validate
 
 ## Status
 
-M0 in progress. Done: legacy snapshot + tag `legacy-v1`, branch `v2`, solution skeleton, plan, simulation catalog (71 engine scenarios), spikes S3 (DNR) and S4 (YouTube) — see [spikes/S3-S4/REPORT.md](spikes/S3-S4/REPORT.md). Next: S2, S5, S6; S1 needs the user's Chrome Web Store and Microsoft Partner Center developer accounts.
+M0 in progress. Done: legacy snapshot + tag `legacy-v1`, branch `v2`, solution skeleton, plan, simulation catalog (71 engine scenarios), spikes S2a (native messaging, unelevated), S3 (DNR) and S4 (YouTube) — see `spikes/*/REPORT.md`. Next: S2b, S5, S6 (need a Hyper-V VM); S1 needs the user's Chrome Web Store and Microsoft Partner Center developer accounts.
 
 `spikes/` holds throwaway experiments and their evidence. Reuse the findings, not the code: production code is written fresh under `src/` and `extension/`. Browser tests drive the installed Edge (`channel: "msedge"`); Playwright's bundled Chromium does not start on this Windows build.

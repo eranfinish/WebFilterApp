@@ -1,0 +1,8 @@
+{
+  "manifest_version": 3,
+  "name": "WebFilter Spike S2 keep-alive",
+  "version": "0.0.1",
+  "description": "Throwaway spike: does an open native messaging port keep the MV3 service worker alive without automation attached?",
+  "permissions": ["nativeMessaging"],
+  "background": { "service_worker": "background.js" }
+}

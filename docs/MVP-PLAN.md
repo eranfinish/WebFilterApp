@@ -165,7 +165,7 @@
 | תת-רכיב | תפקיד | אחריות |
 |---------|:---:|--------|
 | `Storage` | שניהם | SQLite (Microsoft.Data.Sqlite + Dapper), migrations מוטמעים, ACL על התיקייה |
-| `AgentPipeServer` | שניהם | pipe לתוסף. אימות: `GetNamedPipeClientProcessId` → נתיב התהליך חייב להיות ה-NativeHost שלנו ב-Program Files; זהות = SID מה-impersonation |
+| `AgentPipeServer` | שניהם | pipe לתוסף. אימות: `GetNamedPipeClientProcessId` → handle לתהליך מיד בחיבור → נתיב התהליך חייב להיות ה-NativeHost שלנו ב-Program Files; זהות = SID **מטוקן התהליך**. בלי `RunAsClient` — ה-impersonation דלף לטיימרים וקרס ב-S2 ([דוח](../spikes/S2/REPORT.md)) |
 | `AdminPipeServer` | שניהם | pipe לממשק הניהול. DACL מאפשר רק `BUILTIN\Administrators` — token לא מוגבה נדחה. בסוכן: רק סטטוס והשהיית חירום מקומית |
 | `DecisionService` | שניהם | מחזיק את חבילת המדיניות בזיכרון, מחזיר החלטות, מהדר DNR לכל משתמש, דוחף שינויים לתוספים מחוברים |
 | `UsageTracker` | שניהם | צובר דקות לפי heartbeats; מניעת ספירה כפולה; שולח ל-Hub; מחשב מכסה משותפת לפי הסכום האחרון מה-Hub + שימוש מקומי |
@@ -187,7 +187,7 @@
 
 - Chrome/Edge מפעילים אותו כתהליך בן של הדפדפן, **בהרשאות המשתמש**
 - מעביר הודעות בין stdin/stdout (מסגרת: 4 בתים אורך + JSON) לבין ה-pipe של השירות
-- אם השירות לא זמין: מנהל → "ללא הגבלה"; משתמש מוגבל → רק אתרי "מותר תמיד" מה-`ProfileCache`, וכל השאר **חסום** עם הודעה "שירות הסינון לא פועל"; אין קובץ → חסימה מלאה
+- אם השירות לא זמין: מנהל (לפי `TokenElevationType` = `limited`/`full` — `IsInRole` מחזיר false להורה שגולש לא-מוגבה) → "ללא הגבלה"; משתמש מוגבל → רק אתרי "מותר תמיד" מה-`ProfileCache`, וכל השאר **חסום** עם הודעה "שירות הסינון לא פועל"; אין קובץ → חסימה מלאה
 - NativeAOT כדי שיעלה מהר (עשרות ms)
 - רישום: `HKLM\SOFTWARE\Google\Chrome\NativeMessagingHosts\com.webfilter.host` ו-`HKLM\SOFTWARE\Microsoft\Edge\NativeMessagingHosts\com.webfilter.host`; ה-manifest מתיר רק את מזהי התוסף שלנו (מזהה שונה ב-Chrome Web Store וב-Edge Add-ons)
 
@@ -512,7 +512,8 @@ CLAUDE.md
 
 - ✅ תיוג הקוד הקודם `legacy-v1`, ענף `v2`, שלד ה-solution, `CLAUDE.md`, תיקון בעלות ה-repo (`safe.directory`)
 - **S1 — התקנה כפויה ומדיניות:** תוסף unlisted בשתי החנויות; ב-VM לא בדומיין (Home + Pro): forcelist מ-HKLM עובד, המדיניות מסעיף 5.2 נאכפת מ-HKCU
-- **S2 — Native Messaging וזהות:** הדפדפן מפעיל את ה-host כמשתמש; השירות מקבל את ה-SID הנכון; host מזויף ב-HKCU נחסם
+- ✅ **S2a — Native Messaging וזהות (לא-מוגבה):** הדפדפן מפעיל את ה-host כמשתמש; השרת מזהה SID ונתיב קובץ; תהליך זר נדחה; port פתוח שומר את ה-service worker חי — 12/12 + 2/2 ([דוח](../spikes/S2/REPORT.md))
+- **S2b — במכונה וירטואלית:** רישום ב-HKLM, `NativeMessagingUserLevelHosts=0` חוסם host מזויף ב-HKCU, שרת כ-LocalSystem מול כמה sessions
 - ✅ **S3 — DNR:** redirect ל-`blocked.html` עם ה-URL המקורי (`regexSubstitution`), רשימה שחורה/לבנה, מיליון דומיינים בכלל אחד — 27/27 על Edge 156 ([דוח](../spikes/S3-S4/REPORT.md)). "service worker נשאר חי" עבר ל-S2
 - ✅ **S4 — YouTube:** זיהוי ערוץ בסרטון, Shorts, handle, SPA והטמעה, ואכיפה — 16/16 מול YouTube האמיתי ([דוח](../spikes/S3-S4/REPORT.md))
 - **S5 — WFP:** רכיב C++ מוסיף מסנן persistent לפי משתמש + אפליקציה; אפליקציה של ילד נחסמת, מבוגר לא מושפע, שירותי Windows לא נפגעים, שורד אתחול, הסרה נקייה; אירוע על חיבור שנחסם

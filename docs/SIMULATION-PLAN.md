@@ -47,6 +47,7 @@
 - **דפי YouTube מדומים** (fixtures) שמחקים את המקורות שאומתו ב-S4: `#movie_player.getPlayerResponse()`, `#shorts-player`, `ytd-browse.data`, `PLAYER_VARS.embedded_player_response`, ניווט SPA עם `yt-navigate-finish` — **וגם** מקורות ישנים (`meta`, `og:url`, `ytInitialData` של הדף הקודם), כדי לוודא שהמנוע לא נופל בהם
 - התוצאה נקבעת לפי כותרת הדף: דף אתר מדומה = מותר; `WebFilter · חסום` = חסום (הסיבה נקראת מהדף)
 - בודק גם: fail-closed כשהשירות כבוי, אזהרות זמן, מעבר ל"הזמן נגמר" בלשוניות פתוחות, דף "הערוצים שלי", דיווח חסימה ובקשת גישה
+- **אורך חיים של ה-service worker** לא נבדק דרך Playwright, כי הוא משאיר workers חיים (הוכח ב-S2). הבדיקה הזו מפעילה את Edge ישירות ומדווחת דרך ה-host לשרת, כמו K1/K2 ב-[דוח S2](../spikes/S2/REPORT.md)
 - **חבילת live** (שבועית, לא חוסמת build): כמה תרחישי YouTube מול האתר האמיתי, כדי לזהות שינוי במבנה הדף
 
 ### 2.4 רמה 4 — מערכת (מעבדת VM)

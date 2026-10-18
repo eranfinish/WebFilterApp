@@ -1,0 +1,71 @@
+{
+  "name": "s2-native-messaging",
+  "ranAt": "2026-10-18T16:38:04.120Z",
+  "passed": 12,
+  "failed": 0,
+  "checks": [
+    {
+      "id": "T1.1 hello reaches the service through the host",
+      "ok": true,
+      "note": "{\"pid\":47636,\"image\":\"C:\\\\Projests\\\\WebFilterApp\\\\WebFilterApp\\\\spikes\\\\S2\\\\host\\\\bin\\\\Debug\\\\net10.0-windows\\\\WebFilter.Spike.Host.exe\",\"sessionId\":1,\"trusted\":true,\"impersonationError\":null,\"processTokenSid\":\"S-1-5-21-2187789333-1151311733-986564056-1002\"}"
+    },
+    {
+      "id": "T1.2 service sees the browser user's SID (impersonation)",
+      "ok": true,
+      "note": "ERAN-PC3\\eran S-1-5-21-2187789333-1151311733-986564056-1002"
+    },
+    {
+      "id": "T1.3 service sees the host's image path",
+      "ok": true,
+      "note": "C:\\Projests\\WebFilterApp\\WebFilterApp\\spikes\\S2\\host\\bin\\Debug\\net10.0-windows\\WebFilter.Spike.Host.exe"
+    },
+    {
+      "id": "T1.4 client is trusted",
+      "ok": true
+    },
+    {
+      "id": "T1.5 process-token SID (no impersonation) agrees",
+      "ok": true,
+      "note": "S-1-5-21-2187789333-1151311733-986564056-1002"
+    },
+    {
+      "id": "T2.1 service push reaches the extension",
+      "ok": true
+    },
+    {
+      "id": "T3.1 worker and port survive 75s idle with a native port open",
+      "ok": true,
+      "note": "{\"before\":\"8990c487\",\"after\":\"8990c487\",\"connected\":true}"
+    },
+    {
+      "id": "T4.1 extension notices the host died",
+      "ok": true
+    },
+    {
+      "id": "T4.2 reconnect starts a new host",
+      "ok": true,
+      "note": "5580 → 33760"
+    },
+    {
+      "id": "T5.1 host answers when the service is down",
+      "ok": true,
+      "note": "{\"sid\":\"S-1-5-21-2187789333-1151311733-986564056-1002\",\"name\":\"ERAN-PC3\\\\eran\",\"elevation\":\"limited\",\"inAdminRole\":false,\"isAdmin\":true}"
+    },
+    {
+      "id": "T5.2 host detects an admin account running unelevated",
+      "ok": true,
+      "note": "elevation=limited, inAdminRole=false, expected admin=true"
+    },
+    {
+      "id": "T6.1 rogue client is rejected",
+      "ok": true,
+      "note": "{\"type\":\"rejected\",\"reason\":\"untrusted_client\",\"image\":\"C:\\\\Users\\\\eran\\\\AppData\\\\Local\\\\nvm\\\\v20.20.2\\\\node.exe\"}"
+    }
+  ],
+  "metrics": {
+    "host.coldStartToHello.ms": 279,
+    "client.sessionId": 1,
+    "T3.control.workerRestartedWithoutPort": false,
+    "T3.conclusive": "no — the worker survived without a port too (automation keeps it alive); verify manually in S1/M3"
+  }
+}

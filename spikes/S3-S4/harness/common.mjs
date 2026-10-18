@@ -14,9 +14,9 @@ const RESULTS_DIR = resolve(here, "..", "results");
 // BROWSER=chrome|chromium overrides; HEADED=1 shows the browser window.
 export const CHANNEL = process.env.BROWSER ?? "msedge";
 
-export async function launch({ hostRules } = {}) {
+export async function launch({ hostRules, extensionDir = EXTENSION_DIR } = {}) {
   const userDataDir = mkdtempSync(join(tmpdir(), "wf-spike-"));
-  const args = [`--disable-extensions-except=${EXTENSION_DIR}`, `--load-extension=${EXTENSION_DIR}`];
+  const args = [`--disable-extensions-except=${extensionDir}`, `--load-extension=${extensionDir}`];
   if (hostRules) args.push(`--host-resolver-rules=${hostRules}`);
   const context = await chromium.launchPersistentContext(userDataDir, {
     channel: CHANNEL,
@@ -62,7 +62,7 @@ export function chromiumMemoryMB() {
   return Math.round(bytes / 1024 / 1024);
 }
 
-export function recorder(name) {
+export function recorder(name, resultsDir = RESULTS_DIR) {
   const checks = [];
   const metrics = {};
   return {
@@ -75,9 +75,9 @@ export function recorder(name) {
       console.log(`      ${key}: ${JSON.stringify(value)}`);
     },
     save() {
-      mkdirSync(RESULTS_DIR, { recursive: true });
+      mkdirSync(resultsDir, { recursive: true });
       const passed = checks.filter((c) => c.ok).length;
-      writeFileSync(join(RESULTS_DIR, `${name}.json`), JSON.stringify({ name, ranAt: new Date().toISOString(), passed, failed: checks.length - passed, checks, metrics }, null, 2));
+      writeFileSync(join(resultsDir, `${name}.json`), JSON.stringify({ name, ranAt: new Date().toISOString(), passed, failed: checks.length - passed, checks, metrics }, null, 2));
       console.log(`\n${name}: ${passed}/${checks.length} passed`);
       return checks.length - passed;
     },
