@@ -1,0 +1,92 @@
+{
+  "$schema": "../../schema/scenario.schema.json",
+  "suite": "pause-homework",
+  "description": "Parent quick actions: pause, resume, homework mode, and always-allowed sites.",
+  "layers": ["engine", "integration", "browser"],
+  "platforms": ["windows", "android"],
+  "scenarios": [
+    {
+      "id": "PH-001",
+      "title": "Pause lifts all restrictions until it ends, and paused time is not counted",
+      "start": "2026-11-01T15:00",
+      "steps": [
+        { "do": "browse", "sessions": [ { "member": "noa", "from": "15:00", "to": "15:30" } ] },
+        { "do": "admin", "at": "16:00", "action": "pause", "member": "noa", "until": "18:00" },
+        { "do": "navigate", "member": "noa", "url": "https://www.instagram.com/", "expect": { "decision": "allow", "reason": "allowed_paused" } },
+        { "do": "browse", "sessions": [ { "member": "noa", "from": "16:00", "to": "17:00" } ] },
+        { "do": "expectTime", "member": "noa", "state": "ok", "usedMinutes": 30, "remainingMinutes": 90 },
+        { "do": "navigate", "at": "18:00", "member": "noa", "url": "https://www.instagram.com/", "expect": { "decision": "block", "reason": "blocked_not_in_allowlist" } }
+      ]
+    },
+    {
+      "id": "PH-002",
+      "title": "Resume ends a pause early",
+      "start": "2026-11-01T16:00",
+      "steps": [
+        { "do": "admin", "action": "pause", "member": "noa", "until": "20:00" },
+        { "do": "navigate", "member": "noa", "url": "https://www.instagram.com/", "expect": { "decision": "allow", "reason": "allowed_paused" } },
+        { "do": "admin", "at": "16:30", "action": "resume", "member": "noa" },
+        { "do": "navigate", "member": "noa", "url": "https://www.instagram.com/", "expect": { "decision": "block", "reason": "blocked_not_in_allowlist" } }
+      ]
+    },
+    {
+      "id": "PH-003",
+      "title": "Homework mode after the limit expired: educational only, not counted, then back to expired",
+      "start": "2026-11-01T15:00",
+      "steps": [
+        { "do": "browse", "sessions": [ { "member": "noa", "from": "15:00", "to": "17:00" } ] },
+        { "do": "admin", "at": "17:30", "action": "startHomework", "member": "noa", "minutes": 60 },
+        { "do": "navigate", "member": "noa", "url": "https://www.khanacademy.org/math", "expect": { "decision": "allow", "reason": "allowed_homework" } },
+        { "do": "navigate", "member": "noa", "url": "https://www.instagram.com/",       "expect": { "decision": "block", "reason": "blocked_homework" } },
+        { "do": "navigate", "member": "noa", "url": "https://mashov.info/",             "expect": { "decision": "allow", "reason": "allowed_always", "ruleId": "r-school" } },
+        { "do": "browse", "sessions": [ { "member": "noa", "from": "17:30", "to": "18:00" } ] },
+        { "do": "expectTime", "member": "noa", "state": "expired", "usedMinutes": 120, "remainingMinutes": 0 },
+        { "do": "navigate", "at": "18:30", "member": "noa", "url": "https://www.khanacademy.org/math", "expect": { "decision": "block", "reason": "blocked_daily_limit" } }
+      ]
+    },
+    {
+      "id": "PH-004",
+      "title": "Homework mode also works outside the time window",
+      "start": "2026-11-01T20:00",
+      "steps": [
+        { "do": "admin", "action": "startHomework", "member": "noa", "minutes": 45 },
+        { "do": "navigate", "at": "20:10", "member": "noa", "url": "https://scratch.mit.edu/", "expect": { "decision": "allow", "reason": "allowed_homework" } },
+        { "do": "navigate", "at": "20:45", "member": "noa", "url": "https://scratch.mit.edu/", "expect": { "decision": "block", "reason": "blocked_time_window" } }
+      ]
+    },
+    {
+      "id": "PH-005",
+      "title": "Homework mode inside the window is not counted",
+      "start": "2026-11-01T15:00",
+      "steps": [
+        { "do": "admin", "action": "startHomework", "member": "noa", "minutes": 30 },
+        { "do": "navigate", "at": "15:10", "member": "noa", "url": "https://www.instagram.com/", "expect": { "decision": "block", "reason": "blocked_homework" } },
+        { "do": "browse", "sessions": [ { "member": "noa", "from": "15:10", "to": "15:30" } ] },
+        { "do": "expectTime", "member": "noa", "state": "ok", "usedMinutes": 0, "remainingMinutes": 120 },
+        { "do": "navigate", "member": "noa", "url": "https://www.instagram.com/", "expect": { "decision": "block", "reason": "blocked_not_in_allowlist" } }
+      ]
+    },
+    {
+      "id": "PH-006",
+      "title": "Homework mode narrows a blocklist member to educational sites",
+      "start": "2026-11-01T16:00",
+      "steps": [
+        { "do": "navigate", "member": "yoav", "url": "https://news.example/", "expect": { "decision": "allow", "reason": "allowed_default" } },
+        { "do": "admin", "action": "startHomework", "member": "yoav", "minutes": 60 },
+        { "do": "navigate", "member": "yoav", "url": "https://en.wikipedia.org/wiki/Photosynthesis", "expect": { "decision": "allow", "reason": "allowed_homework" } },
+        { "do": "navigate", "member": "yoav", "url": "https://news.example/", "expect": { "decision": "block", "reason": "blocked_homework" } },
+        { "do": "admin", "at": "16:20", "action": "stopHomework", "member": "yoav" },
+        { "do": "navigate", "member": "yoav", "url": "https://news.example/", "expect": { "decision": "allow", "reason": "allowed_default" } }
+      ]
+    },
+    {
+      "id": "PH-007",
+      "title": "Always-allowed sites stay reachable outside the window",
+      "start": "2026-11-01T21:00",
+      "steps": [
+        { "do": "navigate", "member": "noa", "url": "https://mashov.info/grades",   "expect": { "decision": "allow", "reason": "allowed_always", "ruleId": "r-school" } },
+        { "do": "navigate", "member": "noa", "url": "https://www.khanacademy.org/", "expect": { "decision": "block", "reason": "blocked_time_window" } }
+      ]
+    }
+  ]
+}

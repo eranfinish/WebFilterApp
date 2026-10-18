@@ -1,0 +1,54 @@
+{
+  "$schema": "../../schema/scenario.schema.json",
+  "suite": "fail-closed",
+  "description": "What the native host decides on its own when the agent service is unavailable, and how unmapped accounts are treated.",
+  "layers": ["engine", "integration", "browser"],
+  "platforms": ["windows"],
+  "scenarios": [
+    {
+      "id": "FC-001",
+      "title": "Service down with a profile cache: restricted accounts get only always-allowed sites",
+      "start": "2026-11-01T16:00",
+      "steps": [
+        { "do": "service", "device": "pc-kids", "state": "down", "profileCache": "present" },
+        { "do": "navigate", "member": "noa",   "device": "pc-kids", "url": "https://www.khanacademy.org/", "expect": { "decision": "block", "reason": "blocked_service_unavailable" } },
+        { "do": "navigate", "member": "noa",   "device": "pc-kids", "url": "https://mashov.info/",         "expect": { "decision": "allow", "reason": "allowed_always" } },
+        { "do": "navigate", "member": "yoav",  "device": "pc-kids", "url": "https://www.wikipedia.org/",   "expect": { "decision": "block", "reason": "blocked_service_unavailable" } },
+        { "do": "navigate", "member": "dana",  "device": "pc-kids", "url": "https://www.instagram.com/",   "expect": { "decision": "allow", "reason": "allowed_unrestricted" }, "note": "Windows admin" },
+        { "do": "navigate", "member": "savta", "device": "pc-kids", "url": "https://www.instagram.com/",   "expect": { "decision": "allow", "reason": "allowed_unrestricted" }, "note": "not an admin; the cache says unrestricted" },
+        { "do": "navigate", "account": "visitor", "device": "pc-kids", "url": "https://www.wikipedia.org/", "expect": { "decision": "block", "reason": "blocked_service_unavailable" } }
+      ]
+    },
+    {
+      "id": "FC-002",
+      "title": "Service down without a profile cache: everyone except Windows admins is blocked",
+      "start": "2026-11-01T16:00",
+      "steps": [
+        { "do": "service", "device": "pc-kids", "state": "down", "profileCache": "absent" },
+        { "do": "navigate", "member": "noa",   "device": "pc-kids", "url": "https://mashov.info/",       "expect": { "decision": "block", "reason": "blocked_service_unavailable" } },
+        { "do": "navigate", "member": "savta", "device": "pc-kids", "url": "https://www.wikipedia.org/", "expect": { "decision": "block", "reason": "blocked_service_unavailable" } },
+        { "do": "navigate", "member": "dana",  "device": "pc-kids", "url": "https://www.wikipedia.org/", "expect": { "decision": "allow", "reason": "allowed_unrestricted" } }
+      ]
+    },
+    {
+      "id": "FC-003",
+      "title": "Normal decisions resume as soon as the service is back",
+      "start": "2026-11-01T16:00",
+      "steps": [
+        { "do": "service", "device": "pc-kids", "state": "down" },
+        { "do": "navigate", "member": "noa", "device": "pc-kids", "url": "https://www.khanacademy.org/", "expect": { "decision": "block", "reason": "blocked_service_unavailable" } },
+        { "do": "service", "at": "16:05", "device": "pc-kids", "state": "up" },
+        { "do": "navigate", "member": "noa", "device": "pc-kids", "url": "https://www.khanacademy.org/", "expect": { "decision": "allow", "reason": "allowed_category" } }
+      ]
+    },
+    {
+      "id": "FC-004",
+      "title": "An account not yet linked to a family member gets only always-allowed sites",
+      "start": "2026-11-01T16:00",
+      "steps": [
+        { "do": "navigate", "account": "visitor", "device": "pc-kids", "url": "https://www.wikipedia.org/", "expect": { "decision": "block", "reason": "blocked_not_in_allowlist" } },
+        { "do": "navigate", "account": "visitor", "device": "pc-kids", "url": "https://mashov.info/",       "expect": { "decision": "allow", "reason": "allowed_always" } }
+      ]
+    }
+  ]
+}

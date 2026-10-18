@@ -1,0 +1,110 @@
+{
+  "$schema": "../../schema/scenario.schema.json",
+  "suite": "multi-device",
+  "description": "Hub and agents: shared daily limit, de-duplication, hub disconnection, propagation of settings, local emergency actions. 2026-11-02 is a Monday; yoav's limit is set to 120 for these scenarios.",
+  "layers": ["engine", "integration"],
+  "platforms": ["windows", "android"],
+  "scenarios": [
+    {
+      "id": "MD-001",
+      "title": "Overlapping use on two computers is counted once per minute",
+      "start": "2026-11-02T14:00",
+      "setup": { "dailyLimits": [ { "member": "yoav", "days": [1], "minutes": 120 } ] },
+      "steps": [
+        { "do": "browse", "sessions": [
+          { "member": "yoav", "device": "pc-kids",     "from": "15:00", "to": "16:00" },
+          { "member": "yoav", "device": "laptop-yoav", "from": "15:30", "to": "16:30" }
+        ] },
+        { "do": "expectTime", "member": "yoav", "state": "ok", "usedMinutes": 90, "limitMinutes": 120, "remainingMinutes": 30, "windowEndsAt": "21:30" }
+      ]
+    },
+    {
+      "id": "MD-002",
+      "title": "Two browsers on the same computer are counted once per minute",
+      "start": "2026-11-02T15:00",
+      "setup": { "dailyLimits": [ { "member": "yoav", "days": [1], "minutes": 120 } ] },
+      "steps": [
+        { "do": "browse", "sessions": [
+          { "member": "yoav", "device": "pc-kids", "browser": "chrome", "from": "15:00", "to": "15:40" },
+          { "member": "yoav", "device": "pc-kids", "browser": "edge",   "from": "15:20", "to": "16:00" }
+        ] },
+        { "do": "expectTime", "member": "yoav", "state": "ok", "usedMinutes": 60, "remainingMinutes": 60 }
+      ]
+    },
+    {
+      "id": "MD-003",
+      "title": "The shared limit expires on every computer at once",
+      "start": "2026-11-02T14:00",
+      "setup": { "dailyLimits": [ { "member": "yoav", "days": [1], "minutes": 120 } ] },
+      "steps": [
+        { "do": "browse", "sessions": [ { "member": "yoav", "device": "pc-kids",     "from": "14:00", "to": "15:00" } ] },
+        { "do": "browse", "sessions": [ { "member": "yoav", "device": "laptop-yoav", "from": "15:00", "to": "16:00" } ] },
+        { "do": "expectTime", "member": "yoav", "state": "expired", "usedMinutes": 120, "remainingMinutes": 0 },
+        { "do": "navigate", "member": "yoav", "device": "pc-kids",     "url": "https://www.wikipedia.org/", "expect": { "decision": "block", "reason": "blocked_daily_limit" } },
+        { "do": "navigate", "member": "yoav", "device": "laptop-yoav", "url": "https://www.wikipedia.org/", "expect": { "decision": "block", "reason": "blocked_daily_limit" } }
+      ]
+    },
+    {
+      "id": "MD-004",
+      "title": "A disconnected agent keeps enforcing its own view, and the totals reconcile on reconnect",
+      "note": "Known and accepted: while disconnected, the shared limit can be exceeded. On reconnect the member is expired everywhere at once.",
+      "start": "2026-11-02T14:00",
+      "setup": { "dailyLimits": [ { "member": "yoav", "days": [1], "minutes": 120 } ] },
+      "steps": [
+        { "do": "network", "device": "laptop-yoav", "hub": "offline" },
+        { "do": "browse", "sessions": [ { "member": "yoav", "device": "pc-kids",     "from": "14:00", "to": "15:00" } ] },
+        { "do": "browse", "sessions": [ { "member": "yoav", "device": "laptop-yoav", "from": "15:00", "to": "16:30" } ] },
+        { "do": "expectTime", "member": "yoav", "device": "laptop-yoav", "state": "ok", "usedMinutes": 90, "remainingMinutes": 30, "note": "the laptop has not heard about pc-kids" },
+        { "do": "expectTime", "member": "yoav", "device": "pc-kids",     "state": "ok", "usedMinutes": 60, "remainingMinutes": 60 },
+        { "do": "network", "device": "laptop-yoav", "hub": "online" },
+        { "do": "expectTime", "member": "yoav", "state": "expired", "usedMinutes": 150, "limitMinutes": 120, "remainingMinutes": 0 },
+        { "do": "navigate", "member": "yoav", "device": "laptop-yoav", "url": "https://www.wikipedia.org/", "expect": { "decision": "block", "reason": "blocked_daily_limit" } }
+      ]
+    },
+    {
+      "id": "MD-005",
+      "title": "A disconnected agent enforces its last settings and picks up changes on reconnect",
+      "start": "2026-11-02T14:00",
+      "steps": [
+        { "do": "network", "device": "laptop-yoav", "hub": "offline" },
+        { "do": "admin", "at": "14:05", "action": "addRule", "rule": { "id": "r-chess", "member": "yoav", "pattern": "chess.example", "type": "domain", "action": "block" } },
+        { "do": "navigate", "member": "yoav", "device": "pc-kids",     "url": "https://chess.example/", "expect": { "decision": "block", "reason": "blocked_rule", "ruleId": "r-chess" } },
+        { "do": "navigate", "member": "yoav", "device": "laptop-yoav", "url": "https://chess.example/", "expect": { "decision": "allow", "reason": "allowed_default" }, "note": "still on the previous settings" },
+        { "do": "network", "at": "14:10", "device": "laptop-yoav", "hub": "online" },
+        { "do": "navigate", "member": "yoav", "device": "laptop-yoav", "url": "https://chess.example/", "expect": { "decision": "block", "reason": "blocked_rule", "ruleId": "r-chess" } }
+      ]
+    },
+    {
+      "id": "MD-006",
+      "title": "A local emergency pause applies only to that computer and is reported to the hub",
+      "start": "2026-11-02T14:00",
+      "steps": [
+        { "do": "network", "device": "laptop-yoav", "hub": "offline" },
+        { "do": "admin", "action": "pause", "scope": "local", "device": "laptop-yoav", "member": "yoav", "until": "15:00" },
+        { "do": "navigate", "member": "yoav", "device": "laptop-yoav", "url": "https://www.instagram.com/", "expect": { "decision": "allow", "reason": "allowed_paused" } },
+        { "do": "navigate", "member": "yoav", "device": "pc-kids",     "url": "https://www.instagram.com/", "expect": { "decision": "block", "reason": "blocked_category" } },
+        { "do": "network", "at": "14:30", "device": "laptop-yoav", "hub": "online" },
+        { "do": "expectEvents", "type": "admin_change", "member": "yoav", "expect": { "items": [ { "device": "laptop-yoav", "detail": "local_pause" } ] } },
+        { "do": "navigate", "member": "yoav", "device": "pc-kids",     "url": "https://www.instagram.com/", "expect": { "decision": "block", "reason": "blocked_category" } },
+        { "do": "navigate", "member": "yoav", "device": "laptop-yoav", "url": "https://www.instagram.com/", "expect": { "decision": "allow", "reason": "allowed_paused" } },
+        { "do": "navigate", "at": "15:00", "member": "yoav", "device": "laptop-yoav", "url": "https://www.instagram.com/", "expect": { "decision": "block", "reason": "blocked_category" } }
+      ]
+    },
+    {
+      "id": "MD-007",
+      "title": "Extra time reaches connected agents at once and disconnected agents on reconnect",
+      "start": "2026-11-02T14:00",
+      "setup": { "dailyLimits": [ { "member": "yoav", "days": [1], "minutes": 120 } ] },
+      "steps": [
+        { "do": "browse", "sessions": [ { "member": "yoav", "device": "pc-kids", "from": "14:00", "to": "16:00" } ] },
+        { "do": "expectTime", "member": "yoav", "state": "expired", "usedMinutes": 120 },
+        { "do": "network", "device": "laptop-yoav", "hub": "offline" },
+        { "do": "admin", "at": "16:05", "action": "extendTime", "member": "yoav", "minutes": 30 },
+        { "do": "expectTime", "member": "yoav", "device": "pc-kids",     "state": "ok",      "usedMinutes": 120, "limitMinutes": 150, "remainingMinutes": 30 },
+        { "do": "expectTime", "member": "yoav", "device": "laptop-yoav", "state": "expired", "usedMinutes": 120, "limitMinutes": 120, "remainingMinutes": 0 },
+        { "do": "network", "at": "16:10", "device": "laptop-yoav", "hub": "online" },
+        { "do": "expectTime", "member": "yoav", "state": "ok", "usedMinutes": 120, "limitMinutes": 150, "remainingMinutes": 30 }
+      ]
+    }
+  ]
+}

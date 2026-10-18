@@ -1,0 +1,89 @@
+{
+  "$schema": "../../schema/scenario.schema.json",
+  "suite": "normalization",
+  "description": "URL normalization before matching: host case, trailing dot, ports, userinfo, path normalization, percent-encoding, IDN, IP literals.",
+  "layers": ["engine", "integration", "browser"],
+  "platforms": ["windows", "android"],
+  "scenarios": [
+    {
+      "id": "NORM-001",
+      "title": "Host case, trailing dot, ports and userinfo do not change which host is matched",
+      "start": "2026-11-01T16:00",
+      "setup": { "rules": [ { "id": "r-blk", "pattern": "blocked.example", "type": "domain", "action": "block" } ] },
+      "steps": [
+        {
+          "do": "checkUrls", "member": "yoav",
+          "cases": [
+            { "url": "https://BLOCKED.EXAMPLE/",                   "expect": { "decision": "block", "reason": "blocked_rule", "ruleId": "r-blk" } },
+            { "url": "https://Blocked.Example./page",              "expect": { "decision": "block", "reason": "blocked_rule", "ruleId": "r-blk" } },
+            { "url": "https://blocked.example:8443/",              "expect": { "decision": "block", "reason": "blocked_rule", "ruleId": "r-blk" } },
+            { "url": "http://blocked.example:80/",                 "expect": { "decision": "block", "reason": "blocked_rule", "ruleId": "r-blk" } },
+            { "url": "https://user:secret@blocked.example/",       "expect": { "decision": "block", "reason": "blocked_rule", "ruleId": "r-blk" } },
+            { "url": "https://allowed.example@blocked.example/",   "expect": { "decision": "block", "reason": "blocked_rule", "ruleId": "r-blk" }, "note": "the host is the part after @" },
+            { "url": "https://blocked.example@allowed.example/",   "expect": { "decision": "allow", "reason": "allowed_default" }, "note": "the host is allowed.example" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "NORM-002",
+      "title": "Path normalization and percent-encoding in the host are resolved before matching",
+      "start": "2026-11-01T16:00",
+      "setup": { "rules": [ { "id": "r-blk", "pattern": "blocked.example", "type": "domain", "action": "block" } ] },
+      "steps": [
+        {
+          "do": "checkUrls", "member": "yoav",
+          "cases": [
+            { "url": "https://blocked.example/../other.example/", "expect": { "decision": "block", "reason": "blocked_rule", "ruleId": "r-blk" }, "note": "dot segments only change the path" },
+            { "url": "https://blocked%2Eexample/",                "expect": { "decision": "block", "reason": "blocked_rule", "ruleId": "r-blk" }, "note": "host is percent-decoded" },
+            { "url": "https://www.blocked.example/a%2Fb",         "expect": { "decision": "block", "reason": "blocked_rule", "ruleId": "r-blk" } },
+            { "url": "https://blocked.example%2eother.example/",  "expect": { "decision": "allow", "reason": "allowed_default" }, "note": "decodes to blocked.example.other.example, a different domain; Prompt.md expected a block here, which was wrong" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "NORM-003",
+      "title": "Internationalized domain names match in Unicode and punycode form",
+      "start": "2026-11-01T16:00",
+      "setup": { "rules": [ { "id": "r-idn", "pattern": "bücher.example", "type": "domain", "action": "block" } ] },
+      "steps": [
+        {
+          "do": "checkUrls", "member": "yoav",
+          "cases": [
+            { "url": "https://bücher.example/",          "expect": { "decision": "block", "reason": "blocked_rule", "ruleId": "r-idn" } },
+            { "url": "https://xn--bcher-kva.example/",   "expect": { "decision": "block", "reason": "blocked_rule", "ruleId": "r-idn" } },
+            { "url": "https://BÜCHER.example/",          "expect": { "decision": "block", "reason": "blocked_rule", "ruleId": "r-idn" } },
+            { "url": "https://www.xn--bcher-kva.example/", "expect": { "decision": "block", "reason": "blocked_rule", "ruleId": "r-idn" } }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "NORM-004",
+      "title": "IP literals are blocked for restricted members unless explicitly allowed, in every notation",
+      "start": "2026-11-01T16:00",
+      "setup": { "rules": [ { "id": "r-printer", "pattern": "192.168.1.50", "type": "domain", "action": "allow" } ] },
+      "steps": [
+        {
+          "do": "checkUrls", "member": "yoav",
+          "cases": [
+            { "url": "http://192.168.1.1/",   "expect": { "decision": "block", "reason": "blocked_ip_literal" } },
+            { "url": "http://3232235777/",    "expect": { "decision": "block", "reason": "blocked_ip_literal" }, "note": "decimal form of 192.168.1.1" },
+            { "url": "http://0xC0A80101/",    "expect": { "decision": "block", "reason": "blocked_ip_literal" }, "note": "hex form of 192.168.1.1" },
+            { "url": "http://[::1]:8080/",    "expect": { "decision": "block", "reason": "blocked_ip_literal" } },
+            { "url": "http://192.168.1.50/",  "expect": { "decision": "allow", "reason": "allowed_rule", "ruleId": "r-printer" } },
+            { "url": "http://3232235826/",    "expect": { "decision": "allow", "reason": "allowed_rule", "ruleId": "r-printer" }, "note": "decimal form of 192.168.1.50" }
+          ]
+        },
+        {
+          "do": "checkUrls", "member": "noa", "note": "same in allowlist mode",
+          "cases": [
+            { "url": "http://192.168.1.1/",   "expect": { "decision": "block", "reason": "blocked_ip_literal" } },
+            { "url": "http://192.168.1.50/",  "expect": { "decision": "allow", "reason": "allowed_rule", "ruleId": "r-printer" } }
+          ]
+        }
+      ]
+    }
+  ]
+}

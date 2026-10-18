@@ -1,0 +1,29 @@
+# .NET
+bin/
+obj/
+*.user
+*.suo
+TestResults/
+artifacts/
+
+# IDE
+.vs/
+.vscode/
+.idea/
+
+# Node (extension, simulation tools)
+node_modules/
+package-lock.json
+dist/
+
+# Simulation output
+tests/simulation/reports/
+
+# Local Claude Code settings
+.claude/settings.local.json
+
+# Leftovers from the legacy tree (kept only in tag legacy-v1)
+/android/
+/build/
+/windows/
+/shared/

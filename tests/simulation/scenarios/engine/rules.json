@@ -1,0 +1,238 @@
+{
+  "$schema": "../../schema/scenario.schema.json",
+  "suite": "rules",
+  "description": "URL rule matching: domain, wildcard, prefix, regex, specificity, member vs global, categories, expiry, allowlist mode.",
+  "layers": ["engine", "integration", "browser"],
+  "platforms": ["windows", "android"],
+  "scenarios": [
+    {
+      "id": "RULE-001",
+      "title": "A domain rule covers the domain and its subdomains, and nothing else",
+      "start": "2026-11-01T16:00",
+      "setup": { "rules": [ { "id": "r1", "pattern": "videosite.example", "type": "domain", "action": "block" } ] },
+      "steps": [
+        {
+          "do": "checkUrls", "member": "yoav", "device": "pc-kids",
+          "cases": [
+            { "url": "https://videosite.example/",                 "expect": { "decision": "block", "reason": "blocked_rule", "ruleId": "r1" } },
+            { "url": "https://www.videosite.example/watch/1",      "expect": { "decision": "block", "reason": "blocked_rule", "ruleId": "r1" } },
+            { "url": "https://m.videosite.example/",               "expect": { "decision": "block", "reason": "blocked_rule", "ruleId": "r1" } },
+            { "url": "https://videosite.example.other.net/",       "expect": { "decision": "allow", "reason": "allowed_default" }, "note": "different registrable domain" },
+            { "url": "https://notvideosite.example/",              "expect": { "decision": "allow", "reason": "allowed_default" } }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "RULE-002",
+      "title": "An exact domain allow beats a wildcard block; a wildcard does not match the apex",
+      "start": "2026-11-01T16:00",
+      "setup": {
+        "rules": [
+          { "id": "r-g-wild", "pattern": "*.google.com",    "type": "wildcard", "action": "block" },
+          { "id": "r-g-docs", "pattern": "docs.google.com", "type": "domain",   "action": "allow" }
+        ]
+      },
+      "steps": [
+        {
+          "do": "checkUrls", "member": "yoav",
+          "cases": [
+            { "url": "https://mail.google.com/",               "expect": { "decision": "block", "reason": "blocked_rule", "ruleId": "r-g-wild" } },
+            { "url": "https://www.google.com/search?q=x",      "expect": { "decision": "block", "reason": "blocked_rule", "ruleId": "r-g-wild" } },
+            { "url": "https://docs.google.com/document/d/abc", "expect": { "decision": "allow", "reason": "allowed_rule", "ruleId": "r-g-docs" } },
+            { "url": "https://a.docs.google.com/",             "expect": { "decision": "allow", "reason": "allowed_rule", "ruleId": "r-g-docs" }, "note": "3-label domain beats 2-label wildcard" },
+            { "url": "https://google.com/",                    "expect": { "decision": "allow", "reason": "allowed_default" }, "note": "wildcard excludes the apex" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "RULE-003",
+      "title": "On an exact tie, block wins",
+      "start": "2026-11-01T16:00",
+      "setup": {
+        "rules": [
+          { "id": "r-a", "pattern": "forum.example", "type": "domain", "action": "allow" },
+          { "id": "r-b", "pattern": "forum.example", "type": "domain", "action": "block" }
+        ]
+      },
+      "steps": [
+        { "do": "navigate", "member": "yoav", "url": "https://forum.example/", "expect": { "decision": "block", "reason": "blocked_rule", "ruleId": "r-b" } }
+      ]
+    },
+    {
+      "id": "RULE-004",
+      "title": "Any matching member rule beats every global rule, even a more specific one",
+      "start": "2026-11-01T16:00",
+      "setup": {
+        "rules": [
+          { "id": "r-glob-docs", "pattern": "docs.google.com", "type": "domain",   "action": "allow" },
+          { "id": "r-yoav-g",    "member": "yoav", "pattern": "*.google.com", "type": "wildcard", "action": "block" },
+          { "id": "r-glob-chat", "pattern": "chat.example",    "type": "domain",   "action": "block" },
+          { "id": "r-yoav-chat", "member": "yoav", "pattern": "chat.example", "type": "domain", "action": "allow" }
+        ]
+      },
+      "steps": [
+        {
+          "do": "checkUrls", "member": "yoav",
+          "cases": [
+            { "url": "https://docs.google.com/", "expect": { "decision": "block", "reason": "blocked_rule", "ruleId": "r-yoav-g" } },
+            { "url": "https://chat.example/",    "expect": { "decision": "allow", "reason": "allowed_rule", "ruleId": "r-yoav-chat" } }
+          ]
+        },
+        {
+          "do": "checkUrls", "member": "noa", "note": "global rules still apply to members without a matching member rule, also in allowlist mode",
+          "cases": [
+            { "url": "https://docs.google.com/", "expect": { "decision": "allow", "reason": "allowed_rule", "ruleId": "r-glob-docs" } },
+            { "url": "https://chat.example/",    "expect": { "decision": "block", "reason": "blocked_rule", "ruleId": "r-glob-chat" } }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "RULE-005",
+      "title": "Allowlist mode allows only approved categories and rules, in main and sub frames",
+      "start": "2026-11-01T16:00",
+      "setup": { "rules": [ { "id": "r-noa-pbs", "member": "noa", "pattern": "pbskids.org", "type": "domain", "action": "allow" } ] },
+      "steps": [
+        {
+          "do": "checkUrls", "member": "noa", "device": "pc-kids",
+          "cases": [
+            { "url": "https://www.khanacademy.org/math",        "expect": { "decision": "allow", "reason": "allowed_category" } },
+            { "url": "https://he.wikipedia.org/wiki/Dinosaur",  "expect": { "decision": "allow", "reason": "allowed_category" } },
+            { "url": "https://pbskids.org/games",               "expect": { "decision": "allow", "reason": "allowed_rule", "ruleId": "r-noa-pbs" } },
+            { "url": "https://mashov.info/login",               "expect": { "decision": "allow", "reason": "allowed_always", "ruleId": "r-school" } },
+            { "url": "https://www.google.com/",                 "expect": { "decision": "block", "reason": "blocked_not_in_allowlist" } },
+            { "url": "https://ads.example/frame", "frame": "sub", "expect": { "decision": "block", "reason": "blocked_not_in_allowlist" } }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "RULE-006",
+      "title": "Prefix rules match at path-segment boundaries, case-insensitively",
+      "start": "2026-11-01T16:00",
+      "setup": {
+        "rules": [
+          { "id": "r-red-r",     "pattern": "reddit.com/r/",                 "type": "prefix", "action": "block" },
+          { "id": "r-red-learn", "pattern": "reddit.com/r/learnprogramming", "type": "prefix", "action": "allow" }
+        ]
+      },
+      "steps": [
+        {
+          "do": "checkUrls", "member": "yoav",
+          "cases": [
+            { "url": "https://www.reddit.com/r/funny/",                          "expect": { "decision": "block", "reason": "blocked_rule", "ruleId": "r-red-r" } },
+            { "url": "https://www.reddit.com/R/funny",                           "expect": { "decision": "block", "reason": "blocked_rule", "ruleId": "r-red-r" }, "note": "path match is case-insensitive" },
+            { "url": "https://www.reddit.com/r/learnprogramming",                "expect": { "decision": "allow", "reason": "allowed_rule", "ruleId": "r-red-learn" } },
+            { "url": "https://www.reddit.com/r/learnprogramming/comments/1",     "expect": { "decision": "allow", "reason": "allowed_rule", "ruleId": "r-red-learn" } },
+            { "url": "https://www.reddit.com/r/learnprogramming?sort=new",       "expect": { "decision": "allow", "reason": "allowed_rule", "ruleId": "r-red-learn" } },
+            { "url": "https://www.reddit.com/r/learnprogrammingmemes",           "expect": { "decision": "block", "reason": "blocked_rule", "ruleId": "r-red-r" }, "note": "segment boundary" },
+            { "url": "https://www.reddit.com/",                                  "expect": { "decision": "allow", "reason": "allowed_default" } }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "RULE-007",
+      "title": "Regex rules apply to the full normalized URL and lose to any domain rule",
+      "start": "2026-11-01T16:00",
+      "setup": {
+        "rules": [
+          { "id": "r-casino",      "pattern": "^https?://([a-z0-9-]+\\.)*[a-z0-9-]*casino[a-z0-9-]*\\.[a-z.]+/", "type": "regex", "action": "block" },
+          { "id": "r-casino-hist", "pattern": "casino-history.example", "type": "domain", "action": "allow" }
+        ]
+      },
+      "steps": [
+        {
+          "do": "checkUrls", "member": "yoav",
+          "cases": [
+            { "url": "https://bestcasino.example/",            "expect": { "decision": "block", "reason": "blocked_rule", "ruleId": "r-casino" } },
+            { "url": "https://www.casino-online.example/play", "expect": { "decision": "block", "reason": "blocked_rule", "ruleId": "r-casino" } },
+            { "url": "https://casino-history.example/",        "expect": { "decision": "allow", "reason": "allowed_rule", "ruleId": "r-casino-hist" } },
+            { "url": "https://cards.example/casino",           "expect": { "decision": "allow", "reason": "allowed_default" } }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "RULE-008",
+      "title": "Blocked categories apply, and a member rule overrides a member category",
+      "start": "2026-11-01T16:00",
+      "setup": { "rules": [ { "id": "r-yoav-roblox", "member": "yoav", "pattern": "roblox.com", "type": "domain", "action": "allow" } ] },
+      "steps": [
+        {
+          "do": "checkUrls", "member": "yoav",
+          "cases": [
+            { "url": "https://www.instagram.com/",      "expect": { "decision": "block", "reason": "blocked_category" } },
+            { "url": "https://www.tiktok.com/@someone", "expect": { "decision": "block", "reason": "blocked_category" } },
+            { "url": "https://www.miniclip.com/",       "expect": { "decision": "block", "reason": "blocked_category" } },
+            { "url": "https://www.roblox.com/games",    "expect": { "decision": "allow", "reason": "allowed_rule", "ruleId": "r-yoav-roblox" } },
+            { "url": "https://www.khanacademy.org/",    "expect": { "decision": "allow", "reason": "allowed_default" }, "note": "educational is not configured for yoav" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "RULE-009",
+      "title": "A temporary allow stops working exactly at its expiry",
+      "start": "2026-11-01T16:00",
+      "setup": { "rules": [ { "id": "r-noa-tmp", "member": "noa", "pattern": "pbskids.org", "type": "domain", "action": "allow", "expiresAt": "2026-11-01T17:00" } ] },
+      "steps": [
+        { "do": "navigate", "at": "16:59", "member": "noa", "url": "https://pbskids.org/", "expect": { "decision": "allow", "reason": "allowed_rule", "ruleId": "r-noa-tmp" } },
+        { "do": "navigate", "at": "17:00", "member": "noa", "url": "https://pbskids.org/", "expect": { "decision": "block", "reason": "blocked_not_in_allowlist" } }
+      ]
+    },
+    {
+      "id": "RULE-010",
+      "title": "Unrestricted adults are never filtered, at any hour",
+      "start": "2026-11-01T23:30",
+      "setup": { "rules": [ { "id": "r1", "pattern": "videosite.example", "type": "domain", "action": "block" } ] },
+      "steps": [
+        {
+          "do": "checkUrls", "member": "dana", "device": "pc-kids",
+          "cases": [
+            { "url": "https://videosite.example/",  "expect": { "decision": "allow", "reason": "allowed_unrestricted" } },
+            { "url": "https://www.instagram.com/",  "expect": { "decision": "allow", "reason": "allowed_unrestricted" } },
+            { "url": "http://192.168.1.1/",         "expect": { "decision": "allow", "reason": "allowed_unrestricted" } }
+          ]
+        },
+        {
+          "do": "checkUrls", "member": "savta", "device": "pc-kids", "note": "not a Windows admin, still unrestricted",
+          "cases": [
+            { "url": "https://videosite.example/", "expect": { "decision": "allow", "reason": "allowed_unrestricted" } }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "RULE-011",
+      "title": "Non-web schemes are left to browser policy",
+      "start": "2026-11-01T16:00",
+      "steps": [
+        {
+          "do": "checkUrls", "member": "noa",
+          "cases": [
+            { "url": "chrome://settings/",                   "expect": { "decision": "not_applicable" } },
+            { "url": "edge://extensions/",                   "expect": { "decision": "not_applicable" } },
+            { "url": "about:blank",                          "expect": { "decision": "not_applicable" } },
+            { "url": "file:///C:/Users/noa/Desktop/a.html",  "expect": { "decision": "not_applicable" } }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "RULE-012",
+      "title": "Rules added or removed by the admin take effect on the next check",
+      "start": "2026-11-01T16:00",
+      "setup": { "rules": [ { "id": "r1", "pattern": "videosite.example", "type": "domain", "action": "block" } ] },
+      "steps": [
+        { "do": "navigate", "member": "yoav", "url": "https://videosite.example/", "expect": { "decision": "block", "reason": "blocked_rule", "ruleId": "r1" } },
+        { "do": "admin", "action": "removeRule", "ruleId": "r1" },
+        { "do": "navigate", "member": "yoav", "url": "https://videosite.example/", "expect": { "decision": "allow", "reason": "allowed_default" } },
+        { "do": "admin", "action": "addRule", "rule": { "id": "r2", "member": "yoav", "pattern": "news.example", "type": "domain", "action": "block" } },
+        { "do": "navigate", "member": "yoav", "url": "https://www.news.example/today", "expect": { "decision": "block", "reason": "blocked_rule", "ruleId": "r2" } }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,75 @@
+{
+  "description": "Simulated family used by all scenarios unless a suite names another fixture. Domains and YouTube channels are synthetic or used only as test data.",
+  "timezone": "Asia/Jerusalem",
+  "members": [
+    { "id": "noa",   "displayName": "נועה", "role": "child", "age": 8,  "filterMode": "allowlist",    "youtubeMode": "allowlist" },
+    { "id": "yoav",  "displayName": "יואב", "role": "teen",  "age": 14, "filterMode": "blocklist",    "youtubeMode": "restricted" },
+    { "id": "dana",  "displayName": "דנה",  "role": "adult", "age": 42, "filterMode": "unrestricted", "youtubeMode": "unrestricted" },
+    { "id": "savta", "displayName": "סבתא", "role": "adult", "age": 70, "filterMode": "unrestricted", "youtubeMode": "unrestricted" }
+  ],
+  "devices": [
+    {
+      "id": "pc-parents", "os": "windows", "role": "hub",
+      "accounts": [
+        { "accountId": "S-1-5-21-1000-1001", "name": "dana", "member": "dana", "isAdmin": true }
+      ]
+    },
+    {
+      "id": "pc-kids", "os": "windows", "role": "agent",
+      "accounts": [
+        { "accountId": "S-1-5-21-2000-1001", "name": "noa",     "member": "noa",   "isAdmin": false },
+        { "accountId": "S-1-5-21-2000-1002", "name": "yoav",    "member": "yoav",  "isAdmin": false },
+        { "accountId": "S-1-5-21-2000-1003", "name": "dana",    "member": "dana",  "isAdmin": true },
+        { "accountId": "S-1-5-21-2000-1004", "name": "savta",   "member": "savta", "isAdmin": false },
+        { "accountId": "S-1-5-21-2000-1005", "name": "visitor",                    "isAdmin": false }
+      ]
+    },
+    {
+      "id": "laptop-yoav", "os": "windows", "role": "agent",
+      "accounts": [
+        { "accountId": "S-1-5-21-3000-1001", "name": "yoav", "member": "yoav", "isAdmin": false }
+      ]
+    }
+  ],
+  "categories": {
+    "educational": ["khanacademy.org", "wikipedia.org", "scratch.mit.edu"],
+    "social": ["instagram.com", "tiktok.com", "facebook.com"],
+    "gaming": ["roblox.com", "miniclip.com"]
+  },
+  "memberCategories": [
+    { "member": "noa",  "category": "educational", "action": "allow" },
+    { "member": "yoav", "category": "social",      "action": "block" },
+    { "member": "yoav", "category": "gaming",      "action": "block" }
+  ],
+  "rules": [
+    { "id": "r-school", "pattern": "mashov.info", "type": "domain", "action": "allow", "alwaysAllowed": true }
+  ],
+  "schedules": [
+    { "member": "noa",  "days": [0, 1, 2, 3, 4], "start": "15:00", "end": "19:00" },
+    { "member": "noa",  "days": [5],             "start": "09:00", "end": "13:00" },
+    { "member": "noa",  "days": [5],             "start": "16:00", "end": "20:00" },
+    { "member": "noa",  "days": [6],             "start": "09:00", "end": "20:00" },
+    { "member": "yoav", "days": [0, 1, 2, 3, 4], "start": "14:00", "end": "21:30" },
+    { "member": "yoav", "days": [5, 6],          "start": "09:00", "end": "23:00" }
+  ],
+  "dailyLimits": [
+    { "member": "noa",  "days": [0, 1, 2, 3, 4], "minutes": 120 },
+    { "member": "noa",  "days": [5, 6],          "minutes": 180 },
+    { "member": "yoav", "days": [0, 1, 2, 3, 4], "minutes": 240 },
+    { "member": "yoav", "days": [5, 6],          "minutes": 300 }
+  ],
+  "youtubeChannels": [
+    { "channelId": "UCkhanKids00000000000001", "handle": "@khankids-sim", "title": "Khan Kids (sim)", "member": "noa",  "action": "allow" },
+    { "channelId": "UCsesame0000000000000002", "handle": "@sesame-sim",   "title": "Sesame (sim)",    "member": "noa",  "action": "allow" },
+    { "channelId": "UCgamerX0000000000000003", "handle": "@gamerx-sim",   "title": "GamerX (sim)",    "member": "yoav", "action": "block" }
+  ],
+  "supportedBrowsers": [
+    "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe",
+    "C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe"
+  ],
+  "appRules": [
+    { "id": "a-school",    "match": "path",    "value": "C:\\Program Files\\SchoolApp\\schoolapp.exe", "action": "allow", "alwaysAllowed": true },
+    { "id": "a-minecraft", "member": "yoav", "match": "path",    "value": "C:\\Games\\Minecraft\\minecraft.exe",  "action": "allow" },
+    { "id": "a-mc-store",  "member": "yoav", "match": "package", "value": "Microsoft.MinecraftUWP_8wekyb3d8bbwe", "action": "allow" }
+  ]
+}

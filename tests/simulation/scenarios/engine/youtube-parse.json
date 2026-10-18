@@ -1,0 +1,69 @@
+{
+  "$schema": "../../schema/scenario.schema.json",
+  "suite": "youtube-parse",
+  "description": "YouTube URL parser: every URL form the filter must recognize. All IDs are synthetic.",
+  "layers": ["engine"],
+  "platforms": ["windows", "android"],
+  "scenarios": [
+    {
+      "id": "YTP-001",
+      "title": "Channel, handle, custom and user URLs",
+      "start": "2026-11-01T12:00",
+      "steps": [
+        {
+          "do": "parseYouTube",
+          "cases": [
+            { "url": "https://www.youtube.com/channel/UCkhanKids00000000000001",        "expect": { "kind": "channel", "site": "www", "channelId": "UCkhanKids00000000000001" } },
+            { "url": "https://www.youtube.com/channel/UCkhanKids00000000000001/videos", "expect": { "kind": "channel", "site": "www", "channelId": "UCkhanKids00000000000001" } },
+            { "url": "https://m.youtube.com/channel/UCkhanKids00000000000001",          "expect": { "kind": "channel", "site": "m",   "channelId": "UCkhanKids00000000000001" } },
+            { "url": "https://youtube.com/channel/UCkhanKids00000000000001",            "expect": { "kind": "channel", "site": "www", "channelId": "UCkhanKids00000000000001" } },
+            { "url": "https://www.youtube.com/@KhanKids-Sim",                           "expect": { "kind": "handle",  "site": "www", "handle": "@khankids-sim" }, "note": "handles are case-insensitive" },
+            { "url": "https://www.youtube.com/@khankids-sim/shorts",                    "expect": { "kind": "handle",  "site": "www", "handle": "@khankids-sim" } },
+            { "url": "https://www.youtube.com/c/SesameSim",                             "expect": { "kind": "custom",  "site": "www", "customName": "sesamesim" } },
+            { "url": "https://www.youtube.com/user/sesameuser",                         "expect": { "kind": "user",    "site": "www", "userName": "sesameuser" } }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "YTP-002",
+      "title": "Video, shorts, short links, embeds and playlists",
+      "start": "2026-11-01T12:00",
+      "steps": [
+        {
+          "do": "parseYouTube",
+          "cases": [
+            { "url": "https://www.youtube.com/watch?v=vidKhan0001",                      "expect": { "kind": "video",    "site": "www",      "videoId": "vidKhan0001" } },
+            { "url": "https://www.youtube.com/watch?feature=share&v=vidKhan0001&t=30",   "expect": { "kind": "video",    "site": "www",      "videoId": "vidKhan0001" } },
+            { "url": "https://www.youtube.com/watch?v=vidKhan0001&list=PLsim0001",       "expect": { "kind": "video",    "site": "www",      "videoId": "vidKhan0001", "playlistId": "PLsim0001" } },
+            { "url": "https://m.youtube.com/watch?v=vidKhan0001",                        "expect": { "kind": "video",    "site": "m",        "videoId": "vidKhan0001" } },
+            { "url": "https://youtu.be/vidKhan0001?t=10",                                "expect": { "kind": "video",    "site": "short",    "videoId": "vidKhan0001" } },
+            { "url": "https://www.youtube.com/shorts/vidShrt0001",                       "expect": { "kind": "shorts",   "site": "www",      "videoId": "vidShrt0001" } },
+            { "url": "https://www.youtube.com/embed/vidKhan0001",                        "expect": { "kind": "embed",    "site": "www",      "videoId": "vidKhan0001" } },
+            { "url": "https://www.youtube-nocookie.com/embed/vidKhan0001?rel=0",         "expect": { "kind": "embed",    "site": "nocookie", "videoId": "vidKhan0001" } },
+            { "url": "https://music.youtube.com/watch?v=vidMusc0001",                    "expect": { "kind": "video",    "site": "music",    "videoId": "vidMusc0001" } },
+            { "url": "https://www.youtube.com/playlist?list=PLsim0001",                  "expect": { "kind": "playlist", "site": "www",      "playlistId": "PLsim0001" } }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "YTP-003",
+      "title": "Home, search, other pages, and look-alike hosts",
+      "start": "2026-11-01T12:00",
+      "steps": [
+        {
+          "do": "parseYouTube",
+          "cases": [
+            { "url": "https://www.youtube.com/",                               "expect": { "kind": "home",   "site": "www" } },
+            { "url": "https://www.youtube.com/results?search_query=dinosaurs", "expect": { "kind": "search", "site": "www" } },
+            { "url": "https://www.youtube.com/feed/trending",                  "expect": { "kind": "other",  "site": "www" } },
+            { "url": "https://example.com/watch?v=vidKhan0001",                "expect": { "kind": "not_youtube" } },
+            { "url": "https://youtube.com.example.net/watch?v=vidKhan0001",    "expect": { "kind": "not_youtube" } },
+            { "url": "https://notyoutube.com/watch?v=vidKhan0001",             "expect": { "kind": "not_youtube" } }
+          ]
+        }
+      ]
+    }
+  ]
+}

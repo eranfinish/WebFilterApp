@@ -1,0 +1,11 @@
+{
+  "name": "webfilter-simulation-tools",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "validate": "node validate.mjs"
+  },
+  "devDependencies": {
+    "ajv": "8.17.1"
+  }
+}

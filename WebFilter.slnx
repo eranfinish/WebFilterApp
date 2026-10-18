@@ -1,0 +1,17 @@
+<Solution>
+  <Configurations>
+    <BuildType Name="Debug" />
+    <BuildType Name="Release" />
+    <BuildType Name="Simulation" />
+  </Configurations>
+  <Folder Name="/src/">
+    <Project Path="src/WebFilter.Admin/WebFilter.Admin.csproj" />
+    <Project Path="src/WebFilter.Contracts/WebFilter.Contracts.csproj" />
+    <Project Path="src/WebFilter.Core/WebFilter.Core.csproj" />
+    <Project Path="src/WebFilter.NativeHost/WebFilter.NativeHost.csproj" />
+    <Project Path="src/WebFilter.Service/WebFilter.Service.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/WebFilter.Core.Tests/WebFilter.Core.Tests.csproj" />
+  </Folder>
+</Solution>

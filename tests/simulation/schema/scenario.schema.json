@@ -1,0 +1,441 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://webfilter.local/schema/scenario.schema.json",
+  "title": "WebFilter simulation suite",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["suite", "description", "layers", "platforms", "scenarios"],
+  "properties": {
+    "$schema": { "type": "string" },
+    "suite": { "type": "string", "pattern": "^[a-z0-9-]+$" },
+    "description": { "type": "string" },
+    "fixture": { "type": "string", "default": "family-base" },
+    "layers": { "$ref": "#/$defs/layers" },
+    "platforms": { "$ref": "#/$defs/platforms" },
+    "scenarios": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/scenario" } }
+  },
+  "$defs": {
+    "layers": {
+      "type": "array", "minItems": 1, "uniqueItems": true,
+      "items": { "enum": ["engine", "integration", "browser", "system", "load"] }
+    },
+    "platforms": {
+      "type": "array", "minItems": 1, "uniqueItems": true,
+      "items": { "enum": ["windows", "android"] }
+    },
+    "id": { "type": "string", "pattern": "^[A-Za-z0-9_.-]+$" },
+    "localTime": {
+      "description": "Local wall-clock time in the family time zone: 'HH:MM[:SS]' (same simulated day) or 'YYYY-MM-DDTHH:MM[:SS]'.",
+      "type": "string",
+      "pattern": "^(\\d{4}-\\d{2}-\\d{2}T)?\\d{2}:\\d{2}(:\\d{2})?$"
+    },
+    "dayList": {
+      "type": "array", "minItems": 1, "uniqueItems": true,
+      "items": { "type": "integer", "minimum": 0, "maximum": 6 },
+      "description": "0 = Sunday ... 6 = Saturday"
+    },
+    "hhmm": { "type": "string", "pattern": "^([01]\\d|2[0-3]):[0-5]\\d$|^24:00$" },
+
+    "decision": { "enum": ["allow", "block", "redirect", "not_applicable"] },
+    "reason": {
+      "enum": [
+        "allowed_unrestricted", "allowed_paused", "allowed_always", "allowed_rule", "allowed_category",
+        "allowed_default", "allowed_homework", "allowed_youtube_channel", "allowed_browser",
+        "blocked_rule", "blocked_category", "blocked_not_in_allowlist", "blocked_time_window",
+        "blocked_daily_limit", "blocked_homework", "blocked_ip_literal", "blocked_youtube_channel",
+        "blocked_youtube_unknown", "blocked_youtube_off", "blocked_service_unavailable", "blocked_app_network",
+        "redirect_youtube_home"
+      ]
+    },
+    "expectDecision": {
+      "type": "object", "additionalProperties": false, "required": ["decision"],
+      "properties": {
+        "decision": { "$ref": "#/$defs/decision" },
+        "reason": { "$ref": "#/$defs/reason" },
+        "ruleId": { "$ref": "#/$defs/id" }
+      }
+    },
+
+    "member": {
+      "type": "object", "additionalProperties": false, "required": ["id"],
+      "properties": {
+        "id": { "$ref": "#/$defs/id" },
+        "displayName": { "type": "string" },
+        "role": { "enum": ["child", "teen", "adult"] },
+        "age": { "type": "integer", "minimum": 0, "maximum": 120 },
+        "filterMode": { "enum": ["unrestricted", "blocklist", "allowlist"] },
+        "youtubeMode": { "enum": ["off", "restricted", "allowlist", "unrestricted"] }
+      }
+    },
+    "account": {
+      "type": "object", "additionalProperties": false, "required": ["accountId", "name", "isAdmin"],
+      "properties": {
+        "accountId": { "type": "string" },
+        "name": { "type": "string" },
+        "member": { "$ref": "#/$defs/id" },
+        "isAdmin": { "type": "boolean" }
+      }
+    },
+    "device": {
+      "type": "object", "additionalProperties": false, "required": ["id", "os", "role", "accounts"],
+      "properties": {
+        "id": { "$ref": "#/$defs/id" },
+        "os": { "enum": ["windows", "android"] },
+        "role": { "enum": ["hub", "agent"] },
+        "accounts": { "type": "array", "items": { "$ref": "#/$defs/account" } }
+      }
+    },
+    "rule": {
+      "type": "object", "additionalProperties": false, "required": ["id", "pattern", "type", "action"],
+      "properties": {
+        "id": { "$ref": "#/$defs/id" },
+        "member": { "$ref": "#/$defs/id", "description": "Omit for a global rule." },
+        "pattern": { "type": "string", "minLength": 1 },
+        "type": { "enum": ["domain", "wildcard", "prefix", "regex"] },
+        "action": { "enum": ["allow", "block"] },
+        "alwaysAllowed": { "type": "boolean" },
+        "expiresAt": { "$ref": "#/$defs/localTime" }
+      }
+    },
+    "memberCategory": {
+      "type": "object", "additionalProperties": false, "required": ["member", "category", "action"],
+      "properties": {
+        "member": { "$ref": "#/$defs/id" },
+        "category": { "type": "string" },
+        "action": { "enum": ["allow", "block"] }
+      }
+    },
+    "schedule": {
+      "type": "object", "additionalProperties": false, "required": ["member", "days", "start", "end"],
+      "properties": {
+        "member": { "$ref": "#/$defs/id" },
+        "days": { "$ref": "#/$defs/dayList" },
+        "start": { "$ref": "#/$defs/hhmm" },
+        "end": { "$ref": "#/$defs/hhmm" }
+      }
+    },
+    "dailyLimit": {
+      "type": "object", "additionalProperties": false, "required": ["member", "days", "minutes"],
+      "properties": {
+        "member": { "$ref": "#/$defs/id" },
+        "days": { "$ref": "#/$defs/dayList" },
+        "minutes": { "type": "integer", "minimum": 0 }
+      }
+    },
+    "youtubeChannel": {
+      "type": "object", "additionalProperties": false, "required": ["channelId", "action"],
+      "properties": {
+        "channelId": { "type": "string", "pattern": "^UC[A-Za-z0-9_-]{22}$" },
+        "handle": { "type": "string", "pattern": "^@[a-z0-9._-]+$" },
+        "title": { "type": "string" },
+        "member": { "$ref": "#/$defs/id" },
+        "action": { "enum": ["allow", "block"] }
+      }
+    },
+    "appRule": {
+      "type": "object", "additionalProperties": false, "required": ["id", "match", "value", "action"],
+      "properties": {
+        "id": { "$ref": "#/$defs/id" },
+        "member": { "$ref": "#/$defs/id" },
+        "match": { "enum": ["path", "package", "publisher"] },
+        "value": { "type": "string" },
+        "action": { "enum": ["allow", "block"] },
+        "alwaysAllowed": { "type": "boolean" }
+      }
+    },
+    "setup": {
+      "description": "Patch applied on top of the fixture. See README: members merge by id; schedules replace per member; dailyLimits replace per member+day; other arrays append.",
+      "type": "object", "additionalProperties": false,
+      "properties": {
+        "members": { "type": "array", "items": { "$ref": "#/$defs/member" } },
+        "rules": { "type": "array", "items": { "$ref": "#/$defs/rule" } },
+        "memberCategories": { "type": "array", "items": { "$ref": "#/$defs/memberCategory" } },
+        "schedules": { "type": "array", "items": { "$ref": "#/$defs/schedule" } },
+        "dailyLimits": { "type": "array", "items": { "$ref": "#/$defs/dailyLimit" } },
+        "youtubeChannels": { "type": "array", "items": { "$ref": "#/$defs/youtubeChannel" } },
+        "appRules": { "type": "array", "items": { "$ref": "#/$defs/appRule" } }
+      }
+    },
+
+    "scenario": {
+      "type": "object", "additionalProperties": false, "required": ["id", "title", "start", "steps"],
+      "properties": {
+        "id": { "$ref": "#/$defs/id" },
+        "title": { "type": "string" },
+        "note": { "type": "string" },
+        "layers": { "$ref": "#/$defs/layers", "description": "Overrides the suite layers." },
+        "platforms": { "$ref": "#/$defs/platforms", "description": "Overrides the suite platforms." },
+        "start": { "$ref": "#/$defs/localTime" },
+        "setup": { "$ref": "#/$defs/setup" },
+        "steps": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/step" } }
+      }
+    },
+
+    "step": {
+      "type": "object", "required": ["do"],
+      "properties": { "do": { "enum": ["navigate", "checkUrls", "parseYouTube", "youtube", "app", "browse", "setTime", "admin", "expectTime", "expectEvents", "network", "service", "setSystemTimezone"] } },
+      "allOf": [
+        { "if": { "properties": { "do": { "const": "navigate" } } }, "then": { "$ref": "#/$defs/stepNavigate" } },
+        { "if": { "properties": { "do": { "const": "checkUrls" } } }, "then": { "$ref": "#/$defs/stepCheckUrls" } },
+        { "if": { "properties": { "do": { "const": "parseYouTube" } } }, "then": { "$ref": "#/$defs/stepParseYouTube" } },
+        { "if": { "properties": { "do": { "const": "youtube" } } }, "then": { "$ref": "#/$defs/stepYouTube" } },
+        { "if": { "properties": { "do": { "const": "app" } } }, "then": { "$ref": "#/$defs/stepApp" } },
+        { "if": { "properties": { "do": { "const": "browse" } } }, "then": { "$ref": "#/$defs/stepBrowse" } },
+        { "if": { "properties": { "do": { "const": "setTime" } } }, "then": { "$ref": "#/$defs/stepSetTime" } },
+        { "if": { "properties": { "do": { "const": "admin" } } }, "then": { "$ref": "#/$defs/stepAdmin" } },
+        { "if": { "properties": { "do": { "const": "expectTime" } } }, "then": { "$ref": "#/$defs/stepExpectTime" } },
+        { "if": { "properties": { "do": { "const": "expectEvents" } } }, "then": { "$ref": "#/$defs/stepExpectEvents" } },
+        { "if": { "properties": { "do": { "const": "network" } } }, "then": { "$ref": "#/$defs/stepNetwork" } },
+        { "if": { "properties": { "do": { "const": "service" } } }, "then": { "$ref": "#/$defs/stepService" } },
+        { "if": { "properties": { "do": { "const": "setSystemTimezone" } } }, "then": { "$ref": "#/$defs/stepSetSystemTimezone" } }
+      ]
+    },
+
+    "stepNavigate": {
+      "type": "object", "additionalProperties": false, "required": ["do", "url", "expect"],
+      "anyOf": [ { "required": ["member"] }, { "required": ["account", "device"] } ],
+      "properties": {
+        "do": { "const": "navigate" },
+        "at": { "$ref": "#/$defs/localTime" },
+        "note": { "type": "string" },
+        "member": { "$ref": "#/$defs/id" },
+        "device": { "$ref": "#/$defs/id" },
+        "account": { "type": "string", "description": "Account name on the device; use instead of member for unmapped accounts." },
+        "url": { "type": "string" },
+        "frame": { "enum": ["main", "sub"], "default": "main" },
+        "expect": { "$ref": "#/$defs/expectDecision" }
+      }
+    },
+    "stepCheckUrls": {
+      "type": "object", "additionalProperties": false, "required": ["do", "member", "cases"],
+      "properties": {
+        "do": { "const": "checkUrls" },
+        "at": { "$ref": "#/$defs/localTime" },
+        "note": { "type": "string" },
+        "member": { "$ref": "#/$defs/id" },
+        "device": { "$ref": "#/$defs/id" },
+        "cases": {
+          "type": "array", "minItems": 1,
+          "items": {
+            "type": "object", "additionalProperties": false, "required": ["url", "expect"],
+            "properties": {
+              "url": { "type": "string" },
+              "frame": { "enum": ["main", "sub"], "default": "main" },
+              "note": { "type": "string" },
+              "expect": { "$ref": "#/$defs/expectDecision" }
+            }
+          }
+        }
+      }
+    },
+    "stepParseYouTube": {
+      "type": "object", "additionalProperties": false, "required": ["do", "cases"],
+      "properties": {
+        "do": { "const": "parseYouTube" },
+        "note": { "type": "string" },
+        "cases": {
+          "type": "array", "minItems": 1,
+          "items": {
+            "type": "object", "additionalProperties": false, "required": ["url", "expect"],
+            "properties": {
+              "url": { "type": "string" },
+              "note": { "type": "string" },
+              "expect": {
+                "type": "object", "additionalProperties": false, "required": ["kind"],
+                "properties": {
+                  "kind": { "enum": ["channel", "handle", "custom", "user", "video", "shorts", "embed", "playlist", "home", "search", "other", "not_youtube"] },
+                  "site": { "enum": ["www", "m", "music", "nocookie", "short"] },
+                  "channelId": { "type": "string" },
+                  "handle": { "type": "string" },
+                  "customName": { "type": "string" },
+                  "userName": { "type": "string" },
+                  "videoId": { "type": "string" },
+                  "playlistId": { "type": "string" }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "stepYouTube": {
+      "type": "object", "additionalProperties": false, "required": ["do", "member", "page", "expect"],
+      "properties": {
+        "do": { "const": "youtube" },
+        "at": { "$ref": "#/$defs/localTime" },
+        "note": { "type": "string" },
+        "member": { "$ref": "#/$defs/id" },
+        "device": { "$ref": "#/$defs/id" },
+        "page": {
+          "type": "object", "additionalProperties": false, "required": ["url"],
+          "description": "What the content script sees: the URL and, when present, the channel identity found in the page data.",
+          "properties": {
+            "url": { "type": "string" },
+            "frame": { "enum": ["main", "sub"], "default": "main" },
+            "parentUrl": { "type": "string", "description": "Top-level page URL for embeds." },
+            "channelId": { "type": "string" },
+            "handle": { "type": "string" }
+          }
+        },
+        "expect": { "$ref": "#/$defs/expectDecision" }
+      }
+    },
+    "stepApp": {
+      "type": "object", "additionalProperties": false, "required": ["do", "member", "device", "app", "expect"],
+      "properties": {
+        "do": { "const": "app" },
+        "at": { "$ref": "#/$defs/localTime" },
+        "note": { "type": "string" },
+        "member": { "$ref": "#/$defs/id" },
+        "device": { "$ref": "#/$defs/id" },
+        "app": {
+          "type": "object", "additionalProperties": false,
+          "properties": {
+            "path": { "type": "string" },
+            "package": { "type": "string" },
+            "publisher": { "type": "string" }
+          },
+          "minProperties": 1
+        },
+        "expect": { "$ref": "#/$defs/expectDecision" }
+      }
+    },
+    "stepBrowse": {
+      "type": "object", "additionalProperties": false, "required": ["do", "sessions"],
+      "properties": {
+        "do": { "const": "browse" },
+        "note": { "type": "string" },
+        "sessions": {
+          "type": "array", "minItems": 1,
+          "items": {
+            "type": "object", "additionalProperties": false, "required": ["member", "from", "to"],
+            "properties": {
+              "member": { "$ref": "#/$defs/id" },
+              "device": { "$ref": "#/$defs/id" },
+              "browser": { "enum": ["chrome", "edge"], "default": "edge" },
+              "from": { "$ref": "#/$defs/localTime" },
+              "to": { "$ref": "#/$defs/localTime" },
+              "active": { "type": "boolean", "default": true }
+            }
+          }
+        }
+      }
+    },
+    "stepSetTime": {
+      "type": "object", "additionalProperties": false, "required": ["do", "to"],
+      "properties": {
+        "do": { "const": "setTime" },
+        "note": { "type": "string" },
+        "to": { "$ref": "#/$defs/localTime" }
+      }
+    },
+    "stepAdmin": {
+      "type": "object", "additionalProperties": false, "required": ["do", "action"],
+      "properties": {
+        "do": { "const": "admin" },
+        "at": { "$ref": "#/$defs/localTime" },
+        "note": { "type": "string" },
+        "action": { "enum": ["extendTime", "pause", "resume", "startHomework", "stopHomework", "addRule", "removeRule", "setMember"] },
+        "scope": { "enum": ["hub", "local"], "default": "hub", "description": "'local' = emergency action on an agent device (requires device)." },
+        "device": { "$ref": "#/$defs/id" },
+        "member": { "$ref": "#/$defs/id" },
+        "minutes": { "type": "integer", "minimum": 1 },
+        "until": { "$ref": "#/$defs/localTime" },
+        "rule": { "$ref": "#/$defs/rule" },
+        "ruleId": { "$ref": "#/$defs/id" },
+        "patch": { "$ref": "#/$defs/member" }
+      },
+      "allOf": [
+        { "if": { "properties": { "action": { "const": "extendTime" } } }, "then": { "required": ["member", "minutes"] } },
+        { "if": { "properties": { "action": { "const": "pause" } } }, "then": { "required": ["member", "until"] } },
+        { "if": { "properties": { "action": { "const": "resume" } } }, "then": { "required": ["member"] } },
+        { "if": { "properties": { "action": { "const": "startHomework" } } }, "then": { "required": ["member", "minutes"] } },
+        { "if": { "properties": { "action": { "const": "stopHomework" } } }, "then": { "required": ["member"] } },
+        { "if": { "properties": { "action": { "const": "addRule" } } }, "then": { "required": ["rule"] } },
+        { "if": { "properties": { "action": { "const": "removeRule" } } }, "then": { "required": ["ruleId"] } },
+        { "if": { "properties": { "action": { "const": "setMember" } } }, "then": { "required": ["patch"] } },
+        { "if": { "required": ["scope"], "properties": { "scope": { "const": "local" } } }, "then": { "required": ["device"] } }
+      ]
+    },
+    "stepExpectTime": {
+      "type": "object", "additionalProperties": false, "required": ["do", "member", "state"],
+      "properties": {
+        "do": { "const": "expectTime" },
+        "at": { "$ref": "#/$defs/localTime" },
+        "note": { "type": "string" },
+        "member": { "$ref": "#/$defs/id" },
+        "device": { "$ref": "#/$defs/id", "description": "Whose view to check. Omit = the hub and every online agent must agree." },
+        "state": { "enum": ["ok", "warn", "expired", "outside_window", "unlimited"] },
+        "usedMinutes": { "type": "integer", "minimum": 0 },
+        "limitMinutes": { "type": "integer", "minimum": 0 },
+        "remainingMinutes": { "type": "integer", "minimum": 0 },
+        "windowEndsAt": { "type": ["string", "null"], "pattern": "^\\d{2}:\\d{2}$" }
+      }
+    },
+    "stepExpectEvents": {
+      "type": "object", "additionalProperties": false, "required": ["do", "type", "expect"],
+      "properties": {
+        "do": { "const": "expectEvents" },
+        "at": { "$ref": "#/$defs/localTime" },
+        "note": { "type": "string" },
+        "type": { "enum": ["time_warning", "time_expired", "blocked", "app_blocked", "admin_change", "access_request", "tamper", "service"] },
+        "member": { "$ref": "#/$defs/id" },
+        "device": { "$ref": "#/$defs/id", "description": "Where the events must be visible. Omit = on the hub." },
+        "since": { "$ref": "#/$defs/localTime", "description": "Default: scenario start." },
+        "expect": {
+          "type": "object", "additionalProperties": false,
+          "properties": {
+            "count": { "type": "integer", "minimum": 0 },
+            "items": {
+              "type": "array",
+              "description": "Ordered subset that must be present, matched field by field.",
+              "items": {
+                "type": "object", "additionalProperties": false,
+                "properties": {
+                  "at": { "$ref": "#/$defs/localTime" },
+                  "remainingMinutes": { "type": "integer" },
+                  "reason": { "$ref": "#/$defs/reason" },
+                  "url": { "type": "string" },
+                  "app": { "type": "string" },
+                  "device": { "$ref": "#/$defs/id" },
+                  "detail": { "type": "string" }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "stepNetwork": {
+      "type": "object", "additionalProperties": false, "required": ["do", "device", "hub"],
+      "properties": {
+        "do": { "const": "network" },
+        "at": { "$ref": "#/$defs/localTime" },
+        "note": { "type": "string" },
+        "device": { "$ref": "#/$defs/id" },
+        "hub": { "enum": ["online", "offline"] }
+      }
+    },
+    "stepService": {
+      "type": "object", "additionalProperties": false, "required": ["do", "device", "state"],
+      "properties": {
+        "do": { "const": "service" },
+        "at": { "$ref": "#/$defs/localTime" },
+        "note": { "type": "string" },
+        "device": { "$ref": "#/$defs/id" },
+        "state": { "enum": ["up", "down"] },
+        "profileCache": { "enum": ["present", "absent"], "default": "present" }
+      }
+    },
+    "stepSetSystemTimezone": {
+      "type": "object", "additionalProperties": false, "required": ["do", "device", "tz"],
+      "properties": {
+        "do": { "const": "setSystemTimezone" },
+        "at": { "$ref": "#/$defs/localTime" },
+        "note": { "type": "string" },
+        "device": { "$ref": "#/$defs/id" },
+        "tz": { "type": "string" }
+      }
+    }
+  }
+}

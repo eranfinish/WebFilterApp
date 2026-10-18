@@ -1,0 +1,80 @@
+{
+  "$schema": "../../schema/scenario.schema.json",
+  "suite": "youtube-decisions",
+  "description": "YouTube decisions per member mode. 'page' is what the content script sees: the URL plus any channel identity found in the page data.",
+  "layers": ["engine", "browser"],
+  "platforms": ["windows"],
+  "scenarios": [
+    {
+      "id": "YT-001",
+      "title": "Allowlist mode: only approved channels play; home and search go to 'my channels'",
+      "start": "2026-11-01T16:00",
+      "steps": [
+        { "do": "youtube", "member": "noa", "page": { "url": "https://www.youtube.com/watch?v=vidKhan0001", "channelId": "UCkhanKids00000000000001" }, "expect": { "decision": "allow", "reason": "allowed_youtube_channel" } },
+        { "do": "youtube", "member": "noa", "page": { "url": "https://www.youtube.com/watch?v=vidGamr0001", "channelId": "UCgamerX0000000000000003" }, "expect": { "decision": "block", "reason": "blocked_youtube_channel" } },
+        { "do": "youtube", "member": "noa", "page": { "url": "https://www.youtube.com/watch?v=vidNone0001" }, "expect": { "decision": "block", "reason": "blocked_youtube_unknown" }, "note": "no channel identity in the page" },
+        { "do": "youtube", "member": "noa", "page": { "url": "https://www.youtube.com/channel/UCsesame0000000000000002" }, "expect": { "decision": "allow", "reason": "allowed_youtube_channel" } },
+        { "do": "youtube", "member": "noa", "page": { "url": "https://www.youtube.com/@sesame-sim", "channelId": "UCsesame0000000000000002" }, "expect": { "decision": "allow", "reason": "allowed_youtube_channel" } },
+        { "do": "youtube", "member": "noa", "page": { "url": "https://www.youtube.com/@Sesame-Sim", "handle": "@sesame-sim" }, "expect": { "decision": "allow", "reason": "allowed_youtube_channel" }, "note": "matched by the stored handle" },
+        { "do": "youtube", "member": "noa", "page": { "url": "https://www.youtube.com/shorts/vidShrt0001", "channelId": "UCgamerX0000000000000003" }, "expect": { "decision": "block", "reason": "blocked_youtube_channel" } },
+        { "do": "youtube", "member": "noa", "page": { "url": "https://www.youtube.com/" }, "expect": { "decision": "redirect", "reason": "redirect_youtube_home" } },
+        { "do": "youtube", "member": "noa", "page": { "url": "https://www.youtube.com/results?search_query=dinosaurs" }, "expect": { "decision": "redirect", "reason": "redirect_youtube_home" } }
+      ]
+    },
+    {
+      "id": "YT-002",
+      "title": "Allowlist mode: embeds play only for approved channels",
+      "start": "2026-11-01T16:00",
+      "steps": [
+        { "do": "youtube", "member": "noa", "page": { "url": "https://www.youtube.com/embed/vidKhan0001", "frame": "sub", "parentUrl": "https://www.khanacademy.org/math/1", "channelId": "UCkhanKids00000000000001" }, "expect": { "decision": "allow", "reason": "allowed_youtube_channel" } },
+        { "do": "youtube", "member": "noa", "page": { "url": "https://www.youtube-nocookie.com/embed/vidOthr0001", "frame": "sub", "parentUrl": "https://www.khanacademy.org/math/2" }, "expect": { "decision": "block", "reason": "blocked_youtube_unknown" } }
+      ]
+    },
+    {
+      "id": "YT-003",
+      "title": "An approved channel is still subject to the daily limit",
+      "start": "2026-11-01T15:00",
+      "steps": [
+        { "do": "browse", "sessions": [ { "member": "noa", "from": "15:00", "to": "17:00" } ] },
+        { "do": "youtube", "member": "noa", "page": { "url": "https://www.youtube.com/watch?v=vidKhan0001", "channelId": "UCkhanKids00000000000001" }, "expect": { "decision": "block", "reason": "blocked_daily_limit" } }
+      ]
+    },
+    {
+      "id": "YT-004",
+      "title": "Restricted mode: everything except blocked channels, no identification required",
+      "start": "2026-11-01T16:00",
+      "steps": [
+        { "do": "youtube", "member": "yoav", "page": { "url": "https://www.youtube.com/watch?v=vidGamr0001", "channelId": "UCgamerX0000000000000003" }, "expect": { "decision": "block", "reason": "blocked_youtube_channel" } },
+        { "do": "youtube", "member": "yoav", "page": { "url": "https://www.youtube.com/@gamerx-sim", "handle": "@gamerx-sim" }, "expect": { "decision": "block", "reason": "blocked_youtube_channel" } },
+        { "do": "youtube", "member": "yoav", "page": { "url": "https://www.youtube.com/watch?v=vidNatg0001", "channelId": "UCnatgeoKids000000000004" }, "expect": { "decision": "allow", "reason": "allowed_default" } },
+        { "do": "youtube", "member": "yoav", "page": { "url": "https://www.youtube.com/watch?v=vidNone0001" }, "expect": { "decision": "allow", "reason": "allowed_default" } },
+        { "do": "youtube", "member": "yoav", "page": { "url": "https://www.youtube.com/" }, "expect": { "decision": "allow", "reason": "allowed_default" } }
+      ]
+    },
+    {
+      "id": "YT-005",
+      "title": "YouTube off: every YouTube host is blocked at the URL level",
+      "start": "2026-11-01T16:00",
+      "setup": { "members": [ { "id": "yoav", "youtubeMode": "off" } ] },
+      "steps": [
+        {
+          "do": "checkUrls", "member": "yoav",
+          "cases": [
+            { "url": "https://www.youtube.com/",                            "expect": { "decision": "block", "reason": "blocked_youtube_off" } },
+            { "url": "https://m.youtube.com/watch?v=vidKhan0001",           "expect": { "decision": "block", "reason": "blocked_youtube_off" } },
+            { "url": "https://youtu.be/vidKhan0001",                        "expect": { "decision": "block", "reason": "blocked_youtube_off" } },
+            { "url": "https://www.youtube-nocookie.com/embed/vidKhan0001", "frame": "sub", "expect": { "decision": "block", "reason": "blocked_youtube_off" } }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "YT-006",
+      "title": "Unrestricted adults are never filtered on YouTube",
+      "start": "2026-11-01T23:00",
+      "steps": [
+        { "do": "youtube", "member": "dana", "page": { "url": "https://www.youtube.com/watch?v=vidGamr0001", "channelId": "UCgamerX0000000000000003" }, "expect": { "decision": "allow", "reason": "allowed_unrestricted" } }
+      ]
+    }
+  ]
+}

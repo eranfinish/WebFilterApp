@@ -1,0 +1,69 @@
+{
+  "$schema": "../../schema/scenario.schema.json",
+  "suite": "apps",
+  "description": "Network permission per member and application (the WFP layer's decisions).",
+  "layers": ["engine", "integration"],
+  "platforms": ["windows"],
+  "scenarios": [
+    {
+      "id": "APP-001",
+      "title": "A restricted member gets network only for supported browsers and approved apps",
+      "start": "2026-11-01T16:00",
+      "steps": [
+        { "do": "app", "member": "yoav", "device": "pc-kids", "app": { "path": "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe" }, "expect": { "decision": "allow", "reason": "allowed_browser" } },
+        { "do": "app", "member": "yoav", "device": "pc-kids", "app": { "path": "c:\\program files (x86)\\microsoft\\edge\\application\\MSEDGE.EXE" }, "expect": { "decision": "allow", "reason": "allowed_browser" }, "note": "paths are case-insensitive" },
+        { "do": "app", "member": "yoav", "device": "pc-kids", "app": { "path": "C:\\Games\\Minecraft\\minecraft.exe" }, "expect": { "decision": "allow", "reason": "allowed_rule", "ruleId": "a-minecraft" } },
+        { "do": "app", "member": "yoav", "device": "pc-kids", "app": { "package": "Microsoft.MinecraftUWP_8wekyb3d8bbwe" }, "expect": { "decision": "allow", "reason": "allowed_rule", "ruleId": "a-mc-store" } },
+        { "do": "app", "member": "yoav", "device": "pc-kids", "app": { "path": "C:\\Program Files\\SchoolApp\\schoolapp.exe" }, "expect": { "decision": "allow", "reason": "allowed_always", "ruleId": "a-school" } },
+        { "do": "app", "member": "yoav", "device": "pc-kids", "app": { "path": "C:\\Users\\yoav\\AppData\\Local\\Discord\\app-1.0.9\\Discord.exe" }, "expect": { "decision": "block", "reason": "blocked_app_network" } },
+        { "do": "app", "member": "yoav", "device": "pc-kids", "app": { "path": "C:\\Users\\yoav\\Downloads\\chrome.exe" }, "expect": { "decision": "block", "reason": "blocked_app_network" }, "note": "same file name, different path = a different app" },
+        {
+          "do": "expectEvents", "type": "app_blocked", "member": "yoav",
+          "expect": { "count": 2, "items": [
+            { "app": "C:\\Users\\yoav\\AppData\\Local\\Discord\\app-1.0.9\\Discord.exe", "reason": "blocked_app_network", "device": "pc-kids" },
+            { "app": "C:\\Users\\yoav\\Downloads\\chrome.exe", "reason": "blocked_app_network", "device": "pc-kids" }
+          ] }
+        }
+      ]
+    },
+    {
+      "id": "APP-002",
+      "title": "App approvals are per member",
+      "start": "2026-11-01T16:00",
+      "steps": [
+        { "do": "app", "member": "noa", "device": "pc-kids", "app": { "path": "C:\\Games\\Minecraft\\minecraft.exe" }, "expect": { "decision": "block", "reason": "blocked_app_network" } }
+      ]
+    },
+    {
+      "id": "APP-003",
+      "title": "When the limit expires, approved apps lose network; browsers and always-allowed apps keep it",
+      "start": "2026-11-01T16:00",
+      "setup": { "dailyLimits": [ { "member": "yoav", "days": [0], "minutes": 30 } ] },
+      "steps": [
+        { "do": "browse", "sessions": [ { "member": "yoav", "device": "pc-kids", "from": "16:00", "to": "16:30" } ] },
+        { "do": "expectTime", "member": "yoav", "state": "expired", "usedMinutes": 30, "limitMinutes": 30 },
+        { "do": "app", "member": "yoav", "device": "pc-kids", "app": { "path": "C:\\Games\\Minecraft\\minecraft.exe" }, "expect": { "decision": "block", "reason": "blocked_daily_limit" } },
+        { "do": "app", "member": "yoav", "device": "pc-kids", "app": { "path": "C:\\Program Files\\SchoolApp\\schoolapp.exe" }, "expect": { "decision": "allow", "reason": "allowed_always", "ruleId": "a-school" } },
+        { "do": "app", "member": "yoav", "device": "pc-kids", "app": { "path": "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe" }, "expect": { "decision": "allow", "reason": "allowed_browser" }, "note": "the extension shows the time-up page" }
+      ]
+    },
+    {
+      "id": "APP-004",
+      "title": "Outside the window, approved apps lose network",
+      "start": "2026-11-01T22:00",
+      "steps": [
+        { "do": "app", "member": "yoav", "device": "pc-kids", "app": { "path": "C:\\Games\\Minecraft\\minecraft.exe" }, "expect": { "decision": "block", "reason": "blocked_time_window" } },
+        { "do": "app", "member": "yoav", "device": "pc-kids", "app": { "path": "C:\\Program Files\\SchoolApp\\schoolapp.exe" }, "expect": { "decision": "allow", "reason": "allowed_always", "ruleId": "a-school" } }
+      ]
+    },
+    {
+      "id": "APP-005",
+      "title": "Adults are not affected by app rules",
+      "start": "2026-11-01T22:00",
+      "steps": [
+        { "do": "app", "member": "dana", "device": "pc-kids", "app": { "path": "C:\\Users\\dana\\AppData\\Local\\Discord\\app-1.0.9\\Discord.exe" }, "expect": { "decision": "allow", "reason": "allowed_unrestricted" } },
+        { "do": "app", "member": "savta", "device": "pc-kids", "app": { "path": "C:\\Users\\savta\\AppData\\Local\\Programs\\Zoom\\bin\\Zoom.exe" }, "expect": { "decision": "allow", "reason": "allowed_unrestricted" } }
+      ]
+    }
+  ]
+}
