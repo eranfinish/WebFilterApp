@@ -1,0 +1,185 @@
+{
+  "name": "s3-dnr",
+  "ranAt": "2026-10-18T16:08:23.939Z",
+  "passed": 27,
+  "failed": 0,
+  "checks": [
+    {
+      "id": "T1.1 fail-closed before hello",
+      "ok": true,
+      "got": "chrome-extension://bikddmllbemcmbacnmnchjcclmcmpabo/blocked.html?reason=failclosed"
+    },
+    {
+      "id": "T1.2 open after hello",
+      "ok": true,
+      "got": "SITE allowed.test/"
+    },
+    {
+      "id": "T2.1 blocked domain → block page",
+      "ok": true,
+      "got": "chrome-extension://bikddmllbemcmbacnmnchjcclmcmpabo/blocked.html#http://blocked.test:8080/path/x?q=1&lang=he"
+    },
+    {
+      "id": "T2.2 block page shows the original URL",
+      "ok": true,
+      "got": "http://blocked.test:8080/path/x?q=1&lang=he",
+      "note": "http://blocked.test:8080/path/x?q=1&lang=he"
+    },
+    {
+      "id": "T2.3 blocked request never reached the server",
+      "ok": true
+    },
+    {
+      "id": "T2.4 subdomain blocked",
+      "ok": true
+    },
+    {
+      "id": "T2.5 look-alike domain not blocked",
+      "ok": true
+    },
+    {
+      "id": "T2.6 suffix-extended domain not blocked",
+      "ok": true
+    },
+    {
+      "id": "T2.7 iframe to blocked domain is replaced by the block page",
+      "ok": true,
+      "got": "chrome-extension://bikddmllbemcmbacnmnchjcclmcmpabo/blocked.html#http://blocked.test:8080/inner"
+    },
+    {
+      "id": "T3.1 allowed site loads",
+      "ok": true,
+      "got": "SITE allowed.test/with-img"
+    },
+    {
+      "id": "T3.2 subresource from another domain still loads",
+      "ok": true
+    },
+    {
+      "id": "T3.3 subdomain of allowed site loads",
+      "ok": true
+    },
+    {
+      "id": "T3.4 other site blocked",
+      "ok": true
+    },
+    {
+      "id": "T3.5 iframe to non-allowed site blocked",
+      "ok": true,
+      "got": "chrome-extension://bikddmllbemcmbacnmnchjcclmcmpabo/blocked.html#http://other.test:8080/x"
+    },
+    {
+      "id": "T4.100000.1 installed 100,000 domains in one rule",
+      "ok": true,
+      "note": "949 ms"
+    },
+    {
+      "id": "T4.100000.2 first domain blocked",
+      "ok": true
+    },
+    {
+      "id": "T4.100000.3 last domain blocked",
+      "ok": true
+    },
+    {
+      "id": "T4.100000.4 unlisted domain still allowed",
+      "ok": true
+    },
+    {
+      "id": "T4.300000.1 installed 300,000 domains in one rule",
+      "ok": true,
+      "note": "1845 ms"
+    },
+    {
+      "id": "T4.300000.2 first domain blocked",
+      "ok": true
+    },
+    {
+      "id": "T4.300000.3 last domain blocked",
+      "ok": true
+    },
+    {
+      "id": "T4.300000.4 unlisted domain still allowed",
+      "ok": true
+    },
+    {
+      "id": "T4.1000000.1 installed 1,000,000 domains in one rule",
+      "ok": true,
+      "note": "6370 ms"
+    },
+    {
+      "id": "T4.1000000.2 first domain blocked",
+      "ok": true
+    },
+    {
+      "id": "T4.1000000.3 last domain blocked",
+      "ok": true
+    },
+    {
+      "id": "T4.1000000.4 unlisted domain still allowed",
+      "ok": true
+    },
+    {
+      "id": "T5.1 fail-closed can be re-enabled",
+      "ok": true
+    }
+  ],
+  "metrics": {
+    "memory.baselineMB": 634,
+    "nav.allowedNoRules.ms": [
+      180,
+      209,
+      174,
+      163,
+      137
+    ],
+    "install.100000.ms": 949,
+    "nav.100000.allowed.ms": [
+      155,
+      128,
+      117,
+      111,
+      135
+    ],
+    "nav.100000.blocked.ms": [
+      153,
+      95,
+      138,
+      103,
+      127
+    ],
+    "memory.100000.MB": 676,
+    "install.300000.ms": 1845,
+    "nav.300000.allowed.ms": [
+      96,
+      99,
+      123,
+      124,
+      177
+    ],
+    "nav.300000.blocked.ms": [
+      80,
+      81,
+      82,
+      96,
+      190
+    ],
+    "memory.300000.MB": 958,
+    "install.1000000.ms": 6370,
+    "nav.1000000.allowed.ms": [
+      85,
+      81,
+      136,
+      146,
+      84
+    ],
+    "nav.1000000.blocked.ms": [
+      66,
+      185,
+      96,
+      211,
+      72
+    ],
+    "memory.1000000.MB": 859
+  }
+}

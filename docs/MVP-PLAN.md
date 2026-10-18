@@ -316,9 +316,14 @@
 | ללא הגבלה | בלי התערבות |
 
 **מצב "רק ערוצים מאושרים":**
-- content script ב-`document_start` וב-`all_frames`, מסתיר את הדף עד שמתקבלת החלטה
-- מזהה ערוץ: מה-URL (`/channel/UC…`); בסרטון/Shorts — מנתוני הדף (`videoDetails.channelId`); בדף ערוץ לפי handle — מהמטא-דאטה (`externalId`/canonical)
-- ניווט בתוך האתר (SPA): אירועי `yt-navigate-finish`
+- content script ב-`document_start` וב-`all_frames`, מסתיר את הדף עד שמתקבלת החלטה. סקריפט נוסף ב-`world: "MAIN"` קורא את הנתונים של YouTube
+- מזהה ערוץ (אומת ב-S4, ראו [הדוח](../spikes/S3-S4/REPORT.md)) — מקור נחשב רק אם הוא קשור לכתובת הנוכחית:
+  - `/channel/UC…` — מהכתובת
+  - סרטון / Shorts — `#movie_player` / `#shorts-player` `.getPlayerResponse().videoDetails`, **רק** כש-`videoId` תואם לכתובת
+  - דף ערוץ לפי handle — `ytd-browse:not([hidden]).data` (או `ytInitialData` בטעינה מלאה), **רק** כשה-handle תואם
+  - הטמעה — `ytcfg.get("PLAYER_VARS").embedded_player_response` (גיבוי: לינק הערוץ בנגן)
+  - **לא להשתמש** ב-`meta`, `og:url`, `canonical` או `ytInitialData` אחרי ניווט SPA — הם נשארים של הדף הקודם
+- ניווט בתוך האתר (SPA): `yt-navigate-finish` **וגם** מעקב אחרי שינוי כתובת
 - ההחלטה מקומית — רשימת ה-channel IDs המותרים מסונכרנת לתוסף
 - דף הבית והחיפוש → דף "הערוצים שלי" של התוסף
 - בסרטון מותר: הסתרת המלצות הצד ומסך הסיום
@@ -485,8 +490,8 @@ CLAUDE.md
 - ✅ תיוג הקוד הקודם `legacy-v1`, ענף `v2`, שלד ה-solution, `CLAUDE.md`, תיקון בעלות ה-repo (`safe.directory`)
 - **S1 — התקנה כפויה ומדיניות:** תוסף unlisted בשתי החנויות; ב-VM לא בדומיין (Home + Pro): forcelist מ-HKLM עובד, המדיניות מסעיף 5.2 נאכפת מ-HKCU
 - **S2 — Native Messaging וזהות:** הדפדפן מפעיל את ה-host כמשתמש; השירות מקבל את ה-SID הנכון; host מזויף ב-HKCU נחסם
-- **S3 — DNR:** redirect ל-`blocked.html` עם ה-URL המקורי; 100,000 דומיינים ב-`requestDomains`; service worker נשאר חי
-- **S4 — YouTube:** זיהוי ערוץ בסרטון, Shorts, handle, SPA והטמעה
+- ✅ **S3 — DNR:** redirect ל-`blocked.html` עם ה-URL המקורי (`regexSubstitution`), רשימה שחורה/לבנה, מיליון דומיינים בכלל אחד — 27/27 על Edge 156 ([דוח](../spikes/S3-S4/REPORT.md)). "service worker נשאר חי" עבר ל-S2
+- ✅ **S4 — YouTube:** זיהוי ערוץ בסרטון, Shorts, handle, SPA והטמעה, ואכיפה — 16/16 מול YouTube האמיתי ([דוח](../spikes/S3-S4/REPORT.md))
 - **S5 — WFP:** רכיב C++ מוסיף מסנן persistent לפי משתמש + אפליקציה; אפליקציה של ילד נחסמת, מבוגר לא מושפע, שירותי Windows לא נפגעים, שורד אתחול, הסרה נקייה; אירוע על חיבור שנחסם
 - **S6 — Hub:** צימוד + TLS הדדי בין שני VMs; גילוי mDNS; חומת אש
 

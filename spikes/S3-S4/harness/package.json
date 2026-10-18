@@ -1,0 +1,12 @@
+{
+  "name": "webfilter-spike-s3-s4",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "s3": "node run-s3.mjs",
+    "s4": "node run-s4.mjs"
+  },
+  "dependencies": {
+    "playwright": "1.64.1"
+  }
+}

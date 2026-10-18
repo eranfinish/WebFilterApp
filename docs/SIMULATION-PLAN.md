@@ -42,9 +42,9 @@
 
 ### 2.3 רמה 3 — דפדפן
 
-- Playwright מפעיל Chromium עם התוסף כ-unpacked ו-NativeHost רשום ב-HKCU של משתמש הבדיקה (רק בסביבת הבדיקה)
+- Playwright מפעיל את **Edge המותקן** (`channel: "msedge"`) עם התוסף כ-unpacked (`--load-extension`) ו-NativeHost רשום ב-HKCU של משתמש הבדיקה (רק בסביבת הבדיקה). הוכח ב-S3; ה-Chromium של Playwright לא עולה על Windows 10.0.26220
 - **שרת אתרים מקומי** עונה לכל שם מארח: `--host-resolver-rules="MAP * 127.0.0.1"` + `ignoreHTTPSErrors`. כל דף מחזיר כותרת עם שם המארח והנתיב, כך שהמריץ יודע מה נטען
-- **דפי YouTube מדומים** (fixtures): דף סרטון עם `videoDetails.channelId`, דף ערוץ עם `externalId`, דף שמבצע ניווט SPA ושולח `yt-navigate-finish`, דף הטמעה
+- **דפי YouTube מדומים** (fixtures) שמחקים את המקורות שאומתו ב-S4: `#movie_player.getPlayerResponse()`, `#shorts-player`, `ytd-browse.data`, `PLAYER_VARS.embedded_player_response`, ניווט SPA עם `yt-navigate-finish` — **וגם** מקורות ישנים (`meta`, `og:url`, `ytInitialData` של הדף הקודם), כדי לוודא שהמנוע לא נופל בהם
 - התוצאה נקבעת לפי כותרת הדף: דף אתר מדומה = מותר; `WebFilter · חסום` = חסום (הסיבה נקראת מהדף)
 - בודק גם: fail-closed כשהשירות כבוי, אזהרות זמן, מעבר ל"הזמן נגמר" בלשוניות פתוחות, דף "הערוצים שלי", דיווח חסימה ובקשת גישה
 - **חבילת live** (שבועית, לא חוסמת build): כמה תרחישי YouTube מול האתר האמיתי, כדי לזהות שינוי במבנה הדף

@@ -1,0 +1,177 @@
+{
+  "name": "s4-youtube",
+  "ranAt": "2026-10-18T16:07:13.044Z",
+  "passed": 16,
+  "failed": 0,
+  "checks": [
+    {
+      "id": "S4.1 handle page, full load",
+      "ok": true,
+      "note": "UC_x5XG1OV2P6uZZ5FSM9Ttw via ytInitialData, 1 ms, trigger=load",
+      "expected": "UC_x5XG1OV2P6uZZ5FSM9Ttw"
+    },
+    {
+      "id": "S4.2 /channel/ page, full load",
+      "ok": true,
+      "note": "UC_x5XG1OV2P6uZZ5FSM9Ttw via url, 0 ms, trigger=load",
+      "expected": "UC_x5XG1OV2P6uZZ5FSM9Ttw"
+    },
+    {
+      "id": "S4.3 watch page, full load",
+      "ok": true,
+      "note": "UC_x5XG1OV2P6uZZ5FSM9Ttw via player:movie_player, 1 ms, trigger=load",
+      "expected": "UC_x5XG1OV2P6uZZ5FSM9Ttw"
+    },
+    {
+      "id": "S4.4 watch page via SPA click",
+      "ok": true,
+      "note": "UC_x5XG1OV2P6uZZ5FSM9Ttw via player:movie_player, 290 ms, trigger=url-change",
+      "expected": "UC_x5XG1OV2P6uZZ5FSM9Ttw"
+    },
+    {
+      "id": "S4.5 watch→watch SPA matches a full load (no stale data)",
+      "ok": true,
+      "note": "UCmeU2DYiVy80wMBGZzEWnbw via player:movie_player, 2 ms, trigger=yt-navigate-finish",
+      "expected": "UCmeU2DYiVy80wMBGZzEWnbw",
+      "note2": "related YJ_e-dsMruc"
+    },
+    {
+      "id": "S4.6 watch→channel SPA (/@PaulJLipsky)",
+      "ok": true,
+      "note": "UCmeU2DYiVy80wMBGZzEWnbw via ytdBrowseData, 2 ms, trigger=yt-navigate-finish",
+      "expected": "UCmeU2DYiVy80wMBGZzEWnbw"
+    },
+    {
+      "id": "S4.7 shorts, full load",
+      "ok": true,
+      "note": "UC_x5XG1OV2P6uZZ5FSM9Ttw via player:shorts-player, 1 ms, trigger=load",
+      "expected": "UC_x5XG1OV2P6uZZ5FSM9Ttw"
+    },
+    {
+      "id": "S4.8 next short via SPA matches a full load",
+      "ok": true,
+      "note": "UCEgcjWr6i32DAt6_AZFeaLQ via player:shorts-player, 0 ms, trigger=yt-navigate-finish",
+      "expected": "UCEgcjWr6i32DAt6_AZFeaLQ"
+    },
+    {
+      "id": "S4.9 embed",
+      "ok": true,
+      "note": "UC_x5XG1OV2P6uZZ5FSM9Ttw via embedPlayerVars, 1 ms, trigger=load",
+      "expected": "UC_x5XG1OV2P6uZZ5FSM9Ttw"
+    },
+    {
+      "id": "S4.9 embed (youtube-nocookie)",
+      "ok": true,
+      "note": "UC_x5XG1OV2P6uZZ5FSM9Ttw via embedPlayerVars, 1 ms, trigger=load",
+      "expected": "UC_x5XG1OV2P6uZZ5FSM9Ttw"
+    },
+    {
+      "id": "S4.10 allowlist: approved channel plays",
+      "ok": true,
+      "got": "https://www.youtube.com/watch?v=i3X7Fv0Z3Uc"
+    },
+    {
+      "id": "S4.11 allowlist: other channel blocked (full load)",
+      "ok": true,
+      "got": "chrome-extension://bikddmllbemcmbacnmnchjcclmcmpabo/blocked.html#yt:blocked_youtube_channel:https%3A%2F%2Fwww.youtube.com%2Fwatch%3Fv%3DYJ_e-dsMruc"
+    },
+    {
+      "id": "S4.12 allowlist: SPA click enforced per channel",
+      "ok": true,
+      "note": "UC_x5XG1OV2P6uZZ5FSM9Ttw → allowed"
+    },
+    {
+      "id": "S4.13 allowlist: home redirected",
+      "ok": true,
+      "got": "chrome-extension://bikddmllbemcmbacnmnchjcclmcmpabo/blocked.html#yt:redirect_youtube_home:https%3A%2F%2Fwww.youtube.com%2F"
+    },
+    {
+      "id": "S4.14 restricted: blocked channel blocked",
+      "ok": true,
+      "got": "chrome-extension://bikddmllbemcmbacnmnchjcclmcmpabo/blocked.html#yt:blocked_youtube_channel:https%3A%2F%2Fwww.youtube.com%2Fwatch%3Fv%3Di3X7Fv0Z3Uc"
+    },
+    {
+      "id": "S4.15 restricted: other channel plays",
+      "ok": true,
+      "got": "https://www.youtube.com/watch?v=YJ_e-dsMruc"
+    }
+  ],
+  "metrics": {
+    "truth.channelId": {
+      "canonical": "UC_x5XG1OV2P6uZZ5FSM9Ttw",
+      "known": "UC_x5XG1OV2P6uZZ5FSM9Ttw"
+    },
+    "S4.1 handle page, full load.sources": {
+      "ytInitialData": "match",
+      "metaIdentifier": "match",
+      "canonical": "match",
+      "ogUrl": "match"
+    },
+    "S4.2 /channel/ page, full load.sources": {
+      "ytInitialData": "match",
+      "metaIdentifier": "match",
+      "canonical": "match",
+      "ogUrl": "match"
+    },
+    "sample.video": "/watch?v=i3X7Fv0Z3Uc",
+    "S4.3 watch page, full load.sources": {
+      "ytInitialPlayerResponse": "match",
+      "player:movie_player": "match",
+      "metaIdentifier": "not-a-channel-id:i3X7Fv0Z3Uc"
+    },
+    "S4.4 watch page via SPA click.sources": {
+      "player:movie_player": "match",
+      "ytInitialData": "match",
+      "metaIdentifier": "match",
+      "canonical": "match",
+      "ogUrl": "match"
+    },
+    "S4.5 watch→watch SPA matches a full load (no stale data).sources": {
+      "player:movie_player": "match",
+      "ytdWatchPlayerData": "other:UC_x5XG1OV2P6uZZ5FSM9Ttw",
+      "ytInitialData": "other:UC_x5XG1OV2P6uZZ5FSM9Ttw",
+      "metaIdentifier": "other:UC_x5XG1OV2P6uZZ5FSM9Ttw",
+      "ogUrl": "other:UC_x5XG1OV2P6uZZ5FSM9Ttw"
+    },
+    "sample.relatedChannelIsDifferent": true,
+    "S4.6 watch→channel SPA (/@PaulJLipsky).sources": {
+      "ytdWatchPlayerData": "match",
+      "ytInitialData": "other:UC_x5XG1OV2P6uZZ5FSM9Ttw",
+      "ytdBrowseData": "match",
+      "metaIdentifier": "other:UC_x5XG1OV2P6uZZ5FSM9Ttw",
+      "ogUrl": "other:UC_x5XG1OV2P6uZZ5FSM9Ttw",
+      "ownerHandle": "not-a-channel-id:@pauljlipsky"
+    },
+    "sample.short": "/shorts/LJ2v4-FvPcA",
+    "S4.7 shorts, full load.sources": {
+      "ytInitialPlayerResponse": "match",
+      "player:shorts-player": "match",
+      "metaIdentifier": "not-a-channel-id:LJ2v4-FvPcA"
+    },
+    "shorts.advance": "button",
+    "S4.8 next short via SPA matches a full load.sources": {
+      "ytInitialPlayerResponse": "other:UC_x5XG1OV2P6uZZ5FSM9Ttw",
+      "player:shorts-player": "match",
+      "metaIdentifier": "not-a-channel-id:LJ2v4-FvPcA"
+    },
+    "S4.9 embed.sources": {
+      "embedPlayerVars": "match"
+    },
+    "S4.9 embed (youtube-nocookie).sources": {
+      "embedPlayerVars": "match"
+    },
+    "S4.10 page visible": "visible",
+    "detection.ms": {
+      "count": 34,
+      "median": 1,
+      "max": 290
+    },
+    "detection.timeouts": [],
+    "detection.triggers": {
+      "load": 17,
+      "yt-navigate-finish:first": 11,
+      "url-change": 2,
+      "yt-navigate-finish": 5
+    }
+  }
+}

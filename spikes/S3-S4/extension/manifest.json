@@ -1,0 +1,32 @@
+{
+  "manifest_version": 3,
+  "name": "WebFilter Spike S3-S4",
+  "version": "0.0.1",
+  "description": "Throwaway spike: DNR blocking at scale, block page with original URL, YouTube channel detection.",
+  "permissions": ["declarativeNetRequest", "storage"],
+  "host_permissions": ["<all_urls>"],
+  "background": { "service_worker": "background.js" },
+  "declarative_net_request": {
+    "rule_resources": [
+      { "id": "failclosed", "enabled": true, "path": "rulesets/failclosed.json" }
+    ]
+  },
+  "content_scripts": [
+    {
+      "matches": ["*://*.youtube.com/*", "*://*.youtube-nocookie.com/*"],
+      "js": ["yt-main.js"],
+      "run_at": "document_start",
+      "all_frames": true,
+      "world": "MAIN"
+    },
+    {
+      "matches": ["*://*.youtube.com/*", "*://*.youtube-nocookie.com/*"],
+      "js": ["yt-content.js"],
+      "run_at": "document_start",
+      "all_frames": true
+    }
+  ],
+  "web_accessible_resources": [
+    { "resources": ["blocked.html", "blocked.js"], "matches": ["<all_urls>"] }
+  ]
+}
