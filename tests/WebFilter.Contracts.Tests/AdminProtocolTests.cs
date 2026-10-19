@@ -15,6 +15,7 @@ public class AdminProtocolTests
         new GetSettings(),
         new SettingsResult(new FamilyBundle { TimeZone = "Asia/Jerusalem", Version = 4 }),
         new ReplaceSettings(new FamilyBundle { TimeZone = "Asia/Jerusalem" }),
+        new ReplaceSettings(new FamilyBundle { TimeZone = "Asia/Jerusalem" }, IfVersion: 12),
         new AddRule(new RuleDto("r1", "noa", "pbskids.org", "domain", "allow", ExpiresAt: At)),
         new RemoveRule("r1"),
         new SetMember("yoav", YouTubeMode: "off"),
@@ -29,6 +30,7 @@ public class AdminProtocolTests
         new RequestsResult([new RequestDto("ar-1", "noa", "pc-kids", "url", "https://pbskids.org/", "pbskids.org", null, "please", At, "pending", null)]),
         new DecideRequest("ar-1", "approve", "page", "today"),
         new SetClock(At),
+        new ScanAccounts(),
         new AdminOk("done"),
         new AdminError("bad_request", "nope"),
     };

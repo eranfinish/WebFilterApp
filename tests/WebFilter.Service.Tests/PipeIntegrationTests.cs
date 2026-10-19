@@ -7,6 +7,8 @@ using Microsoft.Extensions.Options;
 using WebFilter.Contracts.Admin;
 using WebFilter.Contracts.Agent;
 using WebFilter.Core.Engine;
+using WebFilter.Core.Model;
+using WebFilter.Service.Accounts;
 using WebFilter.Service.Pipes;
 
 namespace WebFilter.Service.Tests;
@@ -25,6 +27,7 @@ public sealed class PipeIntegrationTests : IAsyncLifetime
     private FamilyService _family = null!;
     private AgentPipeServer _agentServer = null!;
     private AdminPipeServer _adminServer = null!;
+    private readonly FakeAccounts _accounts = new();
 
     public async Task InitializeAsync()
     {
@@ -55,7 +58,7 @@ public sealed class PipeIntegrationTests : IAsyncLifetime
         _family = new FamilyService(Options.Create(_options), _clock, NullLogger<FamilyService>.Instance);
         _family.Start();
         _agentServer = new AgentPipeServer(_family, Options.Create(_options), NullLogger<AgentPipeServer>.Instance);
-        _adminServer = new AdminPipeServer(_family, Options.Create(_options), _clock, NullLogger<AdminPipeServer>.Instance);
+        _adminServer = new AdminPipeServer(_family, Options.Create(_options), _clock, NullLogger<AdminPipeServer>.Instance, _accounts);
         await _agentServer.StartAsync(CancellationToken.None);
         await _adminServer.StartAsync(CancellationToken.None);
     }
@@ -269,6 +272,102 @@ public sealed class PipeIntegrationTests : IAsyncLifetime
     }
 
     [Fact]
+    public async Task Scanning_adds_this_computers_new_accounts_unlinked_and_keeps_the_links()
+    {
+        _accounts.Seen.Add(new DeviceAccount(UserSid, "noa", null, IsAdmin: false));
+        _accounts.Seen.Add(new DeviceAccount("S-1-5-21-2000-1010", "kids-guest", null, IsAdmin: false));
+        _accounts.Seen.Add(new DeviceAccount("S-1-5-21-2000-1011", "parent2", null, IsAdmin: true));
+        await using var admin = await AdminClient.ConnectAsync(_options.AdminPipeName);
+
+        Assert.Equal("2", Assert.IsType<AdminOk>(await admin.RequestAsync(new ScanAccounts())).Detail);
+
+        var settings = Assert.IsType<SettingsResult>(await admin.RequestAsync(new GetSettings())).Settings;
+        var accounts = settings.Devices.Single(d => d.Id == "pc-kids").Accounts;
+        Assert.Equal("noa", accounts.Single(a => a.AccountId == UserSid).Member);
+        Assert.Equal(new Contracts.Hub.AccountDto("S-1-5-21-2000-1010", "kids-guest", null, false), accounts.Single(a => a.Name == "kids-guest"));
+        Assert.True(accounts.Single(a => a.Name == "parent2").IsAdmin);
+        Assert.Equal(7, accounts.Count);
+
+        // Nothing new: nothing changes, not even the version.
+        Assert.Equal("0", Assert.IsType<AdminOk>(await admin.RequestAsync(new ScanAccounts())).Detail);
+        Assert.Equal(settings.Version, Assert.IsType<SettingsResult>(await admin.RequestAsync(new GetSettings())).Settings.Version);
+    }
+
+    [Fact]
+    public async Task Replacing_settings_read_before_a_change_is_refused_and_changes_nothing()
+    {
+        await using var admin = await AdminClient.ConnectAsync(_options.AdminPipeName);
+        var read = Assert.IsType<SettingsResult>(await admin.RequestAsync(new GetSettings())).Settings;
+        // Meanwhile (another window, a request approval): a new rule.
+        Assert.IsType<AdminOk>(await admin.RequestAsync(new AddRule(new Contracts.Hub.RuleDto("r-new", "noa", "new.example", "domain", "allow"))));
+
+        var stale = read with { Rules = [] };
+        var conflict = Assert.IsType<AdminError>(await admin.RequestAsync(new ReplaceSettings(stale, IfVersion: read.Version)));
+        Assert.Equal(ReplaceSettings.ConflictCode, conflict.Code);
+
+        var current = Assert.IsType<SettingsResult>(await admin.RequestAsync(new GetSettings())).Settings;
+        Assert.Equal(["r-school", "r-new"], current.Rules.Select(r => r.Id));
+
+        // Read again, change, replace at the current version: accepted, and the rule added meanwhile is kept.
+        var edited = current with { Members = [.. current.Members.Select(m => m.Id == "savta" ? m with { DisplayName = "סבתא רבה" } : m)] };
+        Assert.IsType<AdminOk>(await admin.RequestAsync(new ReplaceSettings(edited, IfVersion: current.Version)));
+        var after = Assert.IsType<SettingsResult>(await admin.RequestAsync(new GetSettings())).Settings;
+        Assert.Equal("סבתא רבה", after.Members.Single(m => m.Id == "savta").DisplayName);
+        Assert.Contains(after.Rules, r => r.Id == "r-new");
+        Assert.True(after.Version > current.Version);
+    }
+
+    [Fact]
+    public async Task Replacing_settings_with_an_invalid_rule_is_refused_with_the_reason()
+    {
+        await using var admin = await AdminClient.ConnectAsync(_options.AdminPipeName);
+        var read = Assert.IsType<SettingsResult>(await admin.RequestAsync(new GetSettings())).Settings;
+        var bad = read with { Rules = [.. read.Rules, new Contracts.Hub.RuleDto("r-bad", "noa", "(?<=a)b", "regex", "block")] };
+
+        var error = Assert.IsType<AdminError>(await admin.RequestAsync(new ReplaceSettings(bad, IfVersion: read.Version)));
+
+        Assert.Equal("bad_request", error.Code);
+        Assert.StartsWith("Rule 'r-bad':", error.Message);
+        Assert.Equal(read.Rules, Assert.IsType<SettingsResult>(await admin.RequestAsync(new GetSettings())).Settings.Rules);
+    }
+
+    [Fact]
+    public async Task Settings_that_refer_to_a_missing_member_or_hold_a_malformed_time_are_refused_and_change_nothing()
+    {
+        await using var admin = await AdminClient.ConnectAsync(_options.AdminPipeName);
+        var read = Assert.IsType<SettingsResult>(await admin.RequestAsync(new GetSettings())).Settings;
+
+        // savta's Windows account on pc-kids still points at her.
+        var dangling = Assert.IsType<AdminError>(await admin.RequestAsync(new ReplaceSettings(read with { Members = [.. read.Members.Where(m => m.Id != "savta")] })));
+        Assert.Equal("bad_request", dangling.Code);
+        Assert.StartsWith("Account 'savta' on 'pc-kids' refers to unknown member 'savta'.", dangling.Message);
+        var malformed = read with { Schedules = [.. read.Schedules, new Contracts.Hub.ScheduleDto("noa", [1], "9:00", "12:00")] };
+        Assert.Equal("bad_request", Assert.IsType<AdminError>(await admin.RequestAsync(new ReplaceSettings(malformed))).Code);
+
+        // The same connection still answers, and the settings are as they were.
+        var after = Assert.IsType<SettingsResult>(await admin.RequestAsync(new GetSettings())).Settings;
+        Assert.Equal(read.Version, after.Version);
+        Assert.Equal(read.Members, after.Members);
+        Assert.IsType<StatusResult>(await admin.RequestAsync(new GetStatus()));
+    }
+
+    [Fact]
+    public void The_windows_account_reader_lists_enabled_local_accounts_by_sid()
+    {
+        var accounts = new WindowsLocalAccounts().List();
+
+        Assert.All(accounts, a =>
+        {
+            Assert.StartsWith("S-1-5-21-", a.AccountId);
+            Assert.False(string.IsNullOrWhiteSpace(a.Name));
+            Assert.Null(a.MemberId);
+        });
+        Assert.Equal(accounts.Count, accounts.Select(a => a.AccountId).Distinct().Count());
+        // Disabled by default on every Windows install.
+        Assert.DoesNotContain(accounts, a => a.Name is "DefaultAccount" or "WDAGUtilityAccount");
+    }
+
+    [Fact]
     public async Task Untrusted_programs_are_refused()
     {
         await StopAsync();
@@ -284,6 +383,13 @@ public sealed class PipeIntegrationTests : IAsyncLifetime
         for (var dir = new DirectoryInfo(AppContext.BaseDirectory); dir is not null; dir = dir.Parent)
             if (File.Exists(Path.Combine(dir.FullName, "WebFilter.slnx"))) return dir.FullName;
         throw new InvalidOperationException("WebFilter.slnx not found");
+    }
+
+    private sealed class FakeAccounts : ILocalAccounts
+    {
+        public List<DeviceAccount> Seen { get; } = [];
+
+        public IReadOnlyList<DeviceAccount> List() => [.. Seen];
     }
 
     private sealed class TestClock(DateTimeOffset now) : TimeProvider

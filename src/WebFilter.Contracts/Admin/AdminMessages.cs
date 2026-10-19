@@ -35,6 +35,7 @@ namespace WebFilter.Contracts.Admin;
 [JsonDerivedType(typeof(GetDevices), "getDevices")]
 [JsonDerivedType(typeof(DevicesResult), "devicesResult")]
 [JsonDerivedType(typeof(RevokeDevice), "revokeDevice")]
+[JsonDerivedType(typeof(ScanAccounts), "scanAccounts")]
 [JsonDerivedType(typeof(AdminOk), "ok")]
 [JsonDerivedType(typeof(AdminError), "error")]
 public abstract record AdminMessage
@@ -65,8 +66,16 @@ public sealed record GetSettings : AdminMessage;
 
 public sealed record SettingsResult(FamilyBundle Settings) : AdminMessage;
 
-/// <summary>Replaces all settings (setup wizard, import). The bundle's version is ignored.</summary>
-public sealed record ReplaceSettings(FamilyBundle Settings) : AdminMessage;
+/// <summary>Replaces all settings (setup wizard, member page, import). The bundle's own version is ignored.</summary>
+/// <param name="IfVersion">
+/// When set, the settings are replaced only if the hub is still at this settings version; otherwise the reply is an
+/// <see cref="AdminError"/> with code <see cref="ConflictCode"/> and nothing changes, so an editor that read the settings
+/// earlier cannot undo a change made meanwhile (a request approval, a newly paired computer). Read again and retry.
+/// </param>
+public sealed record ReplaceSettings(FamilyBundle Settings, int? IfVersion = null) : AdminMessage
+{
+    public const string ConflictCode = "conflict";
+}
 
 public sealed record AddRule(RuleDto Rule) : AdminMessage;
 
@@ -124,6 +133,13 @@ public sealed record DeviceInfo(string Id, string Name, string Os, DateTimeOffse
 
 /// <summary>Stops accepting a paired computer (it keeps enforcing its last settings until reinstalled or re-paired).</summary>
 public sealed record RevokeDevice(string DeviceId) : AdminMessage;
+
+/// <summary>
+/// Hub only: reads this computer's Windows accounts and adds the ones the settings do not know yet to this computer's
+/// device in the settings, not linked to anyone, so a parent can link them to family members (setup wizard). Accounts
+/// already there keep their links. Replies <see cref="AdminOk"/> with the number of accounts added as its detail.
+/// </summary>
+public sealed record ScanAccounts : AdminMessage;
 
 public sealed record AdminOk(string? Detail = null) : AdminMessage;
 
