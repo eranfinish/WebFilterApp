@@ -40,6 +40,7 @@ public sealed class PipeIntegrationTests : IAsyncLifetime
             Role = "hub",
             DeviceId = "pc-kids",
             DataDirectory = Path.Combine(_dir, "data"),
+            ProfileDirectory = Path.Combine(_dir, "profiles"),
             AgentPipeName = $"WebFilter.Test.Agent.{_suffix}",
             AdminPipeName = $"WebFilter.Test.Admin.{_suffix}",
             TrustedClientPaths = [Environment.ProcessPath!],

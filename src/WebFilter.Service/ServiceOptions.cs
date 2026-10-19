@@ -11,6 +11,9 @@ public sealed class ServiceOptions
 
     public string DataDirectory { get; set; } = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), "WebFilter", "data");
 
+    /// <summary>Where the native host finds each account's <see cref="Contracts.Agent.ProfileCache"/>.</summary>
+    public string ProfileDirectory { get; set; } = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), "WebFilter", "profiles");
+
     public string AgentPipeName { get; set; } = "WebFilter.Agent";
 
     public string AdminPipeName { get; set; } = "WebFilter.Admin";

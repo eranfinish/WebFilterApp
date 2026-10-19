@@ -16,10 +16,23 @@ public sealed class AgentPipeServer(FamilyService family, IOptions<ServiceOption
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
         log.LogInformation("Agent pipe listening on {Pipe}", _options.AgentPipeName);
+        var first = true;
         while (!stoppingToken.IsCancellationRequested)
         {
-            var pipe = NamedPipeServerStreamAcl.Create(_options.AgentPipeName, PipeDirection.InOut, NamedPipeServerStream.MaxAllowedServerInstances,
-                PipeTransmissionMode.Byte, PipeOptions.Asynchronous, 0, 0, Security());
+            NamedPipeServerStream pipe;
+            try
+            {
+                // The first instance must be ours: if another process already owns the name, someone is impersonating the service.
+                pipe = NamedPipeServerStreamAcl.Create(_options.AgentPipeName, PipeDirection.InOut, NamedPipeServerStream.MaxAllowedServerInstances,
+                    PipeTransmissionMode.Byte, PipeOptions.Asynchronous | (first ? PipeOptions.FirstPipeInstance : PipeOptions.None), 0, 0, Security());
+                first = false;
+            }
+            catch (Exception ex) when (first && ex is UnauthorizedAccessException or IOException)
+            {
+                log.LogCritical(ex, "The agent pipe name {Pipe} is already taken by another process; retrying", _options.AgentPipeName);
+                await Task.Delay(TimeSpan.FromSeconds(5), stoppingToken);
+                continue;
+            }
             try
             {
                 await pipe.WaitForConnectionAsync(stoppingToken);

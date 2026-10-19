@@ -22,6 +22,7 @@ namespace WebFilter.Contracts.Agent;
 [JsonDerivedType(typeof(RulesChangedMessage), "rulesChanged")]
 [JsonDerivedType(typeof(AccessDecidedMessage), "accessDecided")]
 [JsonDerivedType(typeof(ErrorMessage), "error")]
+[JsonDerivedType(typeof(ChunkMessage), "chunk")]
 public abstract record AgentMessage
 {
     public const int CurrentVersion = 1;
@@ -85,3 +86,9 @@ public sealed record RulesChangedMessage(int RulesVersion) : AgentMessage;
 public sealed record AccessDecidedMessage(string RequestId, string Status, DateTimeOffset? Until) : AgentMessage;
 
 public sealed record ErrorMessage(string Code, string Message) : AgentMessage;
+
+/// <summary>
+/// Part of a host→extension message larger than the browser's 1 MB limit. The native host splits the original frame's
+/// UTF-8 JSON into base64 parts; the extension concatenates parts 0..Count-1 of the same <see cref="ChunkOf"/> and parses it.
+/// </summary>
+public sealed record ChunkMessage(string ChunkOf, int Index, int Count, string Data) : AgentMessage;

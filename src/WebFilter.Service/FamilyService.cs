@@ -22,6 +22,7 @@ public sealed class FamilyService : IDisposable
     private readonly ILogger<FamilyService> _log;
     private readonly HubStore? _hubStore;
     private readonly AgentStore _agentStore;
+    private readonly ProfileCacheWriter _profiles;
     private HubCore? _hub;
     private AgentCore _agent;
     private bool _dirty;
@@ -45,6 +46,7 @@ public sealed class FamilyService : IDisposable
         _agentStore = new AgentStore(new SqliteDatabase(Path.Combine(_options.DataDirectory, "agent.db"), "agent"));
         if (IsHub) _hubStore = new HubStore(new SqliteDatabase(Path.Combine(_options.DataDirectory, "hub.db"), "hub"));
         _agent = new AgentCore(_options.DeviceId);
+        _profiles = new ProfileCacheWriter(_options.ProfileDirectory, log);
     }
 
     public bool IsHub => _options.Role == "hub";
@@ -153,6 +155,7 @@ public sealed class FamilyService : IDisposable
         _dirty = true;
         if (_hub.Version == _lastVersion) return null;
         _lastVersion = _hub.Version;
+        _profiles.Write(_hub.Config, _options.DeviceId, _lastVersion, Now);
         return _lastVersion;
     }
 
