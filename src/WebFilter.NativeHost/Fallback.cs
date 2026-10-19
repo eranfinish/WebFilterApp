@@ -1,3 +1,4 @@
+using System.IO.Pipes;
 using System.Runtime.InteropServices;
 using System.Security.Principal;
 using System.Text.Json;
@@ -10,14 +11,48 @@ namespace WebFilter.NativeHost;
 /// <summary>
 /// The host's own answers while the service is unreachable (README §9): administrators are unrestricted; restricted
 /// accounts get only their always-allowed sites (from the profile cache); without a cache everything is blocked.
+/// Meanwhile it checks whether the service is back, and exits when it is, so the extension reconnects to the service.
 /// </summary>
 internal sealed class Fallback(HostSettings settings)
 {
+    /// <summary>How often the agent pipe is tried while the host answers by itself.</summary>
+    private static readonly TimeSpan ServiceProbeInterval = TimeSpan.FromSeconds(3);
+
+    /// <summary>Returns when the browser closes stdin, or when the service accepts connections again.</summary>
     public async Task RunAsync(Stream stdin, Stream stdout)
+    {
+        using var stop = new CancellationTokenSource();
+        // Console stdin reads block their thread, so serve on the pool: the probe can end the host while a read waits.
+        var serve = Task.Run(() => ServeAsync(stdin, stdout));
+        var serviceBack = WaitForServiceAsync(stop.Token);
+        var first = await Task.WhenAny(serve, serviceBack);
+        await stop.CancelAsync();
+        if (first == serve) await serve;
+    }
+
+    /// <summary>Completes once the agent pipe accepts a connection from a trusted server (the same check as at startup).</summary>
+    private async Task WaitForServiceAsync(CancellationToken ct)
+    {
+        while (true)
+        {
+            await Task.Delay(ServiceProbeInterval, ct);
+            await using var pipe = new NamedPipeClientStream(".", settings.AgentPipeName, PipeDirection.InOut, PipeOptions.Asynchronous);
+            try
+            {
+                await pipe.ConnectAsync(200, ct);
+                if (PipeServerCheck.IsTrusted(pipe, settings)) return;
+            }
+            catch (Exception ex) when (ex is TimeoutException or IOException or UnauthorizedAccessException)
+            {
+            }
+        }
+    }
+
+    private async Task ServeAsync(Stream stdin, Stream stdout)
     {
         using var identity = WindowsIdentity.GetCurrent();
         var sid = identity.User?.Value ?? "";
-        var isAdmin = IsAdminAccount(identity);
+        var isAdmin = !settings.SimulateStandardUser && IsAdminAccount(identity);
         var cache = ReadCache(sid);
         var restricted = !isAdmin && (cache?.Restricted ?? true);
         string? extensionId = null;

@@ -89,6 +89,7 @@ export class Controller {
   private beatTimer: unknown = null;
   private refreshing = false;
   private refreshAgain = false;
+  private refreshWaiters: (() => void)[] = [];
   private applyQueue: Promise<unknown> = Promise.resolve();
   private settledWaiters: (() => void)[] = [];
   private readonly decisions = new Map<string, "approved" | "denied">();
@@ -484,7 +485,10 @@ export class Controller {
     }
   }
 
-  /** getRules again (coalesced: changes during a refresh trigger one more). */
+  /**
+   * getRules again (coalesced: changes during a refresh trigger one more). Resolves once the rules asked for are
+   * installed — also when a refresh was already running (it then runs once more and this call waits for it).
+   */
   async refreshRules(): Promise<void> {
     if (!this.ready) {
       this.refreshAgain = true;
@@ -492,7 +496,7 @@ export class Controller {
     }
     if (this.refreshing) {
       this.refreshAgain = true;
-      return;
+      return new Promise((resolve) => this.refreshWaiters.push(resolve));
     }
     this.refreshing = true;
     try {
@@ -508,6 +512,9 @@ export class Controller {
       this.log("rules refresh failed", errorText(error));
     } finally {
       this.refreshing = false;
+      const waiters = this.refreshWaiters;
+      this.refreshWaiters = [];
+      for (const resolve of waiters) resolve();
     }
   }
 

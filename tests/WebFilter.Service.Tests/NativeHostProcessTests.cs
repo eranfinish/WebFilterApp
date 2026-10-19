@@ -38,7 +38,7 @@ public sealed class NativeHostProcessTests : IAsyncLifetime
         throw new InvalidOperationException("WebFilter.slnx not found");
     }
 
-    private Process StartHost(string pipeName)
+    private Process StartHost(string pipeName, bool simulateStandardUser = false)
     {
         var start = new ProcessStartInfo(HostExe(), "chrome-extension://abcdefghijklmnopabcdefghijklmnop/")
         {
@@ -48,7 +48,33 @@ public sealed class NativeHostProcessTests : IAsyncLifetime
         };
         start.Environment["WEBFILTER_AGENT_PIPE"] = pipeName;
         start.Environment["WEBFILTER_PROFILE_DIR"] = Path.Combine(_dir, "profiles");
+        if (simulateStandardUser) start.Environment["WEBFILTER_SIMULATE_STANDARD_USER"] = "1";
         return Process.Start(start)!;
+    }
+
+    /// <summary>A service (family + agent pipe) on <see cref="_pipe"/> that trusts the host executable, with noa = the test user.</summary>
+    private async Task<(FamilyService Family, AgentPipeServer Server, ServiceOptions Options)> StartServiceAsync()
+    {
+        var bundle = JsonNode.Parse(File.ReadAllText(Path.Combine(Path.GetDirectoryName(HostExe())!, "..", "..", "..", "..", "..", "tests", "simulation", "fixtures", "family-base.json")))!;
+        foreach (var account in bundle["devices"]!.AsArray().First(d => (string)d!["id"]! == "pc-kids")!["accounts"]!.AsArray())
+            if ((string?)account!["member"] == "noa") account["accountId"] = UserSid;
+        var bundlePath = Path.Combine(_dir, "bootstrap.json");
+        File.WriteAllText(bundlePath, bundle.ToJsonString());
+        var options = new ServiceOptions
+        {
+            DeviceId = "pc-kids",
+            DataDirectory = Path.Combine(_dir, "data"),
+            ProfileDirectory = Path.Combine(_dir, "profiles"),
+            AgentPipeName = _pipe,
+            AdminPipeName = _pipe + ".admin",
+            TrustedClientPaths = [HostExe()],
+            BootstrapBundlePath = bundlePath,
+        };
+        var family = new FamilyService(Options.Create(options), TimeProvider.System, NullLogger<FamilyService>.Instance);
+        family.Start();
+        var server = new AgentPipeServer(family, Options.Create(options), NullLogger<AgentPipeServer>.Instance);
+        await server.StartAsync(CancellationToken.None);
+        return (family, server, options);
     }
 
     private static async Task<AgentMessage> AskAsync(Process host, AgentMessage message)
@@ -81,27 +107,55 @@ public sealed class NativeHostProcessTests : IAsyncLifetime
     }
 
     [Fact]
+    public async Task A_simulated_standard_user_gets_the_child_fallback_without_a_service()
+    {
+        using var host = StartHost(_pipe, simulateStandardUser: true); // nobody listens; no profile cache
+        try
+        {
+            var hello = Assert.IsType<HelloResponse>(await AskAsync(host, new HelloRequest("0.0.1", "edge", "abcdefghijklmnopabcdefghijklmnop") { Id = "1" }));
+            Assert.Equal(("host", false, "allowlist"), (hello.Source, hello.User.IsAdmin, hello.Mode));
+            var rules = Assert.IsType<RulesResponse>(await AskAsync(host, new GetRulesRequest { Id = "2" }));
+            Assert.NotEmpty(rules.DynamicRules); // the allowlist default block, nothing allowed without a cache
+            var block = Assert.IsType<ErrorMessage>(await AskAsync(host, new ReportBlockRequest("https://x.example/", "blocked_not_in_allowlist", null) { Id = "3" }));
+            Assert.Equal("service_unavailable", block.Code);
+        }
+        finally
+        {
+            host.Kill();
+        }
+    }
+
+    [Fact]
+    public async Task A_host_answering_by_itself_exits_once_the_service_is_back()
+    {
+        using var host = StartHost(_pipe); // the service is not running yet
+        FamilyService? family = null;
+        AgentPipeServer? server = null;
+        try
+        {
+            var hello = Assert.IsType<HelloResponse>(await AskAsync(host, new HelloRequest("0.0.1", "edge") { Id = "1" }));
+            Assert.Equal("host", hello.Source);
+
+            (family, server, _) = await StartServiceAsync();
+            // The host probes the pipe every few seconds and then exits, so the extension reconnects to the service.
+            using var timeout = new CancellationTokenSource(TimeSpan.FromSeconds(20));
+            await host.WaitForExitAsync(timeout.Token);
+            Assert.True(host.HasExited);
+            Assert.Null(await AgentProtocol.ReadAsync(host.StandardOutput.BaseStream).WaitAsync(TimeSpan.FromSeconds(5)));
+        }
+        finally
+        {
+            if (!host.HasExited) host.Kill();
+            if (server is not null) await server.StopAsync(CancellationToken.None);
+            family?.Dispose();
+        }
+    }
+
+    [Fact]
     public async Task With_the_service_the_host_relays_and_the_service_sees_the_browser_user()
     {
-        var bundle = JsonNode.Parse(File.ReadAllText(Path.Combine(Path.GetDirectoryName(HostExe())!, "..", "..", "..", "..", "..", "tests", "simulation", "fixtures", "family-base.json")))!;
-        foreach (var account in bundle["devices"]!.AsArray().First(d => (string)d!["id"]! == "pc-kids")!["accounts"]!.AsArray())
-            if ((string?)account!["member"] == "noa") account["accountId"] = UserSid;
-        var bundlePath = Path.Combine(_dir, "bootstrap.json");
-        File.WriteAllText(bundlePath, bundle.ToJsonString());
-        var options = new ServiceOptions
-        {
-            DeviceId = "pc-kids",
-            DataDirectory = Path.Combine(_dir, "data"),
-            ProfileDirectory = Path.Combine(_dir, "profiles"),
-            AgentPipeName = _pipe,
-            AdminPipeName = _pipe + ".admin",
-            TrustedClientPaths = [HostExe()],
-            BootstrapBundlePath = bundlePath,
-        };
-        using var family = new FamilyService(Options.Create(options), TimeProvider.System, NullLogger<FamilyService>.Instance);
-        family.Start();
-        var server = new AgentPipeServer(family, Options.Create(options), NullLogger<AgentPipeServer>.Instance);
-        await server.StartAsync(CancellationToken.None);
+        var (family, server, options) = await StartServiceAsync();
+        using var owned = family;
         using var host = StartHost(_pipe);
         try
         {

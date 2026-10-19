@@ -14,7 +14,16 @@ npm run build:test     # → dist-test/   test build: adds globalThis.wfTest in 
 npm test               # Vitest unit tests (pure modules + the controller against a chrome.* mock and a fake host)
 npm run typecheck      # tsc --noEmit
 npm run verify:edge    # builds both, then loads them into the installed Edge with Playwright (see below)
+npm run e2e:real       # level 3: dist-test in Edge + the real native host + the real service (Simulation builds)
 ```
+
+### Level 3: the real chain (`npm run e2e:real`)
+
+`harness/e2e-real.mjs` builds the service and the native host (`-c Simulation`) and `dist-test/`, starts `WebFilter.Service.exe` as a hub with a temp data folder, unique pipe names and the family fixture (noa's account = the current Windows user), registers the host for Edge, and loads `dist-test` with a simulated policy install. It then checks, as noa: the handshake and the service's DNR rules; a blocked site with the service's reason and the recorded event; an allowed site; a live `addRule`; a request sent from the block page and approved through the admin pipe; time up and back (`setClock`); pause and resume; and the service killed and restarted. Results: `harness/results/e2e-real.json` (plus the service and worker logs).
+
+- The only change outside the temp folder is `HKCU\Software\Microsoft\Edge\NativeMessagingHosts\com.webfilter.host`, pointing at the temp manifest. The run stops if that key already exists, and removes it at the end, on errors and on Ctrl+C. `npm run e2e:real -- --cleanup` removes a leftover of an interrupted run (only if it points at a manifest of this harness). `--no-build` skips the builds; `HEADED=1` shows the browser.
+- The hub listens on 127.0.0.1 with a random port (no firewall prompt) and the service never writes browser policies.
+- The developer account is usually an administrator, whose service-down fallback is "unrestricted". The harness sets `WEBFILTER_SIMULATE_STANDARD_USER=1` (read by Simulation hosts only) so the fallback behaves as for a child's standard account.
 
 `dist/`, `dist-test/`, `node_modules/`, `package-lock.json` and `harness/results/` are not committed.
 
@@ -65,7 +74,7 @@ On every service-worker start:
 1. `chrome.management.getSelf()`. If `installType !== "admin"`, the extension is **inert**: it disables `failclosed`, clears its rules, never opens the native host, and only answers the popup. If the install type can't be read, the extension is treated as policy-installed (fail closed).
 2. If it is policy-installed, it enables `failclosed`, clears the dynamic and session rules, and connects `chrome.runtime.connectNative("com.webfilter.host")`. The port stays open, which keeps the worker alive (spike S2).
 3. `hello {extVersion, browser, extensionId}` → `helloResult`, then `getRules` → `rules`. The dynamic rules are installed first, then the time state is applied, and only then is `failclosed` disabled. Both reply sources count: `source: "service"` and the native host's own fallback (`source: "host"`). For an unrestricted user, all rules are removed and `failclosed` is turned off.
-4. When the port closes (host missing or exited, handshake error or timeout, rules that cannot be installed): `failclosed` on, dynamic and session rules cleared, then a reconnect with backoff of 1, 2, 4, 8, 16 and 30 s. The 30 s heartbeat alarm restarts the reconnect if the worker lost its timer.
+4. When the port closes (host missing or exited, handshake error or timeout, rules that cannot be installed): `failclosed` on, dynamic and session rules cleared, then a reconnect with backoff of 1, 2, 4, 8, 16 and 30 s. The 30 s heartbeat alarm restarts the reconnect if the worker lost its timer. A host that answers by itself (service down) checks the service pipe every 3 s and exits once the service is back, so the extension reconnects to the service.
 
 Pages that hit the static fail-closed rule cannot carry the original URL, so the worker remembers what each frame tried to load (`webNavigation.onBeforeNavigate`). Once connected, the fail-closed page goes back there by itself (the browser-startup case).
 
@@ -107,8 +116,9 @@ Error replies reject the request. `error {code: "ok"}` (reportBlock on services 
 
 ## Verification so far
 
-- `npm test`: 138 unit tests. They include all of `youtube-parse.json` and `youtube-decisions.json`, loaded from `tests/simulation/` and run against the TS parser and decision, and the controller against the chrome mock plus the fake host: fail-closed, backoff, chunks, the RE2 fallback, time-up, warnings, approvals, and the reportBlock/decideUrl variants.
+- `npm test`: 139 unit tests. They include all of `youtube-parse.json` and `youtube-decisions.json`, loaded from `tests/simulation/` and run against the TS parser and decision, and the controller against the chrome mock plus the fake host: fail-closed, backoff, chunks, the RE2 fallback, time-up, warnings, approvals, and the reportBlock/decideUrl variants.
 - `npm run verify:edge` (Edge 156, headless, no native host registered): 49 checks, passing on two consecutive runs. On the production build: the worker starts, the extension stays inert as an unpacked extension, the exact block-page title and fail-closed reason in Hebrew RTL. On the test build with a simulated policy install: the real `connectNative` fails, `failclosed` stays on, the redirect never leaves the browser, and backoff runs. With the in-worker fake host: the handshake, compiled-rule redirects, an in-page navigation to a blocked path, the reason from `reportBlockResult`, request → approval → return, time-up tab moves (always-allowed stays), a >1 MB chunked rules reply, disconnect → fail-closed → reconnect, and YouTube allow, SPA block, full-load block and home → my channels on local fixtures.
+- `npm run e2e:real` (Edge, headless, the real Simulation host and service, host key in HKCU only): 26 checks, passing on consecutive runs (about 30 s each).
 
 ## What remains
 
@@ -119,7 +129,7 @@ Error replies reject the request. `error {code: "ok"}` (reportBlock on services 
 - Store submission of this build to the existing S1 items. The listing texts and permission justifications are in `store/listing/future-full-product.md`. The new permissions are nativeMessaging, declarativeNetRequest, storage, alarms, idle, tabs, notifications, webNavigation and `<all_urls>`. There is no zip script for this build yet (`store/build-s1.ps1` packages S1 only).
 
 **Level-3 simulations (`browser` layer)**
-- A runner that drives the real NativeHost and service (Simulation build), with the host registered in HKCU of the test user only, instead of the fake host. Scenario files with `"layers": ["browser"]` do not exist yet.
+- `npm run e2e:real` drives the real NativeHost and service (Simulation builds) with the host registered in HKCU of the test user only, as a fixed sequence of checks. A runner for scenario files with `"layers": ["browser"]` (none exist yet) would reuse it.
 - YouTube fixtures that also serve the stale sources (meta, og:url, ytInitialData of the previous page), embeds (`embedded_player_response`), Shorts and handle pages. Only watch and SPA are covered here.
 - Request flows against the real service: merged, rate_limited, cooldown, queued.
 - The weekly live YouTube suite.
