@@ -1,0 +1,114 @@
+# בדיקת המתקין במעבדה (M7)
+
+> בודקים את ה-MSI רק במכונות המעבדה (`lab-hub`, `lab-kids` — ראו [LAB-AND-ACCOUNTS.md](LAB-AND-ACCOUNTS.md)), **לא** במחשב הפיתוח.
+> כל בדיקה מתחילה מנקודת השחזור `clean`. בתוך המכונות — PowerShell **כמנהל** (`labadmin`).
+> מה המתקין עושה: [installer/README.md](../installer/README.md).
+
+## הכנה (במחשב שלך)
+
+```powershell
+dotnet build installer\WebFilter.Installer.wixproj -c Release
+```
+
+```powershell
+Copy-VMFile -Name lab-hub -SourcePath installer\bin\Release\en-US\WebFilter.msi -DestinationPath C:\Lab\WebFilter.msi -CreateFullPath -FileSource Host
+```
+
+(אותו דבר ל-`lab-kids`. ה-MSI בעברית: `installer\bin\Release\he-IL\WebFilter.msi` — כדאי להתקין אותו פעם אחת דרך הממשק כדי לראות את הדיאלוגים.)
+
+## א. Hub (`lab-hub`)
+
+- [ ] התקנה דרך הממשק: לחיצה כפולה על ה-MSI → "Parents' computer (hub)". למדוד זמן.
+- [ ] השירות רץ, אוטומטי, כ-LocalSystem, עם הפעלה מחדש בכשל:
+
+  ```powershell
+  Get-Service WebFilter | Select-Object Status, StartType
+  ```
+
+  ```powershell
+  sc.exe qc WebFilter; sc.exe qfailure WebFilter
+  ```
+
+- [ ] `C:\Program Files\WebFilter\appsettings.json` — `"Role": "hub"`, `"ManageBrowserPolicies": true`. לידו `com.webfilter.host.json`.
+- [ ] רישום ה-host ומדיניות המכונה:
+
+  ```powershell
+  reg query HKLM\SOFTWARE\Microsoft\Edge\NativeMessagingHosts\com.webfilter.host; reg query HKLM\SOFTWARE\Google\Chrome\NativeMessagingHosts\com.webfilter.host; reg query HKLM\SOFTWARE\Policies\Microsoft\Edge
+  ```
+
+- [ ] חומת אש — פורט 47800, TCP, רשת פרטית בלבד:
+
+  ```powershell
+  Get-NetFirewallRule -DisplayName "WebFilter Hub" | Select-Object Enabled, Profile, Direction; Get-NetFirewallRule -DisplayName "WebFilter Hub" | Get-NetFirewallPortFilter
+  ```
+
+- [ ] תיקיית הנתונים — רק SYSTEM ו-Administrators. ואז בחשבון `noa` (רגיל): `dir C:\ProgramData\WebFilter\data` נכשל ב-Access denied.
+
+  ```powershell
+  icacls C:\ProgramData\WebFilter
+  ```
+
+- [ ] הפעלה מחדש אחרי קריסה: אחרי הפקודה, תוך כ-10 שניות השירות שוב `Running`.
+
+  ```powershell
+  taskkill /f /im WebFilter.Service.exe
+  ```
+
+- [ ] קיצור הדרך "WebFilter Admin" בתפריט התחל פותח את ממשק הניהול (UAC). מסך "מכשירים" → קוד צימוד.
+
+## ב. סוכן (`lab-kids`)
+
+- [ ] התקנה שקטה עם צימוד (קוד מסעיף א'). **תנאי סיום M7:** התקנה + צימוד בפחות מ-10 דקות.
+
+  ```powershell
+  msiexec /i C:\Lab\WebFilter.msi /qn ROLE=agent HUB=lab-hub.local:47800 PAIRCODE=XXXX-XXXX-XXXX /l*v C:\Lab\agent-install.log
+  ```
+
+- [ ] ב-log מופיע `Paired lab-kids with hub`; במסך "מכשירים" ב-Hub מופיע `lab-kids`.
+- [ ] `appsettings.json` עם `"Role": "agent"`; **אין** כלל חומת אש "WebFilter Hub".
+- [ ] תיקון (`msiexec /fa C:\Lab\WebFilter.msi /qn`) — התפקיד נשאר `agent` והצימוד נשמר.
+- [ ] קוד שגוי (מנקודת `clean`): ההתקנה מצליחה, ב-log מופיע `Pairing failed`, וצימוד ידני מ-PowerShell כמנהל עובד:
+
+  ```powershell
+  & "C:\Program Files\WebFilter\WebFilter.Service.exe" pair --hub lab-hub.local:47800 --code XXXX-XXXX-XXXX
+  ```
+
+- [ ] ב-`noa`: ב-Edge אין InPrivate, ו-`edge://policy` מציג את מדיניות WebFilter (אחרי שהיא קושרה לבן משפחה מוגבל ב-Hub).
+
+## ג. הסרה (בשתי המכונות)
+
+הכנה: `noa` התחברה פעם אחת **והתנתקה** (ה-hive שלה לא טעון), ו-`yoav` **מחובר** (Switch user) בזמן ההסרה.
+
+- [ ] הסרה:
+
+  ```powershell
+  msiexec /x C:\Lab\WebFilter.msi /qn /l*v C:\Lab\uninstall.log
+  ```
+
+- [ ] ב-log: `Browser policies: N values removed, 0 left.` ו-`Data folder C:\ProgramData\WebFilter deleted.`
+- [ ] לא נשאר כלום: השירות, `C:\Program Files\WebFilter`, `C:\ProgramData\WebFilter`, `HKLM\SOFTWARE\WebFilter`, מפתחות ה-host, ערכי WebFilter תחת `HKLM\SOFTWARE\Policies\{Microsoft\Edge,Google\Chrome}`, `HKLM\SYSTEM\CurrentControlSet\Control\SafeBoot\Network\WebFilter`, כלל חומת האש:
+
+  ```powershell
+  Get-Service WebFilter -ErrorAction SilentlyContinue; Test-Path "C:\Program Files\WebFilter", C:\ProgramData\WebFilter, HKLM:\SOFTWARE\WebFilter; reg query HKLM\SOFTWARE\Policies\Microsoft\Edge; Get-NetFirewallRule -DisplayName "WebFilter Hub" -ErrorAction SilentlyContinue
+  ```
+
+- [ ] המדיניות של `noa` (לא מחוברת) נמחקה, ואין מפתח `WebFilter.Cleanup.*` שנשאר טעון:
+
+  ```powershell
+  reg load HKU\noa C:\Users\noa\NTUSER.DAT; reg query HKU\noa\Software\Policies\Microsoft\Edge; reg unload HKU\noa; reg query HKU
+  ```
+
+- [ ] המדיניות של `yoav` (מחובר) נמחקה: `reg query HKU\<SID של yoav>\Software\Policies\Microsoft\Edge` ריק.
+- [ ] **תנאי סיום M7:** בחשבון ילד, Edge ו-Chrome חוזרים למצב רגיל — InPrivate זמין, `edge://policy` ריק, התוסף לא מותקן בכפייה, והרשת עובדת לכל האפליקציות.
+
+## ד. שדרוג
+
+- [ ] בונים גרסה חדשה ומתקינים מעל סוכן מצומד; השירות חוזר לרוץ, התפקיד, הצימוד, ההגדרות והמדיניות נשמרים, וב-log **אין** `cleanup`.
+
+  ```powershell
+  dotnet build installer\WebFilter.Installer.wixproj -c Release -p:ProductVersion=0.7.1
+  ```
+
+## מה לשלוח לי
+
+סימון של כל סעיף (עבר / נכשל), זמני ההתקנה, וקובצי ה-log (`C:\Lab\*.log`) של מה שנכשל.

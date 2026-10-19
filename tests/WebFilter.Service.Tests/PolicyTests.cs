@@ -16,7 +16,7 @@ public sealed class PolicyTests : IDisposable
     private const string Noa = "S-1-5-21-2000-1001", Yoav = "S-1-5-21-2000-1002", Dana = "S-1-5-21-2000-1003", Savta = "S-1-5-21-2000-1004", Visitor = "S-1-5-21-2000-1005";
     private static readonly ExtensionIds Ids = new("chromeidchromeidchromeidchromeid", "edgeidedgeidedgeidedgeidedgeided");
     private readonly string _dir = Path.Combine(Path.GetTempPath(), "wf-policy-" + Guid.NewGuid().ToString("N"));
-    private readonly MemoryStore _store = new();
+    private readonly MemoryPolicyStore _store = new();
     private readonly PolicyManager _manager;
     private FamilyConfig _config = Fixture();
 
@@ -135,7 +135,7 @@ public sealed class PolicyTests : IDisposable
         Assert.Equal(new[] { "SomeoneElsesPolicy" }, _store.All.Select(v => v.Name));
     }
 
-    private static FamilyConfig Fixture(Func<FamilyMember, FamilyMember>? patch = null)
+    internal static FamilyConfig Fixture(Func<FamilyMember, FamilyMember>? patch = null)
     {
         var root = new DirectoryInfo(AppContext.BaseDirectory);
         while (!File.Exists(Path.Combine(root.FullName, "WebFilter.slnx"))) root = root.Parent!;
@@ -143,21 +143,5 @@ public sealed class PolicyTests : IDisposable
         if (patch is not null)
             for (var i = 0; i < config.Members.Count; i++) config.Members[i] = patch(config.Members[i]);
         return config;
-    }
-
-    private sealed class MemoryStore : IPolicyStore
-    {
-        private readonly Dictionary<(PolicyHive, string?, string, string), object> _values = [];
-        public HashSet<string> Unloaded { get; } = [];
-
-        public IEnumerable<(string? Sid, string Key, string Name)> All => _values.Keys.Select(k => (k.Item2, k.Item3, k.Item4));
-        public IEnumerable<(string Key, string Name)> ValuesOf(string sid) => _values.Keys.Where(k => k.Item2 == sid).Select(k => (k.Item3, k.Item4));
-        public object? Machine(string key, string name) => Get(PolicyHive.Machine, null, key, name);
-        public object? User(string sid, string key, string name) => Get(PolicyHive.User, sid, key, name);
-
-        public bool IsAvailable(PolicyHive hive, string? userSid) => hive == PolicyHive.Machine || !Unloaded.Contains(userSid!);
-        public object? Get(PolicyHive hive, string? userSid, string keyPath, string name) => _values.GetValueOrDefault((hive, userSid, keyPath, name));
-        public void Set(PolicyHive hive, string? userSid, string keyPath, string name, object value) => _values[(hive, userSid, keyPath, name)] = value;
-        public void Delete(PolicyHive hive, string? userSid, string keyPath, string name) => _values.Remove((hive, userSid, keyPath, name));
     }
 }

@@ -27,6 +27,12 @@ dotnet test WebFilter.slnx
 cd tests/simulation/tools && npm install && npm run validate
 ```
 
+מתקין MSI (רק לבנייה — מתקינים במעבדה, לא במחשב הפיתוח; ראו [installer/README.md](installer/README.md)):
+
+```bash
+dotnet build installer/WebFilter.Installer.wixproj -c Release
+```
+
 ## מבנה
 
 ```

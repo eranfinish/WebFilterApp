@@ -230,9 +230,9 @@
 
 - בחירת תפקיד: **Hub** או **סוכן**; לסוכן — כתובת Hub (או גילוי אוטומטי) + קוד צימוד
 - קבצים ל-`C:\Program Files\WebFilter\`, נתונים ב-`C:\ProgramData\WebFilter\`
-- `ServiceInstall` + `ServiceControl`; רישום Native Host ומדיניות HKLM ע"י MSI
+- `ServiceInstall` + `ServiceControl`; רישום Native Host ע"י MSI (את מדיניות הדפדפן ב-HKLM ו-HKCU כותב השירות)
 - ב-Hub: כלל חומת אש נכנס לפורט ה-Hub (Private בלבד)
-- Custom action בהסרה: `WebFilter.Service.exe --cleanup` — מוחק מדיניות HKCU מכל הפרופילים, את מסנני ה-WFP שלנו, מבטל רישום מה-Hub, ומוחק את תיקיית הנתונים `%ProgramData%\WebFilter` (כך מדיניות הפרטיות מבטיחה)
+- Custom action בהסרה: `WebFilter.Service.exe cleanup` — מוחק מדיניות HKCU מכל הפרופילים, את מסנני ה-WFP שלנו, מבטל רישום מה-Hub, ומוחק את תיקיית הנתונים `%ProgramData%\WebFilter` (כך מדיניות הפרטיות מבטיחה)
 - `MajorUpgrade` לשדרוגים
 
 ---
@@ -484,7 +484,7 @@ Retention של `events`: 90 יום כברירת מחדל.
 | Native Host | .NET 10 NativeAOT + System.Text.Json source generators | |
 | תוסף | TypeScript, MV3, esbuild, Vitest | |
 | סימולציות | xUnit (רמות 1–2), Playwright (רמה 3), PowerShell + Hyper-V + FlaUI (רמה 4), NBomber/BenchmarkDotNet (רמה 5) | ראו [SIMULATION-PLAN.md](SIMULATION-PLAN.md) |
-| מתקין | WiX Toolset (גרסה יציבה עדכנית, נבחרת ב-M0) | |
+| מתקין | WiX Toolset 5.0.2 כחבילת NuGet (`WixToolset.Sdk`) | 5.0.2 היא הגרסה האחרונה ברישיון MS-RL בלבד; 6.x ו-7.x דורשות אישור של רישיון ה-Open Source Maintenance Fee — החלטה שלך |
 | CI (אופציונלי) | GitHub Actions `windows-latest` | build + רמות 1–3 + MSI |
 
 ### מבנה תיקיות
@@ -575,6 +575,8 @@ HubServer, צימוד, HubSync, מכסה משותפת, מסך מכשירים, ה
 ### M7 — מתקין ותיעוד
 
 MSI עם בחירת תפקיד, cleanup בהסרה, מדריכים בעברית. **תנאי סיום:** VM נקי → התקנה + צימוד < 10 דקות; הסרה מחזירה דפדפנים ורשת למצב רגיל.
+
+> **סטטוס (2026-10-19): ה-MSI נבנה; טרם הותקן במעבדה.** `installer/` ‏(`dotnet build installer/WebFilter.Installer.wixproj -c Release`) בונה MSI בעברית ובאנגלית, כ-60MB, self-contained — אין צורך ב-.NET במחשב היעד. **התקנה:** דיאלוג תפקיד (Hub או סוכן, ולסוכן כתובת Hub וקוד צימוד — אופציונלי, ו-`pair` שנכשל לא מכשיל את ההתקנה); שירות LocalSystem אוטומטי, הפעלה מחדש בכשל, רישום ל-Safe Mode עם רשת; `WebFilter.Service configure` כותב `appsettings.json` (תפקיד, `ManageBrowserPolicies=true`, מזהי החנויות) ואת ה-manifest של ה-host; מפתחות ה-host ב-HKLM ל-Chrome ול-Edge; `%ProgramData%\WebFilter` נוצרת עם הרשאות ל-SYSTEM ולמנהלים בלבד; ב-Hub — כלל חומת אש ל-TCP 47800, רשת פרטית בלבד. התפקיד ומזהי התוסף נזכרים לתיקון ולשדרוג. **הסרה:** `WebFilter.Service cleanup` (אחרי עצירת השירות, לא בשדרוג) מוחק כל ערך מדיניות שהשירות כתב — כולל HKCU של משתמשים שלא מחוברים, על ידי טעינת ה-hive שלהם — את מסנני ה-WFP (כשהמנוע יהיה קיים) ואת `%ProgramData%\WebFilter`; ה-MSI מוחק את השירות, הקבצים, המפתחות וכלל חומת האש. 42 בדיקות ללא הרשאות: הקבצים שנוצרים כפי שהשירות קורא אותם, cleanup מול רישום בזיכרון (כולל משתמש לא מחובר ו-hive שלא נטען), והתאמה בין קובץ ה-WiX לקוד (שם השירות, פורט, מפתחות, שורות הפקודה של ה-custom actions, הרשאות התיקייה). חסר — הרצה במעבדה ([רשימת בדיקה](LAB-INSTALLER-CHECKLIST.md)), ביטול רישום מה-Hub בהסרה (בינתיים: ביטול צימוד במסך המכשירים), שירות שאחד הרכיבים שלו נכשל נעצר "נקי" ולכן Windows לא מפעיל אותו מחדש, חתימת קוד, NativeAOT ל-host, דיאלוגים מימין לשמאל, מדריכים בעברית.
 
 ### M8 — קבלה
 

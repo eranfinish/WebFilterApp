@@ -1,0 +1,55 @@
+<Project Sdk="WixToolset.Sdk/5.0.2">
+  <!--
+    WebFilter MSI (MVP-PLAN §4.6): x64, per-machine, Hub or Agent role.
+
+      dotnet build installer/WebFilter.Installer.wixproj -c Release
+
+    Publishes the service, the native host and the admin app (Release, self-contained, win-x64) into one payload folder,
+    then builds bin/x64/<Configuration>/he-IL/WebFilter.msi and en-US/WebFilter.msi. Not in WebFilter.slnx, so
+    `dotnet test` does not build an MSI.
+
+    WiX 5.0.2 is the last WiX release under the plain MS-RL license; 6.x and 7.x require accepting the Open Source
+    Maintenance Fee EULA, which is the project owner's decision.
+  -->
+  <PropertyGroup>
+    <OutputName>WebFilter</OutputName>
+    <InstallerPlatform>x64</InstallerPlatform>
+    <Cultures>he-IL;en-US</Cultures>
+    <ProductVersion Condition="'$(ProductVersion)' == ''">0.7.0</ProductVersion>
+    <!-- Store ids of the extension (spike S1). Empty until published; can also be given at install time. -->
+    <ChromeExtensionId Condition="'$(ChromeExtensionId)' == ''"></ChromeExtensionId>
+    <EdgeExtensionId Condition="'$(EdgeExtensionId)' == ''"></EdgeExtensionId>
+    <!-- NativeAOT for the host needs Visual Studio's C++ workload; until it is installed the host is self-contained like the rest. -->
+    <NativeHostAot Condition="'$(NativeHostAot)' == ''">false</NativeHostAot>
+    <PayloadDir>$(MSBuildProjectDirectory)\obj\payload\</PayloadDir>
+    <PayloadArtifacts>$(MSBuildProjectDirectory)\obj\payload-build\</PayloadArtifacts>
+    <!-- ICE60: e_sqlite3.dll (native SQLite) has a version but no language; harmless for file versioning. -->
+    <SuppressIces>ICE60</SuppressIces>
+    <DefineConstants>PayloadDir=$(PayloadDir);ProductVersion=$(ProductVersion);ChromeExtensionId=$(ChromeExtensionId);EdgeExtensionId=$(EdgeExtensionId)</DefineConstants>
+    <DotnetExe Condition="'$(DOTNET_HOST_PATH)' != ''">$(DOTNET_HOST_PATH)</DotnetExe>
+    <DotnetExe Condition="'$(DotnetExe)' == ''">dotnet</DotnetExe>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="WixToolset.Firewall.wixext" Version="5.0.2" />
+    <PackageReference Include="WixToolset.UI.wixext" Version="5.0.2" />
+    <PackageReference Include="WixToolset.Util.wixext" Version="5.0.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PayloadProject Include="..\src\WebFilter.Service\WebFilter.Service.csproj" />
+    <PayloadProject Include="..\src\WebFilter.NativeHost\WebFilter.NativeHost.csproj" ExtraArgs="-p:PublishAot=$(NativeHostAot)" />
+    <PayloadProject Include="..\src\WebFilter.Admin\WebFilter.Admin.csproj" />
+  </ItemGroup>
+
+  <!--
+    Release binaries only: Simulation builds contain SimulationHooks (CLAUDE.md rule 7), and Debug admin builds do not
+    demand elevation. The payload is always published in Release; this project's configuration only names the output.
+    Separate artifacts folders keep the RID-specific build out of the projects' own obj folders.
+  -->
+  <Target Name="PublishPayload" BeforeTargets="BeforeBuild">
+    <Error Condition="'$(Configuration)' == 'Simulation'" Text="The installer is never built from Simulation binaries. Use -c Release." />
+    <RemoveDir Directories="$(PayloadDir)" />
+    <Exec Command="&quot;$(DotnetExe)&quot; publish &quot;%(PayloadProject.FullPath)&quot; -c Release -r win-x64 --self-contained --nologo -v:minimal --artifacts-path &quot;$(PayloadArtifacts.TrimEnd('\'))&quot; -o &quot;$(PayloadDir.TrimEnd('\'))&quot; %(PayloadProject.ExtraArgs)" />
+  </Target>
+</Project>
