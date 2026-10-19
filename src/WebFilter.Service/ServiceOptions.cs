@@ -33,4 +33,22 @@ public sealed class ServiceOptions
 
     /// <summary>How often time warnings are evaluated and stored state is flushed.</summary>
     public TimeSpan TickInterval { get; set; } = TimeSpan.FromSeconds(30);
+
+    /// <summary>
+    /// Write the browser policies of MVP-PLAN §5 to the registry. True in the installed service (LocalSystem); false for
+    /// development runs, which cannot and must not change machine policy.
+    /// </summary>
+    public bool ManageBrowserPolicies { get; set; }
+
+    /// <summary>How often the registry policies are checked and repaired, besides every settings change.</summary>
+    public TimeSpan PolicyInterval { get; set; } = TimeSpan.FromMinutes(1);
+
+    /// <summary>Store ids of the published extension (after spike S1). Without them no force-install policy is written.</summary>
+    public string? ChromeExtensionId { get; set; }
+
+    public string? EdgeExtensionId { get; set; }
+
+    /// <summary>The native messaging host manifest the installer places next to the host.</summary>
+    public string NativeHostManifestPath { get; set; } =
+        Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles), "WebFilter", "com.webfilter.host.json");
 }
