@@ -16,6 +16,20 @@ Copy-VMFile -Name lab-hub -SourcePath installer\bin\Release\en-US\WebFilter.msi 
 
 (אותו דבר ל-`lab-kids`. ה-MSI בעברית: `installer\bin\Release\he-IL\WebFilter.msi` — כדאי להתקין אותו פעם אחת דרך הממשק כדי לראות את הדיאלוגים.)
 
+**אחרי כל שחזור לנקודת `clean`:** אחרי אתחול או התחברות מחדש במחשב שלך, ה-`Default Switch` מקבל טווח כתובות חדש, והמכונות רואות "רשת חדשה" שמסווגת **Public**. כלל חומת האש של ה-Hub פתוח רק ברשת פרטית, ולכן הסוכן לא יגיע ל-Hub. בשתי המכונות:
+
+```powershell
+Get-NetConnectionProfile | Set-NetConnectionProfile -NetworkCategory Private
+```
+
+(רוצים לבדוק במכוון "Hub לא זמין"? מתקינים את הסוכן לפני השינוי: ההתקנה מצליחה, ב-log מופיע `Pairing failed`, והשירות ממשיך לרוץ.)
+
+**אוטומציה מהמחשב שלך:** `tests\simulation\lab\Save-LabCredential.ps1` שומר את סיסמת `labadmin` (אחרי בדיקה מול המכונה), ו-`Invoke-LabAdmin.ps1` שולח הודעות ל-admin pipe בתוך מכונה — למשל קוד צימוד:
+
+```powershell
+.\Invoke-LabAdmin.ps1 -VMName lab-hub -Message '{"type":"createPairingCode","v":1}'
+```
+
 ## א. Hub (`lab-hub`)
 
 - [ ] התקנה דרך הממשק: לחיצה כפולה על ה-MSI → "Parents' computer (hub)". למדוד זמן.
