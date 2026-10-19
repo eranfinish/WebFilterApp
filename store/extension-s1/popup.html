@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="utf-8">
+  <title>WebFilter</title>
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <header class="brand">
+    <img src="icons/icon-48.png" width="24" height="24" alt="">
+    <span>WebFilter</span>
+  </header>
+
+  <section id="status" class="status" data-state="loading" role="status" aria-live="polite">
+    <span class="status-icon" aria-hidden="true">
+      <svg class="icon-managed" viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5" /></svg>
+      <svg class="icon-unmanaged" viewBox="0 0 24 24"><path d="M12 6.5v7" /><path d="M12 17.5v.01" /></svg>
+    </span>
+    <div>
+      <p id="status-title" class="status-title" data-i18n="statusLoading"></p>
+      <p id="status-detail" class="status-detail"></p>
+    </div>
+  </section>
+
+  <dl class="facts">
+    <div>
+      <dt data-i18n="labelId"></dt>
+      <dd><code id="ext-id" dir="ltr"></code></dd>
+    </div>
+    <div>
+      <dt data-i18n="labelVersion"></dt>
+      <dd><code id="ext-version" dir="ltr"></code></dd>
+    </div>
+    <div>
+      <dt data-i18n="labelInstallType"></dt>
+      <dd><code id="install-type" dir="ltr"></code></dd>
+    </div>
+    <div>
+      <dt data-i18n="labelMayDisable"></dt>
+      <dd id="may-disable"></dd>
+    </div>
+  </dl>
+
+  <footer data-i18n="footerNote"></footer>
+
+  <script src="popup.js"></script>
+</body>
+</html>

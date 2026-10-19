@@ -1,0 +1,67 @@
+<!doctype html>
+<!-- Small promo tile, 440x280. Query: lang=en|he. The tagline describes only what version 0.1.0 does. -->
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>WebFilter promo tile</title>
+  <style>
+    html, body {
+      margin: 0;
+      width: 440px;
+      height: 280px;
+      overflow: hidden;
+    }
+    body {
+      display: flex;
+      align-items: center;
+      gap: 26px;
+      padding: 0 36px;
+      box-sizing: border-box;
+      background:
+        radial-gradient(circle at 85% 15%, rgba(255, 255, 255, 0.16), transparent 45%),
+        linear-gradient(140deg, #2a72e6 0%, #1546b3 100%);
+      color: #ffffff;
+      font-family: "Segoe UI", system-ui, Arial, sans-serif;
+    }
+    .mark {
+      flex: none;
+      filter: drop-shadow(0 6px 14px rgba(5, 25, 70, 0.35));
+    }
+    h1 {
+      margin: 0;
+      font-size: 42px;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+      line-height: 1.1;
+    }
+    p {
+      margin: 10px 0 0;
+      font-size: 18px;
+      line-height: 1.35;
+      opacity: 0.92;
+      text-wrap: balance;
+    }
+  </style>
+</head>
+<body>
+  <div class="mark" id="mark"></div>
+  <div>
+    <h1>WebFilter</h1>
+    <p id="tagline"></p>
+  </div>
+  <script src="shield.js"></script>
+  <script>
+    const text = {
+      en: { dir: "ltr", tagline: "Shows whether it was installed by your PC's browser policy" },
+      // \u00a0 keeps the two words of the Hebrew 'by' on one line.
+      he: { dir: "rtl", tagline: "מציג אם התוסף הותקן על\u00a0ידי מדיניות הדפדפן במחשב" },
+    };
+    const lang = new URLSearchParams(location.search).get("lang") === "he" ? "he" : "en";
+    document.documentElement.lang = lang;
+    document.documentElement.dir = text[lang].dir;
+    document.getElementById("tagline").textContent = text[lang].tagline;
+    document.getElementById("mark").innerHTML = shieldSvg({ size: 128, variant: "inverse" });
+    document.fonts.ready.then(() => { document.documentElement.dataset.ready = "1"; });
+  </script>
+</body>
+</html>

@@ -1,0 +1,30 @@
+<!doctype html>
+<!-- Renders the WebFilter mark on a transparent square. Query: size (viewport, px) and art (mark size, px). -->
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>WebFilter icon</title>
+  <style>
+    html, body {
+      margin: 0;
+      background: transparent;
+      overflow: hidden;
+    }
+    body {
+      display: grid;
+      place-items: center;
+      width: 100vw;
+      height: 100vh;
+    }
+  </style>
+</head>
+<body>
+  <script src="shield.js"></script>
+  <script>
+    const query = new URLSearchParams(location.search);
+    const art = Number(query.get("art") || query.get("size") || 128);
+    document.body.innerHTML = shieldSvg({ size: art, variant: query.get("variant") || "color" });
+    document.documentElement.dataset.ready = "1";
+  </script>
+</body>
+</html>

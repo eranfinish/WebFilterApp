@@ -1,0 +1,53 @@
+{
+  "extDescription": {
+    "message": "מציג אם WebFilter הותקן על ידי מדיניות הדפדפן במחשב. חלק ממסנן הגלישה המשפחתי WebFilter למחשבים ביתיים."
+  },
+  "actionTitle": {
+    "message": "WebFilter: מצב התקנה"
+  },
+  "langCode": {
+    "message": "he"
+  },
+  "textDirection": {
+    "message": "rtl"
+  },
+  "statusLoading": {
+    "message": "בודק…"
+  },
+  "statusManaged": {
+    "message": "הותקן על ידי מדיניות"
+  },
+  "statusManagedDetail": {
+    "message": "התוסף הותקן בכפייה על ידי מדיניות הדפדפן במחשב."
+  },
+  "statusNotManaged": {
+    "message": "לא הותקן על ידי מדיניות"
+  },
+  "statusNotManagedDetail": {
+    "message": "התוסף הותקן בדרך אחרת, ולכן הוא לא מנוהל על ידי מדיניות הדפדפן במחשב."
+  },
+  "statusError": {
+    "message": "לא ניתן לקרוא את מצב ההתקנה."
+  },
+  "labelId": {
+    "message": "מזהה התוסף"
+  },
+  "labelVersion": {
+    "message": "גרסה"
+  },
+  "labelInstallType": {
+    "message": "סוג התקנה"
+  },
+  "labelMayDisable": {
+    "message": "המשתמש יכול לכבות אותו"
+  },
+  "valueYes": {
+    "message": "כן"
+  },
+  "valueNo": {
+    "message": "לא"
+  },
+  "footerNote": {
+    "message": "גרסה מוקדמת זו מציגה רק את מצב ההתקנה. יכולות הסינון יגיעו בגרסאות הבאות."
+  }
+}
