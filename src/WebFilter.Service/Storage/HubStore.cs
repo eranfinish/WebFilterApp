@@ -41,10 +41,10 @@ public sealed class HubStore(SqliteDatabase database)
             _savedUsage.Add((member, device, minute));
         }
 
-        var events = db.Query<(string Ts, string Type, string? Member, string? Device, string? Reason, string? Url, string? App, long? Remaining, string? Detail)>(
-                "SELECT ts, type, member_id, device_id, reason, url, app, remaining, detail FROM events ORDER BY seq")
+        var events = db.Query<(string Ts, string Type, string? Member, string? Device, string? Reason, string? Url, string? App, long? Remaining, string? Detail, string? Admin)>(
+                "SELECT ts, type, member_id, device_id, reason, url, app, remaining, detail, admin FROM events ORDER BY seq")
             .Select(e => new FamilyEvent(Enum.Parse<EventType>(e.Type), StateJson.Instant(e.Ts), e.Member, e.Device,
-                e.Reason is null ? ReasonCode.None : ReasonCodes.Parse(e.Reason), e.Url, e.App, (int?)e.Remaining, e.Detail))
+                e.Reason is null ? ReasonCode.None : ReasonCodes.Parse(e.Reason), e.Url, e.App, (int?)e.Remaining, e.Detail, e.Admin))
             .ToList();
         _lastSavedEvent = events.LastOrDefault();
 
@@ -98,12 +98,12 @@ public sealed class HubStore(SqliteDatabase database)
 
         var firstNew = _lastSavedEvent is null ? 0 : LastIndexOf(state.Events, _lastSavedEvent) + 1;
         foreach (var e in state.Events.Skip(firstNew))
-            db.Execute("INSERT INTO events (ts, type, member_id, device_id, reason, url, app, remaining, detail) VALUES (@ts, @type, @member, @device, @reason, @url, @app, @remaining, @detail)",
+            db.Execute("INSERT INTO events (ts, type, member_id, device_id, reason, url, app, remaining, detail, admin) VALUES (@ts, @type, @member, @device, @reason, @url, @app, @remaining, @detail, @admin)",
                 new
                 {
                     ts = StateJson.Instant(e.At), type = e.Type.ToString(), member = e.MemberId, device = e.DeviceId,
                     reason = e.Reason == ReasonCode.None ? null : e.Reason.ToWire(),
-                    url = e.Url, app = e.App, remaining = e.RemainingMinutes, detail = e.Detail,
+                    url = e.Url, app = e.App, remaining = e.RemainingMinutes, detail = e.Detail, admin = e.Admin,
                 }, tx);
         if (state.Events.Count > 0) _lastSavedEvent = state.Events[^1];
 

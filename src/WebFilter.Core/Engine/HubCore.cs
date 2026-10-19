@@ -171,6 +171,7 @@ public sealed class HubCore(FamilyConfig config)
     public void AddRule(Rule rule, DateTimeOffset now)
     {
         RuleValidator.EnsureValid(rule);
+        if (Config.Rules.Any(r => r.Id == rule.Id)) throw new ArgumentException($"A rule with id '{rule.Id}' already exists.", nameof(rule));
         Config.Rules.Add(rule);
         Changed(now, rule.MemberId, "add_rule");
     }
@@ -247,10 +248,13 @@ public sealed class HubCore(FamilyConfig config)
 
     private AccessRequest Request(string id) => Requests.Find(r => r.Id == id) ?? throw new KeyNotFoundException($"Unknown request '{id}'");
 
+    /// <summary>Who makes the current change (the admin's Windows name), recorded on admin-change events (MVP-PLAN §10.2).</summary>
+    public string? Actor { get; set; }
+
     private void Changed(DateTimeOffset now, string? memberId, string detail)
     {
         Version++;
-        Events.Add(new FamilyEvent(EventType.AdminChange, now, memberId, null, Detail: detail));
+        Events.Add(new FamilyEvent(EventType.AdminChange, now, memberId, null, Detail: detail, Admin: Actor));
     }
 
     private bool SameUsage(UsageLedger before) =>

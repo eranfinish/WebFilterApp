@@ -90,7 +90,8 @@ public sealed record GetEvents(DateTimeOffset? Since = null, string? EventType =
 
 public sealed record EventsResult(IReadOnlyList<EventDto> Events) : AdminMessage;
 
-public sealed record EventDto(string Type, DateTimeOffset At, string? MemberId, string? DeviceId, string? Reason, string? Url, string? App, int? RemainingMinutes, string? Detail);
+/// <param name="Admin">For admin changes: the Windows user who made it.</param>
+public sealed record EventDto(string Type, DateTimeOffset At, string? MemberId, string? DeviceId, string? Reason, string? Url, string? App, int? RemainingMinutes, string? Detail, string? Admin = null);
 
 /// <param name="Status">pending | approved | denied; null = all.</param>
 public sealed record GetRequests(string? Status = null, string? MemberId = null) : AdminMessage;

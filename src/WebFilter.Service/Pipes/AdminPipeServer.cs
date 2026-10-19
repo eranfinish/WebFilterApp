@@ -82,26 +82,26 @@ public sealed class AdminPipeServer(FamilyService family, IOptions<ServiceOption
         GetStatus => family.WithHub<AdminMessage>((hub, now) => new StatusResult(hub.Version, family.DeviceId, family.IsHub, now,
             hub.Config.Members.Select(m => MemberStatusOf(hub, m, now)).ToList())),
         GetSettings => family.WithHub<AdminMessage>((hub, _) => new SettingsResult(BundleMapper.ToBundle(hub.Config, hub.Version))),
-        ReplaceSettings replace => Ok((hub, now) => hub.ReplaceSettings(BundleMapper.ToConfig(replace.Settings), now)),
-        AddRule add => Ok((hub, now) => hub.AddRule(ToRule(add.Rule), now)),
-        RemoveRule remove => Ok((hub, now) => hub.RemoveRule(remove.RuleId, now)),
-        SetMember set => Ok((hub, now) => hub.SetMember(Patch(hub.Config.Member(set.MemberId), set), now)),
-        ExtendTime extend => Ok((hub, now) => hub.ExtendTime(extend.MemberId, extend.Minutes, now)),
-        Pause pause => Ok((hub, now) => hub.Pause(pause.MemberId, pause.Until, now)),
-        Resume resume => Ok((hub, now) => hub.Resume(resume.MemberId, now)),
-        StartHomework homework => Ok((hub, now) => hub.StartHomework(homework.MemberId, homework.Minutes, now)),
-        StopHomework stop => Ok((hub, now) => hub.StopHomework(stop.MemberId, now)),
+        ReplaceSettings replace => Ok(adminName, (hub, now) => hub.ReplaceSettings(BundleMapper.ToConfig(replace.Settings), now)),
+        AddRule add => Ok(adminName, (hub, now) => hub.AddRule(ToRule(add.Rule), now)),
+        RemoveRule remove => Ok(adminName, (hub, now) => hub.RemoveRule(remove.RuleId, now)),
+        SetMember set => Ok(adminName, (hub, now) => hub.SetMember(Patch(hub.Config.Member(set.MemberId), set), now)),
+        ExtendTime extend => Ok(adminName, (hub, now) => hub.ExtendTime(extend.MemberId, extend.Minutes, now)),
+        Pause pause => Ok(adminName, (hub, now) => hub.Pause(pause.MemberId, pause.Until, now)),
+        Resume resume => Ok(adminName, (hub, now) => hub.Resume(resume.MemberId, now)),
+        StartHomework homework => Ok(adminName, (hub, now) => hub.StartHomework(homework.MemberId, homework.Minutes, now)),
+        StopHomework stop => Ok(adminName, (hub, now) => hub.StopHomework(stop.MemberId, now)),
         GetEvents query => family.WithHub<AdminMessage>((hub, _) => new EventsResult(hub.Events
             .Where(e => (query.Since is null || e.At >= query.Since) && (query.MemberId is null || e.MemberId == query.MemberId)
                         && (query.EventType is null || Wire(e.Type) == query.EventType))
             .TakeLast(Math.Clamp(query.Max, 1, 5000))
             .Select(e => new EventDto(Wire(e.Type), e.At, e.MemberId, e.DeviceId, e.Reason == Core.Decisions.ReasonCode.None ? null : Core.Decisions.ReasonCodes.ToWire(e.Reason),
-                e.Url, e.App, e.RemainingMinutes, e.Detail)).ToList())),
+                e.Url, e.App, e.RemainingMinutes, e.Detail, e.Admin)).ToList())),
         GetRequests query => family.WithHub<AdminMessage>((hub, _) => new RequestsResult(hub.Requests
             .Where(r => (query.Status is null || r.Status.ToString().Equals(query.Status, StringComparison.OrdinalIgnoreCase)) && (query.MemberId is null || r.MemberId == query.MemberId))
             .Select(r => new RequestDto(r.Id, r.MemberId, r.DeviceId, r.Kind.ToString().ToLowerInvariant(), r.Target, r.TargetKey, r.Minutes, r.Message,
                 r.CreatedAt, r.Status.ToString().ToLowerInvariant(), r.DecidedAt)).ToList())),
-        DecideRequest decide => DecideRequest(decide),
+        DecideRequest decide => DecideRequest(decide, adminName),
         SetClock set => SetClock(set),
         CreatePairingCode => family.IsHub
             ? new PairingCodeResult(family.Pairing.Create(family.Now), family.Now + Hub.HubPairing.Lifetime, family.Options.HubPort, LocalAddresses())
@@ -115,14 +115,14 @@ public sealed class AdminPipeServer(FamilyService family, IOptions<ServiceOption
         _ => new AdminError("unsupported", $"Unsupported message type {request.GetType().Name}."),
     };
 
-    private AdminMessage Ok(Action<HubCore, DateTimeOffset> action) =>
+    private AdminMessage Ok(string adminName, Action<HubCore, DateTimeOffset> action) =>
         family.WithHub<AdminMessage>((hub, now) =>
         {
             action(hub, now);
             return new AdminOk();
-        });
+        }, actor: adminName);
 
-    private AdminMessage DecideRequest(DecideRequest decide)
+    private AdminMessage DecideRequest(DecideRequest decide, string adminName)
     {
         var approve = decide.Decision switch
         {
@@ -138,7 +138,7 @@ public sealed class AdminPipeServer(FamilyService family, IOptions<ServiceOption
             null => ApprovalDuration.Always,
             _ => throw new ArgumentException("duration must be today or always"),
         };
-        family.Decide(decide.RequestId, approve, decide.Scope == "page" ? ApproveScope.Page : ApproveScope.Host, duration, decide.Minutes);
+        family.Decide(decide.RequestId, approve, decide.Scope == "page" ? ApproveScope.Page : ApproveScope.Host, duration, decide.Minutes, adminName);
         return new AdminOk();
     }
 

@@ -104,15 +104,20 @@ public sealed class FamilyService : IDisposable
         return result;
     }
 
-    /// <summary>Runs an admin action on the hub under the gate, then syncs and schedules a save.</summary>
-    public T WithHub<T>(Func<HubCore, DateTimeOffset, T> action)
+    /// <summary>
+    /// Runs an admin action on the hub under the gate, then syncs and schedules a save. <paramref name="actor"/> (the
+    /// admin's Windows name) is recorded on the admin-change events the action raises.
+    /// </summary>
+    public T WithHub<T>(Func<HubCore, DateTimeOffset, T> action, string? actor = null)
     {
         if (!IsHub) throw new InvalidOperationException("This device is not the hub.");
         int? changed;
         T result;
         lock (_gate)
         {
-            result = action(_hub!, Now);
+            _hub!.Actor = actor;
+            try { result = action(_hub, Now); }
+            finally { _hub.Actor = null; }
             changed = SyncLocked();
         }
         if (changed is { } v) SettingsChanged?.Invoke(v);
@@ -120,14 +125,14 @@ public sealed class FamilyService : IDisposable
     }
 
     /// <summary>Approves or denies a request on the hub and notifies the requesting member's sessions.</summary>
-    public void Decide(string requestId, bool approve, ApproveScope scope, ApprovalDuration duration, int? minutes)
+    public void Decide(string requestId, bool approve, ApproveScope scope, ApprovalDuration duration, int? minutes, string? actor = null)
     {
         var request = WithHub((hub, now) =>
         {
             if (approve) hub.Approve(requestId, scope, duration, minutes, now);
             else hub.Deny(requestId, now);
             return hub.Requests.First(r => r.Id == requestId).Clone();
-        });
+        }, actor);
         RequestDecided?.Invoke(request);
     }
 

@@ -14,4 +14,5 @@ public sealed record FamilyEvent(
     string? Url = null,
     string? App = null,
     int? RemainingMinutes = null,
-    string? Detail = null);
+    string? Detail = null,
+    string? Admin = null);

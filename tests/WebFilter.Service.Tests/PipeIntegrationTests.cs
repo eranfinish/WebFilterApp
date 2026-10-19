@@ -154,6 +154,28 @@ public sealed class PipeIntegrationTests : IAsyncLifetime
     }
 
     [Fact]
+    public async Task Admin_changes_record_who_made_them_and_survive_a_restart()
+    {
+        await using (var admin = await AdminClient.ConnectAsync(_options.AdminPipeName))
+        {
+            Assert.IsType<AdminOk>(await admin.RequestAsync(new Pause("noa", _clock.GetUtcNow().AddMinutes(30))));
+            var rule = new Contracts.Hub.RuleDto("r-dup", "noa", "dup.example", "domain", "block", false, null);
+            Assert.IsType<AdminOk>(await admin.RequestAsync(new AddRule(rule)));
+            var duplicate = Assert.IsType<AdminError>(await admin.RequestAsync(new AddRule(rule with { Pattern = "other.example" })));
+            Assert.Contains("already exists", duplicate.Message);
+        }
+        _family.Flush();
+        await StopAsync();
+        await StartAsync();
+
+        await using var again = await AdminClient.ConnectAsync(_options.AdminPipeName);
+        var changes = Assert.IsType<EventsResult>(await again.RequestAsync(new GetEvents(EventType: "admin_change"))).Events;
+        var expected = WindowsIdentity.GetCurrent().Name;
+        Assert.Contains(changes, e => e.Detail == "pause" && e.Admin == expected);
+        Assert.Contains(changes, e => e.Detail == "add_rule" && e.Admin == expected);
+    }
+
+    [Fact]
     public async Task An_expiring_rule_makes_the_agent_fetch_rules_again()
     {
         await using var agent = await AgentClient.ConnectAsync(_options.AgentPipeName);
