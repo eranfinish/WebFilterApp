@@ -68,7 +68,7 @@ cd tests/simulation/tools && npm install && npm run validate
 | `wildcard` `*.example.com` | **רק תתי-דומיינים**, לא את `example.com` עצמו |
 | `prefix` `host/path` | המארח לפי כללי `domain`; הנתיב **לא** רגיש לאותיות (עדיף לחסום יותר מאשר לפספס), ומתאים **בגבול מקטע**: `/r/learn` מתאים ל-`/r/learn`, `/r/learn/x`, `/r/learn?q` — לא ל-`/r/learnmore`. תבנית שמסתיימת ב-`/` היא קידומת רגילה |
 | `alwaysAllowed` | כלל כזה מחזיר תמיד `allowed_always` — גם בתוך החלון ולפני שהמכסה נגמרה |
-| `regex` | RE2, על ה-URL המנורמל המלא |
+| `regex` | RE2, על ה-URL המנורמל המלא, ללא תלות ברישיות (case-insensitive) |
 | ספציפיות | `prefix` > מארח מדויק (`domain` שמתאים בדיוק) > `domain` שמתאים כתת-דומיין / `wildcard` (יותר רמות = יותר ספציפי) > `regex`. תיקו → חסימה |
 | קטגוריה | דומיין בקטגוריה מתנהג כמו כלל `domain`. סיבה: `allowed_category` / `blocked_category` |
 | כלל אישי מול גלובלי | **כל** כלל אישי שמתאים גובר על כל כלל גלובלי או קטגוריה, גם אם פחות ספציפי |

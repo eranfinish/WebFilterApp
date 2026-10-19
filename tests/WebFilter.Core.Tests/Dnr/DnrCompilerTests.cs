@@ -221,18 +221,18 @@ public class DnrCompilerTests
     }
 
     [Fact]
-    public void RegexRules_AreCaseSensitive_AndCannotBeSkippedWithUserinfoOrAFragment()
+    public void RegexRules_AreCaseInsensitive_AndCannotBeSkippedWithUserinfoOrAFragment()
     {
         var set = Compile(Policy(member:
         [
             Member(@"^https?://([a-z0-9-]+\.)*casino\.example/$", PatternType.Regex, RuleAction.Block),
             Member(@"/Secret/", PatternType.Regex, RuleAction.Block),
         ]));
-        foreach (var url in new[] { "https://casino.example/", "https://www.casino.example/", "https://u@casino.example/", "https://u:p@www.casino.example/#x", "https://a.example/Secret/x" })
+        foreach (var url in new[] { "https://casino.example/", "https://www.casino.example/", "https://u@casino.example/", "https://u:p@www.casino.example/#x", "https://a.example/Secret/x", "https://a.example/secret/x", "https://CASINO.example/" })
             Assert.True(Outcome(set, url) == DnrOutcome.Block, url);
-        foreach (var url in new[] { "https://casino.example/x", "https://a.example/secret/x" })
+        foreach (var url in new[] { "https://casino.example/x", "https://a.example/Secrets/x" })
             Assert.True(Outcome(set, url) == DnrOutcome.Allow, url);
-        Assert.All(set.DynamicRules.Where(r => r.Condition.RequestDomains is null && r.Id >= 1000), r => Assert.True(r.Condition.IsUrlFilterCaseSensitive));
+        Assert.All(set.DynamicRules.Where(r => r.Condition.RequestDomains is null && r.Id >= 1000), r => Assert.False(r.Condition.IsUrlFilterCaseSensitive));
     }
 
     [Theory]

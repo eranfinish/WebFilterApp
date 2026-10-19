@@ -1,5 +1,6 @@
 using WebFilter.Core.Dnr;
 using WebFilter.Core.Model;
+using WebFilter.Core.Urls;
 using static WebFilter.Core.Tests.Dnr.DnrTestPolicies;
 
 namespace WebFilter.Core.Tests.Dnr;
@@ -68,6 +69,42 @@ public class DnrDifferentialTests
                 var actualTimeUp = DnrSimulator.Evaluate(rules.TimeUpSessionRules.Concat(rules.DynamicRules), url);
                 if (expectedTimeUp != actualTimeUp)
                     failures.Add($"#{iteration} time-up {url}: reference {expectedTimeUp}, DNR {actualTimeUp}\n  policy: {Describe(policy)}");
+            }
+        }
+
+        Assert.True(failures.Count == 0, string.Join("\n", failures));
+    }
+
+    /// <summary>
+    /// The browser fallback and the decider use <see cref="RuleEvaluator"/>; the extension uses the compiled rules. Both must
+    /// reach the same decision. YouTube hosts are left out (the engine decides YouTube before the evaluator runs).
+    /// </summary>
+    [Fact]
+    public void RandomPolicies_CoreEvaluatorAgreesWithTheCompiledRules()
+    {
+        var random = new Random(20261020);
+        var urls = (from host in UrlHosts
+                    where !host.Contains("youtu", StringComparison.Ordinal)
+                    from path in UrlPaths
+                    from userinfo in new[] { "", "u:p@" }
+                    select $"http{(path.Length % 2 == 0 ? "s" : "")}://{userinfo}{host}{path}").ToList();
+        var failures = new List<string>();
+
+        for (var iteration = 0; iteration < 400 && failures.Count < 10; iteration++)
+        {
+            var policy = RandomPolicy(random);
+            var rules = DnrCompiler.Compile(policy, Options);
+            var hasRegex = policy.MemberRules.Concat(policy.GlobalRules).Any(r => r.Type == PatternType.Regex);
+            foreach (var raw in urls)
+            {
+                var chrome = ChromeUrl.Parse(raw);
+                if (hasRegex && chrome.Host.EndsWith('.'))
+                    continue;
+                Assert.True(UrlNormalizer.TryNormalize(raw, out var normalized), raw);
+                var core = RuleEvaluator.Evaluate(policy, normalized).Decision == Decisions.Decision.Allow ? DnrOutcome.Allow : DnrOutcome.Block;
+                var dnr = DnrSimulator.Evaluate(rules.DynamicRules, chrome);
+                if (core != dnr)
+                    failures.Add($"#{iteration} {raw}: core {core}, DNR {dnr}\n  policy: {Describe(policy)}");
             }
         }
 

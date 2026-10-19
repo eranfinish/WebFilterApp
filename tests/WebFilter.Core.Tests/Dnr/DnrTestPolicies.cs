@@ -96,7 +96,7 @@ internal static class ReferenceEvaluator
                     return null;
                 return new Spec(4, Labels(host), path.Length);
             case PatternType.Regex:
-                return Regex.IsMatch(url.Href, rule.Pattern, RegexOptions.CultureInvariant) ? new Spec(1, 0, 0) : null;
+                return Regex.IsMatch(url.Href, rule.Pattern, RegexOptions.CultureInvariant | RegexOptions.IgnoreCase) ? new Spec(1, 0, 0) : null;
             default:
                 return null;
         }

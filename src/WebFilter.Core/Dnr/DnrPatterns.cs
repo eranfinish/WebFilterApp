@@ -105,7 +105,7 @@ internal static class DnrPatterns
     }
 
     /// <summary>
-    /// A user regex, case-sensitive like RE2 on the evaluator's normalized URL. Known gaps against the evaluator: Chrome keeps a
+    /// A user regex, case-insensitive like the evaluator (a parent's "porn" must also catch "PORN"). Known gaps against the evaluator: Chrome keeps a
     /// trailing host dot ("host./") and its own percent-encoding in the URL the regex sees, and a regex too large for RE2's 2 KB
     /// program limit in Chrome makes the whole rule update fail — the extension should check <c>isRegexSupported</c> first.
     /// </summary>
@@ -116,7 +116,7 @@ internal static class DnrPatterns
         var regex = AllowUserinfo(AllowFragment(pattern));
         // A block rule must match the whole URL so that \0 carries it to the block page.
         var block = regex.StartsWith('^') && !regex.Contains('|') ? $"(?:{regex}).*" : $"^.*?(?:{regex}).*";
-        return new DnrMatch(DnrPriorities.RegexLevel, null, regex, block, true);
+        return new DnrMatch(DnrPriorities.RegexLevel, null, regex, block, false);
     }
 
     /// <summary>
