@@ -159,17 +159,35 @@ public sealed class HubCore(FamilyConfig config)
         Changed(now, null, "pair_device");
     }
 
-    /// <summary>Records accounts an agent has seen; new ones are unlinked until a parent links them. Existing links are kept.</summary>
+    /// <summary>
+    /// Records the accounts a device reports (tests/simulation/README.md §8): new ones are added unlinked until a parent
+    /// links them; a known one keeps its link and takes the reported name and administrator flag — administrators are
+    /// never filtered, so a flag left from before a parent made a child's account a standard one would leave the child
+    /// unfiltered. Accounts missing from the report are kept.
+    /// </summary>
     public void ReportAccounts(string deviceId, IEnumerable<DeviceAccount> seen, DateTimeOffset now)
     {
         var index = Config.Devices.FindIndex(d => d.Id == deviceId);
         if (index < 0) return;
-        var device = Config.Devices[index];
-        var added = seen.Where(s => device.Accounts.All(a => !string.Equals(a.AccountId, s.AccountId, StringComparison.OrdinalIgnoreCase)))
-            .Select(s => s with { MemberId = null }).ToList();
-        if (added.Count == 0) return;
-        Config.Devices[index] = device with { Accounts = [.. device.Accounts, .. added] };
-        Changed(now, null, "new_accounts");
+        var accounts = Config.Devices[index].Accounts.ToList();
+        var (added, updated) = (false, false);
+        foreach (var account in seen)
+        {
+            var known = accounts.FindIndex(a => string.Equals(a.AccountId, account.AccountId, StringComparison.OrdinalIgnoreCase));
+            if (known < 0)
+            {
+                accounts.Add(account with { MemberId = null });
+                added = true;
+            }
+            else if (accounts[known].Name != account.Name || accounts[known].IsAdmin != account.IsAdmin)
+            {
+                accounts[known] = accounts[known] with { Name = account.Name, IsAdmin = account.IsAdmin };
+                updated = true;
+            }
+        }
+        if (!added && !updated) return;
+        Config.Devices[index] = Config.Devices[index] with { Accounts = accounts };
+        Changed(now, null, added ? "new_accounts" : "accounts_updated");
     }
 
     public void AddRule(Rule rule, DateTimeOffset now)

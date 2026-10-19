@@ -91,7 +91,8 @@ for (const file of files) {
       if (!members.has(m.id)) fail(where, `setup patches unknown member '${m.id}'`);
       else Object.assign(members.get(m.id), m);
     }
-    const devices = new Map(fixture.devices.map((d) => [d.id, d]));
+    // Copies: reportAccounts steps add accounts for the steps after them.
+    const devices = new Map(fixture.devices.map((d) => [d.id, { ...d, accounts: [...d.accounts] }]));
     const ruleIds = new Set();
     const addRuleId = (id, w) => { if (ruleIds.has(id)) fail(w, `duplicate rule id '${id}'`); ruleIds.add(id); };
     for (const r of [...fixture.rules, ...(setup.rules ?? [])]) addRuleId(r.id, where);
@@ -139,6 +140,16 @@ for (const file of files) {
       checkMemberOnDevice(step.member, step.device, w);
 
       switch (step.do) {
+        case "reportAccounts": {
+          const dev = devices.get(step.device);
+          const ids = new Set();
+          for (const a of step.accounts) {
+            if (ids.has(a.accountId)) fail(w, `account '${a.accountId}' reported twice`);
+            ids.add(a.accountId);
+            if (dev && !dev.accounts.some((known) => known.accountId === a.accountId)) dev.accounts.push({ accountId: a.accountId, name: a.name, isAdmin: a.isAdmin });
+          }
+          break;
+        }
         case "navigate":
           if (step.account) {
             const dev = devices.get(step.device);
