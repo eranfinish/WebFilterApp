@@ -105,8 +105,7 @@ public sealed class AdminPipeServer(FamilyService family, IOptions<ServiceOption
     /// </summary>
     private AdminMessage HandleOnAgent(AdminMessage request) => request switch
     {
-        GetStatus => family.WithAgent<AdminMessage>((agent, now) => new StatusResult(agent.SnapshotVersion ?? 0, family.DeviceId, false, now,
-            agent.View().Config.Members.Select(m => MemberStatusOf(m, agent.TimeStatus(m.Id, now), agent.View().RuntimeOf(m.Id), now)).ToList())),
+        GetStatus => family.WithAgent<AdminMessage>((agent, now) => AgentStatus(agent, now)),
         Pause pause => family.WithAgent<AdminMessage>((agent, now) => { agent.LocalPause(pause.MemberId, pause.Until, now); return new AdminOk(); }),
         SetClock set => SetClock(set),
         _ => new AdminError("not_hub", "This computer is managed by the hub computer; make this change there."),
@@ -115,7 +114,7 @@ public sealed class AdminPipeServer(FamilyService family, IOptions<ServiceOption
     private AdminMessage HandleOnHub(AdminMessage request, string adminName) => request switch
     {
         GetStatus => family.WithHub<AdminMessage>((hub, now) => new StatusResult(hub.Version, family.DeviceId, family.IsHub, now,
-            hub.Config.Members.Select(m => MemberStatusOf(m, hub.TimeStatus(m.Id, now), hub.RuntimeOf(m.Id), now)).ToList())),
+            hub.Config.Members.Select(m => MemberStatusOf(m, hub.TimeStatus(m.Id, now), hub.RuntimeOf(m.Id), now)).ToList(), BundleMapper.ZoneId(hub.Config.TimeZone))),
         GetSettings => family.WithHub<AdminMessage>((hub, _) => new SettingsResult(BundleMapper.ToBundle(hub.Config, hub.Version))),
         ReplaceSettings replace => Replace(replace, adminName),
         AddRule add => Ok(adminName, (hub, now) => hub.AddRule(ToRule(add.Rule), now)),
@@ -146,6 +145,19 @@ public sealed class AdminPipeServer(FamilyService family, IOptions<ServiceOption
         ScanAccounts => ScanLocalAccounts(adminName),
         _ => new AdminError("unsupported", $"Unsupported message type {request.GetType().Name}."),
     };
+
+    /// <summary>
+    /// The members as this agent sees them (none before its first settings arrive) and the hub that manages it, for the
+    /// admin app's "managed by" view.
+    /// </summary>
+    private StatusResult AgentStatus(AgentCore agent, DateTimeOffset now)
+    {
+        var config = agent.SnapshotVersion is null ? null : agent.View().Config;
+        var members = config?.Members.Select(m => MemberStatusOf(m, agent.TimeStatus(m.Id, now), agent.View().RuntimeOf(m.Id), now)).ToList() ?? [];
+        var hub = new HubConnection(config?.Devices.FirstOrDefault(d => d.Role == "hub")?.Id, family.HubAddress,
+            family.LastHubContactAt is not null && agent.HubReachable, family.LastHubContactAt);
+        return new StatusResult(agent.SnapshotVersion ?? 0, family.DeviceId, false, now, members, config is null ? null : BundleMapper.ZoneId(config.TimeZone), hub);
+    }
 
     private AdminMessage Ok(string adminName, Action<HubCore, DateTimeOffset> action) =>
         family.WithHub<AdminMessage>((hub, now) =>

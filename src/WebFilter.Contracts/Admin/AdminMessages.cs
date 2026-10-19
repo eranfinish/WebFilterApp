@@ -48,7 +48,17 @@ public abstract record AdminMessage
 
 public sealed record GetStatus : AdminMessage;
 
-public sealed record StatusResult(int SettingsVersion, string DeviceId, bool IsHub, DateTimeOffset Now, IReadOnlyList<MemberStatus> Members) : AdminMessage;
+/// <param name="TimeZone">The family's time zone (IANA id), for "until the end of the day"; null before an agent first hears from its hub.</param>
+/// <param name="Hub">On an agent computer: the hub that manages it and whether it is reachable. Null on the hub.</param>
+public sealed record StatusResult(int SettingsVersion, string DeviceId, bool IsHub, DateTimeOffset Now, IReadOnlyList<MemberStatus> Members,
+    string? TimeZone = null, HubConnection? Hub = null) : AdminMessage;
+
+/// <summary>An agent computer's link to the hub that manages it (MVP-PLAN §4.5: "managed by hub ‹name›").</summary>
+/// <param name="Name">The hub computer's name (its device id in the settings); null until the first settings arrive.</param>
+/// <param name="Address">The address the agent syncs with ("host:port"); null while this computer is not paired.</param>
+/// <param name="Reachable">The last sync attempt succeeded.</param>
+/// <param name="LastContactAt">The last successful sync since the service started.</param>
+public sealed record HubConnection(string? Name, string? Address, bool Reachable, DateTimeOffset? LastContactAt);
 
 /// <param name="TimeState">ok | warn | expired | outside_window | unlimited.</param>
 public sealed record MemberStatus(

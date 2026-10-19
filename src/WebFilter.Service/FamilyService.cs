@@ -173,8 +173,20 @@ public sealed class FamilyService : IDisposable
 
     public void SetHubReachable(bool reachable)
     {
-        lock (_gate) _agent.HubReachable = reachable;
+        lock (_gate)
+        {
+            _agent.HubReachable = reachable;
+            if (reachable) LastHubContactAt = Now;
+        }
     }
+
+    /// <summary>Agent role: the hub address this computer syncs with, once it is paired (set by <see cref="Hub.HubSyncService"/>).</summary>
+    public string? HubAddress { get; private set; }
+
+    /// <summary>Agent role: the last successful sync with the hub since the service started.</summary>
+    public DateTimeOffset? LastHubContactAt { get; private set; }
+
+    public void SetHubAddress(string address) => HubAddress = address;
 
     // ---- hub role: the hub API calls these (M6) -------------------------------------------------------------------
 

@@ -12,6 +12,7 @@ public class AdminProtocolTests
     {
         new GetStatus { Id = "1" },
         new StatusResult(4, "pc-kids", true, At, [new MemberStatus("noa", "נועה", "ok", 30, 120, 90, "19:00", null, null)]),
+        new StatusResult(4, "laptop-yoav", false, At, [], "Asia/Jerusalem", new HubConnection("pc-parents", "192.168.1.20:47800", true, At)),
         new GetSettings(),
         new SettingsResult(new FamilyBundle { TimeZone = "Asia/Jerusalem", Version = 4 }),
         new ReplaceSettings(new FamilyBundle { TimeZone = "Asia/Jerusalem" }),

@@ -27,7 +27,7 @@ public sealed class PipeIntegrationTests : IAsyncLifetime
     private FamilyService _family = null!;
     private AgentPipeServer _agentServer = null!;
     private AdminPipeServer _adminServer = null!;
-    private readonly FakeAccounts _accounts = new();
+    private readonly FakeLocalAccounts _accounts = new();
 
     public async Task InitializeAsync()
     {
@@ -274,9 +274,10 @@ public sealed class PipeIntegrationTests : IAsyncLifetime
     [Fact]
     public async Task Scanning_adds_this_computers_new_accounts_unlinked_and_keeps_the_links()
     {
-        _accounts.Seen.Add(new DeviceAccount(UserSid, "noa", null, IsAdmin: false));
-        _accounts.Seen.Add(new DeviceAccount("S-1-5-21-2000-1010", "kids-guest", null, IsAdmin: false));
-        _accounts.Seen.Add(new DeviceAccount("S-1-5-21-2000-1011", "parent2", null, IsAdmin: true));
+        _accounts.Set(
+            new DeviceAccount(UserSid, "noa", null, IsAdmin: false),
+            new DeviceAccount("S-1-5-21-2000-1010", "kids-guest", null, IsAdmin: false),
+            new DeviceAccount("S-1-5-21-2000-1011", "parent2", null, IsAdmin: true));
         await using var admin = await AdminClient.ConnectAsync(_options.AdminPipeName);
 
         Assert.Equal("2", Assert.IsType<AdminOk>(await admin.RequestAsync(new ScanAccounts())).Detail);
@@ -383,13 +384,6 @@ public sealed class PipeIntegrationTests : IAsyncLifetime
         for (var dir = new DirectoryInfo(AppContext.BaseDirectory); dir is not null; dir = dir.Parent)
             if (File.Exists(Path.Combine(dir.FullName, "WebFilter.slnx"))) return dir.FullName;
         throw new InvalidOperationException("WebFilter.slnx not found");
-    }
-
-    private sealed class FakeAccounts : ILocalAccounts
-    {
-        public List<DeviceAccount> Seen { get; } = [];
-
-        public IReadOnlyList<DeviceAccount> List() => [.. Seen];
     }
 
     private sealed class TestClock(DateTimeOffset now) : TimeProvider
