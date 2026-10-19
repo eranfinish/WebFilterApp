@@ -33,3 +33,7 @@ _metadata/
 
 # Local lab settings (never commit credentials)
 tests/simulation/lab/*.local.json
+
+# Disk images (the lab ISO lives in C:\Lab\iso, never in the repo)
+*.iso
+*.vhdx
