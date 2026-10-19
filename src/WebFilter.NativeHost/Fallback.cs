@@ -22,7 +22,7 @@ internal sealed class Fallback(HostSettings settings)
         var restricted = !isAdmin && (cache?.Restricted ?? true);
         string? extensionId = null;
 
-        while (await AgentProtocol.ReadAsync(stdin) is { } message)
+        while (await AgentProtocol.ReadLenientAsync(stdin) is { } message)
         {
             AgentMessage reply = message switch
             {
@@ -30,6 +30,7 @@ internal sealed class Fallback(HostSettings settings)
                 GetRulesRequest => Rules(),
                 HeartbeatRequest => new TimeStateMessage("unlimited", null, null),
                 RequestAccessRequest => new RequestAccessResponse("unavailable", null),
+                UnknownMessage unknown => new ErrorMessage("unsupported", $"Unknown message type '{unknown.Type}'."),
                 _ => new ErrorMessage("service_unavailable", "The filtering service is not running."),
             };
             await AgentProtocol.WriteAsync(stdout, reply with { Id = message.Id });

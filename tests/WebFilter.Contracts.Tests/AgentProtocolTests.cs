@@ -18,6 +18,9 @@ public class AgentProtocolTests
         new HeartbeatRequest(true, "active", true),
         new TimeStateMessage("warn", 5, null),
         new ReportBlockRequest("https://www.instagram.com/", "blocked_category", null),
+        new ReportBlockResult("block", "blocked_rule", "r-1", null, true, "url"),
+        new DecideUrlRequest("https://www.instagram.com/"),
+        new DecideUrlResponse("block", "blocked_category", null, "social", true, "url"),
         new RequestAccessRequest("url", "https://pbskids.org/games", null, "homework"),
         new RequestAccessResponse("created", "ar-1"),
         new ResolveYouTubeRequest("@sesame-sim", null),
@@ -90,5 +93,21 @@ public class AgentProtocolTests
     {
         using var stream = new MemoryStream(BitConverter.GetBytes(MessageFraming.MaxFrame + 1));
         await Assert.ThrowsAsync<InvalidDataException>(() => MessageFraming.ReadAsync(stream));
+    }
+
+    [Theory]
+    [InlineData("""{"type":"somethingNewer","v":2,"id":"q7"}""", "somethingNewer", "q7")]
+    [InlineData("""{"v":1,"id":"q8"}""", null, "q8")]
+    [InlineData("""not json""", null, null)]
+    public async Task Lenient_reading_turns_unknown_frames_into_UnknownMessage(string json, string? type, string? id)
+    {
+        using var stream = new MemoryStream();
+        await MessageFraming.WriteAsync(stream, Encoding.UTF8.GetBytes(json));
+        await AgentProtocol.WriteAsync(stream, new HeartbeatRequest(true, "active", true));
+        stream.Position = 0;
+
+        var unknown = Assert.IsType<UnknownMessage>(await AgentProtocol.ReadLenientAsync(stream));
+        Assert.Equal((type, id), (unknown.Type, unknown.Id));
+        Assert.IsType<HeartbeatRequest>(await AgentProtocol.ReadLenientAsync(stream));
     }
 }

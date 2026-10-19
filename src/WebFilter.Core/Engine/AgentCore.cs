@@ -52,13 +52,19 @@ public sealed class AgentCore(string deviceId)
         return new PolicyView(Snapshot.Config, Snapshot.Runtime, usage, _localPauses, _policies);
     }
 
-    public DecisionResult DecideUrl(DeviceAccount account, string url, DateTimeOffset now)
+    /// <summary>The decision <see cref="DecideUrl"/> would make, without recording a block (the block page asking why).</summary>
+    public DecisionResult ExplainUrl(DeviceAccount account, string url, DateTimeOffset now)
     {
         if (!ServiceUp) return Decider.FailClosed(account, Cache(account, now), url);
-        var result = account.MemberId is null
+        return account.MemberId is null
             ? (account.IsAdmin ? DecisionResult.Allow(ReasonCode.AllowedUnrestricted) : Decider.UnlinkedUrl(View(), url, now))
             : Decider.Url(View(), account.MemberId, url, now);
-        if (result.Decision == Decision.Block) Raise(new FamilyEvent(EventType.Blocked, now, account.MemberId, DeviceId, result.Reason, Url: url));
+    }
+
+    public DecisionResult DecideUrl(DeviceAccount account, string url, DateTimeOffset now)
+    {
+        var result = ExplainUrl(account, url, now);
+        if (result.Decision == Decision.Block && ServiceUp) Raise(new FamilyEvent(EventType.Blocked, now, account.MemberId, DeviceId, result.Reason, Url: url));
         return result;
     }
 

@@ -15,6 +15,9 @@ namespace WebFilter.Contracts.Agent;
 [JsonDerivedType(typeof(HeartbeatRequest), "heartbeat")]
 [JsonDerivedType(typeof(TimeStateMessage), "timeState")]
 [JsonDerivedType(typeof(ReportBlockRequest), "reportBlock")]
+[JsonDerivedType(typeof(ReportBlockResult), "reportBlockResult")]
+[JsonDerivedType(typeof(DecideUrlRequest), "decideUrl")]
+[JsonDerivedType(typeof(DecideUrlResponse), "decideUrlResult")]
 [JsonDerivedType(typeof(RequestAccessRequest), "requestAccess")]
 [JsonDerivedType(typeof(RequestAccessResponse), "requestAccessResult")]
 [JsonDerivedType(typeof(ResolveYouTubeRequest), "resolveYouTube")]
@@ -69,6 +72,24 @@ public sealed record HeartbeatRequest(bool Focused, string Idle, bool HasWebTab)
 public sealed record TimeStateMessage(string State, int? RemainingMinutes, string? WindowEndsAt) : AgentMessage;
 
 public sealed record ReportBlockRequest(string Url, string Reason, string? RuleId) : AgentMessage;
+
+/// <summary>
+/// Reply to reportBlock: the service's own decision for the URL (the extension's reason is only a guess from its rules).
+/// Decision "allow" means the extension's rules are stale; the service also pushes rulesChanged.
+/// </summary>
+public sealed record ReportBlockResult(string Decision, string Reason, string? RuleId, string? Category, bool CanRequest, string RequestKind) : AgentMessage;
+
+/// <summary>A frame that is not a known message (see <see cref="AgentProtocol.ReadLenientAsync"/>). Never sent.</summary>
+public sealed record UnknownMessage(string? Type) : AgentMessage;
+
+/// <summary>The block page asks why <see cref="Url"/> is blocked, without recording a block (reportBlock records and also answers).</summary>
+public sealed record DecideUrlRequest(string Url) : AgentMessage;
+
+/// <param name="Decision">allow | block.</param>
+/// <param name="Reason">A reason code wire name (README §5), e.g. blocked_rule, blocked_category, time_expired.</param>
+/// <param name="CanRequest">The user may send the parents a request (a linked family member).</param>
+/// <param name="RequestKind">What a request should ask for: url, or time when the block is about time.</param>
+public sealed record DecideUrlResponse(string Decision, string Reason, string? RuleId, string? Category, bool CanRequest, string RequestKind) : AgentMessage;
 
 /// <param name="Kind">url | youtube | app | time.</param>
 public sealed record RequestAccessRequest(string Kind, string? Target, int? Minutes, string? Note) : AgentMessage;

@@ -6,6 +6,7 @@ using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Options;
 using WebFilter.Contracts.Admin;
 using WebFilter.Contracts.Agent;
+using WebFilter.Core.Engine;
 using WebFilter.Service.Pipes;
 
 namespace WebFilter.Service.Tests;
@@ -103,6 +104,53 @@ public sealed class PipeIntegrationTests : IAsyncLifetime
         Assert.Contains(rules.DynamicRules, r => r.ToString().Contains("abcdefghijklmnopabcdefghijklmnop", StringComparison.Ordinal));
         Assert.Equal("allowlist", rules.YouTube.Mode);
         Assert.Contains(rules.YouTube.Allowed, c => c.ChannelId == "UCkhanKids00000000000001");
+    }
+
+    [Fact]
+    public async Task The_block_page_learns_why_without_recording_another_block()
+    {
+        _family.WithHub((hub, now) =>
+        {
+            var config = hub.Config.Clone();
+            config.MemberCategories.Add(new Core.Model.MemberCategory("noa", "social", Core.Model.RuleAction.Block));
+            hub.ReplaceSettings(config, now);
+            return 0;
+        });
+        await using var agent = await AgentClient.ConnectAsync(_options.AgentPipeName);
+        await agent.RequestAsync<HelloResponse>(new HelloRequest("0.0.1", "edge"));
+        await using var admin = await AdminClient.ConnectAsync(_options.AdminPipeName);
+        var before = Assert.IsType<EventsResult>(await admin.RequestAsync(new GetEvents())).Events.Count;
+
+        var social = await agent.RequestAsync<DecideUrlResponse>(new DecideUrlRequest("https://www.instagram.com/explore"));
+        Assert.Equal(("block", "blocked_category", "social", true, "url"), (social.Decision, social.Reason, social.Category, social.CanRequest, social.RequestKind));
+        var other = await agent.RequestAsync<DecideUrlResponse>(new DecideUrlRequest("https://unknown.example/"));
+        Assert.Equal(("block", "blocked_not_in_allowlist"), (other.Decision, other.Reason));
+        var school = await agent.RequestAsync<DecideUrlResponse>(new DecideUrlRequest("https://mashov.info/"));
+        Assert.Equal("allow", school.Decision);
+
+        Assert.Equal(before, Assert.IsType<EventsResult>(await admin.RequestAsync(new GetEvents())).Events.Count);
+    }
+
+    [Fact]
+    public async Task Report_block_records_with_the_service_reason_and_unknown_messages_keep_the_session()
+    {
+        await using var agent = await AgentClient.ConnectAsync(_options.AgentPipeName);
+        await agent.RequestAsync<HelloResponse>(new HelloRequest("0.0.1", "edge"));
+        await agent.SendRawAsync("""{"type":"somethingNewer","v":2,"id":"x1"}""");
+        Assert.Equal("unsupported", (await agent.WaitForAsync<ErrorMessage>(m => m.Id == "x1"))!.Code);
+
+        await using var admin = await AdminClient.ConnectAsync(_options.AdminPipeName);
+        async Task<int> Blocks() => Assert.IsType<EventsResult>(await admin.RequestAsync(new GetEvents(EventType: "blocked"))).Events.Count;
+        var before = await Blocks();
+
+        var result = await agent.RequestAsync<ReportBlockResult>(new ReportBlockRequest("https://unknown.example/", "blocked_rule", null));
+        Assert.Equal(("block", "blocked_not_in_allowlist", true), (result.Decision, result.Reason, result.CanRequest));
+        Assert.Equal(before + 1, await Blocks());
+
+        var stale = await agent.RequestAsync<ReportBlockResult>(new ReportBlockRequest("https://mashov.info/", "blocked_rule", null));
+        Assert.Equal("allow", stale.Decision);
+        Assert.NotNull(await agent.WaitForAsync<RulesChangedMessage>());
+        Assert.Equal(before + 1, await Blocks());
     }
 
     [Fact]
@@ -231,6 +279,8 @@ public sealed class PipeIntegrationTests : IAsyncLifetime
         }
 
         public int CountOf<T>() where T : AgentMessage => _received.OfType<T>().Count();
+
+        public Task SendRawAsync(string json) => Contracts.Framing.MessageFraming.WriteAsync(_pipe, System.Text.Encoding.UTF8.GetBytes(json));
 
         public Task<T?> WaitForAsync<T>(Func<T, bool>? match = null) where T : AgentMessage => Poll(() =>
             _received.OfType<T>().FirstOrDefault(m => match?.Invoke(m) ?? true));

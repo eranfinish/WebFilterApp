@@ -6,6 +6,7 @@ using WebFilter.Core.Dnr;
 using WebFilter.Core.Engine;
 using WebFilter.Core.Model;
 using WebFilter.Core.Time;
+using WebFilter.Core.Urls;
 
 namespace WebFilter.Service.Pipes;
 
@@ -35,7 +36,7 @@ internal sealed class AgentSession(Stream pipe, ClientIdentity client, FamilySer
         family.RequestDecided += OnDecided;
         try
         {
-            while (await AgentProtocol.ReadAsync(pipe, linked.Token) is { } message)
+            while (await AgentProtocol.ReadLenientAsync(pipe, linked.Token) is { } message)
             {
                 AgentMessage reply;
                 try
@@ -76,11 +77,9 @@ internal sealed class AgentSession(Stream pipe, ClientIdentity client, FamilySer
         HelloRequest hello => Hello(hello),
         GetRulesRequest => Rules(),
         HeartbeatRequest beat => Heartbeat(beat),
-        ReportBlockRequest block => family.WithAgent<AgentMessage>((agent, now) =>
-        {
-            agent.ReportBlock(Account(agent), block.Url, ReasonCodeExtensions.ParseOrNone(block.Reason), now);
-            return new ErrorMessage("ok", "recorded");
-        }),
+        ReportBlockRequest block => ReportBlock(block),
+        UnknownMessage unknown => new ErrorMessage("unsupported", $"Unknown message type '{unknown.Type}'."),
+        DecideUrlRequest decide => DecideUrl(decide.Url),
         RequestAccessRequest request => RequestAccess(request),
         ResolveYouTubeRequest resolve => family.WithAgent<AgentMessage>((agent, _) =>
             new ResolveYouTubeResponse(agent.View().Config.YouTubeChannels.FirstOrDefault(c =>
@@ -126,6 +125,54 @@ internal sealed class AgentSession(Stream pipe, ClientIdentity client, FamilySer
             rules.TimeUpSessionRules.Select(r => JsonSerializer.SerializeToElement(r)).ToList(),
             youtube, TimeStateOf(agent, account, now));
     });
+
+    private AgentMessage DecideUrl(string url) => family.WithAgent<AgentMessage>((agent, now) =>
+    {
+        var e = Explain(agent, Account(agent), url, now);
+        return new DecideUrlResponse(e.Decision, e.Reason, e.RuleId, e.Category, e.CanRequest, e.RequestKind);
+    });
+
+    /// <summary>
+    /// Records a block the extension enforced and answers with the service's own reason. YouTube channel blocks are
+    /// decided in the page, so the extension's reason stands for those. If the service would allow the URL, the
+    /// extension's rules are stale: nothing is recorded and rulesChanged is pushed.
+    /// </summary>
+    private AgentMessage ReportBlock(ReportBlockRequest block)
+    {
+        var stale = false;
+        var reply = family.WithAgent<AgentMessage>((agent, now) =>
+        {
+            var account = Account(agent);
+            var reported = ReasonCodeExtensions.ParseOrNone(block.Reason);
+            var e = reported is ReasonCode.BlockedYouTubeChannel or ReasonCode.BlockedYouTubeUnknown
+                ? new Explanation("block", reported.ToWire(), block.RuleId, null, account.MemberId is not null, "youtube")
+                : Explain(agent, account, block.Url, now);
+            if (e.Decision == "allow") stale = true;
+            else agent.ReportBlock(account, block.Url, ReasonCodes.Parse(e.Reason), now);
+            return new ReportBlockResult(e.Decision, e.Reason, e.RuleId, e.Category, e.CanRequest, e.RequestKind);
+        });
+        if (stale) _outgoing.Writer.TryWrite(new RulesChangedMessage(family.WithAgent((agent, _) => agent.SnapshotVersion ?? 0)));
+        return reply;
+    }
+
+    private sealed record Explanation(string Decision, string Reason, string? RuleId, string? Category, bool CanRequest, string RequestKind);
+
+    private static Explanation Explain(AgentCore agent, DeviceAccount account, string url, DateTimeOffset now)
+    {
+        var result = agent.ExplainUrl(account, url, now);
+        string? category = null;
+        if (result.Reason == ReasonCode.BlockedCategory && account.MemberId is { } memberId && UrlNormalizer.TryNormalize(url, out var normalized))
+        {
+            var config = agent.View().Config;
+            category = config.MemberCategories
+                .Where(mc => mc.MemberId == memberId && mc.Action == RuleAction.Block)
+                .Select(mc => mc.Category)
+                .FirstOrDefault(c => RuleEvaluator.IsInCategory(config.Categories, c, normalized));
+        }
+        var aboutTime = result.Reason is ReasonCode.BlockedTimeWindow or ReasonCode.BlockedDailyLimit;
+        return new Explanation(result.Decision == Decision.Allow ? "allow" : "block", result.Reason.ToWire(), result.RuleId, category,
+            account.MemberId is not null && result.Decision != Decision.Allow, aboutTime ? "time" : "url");
+    }
 
     private AgentMessage Heartbeat(HeartbeatRequest beat) => family.WithAgent<AgentMessage>((agent, now) =>
     {
