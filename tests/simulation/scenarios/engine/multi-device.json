@@ -105,6 +105,24 @@
         { "do": "network", "at": "16:10", "device": "laptop-yoav", "hub": "online" },
         { "do": "expectTime", "member": "yoav", "state": "ok", "usedMinutes": 120, "limitMinutes": 150, "remainingMinutes": 30 }
       ]
+    },
+    {
+      "id": "MD-008",
+      "title": "A computer's account report adds new accounts unlinked and keeps each account's administrator flag current",
+      "start": "2026-11-02T15:00",
+      "steps": [
+        { "do": "reportAccounts", "device": "pc-kids", "accounts": [
+            { "accountId": "S-1-5-21-2000-1005", "name": "visitor", "isAdmin": true },
+            { "accountId": "S-1-5-21-2000-1006", "name": "cousin", "isAdmin": false } ] },
+        { "do": "navigate", "account": "visitor", "device": "pc-kids", "url": "https://www.wikipedia.org/", "expect": { "decision": "allow", "reason": "allowed_unrestricted" }, "note": "made an administrator on the computer" },
+        { "do": "navigate", "account": "cousin",  "device": "pc-kids", "url": "https://www.wikipedia.org/", "expect": { "decision": "block", "reason": "blocked_not_in_allowlist" }, "note": "new, and not linked to anyone yet" },
+        { "do": "reportAccounts", "at": "15:10", "device": "pc-kids", "accounts": [
+            { "accountId": "S-1-5-21-2000-1005", "name": "visitor", "isAdmin": false },
+            { "accountId": "S-1-5-21-2000-1001", "name": "noa", "isAdmin": false } ] },
+        { "do": "navigate", "account": "visitor", "device": "pc-kids", "url": "https://www.wikipedia.org/", "expect": { "decision": "block", "reason": "blocked_not_in_allowlist" }, "note": "a standard account again" },
+        { "do": "navigate", "account": "cousin",  "device": "pc-kids", "url": "https://mashov.info/", "expect": { "decision": "allow", "reason": "allowed_always" }, "note": "missing from this report, still there" },
+        { "do": "navigate", "member": "noa", "device": "pc-kids", "url": "https://www.khanacademy.org/", "expect": { "decision": "allow", "reason": "allowed_category" }, "note": "a reported account keeps its link" }
+      ]
     }
   ]
 }

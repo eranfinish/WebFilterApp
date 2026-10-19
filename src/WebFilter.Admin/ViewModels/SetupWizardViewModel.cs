@@ -14,6 +14,7 @@ public enum WizardStep
     Members,
     Accounts,
     Time,
+    Categories,
     Review,
     Done,
 }
@@ -21,8 +22,9 @@ public enum WizardStep
 /// <summary>
 /// First-time setup of a hub whose family is empty (MVP-PLAN §4.5): the family members, each starting from its role's
 /// template; this computer's Windows accounts (<see cref="ScanAccounts"/>, then the device in the settings) linked to
-/// them; hours and a daily limit for the filtered ones; then all of it in one <see cref="ReplaceSettings"/>. It ends
-/// with how to pair the children's other computers.
+/// them; hours and a daily limit for the filtered ones; the ready-made category lists (data/starter-lists) and what each
+/// filtered member gets of them; a summary with the requirement checks of this computer (<see cref="GetDiagnostics"/>);
+/// then all of it in one <see cref="ReplaceSettings"/>. It ends with how to pair the children's other computers.
 /// </summary>
 public sealed partial class SetupWizardViewModel : PageViewModel
 {
@@ -32,6 +34,7 @@ public sealed partial class SetupWizardViewModel : PageViewModel
     public SetupWizardViewModel(FamilyContext context) : base(context)
     {
         Members.Add(new WizardMemberViewModel(NewMemberId(), "child"));
+        StarterCategories = [.. StarterLists.All.Select(l => new WizardCategoryViewModel(l))];
         UpdateSteps();
     }
 
@@ -54,18 +57,22 @@ public sealed partial class SetupWizardViewModel : PageViewModel
 
     public ObservableCollection<WizardStepItem> Steps { get; } = [];
 
+    /// <summary>The ready-made lists; each one included is added to the family's categories.</summary>
+    public IReadOnlyList<WizardCategoryViewModel> StarterCategories { get; }
+
     [ObservableProperty]
-    [NotifyPropertyChangedFor(nameof(IsMembersStep), nameof(IsAccountsStep), nameof(IsTimeStep), nameof(IsReviewStep), nameof(IsDone), nameof(CanGoBack),
-        nameof(CanGoNext), nameof(ShowsWizard), nameof(ShowsAlreadySetUp))]
+    [NotifyPropertyChangedFor(nameof(IsMembersStep), nameof(IsAccountsStep), nameof(IsTimeStep), nameof(IsCategoriesStep), nameof(IsReviewStep), nameof(IsDone),
+        nameof(CanGoBack), nameof(CanGoNext), nameof(ShowsWizard), nameof(ShowsAlreadySetUp))]
     private WizardStep _step = WizardStep.Members;
 
     public bool IsMembersStep => Step == WizardStep.Members;
     public bool IsAccountsStep => Step == WizardStep.Accounts;
     public bool IsTimeStep => Step == WizardStep.Time;
+    public bool IsCategoriesStep => Step == WizardStep.Categories;
     public bool IsReviewStep => Step == WizardStep.Review;
     public bool IsDone => Step == WizardStep.Done;
-    public bool CanGoBack => Step is WizardStep.Accounts or WizardStep.Time or WizardStep.Review;
-    public bool CanGoNext => Step is WizardStep.Members or WizardStep.Accounts or WizardStep.Time;
+    public bool CanGoBack => Step is WizardStep.Accounts or WizardStep.Time or WizardStep.Categories or WizardStep.Review;
+    public bool CanGoNext => Step is WizardStep.Members or WizardStep.Accounts or WizardStep.Time or WizardStep.Categories;
 
     /// <summary>The steps show only on a hub whose family is still empty (or right after this wizard set it up).</summary>
     public bool ShowsWizard => !IsNotHub && (!IsAlreadySetUp || IsDone);
@@ -94,6 +101,16 @@ public sealed partial class SetupWizardViewModel : PageViewModel
     /// <summary>On the review step: which accounts go to whom.</summary>
     [ObservableProperty]
     private string? _accountsSummary;
+
+    /// <summary>On the review step: which ready-made lists are added.</summary>
+    [ObservableProperty]
+    private string? _categoriesSummary;
+
+    /// <summary>On the review step: what this computer has and lacks (MVP-PLAN §4.5 requirements check). Saving is allowed either way.</summary>
+    public ObservableCollection<CheckItem> Checks { get; } = [];
+
+    [ObservableProperty]
+    private bool _hasChecks;
 
     protected override async Task LoadAsync()
     {
@@ -168,10 +185,18 @@ public sealed partial class SetupWizardViewModel : PageViewModel
                     Message = timeProblem;
                     return;
                 }
+                foreach (var member in TimedMembers) member.OfferCategories(StarterCategories);
+                GoTo(WizardStep.Categories);
+                break;
+
+            case WizardStep.Categories:
                 foreach (var member in Members) member.Summarize(Accounts.Where(a => a.MemberId == member.Id).Select(a => a.Name));
                 var unlinked = Accounts.Where(a => a.MemberId == NotLinked).Select(a => a.Name).ToList();
                 AccountsSummary = unlinked.Count == 0 ? null : Texts.Format(Strings.Setup_UnlinkedAccounts, string.Join(", ", unlinked));
+                var included = StarterCategories.Where(c => c.Include).Select(c => c.Label).ToList();
+                CategoriesSummary = included.Count == 0 ? Strings.Setup_NoCategories : Texts.Format(Strings.Setup_CategoriesAdded, string.Join(", ", included));
                 GoTo(WizardStep.Review);
+                await LoadChecksAsync();
                 break;
         }
     }
@@ -200,6 +225,10 @@ public sealed partial class SetupWizardViewModel : PageViewModel
         var timed = Members.Where(m => m.IsFiltered && m.LimitTime).ToList();
         var schedules = timed.Select(m => new ScheduleDto(m.Id, allDays, m.StartTime, m.EndTime)).ToList();
         var limits = timed.Where(m => m.LimitMinutes is not null).Select(m => new DailyLimitDto(m.Id, allDays, m.LimitMinutes!.Value)).ToList();
+        var lists = StarterCategories.Where(c => c.Include).ToList();
+        var choices = Members.Where(m => m.IsFiltered)
+            .SelectMany(m => m.Categories.Where(c => c.Category.Include && c.Choice != CategoryChoiceViewModel.Default).Select(c => new MemberCategoryDto(m.Id, c.Category.Name, c.Choice)))
+            .ToList();
 
         var applied = await RunAsync(() => Context.UpdateSettingsAsync(s => s with
         {
@@ -210,6 +239,8 @@ public sealed partial class SetupWizardViewModel : PageViewModel
             })],
             Schedules = [.. s.Schedules, .. schedules],
             DailyLimits = [.. s.DailyLimits, .. limits],
+            Categories = WithLists(s.Categories, lists),
+            MemberCategories = [.. s.MemberCategories, .. choices],
         }));
         if (!applied) return;
         GoTo(WizardStep.Done);
@@ -231,6 +262,22 @@ public sealed partial class SetupWizardViewModel : PageViewModel
             account.Warning = account.IsAdmin && Members.FirstOrDefault(m => m.Id == account.MemberId) is { IsFiltered: true } member
                 ? Texts.Format(Strings.Setup_AdminLinked, account.Name, member.Name.Trim())
                 : null;
+    }
+
+    /// <summary>A service that cannot run the checks (an older one, or the connection dropped) just shows none.</summary>
+    private async Task LoadChecksAsync()
+    {
+        IReadOnlyList<CheckItem> checks;
+        try
+        {
+            checks = await CheckItem.LoadAsync(Client);
+        }
+        catch (AdminClientException)
+        {
+            checks = [];
+        }
+        Replace(Checks, checks);
+        HasChecks = Checks.Count > 0;
     }
 
     private async Task ScanAsync()
@@ -299,6 +346,14 @@ public sealed partial class SetupWizardViewModel : PageViewModel
         return null;
     }
 
+    /// <summary>The family's categories plus the included lists; a category the family already has keeps its own domains.</summary>
+    private static Dictionary<string, IReadOnlyList<string>> WithLists(IReadOnlyDictionary<string, IReadOnlyList<string>> categories, IEnumerable<WizardCategoryViewModel> lists)
+    {
+        var result = new Dictionary<string, IReadOnlyList<string>>(categories, StringComparer.OrdinalIgnoreCase);
+        foreach (var list in lists) result.TryAdd(list.Name, list.Domains);
+        return result;
+    }
+
     private void GoTo(WizardStep step)
     {
         Step = step;
@@ -307,7 +362,7 @@ public sealed partial class SetupWizardViewModel : PageViewModel
 
     private void UpdateSteps()
     {
-        WizardStep[] shown = [WizardStep.Members, WizardStep.Accounts, WizardStep.Time, WizardStep.Review];
+        WizardStep[] shown = [WizardStep.Members, WizardStep.Accounts, WizardStep.Time, WizardStep.Categories, WizardStep.Review];
         Steps.Clear();
         foreach (var step in shown)
             Steps.Add(new WizardStepItem(Texts.Format(Strings.Setup_StepNumber, (int)step + 1, Texts.Code("Setup_Step_", step.ToString())), step == Step, step < Step));
@@ -324,15 +379,48 @@ public sealed partial class SetupWizardViewModel : PageViewModel
 /// <summary>A step in the wizard's progress bar.</summary>
 public sealed record WizardStepItem(string Label, bool IsCurrent, bool IsComplete);
 
-/// <summary>Where a role starts (MVP-PLAN §4.5 templates: young children / teens / adults); the parent can change each part.</summary>
-internal sealed record MemberTemplate(string FilterMode, string YouTubeMode, bool LimitTime, string Start, string End, int LimitMinutes)
+/// <summary>
+/// Where a role starts (MVP-PLAN §4.5 templates: young children / teens / adults); the parent can change each part. A
+/// child, who sees only approved sites, starts with the learning sites allowed.
+/// </summary>
+internal sealed record MemberTemplate(string FilterMode, string YouTubeMode, bool LimitTime, string Start, string End, int LimitMinutes,
+    IReadOnlyDictionary<string, string> Categories)
 {
     public static MemberTemplate For(string role) => role switch
     {
-        "child" => new("allowlist", "allowlist", true, "15:00", "19:00", 120),
-        "teen" => new("blocklist", "restricted", true, "14:00", "21:30", 240),
-        _ => new("unrestricted", "unrestricted", false, "08:00", "22:00", 180),
+        "child" => new("allowlist", "allowlist", true, "15:00", "19:00", 120, new Dictionary<string, string> { ["educational"] = "allow" }),
+        "teen" => new("blocklist", "restricted", true, "14:00", "21:30", 240, new Dictionary<string, string>()),
+        _ => new("unrestricted", "unrestricted", false, "08:00", "22:00", 180, new Dictionary<string, string>()),
     };
+}
+
+/// <summary>A ready-made list offered by the wizard: added to the family's categories unless the parent leaves it out.</summary>
+public sealed partial class WizardCategoryViewModel(StarterList list) : ObservableObject
+{
+    public string Name => list.Category;
+
+    public string Label { get; } = Texts.Code("Category_", list.Category);
+
+    public IReadOnlyList<string> Domains => list.Domains;
+
+    public string Text => Texts.Format(Strings.Setup_IncludeList, Label, Domains.Count);
+
+    /// <summary>A few of the sites, for a tooltip.</summary>
+    public string Sample => string.Join(", ", Domains.Take(8)) + (Domains.Count > 8 ? ", …" : "");
+
+    [ObservableProperty]
+    private bool _include = true;
+}
+
+/// <summary>What one filtered member gets of one ready-made list: as the filter mode says, always allowed, or blocked.</summary>
+public sealed partial class WizardCategoryChoice(WizardCategoryViewModel category, string choice) : ObservableObject
+{
+    public WizardCategoryViewModel Category { get; } = category;
+
+    public IReadOnlyList<Option> Options => CategoryChoiceViewModel.ChoiceOptions;
+
+    [ObservableProperty]
+    private string _choice = choice;
 }
 
 public sealed partial class WizardMemberViewModel : ObservableObject
@@ -368,6 +456,9 @@ public sealed partial class WizardMemberViewModel : ObservableObject
     /// <summary>On the review step: role, modes, hours and accounts in one line.</summary>
     [ObservableProperty] private string? _summaryText;
 
+    /// <summary>On the categories step: this member's choice for each ready-made list.</summary>
+    public ObservableCollection<WizardCategoryChoice> Categories { get; } = [];
+
     public bool IsFiltered => FilterMode != "unrestricted";
 
     internal int? Age { get; set; }
@@ -386,6 +477,14 @@ public sealed partial class WizardMemberViewModel : ObservableObject
 
     internal MemberDto ToDto() => new(Id, Name.Trim(), Role, Age, FilterMode, YouTubeMode);
 
+    /// <summary>A choice per list, from the role's template; choices made earlier are kept.</summary>
+    internal void OfferCategories(IEnumerable<WizardCategoryViewModel> lists)
+    {
+        var template = MemberTemplate.For(Role).Categories;
+        foreach (var list in lists.Where(l => Categories.All(c => c.Category != l)))
+            Categories.Add(new WizardCategoryChoice(list, template.GetValueOrDefault(list.Name, CategoryChoiceViewModel.Default)));
+    }
+
     internal void Summarize(IEnumerable<string> accounts)
     {
         var time = !IsFiltered ? Strings.Setup_Summary_NotFiltered
@@ -398,7 +497,17 @@ public sealed partial class WizardMemberViewModel : ObservableObject
             Texts.Code("FilterMode_", FilterMode),
             Texts.Format(Strings.Setup_Summary_YouTube, Texts.Code("YouTubeMode_", YouTubeMode)),
             time,
+            CategoriesText(),
             linked.Count == 0 ? Strings.Setup_Summary_NoAccount : Texts.Format(Strings.Setup_Summary_Accounts, string.Join(", ", linked)));
+    }
+
+    /// <summary>"Education always allowed, Games blocked", or null when the lists follow the filter mode.</summary>
+    private string? CategoriesText()
+    {
+        var chosen = Categories.Where(c => IsFiltered && c.Category.Include && c.Choice != CategoryChoiceViewModel.Default)
+            .Select(c => Texts.Format(Strings.Setup_Summary_Category, c.Category.Label, Texts.Code("CategoryChoice_", c.Choice)))
+            .ToList();
+        return chosen.Count == 0 ? null : string.Join(", ", chosen);
     }
 
     /// <summary>A new role brings its template's modes and times.</summary>
@@ -411,6 +520,7 @@ public sealed partial class WizardMemberViewModel : ObservableObject
         Start = template.Start;
         End = template.End;
         LimitText = template.LimitMinutes.ToString(CultureInfo.InvariantCulture);
+        foreach (var choice in Categories) choice.Choice = template.Categories.GetValueOrDefault(choice.Category.Name, CategoryChoiceViewModel.Default);
     }
 }
 

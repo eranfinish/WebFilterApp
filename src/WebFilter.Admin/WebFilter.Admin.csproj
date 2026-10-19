@@ -45,6 +45,8 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Strings.resx</DependentUpon>
     </Compile>
+    <!-- The ready-made category lists the setup wizard offers (data/starter-lists). -->
+    <EmbeddedResource Include="..\..\data\starter-lists\*.json" LogicalName="StarterLists.%(Filename)%(Extension)" Link="StarterLists\%(Filename)%(Extension)" />
     <None Include="app.manifest" />
     <None Include="app.asInvoker.manifest" />
   </ItemGroup>

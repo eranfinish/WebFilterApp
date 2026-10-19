@@ -10,7 +10,7 @@ public static class BundleMapper
     public static FamilyBundle ToBundle(FamilyConfig config, int version) => new()
     {
         Version = version,
-        TimeZone = TimeZoneInfo.TryConvertWindowsIdToIanaId(config.TimeZone.Id, out var iana) ? iana : config.TimeZone.Id,
+        TimeZone = ZoneId(config.TimeZone),
         Members = config.Members.Select(m => new MemberDto(m.Id, m.DisplayName, Lower(m.Role), m.Age, Lower(m.FilterMode), Lower(m.YouTubeMode))).ToList(),
         Devices = config.Devices.Select(d => new DeviceDto(d.Id, d.Os, d.Role, d.Accounts.Select(a => new AccountDto(a.AccountId, a.Name, a.MemberId, a.IsAdmin)).ToList())).ToList(),
         Categories = config.Categories.ToDictionary(kv => kv.Key, kv => kv.Value),
@@ -41,6 +41,9 @@ public static class BundleMapper
         foreach (var (name, domains) in bundle.Categories) config.Categories[name] = domains;
         return config;
     }
+
+    /// <summary>The zone's IANA id (platform-neutral), or its own id when it has none.</summary>
+    public static string ZoneId(TimeZoneInfo zone) => TimeZoneInfo.TryConvertWindowsIdToIanaId(zone.Id, out var iana) ? iana : zone.Id;
 
     private static string Lower<T>(T value) where T : struct, Enum => value.ToString().ToLowerInvariant();
 

@@ -238,7 +238,7 @@ public sealed class DevicesViewModelTests
         Assert.Empty(vm.Revoked);
         Assert.False(vm.HasNoActive);
         Assert.False(vm.HasRevoked);
-        // The agent's GetStatus fails; the page does not ask for it.
+        // Devices first: the agent's not_hub settles it, the status is not needed.
         Assert.Empty(_client.SentOf<GetStatus>());
         Assert.Contains("מחשב ההורים", Strings.Devices_NotHub);
     }

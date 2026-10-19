@@ -37,6 +37,13 @@ public sealed partial class FamilyContext : ObservableObject
     [ObservableProperty]
     private int _pendingRequestCount;
 
+    /// <summary>Standard Windows accounts on any computer that no one linked to a family member yet (browsing there is blocked).</summary>
+    [ObservableProperty]
+    private int _unlinkedAccountCount;
+
+    /// <summary>The service answered as an agent computer, managed by a hub: there only the status and the local pause work.</summary>
+    public bool IsAgent => Status is { IsHub: false };
+
     /// <summary>
     /// The service's clock now: the last <see cref="StatusResult.Now"/> plus the time since it arrived. Simulation
     /// services run a settable clock, so "end of the day" and "last 24 hours" follow the service, not this PC.
@@ -48,6 +55,14 @@ public sealed partial class FamilyContext : ObservableObject
         var status = await Client.RequestAsync<StatusResult>(new GetStatus(), ct);
         Status = status;
         _statusReceivedAt = _time.GetUtcNow();
+        if (!status.IsHub)
+        {
+            // An agent answers "not_hub" for the settings; its status carries what the pages need there.
+            Settings = null;
+            TimeZone = FamilyTime.FindZone(status.TimeZone);
+            UnlinkedAccountCount = 0;
+            return status;
+        }
         if (Settings?.Version != status.SettingsVersion) await RefreshSettingsAsync(ct);
         return status;
     }
@@ -57,6 +72,7 @@ public sealed partial class FamilyContext : ObservableObject
         var result = await Client.RequestAsync<SettingsResult>(new GetSettings(), ct);
         Settings = result.Settings;
         TimeZone = FamilyTime.FindZone(result.Settings.TimeZone);
+        UnlinkedAccountCount = result.Settings.Devices.Sum(d => d.Accounts.Count(a => a.Member is null && !a.IsAdmin));
         return result.Settings;
     }
 
@@ -107,6 +123,20 @@ public sealed partial class FamilyContext : ObservableObject
 
     /// <summary>The day with its year, for dates that may be long ago (when a computer was paired).</summary>
     public string FormatDate(DateTimeOffset instant) => ToLocal(instant).ToString(Strings.Format_Date, System.Globalization.CultureInfo.CurrentCulture);
+
+    /// <summary>
+    /// For an agent computer: "managed by the parents' computer ‹name›" and when it was last heard from; whether that is a
+    /// problem (not paired, or not reachable now — it keeps filtering by the last settings either way).
+    /// </summary>
+    public (string Text, bool Problem) DescribeHub(HubConnection? hub)
+    {
+        if (hub?.Address is null) return (Strings.Agent_NotPaired, true);
+        var managedBy = Texts.Format(Strings.Agent_ManagedBy, Texts.Ltr(hub.Name ?? hub.Address));
+        var contact = hub.LastContactAt is { } at ? Texts.Format(Strings.Agent_LastContact, FormatUntil(at)) : Strings.Agent_NoContactYet;
+        return hub.Reachable
+            ? (Texts.Join(" ", managedBy, contact), false)
+            : (Texts.Join(" ", managedBy, Strings.Agent_Unreachable, contact), true);
+    }
 
     /// <summary>"the end of the day" for the coming midnight, the time for later today, otherwise date and time.</summary>
     public string FormatUntil(DateTimeOffset until)

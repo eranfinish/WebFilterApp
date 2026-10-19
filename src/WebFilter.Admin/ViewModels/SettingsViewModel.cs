@@ -32,20 +32,41 @@ public sealed partial class SettingsViewModel : PageViewModel
     [ObservableProperty] private string _serviceTimeText = Strings.Common_None;
     [ObservableProperty] private string _timeZoneText = Strings.Common_None;
 
+    /// <summary>An agent computer: no members to edit here; <see cref="HubText"/> says which hub manages it.</summary>
+    [ObservableProperty] private bool _isAgent;
+
+    [ObservableProperty] private string? _hubText;
+
+    /// <summary>What this computer has and lacks (<see cref="GetDiagnostics"/>).</summary>
+    public ObservableCollection<CheckItem> Checks { get; } = [];
+
+    [ObservableProperty] private bool _hasChecks;
+
     protected override async Task LoadAsync()
     {
         try
         {
             // Every settings change bumps the version, so the cached settings are current unless the version moved.
             var status = await Context.RefreshStatusAsync();
-            var settings = Context.Settings ?? await Context.RefreshSettingsAsync();
+            Checks.Clear();
+            foreach (var check in await CheckItem.LoadAsync(Client)) Checks.Add(check);
+            HasChecks = Checks.Count > 0;
             SettingsVersionText = status.SettingsVersion.ToString(CultureInfo.CurrentCulture);
             DeviceText = status.DeviceId;
             IsHubText = status.IsHub ? Strings.Common_Yes : Strings.Common_No;
             ServiceTimeText = Context.FormatDateTime(status.Now);
-            TimeZoneText = settings.TimeZone;
-
+            IsAgent = !status.IsHub;
             Members.Clear();
+            if (IsAgent)
+            {
+                // Members are managed on the hub; the agent's status still names the family's zone and its hub.
+                TimeZoneText = status.TimeZone ?? Strings.Common_None;
+                HubText = Context.DescribeHub(status.Hub).Text;
+                return;
+            }
+            var settings = Context.Settings ?? await Context.RefreshSettingsAsync();
+            TimeZoneText = settings.TimeZone;
+            HubText = null;
             foreach (var member in settings.Members) Members.Add(new MemberSettingsViewModel(member, this));
         }
         finally

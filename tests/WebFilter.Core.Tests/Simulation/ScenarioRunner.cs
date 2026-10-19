@@ -112,6 +112,10 @@ internal sealed class ScenarioRunner
             case "network":
                 _agents[Str(step, "device")].HubReachable = Str(step, "hub") == "online";
                 break;
+            case "reportAccounts":
+                _hub.ReportAccounts(Str(step, "device"),
+                    step["accounts"]!.AsArray().Select(a => new DeviceAccount(Str(a, "accountId"), Str(a, "name"), null, a!["isAdmin"]!.GetValue<bool>())), _now);
+                break;
             case "service":
                 var target = _agents[Str(step, "device")];
                 target.ServiceUp = Str(step, "state") == "up";

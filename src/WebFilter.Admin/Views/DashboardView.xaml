@@ -11,9 +11,36 @@
     <StackPanel Margin="24,20,12,24">
       <ContentControl Content="{Binding}" ContentTemplate="{StaticResource PageHeader}" Focusable="False" Margin="0,0,12,0" />
 
+      <!-- Agent computer: which hub manages it -->
+      <Border Margin="0,0,12,16" Padding="16,10" CornerRadius="8" BorderThickness="1"
+              Visibility="{Binding IsAgent, Converter={StaticResource BoolToVisibility}}">
+        <Border.Style>
+          <Style TargetType="Border">
+            <Setter Property="Background" Value="{StaticResource InfoSoftBrush}" />
+            <Setter Property="BorderBrush" Value="{StaticResource InfoBrush}" />
+            <Style.Triggers>
+              <DataTrigger Binding="{Binding HubProblem}" Value="True">
+                <Setter Property="Background" Value="{StaticResource WarningSoftBrush}" />
+                <Setter Property="BorderBrush" Value="{StaticResource WarningBrush}" />
+              </DataTrigger>
+            </Style.Triggers>
+          </Style>
+        </Border.Style>
+        <TextBlock Text="{Binding HubText}" TextWrapping="Wrap" FontWeight="SemiBold" />
+      </Border>
+
+      <!-- Windows accounts no one linked yet -->
+      <Border Margin="0,0,12,16" Padding="16,10" CornerRadius="8" BorderThickness="1" Background="{StaticResource WarningSoftBrush}"
+              BorderBrush="{StaticResource WarningBrush}" Visibility="{Binding HasUnlinkedAccounts, Converter={StaticResource BoolToVisibility}}">
+        <DockPanel>
+          <Button DockPanel.Dock="Right" Margin="0" Content="{x:Static res:Strings.Dashboard_OpenDevices}" Command="{Binding OpenDevicesCommand}" />
+          <TextBlock Text="{Binding UnlinkedAccountsText}" VerticalAlignment="Center" TextWrapping="Wrap" Foreground="{StaticResource WarningBrush}" FontWeight="SemiBold" />
+        </DockPanel>
+      </Border>
+
       <!-- Pending access requests -->
       <Border Margin="0,0,12,16" Padding="16,10" CornerRadius="8" BorderThickness="1"
-              Visibility="{Binding HasLoaded, Converter={StaticResource BoolToVisibility}}">
+              Visibility="{Binding ShowsRequests, Converter={StaticResource BoolToVisibility}}">
         <Border.Style>
           <Style TargetType="Border">
             <Setter Property="Background" Value="{StaticResource CardBrush}" />
@@ -36,7 +63,7 @@
       <StackPanel Visibility="{Binding HasNoMembers, Converter={StaticResource BoolToVisibility}}">
         <TextBlock Text="{x:Static res:Strings.Dashboard_NoMembers}" Style="{StaticResource SubtleText}" />
         <Button Content="{x:Static res:Strings.Dashboard_StartSetup}" Command="{Binding OpenSetupCommand}" Style="{StaticResource PrimaryButton}"
-                HorizontalAlignment="Left" Margin="0,8,0,0" />
+                HorizontalAlignment="Left" Margin="0,8,0,0" Visibility="{Binding IsAgent, Converter={StaticResource InverseBoolToVisibility}}" />
       </StackPanel>
 
       <ItemsControl ItemsSource="{Binding Members}" Focusable="False">
@@ -99,16 +126,19 @@
                   <Button Content="{x:Static res:Strings.Action_Add30}" Command="{Binding AddHalfHourCommand}" />
                 </WrapPanel>
                 <WrapPanel Visibility="{Binding IsFiltered, Converter={StaticResource BoolToVisibility}}">
-                  <Button Content="{x:Static res:Strings.Action_PauseToday}" Command="{Binding PauseCommand}"
+                  <Button Content="{Binding PauseText}" Command="{Binding PauseCommand}"
                           Visibility="{Binding CanPause, Converter={StaticResource BoolToVisibility}}" />
                   <Button Content="{x:Static res:Strings.Action_Resume}" Command="{Binding ResumeCommand}" Style="{StaticResource PrimaryButton}"
-                          Visibility="{Binding IsPaused, Converter={StaticResource BoolToVisibility}}" />
+                          Visibility="{Binding CanResume, Converter={StaticResource BoolToVisibility}}" />
+                  <TextBlock Text="{x:Static res:Strings.Member_ResumeOnHub}" Style="{StaticResource SubtleText}" FontSize="12" VerticalAlignment="Center"
+                             Visibility="{Binding ResumesOnHub, Converter={StaticResource BoolToVisibility}}" />
                   <Button Content="{x:Static res:Strings.Action_StartHomework}" Command="{Binding StartHomeworkCommand}"
                           Visibility="{Binding CanStartHomework, Converter={StaticResource BoolToVisibility}}" />
                   <Button Content="{x:Static res:Strings.Action_StopHomework}" Command="{Binding StopHomeworkCommand}" Style="{StaticResource PrimaryButton}"
                           Visibility="{Binding IsInHomework, Converter={StaticResource BoolToVisibility}}" />
                 </WrapPanel>
-                <Button Content="{x:Static res:Strings.Action_MemberDetails}" Command="{Binding OpenDetailsCommand}" HorizontalAlignment="Left" Margin="0,4,0,0" />
+                <Button Content="{x:Static res:Strings.Action_MemberDetails}" Command="{Binding OpenDetailsCommand}" HorizontalAlignment="Left" Margin="0,4,0,0"
+                        Visibility="{Binding DataContext.IsAgent, RelativeSource={RelativeSource AncestorType=UserControl}, Converter={StaticResource InverseBoolToVisibility}}" />
               </StackPanel>
             </Border>
           </DataTemplate>

@@ -11,60 +11,70 @@
     <StackPanel Margin="24,20,24,24" Grid.IsSharedSizeScope="True">
       <ContentControl Content="{Binding}" ContentTemplate="{StaticResource PageHeader}" Focusable="False" />
 
-      <!-- Family members -->
-      <TextBlock Text="{x:Static res:Strings.Settings_Members}" Style="{StaticResource SectionText}" />
-      <TextBlock Text="{x:Static res:Strings.Settings_MembersHint}" Style="{StaticResource SubtleText}" Margin="0,0,0,8" />
-      <Border Style="{StaticResource Card}" Margin="0,0,0,16" Padding="0">
-        <StackPanel>
-          <Grid Background="{StaticResource NeutralSoftBrush}">
-            <Grid.ColumnDefinitions>
-              <ColumnDefinition SharedSizeGroup="Name" Width="Auto" MinWidth="120" />
-              <ColumnDefinition SharedSizeGroup="Role" Width="Auto" MinWidth="90" />
-              <ColumnDefinition SharedSizeGroup="Age" Width="Auto" MinWidth="50" />
-              <ColumnDefinition SharedSizeGroup="Filter" Width="Auto" MinWidth="220" />
-              <ColumnDefinition SharedSizeGroup="YouTube" Width="Auto" MinWidth="200" />
-              <ColumnDefinition Width="*" />
-            </Grid.ColumnDefinitions>
-            <TextBlock Grid.Column="0" Text="{x:Static res:Strings.Settings_Col_Name}" Margin="16,8" FontWeight="SemiBold" Foreground="{StaticResource SubtleTextBrush}" />
-            <TextBlock Grid.Column="1" Text="{x:Static res:Strings.Settings_Col_Role}" Margin="8" FontWeight="SemiBold" Foreground="{StaticResource SubtleTextBrush}" />
-            <TextBlock Grid.Column="2" Text="{x:Static res:Strings.Settings_Col_Age}" Margin="8" FontWeight="SemiBold" Foreground="{StaticResource SubtleTextBrush}" />
-            <TextBlock Grid.Column="3" Text="{x:Static res:Strings.Settings_Col_FilterMode}" Margin="8" FontWeight="SemiBold" Foreground="{StaticResource SubtleTextBrush}" />
-            <TextBlock Grid.Column="4" Text="{x:Static res:Strings.Settings_Col_YouTubeMode}" Margin="8" FontWeight="SemiBold" Foreground="{StaticResource SubtleTextBrush}" />
-          </Grid>
-          <ItemsControl ItemsSource="{Binding Members}" Focusable="False">
-            <ItemsControl.ItemTemplate>
-              <DataTemplate DataType="{x:Type vm:MemberSettingsViewModel}">
-                <Border BorderBrush="{StaticResource BorderBrush}" BorderThickness="0,1,0,0">
-                  <Grid>
-                    <Grid.ColumnDefinitions>
-                      <ColumnDefinition SharedSizeGroup="Name" Width="Auto" />
-                      <ColumnDefinition SharedSizeGroup="Role" Width="Auto" />
-                      <ColumnDefinition SharedSizeGroup="Age" Width="Auto" />
-                      <ColumnDefinition SharedSizeGroup="Filter" Width="Auto" />
-                      <ColumnDefinition SharedSizeGroup="YouTube" Width="Auto" />
-                      <ColumnDefinition Width="*" />
-                    </Grid.ColumnDefinitions>
-                    <TextBlock Grid.Column="0" Text="{Binding DisplayName}" FontWeight="SemiBold" Margin="16,8" VerticalAlignment="Center" />
-                    <TextBlock Grid.Column="1" Text="{Binding RoleText}" Margin="8" VerticalAlignment="Center" />
-                    <TextBlock Grid.Column="2" Text="{Binding AgeText}" Margin="8" VerticalAlignment="Center" />
-                    <ComboBox Grid.Column="3" ItemsSource="{Binding FilterModeOptions}" SelectedValuePath="Value" DisplayMemberPath="Label"
-                              SelectedValue="{Binding FilterMode}" Margin="8,6" />
-                    <ComboBox Grid.Column="4" ItemsSource="{Binding YouTubeModeOptions}" SelectedValuePath="Value" DisplayMemberPath="Label"
-                              SelectedValue="{Binding YouTubeMode}" Margin="8,6" />
-                    <StackPanel Grid.Column="5" Orientation="Horizontal" Margin="8,6,16,6" VerticalAlignment="Center">
-                      <StackPanel Orientation="Horizontal" Visibility="{Binding IsDirty, Converter={StaticResource BoolToVisibility}}">
-                        <Button Content="{x:Static res:Strings.Common_Save}" Command="{Binding SaveCommand}" Style="{StaticResource PrimaryButton}" Margin="0,0,8,0" />
-                        <Button Content="{x:Static res:Strings.Common_Revert}" Command="{Binding RevertCommand}" Margin="0,0,8,0" />
+      <!-- Family members (managed on the hub, so not on an agent computer) -->
+      <StackPanel Visibility="{Binding IsAgent, Converter={StaticResource InverseBoolToVisibility}}">
+        <TextBlock Text="{x:Static res:Strings.Settings_Members}" Style="{StaticResource SectionText}" />
+        <TextBlock Text="{x:Static res:Strings.Settings_MembersHint}" Style="{StaticResource SubtleText}" Margin="0,0,0,8" />
+        <Border Style="{StaticResource Card}" Margin="0,0,0,16" Padding="0">
+          <StackPanel>
+            <Grid Background="{StaticResource NeutralSoftBrush}">
+              <Grid.ColumnDefinitions>
+                <ColumnDefinition SharedSizeGroup="Name" Width="Auto" MinWidth="120" />
+                <ColumnDefinition SharedSizeGroup="Role" Width="Auto" MinWidth="90" />
+                <ColumnDefinition SharedSizeGroup="Age" Width="Auto" MinWidth="50" />
+                <ColumnDefinition SharedSizeGroup="Filter" Width="Auto" MinWidth="220" />
+                <ColumnDefinition SharedSizeGroup="YouTube" Width="Auto" MinWidth="200" />
+                <ColumnDefinition Width="*" />
+              </Grid.ColumnDefinitions>
+              <TextBlock Grid.Column="0" Text="{x:Static res:Strings.Settings_Col_Name}" Margin="16,8" FontWeight="SemiBold" Foreground="{StaticResource SubtleTextBrush}" />
+              <TextBlock Grid.Column="1" Text="{x:Static res:Strings.Settings_Col_Role}" Margin="8" FontWeight="SemiBold" Foreground="{StaticResource SubtleTextBrush}" />
+              <TextBlock Grid.Column="2" Text="{x:Static res:Strings.Settings_Col_Age}" Margin="8" FontWeight="SemiBold" Foreground="{StaticResource SubtleTextBrush}" />
+              <TextBlock Grid.Column="3" Text="{x:Static res:Strings.Settings_Col_FilterMode}" Margin="8" FontWeight="SemiBold" Foreground="{StaticResource SubtleTextBrush}" />
+              <TextBlock Grid.Column="4" Text="{x:Static res:Strings.Settings_Col_YouTubeMode}" Margin="8" FontWeight="SemiBold" Foreground="{StaticResource SubtleTextBrush}" />
+            </Grid>
+            <ItemsControl ItemsSource="{Binding Members}" Focusable="False">
+              <ItemsControl.ItemTemplate>
+                <DataTemplate DataType="{x:Type vm:MemberSettingsViewModel}">
+                  <Border BorderBrush="{StaticResource BorderBrush}" BorderThickness="0,1,0,0">
+                    <Grid>
+                      <Grid.ColumnDefinitions>
+                        <ColumnDefinition SharedSizeGroup="Name" Width="Auto" />
+                        <ColumnDefinition SharedSizeGroup="Role" Width="Auto" />
+                        <ColumnDefinition SharedSizeGroup="Age" Width="Auto" />
+                        <ColumnDefinition SharedSizeGroup="Filter" Width="Auto" />
+                        <ColumnDefinition SharedSizeGroup="YouTube" Width="Auto" />
+                        <ColumnDefinition Width="*" />
+                      </Grid.ColumnDefinitions>
+                      <TextBlock Grid.Column="0" Text="{Binding DisplayName}" FontWeight="SemiBold" Margin="16,8" VerticalAlignment="Center" />
+                      <TextBlock Grid.Column="1" Text="{Binding RoleText}" Margin="8" VerticalAlignment="Center" />
+                      <TextBlock Grid.Column="2" Text="{Binding AgeText}" Margin="8" VerticalAlignment="Center" />
+                      <ComboBox Grid.Column="3" ItemsSource="{Binding FilterModeOptions}" SelectedValuePath="Value" DisplayMemberPath="Label"
+                                SelectedValue="{Binding FilterMode}" Margin="8,6" />
+                      <ComboBox Grid.Column="4" ItemsSource="{Binding YouTubeModeOptions}" SelectedValuePath="Value" DisplayMemberPath="Label"
+                                SelectedValue="{Binding YouTubeMode}" Margin="8,6" />
+                      <StackPanel Grid.Column="5" Orientation="Horizontal" Margin="8,6,16,6" VerticalAlignment="Center">
+                        <StackPanel Orientation="Horizontal" Visibility="{Binding IsDirty, Converter={StaticResource BoolToVisibility}}">
+                          <Button Content="{x:Static res:Strings.Common_Save}" Command="{Binding SaveCommand}" Style="{StaticResource PrimaryButton}" Margin="0,0,8,0" />
+                          <Button Content="{x:Static res:Strings.Common_Revert}" Command="{Binding RevertCommand}" Margin="0,0,8,0" />
+                        </StackPanel>
+                        <Button Content="{x:Static res:Strings.Action_MemberDetails}" Command="{Binding OpenDetailsCommand}" Margin="0" />
                       </StackPanel>
-                      <Button Content="{x:Static res:Strings.Action_MemberDetails}" Command="{Binding OpenDetailsCommand}" Margin="0" />
-                    </StackPanel>
-                  </Grid>
-                </Border>
-              </DataTemplate>
-            </ItemsControl.ItemTemplate>
-          </ItemsControl>
-        </StackPanel>
-      </Border>
+                    </Grid>
+                  </Border>
+                </DataTemplate>
+              </ItemsControl.ItemTemplate>
+            </ItemsControl>
+          </StackPanel>
+        </Border>
+      </StackPanel>
+
+      <!-- What this computer has and lacks -->
+      <StackPanel Visibility="{Binding HasChecks, Converter={StaticResource BoolToVisibility}}">
+        <TextBlock Text="{x:Static res:Strings.Settings_Checks}" Style="{StaticResource SectionText}" />
+        <Border Style="{StaticResource Card}" Margin="0,0,0,16">
+          <ContentControl Content="{Binding Checks}" ContentTemplate="{StaticResource CheckList}" Focusable="False" />
+        </Border>
+      </StackPanel>
 
       <!-- Service connection diagnostics -->
       <TextBlock Text="{x:Static res:Strings.Diagnostics_Title}" Style="{StaticResource SectionText}" />
@@ -75,6 +85,7 @@
             <ColumnDefinition Width="*" />
           </Grid.ColumnDefinitions>
           <Grid.RowDefinitions>
+            <RowDefinition />
             <RowDefinition />
             <RowDefinition />
             <RowDefinition />
@@ -103,6 +114,9 @@
           <TextBlock Grid.Row="5" Grid.Column="1" Text="{Binding ServiceTimeText}" />
           <TextBlock Grid.Row="6" Text="{x:Static res:Strings.Diagnostics_TimeZone}" Foreground="{StaticResource SubtleTextBrush}" />
           <TextBlock Grid.Row="6" Grid.Column="1" Text="{Binding TimeZoneText}" FlowDirection="LeftToRight" HorizontalAlignment="Left" />
+          <TextBlock Grid.Row="7" Text="{x:Static res:Strings.Diagnostics_Hub}" Foreground="{StaticResource SubtleTextBrush}"
+                     Visibility="{Binding IsAgent, Converter={StaticResource BoolToVisibility}}" />
+          <TextBlock Grid.Row="7" Grid.Column="1" Text="{Binding HubText}" MaxWidth="420" Visibility="{Binding IsAgent, Converter={StaticResource BoolToVisibility}}" />
         </Grid>
       </Border>
     </StackPanel>

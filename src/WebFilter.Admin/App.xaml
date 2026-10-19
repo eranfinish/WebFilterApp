@@ -187,6 +187,34 @@
       <Setter Property="TextWrapping" Value="Wrap" />
     </Style>
 
+    <!-- Requirement checks (a list of CheckItem): a coloured mark and the sentence. -->
+    <DataTemplate x:Key="CheckList">
+      <ItemsControl ItemsSource="{Binding}" Focusable="False">
+        <ItemsControl.ItemTemplate>
+          <DataTemplate>
+            <DockPanel Margin="0,3">
+              <TextBlock DockPanel.Dock="Left" Text="{Binding Glyph}" FontWeight="Bold" Width="20" TextAlignment="Center" Margin="0,0,8,0">
+                <TextBlock.Style>
+                  <Style TargetType="TextBlock">
+                    <Setter Property="Foreground" Value="{StaticResource WarningBrush}" />
+                    <Style.Triggers>
+                      <DataTrigger Binding="{Binding IsOk}" Value="True">
+                        <Setter Property="Foreground" Value="{StaticResource SuccessBrush}" />
+                      </DataTrigger>
+                      <DataTrigger Binding="{Binding IsFail}" Value="True">
+                        <Setter Property="Foreground" Value="{StaticResource DangerBrush}" />
+                      </DataTrigger>
+                    </Style.Triggers>
+                  </Style>
+                </TextBlock.Style>
+              </TextBlock>
+              <TextBlock Text="{Binding Text}" TextWrapping="Wrap" />
+            </DockPanel>
+          </DataTemplate>
+        </ItemsControl.ItemTemplate>
+      </ItemsControl>
+    </DataTemplate>
+
     <!-- Header shared by every page: title, intro, refresh, busy bar, error and success messages. DataContext = PageViewModel. -->
     <DataTemplate x:Key="PageHeader">
       <StackPanel Margin="0,0,0,12">

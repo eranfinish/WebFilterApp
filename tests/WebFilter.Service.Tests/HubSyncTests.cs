@@ -59,11 +59,11 @@ public sealed class HubSyncTests : IAsyncLifetime
         await _server.Port.WaitAsync(TimeSpan.FromSeconds(15));
     }
 
-    private async Task PairAndSyncAsync()
+    private async Task PairAndSyncAsync(FakeLocalAccounts? accounts = null)
     {
         await HubLink.PairAsync(_agentData, $"127.0.0.1:{_port}", _hub.Pairing.Create(_clock.GetUtcNow()), "laptop-yoav", "Yoav's laptop");
         _agent.Start();
-        _sync = new HubSyncService(_agent, NullLogger<HubSyncService>.Instance);
+        _sync = new HubSyncService(_agent, NullLogger<HubSyncService>.Instance, accounts) { AccountsInterval = TimeSpan.Zero };
         await _sync.StartAsync(CancellationToken.None);
         await _sync.FirstSync.Task.WaitAsync(TimeSpan.FromSeconds(20));
     }
@@ -143,6 +143,13 @@ public sealed class HubSyncTests : IAsyncLifetime
         var status = Assert.IsType<Contracts.Admin.StatusResult>(admin.Handle(new Contracts.Admin.GetStatus(), "parent"));
         Assert.False(status.IsHub);
         Assert.Contains(status.Members, m => m.MemberId == "yoav");
+        // "Managed by the hub ‹name›": its name from the settings, the address it syncs with, and when it was last heard.
+        Assert.Equal("Asia/Jerusalem", status.TimeZone);
+        Assert.Equal(("pc-parents", $"127.0.0.1:{_port}", true), (status.Hub!.Name, status.Hub.Address, status.Hub.Reachable));
+        Assert.Equal(_clock.GetUtcNow(), status.Hub.LastContactAt);
+        // The requirement checks are answered on an agent too, without the hub-only ones.
+        var checks = Assert.IsType<Contracts.Admin.DiagnosticsResult>(admin.Handle(new Contracts.Admin.GetDiagnostics(), "parent")).Checks;
+        Assert.Equal(["service", "browsers", "browser_policies", "extension"], checks.Select(c => c.Id));
 
         Assert.IsType<Contracts.Admin.AdminOk>(admin.Handle(new Contracts.Admin.Pause("yoav", _clock.GetUtcNow().AddMinutes(30)), "parent"));
         var paused = _agent.WithAgent((agent, now) => agent.DecideUrl(agent.AccountOf("yoav"), "https://www.instagram.com/", now));
@@ -152,6 +159,62 @@ public sealed class HubSyncTests : IAsyncLifetime
                      new Contracts.Admin.ScanAccounts(), new Contracts.Admin.ReplaceSettings(new Contracts.Hub.FamilyBundle { TimeZone = "Asia/Jerusalem" }, 1) })
             Assert.Equal("not_hub", Assert.IsType<Contracts.Admin.AdminError>(admin.Handle(hubOnly, "parent")).Code);
     }
+
+    [Fact]
+    public void An_agent_that_is_not_paired_yet_reports_status_without_members_or_hub()
+    {
+        _agent.Start();
+        var admin = new Pipes.AdminPipeServer(_agent, Options.Create(_agent.Options), _clock, NullLogger<Pipes.AdminPipeServer>.Instance);
+
+        var status = Assert.IsType<Contracts.Admin.StatusResult>(admin.Handle(new Contracts.Admin.GetStatus(), "parent"));
+
+        Assert.Equal((false, 0, null), (status.IsHub, status.SettingsVersion, status.TimeZone));
+        Assert.Empty(status.Members);
+        Assert.Equal(new Contracts.Admin.HubConnection(null, null, false, null), status.Hub);
+    }
+
+    [Fact]
+    public async Task An_agent_reports_its_accounts_and_an_accounts_admin_flag_follows_the_computer()
+    {
+        var accounts = new FakeLocalAccounts(
+            new DeviceAccount("S-1-5-21-3000-1001", "yoav", null, IsAdmin: false),
+            new DeviceAccount("S-1-5-21-3000-1002", "guest", null, IsAdmin: false));
+        await PairAndSyncAsync(accounts);
+
+        await Eventually(() => HubAccounts("laptop-yoav").Count == 2, "accounts reported");
+        Assert.Equal("yoav", HubAccounts("laptop-yoav").Single(a => a.Name == "yoav").MemberId);
+        Assert.Null(HubAccounts("laptop-yoav").Single(a => a.Name == "guest").MemberId);
+
+        // The parent gave yoav's account administrator rights by mistake: the hub learns it (and keeps the link).
+        accounts.Set(new DeviceAccount("S-1-5-21-3000-1001", "yoav", null, IsAdmin: true), new DeviceAccount("S-1-5-21-3000-1002", "guest", null, IsAdmin: false));
+        _sync.Wake();
+        await Eventually(() => HubAccounts("laptop-yoav").Single(a => a.Name == "yoav") is { IsAdmin: true, MemberId: "yoav" }, "admin flag updated");
+        await Eventually(() => _agent.WithAgent((agent, _) => agent.AccountOf("yoav").IsAdmin), "the agent got the new flag");
+    }
+
+    [Fact]
+    public async Task The_hub_reports_its_own_accounts()
+    {
+        var accounts = new FakeLocalAccounts(
+            new DeviceAccount("S-1-5-21-1000-1001", "dana", null, IsAdmin: true),
+            new DeviceAccount("S-1-5-21-1000-1002", "kids", null, IsAdmin: false));
+        var own = new HubSyncService(_hub, NullLogger<HubSyncService>.Instance, accounts) { AccountsInterval = TimeSpan.FromMilliseconds(50) };
+        await own.StartAsync(CancellationToken.None);
+        try
+        {
+            await Eventually(() => HubAccounts("pc-parents").Any(a => a.Name == "kids"), "the hub's own accounts");
+            Assert.Equal("dana", HubAccounts("pc-parents").Single(a => a.Name == "dana").MemberId);
+
+            accounts.Add(new DeviceAccount("S-1-5-21-1000-1003", "guest", null, IsAdmin: false));
+            await Eventually(() => HubAccounts("pc-parents").Any(a => a.Name == "guest"), "an account created later");
+        }
+        finally
+        {
+            await own.StopAsync(CancellationToken.None);
+        }
+    }
+
+    private IReadOnlyList<DeviceAccount> HubAccounts(string deviceId) => _hub.WithHub((hub, _) => hub.Config.Device(deviceId).Accounts.ToList());
 
     [Fact]
     public async Task A_new_pairing_code_replaces_the_previous_one()

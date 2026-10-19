@@ -1216,4 +1216,145 @@ The computer keeps enforcing the last settings it received but stops getting upd
   <data name="AdminChange_pair_device" xml:space="preserve">
     <value>A computer was paired</value>
   </data>
+  <data name="Agent_ManagedBy" xml:space="preserve">
+    <value>This computer is managed by the parents' computer {0}.</value>
+  </data>
+  <data name="Agent_LastContact" xml:space="preserve">
+    <value>Last contact: {0}.</value>
+  </data>
+  <data name="Agent_NoContactYet" xml:space="preserve">
+    <value>No contact yet since the service started.</value>
+  </data>
+  <data name="Agent_Unreachable" xml:space="preserve">
+    <value>It cannot be reached now; filtering goes on with the last settings received.</value>
+  </data>
+  <data name="Agent_NotPaired" xml:space="preserve">
+    <value>This computer is not paired with the parents' computer yet, so it blocks most browsing in standard accounts. On the parents' computer, create a pairing code on the Devices page and run the command shown there on this computer.</value>
+  </data>
+  <data name="Action_LocalPause" xml:space="preserve">
+    <value>Emergency pause on this computer until the end of the day</value>
+  </data>
+  <data name="Member_ResumeOnHub" xml:space="preserve">
+    <value>Filtering is resumed from the parents' computer.</value>
+  </data>
+  <data name="Dashboard_UnlinkedAccounts_One" xml:space="preserve">
+    <value>One Windows account is not linked to a family member yet, and browsing there is almost entirely blocked.</value>
+  </data>
+  <data name="Dashboard_UnlinkedAccounts_Many" xml:space="preserve">
+    <value>{0} Windows accounts are not linked to family members yet, and browsing there is almost entirely blocked.</value>
+  </data>
+  <data name="Dashboard_OpenDevices" xml:space="preserve">
+    <value>Link accounts</value>
+  </data>
+  <data name="Diagnostics_Hub" xml:space="preserve">
+    <value>Parents' computer</value>
+  </data>
+  <data name="Devices_Accounts" xml:space="preserve">
+    <value>Windows accounts</value>
+  </data>
+  <data name="Devices_AccountsHint" xml:space="preserve">
+    <value>Choose whom each account belongs to. A standard account that is not linked can hardly browse; administrators are not filtered. Each computer reports its own accounts, within a minute of their creation.</value>
+  </data>
+  <data name="Devices_ThisComputer" xml:space="preserve">
+    <value>This computer ({0})</value>
+  </data>
+  <data name="Devices_NoAccounts" xml:space="preserve">
+    <value>This computer has not reported its accounts yet.</value>
+  </data>
+  <data name="Devices_Rescan" xml:space="preserve">
+    <value>Look for new accounts</value>
+  </data>
+  <data name="Devices_NewAccounts" xml:space="preserve">
+    <value>{0} new accounts were found on this computer.</value>
+  </data>
+  <data name="Devices_NoNewAccounts" xml:space="preserve">
+    <value>No new accounts were found on this computer.</value>
+  </data>
+  <data name="Devices_AccountLinked" xml:space="preserve">
+    <value>The account {0} on {1} is now {2}'s.</value>
+  </data>
+  <data name="Devices_AccountUnlinked" xml:space="preserve">
+    <value>The account {0} on {1} is no longer linked.</value>
+  </data>
+  <data name="Devices_UnlinkedWarning" xml:space="preserve">
+    <value>Not linked — browsing in this account is almost entirely blocked.</value>
+  </data>
+  <data name="AdminChange_accounts_updated" xml:space="preserve">
+    <value>Windows account details updated</value>
+  </data>
+  <data name="Devices_NewAccount_One" xml:space="preserve">
+    <value>One new account was found on this computer.</value>
+  </data>
+  <data name="Setup_Step_Categories" xml:space="preserve">
+    <value>Categories</value>
+  </data>
+  <data name="Setup_CategoriesHint" xml:space="preserve">
+    <value>Ready-made lists of sites. Anything chosen here can be changed later on the family members page. The learning list is also what homework mode allows.</value>
+  </data>
+  <data name="Setup_IncludeList" xml:space="preserve">
+    <value>Add the ready-made list {0} ({1} sites)</value>
+  </data>
+  <data name="Setup_CategoriesForMembers" xml:space="preserve">
+    <value>What each member gets of the lists</value>
+  </data>
+  <data name="Setup_NoCategories" xml:space="preserve">
+    <value>No ready-made lists.</value>
+  </data>
+  <data name="Setup_CategoriesAdded" xml:space="preserve">
+    <value>Ready-made lists: {0}.</value>
+  </data>
+  <data name="Setup_Summary_Category" xml:space="preserve">
+    <value>{0}: {1}</value>
+  </data>
+  <data name="Setup_ChecksTitle" xml:space="preserve">
+    <value>Checking this computer</value>
+  </data>
+  <data name="Setup_ChecksHint" xml:space="preserve">
+    <value>You can save even with warnings and fix them later. The check is on the settings page too.</value>
+  </data>
+  <data name="Settings_Checks" xml:space="preserve">
+    <value>Checking this computer</value>
+  </data>
+  <data name="Check_service_ok" xml:space="preserve">
+    <value>The filter service runs as a Windows service.</value>
+  </data>
+  <data name="Check_service_warn" xml:space="preserve">
+    <value>The filter service is not running as a system service (a development run). On the family's computers, install it from the setup file.</value>
+  </data>
+  <data name="Check_browsers_ok" xml:space="preserve">
+    <value>Supported browsers on this computer: {0}.</value>
+  </data>
+  <data name="Check_browsers_fail" xml:space="preserve">
+    <value>No supported browser was found. Install Chrome or Edge.</value>
+  </data>
+  <data name="Check_browser_policies_ok" xml:space="preserve">
+    <value>Browser policies are managed: no private browsing, no other extensions, safe search on.</value>
+  </data>
+  <data name="Check_browser_policies_warn" xml:space="preserve">
+    <value>Browser policies are not managed on this computer (a development run), so private browsing gets around the filter.</value>
+  </data>
+  <data name="Check_extension_ok" xml:space="preserve">
+    <value>The WebFilter extension is force-installed in the browsers.</value>
+  </data>
+  <data name="Check_extension_warn" xml:space="preserve">
+    <value>The extension is not published in the Chrome and Edge stores yet, so the browsers do not install it by themselves.</value>
+  </data>
+  <data name="Check_extension_fail" xml:space="preserve">
+    <value>The extension's install policy is missing. Restart the filter service, and reinstall it if that does not help.</value>
+  </data>
+  <data name="Check_network_ok" xml:space="preserve">
+    <value>The network is a private one, so the children's computers can connect to this computer.</value>
+  </data>
+  <data name="Check_network_warn" xml:space="preserve">
+    <value>The network {0} is set as public, so the children's computers cannot connect to this computer. In Windows: Settings → Network &amp; internet → the network's properties → Private network.</value>
+  </data>
+  <data name="Check_network_fail" xml:space="preserve">
+    <value>This computer is not connected to a network.</value>
+  </data>
+  <data name="Check_hub_port_ok" xml:space="preserve">
+    <value>The firewall lets the children's computers connect (port {0}).</value>
+  </data>
+  <data name="Check_hub_port_warn" xml:space="preserve">
+    <value>The firewall does not allow connections to port {0}, so the children's computers cannot connect. Reinstall from the setup file.</value>
+  </data>
 </root>

@@ -31,6 +31,12 @@ public sealed partial class DevicesViewModel : PageViewModel, IDisposable
         _dialogs = dialogs ?? throw new ArgumentNullException(nameof(dialogs));
         _clipboard = clipboard ?? throw new ArgumentNullException(nameof(clipboard));
         _timer = timer ?? throw new ArgumentNullException(nameof(timer));
+        // The navigation shows how many standard accounts wait to be linked (browsing there is blocked meanwhile).
+        Context.PropertyChanged += (_, e) =>
+        {
+            if (e.PropertyName == nameof(FamilyContext.UnlinkedAccountCount))
+                Badge = Context.UnlinkedAccountCount > 0 ? Context.UnlinkedAccountCount.ToString(CultureInfo.CurrentCulture) : null;
+        };
     }
 
     public override string Title => Strings.Nav_Devices;
@@ -86,6 +92,7 @@ public sealed partial class DevicesViewModel : PageViewModel, IDisposable
         IsNotHub = false;
         IsHub = true;
         Sync(result.Devices, Context.ServiceNow);
+        if (Context.Settings is { } settings && Context.Status is { } status) SyncAccounts(settings, status.DeviceId, result.Devices);
     }
 
     [RelayCommand]
@@ -157,6 +164,8 @@ public sealed partial class DevicesViewModel : PageViewModel, IDisposable
         _items.Clear();
         Active.Clear();
         Revoked.Clear();
+        _groups.Clear();
+        AccountGroups.Clear();
         HasNoActive = false;
         HasRevoked = false;
     }
