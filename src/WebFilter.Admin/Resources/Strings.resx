@@ -1310,4 +1310,55 @@
   <data name="Setup_Summary_Category" xml:space="preserve">
     <value>{0}: {1}</value>
   </data>
+  <data name="Setup_ChecksTitle" xml:space="preserve">
+    <value>בדיקת המחשב</value>
+  </data>
+  <data name="Setup_ChecksHint" xml:space="preserve">
+    <value>אפשר לשמור גם כשיש אזהרות, ולתקן אחר כך. הבדיקה מופיעה גם במסך ההגדרות.</value>
+  </data>
+  <data name="Settings_Checks" xml:space="preserve">
+    <value>בדיקת המחשב</value>
+  </data>
+  <data name="Check_service_ok" xml:space="preserve">
+    <value>שירות הסינון רץ כשירות של Windows.</value>
+  </data>
+  <data name="Check_service_warn" xml:space="preserve">
+    <value>שירות הסינון לא רץ כשירות מערכת (הרצת פיתוח). במחשבי המשפחה מתקינים אותו מקובץ ההתקנה.</value>
+  </data>
+  <data name="Check_browsers_ok" xml:space="preserve">
+    <value>דפדפנים נתמכים במחשב: {0}.</value>
+  </data>
+  <data name="Check_browsers_fail" xml:space="preserve">
+    <value>לא נמצא דפדפן נתמך. התקינו Chrome או Edge.</value>
+  </data>
+  <data name="Check_browser_policies_ok" xml:space="preserve">
+    <value>מדיניות הדפדפנים מנוהלת: בלי גלישה בסתר, בלי תוספים אחרים, עם חיפוש בטוח.</value>
+  </data>
+  <data name="Check_browser_policies_warn" xml:space="preserve">
+    <value>מדיניות הדפדפנים לא מנוהלת במחשב הזה (הרצת פיתוח), ולכן אפשר לעקוף את הסינון בגלישה בסתר.</value>
+  </data>
+  <data name="Check_extension_ok" xml:space="preserve">
+    <value>התוסף של WebFilter מותקן בדפדפנים בכפייה.</value>
+  </data>
+  <data name="Check_extension_warn" xml:space="preserve">
+    <value>התוסף עוד לא פורסם בחנויות של Chrome ו-Edge, ולכן הדפדפנים לא מתקינים אותו לבד.</value>
+  </data>
+  <data name="Check_extension_fail" xml:space="preserve">
+    <value>חסרה מדיניות ההתקנה של התוסף. הפעילו מחדש את שירות הסינון, ואם זה לא עוזר התקינו אותו מחדש.</value>
+  </data>
+  <data name="Check_network_ok" xml:space="preserve">
+    <value>הרשת מוגדרת כרשת פרטית, ולכן מחשבי הילדים יכולים להתחבר למחשב הזה.</value>
+  </data>
+  <data name="Check_network_warn" xml:space="preserve">
+    <value>הרשת {0} מוגדרת כרשת ציבורית, ולכן מחשבי הילדים לא יוכלו להתחבר למחשב הזה. ב-Windows: הגדרות ← רשת ואינטרנט ← מאפיינים של הרשת ← רשת פרטית.</value>
+  </data>
+  <data name="Check_network_fail" xml:space="preserve">
+    <value>המחשב לא מחובר לרשת.</value>
+  </data>
+  <data name="Check_hub_port_ok" xml:space="preserve">
+    <value>חומת האש מאפשרת למחשבי הילדים להתחבר (פורט {0}).</value>
+  </data>
+  <data name="Check_hub_port_warn" xml:space="preserve">
+    <value>חומת האש לא מאפשרת חיבור לפורט {0}, ולכן מחשבי הילדים לא יוכלו להתחבר. התקינו מחדש מקובץ ההתקנה.</value>
+  </data>
 </root>

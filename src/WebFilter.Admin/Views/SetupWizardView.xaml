@@ -258,6 +258,17 @@
           </Border>
         </StackPanel>
 
+        <!-- Requirements check, on the review step -->
+        <StackPanel Visibility="{Binding IsReviewStep, Converter={StaticResource BoolToVisibility}}">
+          <StackPanel Visibility="{Binding HasChecks, Converter={StaticResource BoolToVisibility}}">
+            <TextBlock Text="{x:Static res:Strings.Setup_ChecksTitle}" Style="{StaticResource SectionText}" />
+            <TextBlock Text="{x:Static res:Strings.Setup_ChecksHint}" Style="{StaticResource SubtleText}" Margin="0,0,0,8" />
+            <Border Style="{StaticResource Card}" Margin="0">
+              <ContentControl Content="{Binding Checks}" ContentTemplate="{StaticResource CheckList}" Focusable="False" />
+            </Border>
+          </StackPanel>
+        </StackPanel>
+
         <!-- Done -->
         <Border Style="{StaticResource Card}" Margin="0" Visibility="{Binding IsDone, Converter={StaticResource BoolToVisibility}}">
           <StackPanel>

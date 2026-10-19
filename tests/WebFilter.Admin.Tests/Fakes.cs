@@ -73,6 +73,12 @@ internal sealed class FakeAdminClient : IAdminClient
     /// <summary>What <see cref="ScanAccounts"/> finds on this computer: added (unlinked) to the hub device when not known yet.</summary>
     public List<AccountDto> LocalAccounts { get; } = [];
 
+    /// <summary>What <see cref="GetDiagnostics"/> answers (a development run on a private network, by default).</summary>
+    public List<CheckResult> Checks { get; } =
+    [
+        new("service", "warn"), new("browsers", "ok", "edge,chrome"), new("browser_policies", "warn"), new("extension", "warn"), new("network", "ok"),
+    ];
+
     /// <summary>Overrides the reply for a request (return null to fall back to the default).</summary>
     public Func<AdminMessage, AdminMessage?>? Reply { get; set; }
 
@@ -98,6 +104,7 @@ internal sealed class FakeAdminClient : IAdminClient
             RevokeDevice revoke => Revoke(revoke.DeviceId),
             ReplaceSettings replace => Replace(replace),
             ScanAccounts => Scan(),
+            GetDiagnostics => new DiagnosticsResult([.. Checks]),
             _ => (AdminMessage)new AdminOk(),
         };
         return Task.FromResult(reply);
@@ -107,7 +114,7 @@ internal sealed class FakeAdminClient : IAdminClient
     private AdminMessage? AsAgent(AdminMessage request) => request switch
     {
         GetStatus => Status with { IsHub = false, TimeZone = Settings.TimeZone, Hub = AgentHub },
-        Pause or SetClock => null,
+        Pause or SetClock or GetDiagnostics => null,
         RevokeDevice => new AdminError("not_found", "No such paired device."),
         _ => new AdminError("not_hub", "This computer is managed by the hub computer; make this change there."),
     };

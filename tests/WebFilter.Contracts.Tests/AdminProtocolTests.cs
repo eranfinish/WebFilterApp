@@ -32,6 +32,8 @@ public class AdminProtocolTests
         new DecideRequest("ar-1", "approve", "page", "today"),
         new SetClock(At),
         new ScanAccounts(),
+        new GetDiagnostics(),
+        new DiagnosticsResult([new CheckResult("network", "warn", "Network 3"), new CheckResult("service", "ok")]),
         new AdminOk("done"),
         new AdminError("bad_request", "nope"),
     };

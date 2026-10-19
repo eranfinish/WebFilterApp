@@ -23,8 +23,8 @@ public enum WizardStep
 /// First-time setup of a hub whose family is empty (MVP-PLAN §4.5): the family members, each starting from its role's
 /// template; this computer's Windows accounts (<see cref="ScanAccounts"/>, then the device in the settings) linked to
 /// them; hours and a daily limit for the filtered ones; the ready-made category lists (data/starter-lists) and what each
-/// filtered member gets of them; then all of it in one <see cref="ReplaceSettings"/>. It ends with how to pair the
-/// children's other computers.
+/// filtered member gets of them; a summary with the requirement checks of this computer (<see cref="GetDiagnostics"/>);
+/// then all of it in one <see cref="ReplaceSettings"/>. It ends with how to pair the children's other computers.
 /// </summary>
 public sealed partial class SetupWizardViewModel : PageViewModel
 {
@@ -105,6 +105,12 @@ public sealed partial class SetupWizardViewModel : PageViewModel
     /// <summary>On the review step: which ready-made lists are added.</summary>
     [ObservableProperty]
     private string? _categoriesSummary;
+
+    /// <summary>On the review step: what this computer has and lacks (MVP-PLAN §4.5 requirements check). Saving is allowed either way.</summary>
+    public ObservableCollection<CheckItem> Checks { get; } = [];
+
+    [ObservableProperty]
+    private bool _hasChecks;
 
     protected override async Task LoadAsync()
     {
@@ -190,6 +196,7 @@ public sealed partial class SetupWizardViewModel : PageViewModel
                 var included = StarterCategories.Where(c => c.Include).Select(c => c.Label).ToList();
                 CategoriesSummary = included.Count == 0 ? Strings.Setup_NoCategories : Texts.Format(Strings.Setup_CategoriesAdded, string.Join(", ", included));
                 GoTo(WizardStep.Review);
+                await LoadChecksAsync();
                 break;
         }
     }
@@ -255,6 +262,22 @@ public sealed partial class SetupWizardViewModel : PageViewModel
             account.Warning = account.IsAdmin && Members.FirstOrDefault(m => m.Id == account.MemberId) is { IsFiltered: true } member
                 ? Texts.Format(Strings.Setup_AdminLinked, account.Name, member.Name.Trim())
                 : null;
+    }
+
+    /// <summary>A service that cannot run the checks (an older one, or the connection dropped) just shows none.</summary>
+    private async Task LoadChecksAsync()
+    {
+        IReadOnlyList<CheckItem> checks;
+        try
+        {
+            checks = await CheckItem.LoadAsync(Client);
+        }
+        catch (AdminClientException)
+        {
+            checks = [];
+        }
+        Replace(Checks, checks);
+        HasChecks = Checks.Count > 0;
     }
 
     private async Task ScanAsync()

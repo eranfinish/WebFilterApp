@@ -1306,4 +1306,55 @@ The computer keeps enforcing the last settings it received but stops getting upd
   <data name="Setup_Summary_Category" xml:space="preserve">
     <value>{0}: {1}</value>
   </data>
+  <data name="Setup_ChecksTitle" xml:space="preserve">
+    <value>Checking this computer</value>
+  </data>
+  <data name="Setup_ChecksHint" xml:space="preserve">
+    <value>You can save even with warnings and fix them later. The check is on the settings page too.</value>
+  </data>
+  <data name="Settings_Checks" xml:space="preserve">
+    <value>Checking this computer</value>
+  </data>
+  <data name="Check_service_ok" xml:space="preserve">
+    <value>The filter service runs as a Windows service.</value>
+  </data>
+  <data name="Check_service_warn" xml:space="preserve">
+    <value>The filter service is not running as a system service (a development run). On the family's computers, install it from the setup file.</value>
+  </data>
+  <data name="Check_browsers_ok" xml:space="preserve">
+    <value>Supported browsers on this computer: {0}.</value>
+  </data>
+  <data name="Check_browsers_fail" xml:space="preserve">
+    <value>No supported browser was found. Install Chrome or Edge.</value>
+  </data>
+  <data name="Check_browser_policies_ok" xml:space="preserve">
+    <value>Browser policies are managed: no private browsing, no other extensions, safe search on.</value>
+  </data>
+  <data name="Check_browser_policies_warn" xml:space="preserve">
+    <value>Browser policies are not managed on this computer (a development run), so private browsing gets around the filter.</value>
+  </data>
+  <data name="Check_extension_ok" xml:space="preserve">
+    <value>The WebFilter extension is force-installed in the browsers.</value>
+  </data>
+  <data name="Check_extension_warn" xml:space="preserve">
+    <value>The extension is not published in the Chrome and Edge stores yet, so the browsers do not install it by themselves.</value>
+  </data>
+  <data name="Check_extension_fail" xml:space="preserve">
+    <value>The extension's install policy is missing. Restart the filter service, and reinstall it if that does not help.</value>
+  </data>
+  <data name="Check_network_ok" xml:space="preserve">
+    <value>The network is a private one, so the children's computers can connect to this computer.</value>
+  </data>
+  <data name="Check_network_warn" xml:space="preserve">
+    <value>The network {0} is set as public, so the children's computers cannot connect to this computer. In Windows: Settings → Network &amp; internet → the network's properties → Private network.</value>
+  </data>
+  <data name="Check_network_fail" xml:space="preserve">
+    <value>This computer is not connected to a network.</value>
+  </data>
+  <data name="Check_hub_port_ok" xml:space="preserve">
+    <value>The firewall lets the children's computers connect (port {0}).</value>
+  </data>
+  <data name="Check_hub_port_warn" xml:space="preserve">
+    <value>The firewall does not allow connections to port {0}, so the children's computers cannot connect. Reinstall from the setup file.</value>
+  </data>
 </root>

@@ -3843,5 +3843,158 @@ namespace WebFilter.Admin.Resources {
                 return ResourceManager.GetString("Setup_Summary_Category", resourceCulture);
             }
         }
+
+        /// <summary>
+        ///   Looks up a localized string similar to בדיקת המחשב.
+        /// </summary>
+        public static string Setup_ChecksTitle {
+            get {
+                return ResourceManager.GetString("Setup_ChecksTitle", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to אפשר לשמור גם כשיש אזהרות, ולתקן אחר כך. הבדיקה מופיעה גם במסך ההגדרות..
+        /// </summary>
+        public static string Setup_ChecksHint {
+            get {
+                return ResourceManager.GetString("Setup_ChecksHint", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to בדיקת המחשב.
+        /// </summary>
+        public static string Settings_Checks {
+            get {
+                return ResourceManager.GetString("Settings_Checks", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to שירות הסינון רץ כשירות של Windows..
+        /// </summary>
+        public static string Check_service_ok {
+            get {
+                return ResourceManager.GetString("Check_service_ok", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to שירות הסינון לא רץ כשירות מערכת (הרצת פיתוח). במחשבי המשפחה מתקינים אותו מקובץ ה....
+        /// </summary>
+        public static string Check_service_warn {
+            get {
+                return ResourceManager.GetString("Check_service_warn", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to דפדפנים נתמכים במחשב: {0}..
+        /// </summary>
+        public static string Check_browsers_ok {
+            get {
+                return ResourceManager.GetString("Check_browsers_ok", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to לא נמצא דפדפן נתמך. התקינו Chrome או Edge..
+        /// </summary>
+        public static string Check_browsers_fail {
+            get {
+                return ResourceManager.GetString("Check_browsers_fail", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to מדיניות הדפדפנים מנוהלת: בלי גלישה בסתר, בלי תוספים אחרים, עם חיפוש בטוח..
+        /// </summary>
+        public static string Check_browser_policies_ok {
+            get {
+                return ResourceManager.GetString("Check_browser_policies_ok", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to מדיניות הדפדפנים לא מנוהלת במחשב הזה (הרצת פיתוח), ולכן אפשר לעקוף את הסינון בגל....
+        /// </summary>
+        public static string Check_browser_policies_warn {
+            get {
+                return ResourceManager.GetString("Check_browser_policies_warn", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to התוסף של WebFilter מותקן בדפדפנים בכפייה..
+        /// </summary>
+        public static string Check_extension_ok {
+            get {
+                return ResourceManager.GetString("Check_extension_ok", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to התוסף עוד לא פורסם בחנויות של Chrome ו-Edge, ולכן הדפדפנים לא מתקינים אותו לבד..
+        /// </summary>
+        public static string Check_extension_warn {
+            get {
+                return ResourceManager.GetString("Check_extension_warn", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to חסרה מדיניות ההתקנה של התוסף. הפעילו מחדש את שירות הסינון, ואם זה לא עוזר התקינו....
+        /// </summary>
+        public static string Check_extension_fail {
+            get {
+                return ResourceManager.GetString("Check_extension_fail", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to הרשת מוגדרת כרשת פרטית, ולכן מחשבי הילדים יכולים להתחבר למחשב הזה..
+        /// </summary>
+        public static string Check_network_ok {
+            get {
+                return ResourceManager.GetString("Check_network_ok", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to הרשת {0} מוגדרת כרשת ציבורית, ולכן מחשבי הילדים לא יוכלו להתחבר למחשב הזה. ב-Win....
+        /// </summary>
+        public static string Check_network_warn {
+            get {
+                return ResourceManager.GetString("Check_network_warn", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to המחשב לא מחובר לרשת..
+        /// </summary>
+        public static string Check_network_fail {
+            get {
+                return ResourceManager.GetString("Check_network_fail", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to חומת האש מאפשרת למחשבי הילדים להתחבר (פורט {0})..
+        /// </summary>
+        public static string Check_hub_port_ok {
+            get {
+                return ResourceManager.GetString("Check_hub_port_ok", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to חומת האש לא מאפשרת חיבור לפורט {0}, ולכן מחשבי הילדים לא יוכלו להתחבר. התקינו מח....
+        /// </summary>
+        public static string Check_hub_port_warn {
+            get {
+                return ResourceManager.GetString("Check_hub_port_warn", resourceCulture);
+            }
+        }
     }
 }

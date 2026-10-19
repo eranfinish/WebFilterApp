@@ -353,6 +353,19 @@ public sealed class PipeIntegrationTests : IAsyncLifetime
     }
 
     [Fact]
+    public async Task The_hub_answers_the_requirement_checks_from_this_computer()
+    {
+        await using var admin = await AdminClient.ConnectAsync(_options.AdminPipeName);
+
+        var checks = Assert.IsType<DiagnosticsResult>(await admin.RequestAsync(new GetDiagnostics())).Checks;
+
+        // A test run: not LocalSystem, no browser policies, no extension ids — and a network check, as on any hub.
+        Assert.Equal(("warn", "warn", "warn"), (checks.Single(c => c.Id == "service").State, checks.Single(c => c.Id == "browser_policies").State,
+            checks.Single(c => c.Id == "extension").State));
+        Assert.Contains(checks, c => c.Id == "network");
+    }
+
+    [Fact]
     public void The_windows_account_reader_lists_enabled_local_accounts_by_sid()
     {
         var accounts = new WindowsLocalAccounts().List();

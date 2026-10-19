@@ -36,6 +36,8 @@ namespace WebFilter.Contracts.Admin;
 [JsonDerivedType(typeof(DevicesResult), "devicesResult")]
 [JsonDerivedType(typeof(RevokeDevice), "revokeDevice")]
 [JsonDerivedType(typeof(ScanAccounts), "scanAccounts")]
+[JsonDerivedType(typeof(GetDiagnostics), "getDiagnostics")]
+[JsonDerivedType(typeof(DiagnosticsResult), "diagnosticsResult")]
 [JsonDerivedType(typeof(AdminOk), "ok")]
 [JsonDerivedType(typeof(AdminError), "error")]
 public abstract record AdminMessage
@@ -150,6 +152,19 @@ public sealed record RevokeDevice(string DeviceId) : AdminMessage;
 /// already there keep their links. Replies <see cref="AdminOk"/> with the number of accounts added as its detail.
 /// </summary>
 public sealed record ScanAccounts : AdminMessage;
+
+/// <summary>
+/// Checks of this computer for the setup wizard's requirements step and the settings page (MVP-PLAN §4.5). Read only.
+/// Answered on the hub and on agents.
+/// </summary>
+public sealed record GetDiagnostics : AdminMessage;
+
+public sealed record DiagnosticsResult(IReadOnlyList<CheckResult> Checks) : AdminMessage;
+
+/// <param name="Id">service | browsers | browser_policies | extension | network (hub) | hub_port (hub).</param>
+/// <param name="State">ok | warn | fail.</param>
+/// <param name="Detail">Facts the wording needs (browsers found, the public networks, the port) — not user-facing text.</param>
+public sealed record CheckResult(string Id, string State, string? Detail = null);
 
 public sealed record AdminOk(string? Detail = null) : AdminMessage;
 

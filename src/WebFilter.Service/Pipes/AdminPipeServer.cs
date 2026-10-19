@@ -10,6 +10,7 @@ using WebFilter.Core.Model;
 using WebFilter.Core.Time;
 using WebFilter.Service.Accounts;
 using WebFilter.Service.Mapping;
+using WebFilter.Service.Setup;
 
 namespace WebFilter.Service.Pipes;
 
@@ -18,10 +19,11 @@ namespace WebFilter.Service.Pipes;
 /// unelevated token cannot even open it; each client is also checked to be elevated (or the service account).
 /// </summary>
 public sealed class AdminPipeServer(FamilyService family, IOptions<ServiceOptions> options, TimeProvider time, ILogger<AdminPipeServer> log,
-    ILocalAccounts? accounts = null) : BackgroundService
+    ILocalAccounts? accounts = null, IMachineProbe? machine = null) : BackgroundService
 {
     private readonly ServiceOptions _options = options.Value;
     private readonly ILocalAccounts _accounts = accounts ?? new WindowsLocalAccounts();
+    private readonly IMachineProbe _machine = machine ?? new WindowsMachineProbe();
     private static readonly SecurityIdentifier Self = WindowsIdentity.GetCurrent().User!;
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
@@ -107,6 +109,7 @@ public sealed class AdminPipeServer(FamilyService family, IOptions<ServiceOption
     {
         GetStatus => family.WithAgent<AdminMessage>((agent, now) => AgentStatus(agent, now)),
         Pause pause => family.WithAgent<AdminMessage>((agent, now) => { agent.LocalPause(pause.MemberId, pause.Until, now); return new AdminOk(); }),
+        GetDiagnostics => new DiagnosticsResult(MachineChecks.Run(_options, isHub: false, _machine)),
         SetClock set => SetClock(set),
         _ => new AdminError("not_hub", "This computer is managed by the hub computer; make this change there."),
     };
@@ -143,6 +146,7 @@ public sealed class AdminPipeServer(FamilyService family, IOptions<ServiceOption
             ? new AdminOk()
             : new AdminError("not_found", "No such paired device."),
         ScanAccounts => ScanLocalAccounts(adminName),
+        GetDiagnostics => new DiagnosticsResult(MachineChecks.Run(_options, isHub: true, _machine)),
         _ => new AdminError("unsupported", $"Unsupported message type {request.GetType().Name}."),
     };
 

@@ -37,12 +37,20 @@ public sealed partial class SettingsViewModel : PageViewModel
 
     [ObservableProperty] private string? _hubText;
 
+    /// <summary>What this computer has and lacks (<see cref="GetDiagnostics"/>).</summary>
+    public ObservableCollection<CheckItem> Checks { get; } = [];
+
+    [ObservableProperty] private bool _hasChecks;
+
     protected override async Task LoadAsync()
     {
         try
         {
             // Every settings change bumps the version, so the cached settings are current unless the version moved.
             var status = await Context.RefreshStatusAsync();
+            Checks.Clear();
+            foreach (var check in await CheckItem.LoadAsync(Client)) Checks.Add(check);
+            HasChecks = Checks.Count > 0;
             SettingsVersionText = status.SettingsVersion.ToString(CultureInfo.CurrentCulture);
             DeviceText = status.DeviceId;
             IsHubText = status.IsHub ? Strings.Common_Yes : Strings.Common_No;

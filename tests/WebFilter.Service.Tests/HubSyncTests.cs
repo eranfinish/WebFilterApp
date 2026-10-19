@@ -147,6 +147,9 @@ public sealed class HubSyncTests : IAsyncLifetime
         Assert.Equal("Asia/Jerusalem", status.TimeZone);
         Assert.Equal(("pc-parents", $"127.0.0.1:{_port}", true), (status.Hub!.Name, status.Hub.Address, status.Hub.Reachable));
         Assert.Equal(_clock.GetUtcNow(), status.Hub.LastContactAt);
+        // The requirement checks are answered on an agent too, without the hub-only ones.
+        var checks = Assert.IsType<Contracts.Admin.DiagnosticsResult>(admin.Handle(new Contracts.Admin.GetDiagnostics(), "parent")).Checks;
+        Assert.Equal(["service", "browsers", "browser_policies", "extension"], checks.Select(c => c.Id));
 
         Assert.IsType<Contracts.Admin.AdminOk>(admin.Handle(new Contracts.Admin.Pause("yoav", _clock.GetUtcNow().AddMinutes(30)), "parent"));
         var paused = _agent.WithAgent((agent, now) => agent.DecideUrl(agent.AccountOf("yoav"), "https://www.instagram.com/", now));

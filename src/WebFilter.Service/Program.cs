@@ -23,6 +23,7 @@ builder.Services.AddSingleton(TimeProvider.System);
 #endif
 builder.Services.AddSingleton<FamilyService>();
 builder.Services.AddSingleton<ILocalAccounts, WindowsLocalAccounts>();
+builder.Services.AddSingleton<IMachineProbe, WindowsMachineProbe>();
 builder.Services.AddHostedService<TickService>();
 builder.Services.AddHostedService<AgentPipeServer>();
 builder.Services.AddHostedService<AdminPipeServer>();
