@@ -1,0 +1,35 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0-windows</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <IsPackable>false</IsPackable>
+    <!-- The admin assembly references WPF; the view models under test do not need a dispatcher or a window. -->
+    <UseWPF>true</UseWPF>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="coverlet.collector" Version="6.0.4" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.14.1" />
+    <PackageReference Include="xunit" Version="2.9.3" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="3.1.4" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Using Include="Xunit" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\WebFilter.Admin\WebFilter.Admin.csproj" />
+    <!-- Only for the closed lists (reason codes, event types) the UI must have wording for. -->
+    <ProjectReference Include="..\..\src\WebFilter.Core\WebFilter.Core.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\simulation\fixtures\family-base.json" Link="Fixtures\family-base.json" CopyToOutputDirectory="PreserveNewest" />
+    <None Include="..\..\src\WebFilter.Admin\Resources\Strings.resx" Link="Resources\Strings.resx" CopyToOutputDirectory="PreserveNewest" />
+    <None Include="..\..\src\WebFilter.Admin\Resources\Strings.en.resx" Link="Resources\Strings.en.resx" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+
+</Project>

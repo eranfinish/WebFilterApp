@@ -1,0 +1,698 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="App_Title" xml:space="preserve">
+    <value>WebFilter — Parents</value>
+  </data>
+  <data name="App_Subtitle" xml:space="preserve">
+    <value>Family web filter and screen time</value>
+  </data>
+  <data name="Nav_Dashboard" xml:space="preserve">
+    <value>Dashboard</value>
+  </data>
+  <data name="Nav_Requests" xml:space="preserve">
+    <value>Access requests</value>
+  </data>
+  <data name="Nav_Rules" xml:space="preserve">
+    <value>Website rules</value>
+  </data>
+  <data name="Nav_Activity" xml:space="preserve">
+    <value>Activity</value>
+  </data>
+  <data name="Nav_Settings" xml:space="preserve">
+    <value>Settings</value>
+  </data>
+  <data name="Common_Refresh" xml:space="preserve">
+    <value>Refresh</value>
+  </data>
+  <data name="Common_Retry" xml:space="preserve">
+    <value>Try again</value>
+  </data>
+  <data name="Common_Save" xml:space="preserve">
+    <value>Save</value>
+  </data>
+  <data name="Common_Revert" xml:space="preserve">
+    <value>Undo change</value>
+  </data>
+  <data name="Common_Remove" xml:space="preserve">
+    <value>Remove</value>
+  </data>
+  <data name="Common_Yes" xml:space="preserve">
+    <value>Yes</value>
+  </data>
+  <data name="Common_No" xml:space="preserve">
+    <value>No</value>
+  </data>
+  <data name="Common_All" xml:space="preserve">
+    <value>All</value>
+  </data>
+  <data name="Common_WholeFamily" xml:space="preserve">
+    <value>Whole family</value>
+  </data>
+  <data name="Common_None" xml:space="preserve">
+    <value>—</value>
+  </data>
+  <data name="Format_Time" xml:space="preserve">
+    <value>HH:mm</value>
+  </data>
+  <data name="Format_DateTime" xml:space="preserve">
+    <value>MMM d, HH:mm</value>
+  </data>
+  <data name="Minutes_One" xml:space="preserve">
+    <value>1 minute</value>
+  </data>
+  <data name="Minutes_Many" xml:space="preserve">
+    <value>{0} minutes</value>
+  </data>
+  <data name="Until_EndOfDay" xml:space="preserve">
+    <value>the end of the day</value>
+  </data>
+  <data name="Connection_NotConnected" xml:space="preserve">
+    <value>Not connected to the filter service yet</value>
+  </data>
+  <data name="Connection_Connecting" xml:space="preserve">
+    <value>Connecting to the filter service…</value>
+  </data>
+  <data name="Connection_Connected" xml:space="preserve">
+    <value>Connected to the filter service</value>
+  </data>
+  <data name="Connection_ServiceNotRunning" xml:space="preserve">
+    <value>The filter service is not running on this PC or does not answer. Make sure WebFilter is installed and its service is running, then try again.</value>
+  </data>
+  <data name="Connection_NotElevated" xml:space="preserve">
+    <value>The admin app has no admin permission. Close it and start it again as administrator (right-click → "Run as administrator").</value>
+  </data>
+  <data name="Connection_Lost" xml:space="preserve">
+    <value>The connection to the filter service was lost. Reconnecting…</value>
+  </data>
+  <data name="ConnectionShort_NotConnected" xml:space="preserve">
+    <value>Not connected</value>
+  </data>
+  <data name="ConnectionShort_Connecting" xml:space="preserve">
+    <value>Connecting…</value>
+  </data>
+  <data name="ConnectionShort_Connected" xml:space="preserve">
+    <value>Connected to the filter service</value>
+  </data>
+  <data name="ConnectionShort_ServiceNotRunning" xml:space="preserve">
+    <value>Filter service not running</value>
+  </data>
+  <data name="ConnectionShort_NotElevated" xml:space="preserve">
+    <value>No admin permission</value>
+  </data>
+  <data name="ConnectionShort_Lost" xml:space="preserve">
+    <value>Connection lost</value>
+  </data>
+  <data name="Error_Timeout" xml:space="preserve">
+    <value>The filter service did not answer in time. Try again in a moment.</value>
+  </data>
+  <data name="Error_Rejected" xml:space="preserve">
+    <value>The filter service did not do this: {0}</value>
+  </data>
+  <data name="Error_Unsupported" xml:space="preserve">
+    <value>The filter service on this PC does not support this action.</value>
+  </data>
+  <data name="Error_UnexpectedReply" xml:space="preserve">
+    <value>Unexpected reply from the filter service.</value>
+  </data>
+  <data name="Dashboard_Intro" xml:space="preserve">
+    <value>What is happening right now for each family member.</value>
+  </data>
+  <data name="Dashboard_NoPendingRequests" xml:space="preserve">
+    <value>No access requests waiting for you</value>
+  </data>
+  <data name="Dashboard_PendingRequests_One" xml:space="preserve">
+    <value>One access request is waiting for your decision</value>
+  </data>
+  <data name="Dashboard_PendingRequests_Many" xml:space="preserve">
+    <value>{0} access requests are waiting for your decision</value>
+  </data>
+  <data name="Dashboard_OpenRequests" xml:space="preserve">
+    <value>Open requests</value>
+  </data>
+  <data name="Dashboard_NoMembers" xml:space="preserve">
+    <value>No family members are set up yet.</value>
+  </data>
+  <data name="Dashboard_LastUpdated" xml:space="preserve">
+    <value>Updated at {0} · refreshes every 10 seconds</value>
+  </data>
+  <data name="TimeState_ok" xml:space="preserve">
+    <value>Has screen time</value>
+  </data>
+  <data name="TimeState_warn" xml:space="preserve">
+    <value>Time is almost up</value>
+  </data>
+  <data name="TimeState_expired" xml:space="preserve">
+    <value>Time is up for today</value>
+  </data>
+  <data name="TimeState_outside_window" xml:space="preserve">
+    <value>Outside allowed hours</value>
+  </data>
+  <data name="TimeState_unlimited" xml:space="preserve">
+    <value>No time limit</value>
+  </data>
+  <data name="Member_UsedOfLimit" xml:space="preserve">
+    <value>Today: {0} of {1}</value>
+  </data>
+  <data name="Member_Used" xml:space="preserve">
+    <value>Today: {0}</value>
+  </data>
+  <data name="Member_Remaining" xml:space="preserve">
+    <value>{0} left</value>
+  </data>
+  <data name="Member_WindowEnds" xml:space="preserve">
+    <value>Allowed hours end at {0}</value>
+  </data>
+  <data name="Member_PausedUntil" xml:space="preserve">
+    <value>Filtering paused until {0}</value>
+  </data>
+  <data name="Member_HomeworkUntil" xml:space="preserve">
+    <value>Homework mode until {0}</value>
+  </data>
+  <data name="Member_NotFiltered" xml:space="preserve">
+    <value>Not filtered</value>
+  </data>
+  <data name="Action_Add15" xml:space="preserve">
+    <value>15 more minutes</value>
+  </data>
+  <data name="Action_Add30" xml:space="preserve">
+    <value>30 more minutes</value>
+  </data>
+  <data name="Action_PauseToday" xml:space="preserve">
+    <value>Pause filtering for today</value>
+  </data>
+  <data name="Action_Resume" xml:space="preserve">
+    <value>Resume filtering</value>
+  </data>
+  <data name="Action_StartHomework" xml:space="preserve">
+    <value>Homework mode for an hour</value>
+  </data>
+  <data name="Action_StopHomework" xml:space="preserve">
+    <value>End homework mode</value>
+  </data>
+  <data name="Done_Extend" xml:space="preserve">
+    <value>Added {0} for {1}.</value>
+  </data>
+  <data name="Done_Pause" xml:space="preserve">
+    <value>Filtering for {0} is paused until the end of the day.</value>
+  </data>
+  <data name="Done_Resume" xml:space="preserve">
+    <value>Filtering for {0} is back on.</value>
+  </data>
+  <data name="Done_StartHomework" xml:space="preserve">
+    <value>Homework mode is on for {0} for an hour.</value>
+  </data>
+  <data name="Done_StopHomework" xml:space="preserve">
+    <value>Homework mode for {0} has ended.</value>
+  </data>
+  <data name="Requests_Intro" xml:space="preserve">
+    <value>When a child asks for a website, channel, app or more time, the request shows up here.</value>
+  </data>
+  <data name="Requests_Pending" xml:space="preserve">
+    <value>Waiting for a decision</value>
+  </data>
+  <data name="Requests_NoPending" xml:space="preserve">
+    <value>No requests are waiting.</value>
+  </data>
+  <data name="Requests_Recent" xml:space="preserve">
+    <value>Recent decisions</value>
+  </data>
+  <data name="Requests_NoRecent" xml:space="preserve">
+    <value>No decisions yet.</value>
+  </data>
+  <data name="RequestKind_url" xml:space="preserve">
+    <value>Website</value>
+  </data>
+  <data name="RequestKind_youtube" xml:space="preserve">
+    <value>YouTube channel</value>
+  </data>
+  <data name="RequestKind_app" xml:space="preserve">
+    <value>App</value>
+  </data>
+  <data name="RequestKind_time" xml:space="preserve">
+    <value>More time</value>
+  </data>
+  <data name="RequestStatus_pending" xml:space="preserve">
+    <value>Waiting</value>
+  </data>
+  <data name="RequestStatus_approved" xml:space="preserve">
+    <value>Approved</value>
+  </data>
+  <data name="RequestStatus_denied" xml:space="preserve">
+    <value>Denied</value>
+  </data>
+  <data name="Request_TimeTarget" xml:space="preserve">
+    <value>Asked for {0} more</value>
+  </data>
+  <data name="Request_Message" xml:space="preserve">
+    <value>Message: "{0}"</value>
+  </data>
+  <data name="Request_SentAt" xml:space="preserve">
+    <value>Sent {0}</value>
+  </data>
+  <data name="Request_Decided" xml:space="preserve">
+    <value>{0} {1}</value>
+  </data>
+  <data name="Request_ScopeLabel" xml:space="preserve">
+    <value>Allow:</value>
+  </data>
+  <data name="Request_ScopeSite" xml:space="preserve">
+    <value>The whole site {0}</value>
+  </data>
+  <data name="Request_ScopePage" xml:space="preserve">
+    <value>Only this page</value>
+  </data>
+  <data name="Approve_Minutes" xml:space="preserve">
+    <value>Allow for {0}</value>
+  </data>
+  <data name="Approve_Today" xml:space="preserve">
+    <value>Allow until the end of the day</value>
+  </data>
+  <data name="Approve_Always" xml:space="preserve">
+    <value>Always allow</value>
+  </data>
+  <data name="Approve_Channel" xml:space="preserve">
+    <value>Allow this channel</value>
+  </data>
+  <data name="Approve_Time" xml:space="preserve">
+    <value>Give {0} more</value>
+  </data>
+  <data name="Request_Deny" xml:space="preserve">
+    <value>Deny</value>
+  </data>
+  <data name="Done_Approved" xml:space="preserve">
+    <value>The request from {0} was approved.</value>
+  </data>
+  <data name="Done_Denied" xml:space="preserve">
+    <value>The request from {0} was denied.</value>
+  </data>
+  <data name="Rules_Intro" xml:space="preserve">
+    <value>Websites allowed or blocked for the whole family or for one member.</value>
+  </data>
+  <data name="Rules_Filter" xml:space="preserve">
+    <value>Show rules for:</value>
+  </data>
+  <data name="Rules_FilterGlobal" xml:space="preserve">
+    <value>Whole family (general rules)</value>
+  </data>
+  <data name="Rules_Empty" xml:space="preserve">
+    <value>No rules to show.</value>
+  </data>
+  <data name="Rules_Col_Pattern" xml:space="preserve">
+    <value>Site / pattern</value>
+  </data>
+  <data name="Rules_Col_Type" xml:space="preserve">
+    <value>Type</value>
+  </data>
+  <data name="Rules_Col_Action" xml:space="preserve">
+    <value>Action</value>
+  </data>
+  <data name="Rules_Col_AppliesTo" xml:space="preserve">
+    <value>For</value>
+  </data>
+  <data name="Rules_Col_Expiry" xml:space="preserve">
+    <value>Valid</value>
+  </data>
+  <data name="RuleType_domain" xml:space="preserve">
+    <value>Site (with subdomains)</value>
+  </data>
+  <data name="RuleType_wildcard" xml:space="preserve">
+    <value>Subdomains only</value>
+  </data>
+  <data name="RuleType_prefix" xml:space="preserve">
+    <value>Page or folder</value>
+  </data>
+  <data name="RuleType_regex" xml:space="preserve">
+    <value>Regular expression (advanced)</value>
+  </data>
+  <data name="RuleAction_allow" xml:space="preserve">
+    <value>Allowed</value>
+  </data>
+  <data name="RuleAction_block" xml:space="preserve">
+    <value>Blocked</value>
+  </data>
+  <data name="Rule_AlwaysAllowed" xml:space="preserve">
+    <value>Always allowed</value>
+  </data>
+  <data name="Rule_NoExpiry" xml:space="preserve">
+    <value>Permanent</value>
+  </data>
+  <data name="Rule_ExpiresAt" xml:space="preserve">
+    <value>Until {0}</value>
+  </data>
+  <data name="Rule_Expired" xml:space="preserve">
+    <value>Expired</value>
+  </data>
+  <data name="Rules_Add_Title" xml:space="preserve">
+    <value>Add a rule</value>
+  </data>
+  <data name="Rules_Add_Pattern" xml:space="preserve">
+    <value>Website address</value>
+  </data>
+  <data name="Rules_Add_PatternHint" xml:space="preserve">
+    <value>For example: example.com · *.example.com · example.com/games</value>
+  </data>
+  <data name="Rules_Add_Type" xml:space="preserve">
+    <value>Type</value>
+  </data>
+  <data name="Rules_Add_Action" xml:space="preserve">
+    <value>Action</value>
+  </data>
+  <data name="Rules_Add_AppliesTo" xml:space="preserve">
+    <value>For</value>
+  </data>
+  <data name="Rules_Add_AlwaysAllowed" xml:space="preserve">
+    <value>Always allowed — even when screen time is up</value>
+  </data>
+  <data name="Rules_Add_Button" xml:space="preserve">
+    <value>Add rule</value>
+  </data>
+  <data name="Rules_RemoveConfirm" xml:space="preserve">
+    <value>Remove the rule for {0}?</value>
+  </data>
+  <data name="Rules_RemoveTitle" xml:space="preserve">
+    <value>Remove rule</value>
+  </data>
+  <data name="Done_RuleAdded" xml:space="preserve">
+    <value>The rule for {0} was added.</value>
+  </data>
+  <data name="Done_RuleRemoved" xml:space="preserve">
+    <value>The rule for {0} was removed.</value>
+  </data>
+  <data name="Validation_Empty" xml:space="preserve">
+    <value>Enter a website address or pattern.</value>
+  </data>
+  <data name="Validation_DomainStar" xml:space="preserve">
+    <value>A star (*) is allowed only with "Subdomains only", for example *.example.com.</value>
+  </data>
+  <data name="Validation_DomainInvalid" xml:space="preserve">
+    <value>"{0}" is not a valid site name. Enter just the site name, for example example.com.</value>
+  </data>
+  <data name="Validation_DomainHasPath" xml:space="preserve">
+    <value>The address has a path. For a single page or folder choose "Page or folder"; for the whole site enter just the site name.</value>
+  </data>
+  <data name="Validation_WildcardForm" xml:space="preserve">
+    <value>Write a subdomain pattern as *.example.com (one star, at the start).</value>
+  </data>
+  <data name="Validation_PrefixForm" xml:space="preserve">
+    <value>Write a page or folder as example.com/path.</value>
+  </data>
+  <data name="Validation_RegexUnsupported" xml:space="preserve">
+    <value>The expression uses an unsupported feature (lookaround or backreference).</value>
+  </data>
+  <data name="Validation_RegexInvalid" xml:space="preserve">
+    <value>The regular expression is not valid.</value>
+  </data>
+  <data name="Validation_Duplicate" xml:space="preserve">
+    <value>This rule already exists.</value>
+  </data>
+  <data name="Activity_Intro" xml:space="preserve">
+    <value>Blocks, time alerts, requests and changes made by parents.</value>
+  </data>
+  <data name="Activity_Member" xml:space="preserve">
+    <value>Family member</value>
+  </data>
+  <data name="Activity_Type" xml:space="preserve">
+    <value>Type</value>
+  </data>
+  <data name="Activity_Period" xml:space="preserve">
+    <value>Period</value>
+  </data>
+  <data name="Period_Day" xml:space="preserve">
+    <value>Last 24 hours</value>
+  </data>
+  <data name="Period_Week" xml:space="preserve">
+    <value>Last 7 days</value>
+  </data>
+  <data name="Activity_Empty" xml:space="preserve">
+    <value>No events in the selected period.</value>
+  </data>
+  <data name="Activity_Count" xml:space="preserve">
+    <value>{0} events</value>
+  </data>
+  <data name="Activity_Col_Time" xml:space="preserve">
+    <value>When</value>
+  </data>
+  <data name="Activity_Col_Member" xml:space="preserve">
+    <value>Who</value>
+  </data>
+  <data name="Activity_Col_Type" xml:space="preserve">
+    <value>What happened</value>
+  </data>
+  <data name="Activity_Col_Details" xml:space="preserve">
+    <value>Details</value>
+  </data>
+  <data name="Activity_Col_Device" xml:space="preserve">
+    <value>PC</value>
+  </data>
+  <data name="Event_TimeLeft" xml:space="preserve">
+    <value>{0} left</value>
+  </data>
+  <data name="EventType_blocked" xml:space="preserve">
+    <value>Website blocked</value>
+  </data>
+  <data name="EventType_app_blocked" xml:space="preserve">
+    <value>App blocked</value>
+  </data>
+  <data name="EventType_access_request" xml:space="preserve">
+    <value>Access request</value>
+  </data>
+  <data name="EventType_time_warning" xml:space="preserve">
+    <value>Time warning</value>
+  </data>
+  <data name="EventType_time_expired" xml:space="preserve">
+    <value>Time is up</value>
+  </data>
+  <data name="EventType_admin_change" xml:space="preserve">
+    <value>Parent change</value>
+  </data>
+  <data name="EventType_tamper" xml:space="preserve">
+    <value>Bypass attempt</value>
+  </data>
+  <data name="EventType_service" xml:space="preserve">
+    <value>Filter service</value>
+  </data>
+  <data name="Reason_allowed_unrestricted" xml:space="preserve">
+    <value>Unrestricted</value>
+  </data>
+  <data name="Reason_allowed_paused" xml:space="preserve">
+    <value>Filtering paused</value>
+  </data>
+  <data name="Reason_allowed_always" xml:space="preserve">
+    <value>Always allowed</value>
+  </data>
+  <data name="Reason_allowed_rule" xml:space="preserve">
+    <value>Allowed by a rule</value>
+  </data>
+  <data name="Reason_allowed_category" xml:space="preserve">
+    <value>Allowed by a category</value>
+  </data>
+  <data name="Reason_allowed_default" xml:space="preserve">
+    <value>Allowed (default)</value>
+  </data>
+  <data name="Reason_allowed_homework" xml:space="preserve">
+    <value>Allowed in homework mode</value>
+  </data>
+  <data name="Reason_allowed_youtube_channel" xml:space="preserve">
+    <value>Approved channel</value>
+  </data>
+  <data name="Reason_allowed_browser" xml:space="preserve">
+    <value>Supported browser</value>
+  </data>
+  <data name="Reason_blocked_rule" xml:space="preserve">
+    <value>Blocked by a rule</value>
+  </data>
+  <data name="Reason_blocked_category" xml:space="preserve">
+    <value>Blocked by a category</value>
+  </data>
+  <data name="Reason_blocked_not_in_allowlist" xml:space="preserve">
+    <value>Not on the approved sites list</value>
+  </data>
+  <data name="Reason_blocked_time_window" xml:space="preserve">
+    <value>Outside allowed hours</value>
+  </data>
+  <data name="Reason_blocked_daily_limit" xml:space="preserve">
+    <value>Daily screen time used up</value>
+  </data>
+  <data name="Reason_blocked_homework" xml:space="preserve">
+    <value>Not educational — homework mode</value>
+  </data>
+  <data name="Reason_blocked_ip_literal" xml:space="preserve">
+    <value>Direct IP address</value>
+  </data>
+  <data name="Reason_blocked_youtube_channel" xml:space="preserve">
+    <value>Blocked YouTube channel</value>
+  </data>
+  <data name="Reason_blocked_youtube_unknown" xml:space="preserve">
+    <value>Unidentified YouTube channel</value>
+  </data>
+  <data name="Reason_blocked_youtube_off" xml:space="preserve">
+    <value>YouTube is off</value>
+  </data>
+  <data name="Reason_blocked_service_unavailable" xml:space="preserve">
+    <value>Filter service was unavailable</value>
+  </data>
+  <data name="Reason_blocked_app_network" xml:space="preserve">
+    <value>App not allowed on the network</value>
+  </data>
+  <data name="Reason_redirect_youtube_home" xml:space="preserve">
+    <value>Sent to the approved channels page</value>
+  </data>
+  <data name="AdminChange_add_rule" xml:space="preserve">
+    <value>Website rule added</value>
+  </data>
+  <data name="AdminChange_remove_rule" xml:space="preserve">
+    <value>Website rule removed</value>
+  </data>
+  <data name="AdminChange_set_member" xml:space="preserve">
+    <value>Member settings changed</value>
+  </data>
+  <data name="AdminChange_extend_time" xml:space="preserve">
+    <value>Screen time added</value>
+  </data>
+  <data name="AdminChange_pause" xml:space="preserve">
+    <value>Filtering paused</value>
+  </data>
+  <data name="AdminChange_resume" xml:space="preserve">
+    <value>Filtering resumed</value>
+  </data>
+  <data name="AdminChange_start_homework" xml:space="preserve">
+    <value>Homework mode started</value>
+  </data>
+  <data name="AdminChange_stop_homework" xml:space="preserve">
+    <value>Homework mode ended</value>
+  </data>
+  <data name="AdminChange_approve_request" xml:space="preserve">
+    <value>Access request approved</value>
+  </data>
+  <data name="AdminChange_deny_request" xml:space="preserve">
+    <value>Access request denied</value>
+  </data>
+  <data name="AdminChange_replace_settings" xml:space="preserve">
+    <value>All settings replaced</value>
+  </data>
+  <data name="AdminChange_local_pause" xml:space="preserve">
+    <value>Emergency pause on a PC</value>
+  </data>
+  <data name="Settings_Intro" xml:space="preserve">
+    <value>How each member is filtered, and the filter service connection.</value>
+  </data>
+  <data name="Settings_Members" xml:space="preserve">
+    <value>Family members</value>
+  </data>
+  <data name="Settings_MembersHint" xml:space="preserve">
+    <value>Changes apply on every PC within seconds.</value>
+  </data>
+  <data name="Settings_Col_Name" xml:space="preserve">
+    <value>Name</value>
+  </data>
+  <data name="Settings_Col_Role" xml:space="preserve">
+    <value>Role</value>
+  </data>
+  <data name="Settings_Col_Age" xml:space="preserve">
+    <value>Age</value>
+  </data>
+  <data name="Settings_Col_FilterMode" xml:space="preserve">
+    <value>Website filtering</value>
+  </data>
+  <data name="Settings_Col_YouTubeMode" xml:space="preserve">
+    <value>YouTube</value>
+  </data>
+  <data name="Done_MemberSaved" xml:space="preserve">
+    <value>Settings for {0} saved.</value>
+  </data>
+  <data name="Role_child" xml:space="preserve">
+    <value>Child</value>
+  </data>
+  <data name="Role_teen" xml:space="preserve">
+    <value>Teen</value>
+  </data>
+  <data name="Role_adult" xml:space="preserve">
+    <value>Adult</value>
+  </data>
+  <data name="FilterMode_unrestricted" xml:space="preserve">
+    <value>No filtering</value>
+  </data>
+  <data name="FilterMode_blocklist" xml:space="preserve">
+    <value>Block unsuitable sites</value>
+  </data>
+  <data name="FilterMode_allowlist" xml:space="preserve">
+    <value>Approved sites only</value>
+  </data>
+  <data name="YouTubeMode_off" xml:space="preserve">
+    <value>Blocked</value>
+  </data>
+  <data name="YouTubeMode_restricted" xml:space="preserve">
+    <value>Restricted mode</value>
+  </data>
+  <data name="YouTubeMode_allowlist" xml:space="preserve">
+    <value>Approved channels only</value>
+  </data>
+  <data name="YouTubeMode_unrestricted" xml:space="preserve">
+    <value>No restrictions</value>
+  </data>
+  <data name="Diagnostics_Title" xml:space="preserve">
+    <value>Filter service connection</value>
+  </data>
+  <data name="Diagnostics_Pipe" xml:space="preserve">
+    <value>Pipe</value>
+  </data>
+  <data name="Diagnostics_State" xml:space="preserve">
+    <value>State</value>
+  </data>
+  <data name="Diagnostics_SettingsVersion" xml:space="preserve">
+    <value>Settings version</value>
+  </data>
+  <data name="Diagnostics_Device" xml:space="preserve">
+    <value>Device id</value>
+  </data>
+  <data name="Diagnostics_IsHub" xml:space="preserve">
+    <value>Main PC (hub)</value>
+  </data>
+  <data name="Diagnostics_ServiceTime" xml:space="preserve">
+    <value>Service clock</value>
+  </data>
+  <data name="Diagnostics_TimeZone" xml:space="preserve">
+    <value>Family time zone</value>
+  </data>
+</root>
