@@ -10,7 +10,8 @@
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
     "test:watch": "vitest",
-    "verify:edge": "node scripts/build.mjs && node scripts/build.mjs --test-hooks && node harness/verify-edge.mjs"
+    "verify:edge": "node scripts/build.mjs && node scripts/build.mjs --test-hooks && node harness/verify-edge.mjs",
+    "e2e:real": "node harness/e2e-real.mjs"
   },
   "devDependencies": {
     "@types/chrome": "0.3.4",

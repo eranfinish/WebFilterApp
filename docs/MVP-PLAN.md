@@ -539,7 +539,7 @@ CLAUDE.md
 
 במקביל ל-M2 מול שירות מדומה. **תנאי סיום:** תרחישי `browser` (Playwright) עוברים, כולל fail-closed ו-YouTube.
 
-> **סטטוס (2026-10-19):** NativeHost קיים (העברה, פיצול מעל 1MB, תשובה עצמאית כשהשירות כבוי, בדיקה שהשרת רץ כ-SYSTEM) ונבדק כתהליך אמיתי. התוסף (`extension/`, MV3 ב-TypeScript, 0.3.0) קיים: fail-closed רק כשמותקן במדיניות, כללי DNR מהשירות עם נפילה חזרה ל-`isRegexSupported`, מסך חסימה שמקבל את הסיבה מהשירות (`reportBlockResult`/`decideUrl`), מסך "הזמן נגמר", בקשות גישה, זיהוי ערוצי YouTube, ממשק עברי RTL. 138 בדיקות יחידה ו-49 בדיקות ב-Edge אמיתי (Playwright) מול host מדומה. השירות משקף השהיה ושיעורי בית גם בדפדפן (`ExtensionPolicy`). חסר — ריצה מקצה לקצה עם ה-NativeHost והשירות האמיתיים (רמה 3), התקנה במדיניות מהחנות, Chrome. NativeAOT דורש את רכיב ה-C++ של Visual Studio.
+> **סטטוס (2026-10-19):** NativeHost קיים (העברה, פיצול מעל 1MB, תשובה עצמאית כשהשירות כבוי, בדיקה שהשרת רץ כ-SYSTEM) ונבדק כתהליך אמיתי. התוסף (`extension/`, MV3 ב-TypeScript, 0.3.0) קיים: fail-closed רק כשמותקן במדיניות, כללי DNR מהשירות עם נפילה חזרה ל-`isRegexSupported`, מסך חסימה שמקבל את הסיבה מהשירות (`reportBlockResult`/`decideUrl`), מסך "הזמן נגמר", בקשות גישה, זיהוי ערוצי YouTube, ממשק עברי RTL. 139 בדיקות יחידה ו-49 בדיקות ב-Edge אמיתי (Playwright) מול host מדומה. ריצה מקצה לקצה עם ה-NativeHost והשירות האמיתיים (רמה 3, `npm run e2e:real`, 26 בדיקות) עוברת ב-Edge. השירות משקף השהיה ושיעורי בית גם בדפדפן (`ExtensionPolicy`). חסר — התקנה במדיניות מהחנות, שירות מותקן כ-LocalSystem וסשן של ילד (מעבדה), Chrome. NativeAOT דורש את רכיב ה-C++ של Visual Studio.
 
 ### M4 — אכיפה והגנה
 

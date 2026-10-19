@@ -17,6 +17,8 @@ try
 }
 catch (Exception ex) when (ex is TimeoutException or IOException or UnauthorizedAccessException)
 {
+    // Answers by itself until the service is reachable again, then exits: the extension reconnects (fail-closed
+    // meanwhile) and the new host relays to the service.
     await new Fallback(settings).RunAsync(stdin, stdout);
     return 0;
 }

@@ -326,6 +326,32 @@ describe("pushes", () => {
     expect(c.decisionOf("nope")).toEqual({ status: "unknown" });
   });
 
+  it("accessDecided right after rulesChanged (the service's order): the pages hear about it only once the new rules are in", async () => {
+    const host = new FakeHost(script());
+    const c = start(host);
+    await settle();
+    await (async () => {
+      const p = c.requestAccess({ type: "wf:requestAccess", kind: "url", target: "https://pbskids.org/games" });
+      await settle();
+      return p;
+    })();
+    const approved: DnrRule = { id: 5000, priority: 131080, action: { type: "allow" }, condition: { resourceTypes: FRAMES, requestDomains: ["pbskids.org"] } };
+    host.script = script({ rules: { ...script().rules!, rulesVersion: 6, dynamicRules: [...DYNAMIC, approved] } });
+    state.broadcasts = [];
+    let installedWhenTold: boolean | null = null;
+    const broadcast = chrome.runtime.sendMessage;
+    (chrome.runtime as { sendMessage: unknown }).sendMessage = (message: { type?: string }) => {
+      if (message?.type === "wf:accessDecided") installedWhenTold = state.dynamicRules.has(5000);
+      return (broadcast as (m: unknown) => Promise<unknown>)(message);
+    };
+    // The service raises SettingsChanged (→ rulesChanged) and then RequestDecided (→ accessDecided), back to back.
+    host.push({ type: "rulesChanged", rulesVersion: 6 });
+    host.push({ type: "accessDecided", requestId: "ar-1", status: "approved" });
+    await settle();
+    expect(installedWhenTold).toBe(true);
+    expect(state.dynamicRules.has(5000)).toBe(true);
+  });
+
   it("port closed: failclosed on, rules cleared, reconnects after 1 s", async () => {
     state.tabs = [{ id: 1, url: "https://www.khanacademy.org/", active: true }];
     const host = new FakeHost(script());
