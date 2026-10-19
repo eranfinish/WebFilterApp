@@ -43,6 +43,22 @@ public sealed class HubCore(FamilyConfig config)
 
     public TimeStatus TimeStatus(string memberId, DateTimeOffset now) => Decider.Time(View(), memberId, now);
 
+    /// <summary>Everything that must survive a restart (the service persists it; see Storage in WebFilter.Service).</summary>
+    public HubState Export() => new(Version, Config.Clone(), _runtime.ToDictionary(kv => kv.Key, kv => kv.Value.Clone()), Usage.Clone(),
+        [.. Events], Requests.Select(r => r.Clone()).ToList(), _requestCounter, _ruleCounter);
+
+    public static HubCore Restore(HubState state)
+    {
+        var hub = new HubCore(state.Config.Clone()) { Version = state.Version };
+        foreach (var (member, runtime) in state.Runtime) hub._runtime[member] = runtime.Clone();
+        hub.Usage.MergeFrom(state.Usage);
+        hub.Events.AddRange(state.Events);
+        hub.Requests.AddRange(state.Requests.Select(r => r.Clone()));
+        hub._requestCounter = state.RequestCounter;
+        hub._ruleCounter = state.RuleCounter;
+        return hub;
+    }
+
     public void Ingest(AgentUpload upload)
     {
         var before = Usage.Clone();
@@ -204,3 +220,14 @@ public sealed class HubCore(FamilyConfig config)
 
     private static string StripWww(string host) => host.StartsWith("www.", StringComparison.Ordinal) ? host[4..] : host;
 }
+
+/// <summary>A hub's persistent state.</summary>
+public sealed record HubState(
+    int Version,
+    FamilyConfig Config,
+    IReadOnlyDictionary<string, MemberRuntime> Runtime,
+    UsageLedger Usage,
+    IReadOnlyList<FamilyEvent> Events,
+    IReadOnlyList<AccessRequest> Requests,
+    int RequestCounter,
+    int RuleCounter);

@@ -106,6 +106,22 @@ public sealed class AgentCore(string deviceId)
         return RequestResult.Queued;
     }
 
+    /// <summary>Everything that must survive a restart. Outbox and queued requests are included so nothing is lost offline.</summary>
+    public AgentState Export() => new(DeviceId, _snapshot, _localUsage.Clone(), new Dictionary<string, DateTimeOffset>(_localPauses),
+        [.. _outbox], _queued.Select(q => q.Clone()).ToList(), _queuedCounter);
+
+    public static AgentCore Restore(AgentState state)
+    {
+        var agent = new AgentCore(state.DeviceId);
+        if (state.Snapshot is not null) agent.Apply(state.Snapshot);
+        agent._localUsage.MergeFrom(state.LocalUsage);
+        foreach (var (member, until) in state.LocalPauses) agent._localPauses[member] = until;
+        agent._outbox.AddRange(state.Outbox);
+        agent._queued.AddRange(state.QueuedRequests.Select(q => q.Clone()));
+        agent._queuedCounter = state.QueuedCounter;
+        return agent;
+    }
+
     public AgentUpload TakeUpload()
     {
         var upload = new AgentUpload(DeviceId, _localUsage.Clone(), [.. _outbox], [.. _queued]);
@@ -125,6 +141,16 @@ public sealed class AgentCore(string deviceId)
         _outbox.Add(e);
     }
 }
+
+/// <summary>An agent's persistent state.</summary>
+public sealed record AgentState(
+    string DeviceId,
+    HubSnapshot? Snapshot,
+    UsageLedger LocalUsage,
+    IReadOnlyDictionary<string, DateTimeOffset> LocalPauses,
+    IReadOnlyList<FamilyEvent> Outbox,
+    IReadOnlyList<AccessRequest> QueuedRequests,
+    int QueuedCounter);
 
 /// <summary>A request as the child submits it, before the hub assigns an id.</summary>
 public sealed record AccessRequestDraft(
