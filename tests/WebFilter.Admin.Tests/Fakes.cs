@@ -64,6 +64,9 @@ internal sealed class FakeAdminClient : IAdminClient
 
     public List<string> PairingAddresses { get; } = [.. TestData.HubAddresses];
 
+    /// <summary>What <see cref="ScanAccounts"/> finds on this computer: added (unlinked) to the hub device when not known yet.</summary>
+    public List<AccountDto> LocalAccounts { get; } = [];
+
     /// <summary>Overrides the reply for a request (return null to fall back to the default).</summary>
     public Func<AdminMessage, AdminMessage?>? Reply { get; set; }
 
@@ -90,9 +93,39 @@ internal sealed class FakeAdminClient : IAdminClient
             CreatePairingCode when !IsHub => new AdminError("not_hub", "Pairing codes are created on the hub computer."),
             CreatePairingCode => new PairingCodeResult(PairingCode, Status.Now + TimeSpan.FromMinutes(10), TestData.HubPort, [.. PairingAddresses]),
             RevokeDevice revoke => Revoke(revoke.DeviceId),
+            ReplaceSettings replace => Replace(replace),
+            ScanAccounts => Scan(),
             _ => (AdminMessage)new AdminOk(),
         };
         return Task.FromResult(reply);
+    }
+
+    /// <summary>Like the service: refused when the settings moved past <see cref="ReplaceSettings.IfVersion"/>; otherwise taken, with a new version.</summary>
+    private AdminMessage Replace(ReplaceSettings replace)
+    {
+        if (!IsHub) return new AdminError("not_hub", "Settings are managed on the hub computer.");
+        if (replace.IfVersion is { } expected && expected != Settings.Version)
+            return new AdminError(ReplaceSettings.ConflictCode, $"The settings changed meanwhile (version {Settings.Version}, expected {expected}).");
+        BumpVersion(replace.Settings);
+        return new AdminOk();
+    }
+
+    private AdminMessage Scan()
+    {
+        if (!IsHub) return new AdminError("not_hub", "Accounts are linked on the hub computer.");
+        var device = Settings.Devices.Single(d => d.Id == Status.DeviceId);
+        var added = LocalAccounts.Where(a => device.Accounts.All(known => known.AccountId != a.AccountId)).Select(a => a with { Member = null }).ToList();
+        if (added.Count > 0)
+            BumpVersion(Settings with { Devices = [.. Settings.Devices.Select(d => d.Id == device.Id ? d with { Accounts = [.. d.Accounts, .. added] } : d)] });
+        return new AdminOk(added.Count.ToString(CultureInfo.InvariantCulture));
+    }
+
+    /// <summary>Stores new settings at the next version, and reports it in the status, as every change does on the service.</summary>
+    public void BumpVersion(FamilyBundle? settings = null)
+    {
+        var version = Settings.Version + 1;
+        Settings = (settings ?? Settings) with { Version = version };
+        Status = Status with { SettingsVersion = version };
     }
 
     private AdminMessage Revoke(string deviceId)

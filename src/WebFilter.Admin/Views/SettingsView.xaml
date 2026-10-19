@@ -51,10 +51,12 @@
                               SelectedValue="{Binding FilterMode}" Margin="8,6" />
                     <ComboBox Grid.Column="4" ItemsSource="{Binding YouTubeModeOptions}" SelectedValuePath="Value" DisplayMemberPath="Label"
                               SelectedValue="{Binding YouTubeMode}" Margin="8,6" />
-                    <StackPanel Grid.Column="5" Orientation="Horizontal" Margin="8,6,16,6" VerticalAlignment="Center"
-                                Visibility="{Binding IsDirty, Converter={StaticResource BoolToVisibility}}">
-                      <Button Content="{x:Static res:Strings.Common_Save}" Command="{Binding SaveCommand}" Style="{StaticResource PrimaryButton}" Margin="0,0,8,0" />
-                      <Button Content="{x:Static res:Strings.Common_Revert}" Command="{Binding RevertCommand}" Margin="0" />
+                    <StackPanel Grid.Column="5" Orientation="Horizontal" Margin="8,6,16,6" VerticalAlignment="Center">
+                      <StackPanel Orientation="Horizontal" Visibility="{Binding IsDirty, Converter={StaticResource BoolToVisibility}}">
+                        <Button Content="{x:Static res:Strings.Common_Save}" Command="{Binding SaveCommand}" Style="{StaticResource PrimaryButton}" Margin="0,0,8,0" />
+                        <Button Content="{x:Static res:Strings.Common_Revert}" Command="{Binding RevertCommand}" Margin="0,0,8,0" />
+                      </StackPanel>
+                      <Button Content="{x:Static res:Strings.Action_MemberDetails}" Command="{Binding OpenDetailsCommand}" Margin="0" />
                     </StackPanel>
                   </Grid>
                 </Border>

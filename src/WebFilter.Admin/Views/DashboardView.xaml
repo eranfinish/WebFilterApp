@@ -33,8 +33,11 @@
         </DockPanel>
       </Border>
 
-      <TextBlock Text="{x:Static res:Strings.Dashboard_NoMembers}" Style="{StaticResource SubtleText}"
-                 Visibility="{Binding HasNoMembers, Converter={StaticResource BoolToVisibility}}" />
+      <StackPanel Visibility="{Binding HasNoMembers, Converter={StaticResource BoolToVisibility}}">
+        <TextBlock Text="{x:Static res:Strings.Dashboard_NoMembers}" Style="{StaticResource SubtleText}" />
+        <Button Content="{x:Static res:Strings.Dashboard_StartSetup}" Command="{Binding OpenSetupCommand}" Style="{StaticResource PrimaryButton}"
+                HorizontalAlignment="Left" Margin="0,8,0,0" />
+      </StackPanel>
 
       <ItemsControl ItemsSource="{Binding Members}" Focusable="False">
         <ItemsControl.ItemsPanel>
@@ -105,6 +108,7 @@
                   <Button Content="{x:Static res:Strings.Action_StopHomework}" Command="{Binding StopHomeworkCommand}" Style="{StaticResource PrimaryButton}"
                           Visibility="{Binding IsInHomework, Converter={StaticResource BoolToVisibility}}" />
                 </WrapPanel>
+                <Button Content="{x:Static res:Strings.Action_MemberDetails}" Command="{Binding OpenDetailsCommand}" HorizontalAlignment="Left" Margin="0,4,0,0" />
               </StackPanel>
             </Border>
           </DataTemplate>

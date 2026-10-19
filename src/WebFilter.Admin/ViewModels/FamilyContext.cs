@@ -12,6 +12,11 @@ namespace WebFilter.Admin.ViewModels;
 /// </summary>
 public sealed partial class FamilyContext : ObservableObject
 {
+    /// <summary>How often <see cref="UpdateSettingsAsync"/> reads again after the settings changed under it.</summary>
+    public const int UpdateAttempts = 3;
+
+    public const string NotHub = "not_hub";
+
     private readonly TimeProvider _time;
     private DateTimeOffset _statusReceivedAt;
 
@@ -53,6 +58,29 @@ public sealed partial class FamilyContext : ObservableObject
         Settings = result.Settings;
         TimeZone = FamilyTime.FindZone(result.Settings.TimeZone);
         return result.Settings;
+    }
+
+    /// <summary>
+    /// Changes part of the settings with <see cref="ReplaceSettings"/>: reads the current settings, applies
+    /// <paramref name="change"/>, and replaces them only if nothing changed in between (<see cref="ReplaceSettings.IfVersion"/>).
+    /// When something did (a request approved, a computer paired, usage counted), it reads again and reapplies the
+    /// change, so a page that edits one member never undoes anything else.
+    /// </summary>
+    public async Task UpdateSettingsAsync(Func<FamilyBundle, FamilyBundle> change, CancellationToken ct = default)
+    {
+        ArgumentNullException.ThrowIfNull(change);
+        for (var attempt = 1; ; attempt++)
+        {
+            var current = await RefreshSettingsAsync(ct);
+            try
+            {
+                await Client.ExecuteAsync(new ReplaceSettings(change(current), current.Version), ct);
+                return;
+            }
+            catch (AdminServerException ex) when (ex.Code == ReplaceSettings.ConflictCode && attempt < UpdateAttempts)
+            {
+            }
+        }
     }
 
     public async Task<IReadOnlyList<RequestDto>> RefreshPendingRequestsAsync(CancellationToken ct = default)

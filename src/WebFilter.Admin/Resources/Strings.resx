@@ -622,7 +622,7 @@
     <value>נדחתה בקשת גישה</value>
   </data>
   <data name="AdminChange_replace_settings" xml:space="preserve">
-    <value>כל ההגדרות הוחלפו</value>
+    <value>ההגדרות עודכנו</value>
   </data>
   <data name="AdminChange_local_pause" xml:space="preserve">
     <value>השהיית חירום במחשב</value>
@@ -841,5 +841,383 @@
   </data>
   <data name="Pairing_CopyFailed" xml:space="preserve">
     <value>לא ניתן היה להעתיק, כי תוכנה אחרת משתמשת בלוח. סמנו את הפקודה והעתיקו אותה עם Ctrl+C.</value>
+  </data>
+  <data name="Nav_Members" xml:space="preserve">
+    <value>בני משפחה</value>
+  </data>
+  <data name="Nav_Setup" xml:space="preserve">
+    <value>הגדרה ראשונית</value>
+  </data>
+  <data name="Action_MemberDetails" xml:space="preserve">
+    <value>פרטים והגדרות</value>
+  </data>
+  <data name="Dashboard_StartSetup" xml:space="preserve">
+    <value>התחלת הגדרה ראשונית</value>
+  </data>
+  <data name="Error_Conflict" xml:space="preserve">
+    <value>ההגדרות השתנו בזמן השמירה, והשינוי לא נשמר. נסו שוב.</value>
+  </data>
+  <data name="Error_NotHub" xml:space="preserve">
+    <value>המחשב הזה מנוהל על ידי מחשב ההורים (Hub). את השינוי עושים בממשק הניהול שבמחשב ההורים.</value>
+  </data>
+  <data name="Rules_Add_Expiry" xml:space="preserve">
+    <value>לכמה זמן</value>
+  </data>
+  <data name="RuleExpiry_permanent" xml:space="preserve">
+    <value>קבוע</value>
+  </data>
+  <data name="RuleExpiry_hour" xml:space="preserve">
+    <value>לשעה</value>
+  </data>
+  <data name="RuleExpiry_today" xml:space="preserve">
+    <value>עד סוף היום</value>
+  </data>
+  <data name="Member_Intro" xml:space="preserve">
+    <value>כל ההגדרות של בן משפחה אחד: שעות ומכסה יומית, אתרים, ערוצי YouTube, אפליקציות וקטגוריות.</value>
+  </data>
+  <data name="Member_NotHub" xml:space="preserve">
+    <value>המחשב הזה מנוהל על ידי מחשב ההורים (Hub). את ההגדרות של בני המשפחה משנים בממשק הניהול שבמחשב ההורים.</value>
+  </data>
+  <data name="Member_NoMembers" xml:space="preserve">
+    <value>עדיין לא הוגדרו בני משפחה. התחילו בהגדרה הראשונית.</value>
+  </data>
+  <data name="Member_Choose" xml:space="preserve">
+    <value>בן משפחה:</value>
+  </data>
+  <data name="Member_UnrestrictedNote" xml:space="preserve">
+    <value>הגלישה של בן המשפחה הזה לא מסוננת, ולכן השעות, האתרים, האפליקציות והקטגוריות שלמטה לא חלים עליו כרגע. כדי שיחולו, בחרו סינון אתרים אחר.</value>
+  </data>
+  <data name="Member_Profile" xml:space="preserve">
+    <value>פרטים ואופן הסינון</value>
+  </data>
+  <data name="Member_Name" xml:space="preserve">
+    <value>שם</value>
+  </data>
+  <data name="Member_Role" xml:space="preserve">
+    <value>תפקיד</value>
+  </data>
+  <data name="Member_Age" xml:space="preserve">
+    <value>גיל</value>
+  </data>
+  <data name="Member_Week" xml:space="preserve">
+    <value>שעות גלישה ומכסה יומית</value>
+  </data>
+  <data name="Member_WeekHint" xml:space="preserve">
+    <value>השעות לפי השעון של המשפחה. מכסה ריקה = בלי הגבלת דקות באותו יום. הזמן נספר יחד בכל המחשבים.</value>
+  </data>
+  <data name="Member_RestrictHours" xml:space="preserve">
+    <value>גלישה רק בשעות מסוימות</value>
+  </data>
+  <data name="Member_Col_Day" xml:space="preserve">
+    <value>יום</value>
+  </data>
+  <data name="Member_Col_Hours" xml:space="preserve">
+    <value>שעות מותרות</value>
+  </data>
+  <data name="Member_Col_Limit" xml:space="preserve">
+    <value>מכסה יומית</value>
+  </data>
+  <data name="Member_AnyHour" xml:space="preserve">
+    <value>בכל שעה</value>
+  </data>
+  <data name="Member_Closed" xml:space="preserve">
+    <value>אין גלישה ביום הזה</value>
+  </data>
+  <data name="Member_AddWindow" xml:space="preserve">
+    <value>+ שעות</value>
+  </data>
+  <data name="Member_RemoveWindow" xml:space="preserve">
+    <value>הסרת השעות האלה</value>
+  </data>
+  <data name="Member_From" xml:space="preserve">
+    <value>משעה</value>
+  </data>
+  <data name="Member_To" xml:space="preserve">
+    <value>עד שעה</value>
+  </data>
+  <data name="Member_MinutesSuffix" xml:space="preserve">
+    <value>דקות</value>
+  </data>
+  <data name="Member_NoLimit" xml:space="preserve">
+    <value>(ללא הגבלה)</value>
+  </data>
+  <data name="Member_CopyToAll" xml:space="preserve">
+    <value>העתקה לכל הימים</value>
+  </data>
+  <data name="Member_Sites" xml:space="preserve">
+    <value>אתרים</value>
+  </data>
+  <data name="Member_NoSites" xml:space="preserve">
+    <value>אין כללי אתרים אישיים. כללים לכל המשפחה נמצאים במסך כללי אתרים.</value>
+  </data>
+  <data name="Member_Channels" xml:space="preserve">
+    <value>ערוצי YouTube</value>
+  </data>
+  <data name="Member_ChannelsHint" xml:space="preserve">
+    <value>במצב "רק ערוצים מאושרים" אפשר לצפות רק בערוצים המותרים; בשאר המצבים ערוץ חסום לא ייפתח. מזהה הערוץ מתחיל ב-UC: בערוץ, פתחו "מידע" ← "שיתוף הערוץ" ← "העתקת מזהה הערוץ".</value>
+  </data>
+  <data name="Member_ChannelId" xml:space="preserve">
+    <value>מזהה ערוץ או כתובת youtube.com/channel/…</value>
+  </data>
+  <data name="Member_ChannelHandle" xml:space="preserve">
+    <value>שם משתמש (@…), לא חובה</value>
+  </data>
+  <data name="Member_ChannelTitle" xml:space="preserve">
+    <value>שם לתצוגה, לא חובה</value>
+  </data>
+  <data name="Member_AddChannel" xml:space="preserve">
+    <value>הוספת הערוץ</value>
+  </data>
+  <data name="Member_NoChannels" xml:space="preserve">
+    <value>אין ערוצים אישיים.</value>
+  </data>
+  <data name="Member_RemoveChannelConfirm" xml:space="preserve">
+    <value>להסיר את הערוץ {0}?</value>
+  </data>
+  <data name="Member_Apps" xml:space="preserve">
+    <value>אפליקציות מאושרות</value>
+  </data>
+  <data name="Member_AppsHint" xml:space="preserve">
+    <value>מלבד הדפדפנים, רק אפליקציות מאושרות יכולות לגשת לאינטרנט. לתוכנה כותבים את הנתיב המלא לקובץ ה-exe שלה, ולאפליקציה מהחנות את שם החבילה שלה.</value>
+  </data>
+  <data name="Member_AppMatch" xml:space="preserve">
+    <value>סוג</value>
+  </data>
+  <data name="Member_AppValue" xml:space="preserve">
+    <value>נתיב או שם חבילה</value>
+  </data>
+  <data name="Member_AppAlwaysAllowed" xml:space="preserve">
+    <value>מותרת תמיד — גם כשזמן הגלישה נגמר</value>
+  </data>
+  <data name="Member_AddApp" xml:space="preserve">
+    <value>אישור האפליקציה</value>
+  </data>
+  <data name="Member_NoApps" xml:space="preserve">
+    <value>אין אפליקציות מאושרות אישיות.</value>
+  </data>
+  <data name="Member_RemoveAppConfirm" xml:space="preserve">
+    <value>להסיר את האישור של {0}?</value>
+  </data>
+  <data name="Member_RemoveTitle" xml:space="preserve">
+    <value>הסרה</value>
+  </data>
+  <data name="Member_Categories" xml:space="preserve">
+    <value>קטגוריות</value>
+  </data>
+  <data name="Member_CategoriesHint" xml:space="preserve">
+    <value>לכל קטגוריה: לפי אופן הסינון, מותרת תמיד, או חסומה.</value>
+  </data>
+  <data name="Member_NoCategories" xml:space="preserve">
+    <value>עדיין לא הוגדרו קטגוריות למשפחה.</value>
+  </data>
+  <data name="Member_CategoryDomains" xml:space="preserve">
+    <value>{0} ועוד {1}</value>
+  </data>
+  <data name="AppMatch_path" xml:space="preserve">
+    <value>תוכנה (נתיב)</value>
+  </data>
+  <data name="AppMatch_package" xml:space="preserve">
+    <value>אפליקציה מהחנות</value>
+  </data>
+  <data name="CategoryChoice_default" xml:space="preserve">
+    <value>לפי אופן הסינון</value>
+  </data>
+  <data name="CategoryChoice_allow" xml:space="preserve">
+    <value>מותרת תמיד</value>
+  </data>
+  <data name="CategoryChoice_block" xml:space="preserve">
+    <value>חסומה</value>
+  </data>
+  <data name="Category_educational" xml:space="preserve">
+    <value>לימודים</value>
+  </data>
+  <data name="Category_social" xml:space="preserve">
+    <value>רשתות חברתיות</value>
+  </data>
+  <data name="Category_gaming" xml:space="preserve">
+    <value>משחקים</value>
+  </data>
+  <data name="Done_WeekSaved" xml:space="preserve">
+    <value>השעות והמכסה של {0} נשמרו.</value>
+  </data>
+  <data name="Done_ChannelAdded" xml:space="preserve">
+    <value>הערוץ {0} נוסף.</value>
+  </data>
+  <data name="Done_ChannelRemoved" xml:space="preserve">
+    <value>הערוץ {0} הוסר.</value>
+  </data>
+  <data name="Done_AppAdded" xml:space="preserve">
+    <value>{0} אושרה.</value>
+  </data>
+  <data name="Done_AppRemoved" xml:space="preserve">
+    <value>האישור של {0} הוסר.</value>
+  </data>
+  <data name="Done_CategoriesSaved" xml:space="preserve">
+    <value>הקטגוריות של {0} נשמרו.</value>
+  </data>
+  <data name="Validation_NameEmpty" xml:space="preserve">
+    <value>כתבו שם לכל בן משפחה.</value>
+  </data>
+  <data name="Validation_NameTaken" xml:space="preserve">
+    <value>כבר יש בן משפחה בשם {0}.</value>
+  </data>
+  <data name="Validation_Age" xml:space="preserve">
+    <value>גיל הוא מספר בין 1 ל-120, או השאירו ריק.</value>
+  </data>
+  <data name="Validation_TimeFormat" xml:space="preserve">
+    <value>{0}: כתבו שעות בצורה 16:30 (סוף היום: 24:00).</value>
+  </data>
+  <data name="Validation_TimeOrder" xml:space="preserve">
+    <value>{0}: השעה {1} צריכה להיות לפני {2}.</value>
+  </data>
+  <data name="Validation_Limit" xml:space="preserve">
+    <value>{0}: המכסה היומית היא מספר דקות בין 0 ל-1440, או השאירו ריק.</value>
+  </data>
+  <data name="Validation_AppPathForm" xml:space="preserve">
+    <value>כתבו את הנתיב המלא לתוכנה, למשל C:\Program Files\App\app.exe (בלי % ובלי *).</value>
+  </data>
+  <data name="Validation_AppPathExe" xml:space="preserve">
+    <value>הנתיב צריך להסתיים בקובץ התוכנה (‎.exe‎).</value>
+  </data>
+  <data name="Validation_AppPackageForm" xml:space="preserve">
+    <value>כתבו את שם החבילה של האפליקציה, למשל Microsoft.MinecraftUWP_8wekyb3d8bbwe.</value>
+  </data>
+  <data name="Validation_ChannelId" xml:space="preserve">
+    <value>זה לא מזהה ערוץ. מזהה ערוץ מתחיל ב-UC ואחריו 22 תווים.</value>
+  </data>
+  <data name="Validation_ChannelHandleOnly" xml:space="preserve">
+    <value>צריך את מזהה הערוץ (מתחיל ב-UC), לא רק את שם המשתמש. בערוץ: "מידע" ← "שיתוף הערוץ" ← "העתקת מזהה הערוץ". את שם המשתמש אפשר לכתוב בשדה שלידו.</value>
+  </data>
+  <data name="Validation_ChannelHandle" xml:space="preserve">
+    <value>שם משתמש ב-YouTube הוא @ ואחריו 3–30 אותיות באנגלית, ספרות, נקודות, מקפים או קווים תחתונים.</value>
+  </data>
+  <data name="Setup_Intro" xml:space="preserve">
+    <value>כמה צעדים קצרים: מי במשפחה, איזה חשבון Windows במחשב הזה שייך למי, ומתי מותר לגלוש. אפשר לשנות הכל אחר כך.</value>
+  </data>
+  <data name="Setup_NotHub" xml:space="preserve">
+    <value>ההגדרה הראשונית נעשית במחשב ההורים (Hub). המחשב הזה מנוהל על ידו.</value>
+  </data>
+  <data name="Setup_AlreadySetUp" xml:space="preserve">
+    <value>המשפחה כבר מוגדרת. את בני המשפחה וההגדרות שלהם משנים במסך בני משפחה.</value>
+  </data>
+  <data name="Setup_StepNumber" xml:space="preserve">
+    <value>{0}. {1}</value>
+  </data>
+  <data name="Setup_Step_Members" xml:space="preserve">
+    <value>בני משפחה</value>
+  </data>
+  <data name="Setup_Step_Accounts" xml:space="preserve">
+    <value>חשבונות Windows</value>
+  </data>
+  <data name="Setup_Step_Time" xml:space="preserve">
+    <value>שעות ומכסה</value>
+  </data>
+  <data name="Setup_Step_Review" xml:space="preserve">
+    <value>סיכום</value>
+  </data>
+  <data name="Setup_MembersHint" xml:space="preserve">
+    <value>הוסיפו את כל בני המשפחה, גם את ההורים. התפקיד ממלא אופן סינון מתאים, ואפשר לשנות אותו.</value>
+  </data>
+  <data name="Setup_AddMember" xml:space="preserve">
+    <value>+ בן משפחה</value>
+  </data>
+  <data name="Setup_AccountsHint" xml:space="preserve">
+    <value>בחרו לכל חשבון Windows במחשב הזה למי הוא שייך. חשבון שלא מקושר לאף אחד: מנהלים לא מסוננים, וחשבון רגיל חסום.</value>
+  </data>
+  <data name="Setup_NoAccounts" xml:space="preserve">
+    <value>לא נמצאו חשבונות Windows במחשב הזה. אם יצרתם עכשיו חשבון לילד, לחצו על חיפוש מחדש.</value>
+  </data>
+  <data name="Setup_Rescan" xml:space="preserve">
+    <value>חיפוש חשבונות מחדש</value>
+  </data>
+  <data name="Setup_NotLinked" xml:space="preserve">
+    <value>לא מקושר</value>
+  </data>
+  <data name="Setup_AdminAccount" xml:space="preserve">
+    <value>מנהל</value>
+  </data>
+  <data name="Setup_AdminLinked" xml:space="preserve">
+    <value>{0} הוא חשבון מנהל: WebFilter לא מסנן מנהלים, ומנהל יכול לכבות את הסינון. תנו ל-{1} חשבון Windows רגיל.</value>
+  </data>
+  <data name="Setup_TimeHint" xml:space="preserve">
+    <value>לכל בן משפחה מסונן: באילו שעות מותר לגלוש וכמה דקות ביום. אותן שעות בכל ימות השבוע; במסך בני משפחה אפשר לקבוע לכל יום בנפרד.</value>
+  </data>
+  <data name="Setup_NoTimedMembers" xml:space="preserve">
+    <value>אף אחד לא מסונן, ולכן אין שעות להגדיר.</value>
+  </data>
+  <data name="Setup_LimitTime" xml:space="preserve">
+    <value>הגבלת זמן</value>
+  </data>
+  <data name="Setup_Between" xml:space="preserve">
+    <value>בין</value>
+  </data>
+  <data name="Setup_And" xml:space="preserve">
+    <value>ל-</value>
+  </data>
+  <data name="Setup_UpTo" xml:space="preserve">
+    <value>ועד</value>
+  </data>
+  <data name="Setup_MinutesPerDay" xml:space="preserve">
+    <value>דקות ביום</value>
+  </data>
+  <data name="Setup_ReviewHint" xml:space="preserve">
+    <value>כך תוגדר המשפחה. אחרי השמירה ההגדרות חלות מיד על המחשב הזה ועל כל מחשב שיצומד.</value>
+  </data>
+  <data name="Setup_Summary_Age" xml:space="preserve">
+    <value>, גיל {0}</value>
+  </data>
+  <data name="Setup_Summary_YouTube" xml:space="preserve">
+    <value>YouTube: {0}</value>
+  </data>
+  <data name="Setup_Summary_NotFiltered" xml:space="preserve">
+    <value>בלי הגבלת זמן</value>
+  </data>
+  <data name="Setup_Summary_NoTimeLimit" xml:space="preserve">
+    <value>בכל שעה, בלי מכסה</value>
+  </data>
+  <data name="Setup_Summary_Hours" xml:space="preserve">
+    <value>{0}, בלי מכסה</value>
+  </data>
+  <data name="Setup_Summary_Time" xml:space="preserve">
+    <value>{0}, עד {1} ביום</value>
+  </data>
+  <data name="Setup_Summary_Accounts" xml:space="preserve">
+    <value>חשבון: {0}</value>
+  </data>
+  <data name="Setup_Summary_NoAccount" xml:space="preserve">
+    <value>אין חשבון במחשב הזה</value>
+  </data>
+  <data name="Setup_UnlinkedAccounts" xml:space="preserve">
+    <value>חשבונות שלא מקושרים: {0}</value>
+  </data>
+  <data name="Setup_Back" xml:space="preserve">
+    <value>חזרה</value>
+  </data>
+  <data name="Setup_Next" xml:space="preserve">
+    <value>המשך</value>
+  </data>
+  <data name="Setup_Apply" xml:space="preserve">
+    <value>שמירה והפעלה</value>
+  </data>
+  <data name="Setup_DoneTitle" xml:space="preserve">
+    <value>המשפחה מוגדרת</value>
+  </data>
+  <data name="Setup_DoneText" xml:space="preserve">
+    <value>הסינון פועל עכשיו במחשב הזה. כדי לסנן גם את המחשבים של הילדים: התקינו בכל אחד מהם את WebFilter כמחשב מנוהל, ואז במסך מכשירים כאן צרו קוד צימוד והקלידו אותו שם.</value>
+  </data>
+  <data name="Setup_OpenDevices" xml:space="preserve">
+    <value>צימוד מחשב נוסף</value>
+  </data>
+  <data name="Setup_OpenMembers" xml:space="preserve">
+    <value>למסך בני משפחה</value>
+  </data>
+  <data name="Setup_OpenDashboard" xml:space="preserve">
+    <value>ללוח הבקרה</value>
+  </data>
+  <data name="AdminChange_new_accounts" xml:space="preserve">
+    <value>נמצאו חשבונות Windows חדשים</value>
+  </data>
+  <data name="AdminChange_pair_device" xml:space="preserve">
+    <value>מחשב חדש צומד</value>
   </data>
 </root>

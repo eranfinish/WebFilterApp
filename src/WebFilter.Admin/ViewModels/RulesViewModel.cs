@@ -8,7 +8,10 @@ using WebFilter.Contracts.Hub;
 
 namespace WebFilter.Admin.ViewModels;
 
-/// <summary>Global and per-member URL rules from <see cref="GetSettings"/>, with add (<see cref="AddRule"/>) and remove (<see cref="RemoveRule"/>).</summary>
+/// <summary>
+/// Global and per-member URL rules from <see cref="GetSettings"/>, with add (<see cref="AddRule"/>, permanent or for a
+/// while) and remove (<see cref="RemoveRule"/>).
+/// </summary>
 public sealed partial class RulesViewModel : PageViewModel
 {
     /// <summary>Filter value: every rule.</summary>
@@ -40,6 +43,8 @@ public sealed partial class RulesViewModel : PageViewModel
 
     public IReadOnlyList<Option> ActionOptions { get; } = Texts.Options("RuleAction_", "block", "allow");
 
+    public IReadOnlyList<Option> ExpiryOptions => RuleExpiry.Options;
+
     [ObservableProperty]
     private string? _selectedFilter = AllRules;
 
@@ -61,6 +66,10 @@ public sealed partial class RulesViewModel : PageViewModel
 
     [ObservableProperty]
     private bool _newAlwaysAllowed;
+
+    /// <summary>How long the new rule lasts (<see cref="RuleExpiry"/>).</summary>
+    [ObservableProperty]
+    private string _newExpiry = RuleExpiry.Permanent;
 
     [ObservableProperty]
     private string? _validationMessage;
@@ -89,24 +98,18 @@ public sealed partial class RulesViewModel : PageViewModel
     {
         ValidationMessage = null;
         StatusMessage = null;
-        if (!RulePatternValidator.TryNormalize(NewPattern, NewType, out var pattern, out var error))
+        var member = string.IsNullOrEmpty(NewAppliesTo) ? null : NewAppliesTo;
+        var rule = RuleDrafts.TryCreate(NewPattern, NewType, NewAction, member, NewAlwaysAllowed, NewExpiry, _all.Select(r => r.Rule), Context, NewRuleId, out var error);
+        if (rule is null)
         {
             ValidationMessage = error;
             return;
         }
-        var member = string.IsNullOrEmpty(NewAppliesTo) ? null : NewAppliesTo;
-        if (_all.Any(r => r.Rule.Member == member && r.Rule.Type == NewType && r.Rule.Action == NewAction
-                          && string.Equals(r.Rule.Pattern, pattern, StringComparison.OrdinalIgnoreCase)))
-        {
-            ValidationMessage = Strings.Validation_Duplicate;
-            return;
-        }
-
-        var rule = new RuleDto(NewRuleId(), member, pattern, NewType, NewAction, AlwaysAllowed: NewAction == "allow" && NewAlwaysAllowed);
-        if (await ActAsync(new AddRule(rule), Texts.Format(Strings.Done_RuleAdded, Texts.Ltr(pattern))))
+        if (await ActAsync(new AddRule(rule), Texts.Format(Strings.Done_RuleAdded, Texts.Ltr(rule.Pattern))))
         {
             NewPattern = "";
             NewAlwaysAllowed = false;
+            NewExpiry = RuleExpiry.Permanent;
         }
     }
 
@@ -160,12 +163,7 @@ public sealed class RuleItemViewModel
         ActionText = Texts.Code("RuleAction_", rule.Action);
         AppliesToText = context.MemberName(rule.Member);
         IsExpired = rule.ExpiresAt is { } expires && expires <= now;
-        ExpiryText = rule.ExpiresAt switch
-        {
-            null => Strings.Rule_NoExpiry,
-            _ when IsExpired => Strings.Rule_Expired,
-            { } expiresAt => Texts.Format(Strings.Rule_ExpiresAt, context.FormatUntil(expiresAt)),
-        };
+        ExpiryText = RuleDrafts.ExpiryText(rule.ExpiresAt, context, now);
     }
 
     public RuleDto Rule { get; }

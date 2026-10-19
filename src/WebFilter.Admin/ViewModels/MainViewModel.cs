@@ -1,3 +1,4 @@
+using System.Collections.ObjectModel;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using WebFilter.Admin.Services;
@@ -8,6 +9,7 @@ namespace WebFilter.Admin.ViewModels;
 /// The main window: navigation between the pages, the connection banner, and the periodic refresh (every
 /// <see cref="RefreshInterval"/> the shown page reloads if it auto-refreshes; otherwise only the pending-request count
 /// does). A failed refresh is retried on the next tick, which is also how the app reconnects after the service restarts.
+/// While the hub's family is empty the setup wizard joins the navigation and opens once by itself.
 /// </summary>
 public sealed partial class MainViewModel : ObservableObject, INavigator, IDisposable
 {
@@ -16,6 +18,7 @@ public sealed partial class MainViewModel : ObservableObject, INavigator, IDispo
     private readonly IUiTimer _timer;
     private readonly SynchronizationContext? _ui;
     private IDisposable? _ticker;
+    private bool _setupOpened;
 
     public MainViewModel(IAdminClient client, IUiTimer timer, IDialogService dialogs, IClipboardService clipboard, TimeProvider? time = null)
     {
@@ -25,12 +28,14 @@ public sealed partial class MainViewModel : ObservableObject, INavigator, IDispo
         Context = new FamilyContext(client, time);
         Dashboard = new DashboardViewModel(Context);
         Requests = new RequestsViewModel(Context);
+        MemberDetail = new MemberDetailViewModel(Context, dialogs);
         Rules = new RulesViewModel(Context, dialogs);
         Activity = new ActivityViewModel(Context);
         Devices = new DevicesViewModel(Context, dialogs, clipboard, timer);
         Settings = new SettingsViewModel(Context);
-        Pages = [Dashboard, Requests, Rules, Activity, Devices, Settings];
-        foreach (var page in Pages) page.Navigator = this;
+        Setup = new SetupWizardViewModel(Context);
+        Pages = [Dashboard, Requests, MemberDetail, Rules, Activity, Devices, Settings];
+        foreach (var page in Pages.Append(Setup)) page.Navigator = this;
         client.StateChanged += OnClientStateChanged;
         UpdateConnection();
     }
@@ -39,12 +44,17 @@ public sealed partial class MainViewModel : ObservableObject, INavigator, IDispo
 
     public DashboardViewModel Dashboard { get; }
     public RequestsViewModel Requests { get; }
+    public MemberDetailViewModel MemberDetail { get; }
     public RulesViewModel Rules { get; }
     public ActivityViewModel Activity { get; }
     public DevicesViewModel Devices { get; }
     public SettingsViewModel Settings { get; }
 
-    public IReadOnlyList<PageViewModel> Pages { get; }
+    /// <summary>The first-time setup wizard; in <see cref="Pages"/> only while the hub's family is empty.</summary>
+    public SetupWizardViewModel Setup { get; }
+
+    /// <summary>The navigation list.</summary>
+    public ObservableCollection<PageViewModel> Pages { get; }
 
     [ObservableProperty]
     private PageViewModel? _selectedPage;
@@ -78,6 +88,7 @@ public sealed partial class MainViewModel : ObservableObject, INavigator, IDispo
         if (SelectedPage is { AutoRefresh: true } page)
         {
             await page.RefreshAsync();
+            UpdateSetup();
             return;
         }
         try
@@ -90,14 +101,50 @@ public sealed partial class MainViewModel : ObservableObject, INavigator, IDispo
         }
     }
 
-    public void NavigateTo<TPage>() where TPage : PageViewModel => SelectedPage = Pages.OfType<TPage>().First();
+    public void NavigateTo<TPage>() where TPage : PageViewModel
+    {
+        if (typeof(TPage) == typeof(SetupWizardViewModel) && !Pages.Contains(Setup)) Pages.Insert(0, Setup);
+        SelectedPage = Pages.OfType<TPage>().First();
+    }
+
+    public void ShowMember(string memberId)
+    {
+        MemberDetail.Show(memberId);
+        SelectedPage = MemberDetail;
+    }
 
     [RelayCommand]
     private Task Retry() => SelectedPage?.RefreshAsync() ?? Task.CompletedTask;
 
     partial void OnSelectedPageChanged(PageViewModel? value)
     {
-        if (value is not null) CurrentLoad = value.RefreshAsync();
+        if (value is not null) CurrentLoad = LoadAsync(value);
+    }
+
+    private async Task LoadAsync(PageViewModel page)
+    {
+        await page.RefreshAsync();
+        UpdateSetup();
+    }
+
+    /// <summary>
+    /// While the hub's family is empty, the wizard is first in the navigation and opens once by itself; once the family has
+    /// members it leaves the navigation (not while it is shown, so its last step stays on screen).
+    /// </summary>
+    private void UpdateSetup()
+    {
+        var needed = Context.Status is { IsHub: true } && Context.Settings is { Members.Count: 0 };
+        if (needed)
+        {
+            if (!Pages.Contains(Setup)) Pages.Insert(0, Setup);
+            if (_setupOpened) return;
+            _setupOpened = true;
+            SelectedPage = Setup;
+        }
+        else if (SelectedPage != Setup)
+        {
+            Pages.Remove(Setup);
+        }
     }
 
     public void Dispose()

@@ -35,6 +35,10 @@
             <TextBlock Text="{x:Static res:Strings.Rules_Add_AppliesTo}" Style="{StaticResource LabelText}" />
             <ComboBox ItemsSource="{Binding AppliesToOptions}" SelectedValuePath="Value" DisplayMemberPath="Label" SelectedValue="{Binding NewAppliesTo}" />
           </StackPanel>
+          <StackPanel Margin="0,0,12,8">
+            <TextBlock Text="{x:Static res:Strings.Rules_Add_Expiry}" Style="{StaticResource LabelText}" />
+            <ComboBox ItemsSource="{Binding ExpiryOptions}" SelectedValuePath="Value" DisplayMemberPath="Label" SelectedValue="{Binding NewExpiry}" MinWidth="140" />
+          </StackPanel>
         </WrapPanel>
         <TextBlock Text="{x:Static res:Strings.Rules_Add_PatternHint}" Style="{StaticResource SubtleText}" FontSize="12" />
         <CheckBox Content="{x:Static res:Strings.Rules_Add_AlwaysAllowed}" IsChecked="{Binding NewAlwaysAllowed}" Margin="0,10,0,0"

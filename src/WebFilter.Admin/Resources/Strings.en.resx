@@ -618,7 +618,7 @@
     <value>Access request denied</value>
   </data>
   <data name="AdminChange_replace_settings" xml:space="preserve">
-    <value>All settings replaced</value>
+    <value>Settings updated</value>
   </data>
   <data name="AdminChange_local_pause" xml:space="preserve">
     <value>Emergency pause on a PC</value>
@@ -837,5 +837,383 @@ The computer keeps enforcing the last settings it received but stops getting upd
   </data>
   <data name="Pairing_CopyFailed" xml:space="preserve">
     <value>Could not copy because another program is using the clipboard. Select the command and copy it with Ctrl+C.</value>
+  </data>
+  <data name="Nav_Members" xml:space="preserve">
+    <value>Family members</value>
+  </data>
+  <data name="Nav_Setup" xml:space="preserve">
+    <value>First-time setup</value>
+  </data>
+  <data name="Action_MemberDetails" xml:space="preserve">
+    <value>Details and settings</value>
+  </data>
+  <data name="Dashboard_StartSetup" xml:space="preserve">
+    <value>Start first-time setup</value>
+  </data>
+  <data name="Error_Conflict" xml:space="preserve">
+    <value>The settings changed while saving, so the change was not saved. Try again.</value>
+  </data>
+  <data name="Error_NotHub" xml:space="preserve">
+    <value>This computer is managed by the parents' computer (hub). Make this change in the admin app there.</value>
+  </data>
+  <data name="Rules_Add_Expiry" xml:space="preserve">
+    <value>For how long</value>
+  </data>
+  <data name="RuleExpiry_permanent" xml:space="preserve">
+    <value>Permanent</value>
+  </data>
+  <data name="RuleExpiry_hour" xml:space="preserve">
+    <value>For 1 hour</value>
+  </data>
+  <data name="RuleExpiry_today" xml:space="preserve">
+    <value>Until the end of the day</value>
+  </data>
+  <data name="Member_Intro" xml:space="preserve">
+    <value>Everything for one family member: hours and daily limit, websites, YouTube channels, apps and categories.</value>
+  </data>
+  <data name="Member_NotHub" xml:space="preserve">
+    <value>This computer is managed by the parents' computer (hub). Family members' settings are changed in the admin app there.</value>
+  </data>
+  <data name="Member_NoMembers" xml:space="preserve">
+    <value>No family members are set up yet. Start with the first-time setup.</value>
+  </data>
+  <data name="Member_Choose" xml:space="preserve">
+    <value>Family member:</value>
+  </data>
+  <data name="Member_UnrestrictedNote" xml:space="preserve">
+    <value>This member's browsing is not filtered, so the hours, sites, apps and categories below do not apply now. Choose another website filtering to apply them.</value>
+  </data>
+  <data name="Member_Profile" xml:space="preserve">
+    <value>Details and filtering</value>
+  </data>
+  <data name="Member_Name" xml:space="preserve">
+    <value>Name</value>
+  </data>
+  <data name="Member_Role" xml:space="preserve">
+    <value>Role</value>
+  </data>
+  <data name="Member_Age" xml:space="preserve">
+    <value>Age</value>
+  </data>
+  <data name="Member_Week" xml:space="preserve">
+    <value>Browsing hours and daily limit</value>
+  </data>
+  <data name="Member_WeekHint" xml:space="preserve">
+    <value>Hours are in the family's time zone. An empty limit means no minute limit that day. Time is counted across all computers.</value>
+  </data>
+  <data name="Member_RestrictHours" xml:space="preserve">
+    <value>Browsing only at certain hours</value>
+  </data>
+  <data name="Member_Col_Day" xml:space="preserve">
+    <value>Day</value>
+  </data>
+  <data name="Member_Col_Hours" xml:space="preserve">
+    <value>Allowed hours</value>
+  </data>
+  <data name="Member_Col_Limit" xml:space="preserve">
+    <value>Daily limit</value>
+  </data>
+  <data name="Member_AnyHour" xml:space="preserve">
+    <value>Any hour</value>
+  </data>
+  <data name="Member_Closed" xml:space="preserve">
+    <value>No browsing on this day</value>
+  </data>
+  <data name="Member_AddWindow" xml:space="preserve">
+    <value>+ Hours</value>
+  </data>
+  <data name="Member_RemoveWindow" xml:space="preserve">
+    <value>Remove these hours</value>
+  </data>
+  <data name="Member_From" xml:space="preserve">
+    <value>From</value>
+  </data>
+  <data name="Member_To" xml:space="preserve">
+    <value>Until</value>
+  </data>
+  <data name="Member_MinutesSuffix" xml:space="preserve">
+    <value>minutes</value>
+  </data>
+  <data name="Member_NoLimit" xml:space="preserve">
+    <value>(no limit)</value>
+  </data>
+  <data name="Member_CopyToAll" xml:space="preserve">
+    <value>Copy to every day</value>
+  </data>
+  <data name="Member_Sites" xml:space="preserve">
+    <value>Websites</value>
+  </data>
+  <data name="Member_NoSites" xml:space="preserve">
+    <value>No personal website rules. Rules for the whole family are on the website rules page.</value>
+  </data>
+  <data name="Member_Channels" xml:space="preserve">
+    <value>YouTube channels</value>
+  </data>
+  <data name="Member_ChannelsHint" xml:space="preserve">
+    <value>With "Approved channels only", only allowed channels play; in the other modes a blocked channel does not open. The channel id starts with UC: on the channel, open About → Share channel → Copy channel ID.</value>
+  </data>
+  <data name="Member_ChannelId" xml:space="preserve">
+    <value>Channel id or youtube.com/channel/… address</value>
+  </data>
+  <data name="Member_ChannelHandle" xml:space="preserve">
+    <value>Handle (@…), optional</value>
+  </data>
+  <data name="Member_ChannelTitle" xml:space="preserve">
+    <value>Display name, optional</value>
+  </data>
+  <data name="Member_AddChannel" xml:space="preserve">
+    <value>Add channel</value>
+  </data>
+  <data name="Member_NoChannels" xml:space="preserve">
+    <value>No personal channels.</value>
+  </data>
+  <data name="Member_RemoveChannelConfirm" xml:space="preserve">
+    <value>Remove the channel {0}?</value>
+  </data>
+  <data name="Member_Apps" xml:space="preserve">
+    <value>Approved apps</value>
+  </data>
+  <data name="Member_AppsHint" xml:space="preserve">
+    <value>Besides the browsers, only approved apps can reach the internet. For a program, enter the full path to its .exe file; for a Store app, its package family name.</value>
+  </data>
+  <data name="Member_AppMatch" xml:space="preserve">
+    <value>Kind</value>
+  </data>
+  <data name="Member_AppValue" xml:space="preserve">
+    <value>Path or package name</value>
+  </data>
+  <data name="Member_AppAlwaysAllowed" xml:space="preserve">
+    <value>Always allowed — even when screen time is up</value>
+  </data>
+  <data name="Member_AddApp" xml:space="preserve">
+    <value>Approve app</value>
+  </data>
+  <data name="Member_NoApps" xml:space="preserve">
+    <value>No personal approved apps.</value>
+  </data>
+  <data name="Member_RemoveAppConfirm" xml:space="preserve">
+    <value>Remove the approval for {0}?</value>
+  </data>
+  <data name="Member_RemoveTitle" xml:space="preserve">
+    <value>Remove</value>
+  </data>
+  <data name="Member_Categories" xml:space="preserve">
+    <value>Categories</value>
+  </data>
+  <data name="Member_CategoriesHint" xml:space="preserve">
+    <value>For each category: as the filtering says, always allowed, or blocked.</value>
+  </data>
+  <data name="Member_NoCategories" xml:space="preserve">
+    <value>No categories are set up for the family yet.</value>
+  </data>
+  <data name="Member_CategoryDomains" xml:space="preserve">
+    <value>{0} and {1} more</value>
+  </data>
+  <data name="AppMatch_path" xml:space="preserve">
+    <value>Program (path)</value>
+  </data>
+  <data name="AppMatch_package" xml:space="preserve">
+    <value>Store app</value>
+  </data>
+  <data name="CategoryChoice_default" xml:space="preserve">
+    <value>As the filtering says</value>
+  </data>
+  <data name="CategoryChoice_allow" xml:space="preserve">
+    <value>Always allowed</value>
+  </data>
+  <data name="CategoryChoice_block" xml:space="preserve">
+    <value>Blocked</value>
+  </data>
+  <data name="Category_educational" xml:space="preserve">
+    <value>Education</value>
+  </data>
+  <data name="Category_social" xml:space="preserve">
+    <value>Social networks</value>
+  </data>
+  <data name="Category_gaming" xml:space="preserve">
+    <value>Games</value>
+  </data>
+  <data name="Done_WeekSaved" xml:space="preserve">
+    <value>Hours and limit for {0} saved.</value>
+  </data>
+  <data name="Done_ChannelAdded" xml:space="preserve">
+    <value>The channel {0} was added.</value>
+  </data>
+  <data name="Done_ChannelRemoved" xml:space="preserve">
+    <value>The channel {0} was removed.</value>
+  </data>
+  <data name="Done_AppAdded" xml:space="preserve">
+    <value>{0} was approved.</value>
+  </data>
+  <data name="Done_AppRemoved" xml:space="preserve">
+    <value>The approval for {0} was removed.</value>
+  </data>
+  <data name="Done_CategoriesSaved" xml:space="preserve">
+    <value>Categories for {0} saved.</value>
+  </data>
+  <data name="Validation_NameEmpty" xml:space="preserve">
+    <value>Enter a name for every family member.</value>
+  </data>
+  <data name="Validation_NameTaken" xml:space="preserve">
+    <value>There is already a family member named {0}.</value>
+  </data>
+  <data name="Validation_Age" xml:space="preserve">
+    <value>Age is a number from 1 to 120, or leave it empty.</value>
+  </data>
+  <data name="Validation_TimeFormat" xml:space="preserve">
+    <value>{0}: write times like 16:30 (end of the day: 24:00).</value>
+  </data>
+  <data name="Validation_TimeOrder" xml:space="preserve">
+    <value>{0}: {1} must be before {2}.</value>
+  </data>
+  <data name="Validation_Limit" xml:space="preserve">
+    <value>{0}: the daily limit is a number of minutes from 0 to 1440, or leave it empty.</value>
+  </data>
+  <data name="Validation_AppPathForm" xml:space="preserve">
+    <value>Enter the program's full path, e.g. C:\Program Files\App\app.exe (no % and no *).</value>
+  </data>
+  <data name="Validation_AppPathExe" xml:space="preserve">
+    <value>The path must end with the program file (.exe).</value>
+  </data>
+  <data name="Validation_AppPackageForm" xml:space="preserve">
+    <value>Enter the app's package family name, e.g. Microsoft.MinecraftUWP_8wekyb3d8bbwe.</value>
+  </data>
+  <data name="Validation_ChannelId" xml:space="preserve">
+    <value>This is not a channel id. A channel id is UC followed by 22 characters.</value>
+  </data>
+  <data name="Validation_ChannelHandleOnly" xml:space="preserve">
+    <value>The channel id (starting with UC) is needed, not only the handle. On the channel: About → Share channel → Copy channel ID. The handle can go in the field next to it.</value>
+  </data>
+  <data name="Validation_ChannelHandle" xml:space="preserve">
+    <value>A YouTube handle is @ followed by 3–30 letters, digits, dots, hyphens or underscores.</value>
+  </data>
+  <data name="Setup_Intro" xml:space="preserve">
+    <value>A few short steps: who is in the family, which Windows account on this computer belongs to whom, and when browsing is allowed. Everything can be changed later.</value>
+  </data>
+  <data name="Setup_NotHub" xml:space="preserve">
+    <value>First-time setup is done on the parents' computer (hub). This computer is managed by it.</value>
+  </data>
+  <data name="Setup_AlreadySetUp" xml:space="preserve">
+    <value>The family is already set up. Family members and their settings are changed on the family members page.</value>
+  </data>
+  <data name="Setup_StepNumber" xml:space="preserve">
+    <value>{0}. {1}</value>
+  </data>
+  <data name="Setup_Step_Members" xml:space="preserve">
+    <value>Family</value>
+  </data>
+  <data name="Setup_Step_Accounts" xml:space="preserve">
+    <value>Windows accounts</value>
+  </data>
+  <data name="Setup_Step_Time" xml:space="preserve">
+    <value>Hours and limit</value>
+  </data>
+  <data name="Setup_Step_Review" xml:space="preserve">
+    <value>Summary</value>
+  </data>
+  <data name="Setup_MembersHint" xml:space="preserve">
+    <value>Add everyone in the family, parents too. The role fills in suitable filtering, which you can change.</value>
+  </data>
+  <data name="Setup_AddMember" xml:space="preserve">
+    <value>+ Family member</value>
+  </data>
+  <data name="Setup_AccountsHint" xml:space="preserve">
+    <value>Choose whom each Windows account on this computer belongs to. Accounts linked to no one: administrators are not filtered and standard accounts are blocked.</value>
+  </data>
+  <data name="Setup_NoAccounts" xml:space="preserve">
+    <value>No Windows accounts were found on this computer. If you just created an account for a child, look again.</value>
+  </data>
+  <data name="Setup_Rescan" xml:space="preserve">
+    <value>Look for accounts again</value>
+  </data>
+  <data name="Setup_NotLinked" xml:space="preserve">
+    <value>Not linked</value>
+  </data>
+  <data name="Setup_AdminAccount" xml:space="preserve">
+    <value>Administrator</value>
+  </data>
+  <data name="Setup_AdminLinked" xml:space="preserve">
+    <value>{0} is an administrator account: WebFilter does not filter administrators, and an administrator can turn filtering off. Give {1} a standard Windows account.</value>
+  </data>
+  <data name="Setup_TimeHint" xml:space="preserve">
+    <value>For each filtered member: the hours browsing is allowed and how many minutes a day. The same every day; on the family members page each day can differ.</value>
+  </data>
+  <data name="Setup_NoTimedMembers" xml:space="preserve">
+    <value>Nobody is filtered, so there are no hours to set.</value>
+  </data>
+  <data name="Setup_LimitTime" xml:space="preserve">
+    <value>Limit time</value>
+  </data>
+  <data name="Setup_Between" xml:space="preserve">
+    <value>between</value>
+  </data>
+  <data name="Setup_And" xml:space="preserve">
+    <value>and</value>
+  </data>
+  <data name="Setup_UpTo" xml:space="preserve">
+    <value>up to</value>
+  </data>
+  <data name="Setup_MinutesPerDay" xml:space="preserve">
+    <value>minutes a day</value>
+  </data>
+  <data name="Setup_ReviewHint" xml:space="preserve">
+    <value>This is how the family will be set up. Once saved, it applies at once on this computer and on every computer paired later.</value>
+  </data>
+  <data name="Setup_Summary_Age" xml:space="preserve">
+    <value>, age {0}</value>
+  </data>
+  <data name="Setup_Summary_YouTube" xml:space="preserve">
+    <value>YouTube: {0}</value>
+  </data>
+  <data name="Setup_Summary_NotFiltered" xml:space="preserve">
+    <value>No time limit</value>
+  </data>
+  <data name="Setup_Summary_NoTimeLimit" xml:space="preserve">
+    <value>Any hour, no limit</value>
+  </data>
+  <data name="Setup_Summary_Hours" xml:space="preserve">
+    <value>{0}, no limit</value>
+  </data>
+  <data name="Setup_Summary_Time" xml:space="preserve">
+    <value>{0}, up to {1} a day</value>
+  </data>
+  <data name="Setup_Summary_Accounts" xml:space="preserve">
+    <value>Account: {0}</value>
+  </data>
+  <data name="Setup_Summary_NoAccount" xml:space="preserve">
+    <value>No account on this computer</value>
+  </data>
+  <data name="Setup_UnlinkedAccounts" xml:space="preserve">
+    <value>Accounts not linked: {0}</value>
+  </data>
+  <data name="Setup_Back" xml:space="preserve">
+    <value>Back</value>
+  </data>
+  <data name="Setup_Next" xml:space="preserve">
+    <value>Next</value>
+  </data>
+  <data name="Setup_Apply" xml:space="preserve">
+    <value>Save and apply</value>
+  </data>
+  <data name="Setup_DoneTitle" xml:space="preserve">
+    <value>The family is set up</value>
+  </data>
+  <data name="Setup_DoneText" xml:space="preserve">
+    <value>Filtering now runs on this computer. To filter the children's computers too: install WebFilter on each as a managed computer, then create a pairing code on the Devices page here and type it there.</value>
+  </data>
+  <data name="Setup_OpenDevices" xml:space="preserve">
+    <value>Pair another computer</value>
+  </data>
+  <data name="Setup_OpenMembers" xml:space="preserve">
+    <value>Go to family members</value>
+  </data>
+  <data name="Setup_OpenDashboard" xml:space="preserve">
+    <value>Go to the dashboard</value>
+  </data>
+  <data name="AdminChange_new_accounts" xml:space="preserve">
+    <value>New Windows accounts found</value>
+  </data>
+  <data name="AdminChange_pair_device" xml:space="preserve">
+    <value>A computer was paired</value>
   </data>
 </root>

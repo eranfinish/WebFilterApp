@@ -110,4 +110,8 @@ public sealed partial class MemberSettingsViewModel : ObservableObject
         FilterMode = Member.FilterMode;
         YouTubeMode = Member.YouTubeMode;
     }
+
+    /// <summary>The member page: hours, limits, sites, channels, apps and categories.</summary>
+    [RelayCommand]
+    private void OpenDetails() => _owner.Navigator?.ShowMember(Id);
 }

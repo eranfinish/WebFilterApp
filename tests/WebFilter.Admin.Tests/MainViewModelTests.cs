@@ -30,12 +30,78 @@ public sealed class MainViewModelTests
     }
 
     [Fact]
-    public void Lists_the_six_screens_in_order()
+    public void Lists_the_seven_screens_in_order()
     {
         using var main = Create();
 
-        Assert.Equal(["לוח בקרה", "בקשות גישה", "כללי אתרים", "יומן פעילות", "מכשירים", "הגדרות"], main.Pages.Select(p => p.Title));
-        Assert.All(main.Pages, p => Assert.Same(main, p.Navigator));
+        Assert.Equal(["לוח בקרה", "בקשות גישה", "בני משפחה", "כללי אתרים", "יומן פעילות", "מכשירים", "הגדרות"], main.Pages.Select(p => p.Title));
+        Assert.All(main.Pages.Append(main.Setup), p => Assert.Same(main, p.Navigator));
+    }
+
+    [Fact]
+    public async Task An_empty_family_on_the_hub_gets_the_setup_wizard_which_opens_once()
+    {
+        _client.Settings = SetupWizardViewModelTests.EmptyFamily();
+        _client.Status = TestData.Status(1) with { Members = [] };
+        using var main = Create();
+
+        main.Start();
+        await main.CurrentLoad;
+
+        Assert.Same(main.Setup, main.SelectedPage);
+        Assert.Same(main.Setup, main.Pages[0]);
+        Assert.Equal("הגדרה ראשונית", main.Pages[0].Title);
+
+        // Looking elsewhere does not bring the wizard back by itself, but it stays in the navigation.
+        main.SelectedPage = main.Dashboard;
+        await main.CurrentLoad;
+        Assert.Same(main.Dashboard, main.SelectedPage);
+        Assert.Contains(main.Setup, main.Pages);
+        main.Dashboard.OpenSetupCommand.Execute(null);
+        Assert.Same(main.Setup, main.SelectedPage);
+        await main.CurrentLoad;
+
+        // Once the family has members (set up here or elsewhere), the wizard leaves the navigation.
+        _client.BumpVersion(TestData.Family());
+        main.SelectedPage = main.Rules;
+        await main.CurrentLoad;
+        Assert.DoesNotContain(main.Setup, main.Pages);
+        Assert.Equal(7, main.Pages.Count);
+    }
+
+    [Fact]
+    public async Task A_family_that_is_set_up_never_sees_the_wizard()
+    {
+        using var main = Create();
+
+        main.Start();
+        await main.CurrentLoad;
+        await _timer.FireAsync();
+
+        Assert.Same(main.Dashboard, main.SelectedPage);
+        Assert.DoesNotContain(main.Setup, main.Pages);
+    }
+
+    [Fact]
+    public async Task The_details_button_of_a_member_opens_the_member_page_on_them()
+    {
+        using var main = Create();
+        main.Start();
+        await main.CurrentLoad;
+
+        main.Dashboard.Members.Single(m => m.MemberId == "yoav").OpenDetailsCommand.Execute(null);
+        await main.CurrentLoad;
+
+        Assert.Same(main.MemberDetail, main.SelectedPage);
+        Assert.Equal("yoav", main.MemberDetail.SelectedMemberId);
+        Assert.Equal("יואב", main.MemberDetail.Profile!.DisplayName);
+
+        main.SelectedPage = main.Settings;
+        await main.CurrentLoad;
+        main.Settings.Members.Single(m => m.Id == "dana").OpenDetailsCommand.Execute(null);
+        await main.CurrentLoad;
+        Assert.Same(main.MemberDetail, main.SelectedPage);
+        Assert.Equal("dana", main.MemberDetail.SelectedMemberId);
     }
 
     [Fact]

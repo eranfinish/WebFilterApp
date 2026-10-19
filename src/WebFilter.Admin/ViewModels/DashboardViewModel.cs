@@ -41,6 +41,11 @@ public sealed partial class DashboardViewModel : PageViewModel
     [RelayCommand]
     private void OpenRequests() => Navigator?.NavigateTo<RequestsViewModel>();
 
+    [RelayCommand]
+    private void OpenSetup() => Navigator?.NavigateTo<SetupWizardViewModel>();
+
+    internal void OpenMember(MemberCardViewModel member) => Navigator?.ShowMember(member.MemberId);
+
     protected override async Task LoadAsync()
     {
         var status = await Context.RefreshStatusAsync();
@@ -107,6 +112,7 @@ public sealed partial class MemberCardViewModel : ObservableObject
         ResumeCommand = new AsyncRelayCommand(() => owner.ResumeAsync(this));
         StartHomeworkCommand = new AsyncRelayCommand(() => owner.StartHomeworkAsync(this));
         StopHomeworkCommand = new AsyncRelayCommand(() => owner.StopHomeworkAsync(this));
+        OpenDetailsCommand = new RelayCommand(() => owner.OpenMember(this));
     }
 
     public string MemberId { get; }
@@ -117,6 +123,7 @@ public sealed partial class MemberCardViewModel : ObservableObject
     public IAsyncRelayCommand ResumeCommand { get; }
     public IAsyncRelayCommand StartHomeworkCommand { get; }
     public IAsyncRelayCommand StopHomeworkCommand { get; }
+    public IRelayCommand OpenDetailsCommand { get; }
 
     [ObservableProperty] private string _displayName = "";
 

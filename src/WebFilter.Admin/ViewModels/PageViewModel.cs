@@ -8,6 +8,9 @@ namespace WebFilter.Admin.ViewModels;
 public interface INavigator
 {
     void NavigateTo<TPage>() where TPage : PageViewModel;
+
+    /// <summary>Opens the member page on <paramref name="memberId"/>.</summary>
+    void ShowMember(string memberId);
 }
 
 /// <summary>A screen in the main window: loads its data through the admin pipe and reports failures in plain words.</summary>

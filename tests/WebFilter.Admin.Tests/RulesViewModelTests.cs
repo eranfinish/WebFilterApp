@@ -203,6 +203,61 @@ public sealed class RulesViewModelTests
         Assert.Equal("שירות הסינון לא ביצע את הפעולה: Requested value 'x' was not found.", vm.ErrorMessage);
     }
 
+    [Theory]
+    [InlineData(RuleExpiry.Hour, "2026-10-19T17:00:00+03:00", "עד 17:00")]
+    [InlineData(RuleExpiry.Today, "2026-10-20T00:00:00+03:00", "עד סוף היום")]
+    [InlineData(RuleExpiry.Permanent, null, "קבוע")]
+    public async Task A_new_rule_can_last_an_hour_or_until_the_end_of_the_day(string expiry, string? expiresAt, string listed)
+    {
+        var vm = await LoadedAsync();
+        Assert.Equal(["קבוע", "לשעה", "עד סוף היום"], vm.ExpiryOptions.Select(o => o.Label));
+        vm.NewPattern = "games.example";
+        vm.NewAction = "allow";
+        vm.NewAppliesTo = "noa";
+        vm.NewExpiry = expiry;
+
+        await vm.AddCommand.ExecuteAsync(null);
+
+        var rule = _client.Single<AddRule>().Rule;
+        Assert.Equal(expiresAt is null ? null : DateTimeOffset.Parse(expiresAt), rule.ExpiresAt);
+        Assert.Equal(listed, new RuleItemViewModel(rule, vm.Context, TestData.Now).ExpiryText);
+        Assert.Equal(RuleExpiry.Permanent, vm.NewExpiry);
+    }
+
+    [Fact]
+    public async Task The_end_of_the_day_follows_the_service_clock_and_the_family_time_zone()
+    {
+        // The service clock (a Simulation service) is past midnight of the family's day (UTC+3), while this PC's clock
+        // still says 16:00 the day before.
+        _client.Status = _client.Status with { Now = new DateTimeOffset(2026, 10, 19, 21, 30, 0, TimeSpan.Zero) };
+        var vm = await LoadedAsync();
+        vm.NewPattern = "games.example";
+        vm.NewExpiry = RuleExpiry.Today;
+
+        await vm.AddCommand.ExecuteAsync(null);
+
+        Assert.Equal(new DateTimeOffset(2026, 10, 21, 0, 0, 0, TimeSpan.FromHours(3)), _client.Single<AddRule>().Rule.ExpiresAt);
+    }
+
+    [Fact]
+    public async Task An_expired_rule_does_not_stop_the_same_rule_from_being_added_again()
+    {
+        _client.Settings = _client.Settings with
+        {
+            Rules = [.. _client.Settings.Rules, new RuleDto("r-gone", "noa", "gone.example", "domain", "allow", ExpiresAt: TestData.Now.AddMinutes(-5))],
+        };
+        var vm = await LoadedAsync();
+        vm.NewPattern = "gone.example";
+        vm.NewAction = "allow";
+        vm.NewAppliesTo = "noa";
+        vm.NewExpiry = RuleExpiry.Hour;
+
+        await vm.AddCommand.ExecuteAsync(null);
+
+        Assert.Null(vm.ValidationMessage);
+        Assert.Equal("gone.example", _client.Single<AddRule>().Rule.Pattern);
+    }
+
     [Fact]
     public async Task Editing_the_pattern_clears_the_validation_message()
     {
