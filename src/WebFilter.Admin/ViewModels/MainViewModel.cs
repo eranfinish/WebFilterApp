@@ -17,7 +17,7 @@ public sealed partial class MainViewModel : ObservableObject, INavigator, IDispo
     private readonly SynchronizationContext? _ui;
     private IDisposable? _ticker;
 
-    public MainViewModel(IAdminClient client, IUiTimer timer, IDialogService dialogs, TimeProvider? time = null)
+    public MainViewModel(IAdminClient client, IUiTimer timer, IDialogService dialogs, IClipboardService clipboard, TimeProvider? time = null)
     {
         ArgumentNullException.ThrowIfNull(client);
         _timer = timer ?? throw new ArgumentNullException(nameof(timer));
@@ -27,8 +27,9 @@ public sealed partial class MainViewModel : ObservableObject, INavigator, IDispo
         Requests = new RequestsViewModel(Context);
         Rules = new RulesViewModel(Context, dialogs);
         Activity = new ActivityViewModel(Context);
+        Devices = new DevicesViewModel(Context, dialogs, clipboard, timer);
         Settings = new SettingsViewModel(Context);
-        Pages = [Dashboard, Requests, Rules, Activity, Settings];
+        Pages = [Dashboard, Requests, Rules, Activity, Devices, Settings];
         foreach (var page in Pages) page.Navigator = this;
         client.StateChanged += OnClientStateChanged;
         UpdateConnection();
@@ -40,6 +41,7 @@ public sealed partial class MainViewModel : ObservableObject, INavigator, IDispo
     public RequestsViewModel Requests { get; }
     public RulesViewModel Rules { get; }
     public ActivityViewModel Activity { get; }
+    public DevicesViewModel Devices { get; }
     public SettingsViewModel Settings { get; }
 
     public IReadOnlyList<PageViewModel> Pages { get; }
@@ -102,6 +104,7 @@ public sealed partial class MainViewModel : ObservableObject, INavigator, IDispo
     {
         _ticker?.Dispose();
         _ticker = null;
+        Devices.Dispose();
         Context.Client.StateChanged -= OnClientStateChanged;
     }
 

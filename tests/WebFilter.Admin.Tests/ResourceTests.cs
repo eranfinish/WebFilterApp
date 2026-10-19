@@ -35,7 +35,7 @@ public sealed partial class ResourceTests
     [Fact]
     public void The_neutral_strings_are_Hebrew()
     {
-        string[] notHebrew = ["Format_Time", "Format_DateTime", "Common_None", "Settings_Col_YouTubeMode"];
+        string[] notHebrew = ["Format_Time", "Format_DateTime", "Format_Date", "Common_None", "Settings_Col_YouTubeMode", "DeviceOs_windows", "DeviceOs_android"];
         foreach (var (key, value) in Hebrew.Where(kv => !notHebrew.Contains(kv.Key)))
             Assert.True(HebrewLetter().IsMatch(value), $"{key} has no Hebrew text: {value}");
     }
@@ -66,9 +66,33 @@ public sealed partial class ResourceTests
     [InlineData("YouTubeMode_", new[] { "off", "restricted", "allowlist", "unrestricted" })]
     [InlineData("RuleType_", new[] { "domain", "wildcard", "prefix", "regex" })]
     [InlineData("AdminChange_", new[] { "add_rule", "remove_rule", "set_member", "extend_time", "pause", "resume", "start_homework", "stop_homework", "approve_request", "deny_request", "replace_settings", "local_pause" })]
+    [InlineData("DeviceOs_", new[] { "windows", "android" })]
     public void Every_wire_value_has_wording(string prefix, string[] codes)
     {
         foreach (var code in codes) Assert.True(Hebrew.ContainsKey(prefix + code), $"missing {prefix}{code}");
+    }
+
+    [Fact]
+    public void The_devices_page_texts_exist_in_both_languages()
+    {
+        var keys = Hebrew.Keys.Where(k => k.StartsWith("Devices_", StringComparison.Ordinal) || k.StartsWith("Device_", StringComparison.Ordinal)
+                                          || k.StartsWith("Pairing_", StringComparison.Ordinal)).ToList();
+        string[] expected =
+        [
+            "Nav_Devices", "Devices_Intro", "Devices_NotHub", "Devices_Pair", "Devices_Revoke", "Devices_RevokeConfirm", "Done_DeviceRevoked",
+            "Devices_AlreadyRevoked", "Device_NeverSeen", "Device_SeenMinutesAgo", "Pairing_ValidFor", "Pairing_Expired", "Pairing_Copy", "Pairing_CopyFailed",
+        ];
+
+        Assert.True(keys.Count >= 40, $"only {keys.Count} device texts");
+        foreach (var key in keys.Concat(expected))
+        {
+            Assert.False(string.IsNullOrWhiteSpace(Hebrew.GetValueOrDefault(key)), $"{key} missing in Hebrew");
+            Assert.False(string.IsNullOrWhiteSpace(English.GetValueOrDefault(key)), $"{key} missing in English");
+            Assert.False(string.IsNullOrEmpty(Strings.ResourceManager.GetString(key, Strings.Culture)), $"{key} missing from the compiled resources");
+        }
+        // The confirmation explains what revoking does and does not do.
+        Assert.Contains("ימשיך לאכוף את ההגדרות האחרונות", Hebrew["Devices_RevokeConfirm"]);
+        Assert.Contains("keeps enforcing the last settings", English["Devices_RevokeConfirm"]);
     }
 
     private static string Placeholders(string text) => string.Join(",", Placeholder().Matches(text).Select(m => m.Value).Order());

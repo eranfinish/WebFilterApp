@@ -53,6 +53,17 @@ internal sealed class FakeAdminClient : IAdminClient
 
     public List<EventDto> Events { get; } = [];
 
+    /// <summary>The hub's paired computers. <see cref="RevokeDevice"/> marks one revoked, as the service does.</summary>
+    public List<DeviceInfo> Devices { get; } = [];
+
+    /// <summary>False for an agent computer: the device messages answer like the service's (not_hub, or not_found for a revoke) and GetStatus fails.</summary>
+    public bool IsHub { get; set; } = true;
+
+    /// <summary>The next code <see cref="CreatePairingCode"/> returns; it expires 10 minutes after <see cref="StatusResult.Now"/>.</summary>
+    public string PairingCode { get; set; } = TestData.PairingCode;
+
+    public List<string> PairingAddresses { get; } = [.. TestData.HubAddresses];
+
     /// <summary>Overrides the reply for a request (return null to fall back to the default).</summary>
     public Func<AdminMessage, AdminMessage?>? Reply { get; set; }
 
@@ -69,36 +80,67 @@ internal sealed class FakeAdminClient : IAdminClient
         if (Failure is not null) return Task.FromException<AdminMessage>(Failure);
         var reply = Reply?.Invoke(request) ?? request switch
         {
+            GetStatus when !IsHub => new AdminError("bad_request", "This device is not the hub."),
             GetStatus => Status,
             GetSettings => new SettingsResult(Settings),
             GetRequests q => new RequestsResult([.. Requests.Where(r => q.Status is null || r.Status == q.Status)]),
             GetEvents => new EventsResult([.. Events]),
+            GetDevices when !IsHub => new AdminError("not_hub", "Devices are managed on the hub computer."),
+            GetDevices => new DevicesResult([.. Devices]),
+            CreatePairingCode when !IsHub => new AdminError("not_hub", "Pairing codes are created on the hub computer."),
+            CreatePairingCode => new PairingCodeResult(PairingCode, Status.Now + TimeSpan.FromMinutes(10), TestData.HubPort, [.. PairingAddresses]),
+            RevokeDevice revoke => Revoke(revoke.DeviceId),
             _ => (AdminMessage)new AdminOk(),
         };
         return Task.FromResult(reply);
     }
+
+    private AdminMessage Revoke(string deviceId)
+    {
+        var index = Devices.FindIndex(d => d.Id == deviceId && !d.Revoked);
+        if (!IsHub || index < 0) return new AdminError("not_found", "No such paired device.");
+        Devices[index] = Devices[index] with { Revoked = true };
+        return new AdminOk();
+    }
 }
 
+/// <summary>Timers that fire only when a test says so. The first one started is the main window's refresh tick.</summary>
 internal sealed class ManualTimer : IUiTimer
 {
-    public TimeSpan? Interval { get; private set; }
+    private readonly List<Handle> _timers = [];
 
-    public Func<Task>? Tick { get; private set; }
+    public TimeSpan? Interval => _timers.FirstOrDefault()?.Interval;
 
-    public bool Stopped { get; private set; }
+    public bool Stopped => _timers.FirstOrDefault()?.Stopped ?? false;
+
+    /// <summary>The intervals of the timers started and not stopped yet.</summary>
+    public IReadOnlyList<TimeSpan> Running => [.. _timers.Where(t => !t.Stopped).Select(t => t.Interval)];
 
     public IDisposable Start(TimeSpan interval, Func<Task> tick)
     {
-        Interval = interval;
-        Tick = tick;
-        return new Stopper(this);
+        var timer = new Handle(interval, tick);
+        _timers.Add(timer);
+        return timer;
     }
 
-    public Task FireAsync() => Tick?.Invoke() ?? Task.CompletedTask;
+    /// <summary>Fires the first timer started, unless it was stopped.</summary>
+    public Task FireAsync() => _timers.FirstOrDefault() is { Stopped: false } first ? first.Tick() : Task.CompletedTask;
 
-    private sealed class Stopper(ManualTimer timer) : IDisposable
+    /// <summary>Fires every running timer with this interval.</summary>
+    public async Task FireAsync(TimeSpan interval)
     {
-        public void Dispose() => timer.Stopped = true;
+        foreach (var timer in _timers.Where(t => !t.Stopped && t.Interval == interval).ToList()) await timer.Tick();
+    }
+
+    private sealed class Handle(TimeSpan interval, Func<Task> tick) : IDisposable
+    {
+        public TimeSpan Interval { get; } = interval;
+
+        public Func<Task> Tick { get; } = tick;
+
+        public bool Stopped { get; private set; }
+
+        public void Dispose() => Stopped = true;
     }
 }
 
@@ -108,10 +150,28 @@ internal sealed class FakeDialogs : IDialogService
 
     public List<string> Asked { get; } = [];
 
+    public List<string> Titles { get; } = [];
+
     public bool Confirm(string message, string title)
     {
         Asked.Add(message);
+        Titles.Add(title);
         return Answer;
+    }
+}
+
+internal sealed class FakeClipboard : IClipboardService
+{
+    /// <summary>False while "another program" holds the clipboard.</summary>
+    public bool Available { get; set; } = true;
+
+    public string? Text { get; private set; }
+
+    public bool TrySetText(string text)
+    {
+        if (!Available) return false;
+        Text = text;
+        return true;
     }
 }
 
@@ -146,6 +206,22 @@ internal static class TestData
         new("yoav", "יואב", "expired", 240, 240, 0, "21:30", null, null),
         new("dana", "דנה", "unlimited", 0, null, null, null, null, null),
         new("savta", "סבתא", "unlimited", 0, null, null, null, null, null),
+    ];
+
+    public const string PairingCode = "K7QM-2RXD-9HBA";
+
+    public const int HubPort = 47800;
+
+    /// <summary>The home network first, then a Hyper-V virtual switch.</summary>
+    public static readonly string[] HubAddresses = ["192.168.1.20", "172.24.48.1"];
+
+    /// <summary>Two kids' computers (one connected now), one that never connected yet, and one revoked.</summary>
+    public static DeviceInfo[] Devices() =>
+    [
+        new("pc-yoav", "YOAV-LAPTOP", "windows", Now.AddDays(-12), Now.AddMinutes(-42), Revoked: false),
+        new("pc-kids", "KIDS-PC", "windows", new DateTimeOffset(2025, 12, 1, 18, 30, 0, TimeSpan.FromHours(2)), Now.AddSeconds(-15), Revoked: false),
+        new("pc-old", "OLD-DESKTOP", "windows", Now.AddDays(-400), Now.AddDays(-30), Revoked: true),
+        new("pc-basement", "basement", "windows", Now.AddMinutes(-3), LastSeenAt: null, Revoked: false),
     ];
 
     public static RequestDto Request(string id, string kind, string target, string targetKey, int? minutes = null, string status = "pending",

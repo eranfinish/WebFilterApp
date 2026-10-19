@@ -8,8 +8,9 @@ public sealed class MainViewModelTests
 {
     private readonly FakeAdminClient _client = new();
     private readonly ManualTimer _timer = new();
+    private readonly ManualTime _time = new(TestData.Now);
 
-    private MainViewModel Create() => new(_client, _timer, new FakeDialogs(), new ManualTime(TestData.Now));
+    private MainViewModel Create() => new(_client, _timer, new FakeDialogs(), new FakeClipboard(), _time);
 
     [Fact]
     public async Task Starts_on_the_dashboard_and_refreshes_every_10_seconds()
@@ -29,12 +30,56 @@ public sealed class MainViewModelTests
     }
 
     [Fact]
-    public void Lists_the_five_screens_in_order()
+    public void Lists_the_six_screens_in_order()
     {
         using var main = Create();
 
-        Assert.Equal(["לוח בקרה", "בקשות גישה", "כללי אתרים", "יומן פעילות", "הגדרות"], main.Pages.Select(p => p.Title));
+        Assert.Equal(["לוח בקרה", "בקשות גישה", "כללי אתרים", "יומן פעילות", "מכשירים", "הגדרות"], main.Pages.Select(p => p.Title));
         Assert.All(main.Pages, p => Assert.Same(main, p.Navigator));
+    }
+
+    [Fact]
+    public async Task The_devices_page_refreshes_on_the_tick_and_keeps_an_open_pairing_panel()
+    {
+        _client.Devices.AddRange(TestData.Devices());
+        using var main = Create();
+        main.Start();
+        main.SelectedPage = main.Devices;
+        await main.CurrentLoad;
+        await main.Devices.StartPairingCommand.ExecuteAsync(null);
+        var panel = main.Devices.Pairing!;
+        panel.SelectedAddress = TestData.HubAddresses[1];
+        Assert.Equal([MainViewModel.RefreshInterval, PairingViewModel.CountdownInterval], _timer.Running);
+
+        _time.Now += TimeSpan.FromSeconds(10);
+        _client.Status = _client.Status with { Now = TestData.Now.AddSeconds(10) };
+        _client.Devices.Add(new DeviceInfo("pc-new", "NEW-PC", "windows", TestData.Now, TestData.Now, Revoked: false));
+        _client.Requests.Add(TestData.Request("ar-1", "url", "https://games.example/", "games.example"));
+        await _timer.FireAsync();
+        await _timer.FireAsync(PairingViewModel.CountdownInterval);
+
+        Assert.Equal(2, _client.SentOf<GetDevices>().Count());
+        Assert.Contains(main.Devices.Active, d => d.Id == "pc-new");
+        Assert.Equal("1", main.Requests.Badge);
+        Assert.Same(panel, main.Devices.Pairing);
+        Assert.Equal(TestData.HubAddresses[1], panel.SelectedAddress);
+        Assert.Equal("הקוד בתוקף עוד 9:50", panel.CountdownText);
+        Assert.Single(_client.SentOf<CreatePairingCode>());
+    }
+
+    [Fact]
+    public async Task Dispose_stops_the_pairing_countdown()
+    {
+        var main = Create();
+        main.Start();
+        main.SelectedPage = main.Devices;
+        await main.CurrentLoad;
+        await main.Devices.StartPairingCommand.ExecuteAsync(null);
+
+        main.Dispose();
+
+        Assert.Empty(_timer.Running);
+        Assert.Null(main.Devices.Pairing);
     }
 
     [Fact]

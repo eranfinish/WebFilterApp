@@ -1,3 +1,4 @@
+using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Threading;
 
@@ -14,6 +15,13 @@ public interface IUiTimer
 public interface IDialogService
 {
     bool Confirm(string message, string title);
+}
+
+/// <summary>Puts text on the Windows clipboard (view models stay testable without one).</summary>
+public interface IClipboardService
+{
+    /// <summary>False when the clipboard could not be opened (another program holds it); nothing was copied.</summary>
+    bool TrySetText(string text);
 }
 
 public sealed class DispatcherUiTimer : IUiTimer
@@ -56,5 +64,23 @@ public sealed class MessageBoxDialogService : IDialogService
             ? MessageBox.Show(message, title, MessageBoxButton.YesNo, MessageBoxImage.Question, MessageBoxResult.No, rtl)
             : MessageBox.Show(owner, message, title, MessageBoxButton.YesNo, MessageBoxImage.Question, MessageBoxResult.No, rtl);
         return answer == MessageBoxResult.Yes;
+    }
+}
+
+public sealed class WpfClipboardService : IClipboardService
+{
+    public bool TrySetText(string text)
+    {
+        ArgumentNullException.ThrowIfNull(text);
+        try
+        {
+            Clipboard.SetText(text);
+            return true;
+        }
+        catch (ExternalException)
+        {
+            // CLIPBRD_E_CANT_OPEN: another program has the clipboard open.
+            return false;
+        }
     }
 }
