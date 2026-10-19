@@ -22,8 +22,10 @@ internal sealed class AgentSession(Stream pipe, ClientIdentity client, FamilySer
         var writer = WriteLoopAsync(linked.Token);
         void OnSettings(int version) => _outgoing.Writer.TryWrite(new RulesChangedMessage(version));
         void OnTick(DateTimeOffset _) => PushTimeIfChanged();
+        void OnDecided(AccessRequest request) => PushDecision(request);
         family.SettingsChanged += OnSettings;
         family.Ticked += OnTick;
+        family.RequestDecided += OnDecided;
         try
         {
             while (await AgentProtocol.ReadAsync(pipe, linked.Token) is { } message)
@@ -49,6 +51,7 @@ internal sealed class AgentSession(Stream pipe, ClientIdentity client, FamilySer
         {
             family.SettingsChanged -= OnSettings;
             family.Ticked -= OnTick;
+            family.RequestDecided -= OnDecided;
             _outgoing.Writer.TryComplete();
             await linked.CancelAsync();
             try { await writer; } catch (OperationCanceledException) { }
@@ -141,6 +144,14 @@ internal sealed class AgentSession(Stream pipe, ClientIdentity client, FamilySer
             RequestResult.Cooldown => "cooldown", RequestResult.Queued => "queued", _ => "unavailable",
         }, id);
     });
+
+    private void PushDecision(AccessRequest request)
+    {
+        var mine = family.WithAgent((agent, _) => Account(agent).MemberId == request.MemberId);
+        if (!mine) return;
+        _outgoing.Writer.TryWrite(new AccessDecidedMessage(request.Id, request.Status.ToString().ToLowerInvariant(), null));
+        if (request.Kind == RequestKind.Time) PushTimeIfChanged();
+    }
 
     private void PushTimeIfChanged()
     {

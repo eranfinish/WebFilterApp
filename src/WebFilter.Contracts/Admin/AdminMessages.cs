@@ -80,8 +80,8 @@ public sealed record StartHomework(string MemberId, int Minutes) : AdminMessage;
 
 public sealed record StopHomework(string MemberId) : AdminMessage;
 
-/// <param name="Type">time_warning | time_expired | blocked | app_blocked | admin_change | access_request | tamper | service; null = all.</param>
-public sealed record GetEvents(DateTimeOffset? Since = null, string? Type = null, string? MemberId = null, int Max = 500) : AdminMessage;
+/// <param name="EventType">time_warning | time_expired | blocked | app_blocked | admin_change | access_request | tamper | service; null = all.</param>
+public sealed record GetEvents(DateTimeOffset? Since = null, string? EventType = null, string? MemberId = null, int Max = 500) : AdminMessage;
 
 public sealed record EventsResult(IReadOnlyList<EventDto> Events) : AdminMessage;
 

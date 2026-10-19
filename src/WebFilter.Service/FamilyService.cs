@@ -30,6 +30,9 @@ public sealed class FamilyService : IDisposable
     /// <summary>Raised (outside the gate) when the settings snapshot used for decisions changes.</summary>
     public event Action<int>? SettingsChanged;
 
+    /// <summary>Raised (outside the gate) when a parent approves or denies an access request.</summary>
+    public event Action<AccessRequest>? RequestDecided;
+
     /// <summary>Raised (outside the gate) after each time tick.</summary>
     public event Action<DateTimeOffset>? Ticked;
 
@@ -98,6 +101,18 @@ public sealed class FamilyService : IDisposable
         }
         if (changed is { } v) SettingsChanged?.Invoke(v);
         return result;
+    }
+
+    /// <summary>Approves or denies a request on the hub and notifies the requesting member's sessions.</summary>
+    public void Decide(string requestId, bool approve, ApproveScope scope, ApprovalDuration duration, int? minutes)
+    {
+        var request = WithHub((hub, now) =>
+        {
+            if (approve) hub.Approve(requestId, scope, duration, minutes, now);
+            else hub.Deny(requestId, now);
+            return hub.Requests.First(r => r.Id == requestId).Clone();
+        });
+        RequestDecided?.Invoke(request);
     }
 
     /// <summary>Hands a request to the hub (in-process when this device is the hub).</summary>

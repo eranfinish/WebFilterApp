@@ -20,7 +20,7 @@ public sealed class HubCore(FamilyConfig config)
 
     private sealed record TimeTrack(DateOnly Date, int? Remaining, TimeState State);
 
-    public FamilyConfig Config { get; } = config;
+    public FamilyConfig Config { get; private set; } = config;
     public int Version { get; private set; } = 1;
     public UsageLedger Usage { get; } = new();
     public List<FamilyEvent> Events { get; } = [];
@@ -134,6 +134,9 @@ public sealed class HubCore(FamilyConfig config)
     };
 
     // ---- admin actions --------------------------------------------------------------------------------------------
+
+    /// <summary>Replaces all settings (setup wizard, import). Runtime state, usage, events and requests are kept.</summary>
+    public void ReplaceSettings(FamilyConfig config, DateTimeOffset now) { Config = config; Changed(now, null, "replace_settings"); }
 
     public void AddRule(Rule rule, DateTimeOffset now) { Config.Rules.Add(rule); Changed(now, rule.MemberId, "add_rule"); }
 
