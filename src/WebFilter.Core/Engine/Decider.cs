@@ -178,6 +178,9 @@ public static class Decider
 
     private static DecisionResult Homework(PolicyView view, EffectiveUrlPolicy policy, NormalizedUrl url)
     {
+        // YouTube pages are blocked during homework (see YouTube()), so the YouTube hosts are too — even when educational
+        // or always allowed — or the browser would show a block page for a host the service calls allowed.
+        if (YouTubeUrlParser.IsYouTubeHost(url.Host)) return DecisionResult.Block(ReasonCode.BlockedHomework);
         if (RuleEvaluator.MatchesAlwaysAllowed(policy, url, out var alwaysId)) return DecisionResult.Allow(ReasonCode.AllowedAlways, alwaysId);
         return RuleEvaluator.IsInCategory(view.Config.Categories, FamilyConfig.EducationalCategory, url)
             ? DecisionResult.Allow(ReasonCode.AllowedHomework)

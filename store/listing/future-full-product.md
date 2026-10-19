@@ -64,11 +64,11 @@ Parents choose which sites are allowed or blocked for each child, so the rules m
 ### storage
 
 ```text
-Keeps the latest rules, the list of always-allowed sites and the current browsing-time state in extension storage, so that enforcement resumes immediately after the browser or the service worker restarts, before the local service answers. Nothing in storage leaves the computer.
+Keeps small working state in extension storage: which time warnings were already shown today, the YouTube mode and channel lists the YouTube page script needs as the page starts, and (for the browser session only) the address a blocked tab was trying to open, so the block page can offer a request for it. Filtering rules are not kept: after the browser or the service worker restarts, browsing stays blocked until the local service answers. Nothing in storage leaves the computer.
 ```
 
 ```text
-שומר את הכללים האחרונים, את רשימת האתרים שמותרים תמיד ואת מצב זמן הגלישה הנוכחי באחסון של התוסף, כדי שהאכיפה תחזור מיד אחרי הפעלה מחדש של הדפדפן או של ה-service worker, עוד לפני שהשירות המקומי עונה. דבר מהאחסון לא יוצא מהמחשב.
+שומר מצב עבודה קטן באחסון של התוסף: אילו אזהרות זמן כבר הוצגו היום, מצב YouTube ורשימות הערוצים שסקריפט הדף של YouTube צריך כשהדף נטען, ו(לזמן ההפעלה של הדפדפן בלבד) הכתובת שלשונית חסומה ניסתה לפתוח, כדי שמסך החסימה יוכל להציע בקשה עבורה. כללי הסינון לא נשמרים: אחרי הפעלה מחדש של הדפדפן או של ה-service worker הגלישה חסומה עד שהשירות המקומי עונה. דבר מהאחסון לא יוצא מהמחשב.
 ```
 
 ### notifications

@@ -58,7 +58,7 @@ public sealed record RulesResponse(
     int RulesVersion,
     IReadOnlyList<JsonElement> DynamicRules,
     IReadOnlyList<JsonElement> TimeUpSessionRules,
-    YouTubePolicy YouTube,
+    [property: JsonPropertyName("youtube")] YouTubePolicy YouTube,
     TimeStateMessage Time) : AgentMessage;
 
 /// <param name="Mode">off | restricted | allowlist | unrestricted.</param>
@@ -86,7 +86,7 @@ public sealed record UnknownMessage(string? Type) : AgentMessage;
 public sealed record DecideUrlRequest(string Url) : AgentMessage;
 
 /// <param name="Decision">allow | block.</param>
-/// <param name="Reason">A reason code wire name (README §5), e.g. blocked_rule, blocked_category, time_expired.</param>
+/// <param name="Reason">A reason code wire name (README §5), e.g. blocked_rule, blocked_category, blocked_daily_limit.</param>
 /// <param name="CanRequest">The user may send the parents a request (a linked family member).</param>
 /// <param name="RequestKind">What a request should ask for: url, or time when the block is about time.</param>
 public sealed record DecideUrlResponse(string Decision, string Reason, string? RuleId, string? Category, bool CanRequest, string RequestKind) : AgentMessage;

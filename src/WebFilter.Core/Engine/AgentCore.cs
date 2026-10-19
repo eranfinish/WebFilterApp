@@ -87,6 +87,10 @@ public sealed class AgentCore(string deviceId)
     }
 
     /// <summary>A block enforced by the extension itself (DNR or content script), reported for the parents' log.</summary>
+    /// <summary>A problem the browser extension reported (e.g. rules it had to drop), recorded as a service event.</summary>
+    public void ReportProblem(DeviceAccount account, string detail, DateTimeOffset now) =>
+        Raise(new FamilyEvent(EventType.Service, now, account.MemberId, DeviceId, Detail: detail));
+
     public void ReportBlock(DeviceAccount account, string url, ReasonCode reason, DateTimeOffset now) =>
         Raise(new FamilyEvent(EventType.Blocked, now, account.MemberId, DeviceId, reason, Url: url));
 

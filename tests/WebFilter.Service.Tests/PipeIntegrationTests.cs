@@ -151,6 +151,10 @@ public sealed class PipeIntegrationTests : IAsyncLifetime
         Assert.Equal("allow", stale.Decision);
         Assert.NotNull(await agent.WaitForAsync<RulesChangedMessage>());
         Assert.Equal(before + 1, await Blocks());
+
+        Assert.Equal("ok", (await agent.RequestAsync<ErrorMessage>(new ErrorMessage("dnr_rules_dropped", "rules 1001, 1002"))).Code);
+        var problems = Assert.IsType<EventsResult>(await admin.RequestAsync(new GetEvents(EventType: "service"))).Events;
+        Assert.Contains(problems, e => e.Detail == "dnr_rules_dropped: rules 1001, 1002");
     }
 
     [Fact]
@@ -173,6 +177,27 @@ public sealed class PipeIntegrationTests : IAsyncLifetime
         var expected = WindowsIdentity.GetCurrent().Name;
         Assert.Contains(changes, e => e.Detail == "pause" && e.Admin == expected);
         Assert.Contains(changes, e => e.Detail == "add_rule" && e.Admin == expected);
+    }
+
+    [Fact]
+    public async Task A_pause_lifts_the_browser_rules_until_it_ends()
+    {
+        await using var agent = await AgentClient.ConnectAsync(_options.AgentPipeName);
+        await agent.RequestAsync<HelloResponse>(new HelloRequest("0.0.1", "edge", "abcdefghijklmnopabcdefghijklmnop"));
+        Assert.NotEmpty((await agent.RequestAsync<RulesResponse>(new GetRulesRequest())).DynamicRules);
+
+        _family.WithHub((hub, now) => { hub.Pause("noa", now.AddMinutes(20), now); return 0; });
+        Assert.NotNull(await agent.WaitForAsync<RulesChangedMessage>());
+        var paused = await agent.RequestAsync<RulesResponse>(new GetRulesRequest());
+        Assert.Empty(paused.DynamicRules);
+        Assert.Equal(("unrestricted", "unlimited"), (paused.YouTube.Mode, paused.Time.State));
+
+        _clock.Now = _clock.Now.AddMinutes(21);
+        _family.Tick();
+        Assert.NotNull(await Poll(() => agent.CountOf<RulesChangedMessage>() >= 2 ? "pushed" : null));
+        var after = await agent.RequestAsync<RulesResponse>(new GetRulesRequest());
+        Assert.NotEmpty(after.DynamicRules);
+        Assert.Equal("allowlist", after.YouTube.Mode);
     }
 
     [Fact]

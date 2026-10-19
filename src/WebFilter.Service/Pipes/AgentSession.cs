@@ -78,6 +78,12 @@ internal sealed class AgentSession(Stream pipe, ClientIdentity client, FamilySer
         GetRulesRequest => Rules(),
         HeartbeatRequest beat => Heartbeat(beat),
         ReportBlockRequest block => ReportBlock(block),
+        ErrorMessage { Code: "dnr_rules_dropped" } dropped => family.WithAgent<AgentMessage>((agent, now) =>
+        {
+            var detail = "dnr_rules_dropped: " + dropped.Message;
+            agent.ReportProblem(Account(agent), detail.Length > 500 ? detail[..500] : detail, now);
+            return new ErrorMessage("ok", "recorded");
+        }),
         UnknownMessage unknown => new ErrorMessage("unsupported", $"Unknown message type '{unknown.Type}'."),
         DecideUrlRequest decide => DecideUrl(decide.Url),
         RequestAccessRequest request => RequestAccess(request),
@@ -104,19 +110,19 @@ internal sealed class AgentSession(Stream pipe, ClientIdentity client, FamilySer
     {
         var view = agent.View();
         var account = Account(agent);
-        var member = account.MemberId is null ? null : view.Config.Member(account.MemberId);
+        var effective = ExtensionPolicy.For(view, account, now);
         var options = new DnrCompileOptions(_extensionId ?? "unknown-extension-id");
+        var rules = effective.UrlPolicy is null ? new DnrRuleSet([], []) : DnrCompiler.Compile(effective.UrlPolicy, options);
+        Interlocked.Exchange(ref _rulesValidUntil, effective.ValidUntil == DateTimeOffset.MaxValue ? long.MaxValue : effective.ValidUntil.UtcTicks);
 
-        EffectiveUrlPolicy? policy = member is not null ? view.UrlPolicy(member.Id, now)
-            : account.IsAdmin ? null
-            : new EffectiveUrlPolicy("", FilterMode.Allowlist, YouTubeMode.Off, [], view.Config.Rules.Where(r => r.MemberId is null && r.AlwaysAllowed && r.IsActiveAt(now)).ToList(), []);
-        var rules = policy is null ? new DnrRuleSet([], []) : DnrCompiler.Compile(policy, options);
-        var validUntil = policy is null ? DateTimeOffset.MaxValue : EffectiveUrlPolicy.NextExpiry(view.Config, member?.Id, now);
-        Interlocked.Exchange(ref _rulesValidUntil, validUntil == DateTimeOffset.MaxValue ? long.MaxValue : validUntil.UtcTicks);
-
-        var channels = member is null ? [] : view.Config.YouTubeChannels.Where(c => c.MemberId is null || c.MemberId == member.Id).ToList();
+        // One record per channel with its effective action: the member's own record beats a global one.
+        var channels = account.MemberId is not { } memberId ? [] : view.Config.YouTubeChannels
+            .Where(c => c.MemberId is null || c.MemberId == memberId)
+            .GroupBy(c => c.ChannelId, StringComparer.Ordinal)
+            .Select(g => g.FirstOrDefault(c => c.MemberId is not null) ?? g.First())
+            .ToList();
         YouTubeChannelRef Ref(YouTubeChannel c) => new(c.ChannelId, c.Handle, c.Title);
-        var youtube = new YouTubePolicy(member is null ? (account.IsAdmin ? "unrestricted" : "off") : Lower(member.YouTubeMode),
+        var youtube = new YouTubePolicy(Lower(effective.YouTube),
             channels.Where(c => c.Action == RuleAction.Allow).Select(Ref).ToList(),
             channels.Where(c => c.Action == RuleAction.Block).Select(Ref).ToList());
 
@@ -203,9 +209,10 @@ internal sealed class AgentSession(Stream pipe, ClientIdentity client, FamilySer
 
     private void PushDecision(AccessRequest request)
     {
-        var mine = family.WithAgent((agent, _) => Account(agent).MemberId == request.MemberId);
+        var (mine, until) = family.WithAgent((agent, _) => (Account(agent).MemberId == request.MemberId,
+            request.CreatedRuleId is { } ruleId ? agent.View().Config.Rules.FirstOrDefault(r => r.Id == ruleId)?.ExpiresAt : null));
         if (!mine) return;
-        _outgoing.Writer.TryWrite(new AccessDecidedMessage(request.Id, request.Status.ToString().ToLowerInvariant(), null));
+        _outgoing.Writer.TryWrite(new AccessDecidedMessage(request.Id, request.Status.ToString().ToLowerInvariant(), until));
         if (request.Kind == RequestKind.Time) PushTimeIfChanged();
     }
 
@@ -232,7 +239,8 @@ internal sealed class AgentSession(Stream pipe, ClientIdentity client, FamilySer
 
     private static TimeStateMessage TimeStateOf(AgentCore agent, DeviceAccount account, DateTimeOffset now)
     {
-        if (account.MemberId is null) return new TimeStateMessage("unlimited", null, null);
+        // Time does not apply while paused or in homework (MVP-PLAN §6), so the extension must not install its time-up rules.
+        if (account.MemberId is null || !ExtensionPolicy.For(agent.View(), account, now).TimeApplies) return new TimeStateMessage("unlimited", null, null);
         var status = agent.TimeStatus(account.MemberId, now);
         return new TimeStateMessage(
             status.State switch { TimeState.Ok => "ok", TimeState.Warn => "warn", TimeState.Expired => "expired", TimeState.OutsideWindow => "outside_window", _ => "unlimited" },

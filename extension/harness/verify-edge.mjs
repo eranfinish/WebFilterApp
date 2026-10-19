@@ -205,7 +205,7 @@ try {
     const info = await waitFor(async () => {
       const i = await pageInfo(page);
       return i.ready ? i : null;
-    });
+    }, 20000); // the first extension page after a build can wait on a cold worker
     check("P6 blocked.html?reason=failclosed: exact window title", info?.title === BLOCKED_TITLE, { note: info?.title });
     check("P7 blocked.html shows the fail-closed reason in Hebrew (RTL)", info?.reason === "failclosed" && /שירות הסינון/.test(info.text) && info.dir === "rtl" && info.lang === "he", { note: info?.text });
 
