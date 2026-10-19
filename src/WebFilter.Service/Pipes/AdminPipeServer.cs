@@ -40,7 +40,12 @@ public sealed class AdminPipeServer(FamilyService family, IOptions<ServiceOption
                 await pipe.DisposeAsync();
                 break;
             }
-            _ = Task.Run(() => ServeAsync(pipe, stoppingToken), stoppingToken);
+            _ = Task.Run(async () =>
+            {
+                // A session must never fail silently: anything unexpected is logged (the pipe is closed by ServeAsync).
+                try { await ServeAsync(pipe, stoppingToken); }
+                catch (Exception ex) when (ex is not OperationCanceledException) { log.LogError(ex, "Pipe session failed"); }
+            }, stoppingToken);
         }
     }
 
@@ -86,7 +91,7 @@ public sealed class AdminPipeServer(FamilyService family, IOptions<ServiceOption
         catch (Exception ex) when (ex is IOException or OperationCanceledException or ObjectDisposedException)
         {
         }
-        catch (JsonException ex)
+        catch (Exception ex) when (ex is JsonException or NotSupportedException)
         {
             log.LogWarning(ex, "Malformed admin message from {Client}", client);
         }

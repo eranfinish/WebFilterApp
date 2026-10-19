@@ -25,9 +25,17 @@ internal static class PairCommand
             Console.WriteLine($"Paired {device} with hub {link.HubId} at {link.Address}.");
             return 0;
         }
-        catch (Exception ex) when (ex is UnauthorizedAccessException or HttpRequestException or InvalidOperationException)
+        catch (Exception ex) when (ex is UnauthorizedAccessException or InvalidOperationException)
         {
             Console.Error.WriteLine($"Pairing failed: {ex.Message}");
+            return 1;
+        }
+        catch (Exception ex) when (ex is HttpRequestException or TaskCanceledException or IOException or System.Security.Authentication.AuthenticationException)
+        {
+            // Unreachable hub: the commonest causes at home are a hub that is off or a network Windows marks as Public
+            // (the hub's firewall rule is for Private networks only).
+            Console.Error.WriteLine($"Pairing failed: the hub at {hub} did not answer ({ex.Message}). " +
+                "Check that the hub computer is on, on the same network, and that the network is set to Private on both computers.");
             return 1;
         }
     }

@@ -168,6 +168,7 @@ public sealed class InstallerTests
         Assert.Contains("ROLE~=\"agent\" AND HUB AND PAIRCODE", Attr(scheduled, "Condition"), StringComparison.Ordinal);
         Assert.Equal("ConfigureService", Attr(scheduled, "After"));
         Assert.Equal("ignore", Attr(Single("CustomAction", "PairWithHub"), "Return"));
+        Assert.Equal("yes", Attr(Single("CustomAction", "PairWithHub"), "HideTarget")); // the code must not reach the MSI log
         Assert.Equal("yes", Attr(Single("Property", "PAIRCODE"), "Hidden"));
 
         var args = CommandLine("PairWithHub", new() { ["INSTALLFOLDER"] = @"C:\Program Files\WebFilter\", ["HUB"] = "lab-hub.local:47800", ["PAIRCODE"] = "ABCD-EFGH-JKLM" });

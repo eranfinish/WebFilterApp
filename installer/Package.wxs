@@ -153,7 +153,8 @@
 
     <SetProperty Id="PairWithHub" Sequence="execute" Before="PairWithHub"
                  Value="&quot;[INSTALLFOLDER]WebFilter.Service.exe&quot; pair --hub &quot;[HUB]&quot; --code &quot;[PAIRCODE]&quot;" />
-    <CustomAction Id="PairWithHub" BinaryRef="Wix4UtilCA_X64" DllEntry="WixQuietExec" Execute="deferred" Impersonate="no" Return="ignore" />
+    <!-- HideTarget: the command line carries the pairing code; keep it out of the MSI log. -->
+    <CustomAction Id="PairWithHub" BinaryRef="Wix4UtilCA_X64" DllEntry="WixQuietExec" Execute="deferred" Impersonate="no" Return="ignore" HideTarget="yes" />
 
     <SetProperty Id="CleanupMachine" Sequence="execute" Before="CleanupMachine"
                  Value="&quot;[INSTALLFOLDER]WebFilter.Service.exe&quot; cleanup" />

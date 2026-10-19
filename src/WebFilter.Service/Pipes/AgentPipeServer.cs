@@ -42,7 +42,12 @@ public sealed class AgentPipeServer(FamilyService family, IOptions<ServiceOption
                 await pipe.DisposeAsync();
                 break;
             }
-            _ = Task.Run(() => ServeAsync(pipe, stoppingToken), stoppingToken);
+            _ = Task.Run(async () =>
+            {
+                // A session must never fail silently: anything unexpected is logged (the pipe is closed by ServeAsync).
+                try { await ServeAsync(pipe, stoppingToken); }
+                catch (Exception ex) when (ex is not OperationCanceledException) { log.LogError(ex, "Pipe session failed"); }
+            }, stoppingToken);
         }
     }
 
