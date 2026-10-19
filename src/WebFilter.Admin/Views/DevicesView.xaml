@@ -248,6 +248,51 @@
             </StackPanel>
           </Border>
         </StackPanel>
+
+        <!-- Each computer's Windows accounts and whom they belong to -->
+        <TextBlock Text="{x:Static res:Strings.Devices_Accounts}" Style="{StaticResource SectionText}" Margin="0,20,0,4" />
+        <TextBlock Text="{x:Static res:Strings.Devices_AccountsHint}" Style="{StaticResource SubtleText}" Margin="0,0,0,8" />
+        <ItemsControl ItemsSource="{Binding AccountGroups}" Focusable="False">
+          <ItemsControl.ItemTemplate>
+            <DataTemplate DataType="{x:Type vm:DeviceAccountsViewModel}">
+              <Border Style="{StaticResource Card}" Margin="0,0,0,12">
+                <StackPanel>
+                  <DockPanel Margin="0,0,0,6">
+                    <Button DockPanel.Dock="Right" Content="{x:Static res:Strings.Devices_Rescan}" Margin="0" Padding="10,3"
+                            Command="{Binding DataContext.ScanAccountsCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                            Visibility="{Binding IsThisComputer, Converter={StaticResource BoolToVisibility}}" />
+                    <TextBlock Text="{Binding Title}" FontWeight="SemiBold" FontSize="15" VerticalAlignment="Center" />
+                  </DockPanel>
+                  <TextBlock Text="{x:Static res:Strings.Devices_NoAccounts}" Style="{StaticResource SubtleText}"
+                             Visibility="{Binding HasNoAccounts, Converter={StaticResource BoolToVisibility}}" />
+                  <ItemsControl ItemsSource="{Binding Accounts}" Focusable="False">
+                    <ItemsControl.ItemTemplate>
+                      <DataTemplate DataType="{x:Type vm:DeviceAccountItemViewModel}">
+                        <StackPanel Margin="0,4">
+                          <Grid>
+                            <Grid.ColumnDefinitions>
+                              <ColumnDefinition SharedSizeGroup="AccountName" Width="Auto" MinWidth="160" />
+                              <ColumnDefinition SharedSizeGroup="AccountAdmin" Width="Auto" />
+                              <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Grid.Column="0" Text="{Binding Name}" VerticalAlignment="Center" FlowDirection="LeftToRight" HorizontalAlignment="Left" />
+                            <Border Grid.Column="1" Style="{StaticResource Badge}" Margin="8,0" Visibility="{Binding IsAdmin, Converter={StaticResource BoolToVisibility}}">
+                              <TextBlock Text="{x:Static res:Strings.Setup_AdminAccount}" FontSize="12" />
+                            </Border>
+                            <ComboBox Grid.Column="2" ItemsSource="{Binding Options}" SelectedValuePath="Value" DisplayMemberPath="Label" SelectedValue="{Binding MemberId}"
+                                      MinWidth="200" HorizontalAlignment="Left" Margin="8,0" />
+                          </Grid>
+                          <TextBlock Text="{Binding Warning}" Foreground="{StaticResource WarningBrush}" TextWrapping="Wrap" Margin="0,4,0,0" FontSize="12"
+                                     Visibility="{Binding Warning, Converter={StaticResource HasValueToVisibility}}" />
+                        </StackPanel>
+                      </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                  </ItemsControl>
+                </StackPanel>
+              </Border>
+            </DataTemplate>
+          </ItemsControl.ItemTemplate>
+        </ItemsControl>
       </StackPanel>
     </StackPanel>
   </ScrollViewer>

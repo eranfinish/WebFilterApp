@@ -1216,4 +1216,73 @@ The computer keeps enforcing the last settings it received but stops getting upd
   <data name="AdminChange_pair_device" xml:space="preserve">
     <value>A computer was paired</value>
   </data>
+  <data name="Agent_ManagedBy" xml:space="preserve">
+    <value>This computer is managed by the parents' computer {0}.</value>
+  </data>
+  <data name="Agent_LastContact" xml:space="preserve">
+    <value>Last contact: {0}.</value>
+  </data>
+  <data name="Agent_NoContactYet" xml:space="preserve">
+    <value>No contact yet since the service started.</value>
+  </data>
+  <data name="Agent_Unreachable" xml:space="preserve">
+    <value>It cannot be reached now; filtering goes on with the last settings received.</value>
+  </data>
+  <data name="Agent_NotPaired" xml:space="preserve">
+    <value>This computer is not paired with the parents' computer yet, so it blocks most browsing in standard accounts. On the parents' computer, create a pairing code on the Devices page and run the command shown there on this computer.</value>
+  </data>
+  <data name="Action_LocalPause" xml:space="preserve">
+    <value>Emergency pause on this computer until the end of the day</value>
+  </data>
+  <data name="Member_ResumeOnHub" xml:space="preserve">
+    <value>Filtering is resumed from the parents' computer.</value>
+  </data>
+  <data name="Dashboard_UnlinkedAccounts_One" xml:space="preserve">
+    <value>One Windows account is not linked to a family member yet, and browsing there is almost entirely blocked.</value>
+  </data>
+  <data name="Dashboard_UnlinkedAccounts_Many" xml:space="preserve">
+    <value>{0} Windows accounts are not linked to family members yet, and browsing there is almost entirely blocked.</value>
+  </data>
+  <data name="Dashboard_OpenDevices" xml:space="preserve">
+    <value>Link accounts</value>
+  </data>
+  <data name="Diagnostics_Hub" xml:space="preserve">
+    <value>Parents' computer</value>
+  </data>
+  <data name="Devices_Accounts" xml:space="preserve">
+    <value>Windows accounts</value>
+  </data>
+  <data name="Devices_AccountsHint" xml:space="preserve">
+    <value>Choose whom each account belongs to. A standard account that is not linked can hardly browse; administrators are not filtered. Each computer reports its own accounts, within a minute of their creation.</value>
+  </data>
+  <data name="Devices_ThisComputer" xml:space="preserve">
+    <value>This computer ({0})</value>
+  </data>
+  <data name="Devices_NoAccounts" xml:space="preserve">
+    <value>This computer has not reported its accounts yet.</value>
+  </data>
+  <data name="Devices_Rescan" xml:space="preserve">
+    <value>Look for new accounts</value>
+  </data>
+  <data name="Devices_NewAccounts" xml:space="preserve">
+    <value>{0} new accounts were found on this computer.</value>
+  </data>
+  <data name="Devices_NoNewAccounts" xml:space="preserve">
+    <value>No new accounts were found on this computer.</value>
+  </data>
+  <data name="Devices_AccountLinked" xml:space="preserve">
+    <value>The account {0} on {1} is now {2}'s.</value>
+  </data>
+  <data name="Devices_AccountUnlinked" xml:space="preserve">
+    <value>The account {0} on {1} is no longer linked.</value>
+  </data>
+  <data name="Devices_UnlinkedWarning" xml:space="preserve">
+    <value>Not linked — browsing in this account is almost entirely blocked.</value>
+  </data>
+  <data name="AdminChange_accounts_updated" xml:space="preserve">
+    <value>Windows account details updated</value>
+  </data>
+  <data name="Devices_NewAccount_One" xml:space="preserve">
+    <value>One new account was found on this computer.</value>
+  </data>
 </root>

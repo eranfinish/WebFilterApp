@@ -56,8 +56,14 @@ internal sealed class FakeAdminClient : IAdminClient
     /// <summary>The hub's paired computers. <see cref="RevokeDevice"/> marks one revoked, as the service does.</summary>
     public List<DeviceInfo> Devices { get; } = [];
 
-    /// <summary>False for an agent computer: the device messages answer like the service's (not_hub, or not_found for a revoke) and GetStatus fails.</summary>
+    /// <summary>
+    /// False for an agent computer, answering like the service there: the status (with <see cref="AgentHub"/> and the family's
+    /// zone) and the local pause work; a revoke is not_found; everything else is not_hub.
+    /// </summary>
     public bool IsHub { get; set; } = true;
+
+    /// <summary>On an agent: the hub that manages it. Reachable, last heard a minute before <see cref="TestData.Now"/>.</summary>
+    public HubConnection AgentHub { get; set; } = new("pc-parents", "192.168.1.20:47800", true, TestData.Now.AddMinutes(-1));
 
     /// <summary>The next code <see cref="CreatePairingCode"/> returns; it expires 10 minutes after <see cref="StatusResult.Now"/>.</summary>
     public string PairingCode { get; set; } = TestData.PairingCode;
@@ -81,16 +87,13 @@ internal sealed class FakeAdminClient : IAdminClient
     {
         Sent.Add(request);
         if (Failure is not null) return Task.FromException<AdminMessage>(Failure);
-        var reply = Reply?.Invoke(request) ?? request switch
+        var reply = Reply?.Invoke(request) ?? (IsHub ? null : AsAgent(request)) ?? request switch
         {
-            GetStatus when !IsHub => new AdminError("bad_request", "This device is not the hub."),
-            GetStatus => Status,
+            GetStatus => Status with { TimeZone = Settings.TimeZone },
             GetSettings => new SettingsResult(Settings),
             GetRequests q => new RequestsResult([.. Requests.Where(r => q.Status is null || r.Status == q.Status)]),
             GetEvents => new EventsResult([.. Events]),
-            GetDevices when !IsHub => new AdminError("not_hub", "Devices are managed on the hub computer."),
             GetDevices => new DevicesResult([.. Devices]),
-            CreatePairingCode when !IsHub => new AdminError("not_hub", "Pairing codes are created on the hub computer."),
             CreatePairingCode => new PairingCodeResult(PairingCode, Status.Now + TimeSpan.FromMinutes(10), TestData.HubPort, [.. PairingAddresses]),
             RevokeDevice revoke => Revoke(revoke.DeviceId),
             ReplaceSettings replace => Replace(replace),
@@ -100,10 +103,18 @@ internal sealed class FakeAdminClient : IAdminClient
         return Task.FromResult(reply);
     }
 
+    /// <summary>The agent's admin pipe (AdminPipeServer.HandleOnAgent): null for the messages it answers like the hub.</summary>
+    private AdminMessage? AsAgent(AdminMessage request) => request switch
+    {
+        GetStatus => Status with { IsHub = false, TimeZone = Settings.TimeZone, Hub = AgentHub },
+        Pause or SetClock => null,
+        RevokeDevice => new AdminError("not_found", "No such paired device."),
+        _ => new AdminError("not_hub", "This computer is managed by the hub computer; make this change there."),
+    };
+
     /// <summary>Like the service: refused when the settings moved past <see cref="ReplaceSettings.IfVersion"/>; otherwise taken, with a new version.</summary>
     private AdminMessage Replace(ReplaceSettings replace)
     {
-        if (!IsHub) return new AdminError("not_hub", "Settings are managed on the hub computer.");
         if (replace.IfVersion is { } expected && expected != Settings.Version)
             return new AdminError(ReplaceSettings.ConflictCode, $"The settings changed meanwhile (version {Settings.Version}, expected {expected}).");
         BumpVersion(replace.Settings);
@@ -112,7 +123,6 @@ internal sealed class FakeAdminClient : IAdminClient
 
     private AdminMessage Scan()
     {
-        if (!IsHub) return new AdminError("not_hub", "Accounts are linked on the hub computer.");
         var device = Settings.Devices.Single(d => d.Id == Status.DeviceId);
         var added = LocalAccounts.Where(a => device.Accounts.All(known => known.AccountId != a.AccountId)).Select(a => a with { Member = null }).ToList();
         if (added.Count > 0)
@@ -131,7 +141,7 @@ internal sealed class FakeAdminClient : IAdminClient
     private AdminMessage Revoke(string deviceId)
     {
         var index = Devices.FindIndex(d => d.Id == deviceId && !d.Revoked);
-        if (!IsHub || index < 0) return new AdminError("not_found", "No such paired device.");
+        if (index < 0) return new AdminError("not_found", "No such paired device.");
         Devices[index] = Devices[index] with { Revoked = true };
         return new AdminOk();
     }

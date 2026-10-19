@@ -3573,5 +3573,212 @@ namespace WebFilter.Admin.Resources {
                 return ResourceManager.GetString("AdminChange_pair_device", resourceCulture);
             }
         }
+
+        /// <summary>
+        ///   Looks up a localized string similar to המחשב הזה מנוהל על ידי מחשב ההורים {0}..
+        /// </summary>
+        public static string Agent_ManagedBy {
+            get {
+                return ResourceManager.GetString("Agent_ManagedBy", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to קשר אחרון: {0}..
+        /// </summary>
+        public static string Agent_LastContact {
+            get {
+                return ResourceManager.GetString("Agent_LastContact", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to עדיין לא היה קשר מאז שהשירות התחיל..
+        /// </summary>
+        public static string Agent_NoContactYet {
+            get {
+                return ResourceManager.GetString("Agent_NoContactYet", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to אין כרגע קשר איתו, והסינון ממשיך לפי ההגדרות האחרונות שהתקבלו..
+        /// </summary>
+        public static string Agent_Unreachable {
+            get {
+                return ResourceManager.GetString("Agent_Unreachable", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to המחשב הזה עוד לא צומד למחשב ההורים, ולכן הוא חוסם את רוב הגלישה בחשבונות רגילים.....
+        /// </summary>
+        public static string Agent_NotPaired {
+            get {
+                return ResourceManager.GetString("Agent_NotPaired", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to השהיית חירום במחשב הזה עד סוף היום.
+        /// </summary>
+        public static string Action_LocalPause {
+            get {
+                return ResourceManager.GetString("Action_LocalPause", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to את הסינון מחדשים ממחשב ההורים..
+        /// </summary>
+        public static string Member_ResumeOnHub {
+            get {
+                return ResourceManager.GetString("Member_ResumeOnHub", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to חשבון Windows אחד עוד לא קושר לבן משפחה, והגלישה בו חסומה כמעט לגמרי..
+        /// </summary>
+        public static string Dashboard_UnlinkedAccounts_One {
+            get {
+                return ResourceManager.GetString("Dashboard_UnlinkedAccounts_One", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to {0} חשבונות Windows עוד לא קושרו לבני משפחה, והגלישה בהם חסומה כמעט לגמרי..
+        /// </summary>
+        public static string Dashboard_UnlinkedAccounts_Many {
+            get {
+                return ResourceManager.GetString("Dashboard_UnlinkedAccounts_Many", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to לקישור החשבונות.
+        /// </summary>
+        public static string Dashboard_OpenDevices {
+            get {
+                return ResourceManager.GetString("Dashboard_OpenDevices", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to מחשב ההורים.
+        /// </summary>
+        public static string Diagnostics_Hub {
+            get {
+                return ResourceManager.GetString("Diagnostics_Hub", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to חשבונות Windows.
+        /// </summary>
+        public static string Devices_Accounts {
+            get {
+                return ResourceManager.GetString("Devices_Accounts", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to בחרו לכל חשבון למי הוא שייך. בחשבון רגיל שלא מקושר הגלישה חסומה כמעט לגמרי; מנהל....
+        /// </summary>
+        public static string Devices_AccountsHint {
+            get {
+                return ResourceManager.GetString("Devices_AccountsHint", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to המחשב הזה ({0}).
+        /// </summary>
+        public static string Devices_ThisComputer {
+            get {
+                return ResourceManager.GetString("Devices_ThisComputer", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to המחשב הזה עוד לא דיווח על החשבונות שלו..
+        /// </summary>
+        public static string Devices_NoAccounts {
+            get {
+                return ResourceManager.GetString("Devices_NoAccounts", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to חיפוש חשבונות חדשים.
+        /// </summary>
+        public static string Devices_Rescan {
+            get {
+                return ResourceManager.GetString("Devices_Rescan", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to נמצאו {0} חשבונות חדשים במחשב הזה..
+        /// </summary>
+        public static string Devices_NewAccounts {
+            get {
+                return ResourceManager.GetString("Devices_NewAccounts", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to לא נמצאו חשבונות חדשים במחשב הזה..
+        /// </summary>
+        public static string Devices_NoNewAccounts {
+            get {
+                return ResourceManager.GetString("Devices_NoNewAccounts", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to החשבון {0} ב-{1} קושר ל{2}..
+        /// </summary>
+        public static string Devices_AccountLinked {
+            get {
+                return ResourceManager.GetString("Devices_AccountLinked", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to הקישור של החשבון {0} ב-{1} בוטל..
+        /// </summary>
+        public static string Devices_AccountUnlinked {
+            get {
+                return ResourceManager.GetString("Devices_AccountUnlinked", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to לא מקושר — הגלישה בחשבון הזה חסומה כמעט לגמרי..
+        /// </summary>
+        public static string Devices_UnlinkedWarning {
+            get {
+                return ResourceManager.GetString("Devices_UnlinkedWarning", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to פרטי חשבונות Windows עודכנו.
+        /// </summary>
+        public static string AdminChange_accounts_updated {
+            get {
+                return ResourceManager.GetString("AdminChange_accounts_updated", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to נמצא חשבון חדש אחד במחשב הזה..
+        /// </summary>
+        public static string Devices_NewAccount_One {
+            get {
+                return ResourceManager.GetString("Devices_NewAccount_One", resourceCulture);
+            }
+        }
     }
 }

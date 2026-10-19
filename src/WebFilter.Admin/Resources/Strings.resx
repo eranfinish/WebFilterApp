@@ -1220,4 +1220,73 @@
   <data name="AdminChange_pair_device" xml:space="preserve">
     <value>מחשב חדש צומד</value>
   </data>
+  <data name="Agent_ManagedBy" xml:space="preserve">
+    <value>המחשב הזה מנוהל על ידי מחשב ההורים {0}.</value>
+  </data>
+  <data name="Agent_LastContact" xml:space="preserve">
+    <value>קשר אחרון: {0}.</value>
+  </data>
+  <data name="Agent_NoContactYet" xml:space="preserve">
+    <value>עדיין לא היה קשר מאז שהשירות התחיל.</value>
+  </data>
+  <data name="Agent_Unreachable" xml:space="preserve">
+    <value>אין כרגע קשר איתו, והסינון ממשיך לפי ההגדרות האחרונות שהתקבלו.</value>
+  </data>
+  <data name="Agent_NotPaired" xml:space="preserve">
+    <value>המחשב הזה עוד לא צומד למחשב ההורים, ולכן הוא חוסם את רוב הגלישה בחשבונות רגילים. במחשב ההורים, במסך מכשירים, צרו קוד צימוד והריצו כאן את הפקודה שמוצגת שם.</value>
+  </data>
+  <data name="Action_LocalPause" xml:space="preserve">
+    <value>השהיית חירום במחשב הזה עד סוף היום</value>
+  </data>
+  <data name="Member_ResumeOnHub" xml:space="preserve">
+    <value>את הסינון מחדשים ממחשב ההורים.</value>
+  </data>
+  <data name="Dashboard_UnlinkedAccounts_One" xml:space="preserve">
+    <value>חשבון Windows אחד עוד לא קושר לבן משפחה, והגלישה בו חסומה כמעט לגמרי.</value>
+  </data>
+  <data name="Dashboard_UnlinkedAccounts_Many" xml:space="preserve">
+    <value>{0} חשבונות Windows עוד לא קושרו לבני משפחה, והגלישה בהם חסומה כמעט לגמרי.</value>
+  </data>
+  <data name="Dashboard_OpenDevices" xml:space="preserve">
+    <value>לקישור החשבונות</value>
+  </data>
+  <data name="Diagnostics_Hub" xml:space="preserve">
+    <value>מחשב ההורים</value>
+  </data>
+  <data name="Devices_Accounts" xml:space="preserve">
+    <value>חשבונות Windows</value>
+  </data>
+  <data name="Devices_AccountsHint" xml:space="preserve">
+    <value>בחרו לכל חשבון למי הוא שייך. בחשבון רגיל שלא מקושר הגלישה חסומה כמעט לגמרי; מנהלים לא מסוננים. כל מחשב מדווח על החשבונות שלו בעצמו, תוך דקה מרגע שנוצרו.</value>
+  </data>
+  <data name="Devices_ThisComputer" xml:space="preserve">
+    <value>המחשב הזה ({0})</value>
+  </data>
+  <data name="Devices_NoAccounts" xml:space="preserve">
+    <value>המחשב הזה עוד לא דיווח על החשבונות שלו.</value>
+  </data>
+  <data name="Devices_Rescan" xml:space="preserve">
+    <value>חיפוש חשבונות חדשים</value>
+  </data>
+  <data name="Devices_NewAccounts" xml:space="preserve">
+    <value>נמצאו {0} חשבונות חדשים במחשב הזה.</value>
+  </data>
+  <data name="Devices_NoNewAccounts" xml:space="preserve">
+    <value>לא נמצאו חשבונות חדשים במחשב הזה.</value>
+  </data>
+  <data name="Devices_AccountLinked" xml:space="preserve">
+    <value>החשבון {0} ב-{1} קושר ל{2}.</value>
+  </data>
+  <data name="Devices_AccountUnlinked" xml:space="preserve">
+    <value>הקישור של החשבון {0} ב-{1} בוטל.</value>
+  </data>
+  <data name="Devices_UnlinkedWarning" xml:space="preserve">
+    <value>לא מקושר — הגלישה בחשבון הזה חסומה כמעט לגמרי.</value>
+  </data>
+  <data name="AdminChange_accounts_updated" xml:space="preserve">
+    <value>פרטי חשבונות Windows עודכנו</value>
+  </data>
+  <data name="Devices_NewAccount_One" xml:space="preserve">
+    <value>נמצא חשבון חדש אחד במחשב הזה.</value>
+  </data>
 </root>

@@ -8,7 +8,10 @@ using WebFilter.Contracts.Admin;
 
 namespace WebFilter.Admin.ViewModels;
 
-/// <summary>One card per family member (from <see cref="GetStatus"/>) with the parent's quick actions (MVP-PLAN §4.5, §8).</summary>
+/// <summary>
+/// One card per family member (from <see cref="GetStatus"/>) with the parent's quick actions (MVP-PLAN §4.5, §8). On an
+/// agent computer: which hub manages it, and only the local emergency pause.
+/// </summary>
 public sealed partial class DashboardViewModel : PageViewModel
 {
     public const int HomeworkMinutes = 60;
@@ -29,7 +32,30 @@ public sealed partial class DashboardViewModel : PageViewModel
     [ObservableProperty]
     private string? _lastUpdatedText;
 
+    /// <summary>An agent computer: the cards offer only the local emergency pause, and <see cref="HubText"/> says who manages it.</summary>
+    [ObservableProperty]
+    private bool _isAgent;
+
+    /// <summary>On an agent: "managed by the parents' computer ‹name›" and when it was last heard from, or that it is not paired.</summary>
+    [ObservableProperty]
+    private string? _hubText;
+
+    /// <summary>On an agent: the hub is not reachable now (or this computer is not paired): shown as a warning.</summary>
+    [ObservableProperty]
+    private bool _hubProblem;
+
+    /// <summary>The pending-requests line: once loaded, and only on the hub (requests are decided there).</summary>
+    [ObservableProperty]
+    private bool _showsRequests;
+
     public bool HasPendingRequests => Context.PendingRequestCount > 0;
+
+    /// <summary>Standard accounts no one linked yet: browsing there is blocked until a parent links them on the devices page.</summary>
+    public bool HasUnlinkedAccounts => Context.UnlinkedAccountCount > 0;
+
+    public string UnlinkedAccountsText => Context.UnlinkedAccountCount == 1
+        ? Strings.Dashboard_UnlinkedAccounts_One
+        : Texts.Format(Strings.Dashboard_UnlinkedAccounts_Many, Context.UnlinkedAccountCount);
 
     public string PendingRequestsText => Context.PendingRequestCount switch
     {
@@ -44,13 +70,19 @@ public sealed partial class DashboardViewModel : PageViewModel
     [RelayCommand]
     private void OpenSetup() => Navigator?.NavigateTo<SetupWizardViewModel>();
 
+    [RelayCommand]
+    private void OpenDevices() => Navigator?.NavigateTo<DevicesViewModel>();
+
     internal void OpenMember(MemberCardViewModel member) => Navigator?.ShowMember(member.MemberId);
 
     protected override async Task LoadAsync()
     {
         var status = await Context.RefreshStatusAsync();
-        await Context.RefreshPendingRequestsAsync();
+        IsAgent = !status.IsHub;
+        if (!IsAgent) await Context.RefreshPendingRequestsAsync();
         Sync(status);
+        (HubText, HubProblem) = IsAgent ? Context.DescribeHub(status.Hub) : (null, false);
+        ShowsRequests = !IsAgent;
         LastUpdatedText = Texts.Format(Strings.Dashboard_LastUpdated, Context.FormatTime(status.Now));
     }
 
@@ -94,9 +126,17 @@ public sealed partial class DashboardViewModel : PageViewModel
 
     private void OnContextChanged(object? sender, PropertyChangedEventArgs e)
     {
-        if (e.PropertyName != nameof(FamilyContext.PendingRequestCount)) return;
-        OnPropertyChanged(nameof(HasPendingRequests));
-        OnPropertyChanged(nameof(PendingRequestsText));
+        switch (e.PropertyName)
+        {
+            case nameof(FamilyContext.PendingRequestCount):
+                OnPropertyChanged(nameof(HasPendingRequests));
+                OnPropertyChanged(nameof(PendingRequestsText));
+                break;
+            case nameof(FamilyContext.UnlinkedAccountCount):
+                OnPropertyChanged(nameof(HasUnlinkedAccounts));
+                OnPropertyChanged(nameof(UnlinkedAccountsText));
+                break;
+        }
     }
 }
 
@@ -147,7 +187,14 @@ public sealed partial class MemberCardViewModel : ObservableObject
 
     [ObservableProperty] private bool _canExtend;
     [ObservableProperty] private bool _canPause;
+    [ObservableProperty] private bool _canResume;
     [ObservableProperty] private bool _canStartHomework;
+
+    /// <summary>"Pause filtering for today", or on an agent "emergency pause on this computer until the end of the day".</summary>
+    [ObservableProperty] private string _pauseText = Strings.Action_PauseToday;
+
+    /// <summary>On an agent while paused: resuming is done from the parents' computer.</summary>
+    [ObservableProperty] private bool _resumesOnHub;
 
     internal void Update(MemberStatus status, FamilyContext context)
     {
@@ -168,9 +215,14 @@ public sealed partial class MemberCardViewModel : ObservableObject
         IsInHomework = status.HomeworkUntil is not null;
         HomeworkText = status.HomeworkUntil is { } homework ? Texts.Format(Strings.Member_HomeworkUntil, context.FormatUntil(homework)) : null;
 
-        IsFiltered = context.Member(status.MemberId)?.FilterMode is not "unrestricted";
-        CanExtend = IsFiltered && status.TimeState != "unlimited";
+        // An agent has no settings: it knows a member is unfiltered only from the time state ("unlimited").
+        var agent = context.IsAgent;
+        IsFiltered = agent ? status.TimeState != "unlimited" : context.Member(status.MemberId)?.FilterMode is not "unrestricted";
+        CanExtend = IsFiltered && !agent && status.TimeState != "unlimited";
         CanPause = IsFiltered && !IsPaused;
-        CanStartHomework = IsFiltered && !IsInHomework;
+        CanResume = IsPaused && !agent;
+        ResumesOnHub = IsPaused && agent;
+        CanStartHomework = IsFiltered && !agent && !IsInHomework;
+        PauseText = agent ? Strings.Action_LocalPause : Strings.Action_PauseToday;
     }
 }

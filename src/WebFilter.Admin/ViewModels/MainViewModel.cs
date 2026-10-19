@@ -9,7 +9,8 @@ namespace WebFilter.Admin.ViewModels;
 /// The main window: navigation between the pages, the connection banner, and the periodic refresh (every
 /// <see cref="RefreshInterval"/> the shown page reloads if it auto-refreshes; otherwise only the pending-request count
 /// does). A failed refresh is retried on the next tick, which is also how the app reconnects after the service restarts.
-/// While the hub's family is empty the setup wizard joins the navigation and opens once by itself.
+/// While the hub's family is empty the setup wizard joins the navigation and opens once by itself. On an agent computer
+/// only the dashboard (status and the local emergency pause) and the settings page are shown (MVP-PLAN §4.5).
 /// </summary>
 public sealed partial class MainViewModel : ObservableObject, INavigator, IDisposable
 {
@@ -17,6 +18,7 @@ public sealed partial class MainViewModel : ObservableObject, INavigator, IDispo
 
     private readonly IUiTimer _timer;
     private readonly SynchronizationContext? _ui;
+    private readonly IReadOnlyList<PageViewModel> _hubPages;
     private IDisposable? _ticker;
     private bool _setupOpened;
 
@@ -34,7 +36,8 @@ public sealed partial class MainViewModel : ObservableObject, INavigator, IDispo
         Devices = new DevicesViewModel(Context, dialogs, clipboard, timer);
         Settings = new SettingsViewModel(Context);
         Setup = new SetupWizardViewModel(Context);
-        Pages = [Dashboard, Requests, MemberDetail, Rules, Activity, Devices, Settings];
+        _hubPages = [Dashboard, Requests, MemberDetail, Rules, Activity, Devices, Settings];
+        Pages = [.. _hubPages];
         foreach (var page in Pages.Append(Setup)) page.Navigator = this;
         client.StateChanged += OnClientStateChanged;
         UpdateConnection();
@@ -88,12 +91,14 @@ public sealed partial class MainViewModel : ObservableObject, INavigator, IDispo
         if (SelectedPage is { AutoRefresh: true } page)
         {
             await page.RefreshAsync();
-            UpdateSetup();
+            UpdatePages();
             return;
         }
         try
         {
-            await Context.RefreshPendingRequestsAsync();
+            // An agent has no requests to count; asking for the status keeps the connection banner current there.
+            if (Context.IsAgent) await Context.RefreshStatusAsync();
+            else await Context.RefreshPendingRequestsAsync();
         }
         catch (AdminClientException)
         {
@@ -124,27 +129,42 @@ public sealed partial class MainViewModel : ObservableObject, INavigator, IDispo
     private async Task LoadAsync(PageViewModel page)
     {
         await page.RefreshAsync();
-        UpdateSetup();
+        UpdatePages();
     }
 
     /// <summary>
-    /// While the hub's family is empty, the wizard is first in the navigation and opens once by itself; once the family has
-    /// members it leaves the navigation (not while it is shown, so its last step stays on screen).
+    /// The navigation for what the service answered as. A hub gets every page, and while its family is empty the wizard
+    /// first, opening once by itself (it stays while shown, so its last step stays on screen). An agent gets the dashboard
+    /// and the settings page.
     /// </summary>
-    private void UpdateSetup()
+    private void UpdatePages()
     {
-        var needed = Context.Status is { IsHub: true } && Context.Settings is { Members.Count: 0 };
-        if (needed)
+        if (Context.Status is not { } status) return;
+        List<PageViewModel> wanted = status.IsHub ? [.. _hubPages] : [Dashboard, Settings];
+        var setupNeeded = status.IsHub && Context.Settings is { Members.Count: 0 };
+        if (setupNeeded || (status.IsHub && SelectedPage == Setup)) wanted.Insert(0, Setup);
+        Place(Pages, wanted);
+        if (setupNeeded && !_setupOpened)
         {
-            if (!Pages.Contains(Setup)) Pages.Insert(0, Setup);
-            if (_setupOpened) return;
             _setupOpened = true;
             SelectedPage = Setup;
         }
-        else if (SelectedPage != Setup)
+        else if (SelectedPage is { } shown && !Pages.Contains(shown))
         {
-            Pages.Remove(Setup);
+            SelectedPage = Dashboard;
         }
+    }
+
+    /// <summary>Makes <paramref name="target"/> hold exactly <paramref name="items"/> in order, so the selected page keeps its row.</summary>
+    private static void Place(ObservableCollection<PageViewModel> target, IReadOnlyList<PageViewModel> items)
+    {
+        for (var i = 0; i < items.Count; i++)
+        {
+            var at = target.IndexOf(items[i]);
+            if (at < 0) target.Insert(i, items[i]);
+            else if (at != i) target.Move(at, i);
+        }
+        while (target.Count > items.Count) target.RemoveAt(target.Count - 1);
     }
 
     public void Dispose()

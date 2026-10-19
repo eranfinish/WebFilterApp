@@ -122,20 +122,23 @@ public sealed class ViewRenderTests
     public Task Pages_render_on_an_agent_computer_without_binding_errors() => UiThread.RunAsync(async () =>
     {
         var client = new FakeAdminClient { IsHub = false };
-        client.Reply = m => m switch
-        {
-            GetStatus => client.Status with { IsHub = false },
-            GetSettings or ReplaceSettings or ScanAccounts => new AdminError("not_hub", "This computer is managed by the hub computer; make this change there."),
-            _ => null,
-        };
         await using var shown = await ShownAsync(client);
+        Assert.Equal([shown.Main.Dashboard, shown.Main.Settings], shown.Main.Pages);
 
-        foreach (var page in new PageViewModel[] { shown.Main.MemberDetail, shown.Main.Setup })
-        {
-            shown.Main.SelectedPage = page;
-            await shown.Main.CurrentLoad;
-            await shown.RenderAsync(page.GetType().Name + "-agent");
-        }
+        await shown.RenderAsync("Agent-dashboard");
+        shown.Main.SelectedPage = shown.Main.Settings;
+        await shown.Main.CurrentLoad;
+        await shown.RenderAsync("Agent-settings");
+
+        // A hub-only page (say, from a stale link) is not kept: the window goes back to the dashboard.
+        shown.Main.SelectedPage = shown.Main.MemberDetail;
+        await shown.Main.CurrentLoad;
+        Assert.Same(shown.Main.Dashboard, shown.Main.SelectedPage);
+
+        client.AgentHub = new HubConnection("pc-parents", "192.168.1.20:47800", false, TestData.Now.AddHours(-3));
+        shown.Main.SelectedPage = shown.Main.Dashboard;
+        await shown.Main.CurrentLoad;
+        await shown.RenderAsync("Agent-dashboard-unreachable");
     });
 
     [Fact]
