@@ -15,6 +15,7 @@ switch (args.FirstOrDefault())
 
 var builder = Host.CreateApplicationBuilder(args);
 builder.Services.AddWindowsService(options => options.ServiceName = ServiceOptions.WindowsServiceName);
+builder.Services.AddFaultExit();
 builder.Services.Configure<ServiceOptions>(builder.Configuration.GetSection("WebFilter"));
 #if SIMULATION
 builder.Services.AddSingleton<TimeProvider>(new SimulationClock(TimeProvider.System.GetUtcNow()));
