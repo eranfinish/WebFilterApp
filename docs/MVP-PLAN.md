@@ -232,7 +232,7 @@
 - קבצים ל-`C:\Program Files\WebFilter\`, נתונים ב-`C:\ProgramData\WebFilter\`
 - `ServiceInstall` + `ServiceControl`; רישום Native Host ומדיניות HKLM ע"י MSI
 - ב-Hub: כלל חומת אש נכנס לפורט ה-Hub (Private בלבד)
-- Custom action בהסרה: `WebFilter.Service.exe --cleanup` — מוחק מדיניות HKCU מכל הפרופילים, את מסנני ה-WFP שלנו, מבטל רישום מה-Hub, ומוחק את תיקיית הנתונים `%ProgramData%WebFilter` (כך מדיניות הפרטיות מבטיחה)
+- Custom action בהסרה: `WebFilter.Service.exe --cleanup` — מוחק מדיניות HKCU מכל הפרופילים, את מסנני ה-WFP שלנו, מבטל רישום מה-Hub, ומוחק את תיקיית הנתונים `%ProgramData%\WebFilter` (כך מדיניות הפרטיות מבטיחה)
 - `MajorUpgrade` לשדרוגים
 
 ---
