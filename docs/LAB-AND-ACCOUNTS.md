@@ -17,7 +17,7 @@
 | | מצב |
 |---|---|
 | Hyper-V | **כבר מותקן ופועל** (שירות `vmms` רץ) — אין צורך להפעיל אותו |
-| זיכרון | 32GB — מספיק לשתי מכונות של 4GB (ואפילו שלוש) |
+| זיכרון | 32GB — מספיק לשתי מכונות של 4GB, בתנאי שיש 4GB **פנויים** לכל מכונה בזמן ההדלקה (דפדפנים ותוכנות פתוחות תופסים הרבה) |
 | דיסק | 447GB פנויים ב-C: — כל מכונה תתפוס 25–40GB |
 | הרשאות | המשתמש שלך **לא** בקבוצת `Hyper-V Administrators`, ולכן אני לא יכול לנהל מכונות בלי הרשאות מנהל |
 
@@ -73,7 +73,7 @@ vmconnect localhost lab-kids
 3. **I don't have a product key** (אפשר להפעיל רישיון אחר כך; ההתקנה עובדת גם בלעדיו, עם מגבלות התאמה אישית)
 4. מהדורה: **`lab-kids` → Windows 11 Home** · **`lab-hub` → Windows 11 Pro**
 5. **Custom: Install Windows only** → הדיסק הריק → Next
-6. בהגדרה הראשונית: אזור, מקלדת, ואז **חשבון Microsoft** — זה "ההורה" (מנהל). מומלץ חשבון Microsoft נפרד לבדיקות, לא החשבון הראשי שלך
+6. בהגדרה הראשונית: אזור, מקלדת, ואז החשבון של "ההורה" (מנהל). לא להשתמש בחשבון Microsoft הראשי שלך. אפשר לפתוח חשבון חינמי ב-outlook.com (ישמש גם ל-Partner Center בסעיף ב2), או ליצור חשבון מקומי: **Shift+F10** ואז `start ms-cxh:localonly` (ייתכן שהמעקף הוסר בגרסאות חדשות)
 7. בשאלות הפרטיות — אפשר לכבות הכול
 
 חזור על אותו דבר עבור `lab-hub`.
@@ -86,17 +86,19 @@ vmconnect localhost lab-kids
    Copy-VMFile -Name lab-kids -SourcePath .\Initialize-LabGuest.ps1 -DestinationPath C:\Lab\Initialize-LabGuest.ps1 -CreateFullPath -FileSource Host
    ```
 
-2. בתוך ה-VM, פתח **PowerShell כמנהל** והרץ:
+2. בתוך ה-VM, פתח **PowerShell כמנהל** והרץ (הדבקה רגילה לא עובדת בחלון ה-VM, אז כדאי פקודה אחת קצרה להקלדה):
 
    ```powershell
-   Set-ExecutionPolicy -Scope Process Bypass
+   powershell -ep bypass -File C:\Lab\Initialize-LabGuest.ps1 lab-kids -InstallChrome
    ```
+
+   (ב-`lab-hub`: ‏`lab-hub`, בלי `-InstallChrome`. בלי `-ep bypass` Windows חוסם הרצת סקריפטים)
+
+   אחר כך, אזור זמן ישראל (המכונה מגיעה עם אזור הזמן של ארה"ב):
 
    ```powershell
-   C:\Lab\Initialize-LabGuest.ps1 -ComputerName lab-kids -InstallChrome
+   Set-TimeZone -Id "Israel Standard Time"
    ```
-
-   (ב-`lab-hub`: ‏`-ComputerName lab-hub`, בלי Chrome)
 
    הסקריפט ישאל שתי סיסמאות ויצור:
    - **`labadmin`** — מנהל מקומי, ישמש את הבדיקות האוטומטיות (PowerShell Direct)
@@ -154,6 +156,9 @@ Restore-VMCheckpoint -VMName lab-kids -Name clean -Confirm:$false
 
 | תקלה | פתרון |
 |------|-------|
+| `Start-VM`: ‏"Unable to allocate 4096 MB of RAM" | אין 4GB פנויים במחשב (Task Manager → Memory → Available). לסגור דפדפנים, Docker ותוכנות כבדות; להדליק מכונה אחת בכל פעם בזמן ההתקנה |
+| `Copy-VMFile`: ‏"The file exists" | הקובץ כבר הועתק. אפשר להמשיך, או להוסיף `-Force` |
+| `Checkpoint-VM` על מכונה דלוקה | נשמר גם הזיכרון, ושחזור מחזיר מכונה דלוקה. למחוק (`Remove-VMSnapshot`), לכבות (`Stop-VM`) וליצור שוב |
 | "This PC can't run Windows 11" | המכונה נוצרה בלי TPM/Secure Boot — מחק אותה (`Remove-VM`) והרץ שוב את `New-LabVms.ps1` |
 | אין רשת בהתקנה | ודא שהמכונה על `Default Switch`: ‏`Get-VMNetworkAdapter -VMName lab-kids` |
 | `ping lab-hub.local` לא מוצא את השם | בשתי המכונות: ‏`Get-NetConnectionProfile` צריך להראות `Private`, ושתיהן צריכות להיות על `Default Switch` |
