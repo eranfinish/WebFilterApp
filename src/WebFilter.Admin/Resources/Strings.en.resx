@@ -59,6 +59,9 @@
   <data name="Nav_Activity" xml:space="preserve">
     <value>Activity</value>
   </data>
+  <data name="Nav_Devices" xml:space="preserve">
+    <value>Devices</value>
+  </data>
   <data name="Nav_Settings" xml:space="preserve">
     <value>Settings</value>
   </data>
@@ -76,6 +79,9 @@
   </data>
   <data name="Common_Remove" xml:space="preserve">
     <value>Remove</value>
+  </data>
+  <data name="Common_Close" xml:space="preserve">
+    <value>Close</value>
   </data>
   <data name="Common_Yes" xml:space="preserve">
     <value>Yes</value>
@@ -97,6 +103,9 @@
   </data>
   <data name="Format_DateTime" xml:space="preserve">
     <value>MMM d, HH:mm</value>
+  </data>
+  <data name="Format_Date" xml:space="preserve">
+    <value>MMM d, yyyy</value>
   </data>
   <data name="Minutes_One" xml:space="preserve">
     <value>1 minute</value>
@@ -694,5 +703,139 @@
   </data>
   <data name="Diagnostics_TimeZone" xml:space="preserve">
     <value>Family time zone</value>
+  </data>
+  <data name="Devices_Intro" xml:space="preserve">
+    <value>The computers paired with this parents' computer, which get their settings from it. Pair a new computer or revoke one here.</value>
+  </data>
+  <data name="Devices_NotHubTitle" xml:space="preserve">
+    <value>Devices are managed on the parents' computer</value>
+  </data>
+  <data name="Devices_NotHub" xml:space="preserve">
+    <value>This is a managed computer, not the parents' computer (hub). New computers are paired, and pairings revoked, in the admin app on the parents' computer.</value>
+  </data>
+  <data name="Devices_Pair" xml:space="preserve">
+    <value>Pair a new computer</value>
+  </data>
+  <data name="Devices_Paired" xml:space="preserve">
+    <value>Paired computers</value>
+  </data>
+  <data name="Devices_Empty" xml:space="preserve">
+    <value>No computers are paired yet. To add a child's computer, click "Pair a new computer".</value>
+  </data>
+  <data name="Devices_RevokedSection" xml:space="preserve">
+    <value>Revoked computers</value>
+  </data>
+  <data name="Devices_RevokedHint" xml:space="preserve">
+    <value>They keep enforcing the last settings they received but get no updates. To connect one again, pair it again.</value>
+  </data>
+  <data name="Devices_Col_Name" xml:space="preserve">
+    <value>Computer</value>
+  </data>
+  <data name="Devices_Col_Os" xml:space="preserve">
+    <value>System</value>
+  </data>
+  <data name="Devices_Col_PairedAt" xml:space="preserve">
+    <value>Paired on</value>
+  </data>
+  <data name="Devices_Col_LastSeen" xml:space="preserve">
+    <value>Last seen</value>
+  </data>
+  <data name="Devices_Col_Status" xml:space="preserve">
+    <value>Status</value>
+  </data>
+  <data name="Devices_Revoke" xml:space="preserve">
+    <value>Revoke</value>
+  </data>
+  <data name="Devices_RevokeTitle" xml:space="preserve">
+    <value>Revoke computer</value>
+  </data>
+  <data name="Devices_RevokeConfirm" xml:space="preserve">
+    <value>Revoke {0}?
+
+The computer keeps enforcing the last settings it received but stops getting updates: rule changes, extra time and approved requests will not reach it, and its usage and requests will not reach this computer. To connect it again, pair it again with a new code.</value>
+  </data>
+  <data name="Done_DeviceRevoked" xml:space="preserve">
+    <value>{0} was revoked.</value>
+  </data>
+  <data name="Devices_AlreadyRevoked" xml:space="preserve">
+    <value>{0} was already revoked. The list is up to date.</value>
+  </data>
+  <data name="Device_Id" xml:space="preserve">
+    <value>ID: {0}</value>
+  </data>
+  <data name="Device_Active" xml:space="preserve">
+    <value>Active</value>
+  </data>
+  <data name="Device_Revoked" xml:space="preserve">
+    <value>Revoked</value>
+  </data>
+  <data name="Device_Online" xml:space="preserve">
+    <value>Connected now</value>
+  </data>
+  <data name="Device_NeverSeen" xml:space="preserve">
+    <value>Not connected yet</value>
+  </data>
+  <data name="Device_SeenJustNow" xml:space="preserve">
+    <value>Less than a minute ago</value>
+  </data>
+  <data name="Device_SeenMinuteAgo" xml:space="preserve">
+    <value>A minute ago</value>
+  </data>
+  <data name="Device_SeenMinutesAgo" xml:space="preserve">
+    <value>{0} minutes ago</value>
+  </data>
+  <data name="Device_SeenHourAgo" xml:space="preserve">
+    <value>An hour ago</value>
+  </data>
+  <data name="Device_SeenHoursAgo" xml:space="preserve">
+    <value>{0} hours ago</value>
+  </data>
+  <data name="DeviceOs_windows" xml:space="preserve">
+    <value>Windows</value>
+  </data>
+  <data name="DeviceOs_android" xml:space="preserve">
+    <value>Android</value>
+  </data>
+  <data name="Pairing_Title" xml:space="preserve">
+    <value>Pair a new computer</value>
+  </data>
+  <data name="Pairing_Steps" xml:space="preserve">
+    <value>On the new computer: install WebFilter, open a command prompt as administrator in the WebFilter installation folder, and type or paste the command below. The code works once.</value>
+  </data>
+  <data name="Pairing_CodeLabel" xml:space="preserve">
+    <value>Pairing code</value>
+  </data>
+  <data name="Pairing_ValidFor" xml:space="preserve">
+    <value>Valid for another {0}</value>
+  </data>
+  <data name="Pairing_Expired" xml:space="preserve">
+    <value>The code has expired. Create a new code to pair a computer.</value>
+  </data>
+  <data name="Pairing_NewCode" xml:space="preserve">
+    <value>Create a new code</value>
+  </data>
+  <data name="Pairing_Address" xml:space="preserve">
+    <value>This computer's network address</value>
+  </data>
+  <data name="Pairing_SeveralAddresses" xml:space="preserve">
+    <value>This computer has several addresses. Pick the one on the home network and the command follows.</value>
+  </data>
+  <data name="Pairing_NoAddress" xml:space="preserve">
+    <value>No network address was found for this computer. Connect it to the home network and create a new code.</value>
+  </data>
+  <data name="Pairing_Port" xml:space="preserve">
+    <value>Port</value>
+  </data>
+  <data name="Pairing_CommandLabel" xml:space="preserve">
+    <value>Command to run on the new computer</value>
+  </data>
+  <data name="Pairing_Copy" xml:space="preserve">
+    <value>Copy</value>
+  </data>
+  <data name="Pairing_Copied" xml:space="preserve">
+    <value>The command was copied to the clipboard.</value>
+  </data>
+  <data name="Pairing_CopyFailed" xml:space="preserve">
+    <value>Could not copy because another program is using the clipboard. Select the command and copy it with Ctrl+C.</value>
   </data>
 </root>

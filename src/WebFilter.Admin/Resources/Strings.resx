@@ -59,6 +59,9 @@
   <data name="Nav_Activity" xml:space="preserve">
     <value>יומן פעילות</value>
   </data>
+  <data name="Nav_Devices" xml:space="preserve">
+    <value>מכשירים</value>
+  </data>
   <data name="Nav_Settings" xml:space="preserve">
     <value>הגדרות</value>
   </data>
@@ -76,6 +79,9 @@
   </data>
   <data name="Common_Remove" xml:space="preserve">
     <value>הסרה</value>
+  </data>
+  <data name="Common_Close" xml:space="preserve">
+    <value>סגירה</value>
   </data>
   <data name="Common_Yes" xml:space="preserve">
     <value>כן</value>
@@ -99,6 +105,9 @@
   <data name="Format_DateTime" xml:space="preserve">
     <value>dd.MM HH:mm</value>
     <comment>.NET custom format for a date and time (no "/": it would become the culture separator).</comment>
+  </data>
+  <data name="Format_Date" xml:space="preserve">
+    <value>dd.MM.yyyy</value>
   </data>
   <data name="Minutes_One" xml:space="preserve">
     <value>דקה אחת</value>
@@ -698,5 +707,139 @@
   </data>
   <data name="Diagnostics_TimeZone" xml:space="preserve">
     <value>אזור הזמן של המשפחה</value>
+  </data>
+  <data name="Devices_Intro" xml:space="preserve">
+    <value>המחשבים שצומדו למחשב ההורים ומקבלים ממנו את ההגדרות. כאן מצמדים מחשב חדש ומבטלים צימוד.</value>
+  </data>
+  <data name="Devices_NotHubTitle" xml:space="preserve">
+    <value>המכשירים מנוהלים במחשב ההורים</value>
+  </data>
+  <data name="Devices_NotHub" xml:space="preserve">
+    <value>המחשב הזה הוא מחשב מנוהל, לא מחשב ההורים (Hub). צימוד מחשבים חדשים וביטול צימוד נעשים בממשק הניהול שבמחשב ההורים.</value>
+  </data>
+  <data name="Devices_Pair" xml:space="preserve">
+    <value>צימוד מחשב חדש</value>
+  </data>
+  <data name="Devices_Paired" xml:space="preserve">
+    <value>מחשבים מצומדים</value>
+  </data>
+  <data name="Devices_Empty" xml:space="preserve">
+    <value>עדיין לא צומדו מחשבים. כדי להוסיף מחשב של ילד, לחצו על "צימוד מחשב חדש".</value>
+  </data>
+  <data name="Devices_RevokedSection" xml:space="preserve">
+    <value>מחשבים שהצימוד שלהם בוטל</value>
+  </data>
+  <data name="Devices_RevokedHint" xml:space="preserve">
+    <value>הם ממשיכים לאכוף את ההגדרות האחרונות שקיבלו, אבל לא מקבלים עדכונים. כדי לחבר מחשב כזה שוב, צמדו אותו מחדש.</value>
+  </data>
+  <data name="Devices_Col_Name" xml:space="preserve">
+    <value>שם המחשב</value>
+  </data>
+  <data name="Devices_Col_Os" xml:space="preserve">
+    <value>מערכת הפעלה</value>
+  </data>
+  <data name="Devices_Col_PairedAt" xml:space="preserve">
+    <value>תאריך צימוד</value>
+  </data>
+  <data name="Devices_Col_LastSeen" xml:space="preserve">
+    <value>נראה לאחרונה</value>
+  </data>
+  <data name="Devices_Col_Status" xml:space="preserve">
+    <value>מצב</value>
+  </data>
+  <data name="Devices_Revoke" xml:space="preserve">
+    <value>ביטול צימוד</value>
+  </data>
+  <data name="Devices_RevokeTitle" xml:space="preserve">
+    <value>ביטול צימוד</value>
+  </data>
+  <data name="Devices_RevokeConfirm" xml:space="preserve">
+    <value>לבטל את הצימוד של {0}?
+
+המחשב ימשיך לאכוף את ההגדרות האחרונות שקיבל, אבל יפסיק לקבל עדכונים: שינויי כללים, תוספות זמן ואישורי בקשות לא יגיעו אליו, והשימוש והבקשות שלו לא יגיעו לכאן. כדי לחבר אותו שוב צריך לצמד אותו מחדש עם קוד חדש.</value>
+  </data>
+  <data name="Done_DeviceRevoked" xml:space="preserve">
+    <value>הצימוד של {0} בוטל.</value>
+  </data>
+  <data name="Devices_AlreadyRevoked" xml:space="preserve">
+    <value>הצימוד של {0} כבר בוטל. הרשימה עודכנה.</value>
+  </data>
+  <data name="Device_Id" xml:space="preserve">
+    <value>מזהה: {0}</value>
+  </data>
+  <data name="Device_Active" xml:space="preserve">
+    <value>פעיל</value>
+  </data>
+  <data name="Device_Revoked" xml:space="preserve">
+    <value>הצימוד בוטל</value>
+  </data>
+  <data name="Device_Online" xml:space="preserve">
+    <value>מחובר עכשיו</value>
+  </data>
+  <data name="Device_NeverSeen" xml:space="preserve">
+    <value>עדיין לא התחבר</value>
+  </data>
+  <data name="Device_SeenJustNow" xml:space="preserve">
+    <value>לפני פחות מדקה</value>
+  </data>
+  <data name="Device_SeenMinuteAgo" xml:space="preserve">
+    <value>לפני דקה</value>
+  </data>
+  <data name="Device_SeenMinutesAgo" xml:space="preserve">
+    <value>לפני {0} דקות</value>
+  </data>
+  <data name="Device_SeenHourAgo" xml:space="preserve">
+    <value>לפני שעה</value>
+  </data>
+  <data name="Device_SeenHoursAgo" xml:space="preserve">
+    <value>לפני {0} שעות</value>
+  </data>
+  <data name="DeviceOs_windows" xml:space="preserve">
+    <value>Windows</value>
+  </data>
+  <data name="DeviceOs_android" xml:space="preserve">
+    <value>Android</value>
+  </data>
+  <data name="Pairing_Title" xml:space="preserve">
+    <value>צימוד מחשב חדש</value>
+  </data>
+  <data name="Pairing_Steps" xml:space="preserve">
+    <value>במחשב החדש: התקינו את WebFilter, פתחו שורת פקודה כמנהל בתיקיית ההתקנה של WebFilter, והקלידו או הדביקו את הפקודה שלמטה. הקוד חד-פעמי.</value>
+  </data>
+  <data name="Pairing_CodeLabel" xml:space="preserve">
+    <value>קוד הצימוד</value>
+  </data>
+  <data name="Pairing_ValidFor" xml:space="preserve">
+    <value>הקוד בתוקף עוד {0}</value>
+  </data>
+  <data name="Pairing_Expired" xml:space="preserve">
+    <value>הקוד פג תוקף. צרו קוד חדש כדי לצמד מחשב.</value>
+  </data>
+  <data name="Pairing_NewCode" xml:space="preserve">
+    <value>יצירת קוד חדש</value>
+  </data>
+  <data name="Pairing_Address" xml:space="preserve">
+    <value>הכתובת של המחשב הזה ברשת</value>
+  </data>
+  <data name="Pairing_SeveralAddresses" xml:space="preserve">
+    <value>למחשב הזה יש כמה כתובות. בחרו את הכתובת ברשת הביתית, והפקודה תתעדכן.</value>
+  </data>
+  <data name="Pairing_NoAddress" xml:space="preserve">
+    <value>לא נמצאה כתובת רשת למחשב הזה. חברו אותו לרשת הביתית וצרו קוד חדש.</value>
+  </data>
+  <data name="Pairing_Port" xml:space="preserve">
+    <value>פורט</value>
+  </data>
+  <data name="Pairing_CommandLabel" xml:space="preserve">
+    <value>הפקודה להרצה במחשב החדש</value>
+  </data>
+  <data name="Pairing_Copy" xml:space="preserve">
+    <value>העתקה</value>
+  </data>
+  <data name="Pairing_Copied" xml:space="preserve">
+    <value>הפקודה הועתקה ללוח.</value>
+  </data>
+  <data name="Pairing_CopyFailed" xml:space="preserve">
+    <value>לא ניתן היה להעתיק, כי תוכנה אחרת משתמשת בלוח. סמנו את הפקודה והעתיקו אותה עם Ctrl+C.</value>
   </data>
 </root>

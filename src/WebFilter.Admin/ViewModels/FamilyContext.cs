@@ -77,6 +77,9 @@ public sealed partial class FamilyContext : ObservableObject
 
     public string FormatDateTime(DateTimeOffset instant) => ToLocal(instant).ToString(Strings.Format_DateTime, System.Globalization.CultureInfo.CurrentCulture);
 
+    /// <summary>The day with its year, for dates that may be long ago (when a computer was paired).</summary>
+    public string FormatDate(DateTimeOffset instant) => ToLocal(instant).ToString(Strings.Format_Date, System.Globalization.CultureInfo.CurrentCulture);
+
     /// <summary>"the end of the day" for the coming midnight, the time for later today, otherwise date and time.</summary>
     public string FormatUntil(DateTimeOffset until)
     {

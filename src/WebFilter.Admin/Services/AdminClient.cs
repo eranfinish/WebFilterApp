@@ -101,7 +101,9 @@ public sealed class AdminClient : IAdminClient, IDisposable
                 await AdminProtocol.WriteAsync(connection.Pipe, message, CancellationToken.None).ConfigureAwait(false);
                 return (connection, reply);
             }
-            catch (Exception ex) when (ex is IOException or ObjectDisposedException or InvalidOperationException)
+            // The write never takes the caller's token: a cancellation here means the reader ended the connection and
+            // disposed the pipe mid-write (e.g. right after an unsolicited not_elevated refusal), the same as a broken pipe.
+            catch (Exception ex) when (ex is IOException or ObjectDisposedException or InvalidOperationException or OperationCanceledException)
             {
                 connection.Forget(id);
                 var reason = await connection.WhenEnded(BrokenPipeGrace).ConfigureAwait(false);

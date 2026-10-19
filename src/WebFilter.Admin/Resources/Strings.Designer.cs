@@ -110,6 +110,15 @@ namespace WebFilter.Admin.Resources {
         }
 
         /// <summary>
+        ///   Looks up a localized string similar to מכשירים.
+        /// </summary>
+        public static string Nav_Devices {
+            get {
+                return ResourceManager.GetString("Nav_Devices", resourceCulture);
+            }
+        }
+
+        /// <summary>
         ///   Looks up a localized string similar to הגדרות.
         /// </summary>
         public static string Nav_Settings {
@@ -160,6 +169,15 @@ namespace WebFilter.Admin.Resources {
         public static string Common_Remove {
             get {
                 return ResourceManager.GetString("Common_Remove", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to סגירה.
+        /// </summary>
+        public static string Common_Close {
+            get {
+                return ResourceManager.GetString("Common_Close", resourceCulture);
             }
         }
 
@@ -223,6 +241,15 @@ namespace WebFilter.Admin.Resources {
         public static string Format_DateTime {
             get {
                 return ResourceManager.GetString("Format_DateTime", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to dd.MM.yyyy.
+        /// </summary>
+        public static string Format_Date {
+            get {
+                return ResourceManager.GetString("Format_Date", resourceCulture);
             }
         }
 
@@ -2014,6 +2041,402 @@ namespace WebFilter.Admin.Resources {
         public static string Diagnostics_TimeZone {
             get {
                 return ResourceManager.GetString("Diagnostics_TimeZone", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to המחשבים שצומדו למחשב ההורים ומקבלים ממנו את ההגדרות. כאן מצמדים מחשב חדש ומבטלים....
+        /// </summary>
+        public static string Devices_Intro {
+            get {
+                return ResourceManager.GetString("Devices_Intro", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to המכשירים מנוהלים במחשב ההורים.
+        /// </summary>
+        public static string Devices_NotHubTitle {
+            get {
+                return ResourceManager.GetString("Devices_NotHubTitle", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to המחשב הזה הוא מחשב מנוהל, לא מחשב ההורים (Hub). צימוד מחשבים חדשים וביטול צימוד ....
+        /// </summary>
+        public static string Devices_NotHub {
+            get {
+                return ResourceManager.GetString("Devices_NotHub", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to צימוד מחשב חדש.
+        /// </summary>
+        public static string Devices_Pair {
+            get {
+                return ResourceManager.GetString("Devices_Pair", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to מחשבים מצומדים.
+        /// </summary>
+        public static string Devices_Paired {
+            get {
+                return ResourceManager.GetString("Devices_Paired", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to עדיין לא צומדו מחשבים. כדי להוסיף מחשב של ילד, לחצו על "צימוד מחשב חדש"..
+        /// </summary>
+        public static string Devices_Empty {
+            get {
+                return ResourceManager.GetString("Devices_Empty", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to מחשבים שהצימוד שלהם בוטל.
+        /// </summary>
+        public static string Devices_RevokedSection {
+            get {
+                return ResourceManager.GetString("Devices_RevokedSection", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to הם ממשיכים לאכוף את ההגדרות האחרונות שקיבלו, אבל לא מקבלים עדכונים. כדי לחבר מחש....
+        /// </summary>
+        public static string Devices_RevokedHint {
+            get {
+                return ResourceManager.GetString("Devices_RevokedHint", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to שם המחשב.
+        /// </summary>
+        public static string Devices_Col_Name {
+            get {
+                return ResourceManager.GetString("Devices_Col_Name", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to מערכת הפעלה.
+        /// </summary>
+        public static string Devices_Col_Os {
+            get {
+                return ResourceManager.GetString("Devices_Col_Os", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to תאריך צימוד.
+        /// </summary>
+        public static string Devices_Col_PairedAt {
+            get {
+                return ResourceManager.GetString("Devices_Col_PairedAt", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to נראה לאחרונה.
+        /// </summary>
+        public static string Devices_Col_LastSeen {
+            get {
+                return ResourceManager.GetString("Devices_Col_LastSeen", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to מצב.
+        /// </summary>
+        public static string Devices_Col_Status {
+            get {
+                return ResourceManager.GetString("Devices_Col_Status", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to ביטול צימוד.
+        /// </summary>
+        public static string Devices_Revoke {
+            get {
+                return ResourceManager.GetString("Devices_Revoke", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to ביטול צימוד.
+        /// </summary>
+        public static string Devices_RevokeTitle {
+            get {
+                return ResourceManager.GetString("Devices_RevokeTitle", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to לבטל את הצימוד של {0}? המחשב ימשיך לאכוף את ההגדרות האחרונות שקיבל, אבל יפסיק לק....
+        /// </summary>
+        public static string Devices_RevokeConfirm {
+            get {
+                return ResourceManager.GetString("Devices_RevokeConfirm", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to הצימוד של {0} בוטל..
+        /// </summary>
+        public static string Done_DeviceRevoked {
+            get {
+                return ResourceManager.GetString("Done_DeviceRevoked", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to הצימוד של {0} כבר בוטל. הרשימה עודכנה..
+        /// </summary>
+        public static string Devices_AlreadyRevoked {
+            get {
+                return ResourceManager.GetString("Devices_AlreadyRevoked", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to מזהה: {0}.
+        /// </summary>
+        public static string Device_Id {
+            get {
+                return ResourceManager.GetString("Device_Id", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to פעיל.
+        /// </summary>
+        public static string Device_Active {
+            get {
+                return ResourceManager.GetString("Device_Active", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to הצימוד בוטל.
+        /// </summary>
+        public static string Device_Revoked {
+            get {
+                return ResourceManager.GetString("Device_Revoked", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to מחובר עכשיו.
+        /// </summary>
+        public static string Device_Online {
+            get {
+                return ResourceManager.GetString("Device_Online", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to עדיין לא התחבר.
+        /// </summary>
+        public static string Device_NeverSeen {
+            get {
+                return ResourceManager.GetString("Device_NeverSeen", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to לפני פחות מדקה.
+        /// </summary>
+        public static string Device_SeenJustNow {
+            get {
+                return ResourceManager.GetString("Device_SeenJustNow", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to לפני דקה.
+        /// </summary>
+        public static string Device_SeenMinuteAgo {
+            get {
+                return ResourceManager.GetString("Device_SeenMinuteAgo", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to לפני {0} דקות.
+        /// </summary>
+        public static string Device_SeenMinutesAgo {
+            get {
+                return ResourceManager.GetString("Device_SeenMinutesAgo", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to לפני שעה.
+        /// </summary>
+        public static string Device_SeenHourAgo {
+            get {
+                return ResourceManager.GetString("Device_SeenHourAgo", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to לפני {0} שעות.
+        /// </summary>
+        public static string Device_SeenHoursAgo {
+            get {
+                return ResourceManager.GetString("Device_SeenHoursAgo", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Windows.
+        /// </summary>
+        public static string DeviceOs_windows {
+            get {
+                return ResourceManager.GetString("DeviceOs_windows", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Android.
+        /// </summary>
+        public static string DeviceOs_android {
+            get {
+                return ResourceManager.GetString("DeviceOs_android", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to צימוד מחשב חדש.
+        /// </summary>
+        public static string Pairing_Title {
+            get {
+                return ResourceManager.GetString("Pairing_Title", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to במחשב החדש: התקינו את WebFilter, פתחו שורת פקודה כמנהל בתיקיית ההתקנה של WebFilt....
+        /// </summary>
+        public static string Pairing_Steps {
+            get {
+                return ResourceManager.GetString("Pairing_Steps", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to קוד הצימוד.
+        /// </summary>
+        public static string Pairing_CodeLabel {
+            get {
+                return ResourceManager.GetString("Pairing_CodeLabel", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to הקוד בתוקף עוד {0}.
+        /// </summary>
+        public static string Pairing_ValidFor {
+            get {
+                return ResourceManager.GetString("Pairing_ValidFor", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to הקוד פג תוקף. צרו קוד חדש כדי לצמד מחשב..
+        /// </summary>
+        public static string Pairing_Expired {
+            get {
+                return ResourceManager.GetString("Pairing_Expired", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to יצירת קוד חדש.
+        /// </summary>
+        public static string Pairing_NewCode {
+            get {
+                return ResourceManager.GetString("Pairing_NewCode", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to הכתובת של המחשב הזה ברשת.
+        /// </summary>
+        public static string Pairing_Address {
+            get {
+                return ResourceManager.GetString("Pairing_Address", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to למחשב הזה יש כמה כתובות. בחרו את הכתובת ברשת הביתית, והפקודה תתעדכן..
+        /// </summary>
+        public static string Pairing_SeveralAddresses {
+            get {
+                return ResourceManager.GetString("Pairing_SeveralAddresses", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to לא נמצאה כתובת רשת למחשב הזה. חברו אותו לרשת הביתית וצרו קוד חדש..
+        /// </summary>
+        public static string Pairing_NoAddress {
+            get {
+                return ResourceManager.GetString("Pairing_NoAddress", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to פורט.
+        /// </summary>
+        public static string Pairing_Port {
+            get {
+                return ResourceManager.GetString("Pairing_Port", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to הפקודה להרצה במחשב החדש.
+        /// </summary>
+        public static string Pairing_CommandLabel {
+            get {
+                return ResourceManager.GetString("Pairing_CommandLabel", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to העתקה.
+        /// </summary>
+        public static string Pairing_Copy {
+            get {
+                return ResourceManager.GetString("Pairing_Copy", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to הפקודה הועתקה ללוח..
+        /// </summary>
+        public static string Pairing_Copied {
+            get {
+                return ResourceManager.GetString("Pairing_Copied", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to לא ניתן היה להעתיק, כי תוכנה אחרת משתמשת בלוח. סמנו את הפקודה והעתיקו אותה עם Ct....
+        /// </summary>
+        public static string Pairing_CopyFailed {
+            get {
+                return ResourceManager.GetString("Pairing_CopyFailed", resourceCulture);
             }
         }
     }

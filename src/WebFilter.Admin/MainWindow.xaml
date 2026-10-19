@@ -29,6 +29,9 @@
     <DataTemplate DataType="{x:Type vm:ActivityViewModel}">
       <views:ActivityView />
     </DataTemplate>
+    <DataTemplate DataType="{x:Type vm:DevicesViewModel}">
+      <views:DevicesView />
+    </DataTemplate>
     <DataTemplate DataType="{x:Type vm:SettingsViewModel}">
       <views:SettingsView />
     </DataTemplate>
