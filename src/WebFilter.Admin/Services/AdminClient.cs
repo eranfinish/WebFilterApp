@@ -11,8 +11,9 @@ namespace WebFilter.Admin.Services;
 /// and reopened on the next request after it ends, so callers never manage it.
 /// </summary>
 /// <remarks>
-/// The service refuses unelevated clients in two ways: the pipe's DACL denies the open (access denied), or it writes an
-/// <c>not_elevated</c> <see cref="AdminError"/> without an id and closes. Both end in <see cref="AdminConnectionState.NotElevated"/>.
+/// The service refuses unelevated clients in two ways: the pipe's DACL denies the open (access denied), or it answers the
+/// first request with a <c>not_elevated</c> <see cref="AdminError"/> (without an id if no request came) and closes. Both end in
+/// <see cref="AdminConnectionState.NotElevated"/>.
 /// Requests are never retried once they may have reached the service; only a write that failed on a pipe that had
 /// already broken is retried, once, on a fresh connection.
 /// </remarks>
@@ -181,13 +182,16 @@ public sealed class AdminClient : IAdminClient, IDisposable
                     reason = Failure(AdminConnectionError.ConnectionLost, "The service closed the connection.");
                     break;
                 }
-                if (connection.Complete(message)) continue;
+                // A refusal ends the connection as NotElevated whether or not it answers a waiting request; otherwise the
+                // hang-up that follows could end it here as ConnectionLost before the request's own End runs.
                 if (message is AdminError { Code: NotElevatedCode } refused)
                 {
+                    connection.Complete(message);
                     reason = Failure(AdminConnectionError.NotElevated, refused.Message);
                     state = AdminConnectionState.NotElevated;
                     break;
                 }
+                if (connection.Complete(message)) continue;
                 // A reply nobody waits for any more (its request was cancelled): ignore it.
             }
         }

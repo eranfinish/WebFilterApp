@@ -140,11 +140,33 @@ public sealed class AdminClientTests : IDisposable
     {
         var server = Server();
         var client = Client();
-        // What AdminPipeServer does for an unelevated client: one error without an id, then it hangs up.
+        // What AdminPipeServer does for an unelevated client: answers the first request with not_elevated, then hangs up.
+        var serving = Task.Run(async () =>
+        {
+            await server.WaitForConnectionAsync();
+            var first = await AdminProtocol.ReadAsync(server);
+            await AdminProtocol.WriteAsync(server, new AdminError(AdminClient.NotElevatedCode, "Run the admin app as administrator.") { Id = first!.Id });
+            server.Dispose();
+        });
+
+        var error = await Assert.ThrowsAsync<AdminConnectionException>(() => client.SendAsync(new GetStatus()));
+
+        Assert.Equal(AdminConnectionError.NotElevated, error.Error);
+        await Until(() => client.State == AdminConnectionState.NotElevated);
+        await serving;
+    }
+
+    [Fact]
+    public async Task An_unsolicited_refusal_without_an_id_is_also_reported_as_not_elevated()
+    {
+        var server = Server();
+        var client = Client();
+        // A client that sends nothing gets the refusal without an id; here the client's request crosses it.
         var serving = Task.Run(async () =>
         {
             await server.WaitForConnectionAsync();
             await AdminProtocol.WriteAsync(server, new AdminError(AdminClient.NotElevatedCode, "Run the admin app as administrator."));
+            try { await AdminProtocol.ReadAsync(server); } catch (IOException) { }
             server.Dispose();
         });
 

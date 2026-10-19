@@ -48,7 +48,18 @@ public sealed class AdminPipeServer(FamilyService family, IOptions<ServiceOption
         if (client.Elevation != "full" && client.UserSid != Self.Value)
         {
             log.LogWarning("Rejected unelevated admin pipe client: {Client}", client);
-            await AdminProtocol.WriteAsync(pipe, new AdminError("not_elevated", "Run the admin app as administrator."), ct);
+            // Answer the client's first request (so the refusal arrives as its reply, before we hang up); a client that
+            // sends nothing within 5 s gets the refusal without an id.
+            string? firstId = null;
+            try
+            {
+                using var wait = CancellationTokenSource.CreateLinkedTokenSource(ct);
+                wait.CancelAfter(TimeSpan.FromSeconds(5));
+                firstId = (await AdminProtocol.ReadAsync(pipe, wait.Token))?.Id;
+            }
+            catch (Exception ex) when (ex is IOException or OperationCanceledException or JsonException or NotSupportedException or InvalidDataException) { }
+            try { await AdminProtocol.WriteAsync(pipe, new AdminError("not_elevated", "Run the admin app as administrator.") { Id = firstId }, ct); }
+            catch (Exception ex) when (ex is IOException or OperationCanceledException or ObjectDisposedException) { }
             return;
         }
         var adminName = client.UserName ?? client.UserSid ?? "admin";
