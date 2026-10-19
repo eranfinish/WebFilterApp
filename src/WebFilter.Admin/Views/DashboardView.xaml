@@ -1,0 +1,117 @@
+<UserControl x:Class="WebFilter.Admin.Views.DashboardView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:res="clr-namespace:WebFilter.Admin.Resources"
+             xmlns:vm="clr-namespace:WebFilter.Admin.ViewModels"
+             mc:Ignorable="d"
+             d:DataContext="{d:DesignInstance Type=vm:DashboardViewModel}">
+  <ScrollViewer VerticalScrollBarVisibility="Auto">
+    <StackPanel Margin="24,20,12,24">
+      <ContentControl Content="{Binding}" ContentTemplate="{StaticResource PageHeader}" Focusable="False" Margin="0,0,12,0" />
+
+      <!-- Pending access requests -->
+      <Border Margin="0,0,12,16" Padding="16,10" CornerRadius="8" BorderThickness="1"
+              Visibility="{Binding HasLoaded, Converter={StaticResource BoolToVisibility}}">
+        <Border.Style>
+          <Style TargetType="Border">
+            <Setter Property="Background" Value="{StaticResource CardBrush}" />
+            <Setter Property="BorderBrush" Value="{StaticResource BorderBrush}" />
+            <Style.Triggers>
+              <DataTrigger Binding="{Binding HasPendingRequests}" Value="True">
+                <Setter Property="Background" Value="{StaticResource InfoSoftBrush}" />
+                <Setter Property="BorderBrush" Value="{StaticResource InfoBrush}" />
+              </DataTrigger>
+            </Style.Triggers>
+          </Style>
+        </Border.Style>
+        <DockPanel>
+          <Button DockPanel.Dock="Right" Style="{StaticResource PrimaryButton}" Margin="0" Content="{x:Static res:Strings.Dashboard_OpenRequests}"
+                  Command="{Binding OpenRequestsCommand}" Visibility="{Binding HasPendingRequests, Converter={StaticResource BoolToVisibility}}" />
+          <TextBlock Text="{Binding PendingRequestsText}" VerticalAlignment="Center" FontWeight="SemiBold" />
+        </DockPanel>
+      </Border>
+
+      <TextBlock Text="{x:Static res:Strings.Dashboard_NoMembers}" Style="{StaticResource SubtleText}"
+                 Visibility="{Binding HasNoMembers, Converter={StaticResource BoolToVisibility}}" />
+
+      <ItemsControl ItemsSource="{Binding Members}" Focusable="False">
+        <ItemsControl.ItemsPanel>
+          <ItemsPanelTemplate>
+            <WrapPanel />
+          </ItemsPanelTemplate>
+        </ItemsControl.ItemsPanel>
+        <ItemsControl.ItemTemplate>
+          <DataTemplate DataType="{x:Type vm:MemberCardViewModel}">
+            <Border Style="{StaticResource Card}" Width="340">
+              <StackPanel>
+                <DockPanel Margin="0,0,0,8">
+                  <Border DockPanel.Dock="Right" Margin="0" HorizontalAlignment="Right">
+                    <Border.Style>
+                      <Style TargetType="Border" BasedOn="{StaticResource Badge}">
+                        <Style.Triggers>
+                          <DataTrigger Binding="{Binding TimeState}" Value="ok">
+                            <Setter Property="Background" Value="{StaticResource SuccessSoftBrush}" />
+                          </DataTrigger>
+                          <DataTrigger Binding="{Binding TimeState}" Value="warn">
+                            <Setter Property="Background" Value="{StaticResource WarningSoftBrush}" />
+                          </DataTrigger>
+                          <DataTrigger Binding="{Binding TimeState}" Value="expired">
+                            <Setter Property="Background" Value="{StaticResource DangerSoftBrush}" />
+                          </DataTrigger>
+                        </Style.Triggers>
+                      </Style>
+                    </Border.Style>
+                    <TextBlock Text="{Binding TimeStateText}" FontSize="12" />
+                  </Border>
+                  <TextBlock Text="{Binding DisplayName}" FontSize="19" FontWeight="SemiBold" VerticalAlignment="Center" />
+                </DockPanel>
+
+                <TextBlock Text="{Binding UsageText}" />
+                <ProgressBar Height="8" Margin="0,6,0,6" Minimum="0" Maximum="{Binding LimitMinutes}" Value="{Binding UsedMinutes, Mode=OneWay}"
+                             Foreground="{StaticResource AccentBrush}" Background="{StaticResource NeutralSoftBrush}" BorderThickness="0"
+                             Visibility="{Binding HasLimit, Converter={StaticResource BoolToVisibility}}" />
+                <TextBlock Text="{Binding RemainingText}" FontWeight="SemiBold"
+                           Visibility="{Binding RemainingText, Converter={StaticResource HasValueToVisibility}}" />
+                <TextBlock Text="{Binding WindowEndText}" Style="{StaticResource SubtleText}"
+                           Visibility="{Binding WindowEndText, Converter={StaticResource HasValueToVisibility}}" />
+
+                <WrapPanel Margin="0,8,0,0">
+                  <Border Style="{StaticResource Badge}" Background="{StaticResource WarningSoftBrush}"
+                          Visibility="{Binding PausedText, Converter={StaticResource HasValueToVisibility}}">
+                    <TextBlock Text="{Binding PausedText}" FontSize="12" Foreground="{StaticResource WarningBrush}" />
+                  </Border>
+                  <Border Style="{StaticResource Badge}" Background="{StaticResource InfoSoftBrush}"
+                          Visibility="{Binding HomeworkText, Converter={StaticResource HasValueToVisibility}}">
+                    <TextBlock Text="{Binding HomeworkText}" FontSize="12" Foreground="{StaticResource InfoBrush}" />
+                  </Border>
+                  <Border Style="{StaticResource Badge}" Visibility="{Binding IsFiltered, Converter={StaticResource InverseBoolToVisibility}}">
+                    <TextBlock Text="{x:Static res:Strings.Member_NotFiltered}" FontSize="12" />
+                  </Border>
+                </WrapPanel>
+
+                <WrapPanel Margin="0,10,0,0" Visibility="{Binding CanExtend, Converter={StaticResource BoolToVisibility}}">
+                  <Button Content="{x:Static res:Strings.Action_Add15}" Command="{Binding AddQuarterHourCommand}" />
+                  <Button Content="{x:Static res:Strings.Action_Add30}" Command="{Binding AddHalfHourCommand}" />
+                </WrapPanel>
+                <WrapPanel Visibility="{Binding IsFiltered, Converter={StaticResource BoolToVisibility}}">
+                  <Button Content="{x:Static res:Strings.Action_PauseToday}" Command="{Binding PauseCommand}"
+                          Visibility="{Binding CanPause, Converter={StaticResource BoolToVisibility}}" />
+                  <Button Content="{x:Static res:Strings.Action_Resume}" Command="{Binding ResumeCommand}" Style="{StaticResource PrimaryButton}"
+                          Visibility="{Binding IsPaused, Converter={StaticResource BoolToVisibility}}" />
+                  <Button Content="{x:Static res:Strings.Action_StartHomework}" Command="{Binding StartHomeworkCommand}"
+                          Visibility="{Binding CanStartHomework, Converter={StaticResource BoolToVisibility}}" />
+                  <Button Content="{x:Static res:Strings.Action_StopHomework}" Command="{Binding StopHomeworkCommand}" Style="{StaticResource PrimaryButton}"
+                          Visibility="{Binding IsInHomework, Converter={StaticResource BoolToVisibility}}" />
+                </WrapPanel>
+              </StackPanel>
+            </Border>
+          </DataTemplate>
+        </ItemsControl.ItemTemplate>
+      </ItemsControl>
+
+      <TextBlock Text="{Binding LastUpdatedText}" Style="{StaticResource SubtleText}" FontSize="12" Margin="0,4,0,0" />
+    </StackPanel>
+  </ScrollViewer>
+</UserControl>

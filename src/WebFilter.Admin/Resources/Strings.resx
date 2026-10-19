@@ -1,0 +1,702 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="App_Title" xml:space="preserve">
+    <value>WebFilter — ניהול הורים</value>
+  </data>
+  <data name="App_Subtitle" xml:space="preserve">
+    <value>סינון אתרים וזמן מסך למשפחה</value>
+  </data>
+  <data name="Nav_Dashboard" xml:space="preserve">
+    <value>לוח בקרה</value>
+  </data>
+  <data name="Nav_Requests" xml:space="preserve">
+    <value>בקשות גישה</value>
+  </data>
+  <data name="Nav_Rules" xml:space="preserve">
+    <value>כללי אתרים</value>
+  </data>
+  <data name="Nav_Activity" xml:space="preserve">
+    <value>יומן פעילות</value>
+  </data>
+  <data name="Nav_Settings" xml:space="preserve">
+    <value>הגדרות</value>
+  </data>
+  <data name="Common_Refresh" xml:space="preserve">
+    <value>רענון</value>
+  </data>
+  <data name="Common_Retry" xml:space="preserve">
+    <value>לנסות שוב</value>
+  </data>
+  <data name="Common_Save" xml:space="preserve">
+    <value>שמירה</value>
+  </data>
+  <data name="Common_Revert" xml:space="preserve">
+    <value>ביטול השינוי</value>
+  </data>
+  <data name="Common_Remove" xml:space="preserve">
+    <value>הסרה</value>
+  </data>
+  <data name="Common_Yes" xml:space="preserve">
+    <value>כן</value>
+  </data>
+  <data name="Common_No" xml:space="preserve">
+    <value>לא</value>
+  </data>
+  <data name="Common_All" xml:space="preserve">
+    <value>הכל</value>
+  </data>
+  <data name="Common_WholeFamily" xml:space="preserve">
+    <value>כל המשפחה</value>
+  </data>
+  <data name="Common_None" xml:space="preserve">
+    <value>—</value>
+  </data>
+  <data name="Format_Time" xml:space="preserve">
+    <value>HH:mm</value>
+    <comment>.NET format string for a time of day.</comment>
+  </data>
+  <data name="Format_DateTime" xml:space="preserve">
+    <value>dd.MM HH:mm</value>
+    <comment>.NET custom format for a date and time (no "/": it would become the culture separator).</comment>
+  </data>
+  <data name="Minutes_One" xml:space="preserve">
+    <value>דקה אחת</value>
+  </data>
+  <data name="Minutes_Many" xml:space="preserve">
+    <value>{0} דקות</value>
+  </data>
+  <data name="Until_EndOfDay" xml:space="preserve">
+    <value>סוף היום</value>
+  </data>
+  <data name="Connection_NotConnected" xml:space="preserve">
+    <value>עדיין לא מחובר לשירות הסינון</value>
+  </data>
+  <data name="Connection_Connecting" xml:space="preserve">
+    <value>מתחבר לשירות הסינון…</value>
+  </data>
+  <data name="Connection_Connected" xml:space="preserve">
+    <value>מחובר לשירות הסינון</value>
+  </data>
+  <data name="Connection_ServiceNotRunning" xml:space="preserve">
+    <value>שירות הסינון לא פועל במחשב הזה, או שאינו עונה. ודאו ש-WebFilter מותקן ושהשירות שלו פועל, ואז נסו שוב.</value>
+  </data>
+  <data name="Connection_NotElevated" xml:space="preserve">
+    <value>אין לממשק הרשאת ניהול. סגרו אותו והפעילו אותו שוב כמנהל (לחיצה ימנית ← "הפעל כמנהל").</value>
+  </data>
+  <data name="Connection_Lost" xml:space="preserve">
+    <value>החיבור לשירות הסינון נותק. מנסים להתחבר שוב…</value>
+  </data>
+  <data name="ConnectionShort_NotConnected" xml:space="preserve">
+    <value>לא מחובר</value>
+  </data>
+  <data name="ConnectionShort_Connecting" xml:space="preserve">
+    <value>מתחבר…</value>
+  </data>
+  <data name="ConnectionShort_Connected" xml:space="preserve">
+    <value>מחובר לשירות הסינון</value>
+  </data>
+  <data name="ConnectionShort_ServiceNotRunning" xml:space="preserve">
+    <value>שירות הסינון לא פועל</value>
+  </data>
+  <data name="ConnectionShort_NotElevated" xml:space="preserve">
+    <value>אין הרשאת ניהול</value>
+  </data>
+  <data name="ConnectionShort_Lost" xml:space="preserve">
+    <value>החיבור נותק</value>
+  </data>
+  <data name="Error_Timeout" xml:space="preserve">
+    <value>שירות הסינון לא ענה בזמן. נסו שוב בעוד רגע.</value>
+  </data>
+  <data name="Error_Rejected" xml:space="preserve">
+    <value>שירות הסינון לא ביצע את הפעולה: {0}</value>
+  </data>
+  <data name="Error_Unsupported" xml:space="preserve">
+    <value>שירות הסינון במחשב הזה לא תומך בפעולה הזו.</value>
+  </data>
+  <data name="Error_UnexpectedReply" xml:space="preserve">
+    <value>התקבלה תשובה לא צפויה משירות הסינון.</value>
+  </data>
+  <data name="Dashboard_Intro" xml:space="preserve">
+    <value>מה קורה עכשיו אצל כל אחד מבני המשפחה.</value>
+  </data>
+  <data name="Dashboard_NoPendingRequests" xml:space="preserve">
+    <value>אין בקשות גישה שמחכות לכם</value>
+  </data>
+  <data name="Dashboard_PendingRequests_One" xml:space="preserve">
+    <value>בקשת גישה אחת מחכה להחלטה שלכם</value>
+  </data>
+  <data name="Dashboard_PendingRequests_Many" xml:space="preserve">
+    <value>{0} בקשות גישה מחכות להחלטה שלכם</value>
+  </data>
+  <data name="Dashboard_OpenRequests" xml:space="preserve">
+    <value>לבקשות</value>
+  </data>
+  <data name="Dashboard_NoMembers" xml:space="preserve">
+    <value>עדיין לא הוגדרו בני משפחה.</value>
+  </data>
+  <data name="Dashboard_LastUpdated" xml:space="preserve">
+    <value>עודכן ב-{0} · מתעדכן לבד כל 10 שניות</value>
+  </data>
+  <data name="TimeState_ok" xml:space="preserve">
+    <value>יש זמן גלישה</value>
+  </data>
+  <data name="TimeState_warn" xml:space="preserve">
+    <value>הזמן עומד להיגמר</value>
+  </data>
+  <data name="TimeState_expired" xml:space="preserve">
+    <value>הזמן להיום נגמר</value>
+  </data>
+  <data name="TimeState_outside_window" xml:space="preserve">
+    <value>מחוץ לשעות הגלישה</value>
+  </data>
+  <data name="TimeState_unlimited" xml:space="preserve">
+    <value>ללא הגבלת זמן</value>
+  </data>
+  <data name="Member_UsedOfLimit" xml:space="preserve">
+    <value>היום: {0} מתוך {1}</value>
+  </data>
+  <data name="Member_Used" xml:space="preserve">
+    <value>היום: {0}</value>
+  </data>
+  <data name="Member_Remaining" xml:space="preserve">
+    <value>נותרו {0}</value>
+  </data>
+  <data name="Member_WindowEnds" xml:space="preserve">
+    <value>שעות הגלישה נגמרות ב-{0}</value>
+  </data>
+  <data name="Member_PausedUntil" xml:space="preserve">
+    <value>הסינון מושהה עד {0}</value>
+  </data>
+  <data name="Member_HomeworkUntil" xml:space="preserve">
+    <value>מצב שיעורי בית עד {0}</value>
+  </data>
+  <data name="Member_NotFiltered" xml:space="preserve">
+    <value>ללא סינון</value>
+  </data>
+  <data name="Action_Add15" xml:space="preserve">
+    <value>עוד 15 דקות</value>
+  </data>
+  <data name="Action_Add30" xml:space="preserve">
+    <value>עוד 30 דקות</value>
+  </data>
+  <data name="Action_PauseToday" xml:space="preserve">
+    <value>השהיית הסינון עד סוף היום</value>
+  </data>
+  <data name="Action_Resume" xml:space="preserve">
+    <value>חידוש הסינון</value>
+  </data>
+  <data name="Action_StartHomework" xml:space="preserve">
+    <value>שיעורי בית לשעה</value>
+  </data>
+  <data name="Action_StopHomework" xml:space="preserve">
+    <value>סיום שיעורי בית</value>
+  </data>
+  <data name="Done_Extend" xml:space="preserve">
+    <value>נוספו {0} ל{1}.</value>
+  </data>
+  <data name="Done_Pause" xml:space="preserve">
+    <value>הסינון של {0} מושהה עד סוף היום.</value>
+  </data>
+  <data name="Done_Resume" xml:space="preserve">
+    <value>הסינון של {0} חזר לפעול.</value>
+  </data>
+  <data name="Done_StartHomework" xml:space="preserve">
+    <value>מצב שיעורי בית הופעל ל{0} לשעה.</value>
+  </data>
+  <data name="Done_StopHomework" xml:space="preserve">
+    <value>מצב שיעורי בית של {0} הסתיים.</value>
+  </data>
+  <data name="Requests_Intro" xml:space="preserve">
+    <value>כשילד מבקש גישה לאתר, לערוץ, לאפליקציה או עוד זמן — הבקשה מופיעה כאן.</value>
+  </data>
+  <data name="Requests_Pending" xml:space="preserve">
+    <value>מחכות להחלטה</value>
+  </data>
+  <data name="Requests_NoPending" xml:space="preserve">
+    <value>אין בקשות שמחכות להחלטה.</value>
+  </data>
+  <data name="Requests_Recent" xml:space="preserve">
+    <value>החלטות אחרונות</value>
+  </data>
+  <data name="Requests_NoRecent" xml:space="preserve">
+    <value>עדיין אין החלטות.</value>
+  </data>
+  <data name="RequestKind_url" xml:space="preserve">
+    <value>אתר</value>
+  </data>
+  <data name="RequestKind_youtube" xml:space="preserve">
+    <value>ערוץ YouTube</value>
+  </data>
+  <data name="RequestKind_app" xml:space="preserve">
+    <value>אפליקציה</value>
+  </data>
+  <data name="RequestKind_time" xml:space="preserve">
+    <value>עוד זמן</value>
+  </data>
+  <data name="RequestStatus_pending" xml:space="preserve">
+    <value>ממתינה</value>
+  </data>
+  <data name="RequestStatus_approved" xml:space="preserve">
+    <value>אושרה</value>
+  </data>
+  <data name="RequestStatus_denied" xml:space="preserve">
+    <value>נדחתה</value>
+  </data>
+  <data name="Request_TimeTarget" xml:space="preserve">
+    <value>ביקש/ה עוד {0}</value>
+  </data>
+  <data name="Request_Message" xml:space="preserve">
+    <value>הודעה: "{0}"</value>
+  </data>
+  <data name="Request_SentAt" xml:space="preserve">
+    <value>נשלחה ב-{0}</value>
+  </data>
+  <data name="Request_Decided" xml:space="preserve">
+    <value>{0} ב-{1}</value>
+  </data>
+  <data name="Request_ScopeLabel" xml:space="preserve">
+    <value>מה לאשר:</value>
+  </data>
+  <data name="Request_ScopeSite" xml:space="preserve">
+    <value>את כל האתר {0}</value>
+  </data>
+  <data name="Request_ScopePage" xml:space="preserve">
+    <value>רק את הדף הזה</value>
+  </data>
+  <data name="Approve_Minutes" xml:space="preserve">
+    <value>אישור ל-{0}</value>
+  </data>
+  <data name="Approve_Today" xml:space="preserve">
+    <value>אישור עד סוף היום</value>
+  </data>
+  <data name="Approve_Always" xml:space="preserve">
+    <value>אישור תמיד</value>
+  </data>
+  <data name="Approve_Channel" xml:space="preserve">
+    <value>אישור הערוץ</value>
+  </data>
+  <data name="Approve_Time" xml:space="preserve">
+    <value>לתת עוד {0}</value>
+  </data>
+  <data name="Request_Deny" xml:space="preserve">
+    <value>דחייה</value>
+  </data>
+  <data name="Done_Approved" xml:space="preserve">
+    <value>הבקשה של {0} אושרה.</value>
+  </data>
+  <data name="Done_Denied" xml:space="preserve">
+    <value>הבקשה של {0} נדחתה.</value>
+  </data>
+  <data name="Rules_Intro" xml:space="preserve">
+    <value>אתרים שמותרים או חסומים לכל המשפחה או לבן משפחה מסוים.</value>
+  </data>
+  <data name="Rules_Filter" xml:space="preserve">
+    <value>הצגת כללים עבור:</value>
+  </data>
+  <data name="Rules_FilterGlobal" xml:space="preserve">
+    <value>כל המשפחה (כללים כלליים)</value>
+  </data>
+  <data name="Rules_Empty" xml:space="preserve">
+    <value>אין כללים להצגה.</value>
+  </data>
+  <data name="Rules_Col_Pattern" xml:space="preserve">
+    <value>אתר / תבנית</value>
+  </data>
+  <data name="Rules_Col_Type" xml:space="preserve">
+    <value>סוג</value>
+  </data>
+  <data name="Rules_Col_Action" xml:space="preserve">
+    <value>פעולה</value>
+  </data>
+  <data name="Rules_Col_AppliesTo" xml:space="preserve">
+    <value>עבור</value>
+  </data>
+  <data name="Rules_Col_Expiry" xml:space="preserve">
+    <value>תוקף</value>
+  </data>
+  <data name="RuleType_domain" xml:space="preserve">
+    <value>אתר (כולל תתי-דומיינים)</value>
+  </data>
+  <data name="RuleType_wildcard" xml:space="preserve">
+    <value>תתי-דומיינים בלבד</value>
+  </data>
+  <data name="RuleType_prefix" xml:space="preserve">
+    <value>דף או תיקייה באתר</value>
+  </data>
+  <data name="RuleType_regex" xml:space="preserve">
+    <value>ביטוי רגולרי (מתקדם)</value>
+  </data>
+  <data name="RuleAction_allow" xml:space="preserve">
+    <value>מותר</value>
+  </data>
+  <data name="RuleAction_block" xml:space="preserve">
+    <value>חסום</value>
+  </data>
+  <data name="Rule_AlwaysAllowed" xml:space="preserve">
+    <value>מותר תמיד</value>
+  </data>
+  <data name="Rule_NoExpiry" xml:space="preserve">
+    <value>קבוע</value>
+  </data>
+  <data name="Rule_ExpiresAt" xml:space="preserve">
+    <value>עד {0}</value>
+  </data>
+  <data name="Rule_Expired" xml:space="preserve">
+    <value>פג תוקף</value>
+  </data>
+  <data name="Rules_Add_Title" xml:space="preserve">
+    <value>הוספת כלל</value>
+  </data>
+  <data name="Rules_Add_Pattern" xml:space="preserve">
+    <value>כתובת האתר</value>
+  </data>
+  <data name="Rules_Add_PatternHint" xml:space="preserve">
+    <value>לדוגמה: example.com · *.example.com · example.com/games</value>
+  </data>
+  <data name="Rules_Add_Type" xml:space="preserve">
+    <value>סוג</value>
+  </data>
+  <data name="Rules_Add_Action" xml:space="preserve">
+    <value>מה לעשות</value>
+  </data>
+  <data name="Rules_Add_AppliesTo" xml:space="preserve">
+    <value>עבור</value>
+  </data>
+  <data name="Rules_Add_AlwaysAllowed" xml:space="preserve">
+    <value>מותר תמיד — גם כשזמן הגלישה נגמר</value>
+  </data>
+  <data name="Rules_Add_Button" xml:space="preserve">
+    <value>הוספת הכלל</value>
+  </data>
+  <data name="Rules_RemoveConfirm" xml:space="preserve">
+    <value>להסיר את הכלל עבור {0}?</value>
+  </data>
+  <data name="Rules_RemoveTitle" xml:space="preserve">
+    <value>הסרת כלל</value>
+  </data>
+  <data name="Done_RuleAdded" xml:space="preserve">
+    <value>הכלל עבור {0} נוסף.</value>
+  </data>
+  <data name="Done_RuleRemoved" xml:space="preserve">
+    <value>הכלל עבור {0} הוסר.</value>
+  </data>
+  <data name="Validation_Empty" xml:space="preserve">
+    <value>כתבו כתובת של אתר או תבנית.</value>
+  </data>
+  <data name="Validation_DomainStar" xml:space="preserve">
+    <value>כוכבית (*) מותרת רק בסוג "תתי-דומיינים בלבד", למשל ‎*.example.com.</value>
+    <comment>LRM before * keeps the pattern in one piece in right-to-left text.</comment>
+  </data>
+  <data name="Validation_DomainInvalid" xml:space="preserve">
+    <value>"{0}" אינו שם אתר תקין. כתבו רק את שם האתר, למשל example.com.</value>
+  </data>
+  <data name="Validation_DomainHasPath" xml:space="preserve">
+    <value>בכתובת יש נתיב. לדף או תיקייה בלבד בחרו "דף או תיקייה באתר"; לכל האתר כתבו רק את שם האתר.</value>
+  </data>
+  <data name="Validation_WildcardForm" xml:space="preserve">
+    <value>תבנית של תתי-דומיינים נכתבת כך: ‎*.example.com (כוכבית אחת, בהתחלה).</value>
+    <comment>LRM before * keeps the pattern in one piece in right-to-left text.</comment>
+  </data>
+  <data name="Validation_PrefixForm" xml:space="preserve">
+    <value>דף או תיקייה נכתבים כך: example.com/path.</value>
+  </data>
+  <data name="Validation_RegexUnsupported" xml:space="preserve">
+    <value>הביטוי משתמש באפשרות שאינה נתמכת (lookaround או backreference).</value>
+  </data>
+  <data name="Validation_RegexInvalid" xml:space="preserve">
+    <value>הביטוי הרגולרי אינו תקין.</value>
+  </data>
+  <data name="Validation_Duplicate" xml:space="preserve">
+    <value>כלל כזה כבר קיים.</value>
+  </data>
+  <data name="Activity_Intro" xml:space="preserve">
+    <value>חסימות, התראות זמן, בקשות ושינויים שעשו ההורים.</value>
+  </data>
+  <data name="Activity_Member" xml:space="preserve">
+    <value>בן משפחה</value>
+  </data>
+  <data name="Activity_Type" xml:space="preserve">
+    <value>סוג</value>
+  </data>
+  <data name="Activity_Period" xml:space="preserve">
+    <value>תקופה</value>
+  </data>
+  <data name="Period_Day" xml:space="preserve">
+    <value>24 השעות האחרונות</value>
+  </data>
+  <data name="Period_Week" xml:space="preserve">
+    <value>7 הימים האחרונים</value>
+  </data>
+  <data name="Activity_Empty" xml:space="preserve">
+    <value>אין אירועים בתקופה שנבחרה.</value>
+  </data>
+  <data name="Activity_Count" xml:space="preserve">
+    <value>{0} אירועים</value>
+  </data>
+  <data name="Activity_Col_Time" xml:space="preserve">
+    <value>מתי</value>
+  </data>
+  <data name="Activity_Col_Member" xml:space="preserve">
+    <value>מי</value>
+  </data>
+  <data name="Activity_Col_Type" xml:space="preserve">
+    <value>מה קרה</value>
+  </data>
+  <data name="Activity_Col_Details" xml:space="preserve">
+    <value>פרטים</value>
+  </data>
+  <data name="Activity_Col_Device" xml:space="preserve">
+    <value>מחשב</value>
+  </data>
+  <data name="Event_TimeLeft" xml:space="preserve">
+    <value>נותרו {0}</value>
+  </data>
+  <data name="EventType_blocked" xml:space="preserve">
+    <value>אתר נחסם</value>
+  </data>
+  <data name="EventType_app_blocked" xml:space="preserve">
+    <value>אפליקציה נחסמה</value>
+  </data>
+  <data name="EventType_access_request" xml:space="preserve">
+    <value>בקשת גישה</value>
+  </data>
+  <data name="EventType_time_warning" xml:space="preserve">
+    <value>התראת זמן</value>
+  </data>
+  <data name="EventType_time_expired" xml:space="preserve">
+    <value>הזמן נגמר</value>
+  </data>
+  <data name="EventType_admin_change" xml:space="preserve">
+    <value>שינוי של הורה</value>
+  </data>
+  <data name="EventType_tamper" xml:space="preserve">
+    <value>ניסיון עקיפה</value>
+  </data>
+  <data name="EventType_service" xml:space="preserve">
+    <value>שירות הסינון</value>
+  </data>
+  <data name="Reason_allowed_unrestricted" xml:space="preserve">
+    <value>ללא הגבלות</value>
+  </data>
+  <data name="Reason_allowed_paused" xml:space="preserve">
+    <value>הסינון מושהה</value>
+  </data>
+  <data name="Reason_allowed_always" xml:space="preserve">
+    <value>מותר תמיד</value>
+  </data>
+  <data name="Reason_allowed_rule" xml:space="preserve">
+    <value>מותר לפי כלל</value>
+  </data>
+  <data name="Reason_allowed_category" xml:space="preserve">
+    <value>מותר לפי קטגוריה</value>
+  </data>
+  <data name="Reason_allowed_default" xml:space="preserve">
+    <value>מותר (ברירת מחדל)</value>
+  </data>
+  <data name="Reason_allowed_homework" xml:space="preserve">
+    <value>מותר בשיעורי בית</value>
+  </data>
+  <data name="Reason_allowed_youtube_channel" xml:space="preserve">
+    <value>ערוץ מאושר</value>
+  </data>
+  <data name="Reason_allowed_browser" xml:space="preserve">
+    <value>דפדפן נתמך</value>
+  </data>
+  <data name="Reason_blocked_rule" xml:space="preserve">
+    <value>חסום לפי כלל</value>
+  </data>
+  <data name="Reason_blocked_category" xml:space="preserve">
+    <value>חסום לפי קטגוריה</value>
+  </data>
+  <data name="Reason_blocked_not_in_allowlist" xml:space="preserve">
+    <value>לא ברשימת האתרים המאושרים</value>
+  </data>
+  <data name="Reason_blocked_time_window" xml:space="preserve">
+    <value>מחוץ לשעות הגלישה</value>
+  </data>
+  <data name="Reason_blocked_daily_limit" xml:space="preserve">
+    <value>זמן הגלישה היומי נגמר</value>
+  </data>
+  <data name="Reason_blocked_homework" xml:space="preserve">
+    <value>לא חינוכי — מצב שיעורי בית</value>
+  </data>
+  <data name="Reason_blocked_ip_literal" xml:space="preserve">
+    <value>כתובת IP ישירה</value>
+  </data>
+  <data name="Reason_blocked_youtube_channel" xml:space="preserve">
+    <value>ערוץ YouTube חסום</value>
+  </data>
+  <data name="Reason_blocked_youtube_unknown" xml:space="preserve">
+    <value>ערוץ YouTube שלא זוהה</value>
+  </data>
+  <data name="Reason_blocked_youtube_off" xml:space="preserve">
+    <value>YouTube חסום</value>
+  </data>
+  <data name="Reason_blocked_service_unavailable" xml:space="preserve">
+    <value>שירות הסינון לא היה זמין</value>
+  </data>
+  <data name="Reason_blocked_app_network" xml:space="preserve">
+    <value>אפליקציה בלי אישור לרשת</value>
+  </data>
+  <data name="Reason_redirect_youtube_home" xml:space="preserve">
+    <value>הופנה לדף הערוצים המאושרים</value>
+  </data>
+  <data name="AdminChange_add_rule" xml:space="preserve">
+    <value>נוסף כלל אתר</value>
+  </data>
+  <data name="AdminChange_remove_rule" xml:space="preserve">
+    <value>הוסר כלל אתר</value>
+  </data>
+  <data name="AdminChange_set_member" xml:space="preserve">
+    <value>שונו הגדרות של בן משפחה</value>
+  </data>
+  <data name="AdminChange_extend_time" xml:space="preserve">
+    <value>נוסף זמן גלישה</value>
+  </data>
+  <data name="AdminChange_pause" xml:space="preserve">
+    <value>הסינון הושהה</value>
+  </data>
+  <data name="AdminChange_resume" xml:space="preserve">
+    <value>הסינון חזר לפעול</value>
+  </data>
+  <data name="AdminChange_start_homework" xml:space="preserve">
+    <value>הופעל מצב שיעורי בית</value>
+  </data>
+  <data name="AdminChange_stop_homework" xml:space="preserve">
+    <value>הסתיים מצב שיעורי בית</value>
+  </data>
+  <data name="AdminChange_approve_request" xml:space="preserve">
+    <value>אושרה בקשת גישה</value>
+  </data>
+  <data name="AdminChange_deny_request" xml:space="preserve">
+    <value>נדחתה בקשת גישה</value>
+  </data>
+  <data name="AdminChange_replace_settings" xml:space="preserve">
+    <value>כל ההגדרות הוחלפו</value>
+  </data>
+  <data name="AdminChange_local_pause" xml:space="preserve">
+    <value>השהיית חירום במחשב</value>
+  </data>
+  <data name="Settings_Intro" xml:space="preserve">
+    <value>אופן הסינון של כל אחד, ומצב החיבור לשירות הסינון.</value>
+  </data>
+  <data name="Settings_Members" xml:space="preserve">
+    <value>בני המשפחה</value>
+  </data>
+  <data name="Settings_MembersHint" xml:space="preserve">
+    <value>שינוי נכנס לתוקף בכל המחשבים תוך שניות.</value>
+  </data>
+  <data name="Settings_Col_Name" xml:space="preserve">
+    <value>שם</value>
+  </data>
+  <data name="Settings_Col_Role" xml:space="preserve">
+    <value>תפקיד</value>
+  </data>
+  <data name="Settings_Col_Age" xml:space="preserve">
+    <value>גיל</value>
+  </data>
+  <data name="Settings_Col_FilterMode" xml:space="preserve">
+    <value>סינון אתרים</value>
+  </data>
+  <data name="Settings_Col_YouTubeMode" xml:space="preserve">
+    <value>YouTube</value>
+  </data>
+  <data name="Done_MemberSaved" xml:space="preserve">
+    <value>ההגדרות של {0} נשמרו.</value>
+  </data>
+  <data name="Role_child" xml:space="preserve">
+    <value>ילד/ה</value>
+  </data>
+  <data name="Role_teen" xml:space="preserve">
+    <value>נער/ה</value>
+  </data>
+  <data name="Role_adult" xml:space="preserve">
+    <value>מבוגר/ת</value>
+  </data>
+  <data name="FilterMode_unrestricted" xml:space="preserve">
+    <value>ללא סינון</value>
+  </data>
+  <data name="FilterMode_blocklist" xml:space="preserve">
+    <value>חסימת אתרים לא מתאימים</value>
+  </data>
+  <data name="FilterMode_allowlist" xml:space="preserve">
+    <value>רק אתרים מאושרים</value>
+  </data>
+  <data name="YouTubeMode_off" xml:space="preserve">
+    <value>חסום</value>
+  </data>
+  <data name="YouTubeMode_restricted" xml:space="preserve">
+    <value>מצב מוגבל</value>
+  </data>
+  <data name="YouTubeMode_allowlist" xml:space="preserve">
+    <value>רק ערוצים מאושרים</value>
+  </data>
+  <data name="YouTubeMode_unrestricted" xml:space="preserve">
+    <value>ללא הגבלה</value>
+  </data>
+  <data name="Diagnostics_Title" xml:space="preserve">
+    <value>חיבור לשירות הסינון</value>
+  </data>
+  <data name="Diagnostics_Pipe" xml:space="preserve">
+    <value>ערוץ התקשורת (pipe)</value>
+  </data>
+  <data name="Diagnostics_State" xml:space="preserve">
+    <value>מצב</value>
+  </data>
+  <data name="Diagnostics_SettingsVersion" xml:space="preserve">
+    <value>גרסת ההגדרות</value>
+  </data>
+  <data name="Diagnostics_Device" xml:space="preserve">
+    <value>מזהה המחשב</value>
+  </data>
+  <data name="Diagnostics_IsHub" xml:space="preserve">
+    <value>מחשב ראשי (Hub)</value>
+  </data>
+  <data name="Diagnostics_ServiceTime" xml:space="preserve">
+    <value>השעה בשירות</value>
+  </data>
+  <data name="Diagnostics_TimeZone" xml:space="preserve">
+    <value>אזור הזמן של המשפחה</value>
+  </data>
+</root>

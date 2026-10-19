@@ -1,0 +1,51 @@
+<UserControl x:Class="WebFilter.Admin.Views.ActivityView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:res="clr-namespace:WebFilter.Admin.Resources"
+             xmlns:vm="clr-namespace:WebFilter.Admin.ViewModels"
+             mc:Ignorable="d"
+             d:DataContext="{d:DesignInstance Type=vm:ActivityViewModel}">
+  <DockPanel Margin="24,20,24,24">
+    <ContentControl DockPanel.Dock="Top" Content="{Binding}" ContentTemplate="{StaticResource PageHeader}" Focusable="False" />
+
+    <WrapPanel DockPanel.Dock="Top" Margin="0,0,0,8">
+      <StackPanel Margin="0,0,12,8">
+        <TextBlock Text="{x:Static res:Strings.Activity_Member}" Style="{StaticResource LabelText}" />
+        <ComboBox ItemsSource="{Binding MemberOptions}" SelectedValuePath="Value" DisplayMemberPath="Label" SelectedValue="{Binding SelectedMember}" />
+      </StackPanel>
+      <StackPanel Margin="0,0,12,8">
+        <TextBlock Text="{x:Static res:Strings.Activity_Type}" Style="{StaticResource LabelText}" />
+        <ComboBox ItemsSource="{Binding TypeOptions}" SelectedValuePath="Value" DisplayMemberPath="Label" SelectedValue="{Binding SelectedType}" />
+      </StackPanel>
+      <StackPanel Margin="0,0,12,8">
+        <TextBlock Text="{x:Static res:Strings.Activity_Period}" Style="{StaticResource LabelText}" />
+        <ComboBox ItemsSource="{Binding PeriodOptions}" SelectedValuePath="Value" DisplayMemberPath="Label" SelectedValue="{Binding SelectedPeriod}" />
+      </StackPanel>
+      <TextBlock Text="{Binding CountText}" Style="{StaticResource SubtleText}" VerticalAlignment="Bottom" Margin="0,0,0,12" />
+    </WrapPanel>
+
+    <TextBlock DockPanel.Dock="Top" Text="{x:Static res:Strings.Activity_Empty}" Style="{StaticResource SubtleText}"
+               Visibility="{Binding HasNoEvents, Converter={StaticResource BoolToVisibility}}" />
+
+    <DataGrid ItemsSource="{Binding Events}" Visibility="{Binding HasNoEvents, Converter={StaticResource InverseBoolToVisibility}}">
+      <DataGrid.RowStyle>
+        <Style TargetType="DataGridRow">
+          <Style.Triggers>
+            <DataTrigger Binding="{Binding IsAlert}" Value="True">
+              <Setter Property="Background" Value="#FFF8F7" />
+            </DataTrigger>
+          </Style.Triggers>
+        </Style>
+      </DataGrid.RowStyle>
+      <DataGrid.Columns>
+        <DataGridTextColumn Header="{x:Static res:Strings.Activity_Col_Time}" Binding="{Binding TimeText}" Width="110" />
+        <DataGridTextColumn Header="{x:Static res:Strings.Activity_Col_Member}" Binding="{Binding MemberName}" Width="100" />
+        <DataGridTextColumn Header="{x:Static res:Strings.Activity_Col_Type}" Binding="{Binding TypeText}" Width="140" />
+        <DataGridTextColumn Header="{x:Static res:Strings.Activity_Col_Details}" Binding="{Binding Details}" Width="*" ElementStyle="{StaticResource WrapCell}" />
+        <DataGridTextColumn Header="{x:Static res:Strings.Activity_Col_Device}" Binding="{Binding DeviceText}" Width="110" />
+      </DataGrid.Columns>
+    </DataGrid>
+  </DockPanel>
+</UserControl>
