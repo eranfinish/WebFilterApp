@@ -88,10 +88,25 @@ public sealed class AdminPipeServer(FamilyService family, IOptions<ServiceOption
         }
     }
 
-    private AdminMessage Handle(AdminMessage request, string adminName) => request switch
+    internal AdminMessage Handle(AdminMessage request, string adminName) => family.IsHub ? HandleOnHub(request, adminName) : HandleOnAgent(request);
+
+    /// <summary>
+    /// On an agent computer (MVP-PLAN §4.5): status from the last settings received, and the local emergency pause;
+    /// everything else is managed on the hub.
+    /// </summary>
+    private AdminMessage HandleOnAgent(AdminMessage request) => request switch
+    {
+        GetStatus => family.WithAgent<AdminMessage>((agent, now) => new StatusResult(agent.SnapshotVersion ?? 0, family.DeviceId, false, now,
+            agent.View().Config.Members.Select(m => MemberStatusOf(m, agent.TimeStatus(m.Id, now), agent.View().RuntimeOf(m.Id), now)).ToList())),
+        Pause pause => family.WithAgent<AdminMessage>((agent, now) => { agent.LocalPause(pause.MemberId, pause.Until, now); return new AdminOk(); }),
+        SetClock set => SetClock(set),
+        _ => new AdminError("not_hub", "This computer is managed by the hub computer; make this change there."),
+    };
+
+    private AdminMessage HandleOnHub(AdminMessage request, string adminName) => request switch
     {
         GetStatus => family.WithHub<AdminMessage>((hub, now) => new StatusResult(hub.Version, family.DeviceId, family.IsHub, now,
-            hub.Config.Members.Select(m => MemberStatusOf(hub, m, now)).ToList())),
+            hub.Config.Members.Select(m => MemberStatusOf(m, hub.TimeStatus(m.Id, now), hub.RuntimeOf(m.Id), now)).ToList())),
         GetSettings => family.WithHub<AdminMessage>((hub, _) => new SettingsResult(BundleMapper.ToBundle(hub.Config, hub.Version))),
         ReplaceSettings replace => Ok(adminName, (hub, now) => hub.ReplaceSettings(BundleMapper.ToConfig(replace.Settings), now)),
         AddRule add => Ok(adminName, (hub, now) => hub.AddRule(ToRule(add.Rule), now)),
@@ -114,13 +129,9 @@ public sealed class AdminPipeServer(FamilyService family, IOptions<ServiceOption
                 r.CreatedAt, r.Status.ToString().ToLowerInvariant(), r.DecidedAt)).ToList())),
         DecideRequest decide => DecideRequest(decide, adminName),
         SetClock set => SetClock(set),
-        CreatePairingCode => family.IsHub
-            ? new PairingCodeResult(family.Pairing.Create(family.Now), family.Now + Hub.HubPairing.Lifetime, family.Options.HubPort, LocalAddresses())
-            : new AdminError("not_hub", "Pairing codes are created on the hub computer."),
-        GetDevices => family.IsHub
-            ? new DevicesResult(family.Devices!.All().Select(d => new DeviceInfo(d.Id, d.Name, d.Os, d.PairedAt, d.LastSeenAt, d.RevokedAt is not null)).ToList())
-            : new AdminError("not_hub", "Devices are managed on the hub computer."),
-        RevokeDevice revoke => family.IsHub && family.Devices!.Revoke(revoke.DeviceId, family.Now)
+        CreatePairingCode => new PairingCodeResult(family.Pairing.Create(family.Now), family.Now + Hub.HubPairing.Lifetime, family.Options.HubPort, LocalAddresses()),
+        GetDevices => new DevicesResult(family.Devices!.All().Select(d => new DeviceInfo(d.Id, d.Name, d.Os, d.PairedAt, d.LastSeenAt, d.RevokedAt is not null)).ToList()),
+        RevokeDevice revoke => family.Devices!.Revoke(revoke.DeviceId, family.Now)
             ? new AdminOk()
             : new AdminError("not_found", "No such paired device."),
         _ => new AdminError("unsupported", $"Unsupported message type {request.GetType().Name}."),
@@ -167,19 +178,21 @@ public sealed class AdminPipeServer(FamilyService family, IOptions<ServiceOption
         return new AdminError("unsupported", "The clock can only be set in Simulation builds.");
     }
 
+    /// <summary>This computer's IPv4 addresses; adapters with a default gateway (the home network) first, so the first
+    /// address is the one agents should use rather than a Hyper-V or VPN adapter.</summary>
     private static List<string> LocalAddresses() =>
         System.Net.NetworkInformation.NetworkInterface.GetAllNetworkInterfaces()
             .Where(n => n.OperationalStatus == System.Net.NetworkInformation.OperationalStatus.Up && n.NetworkInterfaceType != System.Net.NetworkInformation.NetworkInterfaceType.Loopback)
-            .SelectMany(n => n.GetIPProperties().UnicastAddresses)
+            .Select(n => n.GetIPProperties())
+            .OrderByDescending(p => p.GatewayAddresses.Any(g => g.Address.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork && !g.Address.Equals(System.Net.IPAddress.Any)))
+            .SelectMany(p => p.UnicastAddresses)
             .Where(u => u.Address.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork)
             .Select(u => u.Address.ToString())
             .Distinct()
             .ToList();
 
-    private static MemberStatus MemberStatusOf(HubCore hub, FamilyMember member, DateTimeOffset now)
+    private static MemberStatus MemberStatusOf(FamilyMember member, TimeStatus status, MemberRuntime runtime, DateTimeOffset now)
     {
-        var status = hub.TimeStatus(member.Id, now);
-        var runtime = hub.RuntimeOf(member.Id);
         return new MemberStatus(member.Id, member.DisplayName,
             status.State switch { TimeState.Ok => "ok", TimeState.Warn => "warn", TimeState.Expired => "expired", TimeState.OutsideWindow => "outside_window", _ => "unlimited" },
             status.UsedMinutes, status.LimitMinutes, status.RemainingMinutes,

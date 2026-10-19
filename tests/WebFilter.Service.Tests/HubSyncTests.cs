@@ -134,6 +134,45 @@ public sealed class HubSyncTests : IAsyncLifetime
         Assert.Equal(Core.Decisions.Decision.Block, stillFiltered.Decision);
     }
 
+    [Fact]
+    public async Task On_an_agent_the_admin_pipe_gives_status_and_a_local_pause_and_refers_the_rest_to_the_hub()
+    {
+        await PairAndSyncAsync();
+        var admin = new Pipes.AdminPipeServer(_agent, Options.Create(_agent.Options), _clock, NullLogger<Pipes.AdminPipeServer>.Instance);
+
+        var status = Assert.IsType<Contracts.Admin.StatusResult>(admin.Handle(new Contracts.Admin.GetStatus(), "parent"));
+        Assert.False(status.IsHub);
+        Assert.Contains(status.Members, m => m.MemberId == "yoav");
+
+        Assert.IsType<Contracts.Admin.AdminOk>(admin.Handle(new Contracts.Admin.Pause("yoav", _clock.GetUtcNow().AddMinutes(30)), "parent"));
+        var paused = _agent.WithAgent((agent, now) => agent.DecideUrl(agent.AccountOf("yoav"), "https://www.instagram.com/", now));
+        Assert.Equal(Core.Decisions.ReasonCode.AllowedPaused, paused.Reason);
+
+        foreach (var hubOnly in new Contracts.Admin.AdminMessage[] { new Contracts.Admin.GetSettings(), new Contracts.Admin.GetDevices(), new Contracts.Admin.CreatePairingCode(), new Contracts.Admin.RevokeDevice("x") })
+            Assert.Equal("not_hub", Assert.IsType<Contracts.Admin.AdminError>(admin.Handle(hubOnly, "parent")).Code);
+    }
+
+    [Fact]
+    public async Task A_new_pairing_code_replaces_the_previous_one()
+    {
+        var first = _hub.Pairing.Create(_clock.GetUtcNow());
+        _hub.Pairing.Create(_clock.GetUtcNow());
+        await Assert.ThrowsAsync<UnauthorizedAccessException>(() => HubLink.PairAsync(_agentData, $"127.0.0.1:{_port}", first, "laptop-yoav", "laptop"));
+    }
+
+    [Fact]
+    public void Admin_changes_are_stored_at_once_and_survive_a_crash()
+    {
+        _hub.WithHub((hub, now) => { hub.AddRule(new Rule("r-crash", "yoav", "crash.example", PatternType.Domain, RuleAction.Block), now); return 0; }, "parent");
+        // No Flush or Dispose: a second service on the same data folder reads what the first one stored.
+        using var afterCrash = new FamilyService(Options.Create(new ServiceOptions
+        {
+            Role = "hub", DeviceId = "pc-parents", DataDirectory = Path.Combine(_dir, "hub"), ProfileDirectory = Path.Combine(_dir, "hub-profiles-2"),
+        }), _clock, NullLogger<FamilyService>.Instance);
+        afterCrash.Start();
+        Assert.Contains(afterCrash.WithHub((hub, _) => hub.Config.Rules.ToList()), r => r.Id == "r-crash");
+    }
+
     private RequestResult Request(string url) => _agent.WithAgent((agent, now) =>
     {
         var draft = new AccessRequestDraft("yoav", "laptop-yoav", RequestKind.Url, url, HubCore.TargetKeyFor(RequestKind.Url, url, DateOnly.FromDateTime(now.DateTime)), null, null, now);

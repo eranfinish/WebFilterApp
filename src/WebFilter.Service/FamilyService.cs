@@ -119,6 +119,8 @@ public sealed class FamilyService : IDisposable
             try { result = action(_hub, Now); }
             finally { _hub.Actor = null; }
             changed = SyncLocked();
+            // Admin changes are rare and must survive a crash: store them now, not on the next tick.
+            SaveLocked();
         }
         if (changed is { } v) SettingsChanged?.Invoke(v);
         return result;

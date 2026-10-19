@@ -14,14 +14,14 @@ public sealed class HubPairing
     private readonly object _gate = new();
     private readonly List<(string Code, DateTimeOffset Expires)> _codes = [];
 
-    /// <summary>A new code, formatted for reading aloud: XXXX-XXXX-XXXX.</summary>
+    /// <summary>A new code, formatted for reading aloud: XXXX-XXXX-XXXX. It replaces any earlier unused code.</summary>
     public string Create(DateTimeOffset now)
     {
         var chars = RandomNumberGenerator.GetItems<char>(Alphabet, 12);
         var code = new string(chars);
         lock (_gate)
         {
-            _codes.RemoveAll(c => c.Expires <= now);
+            _codes.Clear();
             _codes.Add((code, now + Lifetime));
         }
         return $"{code[..4]}-{code[4..8]}-{code[8..]}";
