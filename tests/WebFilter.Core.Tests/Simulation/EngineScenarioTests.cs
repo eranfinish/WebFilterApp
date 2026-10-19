@@ -5,7 +5,7 @@ namespace WebFilter.Core.Tests.Simulation;
 /// <summary>Runs every scenario marked for the "engine" layer and the "windows" platform (docs/SIMULATION-PLAN.md §2.1).</summary>
 public class EngineScenarioTests
 {
-    private static readonly string SimulationDir = Path.Combine(RepoRoot(), "tests", "simulation");
+    internal static readonly string SimulationDir = Path.Combine(RepoRoot(), "tests", "simulation");
     private static readonly Lazy<Dictionary<string, (JsonObject Scenario, JsonObject Fixture)>> Catalog = new(Load);
 
     public static TheoryData<string> Scenarios()

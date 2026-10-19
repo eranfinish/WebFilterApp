@@ -464,18 +464,43 @@ public class DnrCompilerTests
     }
 
     [Fact]
-    public void ALongPrefixPath_Throws_AtTheDocumentedLimit()
+    public void ALongPrefixPath_BlockWidensToADirectoryThatFits_AllowIsDropped()
     {
         var fits = "/" + new string('a', DnrLimits.MaxPrefixPathLength - 1);
-        Compile(Policy(member: [Member("example.com" + fits, PatternType.Prefix, RuleAction.Allow)]));
-        var ex = Assert.Throws<DnrCompileException>(() => Compile(Policy(member: [Member("example.com" + fits + "b", PatternType.Prefix, RuleAction.Allow, id: "long")])));
-        Assert.Contains("'long'", ex.Message);
+        var exact = Compile(Policy(member: [Member("example.com" + fits, PatternType.Prefix, RuleAction.Allow)]));
+        Assert.Equal(DnrOutcome.Allow, Outcome(exact, "https://example.com" + fits));
+
+        var longPath = "/dir/" + new string('b', DnrLimits.MaxPrefixPathLength) + "/page";
+        var block = Compile(Policy(member: [Member("example.com" + longPath, PatternType.Prefix, RuleAction.Block)]));
+        Assert.Equal(DnrOutcome.Block, Outcome(block, "https://example.com" + longPath));
+        Assert.Equal(DnrOutcome.Block, Outcome(block, "https://example.com/dir/other"));
+        Assert.Equal(DnrOutcome.Allow, Outcome(block, "https://example.com/elsewhere"));
+
+        var allow = Compile(Policy(FilterMode.Allowlist, member: [Member("example.com" + longPath, PatternType.Prefix, RuleAction.Allow)]));
+        Assert.Equal(DnrOutcome.Block, Outcome(allow, "https://example.com" + longPath));
     }
 
     [Fact]
-    public void AWildcardWithTooManyLabels_Throws()
+    public void AWildcardWithTooManyLabels_BlockWidensToTheBaseDomain_AllowIsDropped()
     {
-        Compile(Policy(member: [Member("*.a.b.c.d.e.f.g.h", PatternType.Wildcard, RuleAction.Block)]));
-        Assert.Throws<DnrCompileException>(() => Compile(Policy(member: [Member("*.a.b.c.d.e.f.g.h.i", PatternType.Wildcard, RuleAction.Block)])));
+        var fits = Compile(Policy(member: [Member("*.a.b.c.d.e.f.g.h", PatternType.Wildcard, RuleAction.Block)]));
+        Assert.Equal(DnrOutcome.Block, Outcome(fits, "https://x.a.b.c.d.e.f.g.h/"));
+        Assert.Equal(DnrOutcome.Allow, Outcome(fits, "https://a.b.c.d.e.f.g.h/"));
+
+        var block = Compile(Policy(member: [Member("*.a.b.c.d.e.f.g.h.i", PatternType.Wildcard, RuleAction.Block)]));
+        Assert.Equal(DnrOutcome.Block, Outcome(block, "https://x.a.b.c.d.e.f.g.h.i/"));
+        Assert.Equal(DnrOutcome.Block, Outcome(block, "https://a.b.c.d.e.f.g.h.i/"));
+
+        var allow = Compile(Policy(FilterMode.Allowlist, member: [Member("*.a.b.c.d.e.f.g.h.i", PatternType.Wildcard, RuleAction.Allow)]));
+        Assert.Equal(DnrOutcome.Block, Outcome(allow, "https://x.a.b.c.d.e.f.g.h.i/"));
+    }
+
+    [Fact]
+    public void FitPrefix_KeepsShortPaths_AndCutsLongOnesAtADirectory()
+    {
+        Assert.Equal("example.com/a/b", DnrPatterns.FitPrefix("example.com", "/a/b"));
+        var fitted = DnrPatterns.FitPrefix("example.com", "/dir/" + new string('ש', 60) + "/x");
+        Assert.Equal("example.com/dir/", fitted);
+        Compile(Policy(member: [Member(fitted, PatternType.Prefix, RuleAction.Allow)]));
     }
 }

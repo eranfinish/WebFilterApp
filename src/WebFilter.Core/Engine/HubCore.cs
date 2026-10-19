@@ -1,3 +1,4 @@
+using WebFilter.Core.Dnr;
 using WebFilter.Core.Model;
 using WebFilter.Core.Time;
 using WebFilter.Core.Urls;
@@ -101,7 +102,7 @@ public sealed class HubCore(FamilyConfig config)
         {
             case RequestKind.Url:
                 var pattern = scope == ApproveScope.Page && UrlNormalizer.TryNormalize(request.Target, out var url)
-                    ? $"{url.Host}{url.Path}"
+                    ? DnrPatterns.FitPrefix(url.Host, url.Path)
                     : request.TargetKey;
                 var rule = new Rule($"req-{++_ruleCounter}", request.MemberId, pattern, scope == ApproveScope.Page ? PatternType.Prefix : PatternType.Domain, RuleAction.Allow, ExpiresAt: expires);
                 Config.Rules.Add(rule);
@@ -136,7 +137,14 @@ public sealed class HubCore(FamilyConfig config)
     // ---- admin actions --------------------------------------------------------------------------------------------
 
     /// <summary>Replaces all settings (setup wizard, import). Runtime state, usage, events and requests are kept.</summary>
-    public void ReplaceSettings(FamilyConfig config, DateTimeOffset now) { Config = config; Changed(now, null, "replace_settings"); }
+    /// <summary>Replaces all settings. New or changed rules must pass <see cref="RuleValidator"/>; rules already present are kept as they are.</summary>
+    public void ReplaceSettings(FamilyConfig config, DateTimeOffset now)
+    {
+        var existing = Config.Rules.ToHashSet();
+        foreach (var rule in config.Rules.Where(r => !existing.Contains(r))) RuleValidator.EnsureValid(rule);
+        Config = config;
+        Changed(now, null, "replace_settings");
+    }
 
     /// <summary>Adds a newly paired device (or updates its name and OS), keeping its known accounts.</summary>
     public void AddDevice(string id, string os, DateTimeOffset now)
@@ -160,7 +168,12 @@ public sealed class HubCore(FamilyConfig config)
         Changed(now, null, "new_accounts");
     }
 
-    public void AddRule(Rule rule, DateTimeOffset now) { Config.Rules.Add(rule); Changed(now, rule.MemberId, "add_rule"); }
+    public void AddRule(Rule rule, DateTimeOffset now)
+    {
+        RuleValidator.EnsureValid(rule);
+        Config.Rules.Add(rule);
+        Changed(now, rule.MemberId, "add_rule");
+    }
 
     public void RemoveRule(string ruleId, DateTimeOffset now)
     {

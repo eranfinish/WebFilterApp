@@ -6,4 +6,8 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <InternalsVisibleTo Include="WebFilter.Core.Tests" />
+  </ItemGroup>
+
 </Project>

@@ -68,29 +68,88 @@ internal static class DnrPatterns
             !DnrHostNormalizer.TryNormalize(pattern[2..], out var host, out var kind) || kind != DnrHostKind.Domain)
             return null;
         var labels = DnrHostNormalizer.Labels(host, kind);
+        // Too many labels for the browser's regex budget (RuleValidator refuses these on entry): a block widens to the base
+        // domain itself, an allow is dropped — never the other way round.
         if (labels > DnrLimits.MaxWildcardLabels)
-            throw new DnrCompileException(
-                $"Rule '{rule.Id}': wildcard '{rule.Pattern}' has {labels} labels; at most {DnrLimits.MaxWildcardLabels} fit in a DNR regex.");
+            return rule.Action == RuleAction.Block ? FromDomain(host) : null;
         var regex = SubdomainsOnly(labels);
         return new DnrMatch(DnrPriorities.HostLevel(labels), host, regex, regex, null);
     }
 
-    private static DnrMatch? FromPrefix(Rule rule)
+    private static bool TryParsePrefix(string pattern, out string host, out DnrHostKind kind, out string path)
     {
-        var pattern = rule.Pattern.Trim();
+        (host, kind, path) = ("", DnrHostKind.Domain, "");
+        pattern = pattern.Trim();
         if (pattern.Contains("://", StringComparison.Ordinal))
-            return null;
+            return false;
         var cut = pattern.IndexOfAny(['?', '#']);
         if (cut >= 0)
             pattern = pattern[..cut];
         var slash = pattern.IndexOf('/');
         var hostPart = slash < 0 ? pattern : pattern[..slash];
-        if (hostPart.Contains('*') || !DnrHostNormalizer.TryNormalize(hostPart, out var host, out var kind))
+        if (hostPart.Contains('*') || !DnrHostNormalizer.TryNormalize(hostPart, out host, out kind))
+            return false;
+        path = CanonicalPath(slash < 0 ? "/" : pattern[slash..]);
+        return true;
+    }
+
+    /// <summary>
+    /// The longest leading part of a canonical path that ends with '/' and fits <see cref="DnrLimits.MaxPrefixPathLength"/>
+    /// (the path itself when it fits). Cutting at '/' never splits a %XX escape.
+    /// </summary>
+    internal static string FitPath(string canonicalPath)
+    {
+        if (canonicalPath.Length <= DnrLimits.MaxPrefixPathLength)
+            return canonicalPath;
+        var slash = canonicalPath.LastIndexOf('/', DnrLimits.MaxPrefixPathLength - 1);
+        return canonicalPath[..(slash + 1)];
+    }
+
+    /// <summary>
+    /// A host+path prefix pattern that compiles within the limits: <paramref name="host"/> plus <paramref name="path"/>,
+    /// or plus the longest directory of it that fits. For access-request "approve page".
+    /// </summary>
+    public static string FitPrefix(string host, string path)
+    {
+        var canonical = CanonicalPath(path);
+        return canonical.Length <= DnrLimits.MaxPrefixPathLength ? host + path : host + FitPath(canonical);
+    }
+
+    /// <summary>Why a rule would not compile to DNR as written, or null. Used by <see cref="Engine.RuleValidator"/>.</summary>
+    public static string? LimitError(Rule rule)
+    {
+        switch (rule.Type)
+        {
+            case PatternType.Wildcard:
+                var wildcard = rule.Pattern.Trim();
+                if (wildcard.StartsWith("*.", StringComparison.Ordinal) && DnrHostNormalizer.TryNormalize(wildcard[2..], out var host, out var kind) &&
+                    kind == DnrHostKind.Domain && DnrHostNormalizer.Labels(host, kind) is var labels && labels > DnrLimits.MaxWildcardLabels)
+                    return $"The wildcard '{rule.Pattern}' has {labels} labels; browsers accept at most {DnrLimits.MaxWildcardLabels}.";
+                return null;
+            case PatternType.Prefix:
+                if (TryParsePrefix(rule.Pattern, out _, out _, out var path) && path.Length > DnrLimits.MaxPrefixPathLength)
+                    return $"The path of '{rule.Pattern}' is {path.Length} characters long; browsers accept at most {DnrLimits.MaxPrefixPathLength}.";
+                return null;
+            case PatternType.Regex:
+                return IsRe2Compatible(rule.Pattern) ? null
+                    : $"The regular expression '{rule.Pattern}' uses features browsers cannot run (lookaround, backreferences, possessive or atomic groups).";
+            default:
+                return null;
+        }
+    }
+
+    private static DnrMatch? FromPrefix(Rule rule)
+    {
+        if (!TryParsePrefix(rule.Pattern, out var host, out var kind, out var path))
             return null;
-        var path = CanonicalPath(slash < 0 ? "/" : pattern[slash..]);
+        // Too long for the browser's regex budget (RuleValidator refuses these on entry): a block widens to the longest
+        // directory that fits, an allow is dropped — never the other way round.
         if (path.Length > DnrLimits.MaxPrefixPathLength)
-            throw new DnrCompileException(
-                $"Rule '{rule.Id}': prefix '{rule.Pattern}' has a {path.Length}-character path; at most {DnrLimits.MaxPrefixPathLength} fit in a DNR regex.");
+        {
+            if (rule.Action != RuleAction.Block)
+                return null;
+            path = FitPath(path);
+        }
 
         var level = DnrPriorities.PrefixLevel(DnrHostNormalizer.Labels(host, kind), path.Length);
         if (path == "/")
