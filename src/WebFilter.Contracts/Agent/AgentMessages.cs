@@ -30,7 +30,8 @@ public abstract record AgentMessage
     public string? Id { get; init; }
 }
 
-public sealed record HelloRequest(string ExtVersion, string Browser) : AgentMessage;
+/// <param name="ExtensionId">chrome.runtime.id — used only to build the block-page URL in compiled rules.</param>
+public sealed record HelloRequest(string ExtVersion, string Browser, string? ExtensionId = null) : AgentMessage;
 
 /// <param name="Source">"service", or "host" when the native host answers by itself because the service is down.</param>
 /// <param name="Mode">unrestricted | blocklist | allowlist — the extension disables its fail-closed ruleset for unrestricted users.</param>

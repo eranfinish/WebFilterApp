@@ -80,6 +80,10 @@ public sealed class AgentCore(string deviceId)
         return result;
     }
 
+    /// <summary>A block enforced by the extension itself (DNR or content script), reported for the parents' log.</summary>
+    public void ReportBlock(DeviceAccount account, string url, ReasonCode reason, DateTimeOffset now) =>
+        Raise(new FamilyEvent(EventType.Blocked, now, account.MemberId, DeviceId, reason, Url: url));
+
     /// <summary>A browser heartbeat. The minute counts only when browsing is allowed at this instant.</summary>
     public void Heartbeat(DeviceAccount account, DateTimeOffset now, bool active)
     {
