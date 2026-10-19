@@ -51,8 +51,9 @@ cd tests/simulation/tools && npm install && npm run validate
 ## Status
 
 - M0: legacy tag, v2 skeleton, plan, simulation catalog, spikes S2a/S3/S4 done (`spikes/*/REPORT.md`). S1, S2b, S5, S6 need the user's store accounts and a Hyper-V VM (`docs/LAB-AND-ACCOUNTS.md`).
-- M1: Core engine, Contracts, level-1 runner — 71/71 engine scenarios pass; decision p99 ≈ 57 µs (`tests/WebFilter.Benchmarks`). DNR compiler in progress.
+- M1: done. Core engine, Contracts, level-1 runner — 71/71 engine scenarios pass; decision p99 ≈ 57 µs (`tests/WebFilter.Benchmarks`). DNR compiler checked against Edge 156 and, by a differential test, against the Core evaluator. Rules are validated on entry (`RuleValidator`).
 - M2/M3 (partial): service storage, agent/admin pipes, profile caches, native host; extension in progress. Not yet run as an installed LocalSystem service.
+- M6 (partial): hub server, code pairing with mutual proofs, mutual-TLS sync, change push, queued requests, revocation — tested with two services over loopback (`HubSyncTests`). Needs the 3-VM lab.
 - NativeAOT and the WFP C++ DLL need Visual Studio's "Desktop development with C++" workload (not installed).
 
 `spikes/` holds throwaway experiments and their evidence. Reuse the findings, not the code: production code is written fresh under `src/` and `extension/`. Browser tests drive the installed Edge (`channel: "msedge"`); Playwright's bundled Chromium does not start on this Windows build.
