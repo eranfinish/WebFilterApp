@@ -29,8 +29,8 @@ public sealed class StorageTests : IDisposable
     [Fact]
     public void Migrations_are_applied_once()
     {
-        Assert.Equal(1, Db("hub.db", "hub").SchemaVersion);
-        Assert.Equal(1, Db("hub.db", "hub").SchemaVersion);
+        Assert.Equal(2, Db("hub.db", "hub").SchemaVersion);
+        Assert.Equal(2, Db("hub.db", "hub").SchemaVersion);
         Assert.Equal(1, Db("agent.db", "agent").SchemaVersion);
     }
 
