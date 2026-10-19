@@ -8,6 +8,7 @@ using WebFilter.Contracts.Hub;
 using WebFilter.Core.Engine;
 using WebFilter.Core.Model;
 using WebFilter.Core.Time;
+using WebFilter.Service.Accounts;
 using WebFilter.Service.Mapping;
 
 namespace WebFilter.Service.Pipes;
@@ -16,9 +17,11 @@ namespace WebFilter.Service.Pipes;
 /// <c>\\.\pipe\WebFilter.Admin</c>: the DACL grants only Administrators, SYSTEM and the service account, so an
 /// unelevated token cannot even open it; each client is also checked to be elevated (or the service account).
 /// </summary>
-public sealed class AdminPipeServer(FamilyService family, IOptions<ServiceOptions> options, TimeProvider time, ILogger<AdminPipeServer> log) : BackgroundService
+public sealed class AdminPipeServer(FamilyService family, IOptions<ServiceOptions> options, TimeProvider time, ILogger<AdminPipeServer> log,
+    ILocalAccounts? accounts = null) : BackgroundService
 {
     private readonly ServiceOptions _options = options.Value;
+    private readonly ILocalAccounts _accounts = accounts ?? new WindowsLocalAccounts();
     private static readonly SecurityIdentifier Self = WindowsIdentity.GetCurrent().User!;
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
@@ -72,7 +75,8 @@ public sealed class AdminPipeServer(FamilyService family, IOptions<ServiceOption
                 {
                     reply = Handle(request, adminName);
                 }
-                catch (Exception ex) when (ex is KeyNotFoundException or ArgumentException or InvalidOperationException or NotSupportedException)
+                catch (Exception ex) when (ex is KeyNotFoundException or ArgumentException or InvalidOperationException or NotSupportedException
+                                               or FormatException or TimeZoneNotFoundException or InvalidTimeZoneException)
                 {
                     reply = new AdminError("bad_request", ex.Message);
                 }
@@ -108,7 +112,7 @@ public sealed class AdminPipeServer(FamilyService family, IOptions<ServiceOption
         GetStatus => family.WithHub<AdminMessage>((hub, now) => new StatusResult(hub.Version, family.DeviceId, family.IsHub, now,
             hub.Config.Members.Select(m => MemberStatusOf(m, hub.TimeStatus(m.Id, now), hub.RuntimeOf(m.Id), now)).ToList())),
         GetSettings => family.WithHub<AdminMessage>((hub, _) => new SettingsResult(BundleMapper.ToBundle(hub.Config, hub.Version))),
-        ReplaceSettings replace => Ok(adminName, (hub, now) => hub.ReplaceSettings(BundleMapper.ToConfig(replace.Settings), now)),
+        ReplaceSettings replace => Replace(replace, adminName),
         AddRule add => Ok(adminName, (hub, now) => hub.AddRule(ToRule(add.Rule), now)),
         RemoveRule remove => Ok(adminName, (hub, now) => hub.RemoveRule(remove.RuleId, now)),
         SetMember set => Ok(adminName, (hub, now) => hub.SetMember(Patch(hub.Config.Member(set.MemberId), set), now)),
@@ -134,6 +138,7 @@ public sealed class AdminPipeServer(FamilyService family, IOptions<ServiceOption
         RevokeDevice revoke => family.Devices!.Revoke(revoke.DeviceId, family.Now)
             ? new AdminOk()
             : new AdminError("not_found", "No such paired device."),
+        ScanAccounts => ScanLocalAccounts(adminName),
         _ => new AdminError("unsupported", $"Unsupported message type {request.GetType().Name}."),
     };
 
@@ -143,6 +148,34 @@ public sealed class AdminPipeServer(FamilyService family, IOptions<ServiceOption
             action(hub, now);
             return new AdminOk();
         }, actor: adminName);
+
+    /// <summary>The version check and the change happen under the same gate, so nothing can slip in between.</summary>
+    private AdminMessage Replace(ReplaceSettings replace, string adminName)
+    {
+        var config = BundleMapper.ToConfig(replace.Settings);
+        return family.WithHub<AdminMessage>((hub, now) =>
+        {
+            if (replace.IfVersion is { } expected && hub.Version != expected)
+                return new AdminError(ReplaceSettings.ConflictCode,
+                    $"The settings changed meanwhile (version {hub.Version}, expected {expected}); read them again.");
+            hub.ReplaceSettings(config, now);
+            return new AdminOk();
+        }, actor: adminName);
+    }
+
+    /// <summary>Reads the Windows accounts outside the gate (it may take a moment), then records the new ones.</summary>
+    private AdminMessage ScanLocalAccounts(string adminName)
+    {
+        var seen = _accounts.List();
+        return family.WithHub<AdminMessage>((hub, now) =>
+        {
+            var before = hub.Config.Devices.Find(d => d.Id == family.DeviceId)?.Accounts.Count;
+            if (before is null) return new AdminError("not_found", $"This computer ({family.DeviceId}) is not in the settings.");
+            hub.ReportAccounts(family.DeviceId, seen, now);
+            var added = hub.Config.Device(family.DeviceId).Accounts.Count - before.Value;
+            return new AdminOk(added.ToString(System.Globalization.CultureInfo.InvariantCulture));
+        }, actor: adminName);
+    }
 
     private AdminMessage DecideRequest(DecideRequest decide, string adminName)
     {

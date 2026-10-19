@@ -136,10 +136,14 @@ public sealed class HubCore(FamilyConfig config)
 
     // ---- admin actions --------------------------------------------------------------------------------------------
 
-    /// <summary>Replaces all settings (setup wizard, import). Runtime state, usage, events and requests are kept.</summary>
-    /// <summary>Replaces all settings. New or changed rules must pass <see cref="RuleValidator"/>; rules already present are kept as they are.</summary>
+    /// <summary>
+    /// Replaces all settings (setup wizard, member page, import). Runtime state, usage, events and requests are kept.
+    /// The settings must pass <see cref="SettingsValidator"/>, and new or changed rules <see cref="RuleValidator"/>;
+    /// rules already present are kept as they are.
+    /// </summary>
     public void ReplaceSettings(FamilyConfig config, DateTimeOffset now)
     {
+        SettingsValidator.EnsureValid(config);
         var existing = Config.Rules.ToHashSet();
         foreach (var rule in config.Rules.Where(r => !existing.Contains(r))) RuleValidator.EnsureValid(rule);
         Config = config;

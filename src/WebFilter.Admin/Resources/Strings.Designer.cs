@@ -1784,7 +1784,7 @@ namespace WebFilter.Admin.Resources {
         }
 
         /// <summary>
-        ///   Looks up a localized string similar to כל ההגדרות הוחלפו.
+        ///   Looks up a localized string similar to ההגדרות עודכנו.
         /// </summary>
         public static string AdminChange_replace_settings {
             get {
@@ -2437,6 +2437,1140 @@ namespace WebFilter.Admin.Resources {
         public static string Pairing_CopyFailed {
             get {
                 return ResourceManager.GetString("Pairing_CopyFailed", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to בני משפחה.
+        /// </summary>
+        public static string Nav_Members {
+            get {
+                return ResourceManager.GetString("Nav_Members", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to הגדרה ראשונית.
+        /// </summary>
+        public static string Nav_Setup {
+            get {
+                return ResourceManager.GetString("Nav_Setup", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to פרטים והגדרות.
+        /// </summary>
+        public static string Action_MemberDetails {
+            get {
+                return ResourceManager.GetString("Action_MemberDetails", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to התחלת הגדרה ראשונית.
+        /// </summary>
+        public static string Dashboard_StartSetup {
+            get {
+                return ResourceManager.GetString("Dashboard_StartSetup", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to ההגדרות השתנו בזמן השמירה, והשינוי לא נשמר. נסו שוב..
+        /// </summary>
+        public static string Error_Conflict {
+            get {
+                return ResourceManager.GetString("Error_Conflict", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to המחשב הזה מנוהל על ידי מחשב ההורים (Hub). את השינוי עושים בממשק הניהול שבמחשב הה....
+        /// </summary>
+        public static string Error_NotHub {
+            get {
+                return ResourceManager.GetString("Error_NotHub", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to לכמה זמן.
+        /// </summary>
+        public static string Rules_Add_Expiry {
+            get {
+                return ResourceManager.GetString("Rules_Add_Expiry", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to קבוע.
+        /// </summary>
+        public static string RuleExpiry_permanent {
+            get {
+                return ResourceManager.GetString("RuleExpiry_permanent", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to לשעה.
+        /// </summary>
+        public static string RuleExpiry_hour {
+            get {
+                return ResourceManager.GetString("RuleExpiry_hour", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to עד סוף היום.
+        /// </summary>
+        public static string RuleExpiry_today {
+            get {
+                return ResourceManager.GetString("RuleExpiry_today", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to כל ההגדרות של בן משפחה אחד: שעות ומכסה יומית, אתרים, ערוצי YouTube, אפליקציות וק....
+        /// </summary>
+        public static string Member_Intro {
+            get {
+                return ResourceManager.GetString("Member_Intro", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to המחשב הזה מנוהל על ידי מחשב ההורים (Hub). את ההגדרות של בני המשפחה משנים בממשק ה....
+        /// </summary>
+        public static string Member_NotHub {
+            get {
+                return ResourceManager.GetString("Member_NotHub", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to עדיין לא הוגדרו בני משפחה. התחילו בהגדרה הראשונית..
+        /// </summary>
+        public static string Member_NoMembers {
+            get {
+                return ResourceManager.GetString("Member_NoMembers", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to בן משפחה:.
+        /// </summary>
+        public static string Member_Choose {
+            get {
+                return ResourceManager.GetString("Member_Choose", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to הגלישה של בן המשפחה הזה לא מסוננת, ולכן השעות, האתרים, האפליקציות והקטגוריות שלמ....
+        /// </summary>
+        public static string Member_UnrestrictedNote {
+            get {
+                return ResourceManager.GetString("Member_UnrestrictedNote", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to פרטים ואופן הסינון.
+        /// </summary>
+        public static string Member_Profile {
+            get {
+                return ResourceManager.GetString("Member_Profile", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to שם.
+        /// </summary>
+        public static string Member_Name {
+            get {
+                return ResourceManager.GetString("Member_Name", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to תפקיד.
+        /// </summary>
+        public static string Member_Role {
+            get {
+                return ResourceManager.GetString("Member_Role", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to גיל.
+        /// </summary>
+        public static string Member_Age {
+            get {
+                return ResourceManager.GetString("Member_Age", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to שעות גלישה ומכסה יומית.
+        /// </summary>
+        public static string Member_Week {
+            get {
+                return ResourceManager.GetString("Member_Week", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to השעות לפי השעון של המשפחה. מכסה ריקה = בלי הגבלת דקות באותו יום. הזמן נספר יחד ב....
+        /// </summary>
+        public static string Member_WeekHint {
+            get {
+                return ResourceManager.GetString("Member_WeekHint", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to גלישה רק בשעות מסוימות.
+        /// </summary>
+        public static string Member_RestrictHours {
+            get {
+                return ResourceManager.GetString("Member_RestrictHours", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to יום.
+        /// </summary>
+        public static string Member_Col_Day {
+            get {
+                return ResourceManager.GetString("Member_Col_Day", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to שעות מותרות.
+        /// </summary>
+        public static string Member_Col_Hours {
+            get {
+                return ResourceManager.GetString("Member_Col_Hours", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to מכסה יומית.
+        /// </summary>
+        public static string Member_Col_Limit {
+            get {
+                return ResourceManager.GetString("Member_Col_Limit", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to בכל שעה.
+        /// </summary>
+        public static string Member_AnyHour {
+            get {
+                return ResourceManager.GetString("Member_AnyHour", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to אין גלישה ביום הזה.
+        /// </summary>
+        public static string Member_Closed {
+            get {
+                return ResourceManager.GetString("Member_Closed", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to + שעות.
+        /// </summary>
+        public static string Member_AddWindow {
+            get {
+                return ResourceManager.GetString("Member_AddWindow", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to הסרת השעות האלה.
+        /// </summary>
+        public static string Member_RemoveWindow {
+            get {
+                return ResourceManager.GetString("Member_RemoveWindow", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to משעה.
+        /// </summary>
+        public static string Member_From {
+            get {
+                return ResourceManager.GetString("Member_From", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to עד שעה.
+        /// </summary>
+        public static string Member_To {
+            get {
+                return ResourceManager.GetString("Member_To", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to דקות.
+        /// </summary>
+        public static string Member_MinutesSuffix {
+            get {
+                return ResourceManager.GetString("Member_MinutesSuffix", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to (ללא הגבלה).
+        /// </summary>
+        public static string Member_NoLimit {
+            get {
+                return ResourceManager.GetString("Member_NoLimit", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to העתקה לכל הימים.
+        /// </summary>
+        public static string Member_CopyToAll {
+            get {
+                return ResourceManager.GetString("Member_CopyToAll", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to אתרים.
+        /// </summary>
+        public static string Member_Sites {
+            get {
+                return ResourceManager.GetString("Member_Sites", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to אין כללי אתרים אישיים. כללים לכל המשפחה נמצאים במסך כללי אתרים..
+        /// </summary>
+        public static string Member_NoSites {
+            get {
+                return ResourceManager.GetString("Member_NoSites", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to ערוצי YouTube.
+        /// </summary>
+        public static string Member_Channels {
+            get {
+                return ResourceManager.GetString("Member_Channels", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to במצב "רק ערוצים מאושרים" אפשר לצפות רק בערוצים המותרים; בשאר המצבים ערוץ חסום לא....
+        /// </summary>
+        public static string Member_ChannelsHint {
+            get {
+                return ResourceManager.GetString("Member_ChannelsHint", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to מזהה ערוץ או כתובת youtube.com/channel/….
+        /// </summary>
+        public static string Member_ChannelId {
+            get {
+                return ResourceManager.GetString("Member_ChannelId", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to שם משתמש (@…), לא חובה.
+        /// </summary>
+        public static string Member_ChannelHandle {
+            get {
+                return ResourceManager.GetString("Member_ChannelHandle", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to שם לתצוגה, לא חובה.
+        /// </summary>
+        public static string Member_ChannelTitle {
+            get {
+                return ResourceManager.GetString("Member_ChannelTitle", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to הוספת הערוץ.
+        /// </summary>
+        public static string Member_AddChannel {
+            get {
+                return ResourceManager.GetString("Member_AddChannel", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to אין ערוצים אישיים..
+        /// </summary>
+        public static string Member_NoChannels {
+            get {
+                return ResourceManager.GetString("Member_NoChannels", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to להסיר את הערוץ {0}?.
+        /// </summary>
+        public static string Member_RemoveChannelConfirm {
+            get {
+                return ResourceManager.GetString("Member_RemoveChannelConfirm", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to אפליקציות מאושרות.
+        /// </summary>
+        public static string Member_Apps {
+            get {
+                return ResourceManager.GetString("Member_Apps", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to מלבד הדפדפנים, רק אפליקציות מאושרות יכולות לגשת לאינטרנט. לתוכנה כותבים את הנתיב....
+        /// </summary>
+        public static string Member_AppsHint {
+            get {
+                return ResourceManager.GetString("Member_AppsHint", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to סוג.
+        /// </summary>
+        public static string Member_AppMatch {
+            get {
+                return ResourceManager.GetString("Member_AppMatch", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to נתיב או שם חבילה.
+        /// </summary>
+        public static string Member_AppValue {
+            get {
+                return ResourceManager.GetString("Member_AppValue", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to מותרת תמיד — גם כשזמן הגלישה נגמר.
+        /// </summary>
+        public static string Member_AppAlwaysAllowed {
+            get {
+                return ResourceManager.GetString("Member_AppAlwaysAllowed", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to אישור האפליקציה.
+        /// </summary>
+        public static string Member_AddApp {
+            get {
+                return ResourceManager.GetString("Member_AddApp", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to אין אפליקציות מאושרות אישיות..
+        /// </summary>
+        public static string Member_NoApps {
+            get {
+                return ResourceManager.GetString("Member_NoApps", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to להסיר את האישור של {0}?.
+        /// </summary>
+        public static string Member_RemoveAppConfirm {
+            get {
+                return ResourceManager.GetString("Member_RemoveAppConfirm", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to הסרה.
+        /// </summary>
+        public static string Member_RemoveTitle {
+            get {
+                return ResourceManager.GetString("Member_RemoveTitle", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to קטגוריות.
+        /// </summary>
+        public static string Member_Categories {
+            get {
+                return ResourceManager.GetString("Member_Categories", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to לכל קטגוריה: לפי אופן הסינון, מותרת תמיד, או חסומה..
+        /// </summary>
+        public static string Member_CategoriesHint {
+            get {
+                return ResourceManager.GetString("Member_CategoriesHint", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to עדיין לא הוגדרו קטגוריות למשפחה..
+        /// </summary>
+        public static string Member_NoCategories {
+            get {
+                return ResourceManager.GetString("Member_NoCategories", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to {0} ועוד {1}.
+        /// </summary>
+        public static string Member_CategoryDomains {
+            get {
+                return ResourceManager.GetString("Member_CategoryDomains", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to תוכנה (נתיב).
+        /// </summary>
+        public static string AppMatch_path {
+            get {
+                return ResourceManager.GetString("AppMatch_path", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to אפליקציה מהחנות.
+        /// </summary>
+        public static string AppMatch_package {
+            get {
+                return ResourceManager.GetString("AppMatch_package", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to לפי אופן הסינון.
+        /// </summary>
+        public static string CategoryChoice_default {
+            get {
+                return ResourceManager.GetString("CategoryChoice_default", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to מותרת תמיד.
+        /// </summary>
+        public static string CategoryChoice_allow {
+            get {
+                return ResourceManager.GetString("CategoryChoice_allow", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to חסומה.
+        /// </summary>
+        public static string CategoryChoice_block {
+            get {
+                return ResourceManager.GetString("CategoryChoice_block", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to לימודים.
+        /// </summary>
+        public static string Category_educational {
+            get {
+                return ResourceManager.GetString("Category_educational", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to רשתות חברתיות.
+        /// </summary>
+        public static string Category_social {
+            get {
+                return ResourceManager.GetString("Category_social", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to משחקים.
+        /// </summary>
+        public static string Category_gaming {
+            get {
+                return ResourceManager.GetString("Category_gaming", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to השעות והמכסה של {0} נשמרו..
+        /// </summary>
+        public static string Done_WeekSaved {
+            get {
+                return ResourceManager.GetString("Done_WeekSaved", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to הערוץ {0} נוסף..
+        /// </summary>
+        public static string Done_ChannelAdded {
+            get {
+                return ResourceManager.GetString("Done_ChannelAdded", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to הערוץ {0} הוסר..
+        /// </summary>
+        public static string Done_ChannelRemoved {
+            get {
+                return ResourceManager.GetString("Done_ChannelRemoved", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to {0} אושרה..
+        /// </summary>
+        public static string Done_AppAdded {
+            get {
+                return ResourceManager.GetString("Done_AppAdded", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to האישור של {0} הוסר..
+        /// </summary>
+        public static string Done_AppRemoved {
+            get {
+                return ResourceManager.GetString("Done_AppRemoved", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to הקטגוריות של {0} נשמרו..
+        /// </summary>
+        public static string Done_CategoriesSaved {
+            get {
+                return ResourceManager.GetString("Done_CategoriesSaved", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to כתבו שם לכל בן משפחה..
+        /// </summary>
+        public static string Validation_NameEmpty {
+            get {
+                return ResourceManager.GetString("Validation_NameEmpty", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to כבר יש בן משפחה בשם {0}..
+        /// </summary>
+        public static string Validation_NameTaken {
+            get {
+                return ResourceManager.GetString("Validation_NameTaken", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to גיל הוא מספר בין 1 ל-120, או השאירו ריק..
+        /// </summary>
+        public static string Validation_Age {
+            get {
+                return ResourceManager.GetString("Validation_Age", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to {0}: כתבו שעות בצורה 16:30 (סוף היום: 24:00)..
+        /// </summary>
+        public static string Validation_TimeFormat {
+            get {
+                return ResourceManager.GetString("Validation_TimeFormat", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to {0}: השעה {1} צריכה להיות לפני {2}..
+        /// </summary>
+        public static string Validation_TimeOrder {
+            get {
+                return ResourceManager.GetString("Validation_TimeOrder", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to {0}: המכסה היומית היא מספר דקות בין 0 ל-1440, או השאירו ריק..
+        /// </summary>
+        public static string Validation_Limit {
+            get {
+                return ResourceManager.GetString("Validation_Limit", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to כתבו את הנתיב המלא לתוכנה, למשל C:\Program Files\App\app.exe (בלי % ובלי *)..
+        /// </summary>
+        public static string Validation_AppPathForm {
+            get {
+                return ResourceManager.GetString("Validation_AppPathForm", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to הנתיב צריך להסתיים בקובץ התוכנה (‎.exe‎)..
+        /// </summary>
+        public static string Validation_AppPathExe {
+            get {
+                return ResourceManager.GetString("Validation_AppPathExe", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to כתבו את שם החבילה של האפליקציה, למשל Microsoft.MinecraftUWP_8wekyb3d8bbwe..
+        /// </summary>
+        public static string Validation_AppPackageForm {
+            get {
+                return ResourceManager.GetString("Validation_AppPackageForm", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to זה לא מזהה ערוץ. מזהה ערוץ מתחיל ב-UC ואחריו 22 תווים..
+        /// </summary>
+        public static string Validation_ChannelId {
+            get {
+                return ResourceManager.GetString("Validation_ChannelId", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to צריך את מזהה הערוץ (מתחיל ב-UC), לא רק את שם המשתמש. בערוץ: "מידע" ← "שיתוף הערו....
+        /// </summary>
+        public static string Validation_ChannelHandleOnly {
+            get {
+                return ResourceManager.GetString("Validation_ChannelHandleOnly", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to שם משתמש ב-YouTube הוא @ ואחריו 3–30 אותיות באנגלית, ספרות, נקודות, מקפים או קוו....
+        /// </summary>
+        public static string Validation_ChannelHandle {
+            get {
+                return ResourceManager.GetString("Validation_ChannelHandle", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to כמה צעדים קצרים: מי במשפחה, איזה חשבון Windows במחשב הזה שייך למי, ומתי מותר לגל....
+        /// </summary>
+        public static string Setup_Intro {
+            get {
+                return ResourceManager.GetString("Setup_Intro", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to ההגדרה הראשונית נעשית במחשב ההורים (Hub). המחשב הזה מנוהל על ידו..
+        /// </summary>
+        public static string Setup_NotHub {
+            get {
+                return ResourceManager.GetString("Setup_NotHub", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to המשפחה כבר מוגדרת. את בני המשפחה וההגדרות שלהם משנים במסך בני משפחה..
+        /// </summary>
+        public static string Setup_AlreadySetUp {
+            get {
+                return ResourceManager.GetString("Setup_AlreadySetUp", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to {0}. {1}.
+        /// </summary>
+        public static string Setup_StepNumber {
+            get {
+                return ResourceManager.GetString("Setup_StepNumber", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to בני משפחה.
+        /// </summary>
+        public static string Setup_Step_Members {
+            get {
+                return ResourceManager.GetString("Setup_Step_Members", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to חשבונות Windows.
+        /// </summary>
+        public static string Setup_Step_Accounts {
+            get {
+                return ResourceManager.GetString("Setup_Step_Accounts", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to שעות ומכסה.
+        /// </summary>
+        public static string Setup_Step_Time {
+            get {
+                return ResourceManager.GetString("Setup_Step_Time", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to סיכום.
+        /// </summary>
+        public static string Setup_Step_Review {
+            get {
+                return ResourceManager.GetString("Setup_Step_Review", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to הוסיפו את כל בני המשפחה, גם את ההורים. התפקיד ממלא אופן סינון מתאים, ואפשר לשנות....
+        /// </summary>
+        public static string Setup_MembersHint {
+            get {
+                return ResourceManager.GetString("Setup_MembersHint", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to + בן משפחה.
+        /// </summary>
+        public static string Setup_AddMember {
+            get {
+                return ResourceManager.GetString("Setup_AddMember", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to בחרו לכל חשבון Windows במחשב הזה למי הוא שייך. חשבון שלא מקושר לאף אחד: מנהלים ל....
+        /// </summary>
+        public static string Setup_AccountsHint {
+            get {
+                return ResourceManager.GetString("Setup_AccountsHint", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to לא נמצאו חשבונות Windows במחשב הזה. אם יצרתם עכשיו חשבון לילד, לחצו על חיפוש מחד....
+        /// </summary>
+        public static string Setup_NoAccounts {
+            get {
+                return ResourceManager.GetString("Setup_NoAccounts", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to חיפוש חשבונות מחדש.
+        /// </summary>
+        public static string Setup_Rescan {
+            get {
+                return ResourceManager.GetString("Setup_Rescan", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to לא מקושר.
+        /// </summary>
+        public static string Setup_NotLinked {
+            get {
+                return ResourceManager.GetString("Setup_NotLinked", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to מנהל.
+        /// </summary>
+        public static string Setup_AdminAccount {
+            get {
+                return ResourceManager.GetString("Setup_AdminAccount", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to {0} הוא חשבון מנהל: WebFilter לא מסנן מנהלים, ומנהל יכול לכבות את הסינון. תנו ל-....
+        /// </summary>
+        public static string Setup_AdminLinked {
+            get {
+                return ResourceManager.GetString("Setup_AdminLinked", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to לכל בן משפחה מסונן: באילו שעות מותר לגלוש וכמה דקות ביום. אותן שעות בכל ימות השב....
+        /// </summary>
+        public static string Setup_TimeHint {
+            get {
+                return ResourceManager.GetString("Setup_TimeHint", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to אף אחד לא מסונן, ולכן אין שעות להגדיר..
+        /// </summary>
+        public static string Setup_NoTimedMembers {
+            get {
+                return ResourceManager.GetString("Setup_NoTimedMembers", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to הגבלת זמן.
+        /// </summary>
+        public static string Setup_LimitTime {
+            get {
+                return ResourceManager.GetString("Setup_LimitTime", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to בין.
+        /// </summary>
+        public static string Setup_Between {
+            get {
+                return ResourceManager.GetString("Setup_Between", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to ל-.
+        /// </summary>
+        public static string Setup_And {
+            get {
+                return ResourceManager.GetString("Setup_And", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to ועד.
+        /// </summary>
+        public static string Setup_UpTo {
+            get {
+                return ResourceManager.GetString("Setup_UpTo", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to דקות ביום.
+        /// </summary>
+        public static string Setup_MinutesPerDay {
+            get {
+                return ResourceManager.GetString("Setup_MinutesPerDay", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to כך תוגדר המשפחה. אחרי השמירה ההגדרות חלות מיד על המחשב הזה ועל כל מחשב שיצומד..
+        /// </summary>
+        public static string Setup_ReviewHint {
+            get {
+                return ResourceManager.GetString("Setup_ReviewHint", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to , גיל {0}.
+        /// </summary>
+        public static string Setup_Summary_Age {
+            get {
+                return ResourceManager.GetString("Setup_Summary_Age", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to YouTube: {0}.
+        /// </summary>
+        public static string Setup_Summary_YouTube {
+            get {
+                return ResourceManager.GetString("Setup_Summary_YouTube", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to בלי הגבלת זמן.
+        /// </summary>
+        public static string Setup_Summary_NotFiltered {
+            get {
+                return ResourceManager.GetString("Setup_Summary_NotFiltered", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to בכל שעה, בלי מכסה.
+        /// </summary>
+        public static string Setup_Summary_NoTimeLimit {
+            get {
+                return ResourceManager.GetString("Setup_Summary_NoTimeLimit", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to {0}, בלי מכסה.
+        /// </summary>
+        public static string Setup_Summary_Hours {
+            get {
+                return ResourceManager.GetString("Setup_Summary_Hours", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to {0}, עד {1} ביום.
+        /// </summary>
+        public static string Setup_Summary_Time {
+            get {
+                return ResourceManager.GetString("Setup_Summary_Time", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to חשבון: {0}.
+        /// </summary>
+        public static string Setup_Summary_Accounts {
+            get {
+                return ResourceManager.GetString("Setup_Summary_Accounts", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to אין חשבון במחשב הזה.
+        /// </summary>
+        public static string Setup_Summary_NoAccount {
+            get {
+                return ResourceManager.GetString("Setup_Summary_NoAccount", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to חשבונות שלא מקושרים: {0}.
+        /// </summary>
+        public static string Setup_UnlinkedAccounts {
+            get {
+                return ResourceManager.GetString("Setup_UnlinkedAccounts", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to חזרה.
+        /// </summary>
+        public static string Setup_Back {
+            get {
+                return ResourceManager.GetString("Setup_Back", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to המשך.
+        /// </summary>
+        public static string Setup_Next {
+            get {
+                return ResourceManager.GetString("Setup_Next", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to שמירה והפעלה.
+        /// </summary>
+        public static string Setup_Apply {
+            get {
+                return ResourceManager.GetString("Setup_Apply", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to המשפחה מוגדרת.
+        /// </summary>
+        public static string Setup_DoneTitle {
+            get {
+                return ResourceManager.GetString("Setup_DoneTitle", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to הסינון פועל עכשיו במחשב הזה. כדי לסנן גם את המחשבים של הילדים: התקינו בכל אחד מה....
+        /// </summary>
+        public static string Setup_DoneText {
+            get {
+                return ResourceManager.GetString("Setup_DoneText", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to צימוד מחשב נוסף.
+        /// </summary>
+        public static string Setup_OpenDevices {
+            get {
+                return ResourceManager.GetString("Setup_OpenDevices", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to למסך בני משפחה.
+        /// </summary>
+        public static string Setup_OpenMembers {
+            get {
+                return ResourceManager.GetString("Setup_OpenMembers", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to ללוח הבקרה.
+        /// </summary>
+        public static string Setup_OpenDashboard {
+            get {
+                return ResourceManager.GetString("Setup_OpenDashboard", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to נמצאו חשבונות Windows חדשים.
+        /// </summary>
+        public static string AdminChange_new_accounts {
+            get {
+                return ResourceManager.GetString("AdminChange_new_accounts", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to מחשב חדש צומד.
+        /// </summary>
+        public static string AdminChange_pair_device {
+            get {
+                return ResourceManager.GetString("AdminChange_pair_device", resourceCulture);
             }
         }
     }

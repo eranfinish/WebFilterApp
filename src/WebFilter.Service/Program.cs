@@ -1,4 +1,5 @@
 using WebFilter.Service;
+using WebFilter.Service.Accounts;
 using WebFilter.Service.Hub;
 using WebFilter.Service.Pipes;
 using WebFilter.Service.Policies;
@@ -14,6 +15,7 @@ builder.Services.AddSingleton<TimeProvider>(new SimulationClock(TimeProvider.Sys
 builder.Services.AddSingleton(TimeProvider.System);
 #endif
 builder.Services.AddSingleton<FamilyService>();
+builder.Services.AddSingleton<ILocalAccounts, WindowsLocalAccounts>();
 builder.Services.AddHostedService<TickService>();
 builder.Services.AddHostedService<AgentPipeServer>();
 builder.Services.AddHostedService<AdminPipeServer>();

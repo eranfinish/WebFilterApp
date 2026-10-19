@@ -42,6 +42,8 @@ internal static class Texts
         AdminConnectionException { Error: AdminConnectionError.Timeout } => Strings.Error_Timeout,
         AdminConnectionException => null,
         AdminServerException { Code: "unsupported" } => Strings.Error_Unsupported,
+        AdminServerException { Code: FamilyContext.NotHub } => Strings.Error_NotHub,
+        AdminServerException { Code: Contracts.Admin.ReplaceSettings.ConflictCode } => Strings.Error_Conflict,
         AdminServerException { Code: AdminServerException.UnexpectedReply } => Strings.Error_UnexpectedReply,
         _ => Format(Strings.Error_Rejected, error.Message),
     };
@@ -65,6 +67,20 @@ internal static class Texts
     /// the Unicode bidi rules move leading "*." or a trailing "/" to the other end ("example.com.*").
     /// </summary>
     public static string? Ltr(string? value) => string.IsNullOrEmpty(value) ? value : $"{Lrm}{value}{Lrm}";
+
+    /// <summary>
+    /// A name that may be Hebrew or Latin, in its own direction: a Latin one (by its first letter) gets the left-to-right
+    /// marks of <see cref="Ltr"/>, so "Khan Kids (sim)" does not become "(Khan Kids (sim".
+    /// </summary>
+    public static string Natural(string value)
+    {
+        foreach (var c in value)
+        {
+            if (c is >= '\u0590' and <= '\u08FF') return value;
+            if (char.IsLetter(c)) return Ltr(value)!;
+        }
+        return value;
+    }
 
     public static string? NullIfEmpty(string? value) => string.IsNullOrEmpty(value) ? null : value;
 
