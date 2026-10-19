@@ -25,6 +25,12 @@ public sealed class ServiceOptions
     /// <summary>Settings used the first time the hub starts with no stored state (until the setup wizard exists).</summary>
     public string? BootstrapBundlePath { get; set; }
 
+    /// <summary>Hub: the HTTPS port agents connect to (0 = any free port, for tests).</summary>
+    public int HubPort { get; set; } = Contracts.Hub.HubApi.DefaultPort;
+
+    /// <summary>Hub: the address to listen on. The installer opens the port for Private networks only.</summary>
+    public string HubBindAddress { get; set; } = "0.0.0.0";
+
     /// <summary>How often time warnings are evaluated and stored state is flushed.</summary>
     public TimeSpan TickInterval { get; set; } = TimeSpan.FromSeconds(30);
 }

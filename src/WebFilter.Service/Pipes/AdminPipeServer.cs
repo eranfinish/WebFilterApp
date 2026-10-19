@@ -103,6 +103,15 @@ public sealed class AdminPipeServer(FamilyService family, IOptions<ServiceOption
                 r.CreatedAt, r.Status.ToString().ToLowerInvariant(), r.DecidedAt)).ToList())),
         DecideRequest decide => DecideRequest(decide),
         SetClock set => SetClock(set),
+        CreatePairingCode => family.IsHub
+            ? new PairingCodeResult(family.Pairing.Create(family.Now), family.Now + Hub.HubPairing.Lifetime, family.Options.HubPort, LocalAddresses())
+            : new AdminError("not_hub", "Pairing codes are created on the hub computer."),
+        GetDevices => family.IsHub
+            ? new DevicesResult(family.Devices!.All().Select(d => new DeviceInfo(d.Id, d.Name, d.Os, d.PairedAt, d.LastSeenAt, d.RevokedAt is not null)).ToList())
+            : new AdminError("not_hub", "Devices are managed on the hub computer."),
+        RevokeDevice revoke => family.IsHub && family.Devices!.Revoke(revoke.DeviceId, family.Now)
+            ? new AdminOk()
+            : new AdminError("not_found", "No such paired device."),
         _ => new AdminError("unsupported", $"Unsupported message type {request.GetType().Name}."),
     };
 
@@ -146,6 +155,15 @@ public sealed class AdminPipeServer(FamilyService family, IOptions<ServiceOption
         _ = time;
         return new AdminError("unsupported", "The clock can only be set in Simulation builds.");
     }
+
+    private static List<string> LocalAddresses() =>
+        System.Net.NetworkInformation.NetworkInterface.GetAllNetworkInterfaces()
+            .Where(n => n.OperationalStatus == System.Net.NetworkInformation.OperationalStatus.Up && n.NetworkInterfaceType != System.Net.NetworkInformation.NetworkInterfaceType.Loopback)
+            .SelectMany(n => n.GetIPProperties().UnicastAddresses)
+            .Where(u => u.Address.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork)
+            .Select(u => u.Address.ToString())
+            .Distinct()
+            .ToList();
 
     private static MemberStatus MemberStatusOf(HubCore hub, FamilyMember member, DateTimeOffset now)
     {

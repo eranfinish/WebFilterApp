@@ -138,6 +138,28 @@ public sealed class HubCore(FamilyConfig config)
     /// <summary>Replaces all settings (setup wizard, import). Runtime state, usage, events and requests are kept.</summary>
     public void ReplaceSettings(FamilyConfig config, DateTimeOffset now) { Config = config; Changed(now, null, "replace_settings"); }
 
+    /// <summary>Adds a newly paired device (or updates its name and OS), keeping its known accounts.</summary>
+    public void AddDevice(string id, string os, DateTimeOffset now)
+    {
+        var index = Config.Devices.FindIndex(d => d.Id == id);
+        if (index >= 0) Config.Devices[index] = Config.Devices[index] with { Os = os };
+        else Config.Devices.Add(new Device(id, os, "agent", []));
+        Changed(now, null, "pair_device");
+    }
+
+    /// <summary>Records accounts an agent has seen; new ones are unlinked until a parent links them. Existing links are kept.</summary>
+    public void ReportAccounts(string deviceId, IEnumerable<DeviceAccount> seen, DateTimeOffset now)
+    {
+        var index = Config.Devices.FindIndex(d => d.Id == deviceId);
+        if (index < 0) return;
+        var device = Config.Devices[index];
+        var added = seen.Where(s => device.Accounts.All(a => !string.Equals(a.AccountId, s.AccountId, StringComparison.OrdinalIgnoreCase)))
+            .Select(s => s with { MemberId = null }).ToList();
+        if (added.Count == 0) return;
+        Config.Devices[index] = device with { Accounts = [.. device.Accounts, .. added] };
+        Changed(now, null, "new_accounts");
+    }
+
     public void AddRule(Rule rule, DateTimeOffset now) { Config.Rules.Add(rule); Changed(now, rule.MemberId, "add_rule"); }
 
     public void RemoveRule(string ruleId, DateTimeOffset now)

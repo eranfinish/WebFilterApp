@@ -104,7 +104,12 @@ public sealed class AgentCore(string deviceId)
     public RequestResult RequestAccess(AccessRequestDraft draft, Func<AccessRequestDraft, RequestResult> sendToHub)
     {
         if (!ServiceUp) return RequestResult.Unavailable;
-        if (HubReachable) return sendToHub(draft);
+        if (HubReachable)
+        {
+            var sent = sendToHub(draft);
+            if (sent != RequestResult.Queued) return sent;
+            // The hub turned out to be unreachable: keep the request until it is.
+        }
         if (_queued.Any(q => q.MemberId == draft.MemberId && q.TargetKey == draft.TargetKey)) return RequestResult.Merged;
         _queued.Add(draft.ToRequest($"{DeviceId}-q{++_queuedCounter}"));
         return RequestResult.Queued;
@@ -124,6 +129,13 @@ public sealed class AgentCore(string deviceId)
         agent._queued.AddRange(state.QueuedRequests.Select(q => q.Clone()));
         agent._queuedCounter = state.QueuedCounter;
         return agent;
+    }
+
+    /// <summary>Puts back an upload that could not be delivered (usage needs nothing: the local ledger is never cleared).</summary>
+    public void Requeue(AgentUpload upload)
+    {
+        _outbox.InsertRange(0, upload.Events);
+        _queued.InsertRange(0, upload.QueuedRequests.Where(q => _queued.All(existing => existing.Id != q.Id)));
     }
 
     public AgentUpload TakeUpload()

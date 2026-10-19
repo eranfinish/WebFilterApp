@@ -30,6 +30,11 @@ namespace WebFilter.Contracts.Admin;
 [JsonDerivedType(typeof(RequestsResult), "requestsResult")]
 [JsonDerivedType(typeof(DecideRequest), "decideRequest")]
 [JsonDerivedType(typeof(SetClock), "setClock")]
+[JsonDerivedType(typeof(CreatePairingCode), "createPairingCode")]
+[JsonDerivedType(typeof(PairingCodeResult), "pairingCodeResult")]
+[JsonDerivedType(typeof(GetDevices), "getDevices")]
+[JsonDerivedType(typeof(DevicesResult), "devicesResult")]
+[JsonDerivedType(typeof(RevokeDevice), "revokeDevice")]
 [JsonDerivedType(typeof(AdminOk), "ok")]
 [JsonDerivedType(typeof(AdminError), "error")]
 public abstract record AdminMessage
@@ -103,6 +108,21 @@ public sealed record DecideRequest(string RequestId, string Decision, string? Sc
 
 /// <summary>Simulation builds only (<c>#if SIMULATION</c>): sets the service clock. Release services answer "unsupported".</summary>
 public sealed record SetClock(DateTimeOffset Now) : AdminMessage;
+
+/// <summary>Hub only: a one-time code for pairing another computer (valid 10 minutes).</summary>
+public sealed record CreatePairingCode : AdminMessage;
+
+/// <param name="Addresses">This hub's IPv4 addresses on its networks, to type on the new computer together with <paramref name="Port"/>.</param>
+public sealed record PairingCodeResult(string Code, DateTimeOffset ExpiresAt, int Port, IReadOnlyList<string> Addresses) : AdminMessage;
+
+public sealed record GetDevices : AdminMessage;
+
+public sealed record DevicesResult(IReadOnlyList<DeviceInfo> Devices) : AdminMessage;
+
+public sealed record DeviceInfo(string Id, string Name, string Os, DateTimeOffset PairedAt, DateTimeOffset? LastSeenAt, bool Revoked);
+
+/// <summary>Stops accepting a paired computer (it keeps enforcing its last settings until reinstalled or re-paired).</summary>
+public sealed record RevokeDevice(string DeviceId) : AdminMessage;
 
 public sealed record AdminOk(string? Detail = null) : AdminMessage;
 

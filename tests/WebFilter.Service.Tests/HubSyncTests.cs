@@ -1,0 +1,174 @@
+using System.Diagnostics;
+using System.Net;
+using System.Net.Sockets;
+using Microsoft.Extensions.Logging.Abstractions;
+using Microsoft.Extensions.Options;
+using WebFilter.Core.Engine;
+using WebFilter.Core.Model;
+using WebFilter.Service.Hub;
+
+namespace WebFilter.Service.Tests;
+
+/// <summary>
+/// M6 on one machine: a hub and an agent as two services talking HTTPS with mutual TLS over loopback —
+/// pairing, snapshot sync, usage upload, change push, online and queued requests, wrong codes and revocation.
+/// </summary>
+public sealed class HubSyncTests : IAsyncLifetime
+{
+    private readonly string _dir = Path.Combine(Path.GetTempPath(), "wf-hub-" + Guid.NewGuid().ToString("N"));
+    private readonly TestClock _clock = new(DateTimeOffset.Parse("2026-11-02T15:00:00+02:00")); // Monday, inside yoav's window
+    private readonly int _port = FreePort();
+    private FamilyService _hub = null!;
+    private HubServer _server = null!;
+    private FamilyService _agent = null!;
+    private HubSyncService _sync = null!;
+    private string _agentData = null!;
+
+    public async Task InitializeAsync()
+    {
+        Directory.CreateDirectory(_dir);
+        var fixture = Path.Combine(RepoRoot(), "tests", "simulation", "fixtures", "family-base.json");
+        _hub = new FamilyService(Options.Create(new ServiceOptions
+        {
+            Role = "hub", DeviceId = "pc-parents", DataDirectory = Path.Combine(_dir, "hub"), ProfileDirectory = Path.Combine(_dir, "hub-profiles"),
+            HubBindAddress = "127.0.0.1", HubPort = _port, BootstrapBundlePath = fixture,
+        }), _clock, NullLogger<FamilyService>.Instance);
+        _hub.Start();
+        await StartServerAsync();
+
+        _agentData = Path.Combine(_dir, "agent");
+        _agent = new FamilyService(Options.Create(new ServiceOptions
+        {
+            Role = "agent", DeviceId = "laptop-yoav", DataDirectory = _agentData, ProfileDirectory = Path.Combine(_dir, "agent-profiles"),
+        }), _clock, NullLogger<FamilyService>.Instance);
+    }
+
+    public async Task DisposeAsync()
+    {
+        if (_sync is not null) await _sync.StopAsync(CancellationToken.None);
+        await _server.StopAsync(CancellationToken.None);
+        _agent.Dispose();
+        _hub.Dispose();
+        try { Directory.Delete(_dir, recursive: true); } catch (IOException) { } catch (UnauthorizedAccessException) { }
+    }
+
+    private async Task StartServerAsync()
+    {
+        _server = new HubServer(_hub, NullLogger<HubServer>.Instance);
+        await _server.StartAsync(CancellationToken.None);
+        await _server.Port.WaitAsync(TimeSpan.FromSeconds(15));
+    }
+
+    private async Task PairAndSyncAsync()
+    {
+        await HubLink.PairAsync(_agentData, $"127.0.0.1:{_port}", _hub.Pairing.Create(_clock.GetUtcNow()), "laptop-yoav", "Yoav's laptop");
+        _agent.Start();
+        _sync = new HubSyncService(_agent, NullLogger<HubSyncService>.Instance);
+        await _sync.StartAsync(CancellationToken.None);
+        await _sync.FirstSync.Task.WaitAsync(TimeSpan.FromSeconds(20));
+    }
+
+    private int HubVersion => _hub.WithHub((hub, _) => hub.Version);
+
+    [Fact]
+    public async Task Pairing_registers_the_device_and_the_agent_receives_the_settings()
+    {
+        await PairAndSyncAsync();
+        Assert.Contains(_hub.Devices!.All(), d => d.Id == "laptop-yoav" && d.RevokedAt is null);
+        Assert.Equal(HubVersion, _agent.AgentSnapshotVersion);
+        var member = _agent.WithAgent((agent, _) => agent.AccountOf("yoav").MemberId);
+        Assert.Equal("yoav", member);
+    }
+
+    [Fact]
+    public async Task A_wrong_code_is_refused_and_nothing_is_registered()
+    {
+        await Assert.ThrowsAsync<UnauthorizedAccessException>(() =>
+            HubLink.PairAsync(_agentData, $"127.0.0.1:{_port}", "AAAA-BBBB-CCCC", "laptop-yoav", "laptop"));
+        Assert.DoesNotContain(_hub.Devices!.All(), d => d.Id == "laptop-yoav");
+        Assert.Null(HubLink.Load(_agentData));
+    }
+
+    [Fact]
+    public async Task Usage_reaches_the_hub_and_hub_changes_reach_the_agent_within_five_seconds()
+    {
+        await PairAndSyncAsync();
+        _agent.WithAgent((agent, now) => { agent.Heartbeat(agent.AccountOf("yoav"), now, active: true); return 0; });
+        _sync.Wake();
+        await Eventually(() => _hub.WithHub((hub, _) => hub.Usage.MinutesOn("yoav", "laptop-yoav").Count) == 1, "usage uploaded");
+
+        var watch = Stopwatch.StartNew();
+        _hub.WithHub((hub, now) => { hub.AddRule(new Rule("r-sync", "yoav", "chess.example", PatternType.Domain, RuleAction.Block), now); return 0; });
+        await Eventually(() => _agent.AgentSnapshotVersion == HubVersion, "settings pushed");
+        Assert.True(watch.Elapsed < TimeSpan.FromSeconds(5), $"took {watch.Elapsed}");
+        var decision = _agent.WithAgent((agent, now) => agent.DecideUrl(agent.AccountOf("yoav"), "https://chess.example/", now));
+        Assert.Equal("r-sync", decision.RuleId);
+    }
+
+    [Fact]
+    public async Task Requests_go_straight_to_the_hub_when_reachable_and_are_queued_otherwise()
+    {
+        await PairAndSyncAsync();
+        var online = Request("https://www.instagram.com/");
+        Assert.Equal(RequestResult.Created, online);
+        Assert.Single(_hub.WithHub((hub, _) => hub.Requests.ToList()));
+
+        await _server.StopAsync(CancellationToken.None);
+        await Eventually(() => Request("https://www.tiktok.com/") == RequestResult.Queued || _agent.WithAgent((a, _) => a.QueuedRequests.Count) > 0, "queued while the hub is down");
+
+        await StartServerAsync();
+        _sync.Wake();
+        await Eventually(() => _hub.WithHub((hub, _) => hub.Requests.Count) == 2, "queued request delivered after the hub returned");
+    }
+
+    [Fact]
+    public async Task A_revoked_device_is_shut_out_but_keeps_enforcing()
+    {
+        await PairAndSyncAsync();
+        Assert.True(_hub.Devices!.Revoke("laptop-yoav", _clock.GetUtcNow()));
+        _hub.WithHub((hub, now) => { hub.AddRule(new Rule("r-after", "yoav", "after.example", PatternType.Domain, RuleAction.Block), now); return 0; });
+        _sync.Wake();
+        await Eventually(() => Request("https://x.example/") == RequestResult.Queued, "hub unreachable for a revoked device");
+        Assert.NotEqual(HubVersion, _agent.AgentSnapshotVersion);
+        var stillFiltered = _agent.WithAgent((agent, now) => agent.DecideUrl(agent.AccountOf("yoav"), "https://www.instagram.com/", now));
+        Assert.Equal(Core.Decisions.Decision.Block, stillFiltered.Decision);
+    }
+
+    private RequestResult Request(string url) => _agent.WithAgent((agent, now) =>
+    {
+        var draft = new AccessRequestDraft("yoav", "laptop-yoav", RequestKind.Url, url, HubCore.TargetKeyFor(RequestKind.Url, url, DateOnly.FromDateTime(now.DateTime)), null, null, now);
+        return agent.RequestAccess(draft, d => _agent.SendRequestToHub(d, out _));
+    });
+
+    private static async Task Eventually(Func<bool> condition, string what, int timeoutMs = 20000)
+    {
+        var until = DateTime.UtcNow.AddMilliseconds(timeoutMs);
+        while (DateTime.UtcNow < until)
+        {
+            if (condition()) return;
+            await Task.Delay(50);
+        }
+        Assert.Fail($"Timed out waiting for: {what}");
+    }
+
+    private static int FreePort()
+    {
+        var listener = new TcpListener(IPAddress.Loopback, 0);
+        listener.Start();
+        var port = ((IPEndPoint)listener.LocalEndpoint).Port;
+        listener.Stop();
+        return port;
+    }
+
+    private static string RepoRoot()
+    {
+        for (var dir = new DirectoryInfo(AppContext.BaseDirectory); dir is not null; dir = dir.Parent)
+            if (File.Exists(Path.Combine(dir.FullName, "WebFilter.slnx"))) return dir.FullName;
+        throw new InvalidOperationException("WebFilter.slnx not found");
+    }
+
+    private sealed class TestClock(DateTimeOffset now) : TimeProvider
+    {
+        public override DateTimeOffset GetUtcNow() => now;
+    }
+}
