@@ -1,0 +1,60 @@
+{
+  "extDescription": {
+    "message": "Shows whether WebFilter was installed by your computer's browser policy. Part of the WebFilter family web filter for home PCs.",
+    "description": "Manifest description. Also the Chrome Web Store summary; must stay at or under 132 characters."
+  },
+  "actionTitle": {
+    "message": "WebFilter: installation status",
+    "description": "Tooltip of the toolbar button."
+  },
+  "langCode": {
+    "message": "en",
+    "description": "BCP 47 code of this messages file; set on <html lang>."
+  },
+  "textDirection": {
+    "message": "ltr",
+    "description": "Text direction of this messages file: ltr or rtl."
+  },
+  "statusLoading": {
+    "message": "Checking…"
+  },
+  "statusManaged": {
+    "message": "Installed by policy",
+    "description": "Headline when chrome.management.getSelf().installType is 'admin'."
+  },
+  "statusManagedDetail": {
+    "message": "This extension was force-installed by the computer's browser policy."
+  },
+  "statusNotManaged": {
+    "message": "Not installed by policy",
+    "description": "Headline for any installType other than 'admin'."
+  },
+  "statusNotManagedDetail": {
+    "message": "This extension was installed in another way, so it is not managed by the computer's browser policy."
+  },
+  "statusError": {
+    "message": "Could not read the installation status."
+  },
+  "labelId": {
+    "message": "Extension ID"
+  },
+  "labelVersion": {
+    "message": "Version"
+  },
+  "labelInstallType": {
+    "message": "Install type"
+  },
+  "labelMayDisable": {
+    "message": "User can turn it off",
+    "description": "Row showing chrome.management.getSelf().mayDisable."
+  },
+  "valueYes": {
+    "message": "Yes"
+  },
+  "valueNo": {
+    "message": "No"
+  },
+  "footerNote": {
+    "message": "This early version only shows the installation status. Filtering features will arrive in later versions."
+  }
+}
