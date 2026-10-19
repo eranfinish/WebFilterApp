@@ -1,0 +1,24 @@
+{
+  "name": "webfilter-extension",
+  "version": "0.3.0",
+  "private": true,
+  "description": "WebFilter browser extension (Manifest V3) for Edge and Chrome.",
+  "type": "module",
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "build:test": "node scripts/build.mjs --test-hooks",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "verify:edge": "node scripts/build.mjs && node scripts/build.mjs --test-hooks && node harness/verify-edge.mjs"
+  },
+  "devDependencies": {
+    "@types/chrome": "0.3.4",
+    "@types/node": "20.19.9",
+    "esbuild": "0.28.2",
+    "playwright": "1.64.1",
+    "typescript": "5.9.3",
+    "vite": "7.3.6",
+    "vitest": "4.1.11"
+  }
+}

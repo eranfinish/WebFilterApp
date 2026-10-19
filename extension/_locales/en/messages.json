@@ -1,0 +1,284 @@
+{
+  "extDescription": {
+    "message": "Family web filter for home PCs. Works with the WebFilter app on this computer to filter websites and limit browsing time.",
+    "description": "Manifest description and store summary; at most 132 characters."
+  },
+  "actionTitle": {
+    "message": "WebFilter",
+    "description": "Tooltip of the toolbar button."
+  },
+  "langCode": {
+    "message": "en",
+    "description": "BCP 47 code of this file; set on <html lang>."
+  },
+  "textDirection": {
+    "message": "ltr",
+    "description": "Text direction of this file: ltr or rtl."
+  },
+  "reason_allowed_unrestricted": {
+    "message": "This account has no restrictions."
+  },
+  "reason_allowed_paused": {
+    "message": "Restrictions are paused right now."
+  },
+  "reason_allowed_always": {
+    "message": "This site is always allowed."
+  },
+  "reason_allowed_rule": {
+    "message": "This site is allowed by a rule."
+  },
+  "reason_allowed_category": {
+    "message": "This site is in an allowed category."
+  },
+  "reason_allowed_default": {
+    "message": "This site is allowed."
+  },
+  "reason_allowed_homework": {
+    "message": "This site is allowed in homework mode."
+  },
+  "reason_allowed_youtube_channel": {
+    "message": "This YouTube channel is approved."
+  },
+  "reason_allowed_browser": {
+    "message": "This browser is allowed."
+  },
+  "reason_blocked_rule": {
+    "message": "Your parents blocked this site."
+  },
+  "reason_blocked_category": {
+    "message": "This site is in a category your parents blocked."
+  },
+  "reason_blocked_not_in_allowlist": {
+    "message": "Only sites your parents approved can be opened, and this one isn't on the list yet."
+  },
+  "reason_blocked_time_window": {
+    "message": "Browsing isn't allowed at this hour."
+  },
+  "reason_blocked_daily_limit": {
+    "message": "You've used all of today's browsing time."
+  },
+  "reason_blocked_homework": {
+    "message": "Homework mode is on: only learning sites are open right now."
+  },
+  "reason_blocked_ip_literal": {
+    "message": "Sites can't be opened by their numeric address."
+  },
+  "reason_blocked_youtube_channel": {
+    "message": "This YouTube channel isn't approved."
+  },
+  "reason_blocked_youtube_unknown": {
+    "message": "We couldn't tell which YouTube channel this video belongs to, so it's blocked."
+  },
+  "reason_blocked_youtube_off": {
+    "message": "YouTube is turned off for you."
+  },
+  "reason_blocked_service_unavailable": {
+    "message": "The filtering service isn't running, so only always-allowed sites can be opened."
+  },
+  "reason_blocked_app_network": {
+    "message": "This app isn't allowed to use the internet."
+  },
+  "reason_redirect_youtube_home": {
+    "message": "YouTube's home page and search aren't available. Pick one of your channels."
+  },
+  "reason_failclosed": {
+    "message": "WebFilter isn't connected to the filtering service yet, so browsing is blocked. This page will open by itself as soon as it connects.",
+    "description": "Static fail-closed ruleset: no profile from the service yet."
+  },
+  "reason_unknown": {
+    "message": "This page is blocked."
+  },
+  "blockedHeading": {
+    "message": "This page is blocked"
+  },
+  "labelAddress": {
+    "message": "Address:"
+  },
+  "labelCategory": {
+    "message": "Category:"
+  },
+  "allowedNowHeading": {
+    "message": "This page is allowed now"
+  },
+  "tryAgain": {
+    "message": "Try again"
+  },
+  "noteLabel": {
+    "message": "Why do you need it? (optional)"
+  },
+  "requestButton": {
+    "message": "Ask my parents for access"
+  },
+  "requestYouTubeButton": {
+    "message": "Ask my parents to approve this channel"
+  },
+  "timeRequest15": {
+    "message": "Ask for 15 more minutes"
+  },
+  "timeRequest30": {
+    "message": "Ask for 30 more minutes"
+  },
+  "requestSending": {
+    "message": "Sending…"
+  },
+  "result_created": {
+    "message": "Your request was sent to your parents. If they approve, the page will open by itself."
+  },
+  "result_merged": {
+    "message": "You already asked for this. The request is waiting for your parents."
+  },
+  "result_rate_limited": {
+    "message": "You've sent a lot of requests in the last hour. Try again later."
+  },
+  "result_cooldown": {
+    "message": "Your parents said no to this a little while ago. You can ask again in an hour."
+  },
+  "result_queued": {
+    "message": "Your request was saved and will reach your parents when the computer is connected again."
+  },
+  "result_unavailable": {
+    "message": "Requests can't be sent right now because the filtering service isn't running."
+  },
+  "result_error": {
+    "message": "Something went wrong. Try again in a moment."
+  },
+  "result_waiting": {
+    "message": "Your request is waiting for your parents."
+  },
+  "decision_approved": {
+    "message": "Approved! Opening the page…"
+  },
+  "decision_denied": {
+    "message": "Your parents said no to this request."
+  },
+  "timeupHeading": {
+    "message": "Browsing time is over"
+  },
+  "timeupHeadingWindow": {
+    "message": "It's not browsing time now"
+  },
+  "timeupBodyLimit": {
+    "message": "You've used all of today's browsing time."
+  },
+  "timeupBodyWindow": {
+    "message": "Browsing isn't allowed at this hour. You can browse again in your next time window."
+  },
+  "labelRemaining": {
+    "message": "Time left today:"
+  },
+  "labelWindowEnds": {
+    "message": "Browsing allowed until:"
+  },
+  "timeupAlwaysAllowed": {
+    "message": "Sites that are always allowed still work."
+  },
+  "timeupWasAt": {
+    "message": "You were on:"
+  },
+  "timeupBack": {
+    "message": "Back to the page"
+  },
+  "myChannelsHeading": {
+    "message": "My YouTube channels"
+  },
+  "myChannelsIntro": {
+    "message": "These are the channels your parents approved. YouTube's home page and search aren't available."
+  },
+  "myChannelsEmpty": {
+    "message": "No channels have been approved yet. You can ask your parents to add some."
+  },
+  "statusLoading": {
+    "message": "Checking…"
+  },
+  "statusUnknown": {
+    "message": "Couldn't read the status."
+  },
+  "statusInert": {
+    "message": "Not installed by policy"
+  },
+  "statusInertDetail": {
+    "message": "WebFilter filters only when the WebFilter app installs it through the browser policy. Here it is inactive and blocks nothing."
+  },
+  "statusService": {
+    "message": "Connected to WebFilter"
+  },
+  "statusServiceDetail": {
+    "message": "Filtering and time limits are active."
+  },
+  "statusHost": {
+    "message": "The filtering service isn't running"
+  },
+  "statusHostDetail": {
+    "message": "Working in limited mode until the service is back."
+  },
+  "statusConnecting": {
+    "message": "Connecting…"
+  },
+  "statusDisconnected": {
+    "message": "Not connected"
+  },
+  "statusDisconnectedDetail": {
+    "message": "Browsing is blocked until WebFilter on this computer responds."
+  },
+  "labelUser": {
+    "message": "User"
+  },
+  "labelMode": {
+    "message": "Filtering"
+  },
+  "labelTime": {
+    "message": "Browsing time left today"
+  },
+  "labelVersion": {
+    "message": "Version"
+  },
+  "labelInstallType": {
+    "message": "Install type"
+  },
+  "mode_unrestricted": {
+    "message": "No restrictions"
+  },
+  "mode_blocklist": {
+    "message": "Blocked sites list"
+  },
+  "mode_allowlist": {
+    "message": "Approved sites only"
+  },
+  "time_unlimited": {
+    "message": "No limit"
+  },
+  "time_expired": {
+    "message": "Time is up"
+  },
+  "time_outside_window": {
+    "message": "Outside browsing hours"
+  },
+  "minutesValue": {
+    "message": "$COUNT$ minutes",
+    "description": "count: a number of minutes greater than 1.",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "15"
+      }
+    }
+  },
+  "oneMinute": {
+    "message": "1 minute"
+  },
+  "notify10": {
+    "message": "10 minutes of browsing left today."
+  },
+  "notify5": {
+    "message": "5 minutes of browsing left today."
+  },
+  "notify1": {
+    "message": "1 minute of browsing left today."
+  },
+  "notifyApproved": {
+    "message": "Your parents approved your request."
+  },
+  "notifyDenied": {
+    "message": "Your parents said no to your request."
+  }
+}

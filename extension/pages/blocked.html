@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>WebFilter · חסום</title>
+  <link rel="stylesheet" href="pages.css">
+</head>
+<body>
+  <main>
+    <div class="brand"><img src="icons/icon-32.png" width="20" height="20" alt=""><span>WebFilter</span></div>
+    <h1 id="heading" data-i18n="blockedHeading">הדף הזה חסום</h1>
+    <p id="reason" class="lead"></p>
+    <p id="url-row" class="muted"><span data-i18n="labelAddress">כתובת:</span> <code id="url"></code></p>
+    <p id="category-row" class="muted" hidden><span data-i18n="labelCategory">קטגוריה:</span> <code id="category"></code></p>
+    <p id="retry-row" hidden><button id="retry" type="button" data-i18n="tryAgain">לנסות שוב</button></p>
+
+    <section id="request" hidden>
+      <label for="note" data-i18n="noteLabel">למה צריך את זה? (לא חובה)</label>
+      <textarea id="note" maxlength="500"></textarea>
+      <div class="actions">
+        <button id="ask-url" type="button" hidden data-i18n="requestButton">לבקש גישה מההורים</button>
+        <button id="ask-channel" type="button" hidden data-i18n="requestYouTubeButton">לבקש מההורים לאשר את הערוץ</button>
+        <span id="ask-time" class="actions" hidden>
+          <button id="ask-15" type="button" data-i18n="timeRequest15">לבקש עוד 15 דקות</button>
+          <button id="ask-30" type="button" data-i18n="timeRequest30">לבקש עוד 30 דקות</button>
+        </span>
+      </div>
+    </section>
+
+    <p id="result" class="result" role="status" aria-live="polite" hidden></p>
+  </main>
+  <script src="blocked.js"></script>
+</body>
+</html>
