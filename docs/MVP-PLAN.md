@@ -368,6 +368,8 @@
 
 מזהים: ULID (ממוינים לפי זמן, ייחודיים בין מכשירים). כל טבלה שמסתנכרנת כוללת `updated_at` ו-`version`.
 
+> **מימוש (M2):** ההגדרות נשמרות כמסמך `FamilyBundle` אחד עם גרסה (אותו פורמט שעובר בין Hub לסוכנים); שימוש, אירועים ובקשות — בטבלאות. הסכמה בפועל: `src/WebFilter.Service/Storage/Migrations/`. הטבלאות למטה הן המודל הלוגי.
+
 ### 9.1 Hub (מקור האמת להגדרות)
 
 ```sql
@@ -444,7 +446,7 @@ Retention של `events`: 90 יום כברירת מחדל.
 | `rulesChanged` | ← push | `{version}` |
 | `timeState` | ← push | `{state: ok\|warn\|expired, remainingMinutes}` |
 
-הודעה מה-host לתוסף עד 1MB — רשימות גדולות נשלחות בחלקים.
+הודעה מה-host לתוסף מעל 1MB מפוצלת ע"י ה-host להודעות `chunk` (חלקי base64 של ה-JSON המקורי), והתוסף מרכיב אותן. שמות סוגי התשובות בפועל: `helloResult`, `rules`, `requestAccessResult`, `resolveYouTubeResult`; ב-`hello` התוסף שולח גם את ה-`extensionId` שלו (לבניית כתובת מסך החסימה). ההגדרה המחייבת: `src/WebFilter.Contracts/Agent/`.
 
 ### 10.2 Admin (ממשק ↔ שירות)
 
@@ -525,13 +527,19 @@ CLAUDE.md
 
 `Core` + `Contracts` + סכמות. מריץ רמה 1 שטוען את קבצי התרחישים. **תנאי סיום:** כל תרחישי `engine` עוברים, benchmark עומד ביעד.
 
+> **סטטוס (2026-10-19):** 71/71 תרחישי `engine` עוברים; p99 של החלטה 57µs עם 10,000 כללים + 100,000 דומייני קטגוריה. מהדר ה-DNR — בעבודה.
+
 ### M2 — סוכן (מחשב יחיד)
 
 שירות בתפקיד סוכן עם Hub מקומי פשוט, pipes, זיהוי, DecisionService, UsageTracker, אירועים, ProfileCache. **תנאי סיום:** מותקן כ-LocalSystem; תרחישי `integration` עוברים; admin pipe דוחה תהליך לא מוגבה.
 
+> **סטטוס (2026-10-19):** קיימים — אחסון SQLite, Agent pipe (זיהוי לפי טוקן התהליך, לקוחות מהימנים בלבד, FirstPipeInstance), Admin pipe, ProfileCache, Hub+סוכן באותו תהליך, בדיקות רמה 2 עם pipes אמיתיים. חסר — התקנה ובדיקה כ-LocalSystem (במכונה וירטואלית), מריץ רמה 2 שמריץ את קבצי התרחישים.
+
 ### M3 — תוסף + Native Host
 
 במקביל ל-M2 מול שירות מדומה. **תנאי סיום:** תרחישי `browser` (Playwright) עוברים, כולל fail-closed ו-YouTube.
+
+> **סטטוס (2026-10-19):** NativeHost קיים (העברה, פיצול מעל 1MB, תשובה עצמאית כשהשירות כבוי, בדיקה שהשרת רץ כ-SYSTEM) ונבדק כתהליך אמיתי. התוסף — בעבודה. NativeAOT דורש את רכיב ה-C++ של Visual Studio.
 
 ### M4 — אכיפה והגנה
 
