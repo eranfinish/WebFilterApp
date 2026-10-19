@@ -12,6 +12,7 @@
     <Project Path="src/WebFilter.Service/WebFilter.Service.csproj" />
   </Folder>
   <Folder Name="/tests/">
+    <Project Path="tests/WebFilter.Contracts.Tests/WebFilter.Contracts.Tests.csproj" />
     <Project Path="tests/WebFilter.Core.Tests/WebFilter.Core.Tests.csproj" />
   </Folder>
 </Solution>
