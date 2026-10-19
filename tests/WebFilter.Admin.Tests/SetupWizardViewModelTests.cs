@@ -62,7 +62,7 @@ public sealed class SetupWizardViewModelTests
         Assert.False(vm.CanGoBack);
         var first = Assert.Single(vm.Members);
         Assert.Equal(("child", "allowlist", "allowlist", true), (first.Role, first.FilterMode, first.YouTubeMode, first.LimitTime));
-        Assert.Equal(["1. בני משפחה", "2. חשבונות Windows", "3. שעות ומכסה", "4. סיכום"], vm.Steps.Select(s => s.Label));
+        Assert.Equal(["1. בני משפחה", "2. חשבונות Windows", "3. שעות ומכסה", "4. קטגוריות", "5. סיכום"], vm.Steps.Select(s => s.Label));
         Assert.True(vm.Steps[0].IsCurrent);
     }
 
@@ -93,12 +93,24 @@ public sealed class SetupWizardViewModelTests
         Assert.Equal(("14:00", "21:30", "240"), (vm.TimedMembers[1].Start, vm.TimedMembers[1].End, vm.TimedMembers[1].LimitText));
         vm.TimedMembers[1].LimitText = "180";
 
-        // 4. Review.
+        // 4. Ready-made lists, all offered; a child starts with the learning sites allowed.
+        await vm.NextCommand.ExecuteAsync(null);
+        Assert.True(vm.IsCategoriesStep);
+        Assert.Equal(["educational", "social", "gaming"], vm.StarterCategories.Select(c => c.Name));
+        Assert.All(vm.StarterCategories, c => Assert.True(c.Include));
+        Assert.Equal(["allow", "default", "default"], vm.TimedMembers[0].Categories.Select(c => c.Choice));
+        Assert.Equal(["default", "default", "default"], vm.TimedMembers[1].Categories.Select(c => c.Choice));
+        vm.TimedMembers[1].Categories.Single(c => c.Category.Name == "gaming").Choice = "block";
+
+        // 5. Review.
         await vm.NextCommand.ExecuteAsync(null);
         Assert.True(vm.IsReviewStep);
-        Assert.Equal("ילד/ה, גיל 8 · רק אתרים מאושרים · YouTube: רק ערוצים מאושרים · 15:00–19:00, עד 120 דקות ביום · חשבון: noa", Bidi.Plain(vm.Members[0].SummaryText));
+        Assert.Equal("ילד/ה, גיל 8 · רק אתרים מאושרים · YouTube: רק ערוצים מאושרים · 15:00–19:00, עד 120 דקות ביום · לימודים: מותרת תמיד · חשבון: noa",
+            Bidi.Plain(vm.Members[0].SummaryText));
+        Assert.Contains("משחקים: חסומה", vm.Members[1].SummaryText);
         Assert.Equal("מבוגר/ת · ללא סינון · YouTube: ללא הגבלה · בלי הגבלת זמן · חשבון: Dad", vm.Members[2].SummaryText);
         Assert.Null(vm.AccountsSummary);
+        Assert.Equal("רשימות מוכנות: לימודים, רשתות חברתיות, משחקים.", vm.CategoriesSummary);
 
         await vm.ApplyCommand.ExecuteAsync(null);
 
@@ -113,6 +125,9 @@ public sealed class SetupWizardViewModelTests
         Assert.Equal([$"{noa}:0,1,2,3,4,5,6:15:00-19:00", $"{yoav}:0,1,2,3,4,5,6:14:00-21:30"],
             replace.Settings.Schedules.Select(s => $"{s.Member}:{string.Join(",", s.Days)}:{s.Start}-{s.End}"));
         Assert.Equal([$"{noa}:120", $"{yoav}:180"], replace.Settings.DailyLimits.Select(l => $"{l.Member}:{l.Minutes}"));
+        Assert.Equal(["educational", "social", "gaming"], replace.Settings.Categories.Keys);
+        Assert.Contains("khanacademy.org", replace.Settings.Categories["educational"]);
+        Assert.Equal([new MemberCategoryDto(noa, "educational", "allow"), new MemberCategoryDto(yoav, "gaming", "block")], replace.Settings.MemberCategories);
         Assert.True(vm.IsDone);
         Assert.True(vm.ShowsWizard);
         Assert.False(vm.ShowsAlreadySetUp);
@@ -209,8 +224,8 @@ public sealed class SetupWizardViewModelTests
         await vm.NextCommand.ExecuteAsync(null);
 
         Assert.True(vm.HasNoAccounts);
-        await vm.NextCommand.ExecuteAsync(null);
-        await vm.NextCommand.ExecuteAsync(null);
+        for (var i = 0; i < 3; i++) await vm.NextCommand.ExecuteAsync(null);
+        Assert.True(vm.IsReviewStep);
         Assert.Null(vm.AccountsSummary);
         Assert.Contains("אין חשבון במחשב הזה", vm.Members[0].SummaryText);
     }
@@ -267,6 +282,7 @@ public sealed class SetupWizardViewModelTests
         vm.TimedMembers[0].LimitText = "";
         vm.TimedMembers[1].LimitTime = false;
         await vm.NextCommand.ExecuteAsync(null);
+        await vm.NextCommand.ExecuteAsync(null);
         Assert.Contains("15:00–19:00, בלי מכסה", Bidi.Plain(vm.Members[0].SummaryText));
         Assert.Contains("בכל שעה, בלי מכסה", vm.Members[1].SummaryText);
 
@@ -278,12 +294,60 @@ public sealed class SetupWizardViewModelTests
     }
 
     [Fact]
+    public async Task Lists_left_out_are_not_added_nor_the_choices_made_for_them()
+    {
+        var vm = await LoadedAsync();
+        vm.Members[0].Name = "נועה";
+        for (var i = 0; i < 3; i++) await vm.NextCommand.ExecuteAsync(null);
+        Assert.True(vm.IsCategoriesStep);
+        vm.TimedMembers[0].Categories.Single(c => c.Category.Name == "social").Choice = "block";
+        foreach (var list in vm.StarterCategories.Where(c => c.Name != "educational")) list.Include = false;
+
+        await vm.NextCommand.ExecuteAsync(null);
+        await vm.ApplyCommand.ExecuteAsync(null);
+
+        var settings = _client.Single<ReplaceSettings>().Settings;
+        Assert.Equal(["educational"], settings.Categories.Keys);
+        Assert.Equal([new MemberCategoryDto(vm.Members[0].Id, "educational", "allow")], settings.MemberCategories);
+        Assert.Equal("רשימות מוכנות: לימודים.", vm.CategoriesSummary);
+    }
+
+    [Fact]
+    public async Task A_category_the_family_already_has_keeps_its_own_sites()
+    {
+        _client.Settings = _client.Settings with { Categories = new Dictionary<string, IReadOnlyList<string>> { ["educational"] = ["school.example"] } };
+        var vm = await LoadedAsync();
+        vm.Members[0].Name = "נועה";
+        for (var i = 0; i < 4; i++) await vm.NextCommand.ExecuteAsync(null);
+
+        await vm.ApplyCommand.ExecuteAsync(null);
+
+        var settings = _client.Single<ReplaceSettings>().Settings;
+        Assert.Equal(["school.example"], settings.Categories["educational"]);
+        Assert.Contains("roblox.com", settings.Categories["gaming"]);
+    }
+
+    [Fact]
+    public async Task Changing_the_role_resets_the_list_choices_to_its_template()
+    {
+        var vm = await LoadedAsync();
+        vm.Members[0].Name = "נועה";
+        for (var i = 0; i < 3; i++) await vm.NextCommand.ExecuteAsync(null);
+        var noa = vm.TimedMembers[0];
+
+        noa.Role = "teen";
+        Assert.All(noa.Categories, c => Assert.Equal(CategoryChoiceViewModel.Default, c.Choice));
+        noa.Role = "child";
+        Assert.Equal("allow", noa.Categories.Single(c => c.Category.Name == "educational").Choice);
+    }
+
+    [Fact]
     public async Task A_refused_setup_stays_on_the_summary_with_the_reason()
     {
         _client.Reply = m => m is ReplaceSettings ? new AdminError("bad_request", "Two family members have the id 'm-1'.") : null;
         var vm = await LoadedAsync();
         vm.Members[0].Name = "נועה";
-        for (var i = 0; i < 3; i++) await vm.NextCommand.ExecuteAsync(null);
+        for (var i = 0; i < 4; i++) await vm.NextCommand.ExecuteAsync(null);
 
         await vm.ApplyCommand.ExecuteAsync(null);
 

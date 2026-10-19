@@ -1285,4 +1285,25 @@ The computer keeps enforcing the last settings it received but stops getting upd
   <data name="Devices_NewAccount_One" xml:space="preserve">
     <value>One new account was found on this computer.</value>
   </data>
+  <data name="Setup_Step_Categories" xml:space="preserve">
+    <value>Categories</value>
+  </data>
+  <data name="Setup_CategoriesHint" xml:space="preserve">
+    <value>Ready-made lists of sites. Anything chosen here can be changed later on the family members page. The learning list is also what homework mode allows.</value>
+  </data>
+  <data name="Setup_IncludeList" xml:space="preserve">
+    <value>Add the ready-made list {0} ({1} sites)</value>
+  </data>
+  <data name="Setup_CategoriesForMembers" xml:space="preserve">
+    <value>What each member gets of the lists</value>
+  </data>
+  <data name="Setup_NoCategories" xml:space="preserve">
+    <value>No ready-made lists.</value>
+  </data>
+  <data name="Setup_CategoriesAdded" xml:space="preserve">
+    <value>Ready-made lists: {0}.</value>
+  </data>
+  <data name="Setup_Summary_Category" xml:space="preserve">
+    <value>{0}: {1}</value>
+  </data>
 </root>

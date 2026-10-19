@@ -38,7 +38,7 @@ public sealed partial class ResourceTests
         string[] notHebrew =
         [
             "Format_Time", "Format_DateTime", "Format_Date", "Common_None", "Settings_Col_YouTubeMode", "DeviceOs_windows", "DeviceOs_android",
-            "Setup_StepNumber", "Setup_Summary_YouTube",
+            "Setup_StepNumber", "Setup_Summary_YouTube", "Setup_Summary_Category",
         ];
         foreach (var (key, value) in Hebrew.Where(kv => !notHebrew.Contains(kv.Key)))
             Assert.True(HebrewLetter().IsMatch(value), $"{key} has no Hebrew text: {value}");
@@ -74,7 +74,7 @@ public sealed partial class ResourceTests
     [InlineData("AppMatch_", new[] { "path", "package" })]
     [InlineData("CategoryChoice_", new[] { "default", "allow", "block" })]
     [InlineData("Category_", new[] { "educational", "social", "gaming" })]
-    [InlineData("Setup_Step_", new[] { "Members", "Accounts", "Time", "Review" })]
+    [InlineData("Setup_Step_", new[] { "Members", "Accounts", "Time", "Categories", "Review" })]
     [InlineData("DeviceOs_", new[] { "windows", "android" })]
     public void Every_wire_value_has_wording(string prefix, string[] codes)
     {

@@ -3780,5 +3780,68 @@ namespace WebFilter.Admin.Resources {
                 return ResourceManager.GetString("Devices_NewAccount_One", resourceCulture);
             }
         }
+
+        /// <summary>
+        ///   Looks up a localized string similar to קטגוריות.
+        /// </summary>
+        public static string Setup_Step_Categories {
+            get {
+                return ResourceManager.GetString("Setup_Step_Categories", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to רשימות מוכנות של אתרים. מה שתבחרו כאן אפשר לשנות אחר כך במסך בני משפחה. רשימת הל....
+        /// </summary>
+        public static string Setup_CategoriesHint {
+            get {
+                return ResourceManager.GetString("Setup_CategoriesHint", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to להוסיף את הרשימה המוכנה {0} ({1} אתרים).
+        /// </summary>
+        public static string Setup_IncludeList {
+            get {
+                return ResourceManager.GetString("Setup_IncludeList", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to מה כל אחד מקבל מהרשימות.
+        /// </summary>
+        public static string Setup_CategoriesForMembers {
+            get {
+                return ResourceManager.GetString("Setup_CategoriesForMembers", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to בלי רשימות מוכנות..
+        /// </summary>
+        public static string Setup_NoCategories {
+            get {
+                return ResourceManager.GetString("Setup_NoCategories", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to רשימות מוכנות: {0}..
+        /// </summary>
+        public static string Setup_CategoriesAdded {
+            get {
+                return ResourceManager.GetString("Setup_CategoriesAdded", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to {0}: {1}.
+        /// </summary>
+        public static string Setup_Summary_Category {
+            get {
+                return ResourceManager.GetString("Setup_Summary_Category", resourceCulture);
+            }
+        }
     }
 }

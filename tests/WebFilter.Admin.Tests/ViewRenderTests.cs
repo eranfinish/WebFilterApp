@@ -75,11 +75,15 @@ public sealed class ViewRenderTests
         await shown.RenderAsync("Setup-3-time");
 
         await setup.NextCommand.ExecuteAsync(null);
-        await shown.RenderAsync("Setup-4-review");
+        setup.StarterCategories[1].Include = false;
+        await shown.RenderAsync("Setup-4-categories");
+
+        await setup.NextCommand.ExecuteAsync(null);
+        await shown.RenderAsync("Setup-5-review");
 
         await setup.ApplyCommand.ExecuteAsync(null);
         Assert.True(setup.IsDone);
-        await shown.RenderAsync("Setup-5-done");
+        await shown.RenderAsync("Setup-6-done");
     });
 
     [Fact]

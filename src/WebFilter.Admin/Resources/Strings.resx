@@ -1289,4 +1289,25 @@
   <data name="Devices_NewAccount_One" xml:space="preserve">
     <value>נמצא חשבון חדש אחד במחשב הזה.</value>
   </data>
+  <data name="Setup_Step_Categories" xml:space="preserve">
+    <value>קטגוריות</value>
+  </data>
+  <data name="Setup_CategoriesHint" xml:space="preserve">
+    <value>רשימות מוכנות של אתרים. מה שתבחרו כאן אפשר לשנות אחר כך במסך בני משפחה. רשימת הלימודים היא גם מה שמותר במצב שיעורי בית.</value>
+  </data>
+  <data name="Setup_IncludeList" xml:space="preserve">
+    <value>להוסיף את הרשימה המוכנה {0} ({1} אתרים)</value>
+  </data>
+  <data name="Setup_CategoriesForMembers" xml:space="preserve">
+    <value>מה כל אחד מקבל מהרשימות</value>
+  </data>
+  <data name="Setup_NoCategories" xml:space="preserve">
+    <value>בלי רשימות מוכנות.</value>
+  </data>
+  <data name="Setup_CategoriesAdded" xml:space="preserve">
+    <value>רשימות מוכנות: {0}.</value>
+  </data>
+  <data name="Setup_Summary_Category" xml:space="preserve">
+    <value>{0}: {1}</value>
+  </data>
 </root>

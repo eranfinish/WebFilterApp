@@ -193,7 +193,50 @@
           </Border>
         </StackPanel>
 
-        <!-- 4. Review -->
+        <!-- 4. Ready-made categories -->
+        <StackPanel Visibility="{Binding IsCategoriesStep, Converter={StaticResource BoolToVisibility}}">
+          <TextBlock Text="{x:Static res:Strings.Setup_CategoriesHint}" Style="{StaticResource SubtleText}" Margin="0,0,0,8" />
+          <Border Style="{StaticResource Card}" Margin="0,0,0,12">
+            <ItemsControl ItemsSource="{Binding StarterCategories}" Focusable="False">
+              <ItemsControl.ItemTemplate>
+                <DataTemplate DataType="{x:Type vm:WizardCategoryViewModel}">
+                  <CheckBox Content="{Binding Text}" IsChecked="{Binding Include}" ToolTip="{Binding Sample}" Margin="0,4" />
+                </DataTemplate>
+              </ItemsControl.ItemTemplate>
+            </ItemsControl>
+          </Border>
+          <TextBlock Text="{x:Static res:Strings.Setup_CategoriesForMembers}" Style="{StaticResource SectionText}" />
+          <TextBlock Text="{x:Static res:Strings.Setup_NoTimedMembers}" Style="{StaticResource SubtleText}"
+                     Visibility="{Binding HasNoTimedMembers, Converter={StaticResource BoolToVisibility}}" />
+          <Border Style="{StaticResource Card}" Margin="0" Visibility="{Binding HasNoTimedMembers, Converter={StaticResource InverseBoolToVisibility}}">
+            <ItemsControl ItemsSource="{Binding TimedMembers}" Focusable="False">
+              <ItemsControl.ItemTemplate>
+                <DataTemplate DataType="{x:Type vm:WizardMemberViewModel}">
+                  <WrapPanel Margin="0,6">
+                    <TextBlock Text="{Binding Name}" FontWeight="SemiBold" MinWidth="120" VerticalAlignment="Center" Margin="0,0,12,0" />
+                    <ItemsControl ItemsSource="{Binding Categories}" Focusable="False">
+                      <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                          <WrapPanel />
+                        </ItemsPanelTemplate>
+                      </ItemsControl.ItemsPanel>
+                      <ItemsControl.ItemTemplate>
+                        <DataTemplate DataType="{x:Type vm:WizardCategoryChoice}">
+                          <StackPanel Orientation="Horizontal" Margin="0,2,16,2" Visibility="{Binding Category.Include, Converter={StaticResource BoolToVisibility}}">
+                            <TextBlock Text="{Binding Category.Label}" VerticalAlignment="Center" Margin="0,0,6,0" />
+                            <ComboBox ItemsSource="{Binding Options}" SelectedValuePath="Value" DisplayMemberPath="Label" SelectedValue="{Binding Choice}" MinWidth="170" />
+                          </StackPanel>
+                        </DataTemplate>
+                      </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                  </WrapPanel>
+                </DataTemplate>
+              </ItemsControl.ItemTemplate>
+            </ItemsControl>
+          </Border>
+        </StackPanel>
+
+        <!-- 5. Review -->
         <StackPanel Visibility="{Binding IsReviewStep, Converter={StaticResource BoolToVisibility}}">
           <TextBlock Text="{x:Static res:Strings.Setup_ReviewHint}" Style="{StaticResource SubtleText}" Margin="0,0,0,8" />
           <Border Style="{StaticResource Card}" Margin="0">
@@ -208,7 +251,8 @@
                   </DataTemplate>
                 </ItemsControl.ItemTemplate>
               </ItemsControl>
-              <TextBlock Text="{Binding AccountsSummary}" Style="{StaticResource SubtleText}" Margin="0,8,0,0"
+              <TextBlock Text="{Binding CategoriesSummary}" Style="{StaticResource SubtleText}" Margin="0,8,0,0" />
+              <TextBlock Text="{Binding AccountsSummary}" Style="{StaticResource SubtleText}" Margin="0,4,0,0"
                          Visibility="{Binding AccountsSummary, Converter={StaticResource HasValueToVisibility}}" />
             </StackPanel>
           </Border>

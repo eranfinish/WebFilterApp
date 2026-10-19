@@ -1,0 +1,29 @@
+{
+  "category": "educational",
+  "description": "Learning sites for children and teens, Israeli school systems included. Also the sites homework mode allows.",
+  "domains": [
+    "khanacademy.org",
+    "wikipedia.org",
+    "wiktionary.org",
+    "britannica.com",
+    "scratch.mit.edu",
+    "code.org",
+    "blockly.games",
+    "duolingo.com",
+    "desmos.com",
+    "geogebra.org",
+    "matific.com",
+    "typingclub.com",
+    "pbskids.org",
+    "storylineonline.net",
+    "nationalgeographic.com",
+    "cet.ac.il",
+    "education.gov.il",
+    "snunit.k12.il",
+    "daat.ac.il",
+    "929.org.il",
+    "mashov.info",
+    "webtop.co.il",
+    "smartschool.co.il"
+  ]
+}
