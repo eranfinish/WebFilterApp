@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Hebrew setup strings (codepage 1255: Hebrew letters, ASCII punctuation and dashes only). -->
+<WixLocalization Culture="he-IL" Codepage="1255" xmlns="http://wixtoolset.org/schemas/v4/wxl">
+  <String Id="ProductLanguage" Value="1037" />
+  <String Id="DowngradeError" Value="גרסה חדשה יותר של [ProductName] כבר מותקנת במחשב הזה." />
+  <String Id="RoleInvalid" Value="ROLE צריך להיות hub או agent." />
+  <String Id="ServiceDescription" Value="סינון אתרים וזמן גלישה למשפחה: אוכף את ההגדרות במחשב הזה ומסתנכרן עם מחשב ההורים (Hub)." />
+  <String Id="AdminShortcutName" Value="WebFilter — ניהול הורים" />
+  <String Id="AdminShortcutDescription" Value="ניהול הסינון וזמן הגלישה של המשפחה" />
+  <String Id="FirewallDescription" Value="מאפשר למחשבי המשפחה להתחבר למחשב ההורים של WebFilter ברשת פרטית." />
+
+  <String Id="SetupTitle" Value="התקנת [ProductName]" />
+  <String Id="RoleDlgTitle" Value="{\WixUI_Font_Title}תפקיד המחשב" />
+  <String Id="RoleDlgDescription" Value="בחרו איך המחשב הזה משתתף בסינון של המשפחה." />
+  <String Id="RoleHub" Value="מחשב ההורים (Hub): שומר את הגדרות המשפחה ומנהל את כל המחשבים. פותח את פורט 47800 ברשת פרטית." />
+  <String Id="RoleAgent" Value="מחשב מנוהל (סוכן): מחשב של ילד או של המשפחה, שמקבל את ההגדרות ממחשב ההורים." />
+  <String Id="PairHint" Value="צימוד: במחשב ההורים פתחו את ממשק הניהול, מסך &quot;מכשירים&quot;, &quot;צימוד מחשב חדש&quot;. הזינו כאן את כתובת מחשב ההורים ואת הקוד, או השאירו ריק וצמדו אחר כך." />
+  <String Id="HubLabel" Value="כתובת מחשב ההורים:" />
+  <String Id="PairCodeLabel" Value="קוד צימוד:" />
+  <String Id="PairIncomplete" Value="הזינו גם את כתובת מחשב ההורים וגם את קוד הצימוד, או השאירו את שניהם ריקים כדי לצמד אחר כך." />
+
+  <!-- WixToolset.Firewall.wixext has no Hebrew strings of its own. -->
+  <String Id="msierrFirewallCannotConnect" Value="לא ניתן להתחבר לחומת האש של Windows. ([2] [3] [4] [5])" />
+  <String Id="WixSchedFirewallExceptionsInstall" Value="הגדרת חומת האש של Windows" />
+  <String Id="WixSchedFirewallExceptionsUninstall" Value="הגדרת חומת האש של Windows" />
+  <String Id="WixRollbackFirewallExceptionsInstall" Value="ביטול השינויים בחומת האש של Windows" />
+  <String Id="WixExecFirewallExceptionsInstall" Value="התקנת הגדרות חומת האש של Windows" />
+  <String Id="WixRollbackFirewallExceptionsUninstall" Value="ביטול השינויים בחומת האש של Windows" />
+  <String Id="WixExecFirewallExceptionsUninstall" Value="הסרת הגדרות חומת האש של Windows" />
+</WixLocalization>

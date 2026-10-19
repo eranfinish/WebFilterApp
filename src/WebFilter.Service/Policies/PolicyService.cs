@@ -11,13 +11,16 @@ namespace WebFilter.Service.Policies;
 [SupportedOSPlatform("windows")]
 public sealed class PolicyService(FamilyService family, IOptions<ServiceOptions> options, ILogger<PolicyService> log) : BackgroundService
 {
+    /// <summary>In <see cref="ServiceOptions.DataDirectory"/>: what <see cref="PolicyManager"/> wrote (read again by uninstall).</summary>
+    public const string StateFileName = "managed-policies.json";
+
     private readonly SemaphoreSlim _wake = new(0);
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
         var settings = options.Value;
         if (!settings.ManageBrowserPolicies) return;
-        var manager = new PolicyManager(new RegistryPolicyStore(), Path.Combine(settings.DataDirectory, "managed-policies.json"));
+        var manager = new PolicyManager(new RegistryPolicyStore(), Path.Combine(settings.DataDirectory, StateFileName));
         var ids = new ExtensionIds(settings.ChromeExtensionId, settings.EdgeExtensionId);
         void OnSettings(int _) => _wake.Release();
         family.SettingsChanged += OnSettings;

@@ -3,16 +3,22 @@ namespace WebFilter.Service;
 /// <summary>Configuration (appsettings.json section "WebFilter", or command-line overrides).</summary>
 public sealed class ServiceOptions
 {
+    /// <summary>The Windows service name (the installer registers the service under it).</summary>
+    public const string WindowsServiceName = "WebFilter";
+
+    /// <summary>%ProgramData%\WebFilter: everything the service stores. The installer locks it to SYSTEM and Administrators; uninstall deletes it.</summary>
+    public static string MachineDataRoot => Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), "WebFilter");
+
     /// <summary>"hub" (this PC owns the settings; also enforces locally) or "agent" (syncs with a hub — M6).</summary>
     public string Role { get; set; } = "hub";
 
     /// <summary>This device's id in the family settings.</summary>
     public string DeviceId { get; set; } = Environment.MachineName.ToLowerInvariant();
 
-    public string DataDirectory { get; set; } = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), "WebFilter", "data");
+    public string DataDirectory { get; set; } = Path.Combine(MachineDataRoot, "data");
 
     /// <summary>Where the native host finds each account's <see cref="Contracts.Agent.ProfileCache"/>.</summary>
-    public string ProfileDirectory { get; set; } = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), "WebFilter", "profiles");
+    public string ProfileDirectory { get; set; } = Path.Combine(MachineDataRoot, "profiles");
 
     public string AgentPipeName { get; set; } = "WebFilter.Agent";
 

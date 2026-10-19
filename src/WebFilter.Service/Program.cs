@@ -2,11 +2,18 @@ using WebFilter.Service;
 using WebFilter.Service.Hub;
 using WebFilter.Service.Pipes;
 using WebFilter.Service.Policies;
+using WebFilter.Service.Setup;
 
-if (args.Length > 0 && args[0] == "pair") return await PairCommand.RunAsync(args[1..]);
+// Commands for the installer and administrators; without one, run as the service.
+switch (args.FirstOrDefault())
+{
+    case "pair": return await PairCommand.RunAsync(args[1..]);
+    case "configure": return ConfigureCommand.Run(args[1..]);
+    case "cleanup": return CleanupCommand.Run();
+}
 
 var builder = Host.CreateApplicationBuilder(args);
-builder.Services.AddWindowsService(options => options.ServiceName = "WebFilter");
+builder.Services.AddWindowsService(options => options.ServiceName = ServiceOptions.WindowsServiceName);
 builder.Services.Configure<ServiceOptions>(builder.Configuration.GetSection("WebFilter"));
 #if SIMULATION
 builder.Services.AddSingleton<TimeProvider>(new SimulationClock(TimeProvider.System.GetUtcNow()));

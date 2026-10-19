@@ -59,6 +59,9 @@ public sealed class PolicyManager(IPolicyStore store, string statePath)
     /// <summary>Removes every value this manager wrote (uninstall). Users whose hive is not loaded keep theirs.</summary>
     public int RemoveAll() => Apply([]).Deleted;
 
+    /// <summary>The values this manager wrote and has not removed (registry paths), e.g. what an uninstall left behind.</summary>
+    public IReadOnlyList<string> Remaining() => Load().Select(Describe).Order(StringComparer.Ordinal).ToList();
+
     private static string Describe(Managed m) => $"{(m.Hive == PolicyHive.Machine ? "HKLM" : "HKU\\" + m.UserSid)}\\{m.KeyPath}\\{m.Name}";
 
     private HashSet<Managed> Load()

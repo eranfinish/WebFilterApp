@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- English setup strings: for the lab VMs (English Windows, UI automation by control name). -->
+<WixLocalization Culture="en-US" Codepage="1252" xmlns="http://wixtoolset.org/schemas/v4/wxl">
+  <String Id="ProductLanguage" Value="1033" />
+  <String Id="DowngradeError" Value="A newer version of [ProductName] is already installed on this computer." />
+  <String Id="RoleInvalid" Value="ROLE must be hub or agent." />
+  <String Id="ServiceDescription" Value="Family web filtering and browsing time: enforces the family's settings on this computer and syncs with the parents' computer (hub)." />
+  <String Id="AdminShortcutName" Value="WebFilter Admin" />
+  <String Id="AdminShortcutDescription" Value="Manage the family's filtering and browsing time" />
+  <String Id="FirewallDescription" Value="Lets the family's computers connect to the WebFilter hub on private networks." />
+
+  <String Id="SetupTitle" Value="[ProductName] Setup" />
+  <String Id="RoleDlgTitle" Value="{\WixUI_Font_Title}Computer role" />
+  <String Id="RoleDlgDescription" Value="Choose how this computer takes part in the family's filtering." />
+  <String Id="RoleHub" Value="Parents' computer (hub): keeps the family's settings and manages every computer. Opens TCP port 47800 on private networks." />
+  <String Id="RoleAgent" Value="Managed computer (agent): a child's or family computer that gets its settings from the parents' computer." />
+  <String Id="PairHint" Value="Pairing: on the parents' computer, open the admin app, then Devices, Pair a new computer. Enter the hub's address and the code here, or leave both empty and pair later." />
+  <String Id="HubLabel" Value="Hub address:" />
+  <String Id="PairCodeLabel" Value="Pairing code:" />
+  <String Id="PairIncomplete" Value="Enter both the hub's address and the pairing code, or leave both empty to pair later." />
+</WixLocalization>

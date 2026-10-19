@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Setup UI: WixUI's welcome, ready, progress and maintenance dialogs, plus our role dialog (Hub or Agent, and the
+  agent's optional pairing). No license or folder dialogs: the install folder is fixed, because the service trusts only
+  the native host under %ProgramFiles%\WebFilter (ServiceOptions.TrustedClientPaths).
+-->
+<Wix xmlns="http://wixtoolset.org/schemas/v4/wxs">
+  <Fragment>
+    <UI Id="WebFilterUI">
+      <TextStyle Id="WixUI_Font_Normal" FaceName="!(loc.Advanced_Font_FaceName)" Size="!(loc.Advanced_Font_Normal_Size)" />
+      <TextStyle Id="WixUI_Font_Bigger" FaceName="!(loc.Advanced_Font_FaceName)" Size="!(loc.Advanced_Font_Bigger_Size)" />
+      <TextStyle Id="WixUI_Font_Title" FaceName="!(loc.Advanced_Font_FaceName)" Size="!(loc.Advanced_Font_Title_Size)" Bold="yes" />
+      <Property Id="DefaultUIFont" Value="WixUI_Font_Normal" />
+      <Property Id="ARPNOMODIFY" Value="1" />
+
+      <DialogRef Id="ErrorDlg" />
+      <DialogRef Id="FatalError" />
+      <DialogRef Id="FilesInUse" />
+      <DialogRef Id="MsiRMFilesInUse" />
+      <DialogRef Id="PrepareDlg" />
+      <DialogRef Id="ProgressDlg" />
+      <DialogRef Id="ResumeDlg" />
+      <DialogRef Id="UserExit" />
+
+      <Publish Dialog="ExitDialog" Control="Finish" Event="EndDialog" Value="Return" Order="999" />
+
+      <Publish Dialog="WelcomeDlg" Control="Next" Event="NewDialog" Value="RoleDlg" Condition="NOT Installed" />
+      <Publish Dialog="WelcomeDlg" Control="Next" Event="NewDialog" Value="VerifyReadyDlg" Condition="Installed AND PATCH" />
+
+      <Publish Dialog="RoleDlg" Control="Back" Event="NewDialog" Value="WelcomeDlg" />
+      <Publish Dialog="RoleDlg" Control="Next" Event="SpawnDialog" Value="PairIncompleteDlg" Order="1" Condition="ROLE~=&quot;agent&quot; AND ((HUB AND NOT PAIRCODE) OR (PAIRCODE AND NOT HUB))" />
+      <Publish Dialog="RoleDlg" Control="Next" Event="NewDialog" Value="VerifyReadyDlg" Order="2" Condition="NOT (ROLE~=&quot;agent&quot; AND ((HUB AND NOT PAIRCODE) OR (PAIRCODE AND NOT HUB)))" />
+
+      <Publish Dialog="VerifyReadyDlg" Control="Back" Event="NewDialog" Value="RoleDlg" Order="1" Condition="NOT Installed" />
+      <Publish Dialog="VerifyReadyDlg" Control="Back" Event="NewDialog" Value="MaintenanceTypeDlg" Order="2" Condition="Installed AND NOT PATCH" />
+      <Publish Dialog="VerifyReadyDlg" Control="Back" Event="NewDialog" Value="WelcomeDlg" Order="2" Condition="Installed AND PATCH" />
+
+      <Publish Dialog="MaintenanceWelcomeDlg" Control="Next" Event="NewDialog" Value="MaintenanceTypeDlg" />
+      <Publish Dialog="MaintenanceTypeDlg" Control="RepairButton" Event="NewDialog" Value="VerifyReadyDlg" />
+      <Publish Dialog="MaintenanceTypeDlg" Control="RemoveButton" Event="NewDialog" Value="VerifyReadyDlg" />
+      <Publish Dialog="MaintenanceTypeDlg" Control="Back" Event="NewDialog" Value="MaintenanceWelcomeDlg" />
+
+      <Dialog Id="RoleDlg" Width="370" Height="270" Title="!(loc.SetupTitle)">
+        <Control Id="BannerBitmap" Type="Bitmap" X="0" Y="0" Width="370" Height="44" TabSkip="no" Text="!(loc.InstallDirDlgBannerBitmap)" />
+        <Control Id="BannerLine" Type="Line" X="0" Y="44" Width="370" Height="0" />
+        <Control Id="Title" Type="Text" X="15" Y="6" Width="200" Height="15" Transparent="yes" NoPrefix="yes" Text="!(loc.RoleDlgTitle)" />
+        <Control Id="Description" Type="Text" X="25" Y="23" Width="280" Height="15" Transparent="yes" NoPrefix="yes" Text="!(loc.RoleDlgDescription)" />
+
+        <!-- An upgrade keeps the computer's role (remembered); changing it means uninstalling first. -->
+        <Control Id="Role" Type="RadioButtonGroup" X="20" Y="54" Width="330" Height="58" Property="ROLE" DisableCondition="WIX_UPGRADE_DETECTED">
+          <RadioButtonGroup>
+            <RadioButton Value="hub" X="0" Y="0" Width="330" Height="28" Text="!(loc.RoleHub)" />
+            <RadioButton Value="agent" X="0" Y="30" Width="330" Height="28" Text="!(loc.RoleAgent)" />
+          </RadioButtonGroup>
+        </Control>
+
+        <Control Id="PairHint" Type="Text" X="20" Y="120" Width="330" Height="40" NoPrefix="yes" Text="!(loc.PairHint)"
+                 EnableCondition="ROLE~=&quot;agent&quot;" DisableCondition="NOT ROLE~=&quot;agent&quot;" />
+        <Control Id="HubLabel" Type="Text" X="20" Y="169" Width="90" Height="15" Text="!(loc.HubLabel)"
+                 EnableCondition="ROLE~=&quot;agent&quot;" DisableCondition="NOT ROLE~=&quot;agent&quot;" />
+        <Control Id="Hub" Type="Edit" X="115" Y="166" Width="235" Height="18" Property="HUB" Text="{255}"
+                 EnableCondition="ROLE~=&quot;agent&quot;" DisableCondition="NOT ROLE~=&quot;agent&quot;" />
+        <Control Id="CodeLabel" Type="Text" X="20" Y="195" Width="90" Height="15" Text="!(loc.PairCodeLabel)"
+                 EnableCondition="ROLE~=&quot;agent&quot;" DisableCondition="NOT ROLE~=&quot;agent&quot;" />
+        <Control Id="Code" Type="Edit" X="115" Y="192" Width="120" Height="18" Property="PAIRCODE" Text="{20}"
+                 EnableCondition="ROLE~=&quot;agent&quot;" DisableCondition="NOT ROLE~=&quot;agent&quot;" />
+
+        <Control Id="BottomLine" Type="Line" X="0" Y="234" Width="370" Height="0" />
+        <Control Id="Back" Type="PushButton" X="180" Y="243" Width="56" Height="17" Text="!(loc.WixUIBack)" />
+        <Control Id="Next" Type="PushButton" X="236" Y="243" Width="56" Height="17" Default="yes" Text="!(loc.WixUINext)" />
+        <Control Id="Cancel" Type="PushButton" X="304" Y="243" Width="56" Height="17" Cancel="yes" Text="!(loc.WixUICancel)">
+          <Publish Event="SpawnDialog" Value="CancelDlg" />
+        </Control>
+      </Dialog>
+
+      <Dialog Id="PairIncompleteDlg" Width="260" Height="85" Title="!(loc.SetupTitle)">
+        <Control Id="Text" Type="Text" X="15" Y="12" Width="230" Height="40" NoPrefix="yes" Text="!(loc.PairIncomplete)" />
+        <Control Id="OK" Type="PushButton" X="102" Y="60" Width="56" Height="17" Default="yes" Cancel="yes" Text="!(loc.WixUIOK)">
+          <Publish Event="EndDialog" Value="Return" />
+        </Control>
+      </Dialog>
+    </UI>
+
+    <UIRef Id="WixUI_Common" />
+  </Fragment>
+</Wix>
