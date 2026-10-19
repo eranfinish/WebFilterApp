@@ -15,5 +15,6 @@
     <Project Path="tests/WebFilter.Benchmarks/WebFilter.Benchmarks.csproj" />
     <Project Path="tests/WebFilter.Contracts.Tests/WebFilter.Contracts.Tests.csproj" />
     <Project Path="tests/WebFilter.Core.Tests/WebFilter.Core.Tests.csproj" />
+    <Project Path="tests/WebFilter.Service.Tests/WebFilter.Service.Tests.csproj" />
   </Folder>
 </Solution>

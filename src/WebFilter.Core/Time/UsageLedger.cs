@@ -40,6 +40,13 @@ public sealed class UsageLedger
             ? minutes.Select(m => new DateTimeOffset(m * TimeSpan.TicksPerMinute, TimeSpan.Zero)).ToArray()
             : [];
 
+    /// <summary>Every marked minute (for persistence).</summary>
+    public IEnumerable<(string MemberId, string DeviceId, DateTimeOffset Minute)> Entries() =>
+        from member in _minutes
+        from device in member.Value
+        from minute in device.Value
+        select (member.Key, device.Key, new DateTimeOffset(minute * TimeSpan.TicksPerMinute, TimeSpan.Zero));
+
     /// <summary>Adds every entry of <paramref name="other"/> to this ledger.</summary>
     public void MergeFrom(UsageLedger other)
     {
