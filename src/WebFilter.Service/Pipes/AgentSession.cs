@@ -15,13 +15,20 @@ internal sealed class AgentSession(Stream pipe, ClientIdentity client, FamilySer
     private readonly Channel<AgentMessage> _outgoing = Channel.CreateUnbounded<AgentMessage>(new UnboundedChannelOptions { SingleReader = true });
     private string? _extensionId;
     private string? _lastTimeState;
+    // When the rules last sent stop being right on their own (a temporary rule expires), in UTC ticks.
+    private long _rulesValidUntil = long.MaxValue;
 
     public async Task RunAsync(CancellationToken ct)
     {
         using var linked = CancellationTokenSource.CreateLinkedTokenSource(ct);
         var writer = WriteLoopAsync(linked.Token);
         void OnSettings(int version) => _outgoing.Writer.TryWrite(new RulesChangedMessage(version));
-        void OnTick(DateTimeOffset _) => PushTimeIfChanged();
+        void OnTick(DateTimeOffset now)
+        {
+            PushTimeIfChanged();
+            if (now.UtcTicks >= Interlocked.Read(ref _rulesValidUntil) && Interlocked.Exchange(ref _rulesValidUntil, long.MaxValue) != long.MaxValue)
+                _outgoing.Writer.TryWrite(new RulesChangedMessage(family.WithAgent((agent, _) => agent.SnapshotVersion ?? 0)));
+        }
         void OnDecided(AccessRequest request) => PushDecision(request);
         family.SettingsChanged += OnSettings;
         family.Ticked += OnTick;
@@ -105,6 +112,8 @@ internal sealed class AgentSession(Stream pipe, ClientIdentity client, FamilySer
             : account.IsAdmin ? null
             : new EffectiveUrlPolicy("", FilterMode.Allowlist, YouTubeMode.Off, [], view.Config.Rules.Where(r => r.MemberId is null && r.AlwaysAllowed && r.IsActiveAt(now)).ToList(), []);
         var rules = policy is null ? new DnrRuleSet([], []) : DnrCompiler.Compile(policy, options);
+        var validUntil = policy is null ? DateTimeOffset.MaxValue : EffectiveUrlPolicy.NextExpiry(view.Config, member?.Id, now);
+        Interlocked.Exchange(ref _rulesValidUntil, validUntil == DateTimeOffset.MaxValue ? long.MaxValue : validUntil.UtcTicks);
 
         var channels = member is null ? [] : view.Config.YouTubeChannels.Where(c => c.MemberId is null || c.MemberId == member.Id).ToList();
         YouTubeChannelRef Ref(YouTubeChannel c) => new(c.ChannelId, c.Handle, c.Title);

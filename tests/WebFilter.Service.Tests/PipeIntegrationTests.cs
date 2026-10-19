@@ -106,6 +106,31 @@ public sealed class PipeIntegrationTests : IAsyncLifetime
     }
 
     [Fact]
+    public async Task An_expiring_rule_makes_the_agent_fetch_rules_again()
+    {
+        await using var agent = await AgentClient.ConnectAsync(_options.AgentPipeName);
+        await agent.RequestAsync<HelloResponse>(new HelloRequest("0.0.1", "edge", "abcdefghijklmnopabcdefghijklmnop"));
+        _family.WithHub((hub, now) =>
+        {
+            hub.AddRule(new Core.Model.Rule("r-temp", "noa", "temp.example", Core.Model.PatternType.Domain, Core.Model.RuleAction.Allow, ExpiresAt: now.AddMinutes(10)), now);
+            return 0;
+        });
+        Assert.NotNull(await agent.WaitForAsync<RulesChangedMessage>());
+        var before = await agent.RequestAsync<RulesResponse>(new GetRulesRequest());
+        Assert.Contains(before.DynamicRules, r => r.ToString().Contains("temp.example", StringComparison.Ordinal));
+
+        _family.Tick();
+        await Task.Delay(300);
+        Assert.Equal(1, agent.CountOf<RulesChangedMessage>());
+
+        _clock.Now = _clock.Now.AddMinutes(11);
+        _family.Tick();
+        Assert.NotNull(await Poll(() => agent.CountOf<RulesChangedMessage>() == 2 ? "pushed" : null));
+        var after = await agent.RequestAsync<RulesResponse>(new GetRulesRequest());
+        Assert.DoesNotContain(after.DynamicRules, r => r.ToString().Contains("temp.example", StringComparison.Ordinal));
+    }
+
+    [Fact]
     public async Task Admin_changes_are_pushed_to_connected_agents()
     {
         await using var agent = await AgentClient.ConnectAsync(_options.AgentPipeName);
@@ -168,7 +193,8 @@ public sealed class PipeIntegrationTests : IAsyncLifetime
 
     private sealed class TestClock(DateTimeOffset now) : TimeProvider
     {
-        public override DateTimeOffset GetUtcNow() => now;
+        public DateTimeOffset Now { get; set; } = now;
+        public override DateTimeOffset GetUtcNow() => Now;
     }
 
     /// <summary>Plays the native host: sends requests and collects replies and pushes.</summary>
@@ -203,6 +229,8 @@ public sealed class PipeIntegrationTests : IAsyncLifetime
             var reply = await WaitForAsync<AgentMessage>(m => m.Id == id);
             return reply as T ?? throw new Xunit.Sdk.XunitException($"Expected {typeof(T).Name}, got {reply?.GetType().Name}: {(reply as ErrorMessage)?.Message}");
         }
+
+        public int CountOf<T>() where T : AgentMessage => _received.OfType<T>().Count();
 
         public Task<T?> WaitForAsync<T>(Func<T, bool>? match = null) where T : AgentMessage => Poll(() =>
             _received.OfType<T>().FirstOrDefault(m => match?.Invoke(m) ?? true));

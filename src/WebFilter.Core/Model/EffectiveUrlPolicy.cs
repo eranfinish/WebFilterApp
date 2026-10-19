@@ -27,6 +27,17 @@ public sealed record EffectiveUrlPolicy(
         return new EffectiveUrlPolicy(memberId, member.FilterMode, member.YouTubeMode, memberRules, globalRules, categoryDomains);
     }
 
+    /// <summary>
+    /// When the effective policy of <paramref name="memberId"/> (null: global rules only) next changes on its own — the
+    /// earliest expiry of an active member or global rule — or <see cref="DateTimeOffset.MaxValue"/> if none expires.
+    /// </summary>
+    public static DateTimeOffset NextExpiry(FamilyConfig config, string? memberId, DateTimeOffset now) =>
+        config.Rules
+            .Where(r => (r.MemberId is null || r.MemberId == memberId) && r.ExpiresAt > now)
+            .Select(r => r.ExpiresAt!.Value)
+            .DefaultIfEmpty(DateTimeOffset.MaxValue)
+            .Min();
+
     /// <summary>Always-allowed rules (member and global) — reachable even when time is up.</summary>
     public IEnumerable<Rule> AlwaysAllowedRules => MemberRules.Concat(GlobalRules).Where(r => r.AlwaysAllowed);
 }

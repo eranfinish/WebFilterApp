@@ -16,12 +16,7 @@ public sealed class PolicyCache(FamilyConfig config)
     {
         if (_entries.TryGetValue(memberId, out var entry) && now >= entry.ValidFrom && now < entry.ValidUntil) return entry.Policy;
         var policy = EffectiveUrlPolicy.For(Config, memberId, now);
-        var nextExpiry = Config.Rules
-            .Where(r => (r.MemberId is null || r.MemberId == memberId) && r.ExpiresAt > now)
-            .Select(r => r.ExpiresAt!.Value)
-            .DefaultIfEmpty(DateTimeOffset.MaxValue)
-            .Min();
-        _entries[memberId] = (policy, now, nextExpiry);
+        _entries[memberId] = (policy, now, EffectiveUrlPolicy.NextExpiry(Config, memberId, now));
         return policy;
     }
 }
