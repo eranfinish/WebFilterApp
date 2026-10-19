@@ -2108,7 +2108,7 @@ namespace WebFilter.Admin.Resources {
         }
 
         /// <summary>
-        ///   Looks up a localized string similar to הם ממשיכים לאכוף את ההגדרות האחרונות שקיבלו, אבל לא מקבלים עדכונים. כדי לחבר מחש....
+        ///   Looks up a localized string similar to מחשב שהצימוד שלו בוטל ממשיך לאכוף את ההגדרות האחרונות שקיבל, אבל לא מקבל עדכונים. ....
         /// </summary>
         public static string Devices_RevokedHint {
             get {
@@ -2230,6 +2230,15 @@ namespace WebFilter.Admin.Resources {
         public static string Device_Revoked {
             get {
                 return ResourceManager.GetString("Device_Revoked", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to הסינון הוסר.
+        /// </summary>
+        public static string Device_Uninstalled {
+            get {
+                return ResourceManager.GetString("Device_Uninstalled", resourceCulture);
             }
         }
 
@@ -3571,6 +3580,15 @@ namespace WebFilter.Admin.Resources {
         public static string AdminChange_pair_device {
             get {
                 return ResourceManager.GetString("AdminChange_pair_device", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to הסינון הוסר ממחשב.
+        /// </summary>
+        public static string AdminChange_device_uninstalled {
+            get {
+                return ResourceManager.GetString("AdminChange_device_uninstalled", resourceCulture);
             }
         }
     }

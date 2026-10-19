@@ -11,7 +11,8 @@ namespace WebFilter.Service.Tests;
 
 /// <summary>
 /// M6 on one machine: a hub and an agent as two services talking HTTPS with mutual TLS over loopback —
-/// pairing, snapshot sync, usage upload, change push, online and queued requests, wrong codes and revocation.
+/// pairing, snapshot sync, usage upload, change push, online and queued requests, wrong codes, revocation, and an
+/// agent unregistering itself on uninstall (M7), with the hub on and off.
 /// </summary>
 public sealed class HubSyncTests : IAsyncLifetime
 {
@@ -135,6 +136,91 @@ public sealed class HubSyncTests : IAsyncLifetime
     }
 
     [Fact]
+    public async Task An_uninstalled_device_unregisters_itself_and_the_hub_lists_it_as_uninstalled_until_paired_again()
+    {
+        await PairAndSyncAsync();
+        await _sync.StopAsync(CancellationToken.None); // uninstall stops the service first
+        // A reason the hub does not know is refused and changes nothing.
+        await Assert.ThrowsAsync<HttpRequestException>(() => HubLink.Load(_agentData)!.UnregisterAsync("bored", CancellationToken.None));
+        Assert.Null(_hub.Devices!.All().Single(d => d.Id == "laptop-yoav").RevokedAt);
+
+        Assert.Equal(UnregisterOutcome.Unregistered, await new HubUnregistration(_agentData).UnregisterAsync(CancellationToken.None));
+
+        var device = _hub.Devices!.All().Single(d => d.Id == "laptop-yoav");
+        Assert.NotNull(device.RevokedAt);
+        Assert.Equal(Contracts.Hub.UnregisterRequest.Uninstall, device.RevokedReason);
+        var hubAdmin = new Pipes.AdminPipeServer(_hub, Options.Create(_hub.Options), _clock, NullLogger<Pipes.AdminPipeServer>.Instance);
+        var listed = Assert.IsType<Contracts.Admin.DevicesResult>(hubAdmin.Handle(new Contracts.Admin.GetDevices(), "parent")).Devices.Single(d => d.Id == "laptop-yoav");
+        Assert.True(listed.Revoked);
+        Assert.Equal("uninstall", listed.RevokedReason);
+        Assert.Contains(_hub.WithHub((hub, _) => hub.Events.ToList()), e => e is { Type: EventType.AdminChange, Detail: "device_uninstalled", DeviceId: "laptop-yoav" });
+        // Its entry in the settings (accounts and their links) stays for when the computer is paired again.
+        Assert.Contains(_hub.WithHub((hub, _) => hub.Config.Devices.ToList()), d => d.Id == "laptop-yoav");
+
+        // The hub no longer accepts it, so asking again says so.
+        Assert.Equal(UnregisterOutcome.AlreadyRevoked, await new HubUnregistration(_agentData).UnregisterAsync(CancellationToken.None));
+
+        // Installed again and paired with a new code: active again, without the reason.
+        await HubLink.PairAsync(_agentData, $"127.0.0.1:{_port}", _hub.Pairing.Create(_clock.GetUtcNow()), "laptop-yoav", "Yoav's laptop");
+        var again = _hub.Devices!.All().Single(d => d.Id == "laptop-yoav");
+        Assert.Null(again.RevokedAt);
+        Assert.Null(again.RevokedReason);
+    }
+
+    [Fact]
+    public async Task A_device_a_parent_revoked_keeps_that_reason_when_it_is_uninstalled_later()
+    {
+        await PairAndSyncAsync();
+        Assert.True(_hub.Devices!.Revoke("laptop-yoav", _clock.GetUtcNow()));
+
+        Assert.Equal(UnregisterOutcome.AlreadyRevoked, await new HubUnregistration(_agentData).UnregisterAsync(CancellationToken.None));
+
+        Assert.Null(_hub.Devices!.All().Single(d => d.Id == "laptop-yoav").RevokedReason);
+        Assert.DoesNotContain(_hub.WithHub((hub, _) => hub.Events.ToList()), e => e.Detail == "device_uninstalled");
+    }
+
+    [Fact]
+    public async Task Uninstall_cleanup_unregisters_over_the_real_link_then_deletes_the_pairing()
+    {
+        var root = Path.Combine(_dir, "attic");
+        var data = Path.Combine(root, "data");
+        await HubLink.PairAsync(data, $"127.0.0.1:{_port}", _hub.Pairing.Create(_clock.GetUtcNow()), "pc-attic", "ATTIC");
+        var log = new StringWriter();
+
+        var result = Uninstall(root, log);
+
+        Assert.True(result.Complete);
+        Assert.Equal(UnregisterOutcome.Unregistered, result.Hub);
+        Assert.False(Directory.Exists(root));
+        Assert.Equal("uninstall", _hub.Devices!.All().Single(d => d.Id == "pc-attic").RevokedReason);
+    }
+
+    [Fact]
+    public async Task Uninstall_cleanup_with_the_hub_off_finishes_at_once_and_the_device_stays_listed()
+    {
+        var root = Path.Combine(_dir, "attic");
+        var data = Path.Combine(root, "data");
+        await HubLink.PairAsync(data, $"127.0.0.1:{_port}", _hub.Pairing.Create(_clock.GetUtcNow()), "pc-attic", "ATTIC");
+        await _server.StopAsync(CancellationToken.None);
+        var log = new StringWriter();
+
+        var watch = Stopwatch.StartNew();
+        var result = Uninstall(root, log);
+
+        Assert.True(watch.Elapsed < TimeSpan.FromSeconds(10), $"took {watch.Elapsed}");
+        Assert.True(result.Complete);
+        Assert.Equal(UnregisterOutcome.Failed, result.Hub);
+        Assert.False(Directory.Exists(root));
+        Assert.Contains("until a parent revokes it there", log.ToString(), StringComparison.Ordinal);
+        Assert.Null(_hub.Devices!.All().Single(d => d.Id == "pc-attic").RevokedAt);
+    }
+
+    /// <summary><c>WebFilter.Service cleanup</c> on a computer whose data folder is <paramref name="root"/>, with the real hub link.</summary>
+    private static Setup.MachineCleanup.Result Uninstall(string root, TextWriter log) =>
+        new Setup.MachineCleanup(new MemoryPolicyStore(), new NoHives(), wfp: null, new HubUnregistration(Path.Combine(root, "data")), log)
+            .Run(root, Path.Combine(root, "data", Policies.PolicyService.StateFileName));
+
+    [Fact]
     public async Task On_an_agent_the_admin_pipe_gives_status_and_a_local_pause_and_refers_the_rest_to_the_hub()
     {
         await PairAndSyncAsync();
@@ -210,5 +296,11 @@ public sealed class HubSyncTests : IAsyncLifetime
     private sealed class TestClock(DateTimeOffset now) : TimeProvider
     {
         public override DateTimeOffset GetUtcNow() => now;
+    }
+
+    /// <summary>No policies were written, so no user hive is needed.</summary>
+    private sealed class NoHives : Setup.IUserHives
+    {
+        public string? Load(string userSid) => null;
     }
 }

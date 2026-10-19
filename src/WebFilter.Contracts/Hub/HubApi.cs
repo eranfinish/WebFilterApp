@@ -47,6 +47,21 @@ public sealed record CreateRequestResult(string Result, string? RequestId);
 /// <summary>GET /v1/changes: server-sent events, one "version" event per settings change.</summary>
 public sealed record ChangeEvent(int Version);
 
+/// <summary>
+/// POST /v1/unregister: the device leaves the family by itself. The device is the one behind the client certificate, never
+/// one named in the body. The hub revokes it, as a parent's revoke on the Devices screen would, and keeps the reason so
+/// the parent sees why; the device stays listed, and pairing it again restores it. Answered 204; a device the hub no
+/// longer accepts gets 401, like any other call.
+/// </summary>
+/// <param name="Reason">Why the device leaves; one of <see cref="Reasons"/>.</param>
+public sealed record UnregisterRequest(string Reason)
+{
+    /// <summary>The device is being uninstalled.</summary>
+    public const string Uninstall = "uninstall";
+
+    public static readonly IReadOnlyList<string> Reasons = [Uninstall];
+}
+
 [JsonSourceGenerationOptions(PropertyNamingPolicy = JsonKnownNamingPolicy.CamelCase, DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull, PropertyNameCaseInsensitive = true)]
 [JsonSerializable(typeof(PairRequest))]
 [JsonSerializable(typeof(PairResponse))]
@@ -56,6 +71,7 @@ public sealed record ChangeEvent(int Version);
 [JsonSerializable(typeof(CreateRequestDto))]
 [JsonSerializable(typeof(CreateRequestResult))]
 [JsonSerializable(typeof(ChangeEvent))]
+[JsonSerializable(typeof(UnregisterRequest))]
 public sealed partial class HubApiJsonContext : JsonSerializerContext;
 
 public static class HubApi
@@ -65,6 +81,7 @@ public static class HubApi
     public const string UploadPath = "/v1/upload";
     public const string RequestsPath = "/v1/requests";
     public const string ChangesPath = "/v1/changes";
+    public const string UnregisterPath = "/v1/unregister";
     public const int DefaultPort = 47800;
 
     public static JsonSerializerOptions Options => HubApiJsonContext.Default.Options;

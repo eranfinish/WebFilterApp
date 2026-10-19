@@ -139,7 +139,7 @@ public sealed class AdminPipeServer(FamilyService family, IOptions<ServiceOption
         DecideRequest decide => DecideRequest(decide, adminName),
         SetClock set => SetClock(set),
         CreatePairingCode => new PairingCodeResult(family.Pairing.Create(family.Now), family.Now + Hub.HubPairing.Lifetime, family.Options.HubPort, LocalAddresses()),
-        GetDevices => new DevicesResult(family.Devices!.All().Select(d => new DeviceInfo(d.Id, d.Name, d.Os, d.PairedAt, d.LastSeenAt, d.RevokedAt is not null)).ToList()),
+        GetDevices => new DevicesResult(family.Devices!.All().Select(d => new DeviceInfo(d.Id, d.Name, d.Os, d.PairedAt, d.LastSeenAt, d.RevokedAt is not null, d.RevokedReason)).ToList()),
         RevokeDevice revoke => family.Devices!.Revoke(revoke.DeviceId, family.Now)
             ? new AdminOk()
             : new AdminError("not_found", "No such paired device."),

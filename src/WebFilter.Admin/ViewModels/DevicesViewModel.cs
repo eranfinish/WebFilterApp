@@ -5,6 +5,7 @@ using CommunityToolkit.Mvvm.Input;
 using WebFilter.Admin.Resources;
 using WebFilter.Admin.Services;
 using WebFilter.Contracts.Admin;
+using WebFilter.Contracts.Hub;
 
 namespace WebFilter.Admin.ViewModels;
 
@@ -218,7 +219,9 @@ public sealed partial class DeviceItemViewModel(string id) : ObservableObject
         LastSeenText = LastSeen(device.LastSeenAt, now, context);
         IsRevoked = device.Revoked;
         IsOnline = !device.Revoked && device.LastSeenAt is { } seen && now - seen < DevicesViewModel.OnlineWindow;
-        StatusText = device.Revoked ? Strings.Device_Revoked : Strings.Device_Active;
+        StatusText = !device.Revoked ? Strings.Device_Active
+            : device.RevokedReason == UnregisterRequest.Uninstall ? Strings.Device_Uninstalled
+            : Strings.Device_Revoked;
     }
 
     /// <summary>"N minutes ago" within the hour, "N hours ago" within the day, otherwise the date and time.</summary>

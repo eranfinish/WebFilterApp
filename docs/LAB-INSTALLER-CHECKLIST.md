@@ -91,7 +91,7 @@ Get-NetConnectionProfile | Set-NetConnectionProfile -NetworkCategory Private
 
 ## ג. הסרה (בשתי המכונות)
 
-הכנה: `noa` התחברה פעם אחת **והתנתקה** (ה-hive שלה לא טעון), ו-`yoav` **מחובר** (Switch user) בזמן ההסרה.
+הכנה: `noa` התחברה פעם אחת **והתנתקה** (ה-hive שלה לא טעון), ו-`yoav` **מחובר** (Switch user) בזמן ההסרה. **קודם הסוכן (`lab-kids`), כשה-Hub פועל**, ורק אחר כך ה-Hub — כדי לראות ב-Hub את ביטול הרישום.
 
 - [ ] הסרה:
 
@@ -100,6 +100,13 @@ Get-NetConnectionProfile | Set-NetConnectionProfile -NetworkCategory Private
   ```
 
 - [ ] ב-log: `Browser policies: N values removed, 0 left.` ו-`Data folder C:\ProgramData\WebFilter deleted.`
+- [ ] ביטול הרישום ב-Hub — בסוכן, ב-log: `Hub: this computer was unregistered; the hub's Devices screen shows it as uninstalled.` (וב-Hub עצמו: `Hub: this computer is not paired with a hub; nothing to unregister.`). ב-Hub, במסך "מכשירים", `lab-kids` עבר ל"מחשבים שהצימוד שלהם בוטל" במצב **"הסינון הוסר"**, ובמסך "פעילות" מופיע "הסינון הוסר ממחשב" עם `lab-kids`. או מהמחשב שלך — ב-`lab-kids` מופיעים `"revoked":true` ו-`"revokedReason":"uninstall"`:
+
+  ```powershell
+  .\Invoke-LabAdmin.ps1 -VMName lab-hub -Message '{"type":"getDevices","v":1}'
+  ```
+
+- [ ] Hub כבוי (מנקודת `clean`: Hub + סוכן מותקנים ומצומדים): מכבים את ה-Hub (במחשב שלך `Stop-VM -Name lab-hub`) ומסירים את הסוכן. ההסרה מסתיימת בהצלחה, ולכל היותר כ-5 שניות יותר מהרגיל; ב-log `Hub: this computer could not be unregistered (...). It stays on the hub's Devices screen until a parent revokes it there.` אחרי `Start-VM -Name lab-hub` — `lab-kids` עדיין "פעיל" במסך המכשירים, וביטול צימוד ידני שם עובד.
 - [ ] לא נשאר כלום: השירות, `C:\Program Files\WebFilter`, `C:\ProgramData\WebFilter`, `HKLM\SOFTWARE\WebFilter`, מפתחות ה-host, ערכי WebFilter תחת `HKLM\SOFTWARE\Policies\{Microsoft\Edge,Google\Chrome}`, `HKLM\SYSTEM\CurrentControlSet\Control\SafeBoot\Network\WebFilter`, כלל חומת האש:
 
   ```powershell

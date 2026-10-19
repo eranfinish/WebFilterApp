@@ -159,6 +159,16 @@ public sealed class HubCore(FamilyConfig config)
         Changed(now, null, "pair_device");
     }
 
+    /// <summary>
+    /// A paired device left by itself because it is being uninstalled; recorded for the activity log. Its entry stays, with
+    /// its accounts and their links, so pairing the same computer again restores it as it was.
+    /// </summary>
+    public void DeviceUninstalled(string id, DateTimeOffset now)
+    {
+        Version++;
+        Events.Add(new FamilyEvent(EventType.AdminChange, now, null, id, Detail: "device_uninstalled"));
+    }
+
     /// <summary>Records accounts an agent has seen; new ones are unlinked until a parent links them. Existing links are kept.</summary>
     public void ReportAccounts(string deviceId, IEnumerable<DeviceAccount> seen, DateTimeOffset now)
     {

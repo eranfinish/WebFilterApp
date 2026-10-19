@@ -1,5 +1,7 @@
+using System.Globalization;
 using System.Security;
 using System.Text.Json;
+using WebFilter.Service.Hub;
 using WebFilter.Service.Network;
 using WebFilter.Service.Policies;
 
@@ -8,14 +10,22 @@ namespace WebFilter.Service.Setup;
 /// <summary>
 /// What uninstall removes besides the files and keys the MSI owns (MVP-PLAN §4.6): every browser policy value the
 /// service wrote — in HKLM and in every user's hive, loading the hives of users who are not logged on — our WFP filters,
-/// and the data folder (settings, usage, events, pairing keys, profile caches). Every step runs even if an earlier one
-/// failed; whatever could not be removed is reported. Run with the service stopped, or it writes the policies again.
+/// this computer's pairing on the hub, and the data folder (settings, usage, events, pairing keys, profile caches). Every
+/// step runs even if an earlier one failed; whatever could not be removed is reported. Run with the service stopped, or
+/// it writes the policies again.
 /// </summary>
-public sealed class MachineCleanup(IPolicyStore store, IUserHives hives, IWfpEngine? wfp, TextWriter log)
+public sealed class MachineCleanup(IPolicyStore store, IUserHives hives, IWfpEngine? wfp, IHubUnregistration hub, TextWriter log)
 {
+    /// <summary>How long uninstall waits for the hub: it may be off, and the uninstall must not hang on it.</summary>
+    public TimeSpan HubTimeout { get; init; } = TimeSpan.FromSeconds(5);
+
     /// <param name="PoliciesLeft">Registry paths of values that could not be removed.</param>
     /// <param name="WfpRemoved">False only when an engine exists and failed.</param>
-    public sealed record Result(int PoliciesRemoved, IReadOnlyList<string> PoliciesLeft, bool WfpRemoved, bool DataDeleted)
+    /// <param name="Hub">
+    /// Best effort and not part of <see cref="Complete"/>, which is about this computer: a hub that is off leaves this
+    /// computer listed there until a parent revokes it on the Devices screen.
+    /// </param>
+    public sealed record Result(int PoliciesRemoved, IReadOnlyList<string> PoliciesLeft, bool WfpRemoved, UnregisterOutcome Hub, bool DataDeleted)
     {
         public bool Complete => PoliciesLeft.Count == 0 && WfpRemoved && DataDeleted;
     }
@@ -26,8 +36,10 @@ public sealed class MachineCleanup(IPolicyStore store, IUserHives hives, IWfpEng
     {
         var (removed, left) = RemovePolicies(policyStatePath);
         var wfpRemoved = RemoveWfpFilters();
+        // Before the data folder goes: the pairing and its client key are in it.
+        var unregistered = UnregisterFromHub();
         var dataDeleted = DeleteData(dataRoot);
-        return new Result(removed, left, wfpRemoved, dataDeleted);
+        return new Result(removed, left, wfpRemoved, unregistered, dataDeleted);
     }
 
     private (int Removed, IReadOnlyList<string> Left) RemovePolicies(string statePath)
@@ -65,6 +77,31 @@ public sealed class MachineCleanup(IPolicyStore store, IUserHives hives, IWfpEng
         {
             log.WriteLine($"WFP filters could not be removed: {ex.Message}");
             return false;
+        }
+    }
+
+    private UnregisterOutcome UnregisterFromHub()
+    {
+        using var timeout = new CancellationTokenSource(HubTimeout);
+        try
+        {
+            var unregister = hub.UnregisterAsync(timeout.Token);
+            // The token cancels the request; this also bounds anything that ignores it.
+            if (Task.WhenAny(unregister, Task.Delay(HubTimeout)).GetAwaiter().GetResult() != unregister) throw new OperationCanceledException();
+            var outcome = unregister.GetAwaiter().GetResult();
+            log.WriteLine(outcome switch
+            {
+                UnregisterOutcome.NotPaired => "Hub: this computer is not paired with a hub; nothing to unregister.",
+                UnregisterOutcome.AlreadyRevoked => "Hub: the hub had already revoked this computer.",
+                _ => "Hub: this computer was unregistered; the hub's Devices screen shows it as uninstalled.",
+            });
+            return outcome;
+        }
+        catch (Exception ex) when (ex is not OutOfMemoryException)
+        {
+            var why = ex is OperationCanceledException ? $"no answer within {HubTimeout.TotalSeconds.ToString("0.#", CultureInfo.InvariantCulture)} seconds" : ex.Message;
+            log.WriteLine($"Hub: this computer could not be unregistered ({why}). It stays on the hub's Devices screen until a parent revokes it there.");
+            return UnregisterOutcome.Failed;
         }
     }
 

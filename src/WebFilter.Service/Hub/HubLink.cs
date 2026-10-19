@@ -1,3 +1,4 @@
+using System.Net;
 using System.Net.Http.Json;
 using System.Net.Security;
 using System.Security.Cryptography;
@@ -78,6 +79,20 @@ public sealed class HubLink
         File.WriteAllText(LinkPath(dataDirectory), JsonSerializer.Serialize(new LinkFile(paired.HubId, address, Convert.ToBase64String(caDer))));
         File.WriteAllBytes(KeyPath(dataDirectory), ProtectedData.Protect(client.Export(X509ContentType.Pkcs12), null, DataProtectionScope.LocalMachine));
         return new HubLink { HubId = paired.HubId, Address = address, HubCa = ca, ClientCertificate = client };
+    }
+
+    /// <summary>
+    /// Tells the hub this device leaves (<see cref="UnregisterRequest"/>), so it revokes our certificate. True when it did,
+    /// false when it no longer accepted us anyway (a parent revoked this device). Throws when the hub cannot be reached;
+    /// <paramref name="ct"/> bounds the wait.
+    /// </summary>
+    public async Task<bool> UnregisterAsync(string reason, CancellationToken ct)
+    {
+        using var http = CreateClient(Timeout.InfiniteTimeSpan);
+        using var response = await http.PostAsJsonAsync(HubApi.UnregisterPath, new UnregisterRequest(reason), HubApiJsonContext.Default.UnregisterRequest, ct);
+        if (response.StatusCode == HttpStatusCode.Unauthorized) return false;
+        response.EnsureSuccessStatusCode();
+        return true;
     }
 
     /// <summary>An HTTP client presenting our certificate and trusting only certificates issued by our hub's CA.</summary>

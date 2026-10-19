@@ -41,11 +41,12 @@ Install, repair and upgrade:
 Uninstall (not the removal of the old version during an upgrade):
 
 - The service is stopped, then `WebFilter.Service.exe cleanup` removes every browser policy value the service wrote — in HKLM and in every user's hive, loading the hives of users who are not logged on — the WFP filters (once the native engine exists), and `%ProgramData%\WebFilter`. Best effort: what it could not remove is listed in the MSI log and the uninstall continues.
+- On a paired agent, before the data folder (and with it the client key) is deleted, `cleanup` unregisters the computer from its hub: `POST /v1/unregister` over the existing mutual-TLS link, waiting at most 5 seconds. The hub revokes the computer, as a parent's revoke would, and keeps it listed: the Devices screen shows it among the revoked computers with the status "Uninstalled" ("הסינון הוסר"), and the activity log gets "WebFilter was uninstalled from a computer". It is not deleted, so the parent sees that the filter was removed, and pairing the same computer again after a reinstall restores it with its account links. When the hub is off or does not answer in time, the MSI log says so (`Hub: this computer could not be unregistered …`), the uninstall still completes, and the computer stays listed as active until a parent revokes it.
 - The MSI removes the service, the files, the generated files, the host keys, `HKLM\SOFTWARE\WebFilter`, the Safe Mode key and the firewall rule.
 
 ## Known gaps
 
-- The device is not unregistered from the hub on uninstall; revoke it on the hub's Devices screen.
+- An agent uninstalled while its hub is off (or silent for 5 seconds) is not unregistered; revoke it on the hub's Devices screen. Uninstalling the hub tells its agents nothing: they keep enforcing their last settings until WebFilter is uninstalled from them too.
 - A background service that throws stops the service cleanly, and Windows restarts only services that end without a clean stop.
 - The MSI is not signed (SmartScreen warns). The native host is not NativeAOT yet (needs Visual Studio's C++ workload; then build with `-p:NativeHostAot=true`).
 - The dialogs use WixUI's left-to-right layout, also in Hebrew.
