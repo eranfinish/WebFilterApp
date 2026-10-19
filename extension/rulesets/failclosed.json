@@ -1,0 +1,8 @@
+[
+  {
+    "id": 1,
+    "priority": 1,
+    "action": { "type": "redirect", "redirect": { "extensionPath": "/blocked.html?reason=failclosed" } },
+    "condition": { "regexFilter": "^https?://", "resourceTypes": ["main_frame", "sub_frame"] }
+  }
+]

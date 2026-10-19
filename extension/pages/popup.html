@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <title>WebFilter</title>
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <header class="brand">
+    <img src="icons/icon-48.png" width="24" height="24" alt="">
+    <span>WebFilter</span>
+  </header>
+
+  <section id="status" class="status" data-state="idle" role="status" aria-live="polite">
+    <span class="status-icon" aria-hidden="true">
+      <svg class="icon-ok" viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5" /></svg>
+      <svg class="icon-alert" viewBox="0 0 24 24"><path d="M12 6.5v7" /><path d="M12 17.5v.01" /></svg>
+    </span>
+    <div>
+      <p id="status-title" class="status-title" data-i18n="statusLoading">בודק…</p>
+      <p id="status-detail" class="status-detail"></p>
+    </div>
+  </section>
+  <p id="diag" class="diag" dir="ltr" hidden></p>
+
+  <dl id="profile" class="facts" hidden>
+    <div>
+      <dt data-i18n="labelUser">משתמש</dt>
+      <dd id="user"></dd>
+    </div>
+    <div>
+      <dt data-i18n="labelMode">מצב סינון</dt>
+      <dd id="mode"></dd>
+    </div>
+    <div>
+      <dt data-i18n="labelTime">זמן גלישה שנותר היום</dt>
+      <dd id="time"></dd>
+    </div>
+  </dl>
+
+  <footer>
+    <span data-i18n="labelVersion">גרסה</span> <code id="version" dir="ltr"></code>
+    · <span data-i18n="labelInstallType">סוג התקנה</span> <code id="install-type" dir="ltr"></code>
+  </footer>
+
+  <script src="popup.js"></script>
+</body>
+</html>

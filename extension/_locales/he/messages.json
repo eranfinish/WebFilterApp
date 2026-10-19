@@ -1,0 +1,278 @@
+{
+  "extDescription": {
+    "message": "מסנן גלישה משפחתי למחשבים ביתיים. עובד יחד עם התוכנה WebFilter במחשב כדי לסנן אתרים ולהגביל את זמן הגלישה."
+  },
+  "actionTitle": {
+    "message": "WebFilter"
+  },
+  "langCode": {
+    "message": "he"
+  },
+  "textDirection": {
+    "message": "rtl"
+  },
+  "reason_allowed_unrestricted": {
+    "message": "לחשבון הזה אין הגבלות."
+  },
+  "reason_allowed_paused": {
+    "message": "ההגבלות מושהות כרגע."
+  },
+  "reason_allowed_always": {
+    "message": "האתר הזה מותר תמיד."
+  },
+  "reason_allowed_rule": {
+    "message": "האתר הזה מותר לפי כלל."
+  },
+  "reason_allowed_category": {
+    "message": "האתר הזה שייך לקטגוריה מותרת."
+  },
+  "reason_allowed_default": {
+    "message": "האתר הזה מותר."
+  },
+  "reason_allowed_homework": {
+    "message": "האתר הזה מותר במצב שיעורי בית."
+  },
+  "reason_allowed_youtube_channel": {
+    "message": "ערוץ ה-YouTube הזה מאושר."
+  },
+  "reason_allowed_browser": {
+    "message": "הדפדפן הזה מותר."
+  },
+  "reason_blocked_rule": {
+    "message": "ההורים חסמו את האתר הזה."
+  },
+  "reason_blocked_category": {
+    "message": "האתר הזה שייך לקטגוריה שההורים חסמו."
+  },
+  "reason_blocked_not_in_allowlist": {
+    "message": "אפשר לפתוח רק אתרים שההורים אישרו, והאתר הזה עוד לא ברשימה."
+  },
+  "reason_blocked_time_window": {
+    "message": "בשעה הזו אי אפשר לגלוש."
+  },
+  "reason_blocked_daily_limit": {
+    "message": "ניצלת את כל זמן הגלישה של היום."
+  },
+  "reason_blocked_homework": {
+    "message": "מצב שיעורי בית פעיל: עכשיו פתוחים רק אתרי לימוד."
+  },
+  "reason_blocked_ip_literal": {
+    "message": "אי אפשר לפתוח אתר לפי כתובת מספרית."
+  },
+  "reason_blocked_youtube_channel": {
+    "message": "ערוץ ה-YouTube הזה לא מאושר."
+  },
+  "reason_blocked_youtube_unknown": {
+    "message": "לא הצלחנו לזהות לאיזה ערוץ YouTube שייך הסרטון, ולכן הוא חסום."
+  },
+  "reason_blocked_youtube_off": {
+    "message": "YouTube כבוי בשבילך."
+  },
+  "reason_blocked_service_unavailable": {
+    "message": "שירות הסינון לא פועל, ולכן אפשר לפתוח רק אתרים שמותרים תמיד."
+  },
+  "reason_blocked_app_network": {
+    "message": "האפליקציה הזו לא מורשית להתחבר לאינטרנט."
+  },
+  "reason_redirect_youtube_home": {
+    "message": "דף הבית והחיפוש של YouTube לא זמינים. אפשר לבחור באחד הערוצים שלך."
+  },
+  "reason_failclosed": {
+    "message": "WebFilter עוד לא מחובר לשירות הסינון, ולכן הגלישה חסומה. הדף ייפתח לבד ברגע שהחיבור יחזור."
+  },
+  "reason_unknown": {
+    "message": "הדף הזה חסום."
+  },
+  "blockedHeading": {
+    "message": "הדף הזה חסום"
+  },
+  "labelAddress": {
+    "message": "כתובת:"
+  },
+  "labelCategory": {
+    "message": "קטגוריה:"
+  },
+  "allowedNowHeading": {
+    "message": "הדף הזה מותר עכשיו"
+  },
+  "tryAgain": {
+    "message": "לנסות שוב"
+  },
+  "noteLabel": {
+    "message": "למה צריך את זה? (לא חובה)"
+  },
+  "requestButton": {
+    "message": "לבקש גישה מההורים"
+  },
+  "requestYouTubeButton": {
+    "message": "לבקש מההורים לאשר את הערוץ"
+  },
+  "timeRequest15": {
+    "message": "לבקש עוד 15 דקות"
+  },
+  "timeRequest30": {
+    "message": "לבקש עוד 30 דקות"
+  },
+  "requestSending": {
+    "message": "הבקשה נשלחת…"
+  },
+  "result_created": {
+    "message": "הבקשה נשלחה להורים. אם יאשרו, הדף ייפתח לבד."
+  },
+  "result_merged": {
+    "message": "כבר ביקשת את זה. הבקשה מחכה להורים."
+  },
+  "result_rate_limited": {
+    "message": "שלחת הרבה בקשות בשעה האחרונה. אפשר לנסות שוב מאוחר יותר."
+  },
+  "result_cooldown": {
+    "message": "ההורים סירבו לבקשה הזו לפני זמן קצר. אפשר לבקש שוב בעוד שעה."
+  },
+  "result_queued": {
+    "message": "הבקשה נשמרה ותגיע להורים כשהמחשב יתחבר שוב."
+  },
+  "result_unavailable": {
+    "message": "אי אפשר לשלוח בקשות כרגע כי שירות הסינון לא פועל."
+  },
+  "result_error": {
+    "message": "משהו השתבש. אפשר לנסות שוב בעוד רגע."
+  },
+  "result_waiting": {
+    "message": "הבקשה מחכה להורים."
+  },
+  "decision_approved": {
+    "message": "אושר! הדף נפתח…"
+  },
+  "decision_denied": {
+    "message": "ההורים סירבו לבקשה."
+  },
+  "timeupHeading": {
+    "message": "זמן הגלישה נגמר"
+  },
+  "timeupHeadingWindow": {
+    "message": "עכשיו לא זמן גלישה"
+  },
+  "timeupBodyLimit": {
+    "message": "ניצלת את כל זמן הגלישה של היום."
+  },
+  "timeupBodyWindow": {
+    "message": "בשעה הזו אי אפשר לגלוש. אפשר יהיה לגלוש שוב בחלון הזמן הבא."
+  },
+  "labelRemaining": {
+    "message": "זמן שנותר היום:"
+  },
+  "labelWindowEnds": {
+    "message": "הגלישה מותרת עד:"
+  },
+  "timeupAlwaysAllowed": {
+    "message": "אתרים שמותרים תמיד ממשיכים לעבוד."
+  },
+  "timeupWasAt": {
+    "message": "היית בדף:"
+  },
+  "timeupBack": {
+    "message": "חזרה לדף"
+  },
+  "myChannelsHeading": {
+    "message": "הערוצים שלי ב-YouTube"
+  },
+  "myChannelsIntro": {
+    "message": "אלה הערוצים שההורים אישרו. דף הבית והחיפוש של YouTube לא זמינים."
+  },
+  "myChannelsEmpty": {
+    "message": "עדיין לא אושרו ערוצים. אפשר לבקש מההורים להוסיף."
+  },
+  "statusLoading": {
+    "message": "בבדיקה…"
+  },
+  "statusUnknown": {
+    "message": "לא ניתן לקרוא את המצב."
+  },
+  "statusInert": {
+    "message": "לא הותקן על ידי מדיניות"
+  },
+  "statusInertDetail": {
+    "message": "WebFilter מסנן רק כשהתוכנה WebFilter מתקינה אותו דרך מדיניות הדפדפן. כאן הוא לא פעיל ולא חוסם דבר."
+  },
+  "statusService": {
+    "message": "מחובר ל-WebFilter"
+  },
+  "statusServiceDetail": {
+    "message": "הסינון ומגבלות הזמן פעילים."
+  },
+  "statusHost": {
+    "message": "שירות הסינון לא פועל"
+  },
+  "statusHostDetail": {
+    "message": "עובד במצב מוגבל עד שהשירות יחזור."
+  },
+  "statusConnecting": {
+    "message": "בהתחברות…"
+  },
+  "statusDisconnected": {
+    "message": "לא מחובר"
+  },
+  "statusDisconnectedDetail": {
+    "message": "הגלישה חסומה עד ש-WebFilter במחשב יגיב."
+  },
+  "labelUser": {
+    "message": "משתמש"
+  },
+  "labelMode": {
+    "message": "מצב סינון"
+  },
+  "labelTime": {
+    "message": "זמן גלישה שנותר היום"
+  },
+  "labelVersion": {
+    "message": "גרסה"
+  },
+  "labelInstallType": {
+    "message": "סוג התקנה"
+  },
+  "mode_unrestricted": {
+    "message": "ללא הגבלה"
+  },
+  "mode_blocklist": {
+    "message": "רשימה שחורה"
+  },
+  "mode_allowlist": {
+    "message": "רק אתרים מאושרים"
+  },
+  "time_unlimited": {
+    "message": "ללא הגבלה"
+  },
+  "time_expired": {
+    "message": "הזמן נגמר"
+  },
+  "time_outside_window": {
+    "message": "מחוץ לשעות הגלישה"
+  },
+  "minutesValue": {
+    "message": "$COUNT$ דקות",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "15"
+      }
+    }
+  },
+  "oneMinute": {
+    "message": "דקה אחת"
+  },
+  "notify10": {
+    "message": "נותרו 10 דקות גלישה להיום."
+  },
+  "notify5": {
+    "message": "נותרו 5 דקות גלישה להיום."
+  },
+  "notify1": {
+    "message": "נותרה דקה אחת של גלישה להיום."
+  },
+  "notifyApproved": {
+    "message": "ההורים אישרו את הבקשה שלך."
+  },
+  "notifyDenied": {
+    "message": "ההורים סירבו לבקשה שלך."
+  }
+}

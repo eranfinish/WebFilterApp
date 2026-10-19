@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>WebFilter · הזמן נגמר</title>
+  <link rel="stylesheet" href="pages.css">
+</head>
+<body>
+  <main>
+    <div class="brand"><img src="icons/icon-32.png" width="20" height="20" alt=""><span>WebFilter</span></div>
+    <h1 id="heading">זמן הגלישה נגמר</h1>
+    <p id="detail" class="lead">ניצלת את כל זמן הגלישה של היום.</p>
+    <p id="remaining-row" class="muted" hidden><span data-i18n="labelRemaining">זמן שנותר היום:</span> <strong id="remaining"></strong></p>
+    <p id="window-row" class="muted" hidden><span data-i18n="labelWindowEnds">הגלישה מותרת עד:</span> <strong id="window-end" dir="ltr"></strong></p>
+    <p class="muted" data-i18n="timeupAlwaysAllowed">אתרים שמותרים תמיד ממשיכים לעבוד.</p>
+    <p id="url-row" class="muted" hidden><span data-i18n="timeupWasAt">היית בדף:</span> <code id="url"></code></p>
+    <p id="back-row" hidden><a id="back" data-i18n="timeupBack">חזרה לדף</a></p>
+
+    <section id="request">
+      <label for="note" data-i18n="noteLabel">למה צריך את זה? (לא חובה)</label>
+      <textarea id="note" maxlength="500"></textarea>
+      <div class="actions">
+        <button id="ask-15" type="button" data-i18n="timeRequest15">לבקש עוד 15 דקות</button>
+        <button id="ask-30" type="button" data-i18n="timeRequest30">לבקש עוד 30 דקות</button>
+      </div>
+    </section>
+
+    <p id="result" class="result" role="status" aria-live="polite" hidden></p>
+  </main>
+  <script src="timeup.js"></script>
+</body>
+</html>
