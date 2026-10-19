@@ -19,8 +19,12 @@ public sealed record PolicyView(
     FamilyConfig Config,
     IReadOnlyDictionary<string, MemberRuntime> Runtime,
     UsageLedger Usage,
-    IReadOnlyDictionary<string, DateTimeOffset> LocalPauses)
+    IReadOnlyDictionary<string, DateTimeOffset> LocalPauses,
+    PolicyCache? Policies = null)
 {
+    public EffectiveUrlPolicy UrlPolicy(string memberId, DateTimeOffset now) =>
+        Policies is not null && ReferenceEquals(Policies.Config, Config) ? Policies.Get(memberId, now) : EffectiveUrlPolicy.For(Config, memberId, now);
+
     private static readonly MemberRuntime Empty = new();
 
     public MemberRuntime RuntimeOf(string memberId) => Runtime.TryGetValue(memberId, out var r) ? r : Empty;
@@ -59,7 +63,7 @@ public static class Decider
         if (view.IsPaused(memberId, now)) return DecisionResult.Allow(ReasonCode.AllowedPaused);
         if (!UrlNormalizer.TryNormalize(rawUrl, out var url)) return DecisionResult.Block(ReasonCode.BlockedRule);
 
-        var policy = EffectiveUrlPolicy.For(view.Config, memberId, now);
+        var policy = view.UrlPolicy(memberId, now);
         if (view.RuntimeOf(memberId).IsInHomework(now)) return Homework(view, policy, url);
 
         if (TimeBlock(view, memberId, now) is { } timeReason)

@@ -14,6 +14,7 @@ public sealed record AgentUpload(string DeviceId, UsageLedger Usage, IReadOnlyLi
 public sealed class AgentCore(string deviceId)
 {
     private HubSnapshot? _snapshot;
+    private PolicyCache? _policies;
     private readonly UsageLedger _localUsage = new();
     private readonly Dictionary<string, DateTimeOffset> _localPauses = [];
     private readonly List<FamilyEvent> _outbox = [];
@@ -29,7 +30,12 @@ public sealed class AgentCore(string deviceId)
     public IReadOnlyList<FamilyEvent> LocalEvents => _log;
     public IReadOnlyList<AccessRequest> QueuedRequests => _queued;
 
-    public void Apply(HubSnapshot snapshot) => _snapshot = snapshot;
+    public void Apply(HubSnapshot snapshot)
+    {
+        if (ReferenceEquals(snapshot, _snapshot)) return;
+        _snapshot = snapshot;
+        _policies = new PolicyCache(snapshot.Config);
+    }
 
     public Device Device => Snapshot.Config.Device(DeviceId);
 
@@ -43,7 +49,7 @@ public sealed class AgentCore(string deviceId)
     {
         var usage = Snapshot.Usage.Clone();
         usage.MergeFrom(_localUsage);
-        return new PolicyView(Snapshot.Config, Snapshot.Runtime, usage, _localPauses);
+        return new PolicyView(Snapshot.Config, Snapshot.Runtime, usage, _localPauses, _policies);
     }
 
     public DecisionResult DecideUrl(DeviceAccount account, string url, DateTimeOffset now)

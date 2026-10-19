@@ -14,6 +14,9 @@ public sealed class HubCore(FamilyConfig config)
     private readonly Dictionary<string, TimeTrack> _timeTracks = [];
     private int _requestCounter;
     private int _ruleCounter;
+    private PolicyCache? _policies;
+    private int _policiesVersion;
+    private HubSnapshot? _snapshot;
 
     private sealed record TimeTrack(DateOnly Date, int? Remaining, TimeState State);
 
@@ -26,10 +29,17 @@ public sealed class HubCore(FamilyConfig config)
     public MemberRuntime RuntimeOf(string memberId) =>
         _runtime.TryGetValue(memberId, out var runtime) ? runtime : _runtime[memberId] = new MemberRuntime();
 
+    /// <summary>The current snapshot; the same instance is returned until something changes.</summary>
     public HubSnapshot Snapshot() =>
-        new(Version, Config.Clone(), _runtime.ToDictionary(kv => kv.Key, kv => kv.Value.Clone()), Usage.Clone());
+        _snapshot is { } s && s.Version == Version
+            ? s
+            : _snapshot = new(Version, Config.Clone(), _runtime.ToDictionary(kv => kv.Key, kv => kv.Value.Clone()), Usage.Clone());
 
-    public PolicyView View() => new(Config, _runtime, Usage, new Dictionary<string, DateTimeOffset>());
+    public PolicyView View()
+    {
+        if (_policies is null || _policiesVersion != Version) (_policies, _policiesVersion) = (new PolicyCache(Config), Version);
+        return new PolicyView(Config, _runtime, Usage, new Dictionary<string, DateTimeOffset>(), _policies);
+    }
 
     public TimeStatus TimeStatus(string memberId, DateTimeOffset now) => Decider.Time(View(), memberId, now);
 
