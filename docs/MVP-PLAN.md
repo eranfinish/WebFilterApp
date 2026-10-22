@@ -552,7 +552,7 @@ CLAUDE.md
 
 PolicyManager, WfpManager, ProcessGuard, TamperMonitor. **תנאי סיום:** תרחישי `system` של עקיפה ואפליקציות עוברים על VM, עם התוסף המותקן מהחנות.
 
-> **סטטוס (2026-10-19):** קיימים ונבדקו מול רישום ו-WFP מדומים — מדיניות הדפדפן של סעיף 5 כנתונים (`BrowserPolicies`), `PolicyManager` שכותב, מתקן שינויים ומוחק רק ערכים שהוא כתב (כבוי בהרצות פיתוח: `ManageBrowserPolicies`), רשימת האפליקציות המותרות לרשת לכל משתמש מוגבל (`NetworkPolicy`, אותו סדר החלטה כמו `Decider.App`), `WfpManager` שמיישב ומחזיר מסננים שנמחקו, ומסווג דפדפנים ל-ProcessGuard (שם/OriginalFilename + חתימת Authenticode, נבדק על Edge אמיתי). חסר — `WebFilter.Wfp.Native.dll` (דורש רכיב C++), האזנה להפעלת תהליכים, ובדיקה על VM.
+> **סטטוס (2026-10-22):** קיימים ונבדקו מול רישום ו-WFP מדומים — מדיניות הדפדפן של סעיף 5 כנתונים (`BrowserPolicies`), `PolicyManager` שכותב, מתקן שינויים ומוחק רק ערכים שהוא כתב (כבוי בהרצות פיתוח: `ManageBrowserPolicies`), מדיניות HKCU שנכתבת ברגע שילד מתחבר — השירות מקבל מ-Windows הודעת כניסה (`OnSessionChange`) ובודק שוב 3 פעמים ב-15 השניות הבאות למקרה שה-hive נטען מאוחר, במקום לחכות עד דקה למעבר הבא (נמצא במעבדה; בדיקה במעבדה: סעיף ב' ב[רשימת הבדיקה](LAB-INSTALLER-CHECKLIST.md)), רשימת האפליקציות המותרות לרשת לכל משתמש מוגבל (`NetworkPolicy`, אותו סדר החלטה כמו `Decider.App`), `WfpManager` שמיישב ומחזיר מסננים שנמחקו, ומסווג דפדפנים ל-ProcessGuard (שם/OriginalFilename + חתימת Authenticode, נבדק על Edge אמיתי). חסר — `WebFilter.Wfp.Native.dll` (דורש רכיב C++), האזנה להפעלת תהליכים, ובדיקה על VM.
 
 ### M5 — ממשק ניהול
 

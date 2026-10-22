@@ -88,6 +88,21 @@ Get-NetConnectionProfile | Set-NetConnectionProfile -NetworkCategory Private
   ```
 
 - [ ] ב-`noa`: ב-Edge אין InPrivate, ו-`edge://policy` מציג את מדיניות WebFilter (אחרי שהיא קושרה לבן משפחה מוגבל ב-Hub).
+- [ ] מדיניות המשתמש נכתבת מיד בכניסה, לא עד דקה אחריה. השירות יכול לכתוב את המדיניות של `noa` רק כשה-hive שלה טעון, כלומר כשהיא מחוברת, ועכשיו הוא כותב אותה ברגע ש-Windows מדווח על הכניסה.
+
+  הכנה: `noa` מקושרת לבן משפחה מוגבל, ו**מנותקת** (Sign out, לא Switch user). מוחקים את המדיניות שכבר נשמרה ב-hive שלה, כדי שהמדידה תראה מתי היא נכתבת מחדש (אם `reg load` נכשל כי הקובץ בשימוש — Windows עוד לא שחרר את ה-hive; מחכים דקה או מאתחלים):
+
+  ```powershell
+  reg load HKU\noa C:\Users\noa\NTUSER.DAT; reg delete HKU\noa\Software\Policies\Microsoft\Edge /f; reg delete HKU\noa\Software\Policies\Google\Chrome /f; reg unload HKU\noa
+  ```
+
+  מהמחשב שלך (PowerShell Direct) מפעילים מדידה: היא מחכה שה-hive של `noa` ייטען, ומודדת כמה זמן עבר עד שהמדיניות נכתבה בו:
+
+  ```powershell
+  Invoke-Command -VMName lab-kids -Credential lab-kids\labadmin -ScriptBlock { $sid = (Get-LocalUser noa).SID.Value; while (-not (Test-Path "Registry::HKEY_USERS\$sid")) { Start-Sleep -Milliseconds 200 }; $loaded = Get-Date; while (-not (Get-ItemProperty "Registry::HKEY_USERS\$sid\Software\Policies\Microsoft\Edge" -Name InPrivateModeAvailability -ErrorAction SilentlyContinue)) { Start-Sleep -Milliseconds 200 }; 'policies {0:N1} s after the hive loaded' -f ((Get-Date) - $loaded).TotalSeconds }
+  ```
+
+  במכונה מתחברים כ-`noa` ופותחים מיד את Edge. צפוי: המדידה מדפיסה פחות מ-5 שניות (בדרך כלל פחות משנייה); ב-Edge אין InPrivate (Ctrl+Shift+N לא פותח חלון), ו-`edge://policy` מציג את המדיניות כבר בפתיחה הראשונה. (לפני התיקון: עד 60 שניות.)
 
 ## ג. הסרה (בשתי המכונות)
 
