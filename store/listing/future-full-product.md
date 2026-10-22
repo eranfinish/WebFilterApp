@@ -9,6 +9,7 @@
 - Broad host permissions (`<all_urls>`) and `nativeMessaging` mean an in-depth review: expect days to weeks, and keep the extension stable (logic lives in the service, MVP-PLAN §14).
 - With the update, also change: the store description and images (new taglines; re-render with `store/tools`), the single-purpose text, the data-usage answers (below), the Edge "personal information" answer (**Yes**), and the privacy policy (remove the "version 0.1.0" section). The privacy policy URL becomes required in both stores.
 - Extensions force-installed by policy normally receive new permissions without a prompt or being disabled. Verify this in the lab when the update ships.
+- The package includes `rulesets/ads.json`, the ad-server ruleset generated from EasyList (CC BY-SA 4.0), with its notice `rulesets/ads-notice.txt`; both must stay in the zip. Build the zip from a fresh `npm run build`: a browser that loaded `dist/` unpacked writes its ruleset index to `dist/_metadata/`.
 - Review risk: reviewers install the extension without the Windows program. If the static fail-closed ruleset then blocks every page, the item may be rejected as "breaks browsing". Worth deciding in M3 whether fail-closed applies only when `installType === "admin"` (a store install by hand can never be a child's managed install), and saying so in the notes below.
 
 ---
@@ -18,13 +19,13 @@
 **English**
 
 ```text
-WebFilter enforces the website, YouTube and browsing-time rules that parents set for their children on the family's Windows computers. All filtering decisions are made on the computer, with the rules received from the WebFilter service installed on the same computer.
+WebFilter enforces the website, YouTube, ad-blocking and browsing-time rules that parents set for their children on the family's Windows computers. All filtering decisions are made on the computer, with the rules received from the WebFilter service installed on the same computer.
 ```
 
 **Hebrew**
 
 ```text
-WebFilter אוכף את הכללים לאתרים, ל-YouTube ולזמן הגלישה שההורים קבעו לילדיהם במחשבי Windows של המשפחה. כל החלטות הסינון מתקבלות במחשב עצמו, לפי הכללים שמגיעים משירות WebFilter שמותקן באותו מחשב.
+WebFilter אוכף את הכללים לאתרים, ל-YouTube, לחסימת פרסומות ולזמן הגלישה שההורים קבעו לילדיהם במחשבי Windows של המשפחה. כל החלטות הסינון מתקבלות במחשב עצמו, לפי הכללים שמגיעים משירות WebFilter שמותקן באותו מחשב.
 ```
 
 ---
@@ -44,11 +45,11 @@ Connects to com.webfilter.host, the native messaging host installed by the WebFi
 ### declarativeNetRequest
 
 ```text
-Enforces the parents' rules: navigations of top-level pages and frames to sites that are not allowed for this child are blocked and redirected to the extension's own block page, which shows the reason and a "request access" button. A static ruleset blocks navigation until the local WebFilter service confirms the user's profile (fail-closed), and session rules block browsing when the child's time is over. Only main_frame and sub_frame requests are filtered; images, scripts and other resources are not touched.
+Enforces the parents' rules: navigations of top-level pages and frames to sites that are not allowed for this child are blocked and redirected to the extension's own block page, which shows the reason and a "request access" button. A static ruleset blocks navigation until the local WebFilter service confirms the user's profile (fail-closed), and session rules block browsing when the child's time is over. These rules filter only main_frame and sub_frame requests. When the parents turn on ad blocking for a child (on by default for children and teens), a second static ruleset, disabled by default and generated from EasyList, blocks the requests that pages make to known ad servers (scripts, images, frames and other resources); it never blocks a page itself and reports nothing.
 ```
 
 ```text
-אוכף את כללי ההורים: ניווט של דפים ומסגרות (frames) לאתרים שאינם מותרים לילד נחסם ומופנה לדף החסימה של התוסף, שמציג את הסיבה וכפתור "בקש גישה". ruleset סטטי חוסם ניווט עד ששירות WebFilter המקומי מאשר את פרופיל המשתמש (fail-closed), וכללי session חוסמים גלישה כשהזמן של הילד נגמר. מסוננות רק בקשות main_frame ו-sub_frame; תמונות, סקריפטים ומשאבים אחרים לא מושפעים.
+אוכף את כללי ההורים: ניווט של דפים ומסגרות (frames) לאתרים שאינם מותרים לילד נחסם ומופנה לדף החסימה של התוסף, שמציג את הסיבה וכפתור "בקש גישה". ruleset סטטי חוסם ניווט עד ששירות WebFilter המקומי מאשר את פרופיל המשתמש (fail-closed), וכללי session חוסמים גלישה כשהזמן של הילד נגמר. הכללים האלה מסננים רק בקשות main_frame ו-sub_frame. כשההורים מפעילים חסימת פרסומות לילד (פעילה כברירת מחדל לילדים ולמתבגרים), ruleset סטטי שני, כבוי כברירת מחדל ונוצר מ-EasyList, חוסם בקשות שדפים שולחים לשרתי פרסום מוכרים (סקריפטים, תמונות, מסגרות ומשאבים אחרים); הוא אף פעם לא חוסם דף עצמו ולא מדווח על דבר.
 ```
 
 ### Host permissions: `<all_urls>`
@@ -125,7 +126,7 @@ On YouTube pages only (youtube.com, and YouTube players embedded in other sites 
 
 ### Remote code
 
-**No.** All code ships in the package; rules are data (declarativeNetRequest rules and lists), not code.
+**No.** All code ships in the package; rules are data (declarativeNetRequest rules and lists, including the static ad-server ruleset, generated from EasyList ahead of time and shipped in the package), not code.
 
 ---
 
