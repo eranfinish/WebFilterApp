@@ -1,5 +1,5 @@
 import type { Timers } from "../shared/correlation";
-import { JUMP_REASON, judgeCommit, judgeNewTarget, jumpTabRule } from "../shared/jump";
+import { JUMP_REASON, isSignInHost, judgeCommit, judgeNewTarget, jumpTabRule } from "../shared/jump";
 import { BLOCK_PAGE, buildBlockPageUrl } from "../shared/pages";
 import { siteOf } from "../shared/registrable-domain";
 import { JUMP_RULE_BASE, JUMP_RULE_SPAN, clearOwnSessionRules, isJumpRuleId } from "./dnr";
@@ -102,6 +102,12 @@ export class JumpGuard {
     if (frameId !== 0 || !this.deps.active()) return;
     const entry = this.opened.get(tabId);
     if (!entry || entry.phase !== "pending") return;
+    // A sign-in popup (opened on about:blank, then sent to the provider): stop guarding it, so the provider can return
+    // the member to the site when they are done.
+    if (isSignInHost(url)) {
+      this.forgetOpened(tabId);
+      return;
+    }
     const target = siteOf(url);
     if (target !== null && target !== entry.sourceSite) this.redirect(tabId, entry, url);
   }

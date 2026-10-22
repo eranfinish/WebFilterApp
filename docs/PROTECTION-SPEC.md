@@ -141,3 +141,7 @@ The admin app's activity page shows searches (filter "חיפושים").
   (exact policy names verified against the official lists by the core work).
 - **Blocked frames** (e.g. ad iframes from `ads-popups`): the block page inside a frame is a quiet placeholder and sends
   no `reportBlock`, so ads do not flood the activity log.
+- **Sign-in is not a jump** (decided with the user): a jump to `accounts.google.com`, `accounts.google.co.il`,
+  `login.microsoftonline.com`, `login.microsoft.com`, `login.live.com`, `login.windows.net` or `appleid.apple.com`
+  (exact hosts), and the provider's return to the site afterwards, are not blocked by the jump guard. The URL rules
+  still decide whether those hosts are allowed (children get them through `school-tools`).

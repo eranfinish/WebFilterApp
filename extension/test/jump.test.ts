@@ -2,7 +2,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { JUMP_RULE_BASE, SHORTS_RULE_ID } from "../src/background/dnr";
 import { JUMP_RULE_LIFETIME_MS, JumpGuard } from "../src/background/jump-guard";
 import { realTimers } from "../src/shared/correlation";
-import { JUMP_RULE_PRIORITY, isSearchRedirector, judgeCommit, judgeNewTarget, jumpTabRule } from "../src/shared/jump";
+import { JUMP_RULE_PRIORITY, SIGN_IN_HOSTS, isSearchRedirector, isSignInHost, judgeCommit, judgeNewTarget, jumpTabRule } from "../src/shared/jump";
 import { type ChromeMockState, installChromeMock } from "./chrome-mock";
 
 const BLOCK = "chrome-extension://testextensionid/blocked.html";
@@ -84,7 +84,7 @@ describe("jumpTabRule", () => {
       id: JUMP_RULE_BASE + 7,
       priority: JUMP_RULE_PRIORITY,
       action: { type: "redirect", redirect: { regexSubstitution: `${BLOCK}?reason=blocked_jump#\\0` } },
-      condition: { tabIds: [42], resourceTypes: ["main_frame"], excludedRequestDomains: ["site-a.test"], regexFilter: "^https?://.*$" },
+      condition: { tabIds: [42], resourceTypes: ["main_frame"], excludedRequestDomains: ["site-a.test", ...SIGN_IN_HOSTS], regexFilter: "^https?://.*$" },
     });
     expect(JUMP_RULE_PRIORITY).toBeGreaterThan(262_145);
   });
@@ -115,7 +115,7 @@ describe("JumpGuard (chrome mock)", () => {
     await guard.onCreatedNavigationTarget({ sourceTabId: 1, tabId: 2, url: "https://site-b.test/ad?x=1" });
     expect(state.tabUpdates).toEqual([{ tabId: 2, url: blockPage("https://site-b.test/ad?x=1") }]);
     expect(jumpRules()).toHaveLength(1);
-    expect(jumpRules()[0]!.condition).toMatchObject({ tabIds: [2], excludedRequestDomains: ["site-a.test"] });
+    expect(jumpRules()[0]!.condition).toMatchObject({ tabIds: [2], excludedRequestDomains: ["site-a.test", ...SIGN_IN_HOSTS] });
     // The target answered before the redirect landed: its commit does not trigger a second redirect.
     commit(2, "https://site-b.test/ad?x=1");
     await flush();
@@ -258,5 +258,40 @@ describe("JumpGuard (chrome mock)", () => {
     guard.onCommitted({ tabId: 1, frameId: 3, url: "https://site-b.test/", transitionType: "link", transitionQualifiers: ["client_redirect"] });
     guard.onCommitted({ tabId: 1, frameId: 0, url: "https://site-b.test/", transitionType: "link", transitionQualifiers: ["client_redirect"], documentLifecycle: "prerender" });
     expect(state.tabUpdates).toEqual([]);
+  });
+});
+
+describe("sign-in hosts (Google, Microsoft, Apple) are not jumps", () => {
+  const commit = (over: Partial<Parameters<typeof judgeCommit>[0]>) =>
+    judgeCommit({ url: "https://site-b.test/", transitionType: "link", transitionQualifiers: [], previousUrl: "https://site-a.test/", openedFrom: null, ...over });
+
+  it("matches the exact sign-in hosts only, not the rest of their sites", () => {
+    for (const url of ["https://accounts.google.com/o/oauth2/v2/auth?x=1", "https://login.microsoftonline.com/common/oauth2/authorize", "https://appleid.apple.com/auth/authorize", "https://ACCOUNTS.google.com./x"]) {
+      expect(isSignInHost(url), url).toBe(true);
+    }
+    for (const url of ["https://www.google.com/search?q=x", "https://mail.google.com/", "https://www.microsoft.com/", "https://evil.test/accounts.google.com", "chrome://accounts.google.com/", null]) {
+      expect(isSignInHost(url), String(url)).toBe(false);
+    }
+  });
+
+  it("a sign-in popup opened by a site is not guarded", () => {
+    expect(judgeNewTarget("site-a.test", "https://accounts.google.com/o/oauth2/v2/auth")).toEqual({ action: "ignore" });
+    expect(judgeNewTarget("site-a.test", "https://www.google.com/")).toEqual({ action: "block", sourceSite: "site-a.test" });
+  });
+
+  it("a popup sent to the provider after about:blank settles there", () => {
+    expect(commit({ url: "https://login.microsoftonline.com/common/login", openedFrom: "site-a.test", previousUrl: "about:blank" })).toEqual({ action: "allow", settle: true });
+  });
+
+  it("a client redirect to the provider, and the provider's return to the site, are allowed", () => {
+    expect(commit({ url: "https://accounts.google.com/signin", transitionQualifiers: ["client_redirect"] })).toEqual({ action: "allow", settle: false });
+    expect(commit({ url: "https://site-c.test/callback", previousUrl: "https://accounts.google.com/signin/oauth/consent", transitionQualifiers: ["client_redirect"] })).toEqual({ action: "allow", settle: false });
+    // Not a sign-in host: still a jump.
+    expect(commit({ url: "https://site-c.test/", previousUrl: "https://www.google.com/", transitionQualifiers: ["client_redirect"] })).toEqual({ action: "block", kind: "client_redirect" });
+  });
+
+  it("the tab rule lets the sign-in hosts through", () => {
+    const rule = jumpTabRule(JUMP_RULE_BASE + 1, 7, "site-a.test", BLOCK);
+    expect(rule.condition.excludedRequestDomains).toEqual(expect.arrayContaining(["site-a.test", ...SIGN_IN_HOSTS]));
   });
 });

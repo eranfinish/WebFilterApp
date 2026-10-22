@@ -24,8 +24,38 @@ export type NewTargetVerdict =
   /** Same site, or nothing loaded yet (about:blank, then set by the opener): guard the tab until its first page. */
   | { action: "watch"; sourceSite: string };
 
+/**
+ * Sign-in hosts a site may send the member to ("Sign in with Google / Microsoft / Apple"), matched by exact host so the
+ * rest of google.com, microsoft.com or apple.com gets no exemption. A jump to one, and the identity provider's return
+ * to the site afterwards, are not jumps; the URL rules still decide whether the host is allowed (decided with the user,
+ * PROTECTION-SPEC §11).
+ */
+export const SIGN_IN_HOSTS: readonly string[] = [
+  "accounts.google.com",
+  "accounts.google.co.il",
+  "login.microsoftonline.com",
+  "login.microsoft.com",
+  "login.live.com",
+  "login.windows.net",
+  "appleid.apple.com",
+];
+
+const signInHosts: ReadonlySet<string> = new Set(SIGN_IN_HOSTS);
+
+export function isSignInHost(url: string | null | undefined): boolean {
+  if (!url) return false;
+  try {
+    const { protocol, hostname } = new URL(url);
+    return (protocol === "https:" || protocol === "http:") && signInHosts.has(hostname.toLowerCase().replace(/\.$/, ""));
+  } catch {
+    return false;
+  }
+}
+
 export function judgeNewTarget(sourceSite: string | null, targetUrl: string): NewTargetVerdict {
   if (!sourceSite) return { action: "ignore" };
+  // A sign-in popup: not guarded, so the identity provider can send it back to the site when the member is done.
+  if (isSignInHost(targetUrl)) return { action: "ignore" };
   const target = siteOf(targetUrl);
   if (target !== null && target !== sourceSite) return { action: "block", sourceSite };
   return { action: "watch", sourceSite };
@@ -66,14 +96,17 @@ export function judgeCommit(input: CommitInput): CommitVerdict {
 
   if (input.openedFrom !== null) {
     const byMember = MEMBER_TRANSITIONS.has(input.transitionType) || qualifiers.includes("from_address_bar");
-    if (byMember || target === input.openedFrom) return { action: "allow", settle: true };
+    // A sign-in page (e.g. window.open('about:blank') and then the provider's address) settles the tab like its own site.
+    if (byMember || target === input.openedFrom || isSignInHost(input.url)) return { action: "allow", settle: true };
     // Also a Back to a page that slipped in before the block page replaced it.
     return { action: "block", kind: "new_tab" };
   }
 
   if (qualifiers.includes("client_redirect") && !qualifiers.includes("forward_back")) {
     const from = siteOf(input.previousUrl);
-    if (from !== null && from !== target && !isSearchRedirector(input.previousUrl!)) return { action: "block", kind: "client_redirect" };
+    // To a sign-in page, or the provider's return to the site after signing in: part of the member's sign-in.
+    const signIn = isSignInHost(input.url) || isSignInHost(input.previousUrl);
+    if (from !== null && from !== target && !signIn && !isSearchRedirector(input.previousUrl!)) return { action: "block", kind: "client_redirect" };
   }
   return { action: "allow", settle: false };
 }
@@ -118,7 +151,8 @@ export function jumpTabRule(id: number, tabId: number, sourceSite: string, block
     condition: {
       tabIds: [tabId],
       resourceTypes: ["main_frame"],
-      excludedRequestDomains: [sourceSite],
+      // The sign-in hosts too: a popup opened on about:blank and then sent to the provider is a sign-in, not a jump.
+      excludedRequestDomains: [sourceSite, ...SIGN_IN_HOSTS],
       regexFilter: "^https?://.*$",
     },
   };
