@@ -533,6 +533,7 @@ CLAUDE.md
 
 - ✅ תיוג הקוד הקודם `legacy-v1`, ענף `v2`, שלד ה-solution, `CLAUDE.md`, תיקון בעלות ה-repo (`safe.directory`)
 - **S1 — התקנה כפויה ומדיניות:** תוסף unlisted בשתי החנויות; ב-VM לא בדומיין (Home + Pro): forcelist מ-HKLM עובד, המדיניות מסעיף 5.2 נאכפת מ-HKCU
+  > **Edge ב-Home — עבר (2026-10-23, `lab-kids`, Edge 155, חשבון `noa`):** התוסף 0.1.0 הותקן מחנות Edge לפי ה-forcelist ב-HKLM (`location=7`, סוג התקנה `admin`, הילד לא יכול לכבות אותו), כ-5 דקות אחרי שהדפדפן קיבל רשת. המדיניות של `noa` נכתבה ב-HKCU 1.6 שניות אחרי הכניסה, ו-Edge אוכף אותה: "חלון InPrivate חדש" אפור עם סמל הניהול. לכן המדיניות נשארת לכל ילד (HKCU), לא HKLM. עוד פתוח: הסטטוס של כל מדיניות ב-`edge://policy` (במיוחד כפתור Copilot, שנשאר גלוי עם `HubsSidebarEnabled=0`), Chrome (ממתין לאישור החנות) ו-Pro (`lab-hub`). באותה בדיקה נמצא באג: משפחה חדשה בלי `supportedBrowsers` חסמה את Edge ב-WFP — תוקן (ad4e66b).
 - ✅ **S2a — Native Messaging וזהות (לא-מוגבה):** הדפדפן מפעיל את ה-host כמשתמש; השרת מזהה SID ונתיב קובץ; תהליך זר נדחה; port פתוח שומר את ה-service worker חי — 12/12 + 2/2 ([דוח](../spikes/S2/REPORT.md))
 - **S2b — במכונה וירטואלית:** רישום ב-HKLM, `NativeMessagingUserLevelHosts=0` חוסם host מזויף ב-HKCU, שרת כ-LocalSystem מול כמה sessions
 - ✅ **S3 — DNR:** redirect ל-`blocked.html` עם ה-URL המקורי (`regexSubstitution`), רשימה שחורה/לבנה, מיליון דומיינים בכלל אחד — 27/27 על Edge 156 ([דוח](../spikes/S3-S4/REPORT.md)). "service worker נשאר חי" עבר ל-S2
