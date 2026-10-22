@@ -1,6 +1,6 @@
 # WebFilter browser extension
 
-Manifest V3 extension for Edge and Chrome (milestone M3). It is force-installed by browser policy from the Chrome Web Store and Microsoft Edge Add-ons (unlisted, same item and name "WebFilter" as the S1 build in `store/extension-s1/`). It enforces the rules the WebFilter service compiles for the signed-in Windows user, the time limits, and YouTube channels. Design: [MVP-PLAN.md §4.4, §6–§8.1, §10.1](../docs/MVP-PLAN.md). Semantics: [tests/simulation/README.md](../tests/simulation/README.md).
+Manifest V3 extension for Edge and Chrome (milestone M3). It is force-installed by browser policy from the Chrome Web Store and Microsoft Edge Add-ons (unlisted, same item and name "WebFilter" as the S1 build in `store/extension-s1/`). It enforces the rules the WebFilter service compiles for the signed-in Windows user, the time limits, YouTube channels, and the protection features (jump guard, YouTube Shorts, search-term log). Design: [MVP-PLAN.md §4.4, §6–§8.1, §10.1](../docs/MVP-PLAN.md), [PROTECTION-SPEC.md §6–§9](../docs/PROTECTION-SPEC.md). Semantics: [tests/simulation/README.md](../tests/simulation/README.md).
 
 ## Build and test
 
@@ -44,10 +44,14 @@ src/
     protocol.ts        agent protocol types (mirror of AgentMessages.cs), encodeRequest (type first), parseIncoming
     correlation.ts     Correlator (reply ↔ request id, timeouts), ChunkAssembler (1 MB chunk reassembly), backoff
     youtube-url.ts     port of YouTubeUrlParser.cs
-    youtube-decision.ts  Decider.YouTube() semantics on the last rules
+    youtube-decision.ts  Decider.YouTube() semantics on the last rules (+ the Shorts block)
     explain.ts         block reason from the matched compiled rule (offline fallback only)
     dnr-match.ts       mini DNR evaluator (time-up tab moves, reason inference), rule diff, null stripping
-    reasons.ts         the 22 reason codes → message keys, request kind per reason
+    reasons.ts         the 25 reason codes → message keys, request kind per reason
+    registrable-domain.ts  built-in public-suffix approximation: registrable domain ("site") of a host
+    jump.ts            jump-guard decisions (new tab, client redirect), the per-tab DNR rule
+    shorts.ts          the Shorts DNR rule and the CSS that hides Shorts shelves and menu entries
+    search.ts          search recognition from results-page URLs, once-per-search de-duplication
     time-actions.ts    badge, 10/5/1 warnings, time-up transitions
     pages.ts           block/time-up page URL formats, safe return URLs
   background/
@@ -55,7 +59,8 @@ src/
     wiring.ts          registers all listeners at top level, routes page/content-script messages
     controller.ts      the state machine (below)
     native-client.ts   the native messaging port: requests, pushes, chunks
-    dnr.ts             failclosed toggle, dynamic/session rule installation with the RE2 fallback
+    dnr.ts             failclosed toggle, dynamic/session rule installation with the RE2 fallback, own session-rule ids
+    jump-guard.ts      the jump guard's state: opened tabs, per-tab rules, client redirects
     fake-host.ts, test-hooks.ts   test build and unit tests only
   content/
     yt-main.ts         MAIN-world channel detector (trusted sources only, spike S4)
@@ -90,7 +95,11 @@ Every message the extension sends starts with `type`, then `v: 1` and `id`. Syst
 | `reportBlock {url, reason, ruleId?}` | `reportBlockResult {decision, reason, ruleId?, category?, canRequest, requestKind}` | a block page's first load |
 | `decideUrl {url}` | `decideUrlResult` (same fields) | a reload of the same block page (records nothing) |
 | `requestAccess {kind, target?, minutes?, note?}` | `requestAccessResult {result, requestId?}` | block page / time-up page buttons |
+| `reportSearch {engine, query, url}` | `error {code: "ok"}` | once per distinct search while `features.logSearches` (below) |
+| `reportOverride {url, reason: "blocked_jump"}` | `error {code: "ok"}` | a teen's "פתח בכל זאת" on a jump block |
 | `error {code: "dnr_rules_dropped", message}` | (`error unsupported`, ignored) | rules the browser refused |
+
+`rules` carries `features: {jumpGuard, blockYouTubeShorts, logSearches, canOverrideJump}` (PROTECTION-SPEC §6). A missing object or a flag that is not exactly `true` counts as off; the extension also treats them as off for an unrestricted account and while it is not connected.
 
 | Host → extension push | Action |
 |---|---|
@@ -99,7 +108,7 @@ Every message the extension sends starts with `type`, then `v: 1` and `id`. Syst
 | `accessDecided {requestId, status}` | if approved, refresh the rules first, then tell the pages. The block page for that request navigates back to its URL (the time-up page does so once time is back) |
 | `chunk {chunkOf, index, count, data}` | frames over 1 MB: the base64 slices are decoded and joined as bytes, then parsed as the original message |
 
-Error replies reject the request. `error {code: "ok"}` (reportBlock on services before v2) counts as an acknowledgement. When `service_unavailable` comes from the host fallback, the block page shows the "service is not running" text.
+Error replies reject the request. `error {code: "ok"}` (reportBlock on services before v2, reportSearch, reportOverride) counts as an acknowledgement. When `service_unavailable` comes from the host fallback, the block page shows the "service is not running" text.
 
 ### Enforcement
 
@@ -107,8 +116,30 @@ Error replies reject the request. `error {code: "ok"}` (reportBlock on services 
 - **Time up**: while `time.state` is `expired` or `outside_window`, `timeUpSessionRules` is installed as session rules, and removed when time is back. When time runs out, open http(s) tabs that the session rules would block move to `timeup.html#<url>`. Always-allowed sites stay, decided by `dnr-match.ts` against the session rules. When time comes back, those pages return.
 - **In-page navigations** (history API, which DNR never sees): on `webNavigation.onHistoryStateUpdated`, a top frame whose new address the installed rules would block is sent to `blocked.html#<url>`. The worker does nothing when a rule that applies cannot be evaluated in JS (RE2-only syntax), so an allowed page is never blocked by mistake. Sub-frames are not covered.
 - **Badge**: remaining minutes when 10 or fewer, `0` when time is up, `!` while fail-closed. **Notifications** at 10, 5 and 1 minutes, each at most once a day (re-armed if a parent adds time), and when a parent answers a request sent from this browser.
+- **Blocks inside frames** (an ad slot from a blocked ad network such as the `ads-popups` list, an embed): `blocked.html` in a frame (`window.top !== window`) is a quiet, empty, transparent placeholder with no text or buttons, and it sends neither `reportBlock` nor `decideUrl`, so a news page with blocked ads neither looks broken nor floods the parents' activity log. The worker enforces it too: a `wf:reportBlock` from a frame (the browser's `frameId ≠ 0`, whatever the page says) is answered locally and nothing goes to the service. A fail-closed frame still retries its own address once connected (it only asks the worker). Top-level block pages are unchanged. A blocked YouTube embed is therefore quiet too: the channel request is offered only on a top-level block page.
 - **Block page reason**: compiled rules redirect to `blocked.html#<full URL>` with no reason. The page asks the worker, which sends `reportBlock` (first load) or `decideUrl` (reload) and shows the **service's** reason, category, and whether and what to request. The reason the extension sends along is a guess from the matched rule (`explain.ts`); it stands only for `blocked_youtube_channel` and `blocked_youtube_unknown`. That guess is also what the page shows when the service can't answer (disconnected, or an older service). The page offers a request only when the service says `canRequest` and an approval could help. It offers none for homework, YouTube off, an unknown channel, or service down (MVP-PLAN §8.1). `decision: "allow"` (stale rules) shows "allowed now" with a retry button, and the page returns after the rules refresh.
 - **YouTube**: `yt-main.js` (MAIN world, every YouTube frame, `document_start`) finds the channel of the current URL from trusted sources only and posts it to `yt-bridge.js`. The bridge hides the page until the decision arrives (allowlist mode), asks the worker, and then reveals the page or navigates to the block page (`?reason=…&channel=UC…#url`) or to `my-channels.html` (home and search). The decision is `Decider.YouTube()` on the last rules: unrestricted member → time → mode → channel, matched by id or stored handle. In allowlist mode the side recommendations and the end screen are hidden. SPA navigations are caught by `yt-navigate-finish`, URL polling and `webNavigation.onHistoryStateUpdated`.
+
+### Protection features (PROTECTION-SPEC §6–§9)
+
+Reason codes `blocked_image_search`, `blocked_jump` and `blocked_youtube_shorts` have a sentence in both locales and **no request button**: they come from member settings, and approving the URL would not lift them (image search and Shorts are switched off by the parent; a jump target can be opened by typing it). Image search itself is blocked by the service's DNR rules; the extension only shows the service's reason. `blocked_jump` and `blocked_youtube_shorts` are decided by the extension: the block page carries them in `?reason=`, `reportBlock` sends them, a reload never asks `decideUrl`, and a service answer of `decision: "allow"` is ignored for them.
+
+**Jump guard** (`features.jumpGuard`, `shared/jump.ts`, `background/jump-guard.ts`). Sites are compared by registrable domain (below).
+- A tab or window a page opens (`webNavigation.onCreatedNavigationTarget`: `window.open`, `target=_blank`, also middle-click and "open in new tab" on a link) whose page is on another site than the opener's tab goes to `blocked.html?reason=blocked_jump#<url>`. A tab opened from the browser's or the extension's own pages is not guarded.
+- An automatic client redirect (`transitionQualifiers` has `client_redirect`, not `forward_back`) to another site goes there too. In Edge 156 that flag marks meta refresh and script redirects that run while the page is loading. The search engines' click-through pages (Bing `/ck/a`, DuckDuckGo `/l/`, Google `/url`, YouTube `/redirect`) are exempt: the member clicked the result.
+- Never blocked: the member's own link click in the same tab (search results), forms, server redirects, typed addresses, bookmarks, Back/Forward, the browser's pages.
+- **The race with the new tab's first navigation**: (1) a cross-site target is sent to the block page with `tabs.update` in the same task as the event, which cancels the navigation if it has not committed; (2) a session rule for that tab only (`tabIds`, `excludedRequestDomains: [opener's site]`, priority 327,680 above every compiled rule) redirects any other site's top-level request before it is sent: server redirects of the first navigation, and `opened.location = …` after `window.open('about:blank')`; it is removed when the tab's first page or the block page commits (so a typed address works in that tab), or after 60 s; (3) `onBeforeNavigate` re-checks the tab until it shows something, and `onCommitted` is the backstop. In the Edge harness the target of `window.open` and of the delayed `opened.location` never reached the server. A client redirect is only visible at commit, so its page has started to load when the block page replaces it.
+- A tab a page opened stays guarded until it shows a page of the opener's site or the member navigates it (typed address, bookmark): until then a page-driven load to another site is blocked at commit too.
+- **"פתח בכל זאת"** (`features.canOverrideJump`, teens): the block page's button sends `wf:overrideJump`. The background accepts it only from a top-level `blocked.html?reason=blocked_jump` page for the same URL, sends `reportOverride {url, reason: "blocked_jump"}` (without waiting; an older service's error is logged), stops guarding that tab, and opens the URL in it. The opener's next jump is blocked again, and so is a client redirect of the page that opened.
+- The block page reports with `reportBlock {url, reason: "blocked_jump"}` on its first load.
+
+**Registrable domain** (`shared/registrable-domain.ts`). A small built-in approximation of the Public Suffix List: IP literals and single-label hosts are their own site; a list of second-level suffixes of common country domains (`co.il`, `org.il`, `ac.il`, `gov.il`, `co.uk`, `com.au`, `co.jp`, `com.br`, …) and of hosting platforms (`github.io`, `blogspot.com`, `translate.goog`, …); any other two-letter country domain with a generic second label (`com`, `net`, `org`, `edu`, `gov`, `ac`, `co`, …) is treated as a suffix too; otherwise the last two labels. Limits: deeper or unlisted suffixes count as registrable (`a.city.state.us` → `state.us`), platforms outside the short list count as one site, and the list's wildcard and exception rules are not modelled. A wrong answer only changes whether a cross-site jump is noticed; it never allows a URL the rules block.
+
+**YouTube Shorts** (`features.blockYouTubeShorts`, `shared/shorts.ts`). A `/shorts` page on youtube.com (www, m) is blocked with `blocked_youtube_shorts`: full loads by an extension session rule (priority 196,624: above the YouTube host rule, below the time-up rules; not installed while YouTube is off), in-site navigations by `onHistoryStateUpdated` in the background, and `decideYouTube()` blocks them too when the content script reports one (after time and "YouTube off", before any channel or mode allows it). While it is on, the bridge hides with CSS (one rule per selector): Shorts shelves on home, search, subscriptions and watch pages, single Shorts results, the "Shorts" entry of the side menu, the mini menu and the mobile bottom bar, and a channel's "Shorts" tab. Not covered: a Short opened as `/watch?v=<id>` or `youtu.be/<id>` (an ordinary video of its channel), and YouTube markup renamed after 2026.
+
+**Search-term log** (`features.logSearches`, `shared/search.ts`). Google `/search?q=` (any google.<country>), Bing `/search?q=` (also `/images/search`, `/videos/search`, `/news/search`), YouTube `/results?search_query=`, DuckDuckGo `/?q=` (also `/html/`, `/lite/`), recognised from top-frame commits and in-page address changes, and from a block page's first report (a blocked search, such as an image search, is a search too). `reportSearch {engine, query, url}` is sent once per engine and query (whitespace collapsed, case-insensitive): not for reloads, Back/Forward, prerendered pages, later result pages (`start`, `first`, `s`), or the same search again within 10 minutes of its report. Only while connected to the service; a report lost with the connection is retried at the next sighting. The popup says "החיפושים שלך גלויים להורים" while it is on.
+
+**Session rule ids**: ids from 1,000,000,000 up belong to the extension (Shorts 1,000,000,001; jump-guard tabs from 1,100,000,000). The compiler's ids stay below (hashed ids < 1,000,000,000), and the time-up rule replacement never touches the extension's. Fail-closed, inert and unrestricted clear them.
 
 ### Window titles (lab automation)
 
@@ -116,8 +147,8 @@ Error replies reject the request. `error {code: "ok"}` (reportBlock on services 
 
 ## Verification so far
 
-- `npm test`: 139 unit tests. They include all of `youtube-parse.json` and `youtube-decisions.json`, loaded from `tests/simulation/` and run against the TS parser and decision, and the controller against the chrome mock plus the fake host: fail-closed, backoff, chunks, the RE2 fallback, time-up, warnings, approvals, and the reportBlock/decideUrl variants.
-- `npm run verify:edge` (Edge 156, headless, no native host registered): 49 checks, passing on two consecutive runs. On the production build: the worker starts, the extension stays inert as an unpacked extension, the exact block-page title and fail-closed reason in Hebrew RTL. On the test build with a simulated policy install: the real `connectNative` fails, `failclosed` stays on, the redirect never leaves the browser, and backoff runs. With the in-worker fake host: the handshake, compiled-rule redirects, an in-page navigation to a blocked path, the reason from `reportBlockResult`, request → approval → return, time-up tab moves (always-allowed stays), a >1 MB chunked rules reply, disconnect → fail-closed → reconnect, and YouTube allow, SPA block, full-load block and home → my channels on local fixtures.
+- `npm test`: 202 unit tests. They include all of `youtube-parse.json` and `youtube-decisions.json`, loaded from `tests/simulation/` and run against the TS parser and decision, and the controller against the chrome mock plus the fake host: fail-closed, backoff, chunks, the RE2 fallback, time-up, warnings, approvals, and the reportBlock/decideUrl variants. Protection features: registrable domains, the jump decisions (new tab cross-site vs same-site, client redirect vs link click, typed and bookmark, search click-through pages, the override), the JumpGuard's tab rules against the chrome mock, Shorts detection, rule and SPA check, search extraction and de-duplication, `features` parsing with and without the object, and frame blocks never reported (controller and worker message routing).
+- `npm run verify:edge` (Edge 156, headless, no native host registered): 78 checks, passing on two consecutive runs. On the production build: the worker starts, the extension stays inert as an unpacked extension, the exact block-page title and fail-closed reason in Hebrew RTL. On the test build with a simulated policy install: the real `connectNative` fails, `failclosed` stays on, the redirect never leaves the browser, and backoff runs. With the in-worker fake host: the handshake, compiled-rule redirects, an in-page navigation to a blocked path, the reason from `reportBlockResult`, request → approval → return, time-up tab moves (always-allowed stays), a >1 MB chunked rules reply, disconnect → fail-closed → reconnect, and YouTube allow, SPA block, full-load block and home → my channels on local fixtures. Protection features (a second browser, `features` in the fake rules): a same-tab link to site B loads; `window.open`, `target=_blank` and `window.open('about:blank')` + `opened.location` to site B land on the block page (the last one never requested), same-site `window.open` loads; a meta-refresh and a script redirect to site B are blocked, a same-site one is not; tab rules are gone once the block page shows and a typed address loads there; each jump is reported once with `blocked_jump`; no "open anyway" for a child; for a teen the button opens the site, `reportOverride` arrives, and the same jump is blocked again; `/shorts/` full load (never requested) and SPA are blocked, the Shorts shelf and menu entry are hidden; a Google `/search?q=` sends one `reportSearch` (not again for a reload or page 2); the popup shows the search notice; a news page whose ad iframe is blocked shows the quiet placeholder in the slot and sends nothing to the host.
 - `npm run e2e:real` (Edge, headless, the real Simulation host and service, host key in HKCU only): 26 checks, passing on consecutive runs (about 30 s each).
 
 ## What remains
@@ -134,6 +165,10 @@ Error replies reject the request. `error {code: "ok"}` (reportBlock on services 
 - Request flows against the real service: merged, rate_limited, cooldown, queued.
 - The weekly live YouTube suite.
 
+**Protection features**
+- `npm run e2e:real` with the service side of PROTECTION-SPEC merged: `features` in the real rules reply, `reportSearch` / `reportOverride` acknowledged and recorded (`search`, `override` events), `reportBlock` keeping `blocked_jump` / `blocked_youtube_shorts`, and the service's `blocked_image_search` on the block page. Not run yet (the service changes are not merged).
+- Live sites: the Shorts selectors against today's youtube.com and m.youtube.com, Bing/DuckDuckGo result clicks through their click-through pages, sign-in flows of the school tools with the jump guard on, and Edge's omnibox prerender with the search log.
+
 ## Decisions to review
 
 - **Test hooks are a separate build** (`dist-test/`), in the spirit of CLAUDE.md rule 7. The production build checks that `background.js` contains none. The hook can only make the extension stricter (simulate `admin`).
@@ -142,4 +177,10 @@ Error replies reject the request. `error {code: "ok"}` (reportBlock on services 
 - **Warnings re-arm after more time is granted**, rather than strictly once per day.
 - **No request button** for homework, YouTube off, an unknown channel, or the fail-closed and service-down pages, even if the service says `canRequest`.
 - **Heartbeats are sent for unrestricted users too.** The service ignores them, and this keeps the code path single.
-- **`webNavigation`** is used to recover the fail-closed page's URL, to block in-page navigations, and to catch YouTube SPA navigations. **`tabs`** is needed to read tab URLs for heartbeats and time-up moves.
+- **`webNavigation`** is used to recover the fail-closed page's URL, to block in-page navigations, and to catch YouTube SPA navigations. **`tabs`** is needed to read tab URLs for heartbeats and time-up moves. The protection features need no new permission (`webNavigation.onCreatedNavigationTarget` / `onCommitted`, session rules with `tabIds`).
+- **Jumps and the URL rules**: a jump is blocked whether or not the target is allowed by the rules (the tab rule outranks them), so a child sees "the site tried to open another site" even for an allowed target, and "open anyway" never bypasses the rules (the opened URL is filtered as usual).
+- **Middle-click, "open link in new tab" and sign-in popups** to another site count as jumps: the browser reports them like `window.open`. Sign-in popups ("Sign in with Google/Microsoft" on a third-party site) are blocked for children; an exemption list of identity providers would be a product decision.
+- **Not caught as jumps**: a script that navigates the page to another site after it finished loading (a timer, a click handler) and an auto-submitted form — Edge reports both like a link click (`link` / `form_submit`, no `client_redirect`). Also, once an opened tab shows a page of the opener's site, a later `opened.location = …` from the opener looks like a click in that tab. After a client-redirect block, Back returns to the page that had committed (the member's own action).
+- **Click-through exemption** for Bing, DuckDuckGo, Google and YouTube redirect pages, so search results work; other link shorteners that redirect by script or meta refresh (t.co, l.facebook.com, …) are blocked as jumps.
+- **Image search block page offers no request** (`requestActionFor` → none), like homework: an approval of the URL would not lift the member setting.
+- **Search log**: blocked searches (from the block page's first report) are logged too; reloads and Back/Forward never are; the de-duplication window is 10 minutes from the report.

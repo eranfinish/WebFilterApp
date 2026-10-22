@@ -1,4 +1,4 @@
-import type { AgentUser, ChannelRef, FilterMode, RequestKind, RequestResult, TimeState, YouTubeMode } from "./protocol";
+import type { AgentUser, ChannelRef, FilterMode, ProtectionFeatures, RequestKind, RequestResult, TimeState, YouTubeMode } from "./protocol";
 import type { ReasonCode } from "./reasons";
 import type { ConnectionState } from "./time-actions";
 import type { YouTubeDecision } from "./youtube-decision";
@@ -61,8 +61,18 @@ export interface YouTubeDetectMessage {
   detection: YouTubeDetection;
 }
 
+/**
+ * The block page's "open anyway" on a jump block (teens, features.canOverrideJump). The background checks that the
+ * sender is a top-level blocked.html?reason=blocked_jump page for this URL, sends reportOverride and opens it once.
+ */
+export interface OverrideJumpMessage {
+  type: "wf:overrideJump";
+  url: string;
+}
+
 export type BackgroundRequest =
   | GetStatusMessage
+  | OverrideJumpMessage
   | ReportBlockPageMessage
   | RequestAccessPageMessage
   | GetDecisionMessage
@@ -89,6 +99,8 @@ export interface StatusSnapshot {
   inferredReason: ReasonCode;
   /** Access requests can be sent right now (connected to the service, not the host fallback). */
   canRequest: boolean;
+  /** The member's protection features in force (all off when not connected or unrestricted). */
+  features: ProtectionFeatures;
 }
 
 export interface RequestAccessReply {
@@ -110,6 +122,12 @@ export interface ReportBlockReply {
   canRequest: boolean;
   requestKind: "url" | "time" | "youtube" | null;
   reported: boolean;
+}
+
+export interface OverrideJumpReply {
+  ok: boolean;
+  /** not_allowed (no canOverrideJump), bad_request (not a jump block page for this URL), failed. */
+  error?: string;
 }
 
 export interface DecisionReply {
@@ -157,4 +175,6 @@ export interface YouTubeStoredState {
   mode: YouTubeMode | "inert" | "failclosed";
   /** rulesVersion of the policy, so open pages decide again when the channel lists change. */
   version?: number | null;
+  /** features.blockYouTubeShorts: the bridge hides the Shorts shelf and menu entry. */
+  blockShorts?: boolean;
 }

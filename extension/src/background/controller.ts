@@ -1,10 +1,12 @@
 import { detectBrowser } from "../shared/browser";
-import { HostError, type Timers, backoffDelay, realTimers } from "../shared/correlation";
+import { DisconnectedError, HostError, type Timers, backoffDelay, realTimers } from "../shared/correlation";
 import { classifyNavigation, wouldBlock } from "../shared/dnr-match";
 import { explainBlock } from "../shared/explain";
+import { JUMP_REASON } from "../shared/jump";
 import type {
   DecisionReply,
   MyChannelsReply,
+  OverrideJumpReply,
   ReportBlockReply,
   RequestAccessPageMessage,
   RequestAccessReply,
@@ -14,19 +16,31 @@ import type {
   YouTubeStoredState,
 } from "../shared/messages";
 import { YOUTUBE_STATE_KEY } from "../shared/messages";
-import { BLOCK_PAGE, MY_CHANNELS_PAGE, TIMEUP_PAGE, buildBlockPageUrl, buildTimeUpUrl } from "../shared/pages";
+import { BLOCK_PAGE, MY_CHANNELS_PAGE, TIMEUP_PAGE, buildBlockPageUrl, buildTimeUpUrl, parseBlockPageUrl, safeReturnUrl } from "../shared/pages";
 import {
   type AccessDecidedMessage,
   type DnrRule,
   type HelloResult,
   type IncomingMessage,
+  NO_FEATURES,
+  type ProtectionFeatures,
   type RequestKind,
   type RulesMessage,
   type TimeState,
   isWebUrl,
   normalizeTime,
 } from "../shared/protocol";
-import { FAILCLOSED, type ReasonCode, inferReason, reportableReason, requestActionFor } from "../shared/reasons";
+import {
+  EXTENSION_ONLY_REASONS,
+  FAILCLOSED,
+  PAGE_DECIDED_REASONS,
+  type ReasonCode,
+  inferReason,
+  reportableReason,
+  requestActionFor,
+} from "../shared/reasons";
+import { MAX_SEARCH_URL_LENGTH, SearchDeduper, extractSearch } from "../shared/search";
+import { SHORTS_REASON, shortsRule } from "../shared/shorts";
 import {
   type ConnectionState,
   type WarningMemory,
@@ -37,8 +51,9 @@ import {
   timeTransition,
 } from "../shared/time-actions";
 import { type YouTubeContext, approvedChannels, decideYouTube } from "../shared/youtube-decision";
-import { isChannelId, isYouTubeHost } from "../shared/youtube-url";
-import { replaceDynamicRules, replaceSessionRules, setFailClosed } from "./dnr";
+import { isChannelId, isShortsUrl, isYouTubeHost } from "../shared/youtube-url";
+import { SHORTS_RULE_ID, clearOwnSessionRules, replaceDynamicRules, replaceSessionRules, setFailClosed, setOwnSessionRule } from "./dnr";
+import { JumpGuard } from "./jump-guard";
 import { type Connector, NativeClient, errorText, nativeConnector } from "./native-client";
 
 export interface ControllerOptions {
@@ -98,6 +113,10 @@ export class Controller {
   private rulesWarning: string | null = null;
   private frameOrigins = new Map<string, string>();
   private saveTimer: unknown = null;
+  /** The jump guard (PROTECTION-SPEC §7); wiring.ts feeds it the webNavigation events. */
+  readonly jumps: JumpGuard;
+  private readonly searches = new SearchDeduper();
+  private shortsRuleInstalled = false;
 
   constructor(private readonly options: ControllerOptions = {}) {
     this.timers = options.timers ?? realTimers;
@@ -109,6 +128,7 @@ export class Controller {
       options.requestTimeoutMs ?? 15_000,
       this.timers,
     );
+    this.jumps = new JumpGuard({ active: () => this.features.jumpGuard, timers: this.timers, now: this.now, log: this.log });
   }
 
   /** Hello + rules applied (from the service or the host fallback). */
@@ -118,6 +138,12 @@ export class Controller {
 
   get connectionState(): ConnectionState {
     return this.connection;
+  }
+
+  /** The member's protection features in force: the last rules' `features` while ready and restricted, else all off. */
+  get features(): ProtectionFeatures {
+    if (!this.ready || this.hello?.mode === "unrestricted") return NO_FEATURES;
+    return this.rules?.features ?? NO_FEATURES;
   }
 
   /** Replaces the native host connector (test build: in-worker fake host). Takes effect on the next connect. */
@@ -139,6 +165,7 @@ export class Controller {
     this.attempt = 0;
     this.setConnection("starting");
     void this.loadFrameOrigins();
+    void this.jumps.seed();
 
     const installType = await this.readInstallType();
     if (epoch !== this.epoch) return;
@@ -305,6 +332,7 @@ export class Controller {
     await setFailClosed(true);
     await replaceDynamicRules([]);
     await replaceSessionRules([]);
+    await this.clearProtection();
     this.installedDynamic = [];
     this.installedSession = [];
     this.sessionRulesInstalled = false;
@@ -316,6 +344,7 @@ export class Controller {
     await setFailClosed(false);
     await replaceDynamicRules([]);
     await replaceSessionRules([]);
+    await this.clearProtection();
     this.installedDynamic = [];
     this.installedSession = [];
     this.sessionRulesInstalled = false;
@@ -336,6 +365,7 @@ export class Controller {
     if (hello.mode === "unrestricted") {
       await replaceDynamicRules([]);
       await replaceSessionRules([]);
+      await this.clearProtection();
       this.installedDynamic = [];
       this.installedSession = [];
       this.sessionRulesInstalled = false;
@@ -350,10 +380,41 @@ export class Controller {
       this.reportDropped("dynamic", result.dropped);
       this.rules = rules;
       await this.applyTime(rules.time, true);
+      await this.applyProtection(rules);
       await setFailClosed(false);
       await this.storeYouTubeState(rules.youTube.mode);
     }
     await this.updateBadge();
+  }
+
+  /**
+   * The protection features that need browser state (PROTECTION-SPEC §7–§8): the Shorts session rule, and the jump
+   * guard's tab rules when the guard was switched off. A rule the browser refuses is logged; the content script and
+   * the history check still block Shorts.
+   */
+  private async applyProtection(rules: RulesMessage): Promise<void> {
+    const features = rules.features;
+    const wantShorts = features.blockYouTubeShorts && rules.youTube.mode !== "off";
+    if (wantShorts !== this.shortsRuleInstalled) {
+      try {
+        await setOwnSessionRule(SHORTS_RULE_ID, wantShorts ? shortsRule(SHORTS_RULE_ID, chrome.runtime.getURL(BLOCK_PAGE)) : null);
+        this.shortsRuleInstalled = wantShorts;
+      } catch (error) {
+        this.log("Shorts rule update failed", errorText(error));
+      }
+    }
+    if (!features.jumpGuard) await this.jumps.reset();
+  }
+
+  /** Removes the extension's own session rules (Shorts, jump-guard tabs) and forgets the guarded tabs. */
+  private async clearProtection(): Promise<void> {
+    try {
+      await clearOwnSessionRules();
+    } catch (error) {
+      this.log("clearing own session rules failed", errorText(error));
+    }
+    this.shortsRuleInstalled = false;
+    await this.jumps.reset(false);
   }
 
   /** Applies a time state: time-up session rules, open tabs, badge, warnings. */
@@ -456,7 +517,9 @@ export class Controller {
 
   private async storeYouTubeState(mode: YouTubeStoredState["mode"]): Promise<void> {
     try {
-      const state: YouTubeStoredState = { mode, version: this.rules?.rulesVersion ?? null };
+      const blockShorts =
+        mode !== "inert" && mode !== "failclosed" && this.hello?.mode !== "unrestricted" && this.rules?.features.blockYouTubeShorts === true;
+      const state: YouTubeStoredState = { mode, version: this.rules?.rulesVersion ?? null, ...(blockShorts ? { blockShorts } : {}) };
       await chrome.storage.local.set({ [YOUTUBE_STATE_KEY]: state });
     } catch {
       // best effort: the bridge hides the page by default and asks the background anyway
@@ -571,6 +634,7 @@ export class Controller {
       serverVersion: this.hello?.serverVersion ?? null,
       inferredReason: inferReason(this.time, mode),
       canRequest: this.connection === "service",
+      features: { ...this.features },
     };
   }
 
@@ -599,17 +663,27 @@ export class Controller {
       requestKind: action === "none" ? null : action,
       reported: false,
     };
-    if (reason === FAILCLOSED || !this.ready || !isWebUrl(url)) return offline;
-    // Channel reasons are decided in the page (the service cannot see page data, and decideUrl would judge only the
-    // YouTube host): a reload keeps the page's reason without asking again.
-    const pageDecided = reason === "blocked_youtube_channel" || reason === "blocked_youtube_unknown";
+    // A frame (an ad slot, an embed) is never reported: blocked ad networks would flood the parents' activity log. The
+    // block page shows a quiet placeholder there and does not ask; this is the background's own guard.
+    if (reason === FAILCLOSED || !this.ready || !isWebUrl(url) || frame === "sub_frame") return offline;
+    // Channel, Shorts and jump reasons are decided by the extension (the service cannot see page data or where a page
+    // came from, and decideUrl would judge the URL only): a reload keeps the page's reason without asking again.
+    const pageDecided = typeof reason === "string" && PAGE_DECIDED_REASONS.has(reason);
     if (pageDecided && alreadyReported) return offline;
+    // A blocked search is a search too (e.g. image search, or a search engine that is not allowed).
+    if (!alreadyReported) this.logSearch(url);
+    // For the protection reasons the URL itself may well be allowed: a service that answers "allow" (or an older one
+    // that judges the URL) must not turn the page into "allowed now".
+    const extensionOnly = typeof reason === "string" && EXTENSION_ONLY_REASONS.has(reason);
     try {
       const reply = alreadyReported
         ? await this.client.request({ type: "decideUrl", url })
         : await this.client.request({ type: "reportBlock", url, reason: reportableReason(guess) ?? guess, ...(ruleId ? { ruleId } : {}) });
       if (reply.type === "reportBlockResult" || reply.type === "decideUrlResult") {
         const kind = reply.requestKind === "url" || reply.requestKind === "time" || reply.requestKind === "youtube" ? reply.requestKind : null;
+        if (extensionOnly) {
+          return { ...offline, source: "service", canRequest: false, requestKind: null, reported: reply.type === "reportBlockResult" };
+        }
         return {
           decision: reply.decision === "allow" ? "allow" : "block",
           reason: typeof reply.reason === "string" && reply.reason ? reply.reason : guess,
@@ -690,6 +764,7 @@ export class Controller {
       filterMode: this.hello?.mode ?? null,
       policy: this.rules?.youTube ?? null,
       time: this.time,
+      blockShorts: this.features.blockYouTubeShorts,
     };
   }
 
@@ -716,14 +791,74 @@ export class Controller {
   async checkInPageNavigation(tabId: number, frameId: number, url: string): Promise<boolean> {
     if (!this.ready || frameId !== 0 || tabId < 0 || !isWebUrl(url) || this.hello?.mode === "unrestricted") return false;
     const rules = [...(this.sessionRulesInstalled ? this.installedSession : []), ...this.installedDynamic];
-    if (classifyNavigation(rules, url) !== "block") return false;
+    let target: string | null = null;
+    if (classifyNavigation(rules, url) === "block") target = `${chrome.runtime.getURL(BLOCK_PAGE)}#${url}`;
+    // YouTube is an SPA: moving to a Short changes the address in place (PROTECTION-SPEC §8).
+    else if (this.features.blockYouTubeShorts && isShortsUrl(url)) target = buildBlockPageUrl(chrome.runtime.getURL(BLOCK_PAGE), { reason: SHORTS_REASON, url });
+    if (target === null) return false;
     try {
-      await chrome.tabs.update(tabId, { url: `${chrome.runtime.getURL(BLOCK_PAGE)}#${url}` });
+      await chrome.tabs.update(tabId, { url: target });
       return true;
     } catch (error) {
       this.log("in-page navigation block failed", errorText(error));
       return false;
     }
+  }
+
+  // ---- protection features: jump override, search log ----------------------------------------------------------
+
+  /**
+   * "Open anyway" on a jump block (teens, features.canOverrideJump). Only a top-level blocked.html?reason=blocked_jump
+   * page may ask, for its own URL. reportOverride is sent, the tab stops being guarded, and the target opens once.
+   */
+  async overrideJump(url: string, tabId: number | undefined, frameId: number | undefined, pageUrl: string | undefined): Promise<OverrideJumpReply> {
+    const features = this.features;
+    if (!features.jumpGuard || !features.canOverrideJump) return { ok: false, error: "not_allowed" };
+    const target = safeReturnUrl(url);
+    const page = parseBlockPageUrl(pageUrl ?? "");
+    const samePage = page.reason === JUMP_REASON && (!page.url || safeReturnUrl(page.url) === target);
+    if (tabId === undefined || tabId < 0 || frameId !== 0 || !target || !samePage) return { ok: false, error: "bad_request" };
+    this.client
+      .request({ type: "reportOverride", url: target, reason: "blocked_jump" })
+      .catch((error: unknown) => this.log("reportOverride failed", errorText(error)));
+    await this.jumps.allowOnce(tabId);
+    try {
+      await chrome.tabs.update(tabId, { url: target });
+      return { ok: true };
+    } catch (error) {
+      this.log("override navigation failed", errorText(error));
+      return { ok: false, error: "failed" };
+    }
+  }
+
+  /**
+   * A top-frame commit or in-page address change (webNavigation): a search results page is reported once per distinct
+   * search (PROTECTION-SPEC §9). Prerendered pages, reloads and Back/Forward are not new searches.
+   */
+  noteSearch(details: {
+    tabId: number;
+    frameId: number;
+    url: string;
+    transitionType?: string;
+    transitionQualifiers?: readonly string[];
+    documentLifecycle?: string;
+  }): void {
+    if (details.frameId !== 0 || details.tabId < 0 || details.documentLifecycle === "prerender") return;
+    if (details.transitionType === "reload" || details.transitionQualifiers?.includes("forward_back")) return;
+    this.logSearch(details.url);
+  }
+
+  private logSearch(url: string): void {
+    if (!this.features.logSearches || this.connection !== "service") return;
+    const hit = extractSearch(url);
+    if (!hit || hit.page > 1 || !this.searches.admit(hit.key, this.now())) return;
+    this.client
+      .request({ type: "reportSearch", engine: hit.engine, query: hit.query, url: url.slice(0, MAX_SEARCH_URL_LENGTH) })
+      .catch((error: unknown) => {
+        // Lost with the connection: the next sighting tries again. Any other answer (an older service) is final.
+        if (error instanceof DisconnectedError) this.searches.forget(hit.key);
+        this.log("reportSearch failed", errorText(error));
+      });
   }
 
   // ---- original URLs of fail-closed block pages -----------------------------------------------------------------

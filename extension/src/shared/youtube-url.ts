@@ -134,6 +134,25 @@ export function parseYouTubeUrl(url: string): YouTubeUrl {
   return { kind: "other", site };
 }
 
+/**
+ * A YouTube Shorts page (PROTECTION-SPEC §8): youtube.com (any subdomain) with `/shorts` as the first path segment,
+ * including `/shorts/` without an id (the Shorts feed). youtu.be and /watch?v= addresses of a Short are ordinary
+ * video pages and are not covered.
+ */
+export function isShortsUrl(url: string): boolean {
+  let parsed: URL;
+  try {
+    parsed = new URL(url);
+  } catch {
+    return false;
+  }
+  if (parsed.protocol !== "http:" && parsed.protocol !== "https:") return false;
+  const site = youTubeSiteOf(parsed.hostname);
+  if (site !== "www" && site !== "m") return false;
+  const first = parsed.pathname.split("/").find((s) => s.length > 0);
+  return first !== undefined && unescape(first).toLowerCase() === "shorts";
+}
+
 /** Page kinds that need a channel identity before an allowlist decision. */
 export const KINDS_NEEDING_CHANNEL: ReadonlySet<YouTubeUrlKind> = new Set<YouTubeUrlKind>([
   "channel",

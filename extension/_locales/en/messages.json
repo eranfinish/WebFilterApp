@@ -81,6 +81,15 @@
   "reason_redirect_youtube_home": {
     "message": "YouTube's home page and search aren't available. Pick one of your channels."
   },
+  "reason_blocked_image_search": {
+    "message": "Image search is turned off for you."
+  },
+  "reason_blocked_jump": {
+    "message": "The site you were on tried to open another site."
+  },
+  "reason_blocked_youtube_shorts": {
+    "message": "YouTube Shorts are turned off for you."
+  },
   "reason_failclosed": {
     "message": "WebFilter isn't connected to the filtering service yet, so browsing is blocked. This page will open by itself as soon as it connects.",
     "description": "Static fail-closed ruleset: no profile from the service yet."
@@ -102,6 +111,10 @@
   },
   "tryAgain": {
     "message": "Try again"
+  },
+  "overrideButton": {
+    "message": "Open anyway",
+    "description": "Jump block page, teens only: opens the site once; the parents see that it was opened."
   },
   "noteLabel": {
     "message": "Why do you need it? (optional)"
@@ -234,6 +247,10 @@
   },
   "labelInstallType": {
     "message": "Install type"
+  },
+  "searchesVisible": {
+    "message": "Your searches are visible to your parents",
+    "description": "Shown while the search-term log is on (PROTECTION-SPEC §9)."
   },
   "mode_unrestricted": {
     "message": "No restrictions"

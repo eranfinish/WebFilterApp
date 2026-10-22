@@ -1,6 +1,6 @@
 import type { ChannelRef, FilterMode, TimeState, YouTubePolicy } from "./protocol";
 import type { ReasonCode } from "./reasons";
-import { normalizeHandle, parseYouTubeUrl } from "./youtube-url";
+import { isShortsUrl, normalizeHandle, parseYouTubeUrl } from "./youtube-url";
 
 /** What the content script reports (spike S4: channel id only from sources tied to the current URL). */
 export interface YouTubePageReport {
@@ -19,6 +19,8 @@ export interface YouTubeContext {
   filterMode: FilterMode | null;
   policy: YouTubePolicy | null;
   time: TimeState | null;
+  /** features.blockYouTubeShorts (PROTECTION-SPEC §8). */
+  blockShorts?: boolean;
 }
 
 export type YouTubeDecisionKind = "allow" | "block" | "redirect";
@@ -51,7 +53,8 @@ function channelByHandle(policy: YouTubePolicy, handle: string): ChannelRef | un
 
 /**
  * The YouTube decision of Decider.YouTube() (src/WebFilter.Core/Engine/Decider.cs; scenarios youtube-decisions.json,
- * README §5) computed from the last rules: unrestricted member → time → mode → channel.
+ * README §5) computed from the last rules: unrestricted member → time → mode → channel. With blockShorts, a Shorts
+ * page is blocked right after "YouTube off" and before any channel or mode allows it (PROTECTION-SPEC §8).
  * Pause and homework are not visible to the extension; the service reflects them in `mode`, `youTube.mode` and `time`.
  */
 export function decideYouTube(ctx: YouTubeContext, page: YouTubePageReport): YouTubeDecision {
@@ -62,8 +65,11 @@ export function decideYouTube(ctx: YouTubeContext, page: YouTubePageReport): You
   if (ctx.time?.state === "expired") return { decision: "block", reason: "blocked_daily_limit" };
 
   const policy = ctx.policy;
+  if (policy.mode !== "unrestricted" && policy.mode !== "restricted" && policy.mode !== "allowlist") {
+    return { decision: "block", reason: "blocked_youtube_off" };
+  }
+  if (ctx.blockShorts === true && isShortsUrl(page.url)) return { decision: "block", reason: "blocked_youtube_shorts" };
   if (policy.mode === "unrestricted") return { decision: "allow", reason: "allowed_default" };
-  if (policy.mode !== "restricted" && policy.mode !== "allowlist") return { decision: "block", reason: "blocked_youtube_off" };
 
   const parsed = parseYouTubeUrl(page.url);
   const handle = page.handle ?? parsed.handle ?? null;

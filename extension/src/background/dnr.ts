@@ -1,6 +1,20 @@
 import { planRuleUpdate, stripNulls } from "../shared/dnr-match";
 import type { DnrRule } from "../shared/protocol";
 
+/**
+ * Session rule ids from here up belong to the extension itself (Shorts, jump-guard tabs); the service's compiled ids
+ * stay below (DnrRuleIds: structural ids < 1000, hashed ids in [1000, 1_000_000_000)). replaceSessionRules never
+ * touches them.
+ */
+export const EXTENSION_RULE_BASE = 1_000_000_000;
+export const SHORTS_RULE_ID = EXTENSION_RULE_BASE + 1;
+/** Jump-guard tab rules: JUMP_RULE_BASE + (sequence % JUMP_RULE_SPAN). */
+export const JUMP_RULE_BASE = 1_100_000_000;
+export const JUMP_RULE_SPAN = 100_000_000;
+
+export const isExtensionRuleId = (id: number): boolean => id >= EXTENSION_RULE_BASE;
+export const isJumpRuleId = (id: number): boolean => id >= JUMP_RULE_BASE && id < JUMP_RULE_BASE + JUMP_RULE_SPAN;
+
 /** The static ruleset (rulesets/failclosed.json) that redirects every http(s) frame to blocked.html?reason=failclosed. */
 export const FAILCLOSED_RULESET = "failclosed";
 
@@ -70,10 +84,13 @@ export async function replaceDynamicRules(desired: readonly DnrRule[]): Promise<
   }
 }
 
-/** Replaces all session rules (the time-up rules) with `desired`, with the same regex fallback as dynamic rules. */
+/**
+ * Replaces the service's session rules (the time-up rules) with `desired`, with the same regex fallback as dynamic
+ * rules. The extension's own session rules (ids ≥ EXTENSION_RULE_BASE) are left alone.
+ */
 export async function replaceSessionRules(desired: readonly DnrRule[]): Promise<InstallResult> {
   const clean = desired.map((r) => stripNulls(r));
-  const existing = await chrome.declarativeNetRequest.getSessionRules();
+  const existing = (await chrome.declarativeNetRequest.getSessionRules()).filter((r) => !isExtensionRuleId(r.id));
   if (existing.length === 0 && clean.length === 0) return { installed: [], dropped: [] };
   const removeRuleIds = existing.map((r) => r.id);
   try {
@@ -85,4 +102,15 @@ export async function replaceSessionRules(desired: readonly DnrRule[]): Promise<
     await chrome.declarativeNetRequest.updateSessionRules({ removeRuleIds, addRules: kept });
     return { installed: kept, dropped };
   }
+}
+
+/** Installs (or with null removes) one of the extension's own session rules. */
+export async function setOwnSessionRule(id: number, rule: DnrRule | null): Promise<void> {
+  await chrome.declarativeNetRequest.updateSessionRules({ removeRuleIds: [id], addRules: rule ? [{ ...rule, id }] : [] });
+}
+
+/** Removes the extension's own session rules that `which` selects (all of them by default). */
+export async function clearOwnSessionRules(which: (id: number) => boolean = isExtensionRuleId): Promise<void> {
+  const ids = (await chrome.declarativeNetRequest.getSessionRules()).map((r) => r.id).filter((id) => isExtensionRuleId(id) && which(id));
+  if (ids.length > 0) await chrome.declarativeNetRequest.updateSessionRules({ removeRuleIds: ids });
 }

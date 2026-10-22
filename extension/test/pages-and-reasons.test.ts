@@ -3,7 +3,9 @@ import { join } from "node:path";
 import { describe, expect, it } from "vitest";
 import { buildBlockPageUrl, buildTimeUpUrl, displayUrl, originalUrlFromHash, parseBlockPageUrl, safeReturnUrl } from "../src/shared/pages";
 import {
+  EXTENSION_ONLY_REASONS,
   FAILCLOSED,
+  PAGE_DECIDED_REASONS,
   REASON_CODES,
   REQUEST_RESULTS,
   inferReason,
@@ -59,12 +61,17 @@ describe("block page URLs", () => {
 });
 
 describe("reasons", () => {
-  it("the closed list matches MVP-PLAN §6 (22 codes)", () => {
-    expect(REASON_CODES).toHaveLength(22);
+  it("the closed list matches MVP-PLAN §6 plus PROTECTION-SPEC §6 (25 codes)", () => {
+    expect(REASON_CODES).toHaveLength(25);
     const plan = readFileSync(join(ROOT, "..", "docs", "MVP-PLAN.md"), "utf8");
     const line = plan.split("\n").find((l) => l.startsWith("**קודי סיבה**"))!;
-    const fromPlan = [...line.matchAll(/`([a-z_]+)`/g)].map((m) => m[1]);
-    expect([...REASON_CODES].sort()).toEqual([...fromPlan].sort());
+    const fromPlan = [...line.matchAll(/`([a-z_]+)`/g)].map((m) => m[1]!);
+    const spec = readFileSync(join(ROOT, "..", "docs", "PROTECTION-SPEC.md"), "utf8");
+    const specLine = spec.split("\n").find((l) => l.includes("New reason codes"))!;
+    const fromSpec = [...specLine.matchAll(/`([a-z_]+)`/g)].map((m) => m[1]!);
+    expect(fromSpec).toEqual(["blocked_image_search", "blocked_jump", "blocked_youtube_shorts"]);
+    // The plan may already list the new codes (the service workstream updates it): compare the union.
+    expect([...REASON_CODES].sort()).toEqual([...new Set([...fromPlan, ...fromSpec])].sort());
   });
 
   it("every reason code and fail-closed has a plain-language sentence in both languages", () => {
@@ -95,6 +102,26 @@ describe("reasons", () => {
     expect(requestActionFor("blocked_service_unavailable")).toBe("none");
     expect(requestActionFor(FAILCLOSED)).toBe("none");
     expect(requestActionFor("allowed_rule")).toBe("none");
+    // Member settings: approving the URL would not help (PROTECTION-SPEC §1).
+    expect(requestActionFor("blocked_image_search")).toBe("none");
+    expect(requestActionFor("blocked_jump")).toBe("none");
+    expect(requestActionFor("blocked_youtube_shorts")).toBe("none");
+  });
+
+  it("the protection reasons are decided by the extension, like the YouTube channel reasons", () => {
+    expect([...PAGE_DECIDED_REASONS].sort()).toEqual(["blocked_jump", "blocked_youtube_channel", "blocked_youtube_shorts", "blocked_youtube_unknown"]);
+    expect([...EXTENSION_ONLY_REASONS].sort()).toEqual(["blocked_jump", "blocked_youtube_shorts"]);
+    expect(reportableReason("blocked_jump")).toBe("blocked_jump");
+    expect(reportableReason("blocked_image_search")).toBe("blocked_image_search");
+  });
+
+  it("the protection texts say what happened, in both languages", () => {
+    expect(he.reason_blocked_jump!.message).toContain("האתר ניסה לפתוח אתר אחר");
+    expect(en.reason_blocked_jump!.message).toMatch(/tried to open another site/);
+    expect(he.reason_blocked_image_search!.message).toContain("חיפוש תמונות");
+    expect(he.reason_blocked_youtube_shorts!.message).toContain("Shorts");
+    expect(he.overrideButton!.message).toBe("פתח בכל זאת");
+    expect(he.searchesVisible!.message).toBe("החיפושים שלך גלויים להורים");
   });
 
   it("infers a reason when the page has none, and reports fail-closed as service unavailable", () => {
