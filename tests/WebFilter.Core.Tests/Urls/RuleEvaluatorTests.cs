@@ -154,7 +154,7 @@ public class RuleEvaluatorTests(ITestOutputHelper output)
     }
 
     [Fact]
-    public void TenThousandRules_TenThousandEvaluations_WellUnderASecond()
+    public void TenThousandRules_TenThousandEvaluations_StayFast()
     {
         var member = new List<Rule>();
         var global = new List<Rule>();
@@ -206,6 +206,9 @@ public class RuleEvaluatorTests(ITestOutputHelper output)
 
         Array.Sort(timings);
         output.WriteLine($"10,000 evaluations: {total.ElapsedMilliseconds} ms total, p50 {timings[5_000]:F4} ms, p99 {timings[9_900]:F4} ms, max {timings[^1]:F4} ms");
-        Assert.True(total.Elapsed < TimeSpan.FromSeconds(1), $"took {total.ElapsedMilliseconds} ms");
+        // The median, not the wall-clock total: the full suite runs the test assemblies in parallel, and the total then
+        // measures the machine's load (it reached seconds) rather than the evaluator. A median of a few microseconds is
+        // normal; scanning the 10,000 rules on every call would put it far above 0.1 ms. Real timings: WebFilter.Benchmarks.
+        Assert.True(timings[5_000] < 0.1, $"median evaluation took {timings[5_000]:F4} ms");
     }
 }

@@ -35,6 +35,28 @@ public sealed class StorageTests : IDisposable
     }
 
     [Fact]
+    public void A_bundle_that_leaves_out_lists_reads_them_as_empty_and_the_service_starts_from_it()
+    {
+        const string minimal = """{"timezone":"Asia/Jerusalem","members":[{"id":"noa","displayName":"נועה","role":"child","age":8,"filterMode":"allowlist","youtubeMode":"off"}],"rules":null}""";
+        var config = BundleMapper.ToConfig(FamilyBundleJson.Deserialize(minimal));
+        Assert.Single(config.Members);
+        Assert.Empty(config.Rules);
+        Assert.Empty(config.Devices);
+        Assert.Empty(config.Schedules);
+        Assert.Empty(config.Categories);
+
+        var bootstrap = Path.Combine(_dir, "minimal.json");
+        Directory.CreateDirectory(_dir);
+        File.WriteAllText(bootstrap, minimal);
+        using var family = new FamilyService(Microsoft.Extensions.Options.Options.Create(new ServiceOptions
+        {
+            Role = "hub", DeviceId = "pc", DataDirectory = Path.Combine(_dir, "data"), ProfileDirectory = Path.Combine(_dir, "profiles"), BootstrapBundlePath = bootstrap,
+        }), TimeProvider.System, Microsoft.Extensions.Logging.Abstractions.NullLogger<FamilyService>.Instance);
+        family.Start();
+        Assert.Equal("noa", family.WithHub((hub, _) => hub.Config.Members.Single().Id));
+    }
+
+    [Fact]
     public void Bundle_mapping_round_trips_the_fixture()
     {
         var config = Fixture();

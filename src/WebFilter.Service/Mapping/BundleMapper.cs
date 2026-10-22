@@ -23,22 +23,27 @@ public static class BundleMapper
         AppRules = config.AppRules.Select(r => new AppRuleDto(r.Id, r.MemberId, Lower(r.Match), r.Value, Lower(r.Action), r.AlwaysAllowed, r.ExpiresAt)).ToList(),
     };
 
+    /// <remarks>
+    /// A list the JSON leaves out arrives as null (the property initializers do not run when deserializing), so every
+    /// list is read as empty when missing — a bootstrap file, snapshot or admin request with fewer sections is valid.
+    /// </remarks>
     public static FamilyConfig ToConfig(FamilyBundle bundle)
     {
+        ArgumentNullException.ThrowIfNull(bundle);
         var config = new FamilyConfig
         {
             TimeZone = TimeZoneInfo.FindSystemTimeZoneById(bundle.TimeZone),
-            Members = bundle.Members.Select(m => new FamilyMember(m.Id, m.DisplayName, Parse<Role>(m.Role), m.Age, Parse<FilterMode>(m.FilterMode), Parse<YouTubeMode>(m.YouTubeMode))).ToList(),
-            Devices = bundle.Devices.Select(d => new Device(d.Id, d.Os, d.Role, d.Accounts.Select(a => new DeviceAccount(a.AccountId, a.Name, a.Member, a.IsAdmin)).ToList())).ToList(),
-            MemberCategories = bundle.MemberCategories.Select(c => new MemberCategory(c.Member, c.Category, Parse<RuleAction>(c.Action))).ToList(),
-            Rules = bundle.Rules.Select(r => new Rule(r.Id, r.Member, r.Pattern, Parse<PatternType>(r.Type), Parse<RuleAction>(r.Action), r.AlwaysAllowed, r.ExpiresAt)).ToList(),
-            Schedules = bundle.Schedules.Select(s => new Schedule(s.Member, DaySet(s.Days), Minutes(s.Start), Minutes(s.End))).ToList(),
-            DailyLimits = bundle.DailyLimits.Select(l => new DailyLimit(l.Member, DaySet(l.Days), l.Minutes)).ToList(),
-            YouTubeChannels = bundle.YouTubeChannels.Select(c => new YouTubeChannel(c.ChannelId, c.Handle, c.Title, c.Member, Parse<RuleAction>(c.Action))).ToList(),
-            SupportedBrowsers = [.. bundle.SupportedBrowsers],
-            AppRules = bundle.AppRules.Select(r => new AppRule(r.Id, r.Member, Parse<AppMatchType>(r.Match), r.Value, Parse<RuleAction>(r.Action), r.AlwaysAllowed, r.ExpiresAt)).ToList(),
+            Members = (bundle.Members ?? []).Select(m => new FamilyMember(m.Id, m.DisplayName, Parse<Role>(m.Role), m.Age, Parse<FilterMode>(m.FilterMode), Parse<YouTubeMode>(m.YouTubeMode))).ToList(),
+            Devices = (bundle.Devices ?? []).Select(d => new Device(d.Id, d.Os, d.Role, (d.Accounts ?? []).Select(a => new DeviceAccount(a.AccountId, a.Name, a.Member, a.IsAdmin)).ToList())).ToList(),
+            MemberCategories = (bundle.MemberCategories ?? []).Select(c => new MemberCategory(c.Member, c.Category, Parse<RuleAction>(c.Action))).ToList(),
+            Rules = (bundle.Rules ?? []).Select(r => new Rule(r.Id, r.Member, r.Pattern, Parse<PatternType>(r.Type), Parse<RuleAction>(r.Action), r.AlwaysAllowed, r.ExpiresAt)).ToList(),
+            Schedules = (bundle.Schedules ?? []).Select(s => new Schedule(s.Member, DaySet(s.Days ?? []), Minutes(s.Start), Minutes(s.End))).ToList(),
+            DailyLimits = (bundle.DailyLimits ?? []).Select(l => new DailyLimit(l.Member, DaySet(l.Days ?? []), l.Minutes)).ToList(),
+            YouTubeChannels = (bundle.YouTubeChannels ?? []).Select(c => new YouTubeChannel(c.ChannelId, c.Handle, c.Title, c.Member, Parse<RuleAction>(c.Action))).ToList(),
+            SupportedBrowsers = [.. bundle.SupportedBrowsers ?? []],
+            AppRules = (bundle.AppRules ?? []).Select(r => new AppRule(r.Id, r.Member, Parse<AppMatchType>(r.Match), r.Value, Parse<RuleAction>(r.Action), r.AlwaysAllowed, r.ExpiresAt)).ToList(),
         };
-        foreach (var (name, domains) in bundle.Categories) config.Categories[name] = domains;
+        foreach (var (name, domains) in bundle.Categories ?? new Dictionary<string, IReadOnlyList<string>>()) config.Categories[name] = domains ?? [];
         return config;
     }
 
