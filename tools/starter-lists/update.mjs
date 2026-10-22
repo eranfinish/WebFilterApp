@@ -5,16 +5,17 @@
 //   node tools/starter-lists/update.mjs [--cache-dir <dir>] [--offline] [--report <file>]
 //
 // Downloads go to a cache directory (default: <os tmp>/webfilter-starter-lists) and are only parsed as text.
-// To move to newer sources, change the pinned commits in SOURCES, run this, and review the report and the diff.
+// To move to newer sources, change the pinned commits in sources.mjs, run this, and review the report and the diff.
 // No dependencies; Node 20 or later.
 
 import fs from "node:fs";
-import os from "node:os";
 import path from "node:path";
-import zlib from "node:zlib";
 import url from "node:url";
-import crypto from "node:crypto";
 import * as curation from "./curation.mjs";
+import {
+  CRUX, CRUX_MONTH, CRUX_SOURCES, EASYLIST, PSL_SOURCE, SHADOW, SINFONIETTA, commandLine, download, easylist, gh, lines,
+  parseCrux, parsePsl,
+} from "./sources.mjs";
 
 const here = path.dirname(url.fileURLToPath(import.meta.url));
 const repoRoot = path.resolve(here, "..", "..");
@@ -22,25 +23,15 @@ const listsDir = path.join(repoRoot, "data", "starter-lists");
 
 // ---- pinned sources ------------------------------------------------------------------------------------------------
 
-const SHADOW = "2b7dd18e51c50ed042a56cd57f0b7c3071fd9eef"; // ShadowWhisperer/BlockLists, 2026-10-22 (Unlicense)
-const SINFONIETTA = "46f3097d7bcfc9eea323fe365074dfd771d0d17c"; // Sinfonietta/hostfiles, 2026-09-09 (MIT)
-const EASYLIST = "48ea8294cbb6855914a243e891a3c3b13163fb58"; // easylist/easylist, 2026-10-22 (GPL-3.0+ or CC BY-SA 3.0+)
-const CRUX = "35ba243941defcd21882b134d9dd354824922482"; // zakird/crux-top-lists, 2026-10-13 (CrUX 2026-09)
-const CRUX_MONTH = "202609";
-const PSL = "8437e5262f13305f94087abe699b4fe2be1d1de8"; // publicsuffix/list, 2026-10-22 (MPL-2.0)
-
-const gh = (repo, sha, file) => `https://raw.githubusercontent.com/${repo}/${sha}/${file}`;
-
 const SOURCES = {
   swAdult: gh("ShadowWhisperer/BlockLists", SHADOW, "Lists/Adult"),
   swGambling: gh("ShadowWhisperer/BlockLists", SHADOW, "Lists/Gambling"),
   swTunnels: gh("ShadowWhisperer/BlockLists", SHADOW, "Lists/Tunnels"),
   sinPorn: gh("Sinfonietta/hostfiles", SINFONIETTA, "pornography-hosts"),
   sinGambling: gh("Sinfonietta/hostfiles", SINFONIETTA, "gambling-hosts"),
-  easylistPopup: gh("easylist/easylist", EASYLIST, "easylist/easylist_adservers_popup.txt"),
-  cruxGlobal: gh("zakird/crux-top-lists", CRUX, `data/global/${CRUX_MONTH}.csv.gz`),
-  cruxIsrael: gh("zakird/crux-top-lists", CRUX, `data/country/il/${CRUX_MONTH}.csv.gz`),
-  psl: gh("publicsuffix/list", PSL, "public_suffix_list.dat"),
+  easylistPopup: easylist("easylist_adservers_popup.txt"),
+  ...CRUX_SOURCES,
+  psl: PSL_SOURCE,
 };
 
 /** Most domains a sourced list may ship (a safety net; see README for the actual sizes). */
@@ -61,33 +52,10 @@ const SINFONIETTA_NOTICE =
 
 // ---- command line -------------------------------------------------------------------------------------------------
 
-const args = process.argv.slice(2);
-const option = (name) => {
-  const i = args.indexOf(name);
-  return i >= 0 ? args[i + 1] : undefined;
-};
-const cacheDir = path.resolve(option("--cache-dir") ?? path.join(os.tmpdir(), "webfilter-starter-lists"));
-const offline = args.includes("--offline");
-const reportFile = path.resolve(option("--report") ?? path.join(cacheDir, "review.txt"));
-
-// ---- downloads ----------------------------------------------------------------------------------------------------
-
-async function download(name, source) {
-  const file = path.join(cacheDir, `${name}-${crypto.createHash("sha256").update(source).digest("hex").slice(0, 12)}`);
-  if (fs.existsSync(file)) return fs.readFileSync(file);
-  if (offline) throw new Error(`${name}: not in the cache (${file}) and --offline was given.`);
-  const response = await fetch(source);
-  if (!response.ok)
-    throw new Error(`${name}: HTTP ${response.status} for ${source}. If the pinned commit is gone, pin a newer one.`);
-  const body = Buffer.from(await response.arrayBuffer());
-  fs.mkdirSync(cacheDir, { recursive: true });
-  fs.writeFileSync(file, body);
-  return body;
-}
+const cli = commandLine(process.argv.slice(2), "review.txt");
+const { reportFile } = cli;
 
 // ---- parsing ------------------------------------------------------------------------------------------------------
-
-const lines = (buffer) => buffer.toString("utf8").split(/\r?\n/);
 
 /** ShadowWhisperer: one domain per line, '#' comments. */
 const parsePlain = (buffer) => lines(buffer).map((l) => l.trim()).filter((l) => l && !l.startsWith("#"));
@@ -107,45 +75,6 @@ const parseEasyListPopup = (buffer) =>
     .map((l) => /^\|\|([a-z0-9.-]+)\^\$popup$/i.exec(l.trim()))
     .filter(Boolean)
     .map((m) => m[1]);
-
-/** CrUX top lists (csv.gz of "origin,rank"): rank of every host and of each of its parent domains (best rank wins). */
-function parseCrux(buffer, ranks) {
-  for (const line of lines(zlib.gunzipSync(buffer)).slice(1)) {
-    const [origin, rank] = line.split(",");
-    if (!origin) continue;
-    let host;
-    try {
-      host = new URL(origin).hostname.toLowerCase();
-    } catch {
-      continue;
-    }
-    const labels = host.split(".");
-    for (let i = 0; i < labels.length - 1; i++) {
-      const suffix = labels.slice(i).join(".");
-      const current = ranks.get(suffix);
-      if (current === undefined || Number(rank) < current) ranks.set(suffix, Number(rank));
-    }
-  }
-  return ranks;
-}
-
-/** Public Suffix List: isPublicSuffix(host) for normal, wildcard and exception rules. */
-function parsePsl(buffer) {
-  const rules = new Set();
-  const exceptions = new Set();
-  for (const raw of lines(buffer)) {
-    const line = raw.trim();
-    if (!line || line.startsWith("//")) continue;
-    const rule = url.domainToASCII(line.replace(/^!/, "")) || line.replace(/^!/, "");
-    (line.startsWith("!") ? exceptions : rules).add(rule.toLowerCase());
-  }
-  return (host) => {
-    if (exceptions.has(host)) return false;
-    if (rules.has(host)) return true;
-    const dot = host.indexOf(".");
-    return dot > 0 && rules.has("*." + host.slice(dot + 1));
-  };
-}
 
 // ---- normalisation ------------------------------------------------------------------------------------------------
 
@@ -280,7 +209,7 @@ function writeList(name, description, source, license, domains) {
 // ---- main ---------------------------------------------------------------------------------------------------------
 
 const data = {};
-for (const [name, source] of Object.entries(SOURCES)) data[name] = await download(name, source);
+for (const [name, source] of Object.entries(SOURCES)) data[name] = await download(name, source, cli);
 
 const ranks = new Map();
 parseCrux(data.cruxGlobal, ranks);

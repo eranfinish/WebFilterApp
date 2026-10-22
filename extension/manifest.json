@@ -35,7 +35,8 @@
   "host_permissions": ["<all_urls>"],
   "declarative_net_request": {
     "rule_resources": [
-      { "id": "failclosed", "enabled": true, "path": "rulesets/failclosed.json" }
+      { "id": "failclosed", "enabled": true, "path": "rulesets/failclosed.json" },
+      { "id": "ads", "enabled": false, "path": "rulesets/ads.json" }
     ]
   },
   "content_scripts": [
