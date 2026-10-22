@@ -75,15 +75,33 @@ public class NetworkPolicyTests
     [Fact]
     public void Only_the_machine_wide_OneDrive_the_service_found_is_allowed_never_a_per_user_one()
     {
-        var programs = new WindowsPrograms(@"D:\Win\System32\svchost.exe", [@"D:\Programs\Microsoft OneDrive\OneDrive.exe"]);
+        var programs = new WindowsPrograms(@"D:\Win\System32\svchost.exe", [@"D:\Programs\Microsoft OneDrive\OneDrive.exe"], WindowsPrograms.Default.MachineBrowsers);
         var noa = NetworkPolicy.Desired(new HubCore(Fixture()).View(), "pc-kids", InWindow, programs).Single(p => p.UserSid == Noa);
 
         Assert.Contains(@"D:\Win\System32\svchost.exe", noa.AllowedPaths);
         Assert.Contains(@"D:\Programs\Microsoft OneDrive\OneDrive.exe", noa.AllowedPaths);
         Assert.DoesNotContain(OneDrive, noa.AllowedPaths);
-        Assert.All(WindowsPrograms.Default.MachineOneDrive, p => Assert.StartsWith(@"C:\Program Files", p));
+        Assert.All(WindowsPrograms.Default.MachineOneDrive.Concat(WindowsPrograms.Default.MachineBrowsers), p => Assert.StartsWith(@"C:\Program Files", p));
         Assert.DoesNotContain(Desired(new HubCore(Fixture()), InWindow).SelectMany(p => p.AllowedPaths),
             p => p.Contains("AppData", StringComparison.OrdinalIgnoreCase) || p.Contains("%LOCALAPPDATA%", StringComparison.OrdinalIgnoreCase));
+    }
+
+    [Fact]
+    public void The_machine_wide_Chrome_and_Edge_are_allowed_when_the_family_lists_no_browsers()
+    {
+        // A new hub's settings list no browsers; the children must still browse (the extension filters there).
+        var config = Fixture(WindowsFeatures.Default, supportedBrowsers: []);
+        foreach (var now in new[] { InWindow, Morning })
+        {
+            var policies = Desired(new HubCore(config), now);
+            Assert.Equal(new[] { Noa, Yoav, Visitor }.Order(), policies.Select(p => p.UserSid).Order());
+            Assert.All(policies, p => Assert.Superset(new HashSet<string>([Chrome, Edge]), p.AllowedPaths.ToHashSet()));
+        }
+
+        var programs = WindowsPrograms.Default with { MachineBrowsers = [@"D:\Programs\Google\Chrome\Application\chrome.exe"] };
+        var noa = NetworkPolicy.Desired(new HubCore(config).View(), "pc-kids", InWindow, programs).Single(p => p.UserSid == Noa);
+        Assert.Contains(@"D:\Programs\Google\Chrome\Application\chrome.exe", noa.AllowedPaths);
+        Assert.DoesNotContain(Edge, noa.AllowedPaths);
     }
 
     [Fact]
@@ -120,14 +138,14 @@ public class NetworkPolicyTests
     private static FamilyConfig Fixture() =>
         FixtureLoader.Load(JsonNode.Parse(File.ReadAllText(Path.Combine(EngineScenarioTests.SimulationDir, "fixtures", "family-base.json")))!.AsObject(), null);
 
-    private static FamilyConfig Fixture(WindowsFeatures features)
+    private static FamilyConfig Fixture(WindowsFeatures features, List<string>? supportedBrowsers = null)
     {
         var c = Fixture();
         return new FamilyConfig
         {
             TimeZone = c.TimeZone, Members = c.Members, Devices = c.Devices, Categories = c.Categories, MemberCategories = c.MemberCategories,
             Rules = c.Rules, Schedules = c.Schedules, DailyLimits = c.DailyLimits, YouTubeChannels = c.YouTubeChannels,
-            SupportedBrowsers = c.SupportedBrowsers, AppRules = c.AppRules, WindowsFeatures = features,
+            SupportedBrowsers = supportedBrowsers ?? c.SupportedBrowsers, AppRules = c.AppRules, WindowsFeatures = features,
         };
     }
 }

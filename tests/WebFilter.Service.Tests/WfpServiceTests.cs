@@ -217,6 +217,19 @@ public sealed class WfpServiceTests : IDisposable
         Assert.Equal([Path.Combine(programFiles, "Microsoft OneDrive", "OneDrive.exe"), x86], with.MachineOneDrive);
     }
 
+    [Fact]
+    public void Chrome_is_resolved_in_Program_Files_and_Edge_in_Program_Files_x86_plus_the_other_copy_when_it_exists()
+    {
+        var programFiles = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles);
+        var programFilesX86 = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86);
+        string Chrome(string folder) => Path.Combine(folder, "Google", "Chrome", "Application", "chrome.exe");
+        string Edge(string folder) => Path.Combine(folder, "Microsoft", "Edge", "Application", "msedge.exe");
+
+        Assert.Equal([Chrome(programFiles), Edge(programFilesX86)], WindowsProgramPaths.Resolve(_ => false).MachineBrowsers);
+        Assert.Equal([Chrome(programFiles), Chrome(programFilesX86), Edge(programFilesX86), Edge(programFiles)],
+            WindowsProgramPaths.Resolve(_ => true).MachineBrowsers);
+    }
+
     private sealed class ManualClock(DateTimeOffset now) : TimeProvider
     {
         public DateTimeOffset Now { get; set; } = now;
