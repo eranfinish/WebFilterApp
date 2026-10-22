@@ -1,5 +1,6 @@
 using System.Text.Json;
 using System.Text.Json.Nodes;
+using WebFilter.Core.Decisions;
 using WebFilter.Core.Dnr;
 using WebFilter.Core.Model;
 using static WebFilter.Core.Tests.Dnr.DnrTestPolicies;
@@ -50,6 +51,38 @@ public class DnrCompilerTests
         var set = Compile(Policy(FilterMode.Allowlist, member: [Member("x.example", PatternType.Domain, RuleAction.Block)]));
         Assert.All(set.DynamicRules.Concat(set.TimeUpSessionRules), r => Assert.Equal(["main_frame", "sub_frame"], r.Condition.ResourceTypes));
         Assert.Equal(DnrOutcome.Allow, DnrSimulator.Evaluate(set.DynamicRules, "https://x.example/img.png", "image"));
+    }
+
+    /// <summary>
+    /// PROTECTION-SPEC §12: the extension's ad-server ruleset blocks scripts, images, requests and frames at the lowest
+    /// priority, and that works on an allowed site only while no compiled rule reaches below the frames: no
+    /// allowAllRequests (it would lift every block on the pages it matches) and no allow rule for other resource types.
+    /// </summary>
+    [Theory]
+    [InlineData(FilterMode.Allowlist)]
+    [InlineData(FilterMode.Blocklist)]
+    public void NoRule_LetsSubresourcesThrough_SoAdBlockingStillWorksOnAllowedSites(FilterMode mode)
+    {
+        var policy = Policy(mode, YouTubeMode.Restricted,
+            member:
+            [
+                Member("news.example", PatternType.Domain, RuleAction.Allow),
+                Member("school.example/homework", PatternType.Prefix, RuleAction.Allow, always: true),
+                Member("*.edu.example", PatternType.Wildcard, RuleAction.Allow),
+                Member(@"^https://games\.example/", PatternType.Regex, RuleAction.Allow),
+            ],
+            global: [Global("mashov.info", PatternType.Domain, RuleAction.Allow, always: true)],
+            categories: [new CategoryDomain("ads.example", RuleAction.Block, "ads-popups"), new CategoryDomain("kids.example", RuleAction.Allow, "educational")])
+            with { BuiltinBlocks = [new BuiltinBlock(Global("images.example", PatternType.Domain, RuleAction.Block, id: "builtin-image-search-x"), ReasonCode.BlockedImageSearch)] };
+
+        var set = Compile(policy);
+
+        Assert.All(set.DynamicRules.Concat(set.TimeUpSessionRules), r =>
+        {
+            Assert.Contains(r.Action.Type, new[] { "allow", "redirect" });
+            Assert.Equal(["main_frame", "sub_frame"], r.Condition.ResourceTypes);
+        });
+        Assert.DoesNotContain("allowAllRequests", JsonSerializer.Serialize(set));
     }
 
     // --- block page redirect -----------------------------------------------------------------------------------------

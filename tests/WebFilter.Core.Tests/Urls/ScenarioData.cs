@@ -107,7 +107,8 @@ internal static class ScenarioData
         e.TryGetProperty("blockImageSearch", out var images) ? images.GetBoolean() : baseline?.BlockImageSearch ?? false,
         e.TryGetProperty("jumpGuard", out var jump) ? jump.GetBoolean() : baseline?.JumpGuard ?? false,
         e.TryGetProperty("blockYouTubeShorts", out var shorts) ? shorts.GetBoolean() : baseline?.BlockYouTubeShorts ?? false,
-        e.TryGetProperty("logSearches", out var searches) ? searches.GetBoolean() : baseline?.LogSearches ?? false);
+        e.TryGetProperty("logSearches", out var searches) ? searches.GetBoolean() : baseline?.LogSearches ?? false,
+        e.TryGetProperty("blockAds", out var ads) ? ads.GetBoolean() : baseline?.BlockAds ?? false);
 
     private static void AddMemberCategories(FamilyConfig config, JsonElement source)
     {

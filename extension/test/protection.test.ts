@@ -4,7 +4,7 @@
  */
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { Controller } from "../src/background/controller";
-import { JUMP_RULE_BASE, SHORTS_RULE_ID } from "../src/background/dnr";
+import { ADS_RULESET, JUMP_RULE_BASE, SHORTS_RULE_ID } from "../src/background/dnr";
 import { FakeHost, type FakeHostScript } from "../src/background/fake-host";
 import type { YouTubeDetection } from "../src/shared/messages";
 import { type DnrRule, NO_FEATURES, type OutgoingMessage, type ProtectionFeatures } from "../src/shared/protocol";
@@ -20,7 +20,7 @@ const DYNAMIC: DnrRule[] = [
   { id: 4321, priority: 65544, action: { type: "allow" }, condition: { resourceTypes: FRAMES, requestDomains: ["site-a.test", "site-b.test", "google.com"] } },
 ];
 const TIME_UP: DnrRule[] = [{ id: 10, priority: 262144, action: REDIRECT, condition: { resourceTypes: FRAMES, regexFilter: "^(https?://.*)$" } }];
-const ALL_ON: ProtectionFeatures = { jumpGuard: true, blockYouTubeShorts: true, logSearches: true, canOverrideJump: true };
+const ALL_ON: ProtectionFeatures = { jumpGuard: true, blockYouTubeShorts: true, logSearches: true, canOverrideJump: true, blockAds: true };
 
 function script(features: Partial<ProtectionFeatures> | null, extra: FakeHostScript = {}): FakeHostScript {
   return {
@@ -86,6 +86,107 @@ describe("features in the rules reply", () => {
     restricted.hangUp();
     await settle(10);
     expect(d.features).toEqual(NO_FEATURES);
+  });
+});
+
+describe("ad blocking (PROTECTION-SPEC §12)", () => {
+  const ads = () => state.enabledRulesets.has(ADS_RULESET);
+  const rulesChanged = async (host: FakeHost, next: FakeHostScript) => {
+    host.script = next;
+    host.push({ type: "rulesChanged", rulesVersion: 9 });
+    await settle();
+  };
+
+  it("features.blockAds turns the ads ruleset on, after the rules and with fail-closed off", async () => {
+    const c = await start(new FakeHost(script({ blockAds: true })));
+    expect(c.ready).toBe(true);
+    expect([...state.enabledRulesets].sort()).toEqual([ADS_RULESET]);
+    expect(c.snapshot().features.blockAds).toBe(true);
+  });
+
+  it("follows the switch in later rules, and does not touch the ruleset when nothing changed", async () => {
+    const host = new FakeHost(script({ blockAds: false }));
+    await start(host);
+    expect(ads()).toBe(false);
+    await rulesChanged(host, script({ blockAds: true }));
+    expect(ads()).toBe(true);
+    const adUpdates = () => state.rulesetUpdates.filter((u) => u.endsWith(ADS_RULESET));
+    expect(adUpdates()).toEqual(["+ads", "-ads", "+ads"]); // fail-closed at start, the first rules, the switch
+    await rulesChanged(host, script({ blockAds: true, jumpGuard: true }));
+    expect(adUpdates()).toEqual(["+ads", "-ads", "+ads"]); // unchanged: no call
+    // The parent's escape hatch: switched off for this child.
+    await rulesChanged(host, script({ blockAds: false, jumpGuard: true }));
+    expect(ads()).toBe(false);
+  });
+
+  it("is off while the member is paused (the service sends no rules and blockAds false), and back after", async () => {
+    const host = new FakeHost(script({ blockAds: true }));
+    const c = await start(host);
+    const base = script({ logSearches: true }).rules!;
+    const paused = { rules: { ...base, dynamicRules: [], timeUpSessionRules: [], time: { state: "unlimited" as const, remainingMinutes: null, windowEndsAt: null } } };
+    await rulesChanged(host, paused);
+    expect(ads()).toBe(false);
+    expect(c.features).toEqual({ ...NO_FEATURES, logSearches: true });
+    await rulesChanged(host, script({ blockAds: true }));
+    expect(ads()).toBe(true);
+  });
+
+  it("is on while fail-closed (no rules yet: the strictest state) and the rules decide once connected", async () => {
+    const silent = new FakeHost(script({ blockAds: false }, { silent: true }));
+    const c = await start(silent);
+    expect(c.ready).toBe(false);
+    expect([...state.enabledRulesets].sort()).toEqual([ADS_RULESET, "failclosed"]);
+    controller?.client.close("x");
+    const host = new FakeHost(script({ blockAds: false }));
+    await start(host);
+    expect([...state.enabledRulesets]).toEqual([]);
+    host.hangUp();
+    await settle(10);
+    expect([...state.enabledRulesets].sort()).toEqual([ADS_RULESET, "failclosed"]);
+  });
+
+  it("is off for an unrestricted account, an extension that is not policy-installed, and the host's own answers", async () => {
+    await start(new FakeHost(script({ blockAds: true }, { hello: { mode: "unrestricted" } })));
+    expect(ads()).toBe(false);
+    controller?.client.close("x");
+    // The native host answering by itself (service down) sends no features: only always-allowed sites load.
+    await start(new FakeHost(script(null, { hello: { source: "host", serviceAvailable: false }, hostFallback: true })));
+    expect(controller!.ready).toBe(true);
+    expect(ads()).toBe(false);
+    controller?.client.close("x");
+    state.installType = "development";
+    state.enabledRulesets.add(ADS_RULESET);
+    await start(new FakeHost(script({ blockAds: true })));
+    expect(controller!.connectionState).toBe("inert");
+    expect([...state.enabledRulesets]).toEqual([]);
+  });
+
+  it("is quiet: blocked ad requests never reach a block page, so the extension sends nothing about them", async () => {
+    const host = new FakeHost(script({ blockAds: true }));
+    await start(host);
+    expect(new Set(host.received.map((m) => m.type))).toEqual(new Set(["hello", "getRules", "heartbeat"]));
+  });
+
+  it("a browser that refuses the ruleset is logged; the profile still applies, and the next rules try again", async () => {
+    const dnr = (globalThis as unknown as { chrome: typeof chrome }).chrome.declarativeNetRequest;
+    const original = dnr.updateEnabledRulesets;
+    let refuse = true;
+    dnr.updateEnabledRulesets = (async (o: chrome.declarativeNetRequest.UpdateRulesetOptions) => {
+      if (refuse && o.enableRulesetIds?.includes(ADS_RULESET)) throw new Error("Internal error while updating rulesets.");
+      return original(o);
+    }) as typeof dnr.updateEnabledRulesets;
+    const logs: string[] = [];
+    const host = new FakeHost(script({ blockAds: true }));
+    controller = new Controller({ connector: host.connector, log: (m) => logs.push(m) });
+    void controller.start();
+    await settle();
+    expect(controller.ready).toBe(true);
+    expect(state.enabledRulesets.has("failclosed")).toBe(false);
+    expect(ads()).toBe(false);
+    expect(logs).toContain("ads ruleset update failed");
+    refuse = false;
+    await rulesChanged(host, script({ blockAds: true }));
+    expect(ads()).toBe(true);
   });
 });
 

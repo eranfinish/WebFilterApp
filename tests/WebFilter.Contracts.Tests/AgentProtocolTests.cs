@@ -61,8 +61,8 @@ public class AgentProtocolTests
     public void Protection_messages_use_the_spec_wire_names()
     {
         var rules = Encoding.UTF8.GetString(AgentProtocol.Serialize(new RulesResponse(1, [], [], new YouTubePolicy("off", [], []),
-            new TimeStateMessage("ok", null, null), new AgentFeatures(JumpGuard: true, BlockYouTubeShorts: true, LogSearches: true, CanOverrideJump: true))));
-        Assert.Contains("\"features\":{\"jumpGuard\":true,\"blockYouTubeShorts\":true,\"logSearches\":true,\"canOverrideJump\":true}", rules);
+            new TimeStateMessage("ok", null, null), new AgentFeatures(JumpGuard: true, BlockYouTubeShorts: true, LogSearches: true, CanOverrideJump: true, BlockAds: true))));
+        Assert.Contains("\"features\":{\"jumpGuard\":true,\"blockYouTubeShorts\":true,\"logSearches\":true,\"canOverrideJump\":true,\"blockAds\":true}", rules);
 
         var search = Assert.IsType<ReportSearchRequest>(AgentProtocol.Deserialize(
             """{"type":"reportSearch","v":1,"id":"s1","engine":"youtube","query":"lego","url":"https://www.youtube.com/results?search_query=lego"}"""u8));
@@ -83,6 +83,11 @@ public class AgentProtocolTests
         var partial = Assert.IsType<RulesResponse>(AgentProtocol.Deserialize(
             """{"type":"rules","v":1,"rulesVersion":3,"dynamicRules":[],"timeUpSessionRules":[],"youtube":{"mode":"off","allowed":[],"blocked":[]},"time":{"type":"timeState","state":"ok"},"features":{"jumpGuard":true}}"""u8));
         Assert.Equal(new AgentFeatures(JumpGuard: true), partial.Features);
+        Assert.False(partial.Features!.BlockAds); // §12: a service before ad blocking → off
+
+        var ads = Assert.IsType<RulesResponse>(AgentProtocol.Deserialize(
+            """{"type":"rules","v":1,"rulesVersion":3,"dynamicRules":[],"timeUpSessionRules":[],"youtube":{"mode":"off","allowed":[],"blocked":[]},"time":{"type":"timeState","state":"ok"},"features":{"blockAds":true}}"""u8));
+        Assert.Equal(new AgentFeatures(BlockAds: true), ads.Features);
     }
 
     [Fact]

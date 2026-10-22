@@ -94,6 +94,8 @@
               <TextBlock Text="{x:Static res:Strings.Member_JumpGuardHint}" Style="{StaticResource SubtleText}" FontSize="12" Margin="22,2,0,10" />
               <CheckBox Content="{x:Static res:Strings.Member_BlockYouTubeShorts}" IsChecked="{Binding BlockYouTubeShorts}" />
               <TextBlock Text="{x:Static res:Strings.Member_BlockYouTubeShortsHint}" Style="{StaticResource SubtleText}" FontSize="12" Margin="22,2,0,10" />
+              <CheckBox Content="{x:Static res:Strings.Member_BlockAds}" IsChecked="{Binding BlockAds}" />
+              <TextBlock Text="{x:Static res:Strings.Member_BlockAdsHint}" Style="{StaticResource SubtleText}" FontSize="12" Margin="22,2,0,10" />
               <CheckBox Content="{x:Static res:Strings.Member_LogSearches}" IsChecked="{Binding LogSearches}" />
               <TextBlock Text="{x:Static res:Strings.Member_LogSearchesNote}" Style="{StaticResource SubtleText}" FontSize="12" Margin="22,2,0,0" />
               <Border Style="{StaticResource ErrorBanner}" Visibility="{Binding Message, Converter={StaticResource HasValueToVisibility}}">

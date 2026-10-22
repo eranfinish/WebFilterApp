@@ -23,7 +23,9 @@ Not to be confused with the synthetic categories in `tests/simulation/fixtures/f
 - When several rules and categories match, the most specific domain (more labels) wins, and a tie goes to block
   (`DnrPriorities`, `RuleEvaluator`). A member rule beats every category.
 - Rules filter only page loads (`main_frame`) and frames (`sub_frame`). Scripts, images and API calls are never
-  filtered, so CDNs and API hosts need not be listed to keep sites working, and listing them would change nothing.
+  filtered by a list, so CDNs and API hosts need not be listed to keep sites working, and listing them would change
+  nothing. (The extension's separate ad-server ruleset does block subresources, for members with ad blocking on; see
+  [below](#the-extensions-ad-server-ruleset-protection-spec-12).)
 
 Checked by `tests/WebFilter.Core.Tests/StarterListFilesTests.cs` (every file, every domain, the compiled policies, spot
 checks) and, for the lists the wizard offers, `tests/WebFilter.Admin.Tests/StarterListsTests.cs`.
@@ -225,6 +227,41 @@ ad navigations.
 - Side effects: a blocked ad frame shows the block page inside the ad slot; "watch an ad to continue" offers stop
   working; ad-tracked links in newsletters open the block page.
 
+## The extension's ad-server ruleset (PROTECTION-SPEC §12)
+
+Not a starter list: `extension/rulesets/ads.json` is a static declarativeNetRequest ruleset the browser extension
+enables for members with ad blocking on (`blockAds`, on by default for children and teens). It blocks every request but
+page loads — scripts, images, frames, API calls, beacons — to EasyList's ad servers, also on sites the member is allowed
+to visit. Generated with the same pinned EasyList commit by `tools/starter-lists/ad-ruleset.mjs` (rules from
+`ad-rules.mjs`, unit-tested in `extension/test/ad-rules.test.ts`), and committed.
+
+- **Source:** the whole-domain rules of `easylist_adservers.txt` (50,438) and `easylist_thirdparty.txt` (1,432):
+  `||domain^` blocks the domain for any page, `||domain^$third-party` (`domainType: "thirdParty"`) only on other sites'
+  pages. Rules with a path or other options, regular expressions and cosmetic rules are skipped (about 1,160).
+- **Exceptions** (`easylist_allowlist.txt`) are honoured per host: a host EasyList spares on every site is left out
+  (`amazon-adsystem.com`, `pubads.g.doubleclick.net`, `v.fwmrm.net`, `go.xlirdr.com`, two ValueCommerce hosts and
+  `adsales.snidigital.com` — Amazon's affiliate product images, video streams with server-side ads); a host it spares on
+  some sites only (video players and games that need their ad SDK: `g.doubleclick.net` on Bloomberg and Downdetector,
+  `pagead2.googlesyndication.com` on game sites, …) is blocked everywhere but there, in a rule of its own.
+- **Never listed** (dropped by the generator, checked by the extension's tests): the domains of `educational` and
+  `school-tools`, every host below them and their parents; `AD_ESSENTIALS` in `curation.mjs` — Google (Search, sign-in,
+  `googleapis.com`, `gstatic.com`, `googleusercontent.com`, `googlevideo.com`, `ggpht.com`, `gvt1.com`, `gvt2.com`,
+  `withgoogle.com`, `recaptcha.net`), YouTube (`youtube.com`, `youtube-nocookie.com`, `youtu.be`, `ytimg.com`), Microsoft
+  (`microsoft.com`, `microsoftonline.com`, `msauth.net`, `msftauth.net`, `live.com`, `office.com`, `office.net`,
+  `office365.com`, `microsoft365.com`, `cloud.microsoft`, `static.microsoft`, `sharepoint.com`, `onenote.com`,
+  `outlook.com`, `skype.com`, `windows.com`, `windows.net`, `windowsupdate.com`, `bing.com`, `msn.com`), Apple
+  (`apple.com`, `icloud.com`, `mzstatic.com`, `cdn-apple.com`) and `gov.il` — with every host below them and their
+  parents; `NEVER_BLOCK` and the parents of its entries (one ad host below a platform, such as an ad distribution on
+  `cloudfront.net` or `ads.linkedin.com`, stays); public suffixes; and `AD_SERVERS.remove` (empty so far). With
+  EasyList 48ea829 that drops `adsdk.microsoft.com`, `msadsscale.microsoft.com`, `imasdk.googleapis.com`,
+  `ogads-pa.googleapis.com`, `googleadapis.l.google.com` and `gvt2.com`.
+- **Result:** 51,874 domains in 65 rules, 1.17 MB (449 KB gzipped). Ads a site serves from its own address are not
+  blocked.
+- **Licence:** EasyList is dual licensed GPL-3.0-or-later or CC BY-SA 3.0-or-later; `ads.json` is an adaptation used and
+  licensed under CC BY-SA 4.0 (as `ads-popups.json`), with the attribution "The EasyList authors
+  (https://easylist.to/)", the source commit and the changes in `extension/rulesets/ads-notice.txt`, which ships in the
+  extension next to the ruleset.
+
 ## Guards applied to every sourced list
 
 `tools/starter-lists/update.mjs` drops, before writing:
@@ -244,7 +281,7 @@ ad navigations.
 |---|---|---|---|
 | [ShadowWhisperer/BlockLists](https://github.com/ShadowWhisperer/BlockLists) — `Lists/Adult`, `Lists/Gambling`, `Lists/Tunnels` | adult, gambling, proxies | commit `2b7dd18e51c50ed042a56cd57f0b7c3071fd9eef`, 2026-10-22 | [Unlicense](https://github.com/ShadowWhisperer/BlockLists/blob/master/LICENSE) (public domain dedication; no conditions). The maintainer builds the lists with his own script and manual additions and states he does not merge other lists. |
 | [Sinfonietta/hostfiles](https://github.com/Sinfonietta/hostfiles) — `pornography-hosts`, `gambling-hosts` | adult, gambling | commit `46f3097d7bcfc9eea323fe365074dfd771d0d17c`, 2026-09-09 | [MIT](https://github.com/Sinfonietta/hostfiles/blob/master/LICENSE), "Copyright (c) 2016 Sinfonietta". The notice and permission text must accompany substantial portions: it is in the `license` field of `adult.json` and `gambling.json`. |
-| [EasyList](https://easylist.to/) — [`easylist_adservers_popup.txt`](https://github.com/easylist/easylist/blob/master/easylist/easylist_adservers_popup.txt) | ads-popups | commit `48ea8294cbb6855914a243e891a3c3b13163fb58`, 2026-10-22 | [Dual licensed](https://easylist.to/pages/licence.html) GPL-3.0-or-later or CC BY-SA 3.0 Unported-or-later; used under [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/). Share-alike applies to `ads-popups.json` only, which is therefore CC BY-SA 4.0 and says so; attribution "The EasyList authors (https://easylist.to/)", changes noted. |
+| [EasyList](https://easylist.to/) — [`easylist_adservers_popup.txt`](https://github.com/easylist/easylist/blob/master/easylist/easylist_adservers_popup.txt); for the extension's ad-server ruleset also `easylist_adservers.txt`, `easylist_thirdparty.txt` and `easylist_allowlist.txt` | ads-popups; `extension/rulesets/ads.json` | commit `48ea8294cbb6855914a243e891a3c3b13163fb58`, 2026-10-22 | [Dual licensed](https://easylist.to/pages/licence.html) GPL-3.0-or-later or CC BY-SA 3.0 Unported-or-later; used under [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/). Share-alike applies to `ads-popups.json` and `extension/rulesets/ads.json` only, which are therefore CC BY-SA 4.0 and say so (the ruleset in `ads-notice.txt` next to it); attribution "The EasyList authors (https://easylist.to/)", changes noted. |
 | [Chrome UX Report](https://developer.chrome.com/docs/crux) top lists via [zakird/crux-top-lists](https://github.com/zakird/crux-top-lists) — global and `il`, 2026-09 | choosing which adult entries ship; review order | commit `35ba243941defcd21882b134d9dd354824922482`, 2026-10-13 | Input only: no CrUX data ships (the files contain only entries from the lists above). |
 | [Public Suffix List](https://publicsuffix.org/) | dropping public suffixes | commit `8437e5262f13305f94087abe699b4fe2be1d1de8`, 2026-10-22 | MPL-2.0; input only. |
 
@@ -266,13 +303,21 @@ Rejected:
 ```bash
 node tools/starter-lists/update.mjs            # downloads the pinned sources to <tmp>/webfilter-starter-lists
 node tools/starter-lists/update.mjs --offline  # reuse the cached downloads
+node tools/starter-lists/ad-ruleset.mjs         # the extension's ad-server ruleset (same cache and options)
 ```
 
 It rewrites `adult.json`, `gambling.json`, `proxies.json` and `ads-popups.json` (the other files are edited by hand) and
 writes a review report (`review.txt` in the cache folder): per list, what the guards dropped, which curated removals
 applied, and the entries in the CrUX lists, most visited first. To update:
 
-1. Pin newer commits in `SOURCES` (`update.mjs`) — ShadowWhisperer occasionally squashes its history, so an old commit
+`ad-ruleset.mjs` rewrites `extension/rulesets/ads.json` and `ads-notice.txt` and writes `review-ads.txt` in the cache
+folder: what was skipped and dropped, the hosts EasyList's exceptions spare, the ad hosts kept below platforms, and the
+any-party ad domains that are also visited as pages (CrUX), most visited first — their own pages lose those hosts'
+scripts and images. Review them, add false positives to `AD_SERVERS.remove` in `curation.mjs` (with a reason), run
+`npm test` in `extension/` (it checks the committed ruleset against the guards) and review the diff (one domain per
+line).
+
+1. Pin newer commits in `sources.mjs` — ShadowWhisperer occasionally squashes its history, so an old commit
    can disappear; the tool then stops with an HTTP 404.
 2. Run it, read the report from the top, and add false positives to `curation.mjs` (with a reason), then run it again.
 3. Run `dotnet test tests/WebFilter.Core.Tests` and review the diff. Nothing runs this automatically; the lists ship

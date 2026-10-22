@@ -200,6 +200,10 @@
         "logSearches": {
           "type": "boolean",
           "description": "PROTECTION-SPEC §9: searches are recorded as search events. Default false."
+        },
+        "blockAds": {
+          "type": "boolean",
+          "description": "PROTECTION-SPEC §12 (extension: the static ad-server ruleset; URL decisions do not change). Default false."
         }
       }
     },

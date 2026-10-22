@@ -245,6 +245,9 @@
   "searchesVisible": {
     "message": "החיפושים שלך גלויים להורים"
   },
+  "adsBlocked": {
+    "message": "חסימת פרסומות פעילה"
+  },
   "mode_unrestricted": {
     "message": "ללא הגבלה"
   },

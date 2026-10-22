@@ -96,8 +96,15 @@ describe("parseIncoming", () => {
       ...JSON.parse(CSHARP.rules),
       features: { jumpGuard: true, blockYouTubeShorts: true, logSearches: false, canOverrideJump: true },
     }) as RulesMessage;
-    expect(withFeatures.features).toEqual({ jumpGuard: true, blockYouTubeShorts: true, logSearches: false, canOverrideJump: true });
+    expect(withFeatures.features).toEqual({ jumpGuard: true, blockYouTubeShorts: true, logSearches: false, canOverrideJump: true, blockAds: false });
     expect(normalizeFeatures({ jumpGuard: "true", logSearches: 1, blockYouTubeShorts: true })).toEqual({ ...NO_FEATURES, blockYouTubeShorts: true });
+    // §12, as the C# AgentFeatures writes it (blockAds last).
+    const ads = parseIncoming({
+      ...JSON.parse(CSHARP.rules),
+      features: { jumpGuard: false, blockYouTubeShorts: false, logSearches: false, canOverrideJump: false, blockAds: true },
+    }) as RulesMessage;
+    expect(ads.features).toEqual({ ...NO_FEATURES, blockAds: true });
+    expect(normalizeFeatures({ blockAds: "yes" }).blockAds).toBe(false);
     expect(normalizeFeatures(null)).toEqual(NO_FEATURES);
     expect(normalizeFeatures([true])).toEqual(NO_FEATURES);
     expect((parseIncoming({ type: "rules", features: "all" }) as RulesMessage).features).toEqual(NO_FEATURES);

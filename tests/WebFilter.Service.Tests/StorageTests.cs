@@ -73,8 +73,9 @@ public sealed class StorageTests : IDisposable
     public void Member_flags_and_windows_features_round_trip_and_default_when_missing()
     {
         var config = PolicyTests.WithFeatures(Fixture(), new WindowsFeatures(NotificationsAndSync: false, OneDrive: true, WebSearchInStart: true));
-        config.Members[0] = config.Members[0] with { BlockImageSearch = true, JumpGuard = true, BlockYouTubeShorts = true, LogSearches = true };
+        config.Members[0] = config.Members[0] with { BlockImageSearch = true, JumpGuard = true, BlockYouTubeShorts = true, LogSearches = true, BlockAds = true };
         config.Members[1] = config.Members[1] with { JumpGuard = true };
+        config.Members[2] = config.Members[2] with { BlockAds = true };
 
         var back = BundleMapper.ToConfig(FamilyBundleJson.Deserialize(FamilyBundleJson.Serialize(BundleMapper.ToBundle(config, 3))));
 
@@ -83,7 +84,7 @@ public sealed class StorageTests : IDisposable
         var older = Fixture();
         Assert.Equal(WindowsFeatures.Default, older.WindowsFeatures);
         Assert.Equal((true, true, false), (older.WindowsFeatures.NotificationsAndSync, older.WindowsFeatures.OneDrive, older.WindowsFeatures.WebSearchInStart));
-        Assert.All(older.Members, m => Assert.False(m.BlockImageSearch || m.JumpGuard || m.BlockYouTubeShorts || m.LogSearches));
+        Assert.All(older.Members, m => Assert.False(m.BlockImageSearch || m.JumpGuard || m.BlockYouTubeShorts || m.LogSearches || m.BlockAds));
     }
 
     [Fact]
@@ -141,6 +142,7 @@ public sealed class StorageTests : IDisposable
         hub.AddRule(new Rule("r-new", "yoav", "chess.example", PatternType.Domain, RuleAction.Block, ExpiresAt: Now.AddHours(1)), Now);
         hub.Pause("noa", Now.AddMinutes(30), Now);
         hub.ExtendTime("yoav", 15, Now);
+        hub.SetMember(hub.Config.Member("yoav") with { BlockAds = true }, Now);
         hub.Usage.Mark("noa", "pc-kids", Now);
         hub.Usage.Mark("noa", "pc-kids", Now.AddMinutes(1));
         hub.CreateRequest(new AccessRequestDraft("noa", "pc-kids", RequestKind.YouTube, "UCnatgeoKids000000000004", "UCnatgeoKids000000000004", null, "please", Now), out var request);
@@ -152,6 +154,7 @@ public sealed class StorageTests : IDisposable
         Assert.NotNull(loaded);
         var restored = HubCore.Restore(loaded);
         Assert.Equal(hub.Version, restored.Version);
+        Assert.Equal((true, false), (restored.Config.Member("yoav").BlockAds, restored.Config.Member("noa").BlockAds));
         Assert.Contains(restored.Config.Rules, r => r.Id == "r-new" && r.ExpiresAt == Now.AddHours(1));
         Assert.Equal(Now.AddMinutes(30), restored.RuntimeOf("noa").PausedUntil);
         Assert.Single(restored.RuntimeOf("yoav").Grants);

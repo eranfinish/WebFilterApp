@@ -1440,6 +1440,12 @@ Do this only for your home network. On a café, hotel or work network it is safe
   <data name="Member_BlockYouTubeShortsHint" xml:space="preserve">
     <value>Shorts are blocked and their shelf on YouTube is hidden. Other videos follow the YouTube mode.</value>
   </data>
+  <data name="Member_BlockAds" xml:space="preserve">
+    <value>Block ads</value>
+  </data>
+  <data name="Member_BlockAdsHint" xml:space="preserve">
+    <value>Ads from known ad servers (EasyList) do not load on websites. Ads a site serves from its own address, such as on YouTube and in Google results, are not blocked. If a site does not work with ad blocking on, turn it off here for this member.</value>
+  </data>
   <data name="Member_LogSearches" xml:space="preserve">
     <value>Log search terms</value>
   </data>

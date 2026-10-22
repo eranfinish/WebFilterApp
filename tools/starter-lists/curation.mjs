@@ -142,3 +142,28 @@ export const ADS = {
     "tsyndicate.com", "yllix.com", "zeropark.com",
   ],
 };
+
+/**
+ * Never in the extension's ad-server ruleset (ad-ruleset.mjs, PROTECTION-SPEC §12), nor any host below them or a parent
+ * of them. That ruleset blocks scripts, images and requests, not just pages, so a host of these companies there could
+ * break sign-in, Search, YouTube, Office, Teams or school sites; ads they serve from their own hosts stay. NEVER_BLOCK and
+ * the allow lists (ALLOW_LISTS, with every host below their entries) guard the ruleset too.
+ */
+export const AD_ESSENTIALS = [
+  // Google: Search, sign-in, YouTube, Classroom and Workspace, and the hosts their pages load from
+  "google.com", "google.co.il", "googleapis.com", "gstatic.com", "googleusercontent.com", "googlevideo.com", "ggpht.com",
+  "gvt1.com", "gvt2.com", "withgoogle.com", "youtube.com", "youtube-nocookie.com", "youtu.be", "ytimg.com", "recaptcha.net",
+  // Microsoft: sign-in, Microsoft 365 and Teams, Windows and Edge services
+  "microsoft.com", "microsoftonline.com", "msauth.net", "msftauth.net", "live.com", "office.com", "office.net",
+  "office365.com", "microsoft365.com", "cloud.microsoft", "static.microsoft", "sharepoint.com", "onenote.com",
+  "outlook.com", "skype.com", "windows.com", "windows.net", "windowsupdate.com", "bing.com", "msn.com",
+  // Apple
+  "apple.com", "icloud.com", "mzstatic.com", "cdn-apple.com",
+  // Israeli government and Ministry of Education sites
+  "gov.il",
+];
+
+/** Removed from the ad-server ruleset after review (none so far): add an entry with the reason, then regenerate. */
+export const AD_SERVERS = {
+  remove: [],
+};

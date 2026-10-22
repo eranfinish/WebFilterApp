@@ -252,6 +252,10 @@
     "message": "Your searches are visible to your parents",
     "description": "Shown while the search-term log is on (PROTECTION-SPEC §9)."
   },
+  "adsBlocked": {
+    "message": "Ad blocking is on",
+    "description": "Shown while the ad-server ruleset is on (PROTECTION-SPEC §12)."
+  },
   "mode_unrestricted": {
     "message": "No restrictions"
   },

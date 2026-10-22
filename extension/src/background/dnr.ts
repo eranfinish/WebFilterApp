@@ -28,6 +28,20 @@ export async function isFailClosedEnabled(): Promise<boolean> {
   return (await chrome.declarativeNetRequest.getEnabledRulesets()).includes(FAILCLOSED_RULESET);
 }
 
+/**
+ * The static ruleset (rulesets/ads.json, disabled in the manifest) that blocks every request but page loads to
+ * EasyList's ad servers (PROTECTION-SPEC §12). Block rules only, at priority 1: the compiled rules filter frames only
+ * and never use allowAllRequests, so ad scripts, images and requests are blocked on allowed sites too. Its rule ids are
+ * its own (static ids are per ruleset) and never meet the dynamic or session ids.
+ */
+export const ADS_RULESET = "ads";
+
+export async function setAdBlocking(enabled: boolean): Promise<void> {
+  await chrome.declarativeNetRequest.updateEnabledRulesets(
+    enabled ? { enableRulesetIds: [ADS_RULESET] } : { disableRulesetIds: [ADS_RULESET] },
+  );
+}
+
 export interface InstallResult {
   /** The rules now installed. */
   installed: DnrRule[];

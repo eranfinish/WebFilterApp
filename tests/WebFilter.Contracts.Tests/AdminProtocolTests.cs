@@ -21,6 +21,7 @@ public class AdminProtocolTests
         new RemoveRule("r1"),
         new SetMember("yoav", YouTubeMode: "off"),
         new SetMember("noa", BlockImageSearch: true, JumpGuard: true, BlockYouTubeShorts: false, LogSearches: true),
+        new SetMember("yoav", BlockAds: false),
         new EventsResult([new EventDto("search", At, "noa", "pc-kids", null, "https://www.google.com/search?q=cats", null, null, "google:cats"),
             new EventDto("override", At, "yoav", "pc-kids", "blocked_jump", "https://other.example/", null, null, null)]),
         new DiagnosticsResult([new CheckResult("onedrive", "warn", "OneDriveSetup.exe /allusers")]),
@@ -61,8 +62,14 @@ public class AdminProtocolTests
         Assert.DoesNotContain("blockImageSearch", json);
 
         var older = Assert.IsType<SetMember>(AdminProtocol.Deserialize("""{"type":"setMember","v":1,"memberId":"noa","filterMode":"blocklist"}"""u8));
-        Assert.Equal((null, null, null, null), (older.BlockImageSearch, older.JumpGuard, older.BlockYouTubeShorts, older.LogSearches));
+        Assert.Equal((null, null, null, null, null), (older.BlockImageSearch, older.JumpGuard, older.BlockYouTubeShorts, older.LogSearches, older.BlockAds));
         var newer = Assert.IsType<SetMember>(AdminProtocol.Deserialize("""{"type":"setMember","v":1,"memberId":"noa","blockYouTubeShorts":true,"logSearches":false}"""u8));
         Assert.Equal((true, false), (newer.BlockYouTubeShorts, newer.LogSearches));
+
+        // PROTECTION-SPEC §12: the ad blocking switch alone.
+        var ads = Encoding.UTF8.GetString(AdminProtocol.Serialize(new SetMember("noa", BlockAds: false)));
+        Assert.Contains("\"blockAds\":false", ads);
+        Assert.DoesNotContain("jumpGuard", ads);
+        Assert.Equal(true, Assert.IsType<SetMember>(AdminProtocol.Deserialize("""{"type":"setMember","v":1,"memberId":"noa","blockAds":true}"""u8)).BlockAds);
     }
 }

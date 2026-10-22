@@ -110,9 +110,9 @@ public sealed class SetupWizardViewModelTests
         await vm.NextCommand.ExecuteAsync(null);
         Assert.True(vm.IsReviewStep);
         Assert.Equal("ילד/ה, גיל 8 · רק אתרים מאושרים · YouTube: רק ערוצים מאושרים · 15:00–19:00, עד 120 דקות ביום"
-                     + " · חסימת חיפוש תמונות, חסימת קפיצות לאתרים אחרים, חסימת YouTube Shorts · לימודים: מותרת תמיד, כלי בית ספר: מותרת תמיד · חשבון: noa",
+                     + " · חסימת חיפוש תמונות, חסימת קפיצות לאתרים אחרים, חסימת YouTube Shorts, חסימת פרסומות · לימודים: מותרת תמיד, כלי בית ספר: מותרת תמיד · חשבון: noa",
             Bidi.Plain(vm.Members[0].SummaryText));
-        Assert.Contains("· חסימת קפיצות לאתרים אחרים ·", vm.Members[1].SummaryText);
+        Assert.Contains("· חסימת קפיצות לאתרים אחרים, חסימת פרסומות ·", vm.Members[1].SummaryText);
         Assert.Contains("משחקים: חסומה", vm.Members[1].SummaryText);
         Assert.Equal("מבוגר/ת · ללא סינון · YouTube: ללא הגבלה · בלי הגבלת זמן · חשבון: Dad", vm.Members[2].SummaryText);
         Assert.Null(vm.AccountsSummary);
@@ -123,10 +123,11 @@ public sealed class SetupWizardViewModelTests
 
         var replace = Assert.Single(_client.SentOf<ReplaceSettings>());
         Assert.Equal(2, replace.IfVersion); // the scan added the accounts (version 2)
-        // PROTECTION-SPEC §1 role defaults: image search, jumps and Shorts blocked for a child, jumps for a teen; searches not logged.
+        // PROTECTION-SPEC §1 role defaults: image search, jumps and Shorts blocked for a child, jumps for a teen, ads for both
+        // (§12); searches not logged.
         Assert.Equal(
-            [new MemberDto(noa, "נועה", "child", 8, "allowlist", "allowlist", BlockImageSearch: true, JumpGuard: true, BlockYouTubeShorts: true, LogSearches: false),
-             new MemberDto(yoav, "יואב", "teen", 14, "blocklist", "restricted", BlockImageSearch: false, JumpGuard: true, BlockYouTubeShorts: false, LogSearches: false),
+            [new MemberDto(noa, "נועה", "child", 8, "allowlist", "allowlist", BlockImageSearch: true, JumpGuard: true, BlockYouTubeShorts: true, LogSearches: false, BlockAds: true),
+             new MemberDto(yoav, "יואב", "teen", 14, "blocklist", "restricted", BlockImageSearch: false, JumpGuard: true, BlockYouTubeShorts: false, LogSearches: false, BlockAds: true),
              new MemberDto(dad, "אבא", "adult", null, "unrestricted", "unrestricted")],
             replace.Settings.Members);
         Assert.Equal(new Dictionary<string, string?> { ["noa"] = noa, ["yoav"] = yoav, ["Dad"] = dad },
@@ -364,10 +365,10 @@ public sealed class SetupWizardViewModelTests
     }
 
     [Theory]
-    [InlineData("child", true, true, true)]
-    [InlineData("teen", false, true, false)]
-    [InlineData("adult", false, false, false)]
-    public async Task A_role_brings_its_protections_and_no_search_log(string role, bool imageSearch, bool jumpGuard, bool shorts)
+    [InlineData("child", true, true, true, true)]
+    [InlineData("teen", false, true, false, true)]
+    [InlineData("adult", false, false, false, false)]
+    public async Task A_role_brings_its_protections_and_no_search_log(string role, bool imageSearch, bool jumpGuard, bool shorts, bool ads)
     {
         var vm = await LoadedAsync();
         vm.Members[0].Name = "נועה";
@@ -377,7 +378,7 @@ public sealed class SetupWizardViewModelTests
         await vm.ApplyCommand.ExecuteAsync(null);
 
         var member = Assert.Single(_client.Single<ReplaceSettings>().Settings.Members);
-        Assert.Equal((imageSearch, jumpGuard, shorts, false), (member.BlockImageSearch, member.JumpGuard, member.BlockYouTubeShorts, member.LogSearches));
+        Assert.Equal((imageSearch, jumpGuard, shorts, ads, false), (member.BlockImageSearch, member.JumpGuard, member.BlockYouTubeShorts, member.BlockAds, member.LogSearches));
     }
 
     [Fact]

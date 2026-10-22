@@ -279,6 +279,7 @@ public sealed class AdminPipeServer(FamilyService family, IOptions<ServiceOption
         JumpGuard = set.JumpGuard ?? member.JumpGuard,
         BlockYouTubeShorts = set.BlockYouTubeShorts ?? member.BlockYouTubeShorts,
         LogSearches = set.LogSearches ?? member.LogSearches,
+        BlockAds = set.BlockAds ?? member.BlockAds,
     };
 
     private static string Wire(EventType type) => SyncMapper.EventWire(type);

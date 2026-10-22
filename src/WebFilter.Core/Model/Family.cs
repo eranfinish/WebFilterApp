@@ -16,9 +16,10 @@ public enum AppMatchType { Path, Package, Publisher }
 /// <param name="JumpGuard">A site may not open another site in a new tab or window or by an automatic redirect (extension, §7).</param>
 /// <param name="BlockYouTubeShorts">YouTube /shorts/ is blocked (extension, §8).</param>
 /// <param name="LogSearches">Search terms are recorded for the parents, and the member is told so (§9).</param>
-/// <remarks>The four protection flags apply only to restricted members; unrestricted members ignore them (§1).</remarks>
+/// <param name="BlockAds">Requests to EasyList's ad servers are blocked (extension, §12).</param>
+/// <remarks>The five protection flags apply only to restricted members; unrestricted members ignore them (§1).</remarks>
 public sealed record FamilyMember(string Id, string DisplayName, Role Role, int? Age, FilterMode FilterMode, YouTubeMode YouTubeMode,
-    bool BlockImageSearch = false, bool JumpGuard = false, bool BlockYouTubeShorts = false, bool LogSearches = false)
+    bool BlockImageSearch = false, bool JumpGuard = false, bool BlockYouTubeShorts = false, bool LogSearches = false, bool BlockAds = false)
 {
     public bool IsRestricted => FilterMode != FilterMode.Unrestricted;
 }

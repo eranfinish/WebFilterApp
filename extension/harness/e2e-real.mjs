@@ -313,11 +313,15 @@ async function waitForService(timeout = 30000) {
 
 const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c]);
 const hits = [];
+// An AdSense host of the extension's ad-server ruleset (PROTECTION-SPEC §12); it resolves here like every host.
+const AD_HOST = "pagead2.googlesyndication.com";
 function handler(req, res) {
   const url = new URL(req.url, `http://${req.headers.host}`);
   hits.push(`${url.hostname}${url.pathname}`);
   res.writeHead(200, { "content-type": "text/html; charset=utf-8", "cache-control": "no-store" });
-  res.end(`<!doctype html><html><head><title>${esc(`SITE ${url.hostname}${url.pathname}`)}</title></head><body><h1>${esc(url.hostname)}</h1></body></html>`);
+  // /with-ads on any host: a page that loads an ad script and an ad image (same scheme and port, protocol-relative).
+  const ads = url.pathname === "/with-ads" ? `<script src="//${AD_HOST}:${url.port}/pagead/js/adsbygoogle.js"></script><img src="//${AD_HOST}:${url.port}/ad.gif">` : "";
+  res.end(`<!doctype html><html><head><title>${esc(`SITE ${url.hostname}${url.pathname}`)}</title></head><body><h1>${esc(url.hostname)}</h1>${ads}</body></html>`);
 }
 
 function makeCert() {
@@ -721,6 +725,28 @@ try {
     check("7b admin resume → rules return, the site is blocked again",
       !!back && after.startsWith(extPage("blocked.html")) && aInfo?.reason === "blocked_not_in_allowlist" && aInfo.reasonSource === "service",
       { note: `${after} ${JSON.stringify(aInfo)}` });
+  }
+
+  // ===== 7c. Ad blocking (PROTECTION-SPEC §12) ===================================================================
+  {
+    const adHits = () => hits.filter((h) => h.startsWith(AD_HOST));
+    // The fixture's noa has no blockAds: the parent turns it on (a one-flag setMember, as the member page sends it).
+    await adminOk({ type: "setMember", memberId: "noa", blockAds: true });
+    const on = await waitFor(async () => ((await enabledRulesets()).includes("ads") && (await status()).features?.blockAds === true ? true : null), 8000, 100);
+    hits.length = 0;
+    await visit(page, U("www.khanacademy.org", fresh("/with-ads")));
+    await sleep(1000);
+    check("7c setMember blockAds → features.blockAds from the service, the ads ruleset on; an allowed page loads without its ads",
+      !!on && (await page.title()) === "SITE www.khanacademy.org/with-ads" && adHits().length === 0,
+      { note: `${await page.title()}; rulesets ${JSON.stringify(await enabledRulesets())}; ad hits ${adHits().join(",") || "none"}` });
+
+    await adminOk({ type: "setMember", memberId: "noa", blockAds: false });
+    const off = await waitFor(async () => (!(await enabledRulesets()).includes("ads") ? true : null), 8000, 100);
+    hits.length = 0;
+    await visit(page, U("www.khanacademy.org", fresh("/with-ads")));
+    const reached = await waitFor(() => (adHits().length >= 2 ? true : null), 5000, 100);
+    check("7d switched off by the parent → the ruleset is off and the ad requests reach the server", !!off && !!reached,
+      { note: `ad hits ${adHits().join(",") || "none"}` });
   }
 
   // ===== 8. Service down =============================================================================================

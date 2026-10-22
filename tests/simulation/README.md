@@ -46,7 +46,7 @@ cd tests/simulation/tools && npm install && npm run validate
 
 | שדה | כלל מיזוג |
 |-----|-----------|
-| `members` | מיזוג שדות לפי `id` (כולל דגלי ההגנה `blockImageSearch`, `jumpGuard`, `blockYouTubeShorts`, `logSearches` — ברירת מחדל `false`) |
+| `members` | מיזוג שדות לפי `id` (כולל דגלי ההגנה `blockImageSearch`, `jumpGuard`, `blockYouTubeShorts`, `logSearches`, `blockAds` — ברירת מחדל `false`) |
 | `schedules` | אם מופיע בן משפחה — **מחליף את כל** חלונות הזמן שלו מה-fixture |
 | `dailyLimits` | מחליף את המכסה של אותו בן משפחה באותם ימים |
 | `categories` | מתווספת (קטגוריה באותו שם מוחלפת) |

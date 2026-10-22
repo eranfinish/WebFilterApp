@@ -46,7 +46,7 @@ internal static class ScenarioData
                 m.TryGetProperty("age", out var age) ? age.GetInt32() : null,
                 Enum.Parse<FilterMode>(Field("filterMode"), ignoreCase: true),
                 Enum.Parse<YouTubeMode>(Field("youtubeMode"), ignoreCase: true),
-                Flag("blockImageSearch"), Flag("jumpGuard"), Flag("blockYouTubeShorts"), Flag("logSearches")));
+                Flag("blockImageSearch"), Flag("jumpGuard"), Flag("blockYouTubeShorts"), Flag("logSearches"), Flag("blockAds")));
         }
 
         foreach (var category in fixture.GetProperty("categories").EnumerateObject())

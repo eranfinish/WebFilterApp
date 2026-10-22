@@ -52,7 +52,15 @@ import {
 } from "../shared/time-actions";
 import { type YouTubeContext, approvedChannels, decideYouTube } from "../shared/youtube-decision";
 import { isChannelId, isShortsUrl, isYouTubeHost } from "../shared/youtube-url";
-import { SHORTS_RULE_ID, clearOwnSessionRules, replaceDynamicRules, replaceSessionRules, setFailClosed, setOwnSessionRule } from "./dnr";
+import {
+  SHORTS_RULE_ID,
+  clearOwnSessionRules,
+  replaceDynamicRules,
+  replaceSessionRules,
+  setAdBlocking,
+  setFailClosed,
+  setOwnSessionRule,
+} from "./dnr";
 import { JumpGuard } from "./jump-guard";
 import { type Connector, NativeClient, errorText, nativeConnector } from "./native-client";
 
@@ -117,6 +125,8 @@ export class Controller {
   readonly jumps: JumpGuard;
   private readonly searches = new SearchDeduper();
   private shortsRuleInstalled = false;
+  /** Whether the ads ruleset was last enabled or disabled by this worker (null: not yet; the browser keeps its state). */
+  private adBlocking: boolean | null = null;
 
   constructor(private readonly options: ControllerOptions = {}) {
     this.timers = options.timers ?? realTimers;
@@ -163,6 +173,7 @@ export class Controller {
     this.rules = null;
     this.time = null;
     this.attempt = 0;
+    this.adBlocking = null;
     this.setConnection("starting");
     void this.loadFrameOrigins();
     void this.jumps.seed();
@@ -333,6 +344,8 @@ export class Controller {
     await replaceDynamicRules([]);
     await replaceSessionRules([]);
     await this.clearProtection();
+    // No policy yet: the strictest state. New pages and frames are blocked anyway; pages already open stop loading ads.
+    await this.applyAdBlocking(true);
     this.installedDynamic = [];
     this.installedSession = [];
     this.sessionRulesInstalled = false;
@@ -345,6 +358,7 @@ export class Controller {
     await replaceDynamicRules([]);
     await replaceSessionRules([]);
     await this.clearProtection();
+    await this.applyAdBlocking(false);
     this.installedDynamic = [];
     this.installedSession = [];
     this.sessionRulesInstalled = false;
@@ -366,6 +380,7 @@ export class Controller {
       await replaceDynamicRules([]);
       await replaceSessionRules([]);
       await this.clearProtection();
+      await this.applyAdBlocking(false);
       this.installedDynamic = [];
       this.installedSession = [];
       this.sessionRulesInstalled = false;
@@ -388,12 +403,13 @@ export class Controller {
   }
 
   /**
-   * The protection features that need browser state (PROTECTION-SPEC §7–§8): the Shorts session rule, and the jump
-   * guard's tab rules when the guard was switched off. A rule the browser refuses is logged; the content script and
-   * the history check still block Shorts.
+   * The protection features that need browser state (PROTECTION-SPEC §7–§8, §12): the Shorts session rule, the jump
+   * guard's tab rules when the guard was switched off, and the ads ruleset. A rule the browser refuses is logged; the
+   * content script and the history check still block Shorts.
    */
   private async applyProtection(rules: RulesMessage): Promise<void> {
     const features = rules.features;
+    await this.applyAdBlocking(features.blockAds);
     const wantShorts = features.blockYouTubeShorts && rules.youTube.mode !== "off";
     if (wantShorts !== this.shortsRuleInstalled) {
       try {
@@ -404,6 +420,22 @@ export class Controller {
       }
     }
     if (!features.jumpGuard) await this.jumps.reset();
+  }
+
+  /**
+   * Enables or disables the ads ruleset (PROTECTION-SPEC §12) when this worker has not already. Ad blocks are quiet: a
+   * blocked request never reaches a block page, so nothing is reported. A browser that refuses is logged and asked
+   * again with the next rules.
+   */
+  private async applyAdBlocking(enabled: boolean): Promise<void> {
+    if (this.adBlocking === enabled) return;
+    try {
+      await setAdBlocking(enabled);
+      this.adBlocking = enabled;
+    } catch (error) {
+      this.adBlocking = null;
+      this.log("ads ruleset update failed", errorText(error));
+    }
   }
 
   /** Removes the extension's own session rules (Shorts, jump-guard tabs) and forgets the guarded tabs. */

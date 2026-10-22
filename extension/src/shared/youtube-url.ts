@@ -55,6 +55,18 @@ export function isYouTubeHost(hostname: string): boolean {
   return youTubeSiteOf(hostname) !== null;
 }
 
+/**
+ * Google's sign-in passes through accounts.youtube.com to set YouTube's cookies: no YouTube mode blocks it, Off included
+ * (PROTECTION-SPEC §11, YouTubeUrlParser.SignInHost; the compiled rules allow it too).
+ */
+export const YOUTUBE_SIGN_IN_HOST = "accounts.youtube.com";
+
+export function isYouTubeSignInHost(hostname: string): boolean {
+  let host = hostname.toLowerCase();
+  if (host.endsWith(".")) host = host.slice(0, -1);
+  return isDomainOrSubdomain(host, YOUTUBE_SIGN_IN_HOST);
+}
+
 function unescape(segment: string): string {
   if (!segment.includes("%")) return segment;
   try {

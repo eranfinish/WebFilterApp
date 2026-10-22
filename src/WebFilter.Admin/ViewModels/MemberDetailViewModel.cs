@@ -539,8 +539,8 @@ public sealed partial class MemberProfileEditor : ObservableObject
 }
 
 /// <summary>
-/// The protection switches of a filtered member (PROTECTION-SPEC §1): image search, jumps to other sites, YouTube Shorts
-/// and the search-term log. Each switch saves at once and alone (<see cref="SetMember"/> with only that flag).
+/// The protection switches of a filtered member (PROTECTION-SPEC §1): image search, jumps to other sites, YouTube Shorts,
+/// ads (§12) and the search-term log. Each switch saves at once and alone (<see cref="SetMember"/> with only that flag).
 /// </summary>
 public sealed partial class ProtectionEditor : ObservableObject
 {
@@ -562,6 +562,7 @@ public sealed partial class ProtectionEditor : ObservableObject
     [ObservableProperty] private bool _blockImageSearch;
     [ObservableProperty] private bool _jumpGuard;
     [ObservableProperty] private bool _blockYouTubeShorts;
+    [ObservableProperty] private bool _blockAds;
     [ObservableProperty] private bool _logSearches;
 
     /// <summary>The service's refusal of the last switch.</summary>
@@ -578,6 +579,7 @@ public sealed partial class ProtectionEditor : ObservableObject
             BlockImageSearch = member.BlockImageSearch;
             JumpGuard = member.JumpGuard;
             BlockYouTubeShorts = member.BlockYouTubeShorts;
+            BlockAds = member.BlockAds;
             LogSearches = member.LogSearches;
         }
         finally
@@ -591,6 +593,8 @@ public sealed partial class ProtectionEditor : ObservableObject
     partial void OnJumpGuardChanged(bool value) => Save(value == Member.JumpGuard ? null : new SetMember(MemberId, JumpGuard: value));
 
     partial void OnBlockYouTubeShortsChanged(bool value) => Save(value == Member.BlockYouTubeShorts ? null : new SetMember(MemberId, BlockYouTubeShorts: value));
+
+    partial void OnBlockAdsChanged(bool value) => Save(value == Member.BlockAds ? null : new SetMember(MemberId, BlockAds: value));
 
     partial void OnLogSearchesChanged(bool value) => Save(value == Member.LogSearches ? null : new SetMember(MemberId, LogSearches: value));
 

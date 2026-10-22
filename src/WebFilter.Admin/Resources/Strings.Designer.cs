@@ -4241,6 +4241,24 @@ namespace WebFilter.Admin.Resources {
         }
 
         /// <summary>
+        ///   Looks up a localized string similar to חסימת פרסומות.
+        /// </summary>
+        public static string Member_BlockAds {
+            get {
+                return ResourceManager.GetString("Member_BlockAds", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to מודעות משרתי פרסום מוכרים (לפי EasyList) לא נטענות באתרים. פרסומות שהאתר מגיש....
+        /// </summary>
+        public static string Member_BlockAdsHint {
+            get {
+                return ResourceManager.GetString("Member_BlockAdsHint", resourceCulture);
+            }
+        }
+
+        /// <summary>
         ///   Looks up a localized string similar to תיעוד מילות חיפוש.
         /// </summary>
         public static string Member_LogSearches {

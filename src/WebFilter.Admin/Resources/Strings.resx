@@ -1444,6 +1444,12 @@
   <data name="Member_BlockYouTubeShortsHint" xml:space="preserve">
     <value>סרטוני Shorts חסומים, והמדף שלהם ב-YouTube מוסתר. שאר הסרטונים לפי הגדרת YouTube.</value>
   </data>
+  <data name="Member_BlockAds" xml:space="preserve">
+    <value>חסימת פרסומות</value>
+  </data>
+  <data name="Member_BlockAdsHint" xml:space="preserve">
+    <value>מודעות משרתי פרסום מוכרים (לפי EasyList) לא נטענות באתרים. פרסומות שהאתר מגיש מהכתובת שלו, כמו ב-YouTube ובתוצאות החיפוש של Google, לא נחסמות. אם אתר לא עובד כשהחסימה פעילה, אפשר לכבות אותה כאן לבן המשפחה הזה.</value>
+  </data>
   <data name="Member_LogSearches" xml:space="preserve">
     <value>תיעוד מילות חיפוש</value>
   </data>
