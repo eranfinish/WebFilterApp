@@ -3,6 +3,13 @@
 > המטרה: לפרסם בשתי החנויות **תוסף מינימלי** (בלי הרשאות, כדי שהביקורת תהיה מהירה), לקבל **שני מזהי תוסף קבועים**, ואיתם להריץ את S1 במעבדה. הגרסה המלאה תעלה בהמשך **לאותו פריט** כעדכון, כך שהמזהים לא ישתנו ([LAB-AND-ACCOUNTS.md](../docs/LAB-AND-ACCOUNTS.md), חלק ב').
 > כל ההתחברויות, ההעלאות והפרסום — שלך. לא העליתי ולא התחברתי לשום מקום.
 
+## מזהי התוסף
+
+| חנות | מזהה | מצב |
+|------|------|-----|
+| Chrome Web Store | `lkbhmgdhaalikcmpmefffohinafbjfgh` | הועלה 2026-10-22 |
+| Edge Add-ons | — | |
+
 ## מה יש בתיקייה
 
 | נתיב | מה זה |
@@ -34,7 +41,7 @@
 
 ## שלב 0 — לבנות את קובץ ה-ZIP
 
-ב-PowerShell, מתיקיית ה-repo (כרגע: `C:\Projests\WebFilterApp\wf-m1-store`):
+ב-PowerShell, מתיקיית ה-repo (`C:\Projests\WebFilterApp\WebFilterApp`):
 
 ```powershell
 powershell -NoProfile -ExecutionPolicy Bypass -File store\build-s1.ps1
