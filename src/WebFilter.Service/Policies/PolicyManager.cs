@@ -14,15 +14,16 @@ public interface IPolicyStore
 
 /// <summary>
 /// Keeps the browser policies in the registry equal to <see cref="BrowserPolicies.Desired"/>: writes missing or changed
-/// values (including ones a user or program changed — tamper repair), and deletes values it wrote earlier that are no
-/// longer wanted. It never deletes values it neither wrote nor overwrote. What it wrote is remembered in a JSON file so removals survive
-/// restarts. Users whose hive is not loaded are skipped and handled on a later pass.
+/// values (including ones someone changed or deleted — tamper repair; only an administrator can write under
+/// Software\Policies, so either is worth reporting), and deletes values it wrote earlier that are no longer wanted. It never
+/// deletes values it neither wrote nor overwrote. What it wrote is remembered in a JSON file so removals survive restarts.
+/// Users whose hive is not loaded are skipped and handled on a later pass.
 /// </summary>
 public sealed class PolicyManager(IPolicyStore store, string statePath)
 {
     private sealed record Managed(PolicyHive Hive, string? UserSid, string KeyPath, string Name);
 
-    /// <param name="Repaired">The values found changed and restored (registry paths).</param>
+    /// <param name="Repaired">The values it had written that were found changed or deleted, and restored (registry paths).</param>
     public sealed record ApplyResult(int Written, int Deleted, int Skipped, IReadOnlyList<string> Repaired)
     {
         /// <summary>Whose values were restored: a user's SID, or null for machine-wide values; each once.</summary>
@@ -44,7 +45,7 @@ public sealed class PolicyManager(IPolicyStore store, string statePath)
             if (!store.IsAvailable(value.Hive, value.UserSid)) { skipped++; continue; }
             var current = store.Get(value.Hive, value.UserSid, value.KeyPath, value.Name);
             if (Equals(current, value.Value)) { managed.Add(key); continue; }
-            if (current is not null && managed.Contains(key))
+            if (managed.Contains(key))
             {
                 repaired.Add(Describe(key));
                 if (!repairedUsers.Contains(key.UserSid)) repairedUsers.Add(key.UserSid);

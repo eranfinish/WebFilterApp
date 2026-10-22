@@ -97,7 +97,7 @@ public sealed class PolicyTests : IDisposable
     }
 
     [Fact]
-    public void A_changed_value_is_restored_and_reported()
+    public void A_changed_or_deleted_value_is_restored_and_reported()
     {
         _manager.Apply(Desired());
         _store.Set(PolicyHive.User, Noa, Chrome, "IncognitoModeAvailability", 0);
@@ -106,7 +106,9 @@ public sealed class PolicyTests : IDisposable
         var result = _manager.Apply(Desired());
 
         Assert.Equal(2, result.Written);
-        Assert.Single(result.Repaired, r => r.EndsWith(@"Chrome\IncognitoModeAvailability", StringComparison.Ordinal));
+        Assert.Equal(2, result.Repaired.Count);
+        Assert.Contains(result.Repaired, r => r.EndsWith(@"Chrome\IncognitoModeAvailability", StringComparison.Ordinal));
+        Assert.Contains(result.Repaired, r => r.EndsWith(@"Edge\DeveloperToolsAvailability", StringComparison.Ordinal));
         Assert.Equal([Noa], result.RepairedUsers);
         Assert.Equal(1, _store.User(Noa, Chrome, "IncognitoModeAvailability"));
         Assert.Equal(2, _store.User(Noa, Edge, "DeveloperToolsAvailability"));
