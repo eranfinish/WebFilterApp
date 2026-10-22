@@ -53,18 +53,21 @@ public static class BrowserPolicies
 
             User(Chrome, "IncognitoModeAvailability", 1);
             User(Edge, "InPrivateModeAvailability", 1);
+            // The same switch has a different name in each browser (Edge reports an unknown name as an error in edge://policy).
+            User(Chrome, "BrowserAddPersonEnabled", 0);
+            User(Edge, "BrowserAddProfileEnabled", 0);
+            // Chrome only; Edge has no such policy (its pop-up and intrusive-ads settings below cover the same ground).
+            User(Chrome, "AbusiveExperienceInterventionEnforce", 1);
             foreach (var browser in new[] { Chrome, Edge })
             {
                 User(browser, "BrowserGuestModeEnabled", 0);
-                User(browser, "BrowserAddPersonEnabled", 0);
                 User(browser, "ExtensionDeveloperModeSettings", 1);
                 User(browser, "DeveloperToolsAvailability", 2);
                 User($@"{browser}\ExtensionInstallBlocklist", "1", "*");
                 User(browser, "ForceGoogleSafeSearch", 1);
                 User(browser, "ForceYouTubeRestrict", member?.YouTubeMode == YouTubeMode.Unrestricted ? 0 : member?.Role == Role.Child ? 2 : 1);
-                // PROTECTION-SPEC §5: no pop-ups, abusive experiences or intrusive ads; no proxy around the filter.
+                // PROTECTION-SPEC §5: no pop-ups or intrusive ads; no proxy around the filter.
                 User(browser, "DefaultPopupsSetting", 2);
-                User(browser, "AbusiveExperienceInterventionEnforce", 1);
                 User(browser, "AdsSettingForIntrusiveAdsSites", 2);
                 User(browser, "ProxyMode", "direct");
             }

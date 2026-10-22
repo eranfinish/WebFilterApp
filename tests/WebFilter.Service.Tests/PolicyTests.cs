@@ -55,10 +55,12 @@ public sealed class PolicyTests : IDisposable
         {
             Assert.Equal(1, _store.User(sid, Chrome, "IncognitoModeAvailability"));
             Assert.Equal(1, _store.User(sid, Edge, "InPrivateModeAvailability"));
+            Assert.Equal(0, _store.User(sid, Chrome, "BrowserAddPersonEnabled"));
+            Assert.Equal(0, _store.User(sid, Edge, "BrowserAddProfileEnabled"));
+            Assert.Null(_store.User(sid, Edge, "BrowserAddPersonEnabled"));
             foreach (var browser in new[] { Chrome, Edge })
             {
                 Assert.Equal(0, _store.User(sid, browser, "BrowserGuestModeEnabled"));
-                Assert.Equal(0, _store.User(sid, browser, "BrowserAddPersonEnabled"));
                 Assert.Equal(1, _store.User(sid, browser, "ExtensionDeveloperModeSettings"));
                 Assert.Equal(2, _store.User(sid, browser, "DeveloperToolsAvailability"));
                 Assert.Equal("*", _store.User(sid, $@"{browser}\ExtensionInstallBlocklist", "1"));
@@ -111,7 +113,7 @@ public sealed class PolicyTests : IDisposable
         Assert.Equal(0, _manager.Apply(Desired()).Written);
     }
 
-    /// <summary>PROTECTION-SPEC §5: pop-ups, abusive experiences, intrusive ads, proxies and (Edge) tracking and the news feed, per restricted account.</summary>
+    /// <summary>PROTECTION-SPEC §5: pop-ups, intrusive ads, proxies, and abusive experiences (Chrome) or tracking and the news feed (Edge), per restricted account.</summary>
     [Fact]
     public void Restricted_and_unlinked_accounts_get_the_protection_policies_adults_and_admins_do_not()
     {
@@ -121,10 +123,11 @@ public sealed class PolicyTests : IDisposable
             foreach (var browser in new[] { Chrome, Edge })
             {
                 Assert.Equal(2, _store.User(sid, browser, "DefaultPopupsSetting"));
-                Assert.Equal(1, _store.User(sid, browser, "AbusiveExperienceInterventionEnforce"));
                 Assert.Equal(2, _store.User(sid, browser, "AdsSettingForIntrusiveAdsSites"));
                 Assert.Equal("direct", _store.User(sid, browser, "ProxyMode"));
             }
+            Assert.Equal(1, _store.User(sid, Chrome, "AbusiveExperienceInterventionEnforce"));
+            Assert.Null(_store.User(sid, Edge, "AbusiveExperienceInterventionEnforce"));
             Assert.Equal(3, _store.User(sid, Edge, "TrackingPrevention"));
             Assert.Null(_store.User(sid, Chrome, "TrackingPrevention"));
             Assert.Equal(0, _store.User(sid, Edge, "NewTabPageContentEnabled"));
