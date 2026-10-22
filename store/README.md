@@ -10,6 +10,8 @@
 | Chrome Web Store | `lkbhmgdhaalikcmpmefffohinafbjfgh` | הועלה 2026-10-22 |
 | Edge Add-ons | — | |
 
+מדיניות הפרטיות: <https://gilded-zabaione-076cae.netlify.app/> (Netlify, חשבון `finish.software@gmail.com`; לרישום באנגלית: `/#en`).
+
 ## מה יש בתיקייה
 
 | נתיב | מה זה |
