@@ -173,6 +173,50 @@ public sealed class WfpServiceTests : IDisposable
         Assert.Equal(new[] { Noa, Yoav, Visitor }.Order(), _engine.Users.Keys.Order());
     }
 
+    /// <summary>
+    /// PROTECTION-SPEC §2 and §10: the family's Windows features reach WFP with this computer's real paths (svchost, and only a
+    /// machine-wide OneDrive), and filters someone removed are restored and reported as tamper for the parents.
+    /// </summary>
+    [Fact]
+    public async Task Windows_features_reach_the_filters_and_a_removed_filter_is_restored_and_reported()
+    {
+        var options = Settings();
+        using var family = Family(options);
+        family.ApplyRemoteSnapshot(new HubCore(PolicyTests.Fixture()).Snapshot());
+        using var service = Service(family, options);
+        var passes = new Passes(service);
+
+        await service.StartAsync(CancellationToken.None);
+        Assert.True(await passes.Next());
+        var programs = WindowsProgramPaths.Resolve();
+        Assert.Contains(Path.Combine(Environment.SystemDirectory, "svchost.exe"), _engine.Users[Noa].AllowedPaths, StringComparer.OrdinalIgnoreCase);
+        Assert.All(programs.MachineOneDrive, p => Assert.Contains(p, _engine.Users[Visitor].AllowedPaths, StringComparer.OrdinalIgnoreCase));
+        Assert.DoesNotContain(_engine.Users[Noa].AllowedPaths, p => p.Contains(@"\AppData\", StringComparison.OrdinalIgnoreCase));
+
+        _engine.Users.Remove(Noa); // someone deleted noa's filters
+        family.Tick();
+        Assert.True(await passes.Next());
+        await service.StopAsync(CancellationToken.None);
+
+        Assert.Contains(Noa, _engine.Users.Keys);
+        var tamper = Assert.Single(family.WithAgent((agent, _) => agent.LocalEvents.Where(e => e.Type == EventType.Tamper).ToList()));
+        Assert.Equal((TamperKinds.NetworkRepaired, "noa", "pc-kids"), (tamper.Detail, tamper.MemberId, tamper.DeviceId));
+    }
+
+    [Fact]
+    public void Only_a_machine_wide_OneDrive_is_resolved_and_the_x86_one_only_when_it_exists()
+    {
+        var programFiles = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles);
+        var x86 = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86), "Microsoft OneDrive", "OneDrive.exe");
+
+        var without = WindowsProgramPaths.Resolve(_ => false);
+        Assert.Equal([Path.Combine(programFiles, "Microsoft OneDrive", "OneDrive.exe")], without.MachineOneDrive);
+        Assert.Equal(Path.Combine(Environment.SystemDirectory, "svchost.exe"), without.Svchost);
+
+        var with = WindowsProgramPaths.Resolve(p => string.Equals(p, x86, StringComparison.OrdinalIgnoreCase));
+        Assert.Equal([Path.Combine(programFiles, "Microsoft OneDrive", "OneDrive.exe"), x86], with.MachineOneDrive);
+    }
+
     private sealed class ManualClock(DateTimeOffset now) : TimeProvider
     {
         public DateTimeOffset Now { get; set; } = now;

@@ -1,5 +1,6 @@
 using System.Runtime.Versioning;
 using Microsoft.Extensions.Options;
+using WebFilter.Core.Engine;
 
 namespace WebFilter.Service.Policies;
 
@@ -66,6 +67,7 @@ public sealed class PolicyService(FamilyService family, SessionEvents sessions, 
                     {
                         var result = manager.Apply(desired);
                         foreach (var value in result.Repaired) log.LogWarning("Browser policy {Value} had been changed; restored", value);
+                        foreach (var user in result.RepairedUsers) family.ReportTamper(user, TamperKinds.PolicyRepaired);
                         if (result.Written + result.Deleted > 0) log.LogInformation("Browser policies: {Written} written, {Deleted} removed", result.Written, result.Deleted);
                         applied = true;
                     }

@@ -247,7 +247,7 @@ public class DnrCompilerTests
     public void RegexRulesRe2CannotRun_AreSkipped(string pattern)
     {
         var set = Compile(Policy(member: [Member(pattern, PatternType.Regex, RuleAction.Block)]));
-        Assert.Equal([DnrRuleIds.YouTube, DnrRuleIds.YouTubeShort, DnrRuleIds.IpLiteralGate], set.DynamicRules.Select(r => r.Id));
+        Assert.Equal([DnrRuleIds.YouTube, DnrRuleIds.YouTubeShort, DnrRuleIds.YouTubeSignIn, DnrRuleIds.IpLiteralGate], set.DynamicRules.Select(r => r.Id));
     }
 
     [Theory]
@@ -260,7 +260,7 @@ public class DnrCompilerTests
     public void InvalidPatterns_AreSkipped(string pattern, PatternType type)
     {
         var set = Compile(Policy(member: [Member(pattern, type, RuleAction.Block)]));
-        Assert.Equal(3, set.DynamicRules.Count);
+        Assert.Equal(4, set.DynamicRules.Count); // the structural rules only (YouTube, youtu.be, YouTube sign-in, IP gate)
     }
 
     [Fact]
@@ -440,7 +440,7 @@ public class DnrCompilerTests
             .ToList();
         var set = Compile(Policy(FilterMode.Blocklist, categories: domains));
 
-        Assert.True(set.DynamicRules.Count <= 6, $"{set.DynamicRules.Count} rules");
+        Assert.True(set.DynamicRules.Count <= 7, $"{set.DynamicRules.Count} rules");
         Assert.True(set.DynamicRules.Count(r => r.Action.Type == "redirect") <= DnrLimits.MaxUnsafeDynamicRules);
         Assert.Equal(100_000, set.DynamicRules.Sum(r => r.Condition.RequestDomains?.Count(d => d.StartsWith('d') || d.StartsWith("www.")) ?? 0));
         Assert.Equal(DnrOutcome.Block, Outcome(set, "https://d054321.example/"));
@@ -449,7 +449,7 @@ public class DnrCompilerTests
         Assert.Equal(DnrOutcome.Allow, Outcome(set, "https://elsewhere.example/"));
 
         var allow = Compile(Policy(FilterMode.Allowlist, categories: domains.Select(d => d with { Action = RuleAction.Allow })));
-        Assert.True(allow.DynamicRules.Count <= 6);
+        Assert.True(allow.DynamicRules.Count <= 7);
         Assert.Equal(DnrOutcome.Allow, Outcome(allow, "https://sub.d099999.example/"));
         Assert.Equal(DnrOutcome.Block, Outcome(allow, "https://elsewhere.example/"));
     }

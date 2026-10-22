@@ -81,6 +81,22 @@ public static class YouTubeUrlParser
     /// <summary>True for every host whose access is governed by the member's YouTube mode rather than URL rules.</summary>
     public static bool IsYouTubeHost(string normalizedHost) => normalizedHost is not null && SiteOf(normalizedHost) is not null;
 
+    /// <summary>
+    /// Google's sign-in passes through this host to set YouTube's cookies; it serves no content. It is a YouTube host, but
+    /// the YouTube mode never blocks it (Off and homework included), so YouTube off does not break Google sign-in
+    /// (PROTECTION-SPEC §11). The DNR compiler and the engine treat it the same way.
+    /// </summary>
+    public const string SignInHost = "accounts.youtube.com";
+
+    /// <summary>True for <see cref="SignInHost"/> (and, as for DNR's requestDomains, its subdomains).</summary>
+    public static bool IsSignInHost(string normalizedHost)
+    {
+        if (normalizedHost is null) return false;
+        var h = normalizedHost.AsSpan();
+        if (h.EndsWith(".")) h = h[..^1];
+        return IsDomainOrSubdomain(h, SignInHost);
+    }
+
     private static YouTubeSite? SiteOf(string host)
     {
         var h = host.AsSpan();

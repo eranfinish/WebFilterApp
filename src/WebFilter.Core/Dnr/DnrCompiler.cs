@@ -64,12 +64,21 @@ public static class DnrCompiler
         foreach (var rule in policy.MemberRules)
             builder.AddRule(rule, DnrPriorities.MemberBand);
 
+        // Built-in blocks (image search) sit above everything, the time-up session rules included, as in the evaluator.
+        foreach (var builtin in policy.BuiltinBlocks)
+        {
+            if (DnrPatterns.FromRule(builtin.Rule) is { } match)
+                builder.AddAtPriority(match, DnrPriorities.BuiltinBlock, block: true);
+        }
+
         // YouTube hosts follow the YouTube mode only: off → block, otherwise allow (the content script decides channels).
         var youTubeBlock = policy.YouTube == YouTubeMode.Off;
         builder.AddFixed(DnrRuleIds.YouTube, DnrPriorities.YouTube, youTubeBlock, YouTubeDomains,
             youTubeBlock ? DnrPatterns.WholeUrl : null, null);
         var exact = DnrPatterns.ExactHostOnly(2);
         builder.AddFixed(DnrRuleIds.YouTubeShort, DnrPriorities.YouTube, youTubeBlock, [YouTubeShortHost], exact, null);
+        // Google sign-in's YouTube cookie host: allowed in every YouTube mode (at equal priority allow beats the block).
+        builder.AddFixed(DnrRuleIds.YouTubeSignIn, DnrPriorities.YouTube, block: false, [YouTube.YouTubeUrlParser.SignInHost], null, null);
 
         return builder.Build();
     }

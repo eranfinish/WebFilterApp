@@ -216,6 +216,31 @@ public sealed class PolicyServiceTests : IDisposable
         Assert.Contains(builder.Services, s => s.ServiceType == typeof(SessionEvents));
     }
 
+    /// <summary>PROTECTION-SPEC §10: a policy someone changed is restored and reported as tamper, once per hour for the same account.</summary>
+    [Fact]
+    public async Task A_changed_policy_is_restored_and_reported_to_the_parents()
+    {
+        var options = Settings(policyInterval: TimeSpan.FromHours(1));
+        using var family = Synced(options);
+        var store = new MemoryPolicyStore();
+        using var service = Policies(family, options, store);
+        var passes = new Passes(service);
+
+        await service.StartAsync(CancellationToken.None);
+        await passes.Next();
+        store.Set(PolicyHive.User, Noa, Edge, "InPrivateModeAvailability", 0);
+        _sessions.OnSessionChange(SessionChangeReason.SessionLogon, 2);
+        await passes.Next();
+        store.Set(PolicyHive.User, Noa, Edge, "InPrivateModeAvailability", 0);
+        _sessions.OnSessionChange(SessionChangeReason.SessionLogon, 2);
+        await passes.Next();
+        await service.StopAsync(CancellationToken.None);
+
+        Assert.Equal(1, store.User(Noa, Edge, "InPrivateModeAvailability"));
+        var tamper = Assert.Single(family.WithAgent((agent, _) => agent.LocalEvents.Where(e => e.Type == EventType.Tamper).ToList()));
+        Assert.Equal((TamperKinds.PolicyRepaired, "noa", "pc-kids"), (tamper.Detail, tamper.MemberId, tamper.DeviceId));
+    }
+
     [Fact]
     public async Task A_pass_that_fails_is_retried_at_the_next_logon_and_does_not_end_the_component()
     {

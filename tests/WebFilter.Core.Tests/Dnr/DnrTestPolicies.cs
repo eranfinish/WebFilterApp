@@ -44,8 +44,10 @@ internal static class ReferenceEvaluator
     {
         if (policy.Mode == FilterMode.Unrestricted)
             return DnrOutcome.Allow;
+        if (MatchesBuiltin(policy, url))
+            return DnrOutcome.Block;
         if (IsYouTubeHost(url.DomainHost))
-            return policy.YouTube == YouTubeMode.Off ? DnrOutcome.Block : DnrOutcome.Allow;
+            return policy.YouTube == YouTubeMode.Off && !Under(url.DomainHost, "accounts.youtube.com") ? DnrOutcome.Block : DnrOutcome.Allow;
         if (url.IsIpLiteral && !policy.MemberRules.Concat(policy.GlobalRules).Any(r => r.Action == RuleAction.Allow && Match(r, url) is not null))
             return DnrOutcome.Block;
 
@@ -60,7 +62,10 @@ internal static class ReferenceEvaluator
     }
 
     public static DnrOutcome EvaluateTimeUp(EffectiveUrlPolicy policy, ChromeUrl url) =>
-        policy.AlwaysAllowedRules.Any(r => r.Action == RuleAction.Allow && Match(r, url) is not null) ? DnrOutcome.Allow : DnrOutcome.Block;
+        !MatchesBuiltin(policy, url) && policy.AlwaysAllowedRules.Any(r => r.Action == RuleAction.Allow && Match(r, url) is not null) ? DnrOutcome.Allow : DnrOutcome.Block;
+
+    /// <summary>Built-in blocks (image search) win over every rule, the time-up always-allowed ones included.</summary>
+    public static bool MatchesBuiltin(EffectiveUrlPolicy policy, ChromeUrl url) => policy.BuiltinBlocks.Any(b => Match(b.Rule, url) is not null);
 
     public static bool IsYouTubeHost(string host) =>
         host == "youtu.be" || Under(host, "youtube.com") || Under(host, "youtube-nocookie.com");

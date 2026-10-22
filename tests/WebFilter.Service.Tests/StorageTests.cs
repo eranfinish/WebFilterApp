@@ -1,6 +1,7 @@
 using WebFilter.Contracts.Hub;
 using WebFilter.Core.Engine;
 using WebFilter.Core.Model;
+using WebFilter.Core.Time;
 using WebFilter.Service.Mapping;
 using WebFilter.Service.Storage;
 
@@ -29,8 +30,8 @@ public sealed class StorageTests : IDisposable
     [Fact]
     public void Migrations_are_applied_once()
     {
-        Assert.Equal(4, Db("hub.db", "hub").SchemaVersion);
-        Assert.Equal(4, Db("hub.db", "hub").SchemaVersion);
+        Assert.Equal(5, Db("hub.db", "hub").SchemaVersion);
+        Assert.Equal(5, Db("hub.db", "hub").SchemaVersion);
         Assert.Equal(1, Db("agent.db", "agent").SchemaVersion);
     }
 
@@ -65,6 +66,72 @@ public sealed class StorageTests : IDisposable
             FamilyBundleJson.Serialize(BundleMapper.ToBundle(config, 3)),
             FamilyBundleJson.Serialize(BundleMapper.ToBundle(again, 3)));
         Assert.Equal("Asia/Jerusalem", BundleMapper.ToBundle(config, 3).TimeZone);
+    }
+
+    /// <summary>PROTECTION-SPEC §1–§2 through the bundle: the flags and Windows features round-trip; an older bundle loads with the defaults.</summary>
+    [Fact]
+    public void Member_flags_and_windows_features_round_trip_and_default_when_missing()
+    {
+        var config = PolicyTests.WithFeatures(Fixture(), new WindowsFeatures(NotificationsAndSync: false, OneDrive: true, WebSearchInStart: true));
+        config.Members[0] = config.Members[0] with { BlockImageSearch = true, JumpGuard = true, BlockYouTubeShorts = true, LogSearches = true };
+        config.Members[1] = config.Members[1] with { JumpGuard = true };
+
+        var back = BundleMapper.ToConfig(FamilyBundleJson.Deserialize(FamilyBundleJson.Serialize(BundleMapper.ToBundle(config, 3))));
+
+        Assert.Equal(config.Members, back.Members);
+        Assert.Equal(new WindowsFeatures(NotificationsAndSync: false, OneDrive: true, WebSearchInStart: true), back.WindowsFeatures);
+        var older = Fixture();
+        Assert.Equal(WindowsFeatures.Default, older.WindowsFeatures);
+        Assert.Equal((true, true, false), (older.WindowsFeatures.NotificationsAndSync, older.WindowsFeatures.OneDrive, older.WindowsFeatures.WebSearchInStart));
+        Assert.All(older.Members, m => Assert.False(m.BlockImageSearch || m.JumpGuard || m.BlockYouTubeShorts || m.LogSearches));
+    }
+
+    [Fact]
+    public void Search_and_override_events_survive_a_restart_on_the_hub_and_in_the_agent_outbox()
+    {
+        var hub = new HubCore(Fixture());
+        var agent = new AgentCore("pc-kids");
+        var config = Fixture();
+        config.Members[0] = config.Members[0] with { LogSearches = true };
+        agent.Apply(new HubCore(config).Snapshot());
+        Assert.True(agent.ReportSearch(agent.AccountOf(config.Members[0].Id), "google", "cats: and dogs", "https://www.google.com/search?q=cats", Now));
+        agent.ReportOverride(agent.AccountOf("yoav"), "https://other.example/", Core.Decisions.ReasonCode.BlockedJump, Now);
+
+        var agentStore = new AgentStore(Db("agent.db", "agent"));
+        agentStore.Save(agent.Export());
+        var outbox = new AgentStore(Db("agent.db", "agent")).Load("pc-kids")!.Outbox;
+        Assert.Equal([EventType.Search, EventType.Override], outbox.Select(e => e.Type));
+        Assert.Equal("google:cats: and dogs", outbox[0].Detail);
+        Assert.Equal(Core.Decisions.ReasonCode.BlockedJump, outbox[1].Reason);
+
+        hub.Ingest(new AgentUpload("pc-kids", new UsageLedger(), outbox, []));
+        new HubStore(Db("hub.db", "hub")).Save(hub.Export(), Now);
+        var events = new HubStore(Db("hub.db", "hub")).Load()!.Events;
+        Assert.Contains(events, e => e.Type == EventType.Search && e.Detail == "google:cats: and dogs" && e.Url == "https://www.google.com/search?q=cats");
+        Assert.Contains(events, e => e.Type == EventType.Override && e.Reason == Core.Decisions.ReasonCode.BlockedJump);
+    }
+
+    [Fact]
+    public void Notifications_have_stable_ids_and_strictly_increasing_times()
+    {
+        var store = new NotificationStore(Db("hub.db", "hub"));
+        Assert.True(store.Add("request:ar-1", "request", Now, "noa", "pc-kids", "url:pbskids.org"));
+        Assert.False(store.Add("request:ar-1", "request", Now.AddMinutes(1)));
+        Assert.True(store.Add("tamper:x", "tamper", Now, null, "pc-kids", "unclean_stop")); // same clock reading
+        Assert.True(store.Add("device:y", "device", Now.AddMinutes(-5), deviceId: "laptop-yoav")); // the clock went back
+
+        var all = store.Since(null);
+        Assert.Equal(["request:ar-1", "tamper:x", "device:y"], all.Select(n => n.Id));
+        Assert.True(all[0].At < all[1].At && all[1].At < all[2].At);
+        Assert.Equal(["tamper:x", "device:y"], store.Since(all[0].At).Select(n => n.Id));
+        Assert.Empty(store.Since(all[2].At));
+
+        // A restart continues after the last time, and retention drops the old ones.
+        var again = new NotificationStore(Db("hub.db", "hub"));
+        Assert.True(again.Add("request:ar-2", "request", Now.AddMinutes(-10)));
+        Assert.True(again.Since(all[2].At).Single().At > all[2].At);
+        again.Prune(Now.AddDays(40));
+        Assert.Empty(again.Since(null));
     }
 
     [Fact]

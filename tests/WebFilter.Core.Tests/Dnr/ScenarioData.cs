@@ -36,17 +36,24 @@ internal static class ScenarioData
                 : default;
             string Field(string name) =>
                 patch.ValueKind == JsonValueKind.Object && patch.TryGetProperty(name, out var v) ? v.GetString()! : m.GetProperty(name).GetString()!;
+            bool Flag(string name) =>
+                patch.ValueKind == JsonValueKind.Object && patch.TryGetProperty(name, out var v) ? v.GetBoolean()
+                : m.TryGetProperty(name, out var f) && f.GetBoolean();
             config.Members.Add(new FamilyMember(
                 id,
                 m.GetProperty("displayName").GetString()!,
                 Enum.Parse<Role>(Field("role"), ignoreCase: true),
                 m.TryGetProperty("age", out var age) ? age.GetInt32() : null,
                 Enum.Parse<FilterMode>(Field("filterMode"), ignoreCase: true),
-                Enum.Parse<YouTubeMode>(Field("youtubeMode"), ignoreCase: true)));
+                Enum.Parse<YouTubeMode>(Field("youtubeMode"), ignoreCase: true),
+                Flag("blockImageSearch"), Flag("jumpGuard"), Flag("blockYouTubeShorts"), Flag("logSearches")));
         }
 
         foreach (var category in fixture.GetProperty("categories").EnumerateObject())
             config.Categories[category.Name] = category.Value.EnumerateArray().Select(d => d.GetString()!).ToList();
+        if (setup is { } withCategories && withCategories.TryGetProperty("categories", out var extraCategories))
+            foreach (var category in extraCategories.EnumerateObject())
+                config.Categories[category.Name] = category.Value.EnumerateArray().Select(d => d.GetString()!).ToList();
 
         IEnumerable<JsonElement> Items(string name)
         {

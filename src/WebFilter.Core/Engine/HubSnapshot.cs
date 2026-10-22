@@ -22,5 +22,6 @@ public static class ConfigCloning
         YouTubeChannels = [.. config.YouTubeChannels],
         SupportedBrowsers = [.. config.SupportedBrowsers],
         AppRules = [.. config.AppRules],
+        WindowsFeatures = config.WindowsFeatures,
     };
 }

@@ -40,7 +40,9 @@ public sealed class WfpService(FamilyService family, IOptions<ServiceOptions> op
                 {
                     // An agent has no family settings until its first sync with the hub: change nothing yet rather than
                     // act on an empty family (which would lift every filter).
-                    var desired = family.WithAgent((agent, now) => agent.SnapshotVersion is null ? null : NetworkPolicy.Desired(agent.View(), agent.DeviceId, now));
+                    // Resolved on every pass: a machine-wide OneDrive installed meanwhile is picked up.
+                    var programs = WindowsProgramPaths.Resolve();
+                    var desired = family.WithAgent((agent, now) => agent.SnapshotVersion is null ? null : NetworkPolicy.Desired(agent.View(), agent.DeviceId, now, programs));
                     if (desired is null)
                     {
                         if (!waitingLogged) log.LogInformation("Network filters wait for the first settings from the hub");
@@ -80,7 +82,11 @@ public sealed class WfpService(FamilyService family, IOptions<ServiceOptions> op
     private void Report(WfpManager.ApplyResult result)
     {
         foreach (var (sid, error) in result.Failed) log.LogError(error, "Could not set the network filters of {Account}; retrying on the next tick", sid);
-        foreach (var sid in result.Repaired) log.LogWarning("The network filters of {Account} had been removed; restored", sid);
+        foreach (var sid in result.Repaired)
+        {
+            log.LogWarning("The network filters of {Account} had been removed; restored", sid);
+            family.ReportTamper(sid, TamperKinds.NetworkRepaired);
+        }
         foreach (var (sid, app) in result.Skipped)
         {
             log.LogWarning("{App}, allowed for {Account}, got no network filter and stays blocked: {Reason}",

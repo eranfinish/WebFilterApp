@@ -22,7 +22,12 @@ public sealed class PolicyManager(IPolicyStore store, string statePath)
 {
     private sealed record Managed(PolicyHive Hive, string? UserSid, string KeyPath, string Name);
 
-    public sealed record ApplyResult(int Written, int Deleted, int Skipped, IReadOnlyList<string> Repaired);
+    /// <param name="Repaired">The values found changed and restored (registry paths).</param>
+    public sealed record ApplyResult(int Written, int Deleted, int Skipped, IReadOnlyList<string> Repaired)
+    {
+        /// <summary>Whose values were restored: a user's SID, or null for machine-wide values; each once.</summary>
+        public IReadOnlyList<string?> RepairedUsers { get; init; } = [];
+    }
 
     public ApplyResult Apply(IReadOnlyList<PolicyValue> desired)
     {
@@ -30,6 +35,7 @@ public sealed class PolicyManager(IPolicyStore store, string statePath)
         var wanted = new HashSet<Managed>();
         int written = 0, deleted = 0, skipped = 0;
         var repaired = new List<string>();
+        var repairedUsers = new List<string?>();
 
         foreach (var value in desired)
         {
@@ -38,7 +44,11 @@ public sealed class PolicyManager(IPolicyStore store, string statePath)
             if (!store.IsAvailable(value.Hive, value.UserSid)) { skipped++; continue; }
             var current = store.Get(value.Hive, value.UserSid, value.KeyPath, value.Name);
             if (Equals(current, value.Value)) { managed.Add(key); continue; }
-            if (current is not null && managed.Contains(key)) repaired.Add(Describe(key));
+            if (current is not null && managed.Contains(key))
+            {
+                repaired.Add(Describe(key));
+                if (!repairedUsers.Contains(key.UserSid)) repairedUsers.Add(key.UserSid);
+            }
             store.Set(value.Hive, value.UserSid, value.KeyPath, value.Name, value.Value);
             managed.Add(key);
             written++;
@@ -53,7 +63,7 @@ public sealed class PolicyManager(IPolicyStore store, string statePath)
         }
 
         Save(managed);
-        return new ApplyResult(written, deleted, skipped, repaired);
+        return new ApplyResult(written, deleted, skipped, repaired) { RepairedUsers = repairedUsers };
     }
 
     /// <summary>Removes every value this manager wrote (uninstall). Users whose hive is not loaded keep theirs.</summary>

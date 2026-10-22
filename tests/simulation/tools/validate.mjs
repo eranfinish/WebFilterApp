@@ -109,7 +109,7 @@ for (const file of files) {
     for (const s of [...(setup.schedules ?? []), ...(setup.dailyLimits ?? []), ...(setup.youtubeChannels ?? [])]) checkMember(s.member, `${where} setup`);
     for (const c of setup.memberCategories ?? []) {
       checkMember(c.member, `${where} setup.memberCategories`);
-      if (!fixture.categories[c.category]) fail(`${where} setup.memberCategories`, `unknown category '${c.category}'`);
+      if (!fixture.categories[c.category] && !setup.categories?.[c.category]) fail(`${where} setup.memberCategories`, `unknown category '${c.category}'`);
     }
 
     const requests = new Map(); // alias -> kind
@@ -128,7 +128,10 @@ for (const file of files) {
       if (decision === "not_applicable") { if (reason) fail(w, "not_applicable must not have a reason"); }
       else if (!reason) fail(w, `decision '${decision}' needs a reason`);
       else if (!reason.startsWith(prefix)) fail(w, `reason '${reason}' does not fit decision '${decision}'`);
-      if (ruleId && !ruleIds.has(ruleId)) fail(w, `unknown ruleId '${ruleId}'`);
+      // Built-in blocks (README §5) exist without being declared, each with its own reason.
+      const builtin = [["builtin-image-search-", "blocked_image_search"], ["builtin-ai-mode-", "blocked_rule"]].find(([p]) => ruleId?.startsWith(p));
+      if (ruleId && !ruleIds.has(ruleId) && !builtin) fail(w, `unknown ruleId '${ruleId}'`);
+      if (builtin && !ruleIds.has(ruleId) && reason !== builtin[1]) fail(w, `built-in rule '${ruleId}' with reason '${reason}'`);
     };
 
     sc.steps.forEach((step, i) => {

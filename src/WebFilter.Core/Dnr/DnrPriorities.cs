@@ -4,9 +4,10 @@ namespace WebFilter.Core.Dnr;
 /// Fixed priority layout of the compiled rules. DNR applies the highest-priority matching rule, and at equal priority
 /// <c>allow</c> beats <c>block</c>/<c>redirect</c>; the layout turns the evaluator's order (README §5) into priorities:
 /// <code>
+///   327,680  built-in blocks of the member's protection flags (image search) — above even always-allowed while time is up
 ///   262,145  time-up session: always-allowed rules (allow)
 ///   262,144  time-up session: everything else (block)
-///   196,608  YouTube hosts: allow (mode ≠ off) or block (mode = off)
+///   196,608  YouTube hosts: allow (mode ≠ off) or block (mode = off); accounts.youtube.com always allow
 ///   131,072+ member band  — any matching member rule beats every global rule or category
 ///    65,536+ global band  — global rules and the member's category domains
 ///         2  IP-literal hosts (block, blocklist mode)
@@ -31,6 +32,7 @@ public static class DnrPriorities
     public const int YouTube = 3 * BandSize;
     public const int TimeUpBlock = 4 * BandSize;
     public const int TimeUpAlwaysAllowed = TimeUpBlock + 1;
+    public const int BuiltinBlock = 5 * BandSize;
 
     internal const int RegexLevel = 1;
     private const int MaxLabels = 127;
@@ -54,6 +56,8 @@ public static class DnrRuleIds
     public const int YouTube = 3;
     /// <summary>youtu.be (the host itself only).</summary>
     public const int YouTubeShort = 4;
+    /// <summary>accounts.youtube.com, Google sign-in's YouTube cookie host: allowed whatever the YouTube mode.</summary>
+    public const int YouTubeSignIn = 5;
     public const int TimeUpBlock = 10;
     internal const int FirstHashed = 1_000;
     internal const int HashedRange = 999_999_000;

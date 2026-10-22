@@ -15,7 +15,7 @@ public sealed partial class ActivityViewModel : PageViewModel
     public const string LastWeek = "week";
 
     /// <summary>The event types of <see cref="GetEvents.EventType"/>.</summary>
-    public static readonly string[] EventTypes = ["blocked", "app_blocked", "access_request", "time_warning", "time_expired", "admin_change", "tamper", "service"];
+    public static readonly string[] EventTypes = ["blocked", "app_blocked", "access_request", "time_warning", "time_expired", "admin_change", "tamper", "service", "search", "override"];
 
     private bool _syncingOptions;
 

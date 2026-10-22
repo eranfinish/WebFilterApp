@@ -6,6 +6,7 @@ using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Options;
 using WebFilter.Contracts.Admin;
 using WebFilter.Contracts.Agent;
+using WebFilter.Contracts.Notify;
 using WebFilter.Core.Engine;
 using WebFilter.Core.Model;
 using WebFilter.Service.Accounts;
@@ -27,6 +28,8 @@ public sealed class PipeIntegrationTests : IAsyncLifetime
     private FamilyService _family = null!;
     private AgentPipeServer _agentServer = null!;
     private AdminPipeServer _adminServer = null!;
+    private NotifyPipeServer _notifyServer = null!;
+    private Func<ClientIdentity, bool>? _notifyPolicy;
     private readonly FakeLocalAccounts _accounts = new();
 
     public async Task InitializeAsync()
@@ -47,6 +50,7 @@ public sealed class PipeIntegrationTests : IAsyncLifetime
             ProfileDirectory = Path.Combine(_dir, "profiles"),
             AgentPipeName = $"WebFilter.Test.Agent.{_suffix}",
             AdminPipeName = $"WebFilter.Test.Admin.{_suffix}",
+            NotifyPipeName = $"WebFilter.Test.Notify.{_suffix}",
             TrustedClientPaths = [Environment.ProcessPath!],
             BootstrapBundlePath = bundlePath,
         };
@@ -59,14 +63,19 @@ public sealed class PipeIntegrationTests : IAsyncLifetime
         _family.Start();
         _agentServer = new AgentPipeServer(_family, Options.Create(_options), NullLogger<AgentPipeServer>.Instance);
         _adminServer = new AdminPipeServer(_family, Options.Create(_options), _clock, NullLogger<AdminPipeServer>.Instance, _accounts);
+        _notifyServer = _notifyPolicy is null
+            ? new NotifyPipeServer(_family, Options.Create(_options), NullLogger<NotifyPipeServer>.Instance)
+            : new NotifyPipeServer(_family, Options.Create(_options), NullLogger<NotifyPipeServer>.Instance) { IsAllowed = _notifyPolicy };
         await _agentServer.StartAsync(CancellationToken.None);
         await _adminServer.StartAsync(CancellationToken.None);
+        await _notifyServer.StartAsync(CancellationToken.None);
     }
 
     private async Task StopAsync()
     {
         await _agentServer.StopAsync(CancellationToken.None);
         await _adminServer.StopAsync(CancellationToken.None);
+        await _notifyServer.StopAsync(CancellationToken.None);
         _family.Dispose();
     }
 
@@ -392,6 +401,165 @@ public sealed class PipeIntegrationTests : IAsyncLifetime
         Assert.Equal("untrusted_client", error!.Code);
     }
 
+    // ---- PROTECTION-SPEC §1, §4, §6 over the agent and admin pipes ----------------------------------------------------
+
+    [Fact]
+    public async Task Rules_carry_the_members_protection_features_and_an_admin_sets_them()
+    {
+        await using var agent = await AgentClient.ConnectAsync(_options.AgentPipeName);
+        await agent.RequestAsync<HelloResponse>(new HelloRequest("0.0.1", "edge", "abcdefghijklmnopabcdefghijklmnop"));
+        var before = await agent.RequestAsync<RulesResponse>(new GetRulesRequest());
+        Assert.Equal(new AgentFeatures(), before.Features);
+        static int Builtins(RulesResponse rules) => rules.DynamicRules.Count(r => r.GetProperty("priority").GetInt32() == Core.Dnr.DnrPriorities.BuiltinBlock);
+        Assert.Equal(1, Builtins(before)); // Google's AI Mode: noa is in allowlist mode and ai-chat is not allowed for her
+
+        await using var admin = await AdminClient.ConnectAsync(_options.AdminPipeName);
+        Assert.IsType<AdminOk>(await admin.RequestAsync(new SetMember("noa", BlockImageSearch: true, JumpGuard: true, BlockYouTubeShorts: true, LogSearches: true)));
+        Assert.NotNull(await agent.WaitForAsync<RulesChangedMessage>());
+
+        var after = await agent.RequestAsync<RulesResponse>(new GetRulesRequest());
+        Assert.Equal(new AgentFeatures(JumpGuard: true, BlockYouTubeShorts: true, LogSearches: true, CanOverrideJump: false), after.Features); // a child
+        Assert.True(Builtins(after) > Builtins(before));
+        var noa = Assert.IsType<SettingsResult>(await admin.RequestAsync(new GetSettings())).Settings.Members.Single(m => m.Id == "noa");
+        Assert.Equal((true, true, true, true), (noa.BlockImageSearch, noa.JumpGuard, noa.BlockYouTubeShorts, noa.LogSearches));
+
+        // A patch leaves the other flags alone.
+        Assert.IsType<AdminOk>(await admin.RequestAsync(new SetMember("noa", JumpGuard: false)));
+        noa = Assert.IsType<SettingsResult>(await admin.RequestAsync(new GetSettings())).Settings.Members.Single(m => m.Id == "noa");
+        Assert.Equal((true, false, true, true), (noa.BlockImageSearch, noa.JumpGuard, noa.BlockYouTubeShorts, noa.LogSearches));
+
+        var image = await agent.RequestAsync<DecideUrlResponse>(new DecideUrlRequest("https://www.google.com/search?q=cats&udm=2"));
+        Assert.Equal(("block", "blocked_image_search", "builtin-image-search-google", false), (image.Decision, image.Reason, image.RuleId, image.CanRequest));
+        var aiMode = await agent.RequestAsync<DecideUrlResponse>(new DecideUrlRequest("https://www.google.com/search?q=cats&udm=50"));
+        Assert.Equal(("block", "blocked_rule", "builtin-ai-mode-google", false), (aiMode.Decision, aiMode.Reason, aiMode.RuleId, aiMode.CanRequest));
+    }
+
+    [Fact]
+    public async Task Searches_are_recorded_only_while_the_members_searches_are_logged()
+    {
+        await using var agent = await AgentClient.ConnectAsync(_options.AgentPipeName);
+        await agent.RequestAsync<HelloResponse>(new HelloRequest("0.0.1", "edge"));
+        await using var admin = await AdminClient.ConnectAsync(_options.AdminPipeName);
+        async Task<IReadOnlyList<EventDto>> Searches() => Assert.IsType<EventsResult>(await admin.RequestAsync(new GetEvents(EventType: "search"))).Events;
+
+        var off = await agent.RequestAsync<ErrorMessage>(new ReportSearchRequest("google", "cats", "https://www.google.com/search?q=cats"));
+        Assert.Equal(("ok", "not recorded"), (off.Code, off.Message));
+        Assert.Empty(await Searches());
+
+        Assert.IsType<AdminOk>(await admin.RequestAsync(new SetMember("noa", LogSearches: true)));
+        var on = await agent.RequestAsync<ErrorMessage>(new ReportSearchRequest("youtube", "lego: city", "https://www.youtube.com/results?search_query=lego"));
+        Assert.Equal(("ok", "recorded"), (on.Code, on.Message));
+        var search = Assert.Single(await Searches());
+        Assert.Equal(("noa", "pc-kids", "youtube:lego: city", "https://www.youtube.com/results?search_query=lego"), (search.MemberId, search.DeviceId, search.Detail, search.Url));
+
+        Assert.Equal("bad_request", (await agent.RequestAsync<ErrorMessage>(new ReportSearchRequest("Google Search", "x", "https://x/"))).Code);
+        Assert.Single(await Searches());
+    }
+
+    [Fact]
+    public async Task Overrides_are_recorded_and_blocks_only_the_extension_can_judge_keep_its_reason()
+    {
+        await using var agent = await AgentClient.ConnectAsync(_options.AgentPipeName);
+        await agent.RequestAsync<HelloResponse>(new HelloRequest("0.0.1", "edge"));
+        await using var admin = await AdminClient.ConnectAsync(_options.AdminPipeName);
+
+        Assert.Equal("ok", (await agent.RequestAsync<ErrorMessage>(new ReportOverrideRequest("https://mashov.info/grades", "blocked_jump"))).Code);
+        var overridden = Assert.Single(Assert.IsType<EventsResult>(await admin.RequestAsync(new GetEvents(EventType: "override"))).Events);
+        Assert.Equal(("noa", "blocked_jump", "https://mashov.info/grades"), (overridden.MemberId, overridden.Reason, overridden.Url));
+
+        // mashov.info is always allowed, yet a jump to it was blocked: the extension's reason stands, and nothing is stale.
+        var jump = await agent.RequestAsync<ReportBlockResult>(new ReportBlockRequest("https://mashov.info/", "blocked_jump", null));
+        Assert.Equal(("block", "blocked_jump", false), (jump.Decision, jump.Reason, jump.CanRequest));
+        var shorts = await agent.RequestAsync<ReportBlockResult>(new ReportBlockRequest("https://www.youtube.com/shorts/abc", "blocked_youtube_shorts", null));
+        Assert.Equal(("block", "blocked_youtube_shorts", false, "youtube"), (shorts.Decision, shorts.Reason, shorts.CanRequest, shorts.RequestKind));
+        var blocks = Assert.IsType<EventsResult>(await admin.RequestAsync(new GetEvents(EventType: "blocked"))).Events;
+        Assert.Contains(blocks, e => e.Reason == "blocked_jump" && e.Url == "https://mashov.info/");
+        Assert.Contains(blocks, e => e.Reason == "blocked_youtube_shorts");
+        Assert.Equal(0, agent.CountOf<RulesChangedMessage>());
+    }
+
+    // ---- PROTECTION-SPEC §10: the notify pipe, with real pipes and the OS-reported identity --------------------------
+
+    /// <summary>
+    /// Whether this test run's own account is an administrator's, worked out from its groups rather than the elevation type
+    /// ClientIdentity reads: unelevated, an administrator's token holds Administrators for deny only; elevated, enabled.
+    /// </summary>
+    private static bool RunsAsAdministratorAccount()
+    {
+        using var identity = WindowsIdentity.GetCurrent();
+        return identity.Claims.Any(c => c.Value == "S-1-5-32-544" &&
+            c.Type is System.Security.Claims.ClaimTypes.GroupSid or System.Security.Claims.ClaimTypes.DenyOnlySid);
+    }
+
+    [Fact]
+    public async Task The_notify_pipe_answers_an_administrator_account_with_requests_and_tamper_and_a_cursor()
+    {
+        await using var notify = await NotifyClient.ConnectAsync(_options.NotifyPipeName);
+        if (!RunsAsAdministratorAccount())
+        {
+            // A standard account: the OS identity check refuses it, as it would a child's notifier.
+            Assert.Equal(NotifyError.NotAdmin, Assert.IsType<NotifyError>(await notify.RequestAsync(new GetNotifications())).Code);
+            return;
+        }
+        Assert.Empty(Assert.IsType<NotificationsResult>(await notify.RequestAsync(new GetNotifications())).Items);
+
+        await using var agent = await AgentClient.ConnectAsync(_options.AgentPipeName);
+        await agent.RequestAsync<HelloResponse>(new HelloRequest("0.0.1", "edge"));
+        Assert.Equal("created", (await agent.RequestAsync<RequestAccessResponse>(new RequestAccessRequest("url", "https://www.pbskids.org/games", null, null))).Result);
+        Assert.Equal("merged", (await agent.RequestAsync<RequestAccessResponse>(new RequestAccessRequest("url", "https://pbskids.org/other", null, null))).Result);
+        Assert.Equal("created", (await agent.RequestAsync<RequestAccessResponse>(new RequestAccessRequest("time", null, 30, null))).Result);
+
+        var items = Assert.IsType<NotificationsResult>(await notify.RequestAsync(new GetNotifications())).Items;
+        Assert.Equal([("request", "url:pbskids.org"), ("request", "time:30")], items.Select(i => (i.Kind, i.Detail)));
+        Assert.All(items, i => Assert.Equal(("noa", "pc-kids"), (i.MemberId, i.DeviceId)));
+        Assert.Empty(Assert.IsType<NotificationsResult>(await notify.RequestAsync(new GetNotifications(items[^1].At))).Items);
+
+        // A tamper repair on this computer: a notification, once per hour for the same account.
+        _family.ReportTamper(UserSid, Core.Engine.TamperKinds.PolicyRepaired);
+        _family.ReportTamper(UserSid, Core.Engine.TamperKinds.PolicyRepaired);
+        _family.Tick();
+        var tamper = Assert.Single(Assert.IsType<NotificationsResult>(await notify.RequestAsync(new GetNotifications(items[^1].At))).Items);
+        Assert.Equal(("tamper", "policy_repaired", "noa", "pc-kids"), (tamper.Kind, tamper.Detail, tamper.MemberId, tamper.DeviceId));
+        Assert.True(tamper.At > items[^1].At);
+
+        // Unknown messages are answered, and the session goes on; the pipe is read only.
+        Assert.Equal("unsupported", Assert.IsType<NotifyError>(await notify.RequestRawAsync("""{"type":"deleteNotifications","v":1,"id":"x9"}""", "x9")).Code);
+        Assert.IsType<NotificationsResult>(await notify.RequestAsync(new GetNotifications()));
+    }
+
+    [Fact]
+    public async Task The_notify_pipe_refuses_a_client_the_identity_check_rejects_and_hangs_up()
+    {
+        await StopAsync();
+        _notifyPolicy = _ => false;
+        await StartAsync();
+
+        await using var notify = await NotifyClient.ConnectAsync(_options.NotifyPipeName);
+        var refused = Assert.IsType<NotifyError>(await notify.RequestAsync(new GetNotifications()));
+        Assert.Equal(NotifyError.NotAdmin, refused.Code);
+        Assert.Null(await notify.ReadAsync());
+    }
+
+    [Fact]
+    public async Task A_service_that_did_not_stop_cleanly_tells_the_parents_when_it_starts_again()
+    {
+        await StopAsync();
+        File.WriteAllText(Path.Combine(_options.DataDirectory, FamilyService.RunningMarkerFileName), "crashed");
+        await StartAsync();
+
+        await using var notify = await NotifyClient.ConnectAsync(_options.NotifyPipeName);
+        if (!RunsAsAdministratorAccount()) return;
+        var tamper = Assert.Single(Assert.IsType<NotificationsResult>(await notify.RequestAsync(new GetNotifications())).Items);
+        Assert.Equal(("tamper", "unclean_stop", "pc-kids", null), (tamper.Kind, tamper.Detail, tamper.DeviceId, tamper.MemberId));
+
+        // A clean stop and start says nothing.
+        await StopAsync();
+        Assert.False(File.Exists(Path.Combine(_options.DataDirectory, FamilyService.RunningMarkerFileName)));
+        await StartAsync();
+        await using var again = await NotifyClient.ConnectAsync(_options.NotifyPipeName);
+        Assert.Single(Assert.IsType<NotificationsResult>(await again.RequestAsync(new GetNotifications())).Items);
+    }
+
     private static string RepoRoot()
     {
         for (var dir = new DirectoryInfo(AppContext.BaseDirectory); dir is not null; dir = dir.Parent)
@@ -473,6 +641,48 @@ public sealed class PipeIntegrationTests : IAsyncLifetime
             var reply = await AdminProtocol.ReadAsync(_pipe) ?? throw new EndOfStreamException();
             Assert.Equal(id, reply.Id);
             return reply;
+        }
+
+        public ValueTask DisposeAsync() => _pipe.DisposeAsync();
+    }
+
+    /// <summary>Plays the notifier app.</summary>
+    private sealed class NotifyClient : IAsyncDisposable
+    {
+        private readonly NamedPipeClientStream _pipe;
+        private int _next;
+
+        private NotifyClient(NamedPipeClientStream pipe) => _pipe = pipe;
+
+        public static async Task<NotifyClient> ConnectAsync(string name)
+        {
+            var pipe = new NamedPipeClientStream(".", name, PipeDirection.InOut, PipeOptions.Asynchronous);
+            await pipe.ConnectAsync(5000);
+            return new NotifyClient(pipe);
+        }
+
+        public async Task<NotifyMessage> RequestAsync(NotifyMessage message)
+        {
+            var id = $"n{Interlocked.Increment(ref _next)}";
+            await NotifyProtocol.WriteAsync(_pipe, message with { Id = id });
+            var reply = await NotifyProtocol.ReadAsync(_pipe) ?? throw new EndOfStreamException();
+            Assert.Equal(id, reply.Id);
+            return reply;
+        }
+
+        public async Task<NotifyMessage> RequestRawAsync(string json, string id)
+        {
+            await Contracts.Framing.MessageFraming.WriteAsync(_pipe, System.Text.Encoding.UTF8.GetBytes(json));
+            var reply = await NotifyProtocol.ReadAsync(_pipe) ?? throw new EndOfStreamException();
+            Assert.Equal(id, reply.Id);
+            return reply;
+        }
+
+        /// <summary>The next message, or null once the server has hung up.</summary>
+        public async Task<NotifyMessage?> ReadAsync()
+        {
+            try { return await NotifyProtocol.ReadAsync(_pipe).WaitAsync(TimeSpan.FromSeconds(10)); }
+            catch (IOException) { return null; }
         }
 
         public ValueTask DisposeAsync() => _pipe.DisposeAsync();

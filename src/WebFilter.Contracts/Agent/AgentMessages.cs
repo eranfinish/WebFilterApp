@@ -16,6 +16,8 @@ namespace WebFilter.Contracts.Agent;
 [JsonDerivedType(typeof(TimeStateMessage), "timeState")]
 [JsonDerivedType(typeof(ReportBlockRequest), "reportBlock")]
 [JsonDerivedType(typeof(ReportBlockResult), "reportBlockResult")]
+[JsonDerivedType(typeof(ReportSearchRequest), "reportSearch")]
+[JsonDerivedType(typeof(ReportOverrideRequest), "reportOverride")]
 [JsonDerivedType(typeof(DecideUrlRequest), "decideUrl")]
 [JsonDerivedType(typeof(DecideUrlResponse), "decideUrlResult")]
 [JsonDerivedType(typeof(RequestAccessRequest), "requestAccess")]
@@ -54,12 +56,28 @@ public sealed record GetRulesRequest(int? KnownVersion = null) : AgentMessage;
 
 /// <param name="DynamicRules">declarativeNetRequest rules, passed through verbatim to updateDynamicRules.</param>
 /// <param name="TimeUpSessionRules">Installed with updateSessionRules while time is up.</param>
+/// <param name="Features">The protections the extension enforces by itself (PROTECTION-SPEC §6). Absent (an older service, the native host's fallback) = all false.</param>
 public sealed record RulesResponse(
     int RulesVersion,
     IReadOnlyList<JsonElement> DynamicRules,
     IReadOnlyList<JsonElement> TimeUpSessionRules,
     [property: JsonPropertyName("youtube")] YouTubePolicy YouTube,
-    TimeStateMessage Time) : AgentMessage;
+    TimeStateMessage Time,
+    AgentFeatures? Features = null) : AgentMessage;
+
+/// <summary>
+/// Wire: <c>features: { jumpGuard, blockYouTubeShorts, logSearches, canOverrideJump }</c>. All false for administrators,
+/// unrestricted members and unlinked accounts; jumpGuard and blockYouTubeShorts are also false while the member is paused.
+/// </summary>
+/// <param name="JumpGuard">Block a site opening another site in a new tab or window or by an automatic client redirect (§7).</param>
+/// <param name="BlockYouTubeShorts">Block YouTube /shorts/, SPA navigations included (§8).</param>
+/// <param name="LogSearches">Send <see cref="ReportSearchRequest"/> for searches, and tell the member their searches are visible (§9).</param>
+/// <param name="CanOverrideJump">The jump block page offers "open anyway" (teens; false for children and unlinked accounts).</param>
+public sealed record AgentFeatures(
+    bool JumpGuard = false,
+    [property: JsonPropertyName("blockYouTubeShorts")] bool BlockYouTubeShorts = false,
+    bool LogSearches = false,
+    bool CanOverrideJump = false);
 
 /// <param name="Mode">off | restricted | allowlist | unrestricted.</param>
 public sealed record YouTubePolicy(string Mode, IReadOnlyList<YouTubeChannelRef> Allowed, IReadOnlyList<YouTubeChannelRef> Blocked);
@@ -75,9 +93,29 @@ public sealed record ReportBlockRequest(string Url, string Reason, string? RuleI
 
 /// <summary>
 /// Reply to reportBlock: the service's own decision for the URL (the extension's reason is only a guess from its rules).
-/// Decision "allow" means the extension's rules are stale; the service also pushes rulesChanged.
+/// Decision "allow" means the extension's rules are stale; the service also pushes rulesChanged. Blocks only the extension
+/// can judge keep the extension's reason: blocked_youtube_channel, blocked_youtube_unknown (request kind "youtube"),
+/// blocked_youtube_shorts and blocked_jump (no request possible). blocked_image_search cannot be requested either.
 /// </summary>
 public sealed record ReportBlockResult(string Decision, string Reason, string? RuleId, string? Category, bool CanRequest, string RequestKind) : AgentMessage;
+
+/// <summary>
+/// A search the member made (PROTECTION-SPEC §9). Acknowledged with <see cref="ErrorMessage"/> code "ok" — recorded as a
+/// <c>search</c> event only when the account's member has logSearches, otherwise dropped; "bad_request" when the engine is
+/// not a short lower-case name.
+/// </summary>
+/// <param name="Engine">google | bing | youtube | duckduckgo.</param>
+/// <param name="Query">The search terms as the URL carries them, decoded.</param>
+/// <param name="Url">The results page.</param>
+public sealed record ReportSearchRequest(string Engine, string Query, string Url) : AgentMessage;
+
+/// <summary>
+/// A teen chose "open anyway" on a jump block (PROTECTION-SPEC §7). Acknowledged with <see cref="ErrorMessage"/> code "ok"
+/// and recorded as an <c>override</c> event.
+/// </summary>
+/// <param name="Url">The site opened.</param>
+/// <param name="Reason">blocked_jump.</param>
+public sealed record ReportOverrideRequest(string Url, string Reason) : AgentMessage;
 
 /// <summary>A frame that is not a known message (see <see cref="AgentProtocol.ReadLenientAsync"/>). Never sent.</summary>
 public sealed record UnknownMessage(string? Type) : AgentMessage;

@@ -284,6 +284,8 @@
 
 1. משתמש **ללא הגבלה**, או שההגבלות מושהות לו כרגע → **מותר** (וזמן לא נספר)
 2. סכמה שאינה http/https → לפי מדיניות הדפדפן, לא דרכנו
+   - **חסימות מובנות** של בן המשפחה — חיפוש תמונות (`blockImageSearch`, [PROTECTION-SPEC §4](PROTECTION-SPEC.md)) → **חסום (`blocked_image_search`)**; AI Mode של Google (`udm=50`) כשהקטגוריות שלו חוסמות `ai-chat` (§11) → **חסום (`blocked_rule`, `builtin-ai-mode-google`)** — לפני שיעורי בית וזמן וגם מול "מותר תמיד". ב-DNR הן בעדיפות 327,680, מעל כללי "הזמן נגמר"
+   - `accounts.youtube.com` (הכניסה לחשבון Google עוברת דרכו) — מצב ה-YouTube לא חוסם אותו לעולם, גם `off` ובשיעורי בית (§11)
 3. **מצב שיעורי בית** פעיל → רק קטגוריית "חינוכי" + "מותר תמיד" מותרים; זמן לא נספר
 4. **זמן**: מחוץ לחלון → **חסום (`blocked_time_window`)**; המכסה נגמרה → **חסום (`blocked_daily_limit`)** — אלא אם האתר ב"מותר תמיד"
 5. כתובת IP ישירה → **חסום (`blocked_ip_literal`)**, אלא אם הותרה במפורש
@@ -299,7 +301,7 @@
 
 **Regex:** חייב להיות תואם RE2 (מתורגם ל-`regexFilter`, עד 1,000). ממשק הניהול דוחה lookaround ו-backreferences.
 
-**קודי סיבה** (משותפים לכל הרכיבים ולסימולציות): `allowed_unrestricted`, `allowed_paused`, `allowed_always`, `allowed_rule`, `allowed_category`, `allowed_default`, `allowed_homework`, `allowed_youtube_channel`, `allowed_browser`, `blocked_rule`, `blocked_category`, `blocked_not_in_allowlist`, `blocked_time_window`, `blocked_daily_limit`, `blocked_homework`, `blocked_ip_literal`, `blocked_youtube_channel`, `blocked_youtube_unknown`, `blocked_youtube_off`, `blocked_service_unavailable`, `blocked_app_network`, `redirect_youtube_home`.
+**קודי סיבה** (משותפים לכל הרכיבים ולסימולציות): `allowed_unrestricted`, `allowed_paused`, `allowed_always`, `allowed_rule`, `allowed_category`, `allowed_default`, `allowed_homework`, `allowed_youtube_channel`, `allowed_browser`, `blocked_rule`, `blocked_category`, `blocked_not_in_allowlist`, `blocked_time_window`, `blocked_daily_limit`, `blocked_homework`, `blocked_ip_literal`, `blocked_youtube_channel`, `blocked_youtube_unknown`, `blocked_youtube_off`, `blocked_service_unavailable`, `blocked_app_network`, `redirect_youtube_home`, `blocked_image_search`, `blocked_jump`, `blocked_youtube_shorts` (שני האחרונים — החלטה של התוסף בלבד; השירות שומר את הסיבה שהתוסף דיווח).
 
 **חשבון לא מקושר:** חשבון Windows לא-מנהל שעדיין לא קושר לבן משפחה מקבל רק "מותר תמיד", עד שההורה מקשר אותו.
 
@@ -426,7 +428,7 @@ hub_identity(hub_id, hub_ca_cert, client_cert, client_key_protected)   -- המפ
 settings(key PK, value) · schema_version(version, applied_at)
 ```
 
-Retention של `events`: 90 יום כברירת מחדל.
+Retention של `events`: 90 יום כברירת מחדל — מוחל ב-Hub בהפעלה ופעם ביום, בזיכרון ובמסד (גם מונחי חיפוש, שהם אירועי `search`). התראות להורים (`notifications`, [PROTECTION-SPEC §10](PROTECTION-SPEC.md)): 30 יום.
 
 ---
 
@@ -439,9 +441,11 @@ Retention של `events`: 90 יום כברירת מחדל.
 | הודעה | כיוון | תוכן |
 |-------|-------|------|
 | `hello` | → | `{extVersion, browser}` ← `{user:{accountId,name,role}, mode, rulesVersion, serverVersion}` |
-| `getRules` | → | ← `{version, dnrRules[], youtube:{mode, allowed[], blocked[]}, alwaysAllowed[], time:{state, remaining}}` |
+| `getRules` | → | ← `{version, dnrRules[], youtube:{mode, allowed[], blocked[]}, alwaysAllowed[], time:{state, remaining}, features?:{jumpGuard, blockYouTubeShorts, logSearches, canOverrideJump}}` |
 | `heartbeat` | → | `{focused, idle, hasWebTab}` ← `{state, remainingMinutes}` |
 | `reportBlock` | → | `{url, reason, ruleId}` |
+| `reportSearch` | → | `{engine, query, url}` ← `error {code: ok}` — נרשם (`search`) רק כש-`logSearches` |
+| `reportOverride` | → | `{url, reason: blocked_jump}` ← `error {code: ok}` — נרשם (`override`) |
 | `requestAccess` | → | `{kind, target, minutes?, note}` ← `{result: created\|merged\|rate_limited\|cooldown\|queued, requestId?}` |
 | `accessDecided` | ← push | `{requestId, status, until?}` — מסך החסימה נטען מחדש באישור |
 | `resolveYouTube` | → | `{handle\|videoId}` ← `{channelId}` |
@@ -457,9 +461,12 @@ Retention של `events`: 90 יום כברירת מחדל.
 - `replaceSettings {settings, ifVersion?}` — מחליף את כל ההגדרות (אשף, מסך בן משפחה, ייבוא). עם `ifVersion`: אם ההגדרות השתנו מאז שנקראו (אישור בקשה, צימוד מחשב, ספירת שימוש) התשובה `conflict` ולא משתנה דבר, והממשק קורא שוב ומחיל את השינוי שלו מחדש — כך עריכה של בן משפחה אחד לא מוחקת שינוי שנעשה בינתיים. השירות בודק את ההגדרות כולן לפני שהן נכנסות: הפניה לבן משפחה שלא קיים (חשבון, כלל, שעות, מכסה, ערוץ, אפליקציה, קטגוריה), מזהים כפולים, שעות ומכסות מחוץ ליום; כלל אתר חדש או ששונה עובר גם את `RuleValidator`. סירוב מגיע עם הסיבה.
 - `scanAccounts` (Hub בלבד) — קורא את חשבונות ה-Windows המופעלים של המחשב הזה (`NetUserEnum`, קריאה בלבד) ומעדכן מיד את ההתקן שלו בהגדרות. בנוסף, כל מחשב מדווח על החשבונות שלו בעצמו כשהם משתנים (סוכן בהעלאה ל-Hub, ה-Hub ישירות): חשבון חדש נוסף לא מקושר; לחשבון מוכר מתעדכנים השם והאם הוא מנהל, והקישור נשמר (תרחיש MD-008).
 - `getStatus` מחזיר גם את אזור הזמן של המשפחה, ובמחשב סוכן את ה-Hub שמנהל אותו (שם, כתובת, האם הסנכרון האחרון הצליח ומתי) — לתצוגת "מנוהל ע"י Hub". סוכן שעוד לא קיבל הגדרות מחזיר סטטוס בלי בני משפחה.
-- `getDiagnostics` — בדיקות קריאה בלבד של המחשב, ב-Hub ובסוכן: השירות רץ כשירות מערכת, יש Chrome או Edge, מדיניות הדפדפנים מנוהלת, מדיניות ההתקנה של התוסף קיימת; וב-Hub גם רשת ש-Windows מסווג Public (כך הסוכן לא מגיע ל-Hub) והפורט של ה-Hub בחומת האש. תשובה: קוד בדיקה, `ok`/`warn`/`fail` ופרט; הממשק מנסח.
+- `getDiagnostics` — בדיקות קריאה בלבד של המחשב, ב-Hub ובסוכן: השירות רץ כשירות מערכת, יש Chrome או Edge, מדיניות הדפדפנים מנוהלת, מדיניות ההתקנה של התוסף קיימת; וב-Hub גם רשת ש-Windows מסווג Public (כך הסוכן לא מגיע ל-Hub) והפורט של ה-Hub בחומת האש. תשובה: קוד בדיקה, `ok`/`warn`/`fail` ופרט; הממשק מנסח. בדיקת `onedrive` (PROTECTION-SPEC §2): `ok` — מותקן לכל המחשב; `warn` עם `OneDriveSetup.exe /allusers` — רק התקנות למשתמש; `ok` עם `none` — לא מותקן.
+- `setMember` מעדכן גם את דגלי ההגנה (`blockImageSearch`, `jumpGuard`, `blockYouTubeShorts`, `logSearches`); `getEvents` מחזיר גם `search` ו-`override`.
 
 ההגדרה המחייבת: `src/WebFilter.Contracts/Admin/AdminMessages.cs`.
+
+**התראות להורים** (PROTECTION-SPEC §10): `\\.\pipe\WebFilter.Notify` ב-Hub, קריאה בלבד. כל משתמש מחובר יכול לפתוח אותו, והשירות עונה רק לחשבון מנהל (מוגבה או לא, לפי הטוקן). `getNotifications {since?}` ← `notificationsResult {items: [{id, kind: request|tamper|device, at, memberId?, deviceId?, detail?}]}` — `at` הוא מתי ה-Hub רשם את ההתראה ועולה תמיד, כך ש-`since` הוא סמן מדויק. ההגדרה המחייבת: `src/WebFilter.Contracts/Notify/NotifyMessages.cs`.
 
 ### 10.3 Hub ↔ Agent (HTTPS, TLS הדדי)
 
@@ -560,7 +567,9 @@ PolicyManager, WfpManager, ProcessGuard, TamperMonitor. **תנאי סיום:** �
 >
 > **WFP (2026-10-22): נבנה ונבדק במעבדה.** `WebFilter.Wfp.Native.dll` (C++, `src/WebFilter.Wfp.Native`, נבנה ב-MSBuild של Visual Studio) — מסננים קבועים (persistent) תחת provider ו-sublayer משלנו בשכבות `ALE_AUTH_CONNECT_V4/V6`. לכל חשבון מוגבל: חסימה, היתר ל-loopback, והיתר לכל תוכנה מותרת (`ALE_APP_ID`) ולכל חבילת Store (`ALE_PACKAGE_ID`, לפי שם משפחת החבילה) — כולם בתנאי המשתמש (`ALE_USER_ID`), והחלפת המסננים של חשבון היא טרנזקציה אחת. ה-SID נשמר במסנן, כך שרשימת החשבונות נקראת מ-WFP גם אחרי אתחול. תנאי המשתמש מתיר גם את ALL APPLICATION PACKAGES: בלעדיו אפליקציות Store של הילד לא נחסמות כלל (נמדד במעבדה). תוכנה מותרת שעוד לא מותקנת מדולגת ונרשמת ב-log, ומקבלת מסנן ב-tick שאחרי שהיא מופיעה. `WfpService` מיישב אחרי כל שינוי הגדרות ובכל tick (חלונות זמן ומכסה), בסוכן מחכה להגדרות הראשונות מה-Hub, ושגיאה נרשמת ומנוסה שוב ב-tick הבא. פועל רק כש-`ManageNetwork` מופעל — המתקין מפעיל אותו, בהרצות פיתוח הוא כבוי. ההסרה (`cleanup`) מוחקת את ה-provider, ה-sublayer והמסננים. **במעבדה (`lab-kids`):** מנוע — 36/36 (`Test-LabWfp.ps1`): כשרק `curl.exe` מותר, `powershell.exe` נחסם ב-IPv4 וב-IPv6 (שגיאה 10013) ו-`curl.exe` מתחבר; עותק של `curl.exe` בתיקייה אחרת נחסם; loopback עובד; SYSTEM לא מושפע; תהליך AppContainer (במקום אפליקציית Store) נחסם, ומותר לפי שם החבילה; אחרי אתחול המסננים והחשבון עדיין שם; `RemoveAll` לא משאיר כלום (גם ב-`netsh wfp show state`). שירות — 13/13 (`Test-LabWfpService.ps1`): השירות האמיתי עם `ManageNetwork=true` מסנן כל חשבון שאינו מנהל ולא את המנהלים, מחזיר מסננים שנמחקו, השהיה דרך ה-admin pipe מסירה את המסננים תוך פחות מ-3 שניות, והמסננים נשארים כשהשירות נעצר. תוצאות: `tests/simulation/lab/results/`.
 >
-> חסר ב-M4 — **האזנה להפעלת תהליכים (ProcessGuard) — הצעד הבא**, אירוע "אפליקציה ניסתה להתחבר" (`FwpmNetEventSubscribe`; אירועי החסימה של המסננים שלנו כבר מופיעים ב-`netsh wfp show netevents`), TamperMonitor, ובדיקת אפליקציות Store אמיתיות ו-WebView2, ותרחישי `system` על VM עם התוסף מהחנות. `ALE_AUTH_RECV_ACCEPT` לא מסונן (חיבורים נכנסים — חומת האש של Windows חוסמת אותם למשתמש רגיל).
+> **הגנות (2026-10-22, [PROTECTION-SPEC](PROTECTION-SPEC.md), Core ושירות):** דגלי בן משפחה (`blockImageSearch`, `jumpGuard`, `blockYouTubeShorts`, `logSearches`) בחבילה, ב-`setMember` וב-`features` של `rules`; חסימת חיפוש תמונות מובנית (`builtin-image-search-*`, `blocked_image_search`) ב-`EffectiveUrlPolicy`, זהה ב-evaluator וב-DNR (תרחישי `IMG-001`–`IMG-004`, בדיקה דיפרנציאלית); `windowsFeatures` — svchost וה-OneDrive שמותקן לכל המחשב ב-WFP גם כשהזמן נגמר, `DisableSearchBoxSuggestions`, ובדיקת `onedrive`; מדיניות §5 (חלונות קופצים, פרסומות פולשניות, `ProxyMode=direct`, Tracking Prevention ב-Edge); §11 — AI Mode של Google חסום כש-`ai-chat` חסומה (תרחישי `AIM-*`), ואז גם `HubsSidebarEnabled=0` ב-Edge (שם Copilot) ו-`GeminiSettings=1` ב-Chrome; `accounts.youtube.com` מותר בכל מצב YouTube (`YT-007`); כללי ההיתר לכניסה של משרד החינוך (`www.google.com/a/`, `www.google.com/recaptcha/`) נבדקו לילד במצב "רק מאושרים"; אירועי `search`/`override`; ותיקוני מדיניות ומסננים נרשמים כ-`tamper` (פעם בשעה לאותו חשבון). לא נבדק במעבדה — במיוחד שהמדיניות החדשה נאכפת מ-HKCU (S1).
+>
+> חסר ב-M4 — **האזנה להפעלת תהליכים (ProcessGuard) — הצעד הבא**, אירוע "אפליקציה ניסתה להתחבר" (`FwpmNetEventSubscribe`; אירועי החסימה של המסננים שלנו כבר מופיעים ב-`netsh wfp show netevents`), TamperMonitor (כולל "התוסף שותק בזמן שדפדפן רץ אצל ילד"), ובדיקת אפליקציות Store אמיתיות ו-WebView2, ותרחישי `system` על VM עם התוסף מהחנות. `ALE_AUTH_RECV_ACCEPT` לא מסונן (חיבורים נכנסים — חומת האש של Windows חוסמת אותם למשתמש רגיל).
 
 ### M5 — ממשק ניהול
 
@@ -577,12 +586,14 @@ PolicyManager, WfpManager, ProcessGuard, TamperMonitor. **תנאי סיום:** �
 > - 350 בדיקות לממשק, כולל רינדור מחוץ למסך של החלון האמיתי בכל המסכים, בכל שלבי האשף ובמחשב סוכן — בלי שגיאות binding.
 >
 > חסר — עריכת קטגוריות ורשימות גלובליות וייבוא/ייצוא JSON (מסך "רשימות"), התראת Windows על בקשה חדשה, ובדיקה ידנית של המסכים החדשים מול שירות מותקן במעבדה. הרשימות המוכנות נבחרו ביד ודורשות עיון לפני הפצה.
+>
+> **התראות להורים — צד השירות (2026-10-22):** ה-Hub מגיש `\\.\pipe\WebFilter.Notify` (קריאה בלבד, רק לחשבון מנהל; נבדק עם pipes אמיתיים) עם התראות `request` (בקשה חדשה), `tamper` (תיקון מדיניות או מסננים, ועצירה לא נקייה של השירות שמתגלה בהפעלה — בכל מחשב) ו-`device` (מחשב שלא דיווח יום). חסר — אפליקציית ההתראות (`src/WebFilter.Notifier`) והפעלתה מהמתקין, וניסוח דגלי ההגנה, `onedrive` ו-`windowsFeatures` בממשק הניהול.
 
 ### M6 — ריבוי מחשבים
 
 HubServer, צימוד, HubSync, מכסה משותפת, מסך מכשירים, השהיית חירום מקומית. **תנאי סיום:** תרחישי `multi-device` עוברים במעבדה של 3 VMs (Hub + 2 סוכנים), כולל Hub כבוי וחזרה.
 
-> **סטטוס (2026-10-19):** קיימים — HubServer (Kestrel, HTTPS עם mutual TLS, CA לכל Hub, מפתחות מוגנים ב-DPAPI), צימוד בקוד של 12 תווים ל-10 דקות עם הוכחה הדדית (HMAC שקושר את הקוד ל-CSR ולתעודת השרת), סנכרון snapshot, העלאת שימוש/אירועים, בקשות גישה ישירות או בתור כשה-Hub כבוי, דחיפת שינויים ב-SSE (פחות מ-5 שניות), ביטול מכשיר. נבדק בשני שירותים על loopback (8 בדיקות). מסך מכשירים בממשק הניהול; במחשב סוכן ממשק הניהול מציג סטטוס, את ה-Hub שמנהל אותו ומאפשר השהיית חירום מקומית. שינויי מנהל נשמרים מיד. כל מחשב מדווח על חשבונות ה-Windows שלו (כולל שינוי בהרשאות מנהל), וההורה מקשר אותם במסך המכשירים. חסר — מעבדת 3 VMs, גרסת התוכנה בכל מחשב.
+> **סטטוס (2026-10-19):** קיימים — HubServer (Kestrel, HTTPS עם mutual TLS, CA לכל Hub, מפתחות מוגנים ב-DPAPI), צימוד בקוד של 12 תווים ל-10 דקות עם הוכחה הדדית (HMAC שקושר את הקוד ל-CSR ולתעודת השרת), סנכרון snapshot, העלאת שימוש/אירועים, בקשות גישה ישירות או בתור כשה-Hub כבוי, דחיפת שינויים ב-SSE (פחות מ-5 שניות), ביטול מכשיר. נבדק בשני שירותים על loopback (8 בדיקות). מסך מכשירים בממשק הניהול; במחשב סוכן ממשק הניהול מציג סטטוס, את ה-Hub שמנהל אותו ומאפשר השהיית חירום מקומית. שינויי מנהל נשמרים מיד. כל מחשב מדווח על חשבונות ה-Windows שלו (כולל שינוי בהרשאות מנהל), וההורה מקשר אותם במסך המכשירים. אירועי `search`, `override` ו-`tamper` של סוכן מגיעים ל-Hub בהעלאה (נבדק על loopback); סיבה שה-Hub לא מכיר (סוכן חדש יותר) נשמטת ולא מכשילה את ההעלאה. חסר — מעבדת 3 VMs, גרסת התוכנה בכל מחשב.
 
 ### M7 — מתקין ותיעוד
 

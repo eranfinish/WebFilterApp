@@ -1,0 +1,78 @@
+{
+  "$schema": "../../schema/scenario.schema.json",
+  "suite": "ai-mode",
+  "description": "PROTECTION-SPEC §11: when a member's categories block ai-chat (blocked for the member, or allowlist mode without allowing it), a built-in rule (builtin-ai-mode-google, blocked_rule) also blocks Google's AI Mode in Search (udm=50), above every rule.",
+  "layers": ["engine", "integration", "browser"],
+  "platforms": ["windows"],
+  "scenarios": [
+    {
+      "id": "AIM-001",
+      "title": "A teen whose ai-chat category is blocked cannot use AI Mode; plain search still works",
+      "start": "2026-11-01T16:00",
+      "setup": {
+        "categories": { "ai-chat": ["chatgpt.com", "gemini.google.com"] },
+        "memberCategories": [ { "member": "yoav", "category": "ai-chat", "action": "block" } ]
+      },
+      "steps": [
+        {
+          "do": "checkUrls", "member": "yoav",
+          "cases": [
+            { "url": "https://www.google.com/search?q=homework+help&udm=50",  "expect": { "decision": "block", "reason": "blocked_rule", "ruleId": "builtin-ai-mode-google" } },
+            { "url": "https://www.google.co.il/search?udm=50&q=x&aep=1",      "expect": { "decision": "block", "reason": "blocked_rule", "ruleId": "builtin-ai-mode-google" }, "note": "any parameter order, any Google domain" },
+            { "url": "https://www.google.com/search?q=homework+help",         "expect": { "decision": "allow", "reason": "allowed_default" } },
+            { "url": "https://www.google.com/search?q=x&udm=500",             "expect": { "decision": "allow", "reason": "allowed_default" }, "note": "udm=50 only" },
+            { "url": "https://www.google.com/search?q=udm%3D50",              "expect": { "decision": "allow", "reason": "allowed_default" } },
+            { "url": "https://chatgpt.com/",                                  "expect": { "decision": "block", "reason": "blocked_category" } }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "AIM-002",
+      "title": "A teen whose ai-chat category is not blocked keeps AI Mode",
+      "start": "2026-11-01T16:00",
+      "steps": [
+        {
+          "do": "checkUrls", "member": "yoav",
+          "cases": [
+            { "url": "https://www.google.com/search?q=homework+help&udm=50", "expect": { "decision": "allow", "reason": "allowed_default" } }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "AIM-003",
+      "title": "A child in allowlist mode: ai-chat is blocked unless allowed, so AI Mode is blocked even where Google is always allowed",
+      "start": "2026-11-01T16:00",
+      "setup": { "rules": [ { "id": "r-google", "member": "noa", "pattern": "google.com", "type": "domain", "action": "allow", "alwaysAllowed": true } ] },
+      "steps": [
+        {
+          "do": "checkUrls", "member": "noa",
+          "cases": [
+            { "url": "https://www.google.com/search?q=volcano&udm=50", "expect": { "decision": "block", "reason": "blocked_rule", "ruleId": "builtin-ai-mode-google" } },
+            { "url": "https://www.google.com/search?q=volcano",        "expect": { "decision": "allow", "reason": "allowed_always", "ruleId": "r-google" } }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "AIM-004",
+      "title": "A child the parent allowed ai-chat for keeps AI Mode where Google is allowed",
+      "start": "2026-11-01T16:00",
+      "setup": {
+        "categories": { "ai-chat": ["chatgpt.com", "gemini.google.com"] },
+        "memberCategories": [ { "member": "noa", "category": "ai-chat", "action": "allow" } ],
+        "rules": [ { "id": "r-google", "member": "noa", "pattern": "google.com", "type": "domain", "action": "allow", "alwaysAllowed": true } ]
+      },
+      "steps": [
+        {
+          "do": "checkUrls", "member": "noa",
+          "cases": [
+            { "url": "https://www.google.com/search?q=volcano&udm=50", "expect": { "decision": "allow", "reason": "allowed_always", "ruleId": "r-google" } },
+            { "url": "https://chatgpt.com/",                           "expect": { "decision": "allow", "reason": "allowed_category" } }
+          ]
+        }
+      ]
+    }
+  ]
+}

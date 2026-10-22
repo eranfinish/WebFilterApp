@@ -275,14 +275,13 @@ public sealed class AdminPipeServer(FamilyService family, IOptions<ServiceOption
         Age = set.Age ?? member.Age,
         FilterMode = set.FilterMode is { } mode ? Enum.Parse<FilterMode>(mode, true) : member.FilterMode,
         YouTubeMode = set.YouTubeMode is { } yt ? Enum.Parse<YouTubeMode>(yt, true) : member.YouTubeMode,
+        BlockImageSearch = set.BlockImageSearch ?? member.BlockImageSearch,
+        JumpGuard = set.JumpGuard ?? member.JumpGuard,
+        BlockYouTubeShorts = set.BlockYouTubeShorts ?? member.BlockYouTubeShorts,
+        LogSearches = set.LogSearches ?? member.LogSearches,
     };
 
-    private static string Wire(EventType type) => type switch
-    {
-        EventType.TimeWarning => "time_warning", EventType.TimeExpired => "time_expired", EventType.Blocked => "blocked",
-        EventType.AppBlocked => "app_blocked", EventType.AdminChange => "admin_change", EventType.AccessRequest => "access_request",
-        EventType.Tamper => "tamper", _ => "service",
-    };
+    private static string Wire(EventType type) => SyncMapper.EventWire(type);
 
     private static PipeSecurity Security()
     {

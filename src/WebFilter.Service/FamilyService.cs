@@ -23,13 +23,26 @@ public sealed class FamilyService : IDisposable
     private readonly TimeProvider _time;
     private readonly ILogger<FamilyService> _log;
     private readonly HubStore? _hubStore;
+    private readonly NotificationStore? _notifications;
     private readonly AgentStore _agentStore;
     private readonly ProfileCacheWriter _profiles;
+    private readonly string _runningMarker;
+    private readonly Dictionary<string, DateTimeOffset> _tamperReported = [];
     private HubCore? _hub;
     private AgentCore _agent;
     private Func<AccessRequestDraft, (RequestResult Result, string? Id)>? _remoteRequests;
     private bool _dirty;
     private int _lastVersion;
+    private DateTimeOffset _lastRetention = DateTimeOffset.MinValue;
+
+    /// <summary>The same tamper (kind and account) is reported at most once in this time; repeats are only logged.</summary>
+    public static readonly TimeSpan TamperThrottle = TimeSpan.FromHours(1);
+
+    /// <summary>A paired computer that has not reported for this long becomes a "device" notification (PROTECTION-SPEC §10).</summary>
+    public static readonly TimeSpan DeviceSilence = TimeSpan.FromDays(1);
+
+    /// <summary>In <see cref="ServiceOptions.DataDirectory"/>: present while the service runs; found at start = the previous run did not stop cleanly.</summary>
+    public const string RunningMarkerFileName = "running.marker";
 
     /// <summary>Raised (outside the gate) when the settings snapshot used for decisions changes.</summary>
     public event Action<int>? SettingsChanged;
@@ -52,9 +65,11 @@ public sealed class FamilyService : IDisposable
             var hubDb = new SqliteDatabase(Path.Combine(_options.DataDirectory, "hub.db"), "hub");
             _hubStore = new HubStore(hubDb);
             Devices = new DeviceStore(hubDb);
+            _notifications = new NotificationStore(hubDb);
         }
         _agent = new AgentCore(_options.DeviceId);
         _profiles = new ProfileCacheWriter(_options.ProfileDirectory, log);
+        _runningMarker = Path.Combine(_options.DataDirectory, RunningMarkerFileName);
     }
 
     public bool IsHub => _options.Role == "hub";
@@ -76,19 +91,49 @@ public sealed class FamilyService : IDisposable
     {
         lock (_gate)
         {
+            var unclean = File.Exists(_runningMarker);
             if (IsHub)
             {
                 var state = _hubStore!.Load();
                 _hub = state is not null ? HubCore.Restore(state) : new HubCore(Bootstrap());
+                _hub.EventRecorded += OnHubEvent;
+                _hub.RequestAccepted += OnHubRequest;
                 Certificates = HubCertificates.LoadOrCreate(Path.Combine(_options.DataDirectory, "certs"));
                 _log.LogInformation("Hub {HubId} started at settings version {Version}", Certificates.HubId, _hub.Version);
             }
 
             _agent = _agentStore.Load(_options.DeviceId) is { } agentState ? AgentCore.Restore(agentState) : new AgentCore(_options.DeviceId);
+            if (unclean)
+            {
+                // Killed, crashed or a power cut: the parents hear of it (PROTECTION-SPEC §10), through the hub like any event.
+                _log.LogWarning("The service did not stop cleanly the previous time");
+                _agent.ReportTamper(null, TamperKinds.UncleanStop, Now);
+            }
+            File.WriteAllText(_runningMarker, Now.ToString("o", System.Globalization.CultureInfo.InvariantCulture));
             SyncLocked();
+            if (IsHub) ApplyRetentionLocked(Now);
             SaveLocked();
         }
     }
+
+    /// <summary>
+    /// Records that something worked against the filter on this computer and was undone (<see cref="TamperKinds"/>), for
+    /// the activity log and a parent notification. The same kind for the same account is reported at most once per
+    /// <see cref="TamperThrottle"/>, so a value something keeps changing does not flood the parents.
+    /// </summary>
+    /// <param name="accountId">The Windows account concerned (SID), or null for the computer as a whole.</param>
+    public void ReportTamper(string? accountId, string detail) => WithAgent((agent, now) =>
+    {
+        var key = $"{detail}|{accountId}";
+        if (_tamperReported.TryGetValue(key, out var last) && now - last < TamperThrottle) return 0;
+        _tamperReported[key] = now;
+        agent.ReportTamper(accountId, detail, now);
+        return 0;
+    });
+
+    /// <summary>Hub only: the parent notifications recorded after <paramref name="since"/> (PROTECTION-SPEC §10), oldest first.</summary>
+    public IReadOnlyList<Contracts.Notify.NotificationDto> NotificationsSince(DateTimeOffset? since) =>
+        _notifications?.Since(since) ?? [];
 
     /// <summary>Runs <paramref name="action"/> on the local agent under the gate, then syncs and schedules a save.</summary>
     public T WithAgent<T>(Func<AgentCore, DateTimeOffset, T> action)
@@ -230,7 +275,10 @@ public sealed class FamilyService : IDisposable
         return true;
     }
 
-    /// <summary>Evaluates time warnings and flushes state. Called by <see cref="TickService"/>.</summary>
+    /// <summary>
+    /// Evaluates time warnings and flushes state; on the hub also notices paired computers that stopped reporting and,
+    /// once a day, drops what is past retention. Called by <see cref="TickService"/>.
+    /// </summary>
     public void Tick()
     {
         var now = Now;
@@ -239,8 +287,10 @@ public sealed class FamilyService : IDisposable
         {
             _hub?.Tick(now);
             changed = SyncLocked();
+            if (_hub is not null && now - _lastRetention >= TimeSpan.FromDays(1)) ApplyRetentionLocked(now);
             if (_dirty) SaveLocked();
         }
+        if (IsHub) NotifySilentDevices(now);
         if (changed is { } v) SettingsChanged?.Invoke(v);
         Ticked?.Invoke(now);
     }
@@ -250,7 +300,99 @@ public sealed class FamilyService : IDisposable
         lock (_gate) SaveLocked();
     }
 
-    public void Dispose() => Flush();
+    /// <summary>A clean stop: state is stored and the running marker removed (so the next start is not an unclean one).</summary>
+    public void Dispose()
+    {
+        Flush();
+        StoppingCleanly();
+    }
+
+    /// <summary>
+    /// A stop was asked for (Windows stops the service, or shuts down): the next start is a clean one even if Windows ends
+    /// the process before the stop completes. Not called when a component fails (<see cref="FaultExit"/>): that is unclean.
+    /// </summary>
+    public void StoppingCleanly()
+    {
+        try { File.Delete(_runningMarker); }
+        catch (Exception ex) when (ex is IOException or UnauthorizedAccessException) { _log.LogWarning(ex, "Could not remove {Marker}", _runningMarker); }
+    }
+
+    // ---- hub role: parent notifications (PROTECTION-SPEC §10) --------------------------------------------------------
+
+    /// <summary>A tamper event from any computer (the hub's own included) becomes a "tamper" notification. Under the gate.</summary>
+    private void OnHubEvent(FamilyEvent e)
+    {
+        if (e.Type != EventType.Tamper) return;
+        Notify($"tamper:{SyncMapper.EventId(e)}", Contracts.Notify.NotificationKinds.Tamper, e.MemberId, e.DeviceId, e.Detail);
+    }
+
+    /// <summary>A new access request becomes a "request" notification, detail "kind:target". Under the gate.</summary>
+    private void OnHubRequest(AccessRequest request)
+    {
+        var target = request.Kind switch
+        {
+            RequestKind.Url => request.TargetKey,
+            RequestKind.Time => request.Minutes?.ToString(System.Globalization.CultureInfo.InvariantCulture) ?? "",
+            _ => request.Target,
+        };
+        Notify($"request:{request.Id}:{request.CreatedAt.UtcTicks}", Contracts.Notify.NotificationKinds.Request, request.MemberId, request.DeviceId,
+            $"{request.Kind.ToString().ToLowerInvariant()}:{target}");
+    }
+
+    /// <summary>Paired computers that have not reported for <see cref="DeviceSilence"/>: one notification per silence.</summary>
+    private void NotifySilentDevices(DateTimeOffset now)
+    {
+        try
+        {
+            foreach (var device in Devices!.All())
+            {
+                if (device.RevokedAt is not null) continue;
+                var last = device.LastSeenAt ?? device.PairedAt;
+                if (now - last < DeviceSilence) continue;
+                Notify($"device:{device.Id}:{last.UtcTicks}", Contracts.Notify.NotificationKinds.Device, null, device.Id,
+                    device.LastSeenAt?.ToString("o", System.Globalization.CultureInfo.InvariantCulture));
+            }
+        }
+        catch (Exception ex) when (ex is Microsoft.Data.Sqlite.SqliteException or IOException)
+        {
+            _log.LogWarning(ex, "Could not check for computers that stopped reporting");
+        }
+    }
+
+    /// <summary>A failure to store a notification must not fail what raised it (an upload, a request).</summary>
+    private void Notify(string id, string kind, string? memberId, string? deviceId, string? detail)
+    {
+        try
+        {
+            if (_notifications!.Add(id, kind, Now, memberId, deviceId, detail))
+                _log.LogInformation("Notification {Kind} for {Member}/{Device}: {Detail}", kind, memberId, deviceId, detail);
+        }
+        catch (Exception ex) when (ex is Microsoft.Data.Sqlite.SqliteException or IOException)
+        {
+            _log.LogError(ex, "Could not record the {Kind} notification {Id}", kind, id);
+        }
+    }
+
+    /// <summary>
+    /// Drops events past retention (MVP-PLAN §9: 90 days) from memory and the database, with the event ids received from
+    /// agents and old notifications. Search terms (PROTECTION-SPEC §9) are events too, so they go after 90 days as well.
+    /// </summary>
+    private void ApplyRetentionLocked(DateTimeOffset now)
+    {
+        _lastRetention = now;
+        try
+        {
+            var dropped = _hub!.PruneEvents(now - HubStore.EventRetention);
+            _hubStore!.Prune(now);
+            Devices!.PruneSeenEvents(now - HubStore.EventRetention);
+            _notifications!.Prune(now - NotificationStore.Retention);
+            if (dropped > 0) _log.LogInformation("Dropped {Count} events past retention", dropped);
+        }
+        catch (Exception ex) when (ex is Microsoft.Data.Sqlite.SqliteException or IOException)
+        {
+            _log.LogWarning(ex, "Could not apply retention; retrying tomorrow");
+        }
+    }
 
     private int? SyncLocked()
     {

@@ -24,6 +24,9 @@ public sealed class ServiceOptions
 
     public string AdminPipeName { get; set; } = "WebFilter.Admin";
 
+    /// <summary>Hub only: the read-only pipe the notifier app polls (PROTECTION-SPEC §10).</summary>
+    public string NotifyPipeName { get; set; } = Contracts.Notify.NotifyProtocol.PipeName;
+
     /// <summary>Executables allowed to speak the agent protocol (the native host). Compared case-insensitively.</summary>
     public List<string> TrustedClientPaths { get; set; } =
         [Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles), "WebFilter", "WebFilter.NativeHost.exe")];

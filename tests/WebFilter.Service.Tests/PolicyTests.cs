@@ -105,9 +105,77 @@ public sealed class PolicyTests : IDisposable
 
         Assert.Equal(2, result.Written);
         Assert.Single(result.Repaired, r => r.EndsWith(@"Chrome\IncognitoModeAvailability", StringComparison.Ordinal));
+        Assert.Equal([Noa], result.RepairedUsers);
         Assert.Equal(1, _store.User(Noa, Chrome, "IncognitoModeAvailability"));
         Assert.Equal(2, _store.User(Noa, Edge, "DeveloperToolsAvailability"));
         Assert.Equal(0, _manager.Apply(Desired()).Written);
+    }
+
+    /// <summary>PROTECTION-SPEC §5: pop-ups, abusive experiences, intrusive ads, proxies and (Edge) tracking, per restricted account.</summary>
+    [Fact]
+    public void Restricted_and_unlinked_accounts_get_the_protection_policies_adults_and_admins_do_not()
+    {
+        _manager.Apply(Desired());
+        foreach (var sid in new[] { Noa, Yoav, Visitor })
+        {
+            foreach (var browser in new[] { Chrome, Edge })
+            {
+                Assert.Equal(2, _store.User(sid, browser, "DefaultPopupsSetting"));
+                Assert.Equal(1, _store.User(sid, browser, "AbusiveExperienceInterventionEnforce"));
+                Assert.Equal(2, _store.User(sid, browser, "AdsSettingForIntrusiveAdsSites"));
+                Assert.Equal("direct", _store.User(sid, browser, "ProxyMode"));
+            }
+            Assert.Equal(3, _store.User(sid, Edge, "TrackingPrevention"));
+            Assert.Null(_store.User(sid, Chrome, "TrackingPrevention"));
+        }
+        Assert.Empty(_store.ValuesOf(Dana));
+        Assert.Empty(_store.ValuesOf(Savta));
+    }
+
+    /// <summary>
+    /// PROTECTION-SPEC §11: when a member's categories block ai-chat, Edge's sidebar (where Copilot lives) is hidden and
+    /// Chrome's Gemini integration is off. A child in allowlist mode has ai-chat blocked unless a parent allowed it.
+    /// </summary>
+    [Fact]
+    public void Browser_AI_is_off_where_the_ai_chat_category_is_blocked()
+    {
+        _manager.Apply(Desired());
+        foreach (var sid in new[] { Noa, Visitor })
+        {
+            Assert.Equal(0, _store.User(sid, Edge, "HubsSidebarEnabled"));
+            Assert.Equal(1, _store.User(sid, Chrome, "GeminiSettings"));
+        }
+        Assert.Null(_store.User(Yoav, Edge, "HubsSidebarEnabled")); // a teen: ai-chat is only offered
+        Assert.Null(_store.User(Yoav, Chrome, "GeminiSettings"));
+        Assert.Empty(_store.ValuesOf(Dana));
+        Assert.Empty(_store.ValuesOf(Savta));
+
+        _config.MemberCategories.Add(new MemberCategory("yoav", "ai-chat", RuleAction.Block));
+        _config.MemberCategories.Add(new MemberCategory("noa", "ai-chat", RuleAction.Allow));
+        _manager.Apply(Desired());
+
+        Assert.Equal(0, _store.User(Yoav, Edge, "HubsSidebarEnabled"));
+        Assert.Equal(1, _store.User(Yoav, Chrome, "GeminiSettings"));
+        Assert.Null(_store.User(Noa, Edge, "HubsSidebarEnabled"));
+        Assert.Null(_store.User(Noa, Chrome, "GeminiSettings"));
+    }
+
+    /// <summary>PROTECTION-SPEC §2: no Bing results in Start search unless the family allows web search there.</summary>
+    [Fact]
+    public void Start_search_stays_local_unless_the_family_allows_web_search_there()
+    {
+        _manager.Apply(Desired());
+        foreach (var sid in new[] { Noa, Yoav, Visitor })
+            Assert.Equal(1, _store.User(sid, BrowserPolicies.Explorer, "DisableSearchBoxSuggestions"));
+        Assert.Empty(_store.ValuesOf(Dana));
+
+        _config = WithFeatures(_config, new WindowsFeatures(WebSearchInStart: true));
+        var result = _manager.Apply(Desired());
+
+        Assert.Equal(3, result.Deleted);
+        foreach (var sid in new[] { Noa, Yoav, Visitor })
+            Assert.Null(_store.User(sid, BrowserPolicies.Explorer, "DisableSearchBoxSuggestions"));
+        Assert.Equal(1, _store.User(Noa, Chrome, "IncognitoModeAvailability"));
     }
 
     [Fact]
@@ -134,6 +202,13 @@ public sealed class PolicyTests : IDisposable
 
         Assert.Equal(new[] { "SomeoneElsesPolicy" }, _store.All.Select(v => v.Name));
     }
+
+    internal static FamilyConfig WithFeatures(FamilyConfig c, WindowsFeatures features) => new()
+    {
+        TimeZone = c.TimeZone, Members = c.Members, Devices = c.Devices, Categories = c.Categories, MemberCategories = c.MemberCategories,
+        Rules = c.Rules, Schedules = c.Schedules, DailyLimits = c.DailyLimits, YouTubeChannels = c.YouTubeChannels,
+        SupportedBrowsers = c.SupportedBrowsers, AppRules = c.AppRules, WindowsFeatures = features,
+    };
 
     internal static FamilyConfig Fixture(Func<FamilyMember, FamilyMember>? patch = null)
     {

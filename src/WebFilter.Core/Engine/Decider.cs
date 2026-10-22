@@ -64,6 +64,9 @@ public static class Decider
         if (!UrlNormalizer.TryNormalize(rawUrl, out var url)) return DecisionResult.Block(ReasonCode.BlockedRule);
 
         var policy = view.UrlPolicy(memberId, now);
+        // Built-in blocks (image search, PROTECTION-SPEC §4) hold in every state the member is filtered in, and beat
+        // always-allowed and educational sites: the browser installs them above its time-up rules too.
+        if (RuleEvaluator.BuiltinBlock(policy, url) is { } builtin) return builtin;
         if (view.RuntimeOf(memberId).IsInHomework(now)) return Homework(view, policy, url);
 
         if (TimeBlock(view, memberId, now) is { } timeReason)
@@ -72,16 +75,22 @@ public static class Decider
                 : DecisionResult.Block(timeReason);
 
         if (YouTubeUrlParser.IsYouTubeHost(url.Host))
-            return member.YouTubeMode == YouTubeMode.Off ? DecisionResult.Block(ReasonCode.BlockedYouTubeOff) : DecisionResult.Allow(ReasonCode.AllowedDefault);
+            return member.YouTubeMode == YouTubeMode.Off && !YouTubeUrlParser.IsSignInHost(url.Host)
+                ? DecisionResult.Block(ReasonCode.BlockedYouTubeOff)
+                : DecisionResult.Allow(ReasonCode.AllowedDefault);
 
         return RuleEvaluator.Evaluate(policy, url);
     }
 
-    /// <summary>A non-admin account not yet linked to a family member: only always-allowed global sites.</summary>
+    /// <summary>
+    /// A non-admin account not yet linked to a family member: only always-allowed global sites — and Google sign-in's
+    /// YouTube cookie host, which no YouTube mode blocks (<see cref="YouTubeUrlParser.SignInHost"/>).
+    /// </summary>
     public static DecisionResult UnlinkedUrl(PolicyView view, string rawUrl, DateTimeOffset now)
     {
         if (!UrlNormalizer.IsWebUrl(rawUrl)) return DecisionResult.NotApplicable;
         if (!UrlNormalizer.TryNormalize(rawUrl, out var url)) return DecisionResult.Block(ReasonCode.BlockedNotInAllowlist);
+        if (YouTubeUrlParser.IsSignInHost(url.Host)) return DecisionResult.Allow(ReasonCode.AllowedDefault);
         var always = view.Config.Rules.Where(r => r.MemberId is null && r.AlwaysAllowed && r.IsActiveAt(now)).ToList();
         var policy = new EffectiveUrlPolicy("", FilterMode.Allowlist, YouTubeMode.Off, [], always, []);
         return RuleEvaluator.Evaluate(policy, url);
@@ -179,8 +188,10 @@ public static class Decider
     private static DecisionResult Homework(PolicyView view, EffectiveUrlPolicy policy, NormalizedUrl url)
     {
         // YouTube pages are blocked during homework (see YouTube()), so the YouTube hosts are too — even when educational
-        // or always allowed — or the browser would show a block page for a host the service calls allowed.
-        if (YouTubeUrlParser.IsYouTubeHost(url.Host)) return DecisionResult.Block(ReasonCode.BlockedHomework);
+        // or always allowed — or the browser would show a block page for a host the service calls allowed. Google sign-in's
+        // YouTube cookie host is never blocked by the YouTube handling, homework included.
+        if (YouTubeUrlParser.IsYouTubeHost(url.Host))
+            return YouTubeUrlParser.IsSignInHost(url.Host) ? DecisionResult.Allow(ReasonCode.AllowedDefault) : DecisionResult.Block(ReasonCode.BlockedHomework);
         if (RuleEvaluator.MatchesAlwaysAllowed(policy, url, out var alwaysId)) return DecisionResult.Allow(ReasonCode.AllowedAlways, alwaysId);
         return RuleEvaluator.IsInCategory(view.Config.Categories, FamilyConfig.EducationalCategory, url)
             ? DecisionResult.Allow(ReasonCode.AllowedHomework)

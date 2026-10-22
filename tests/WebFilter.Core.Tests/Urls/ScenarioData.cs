@@ -52,6 +52,9 @@ internal static class ScenarioData
                     config.Members[index] = ParseMember(patch, config.Members[index]);
                 }
             }
+            if (setup.TryGetProperty("categories", out var categories))
+                foreach (var category in categories.EnumerateObject())
+                    config.Categories[category.Name] = category.Value.EnumerateArray().Select(d => d.GetString()!).ToList();
             AddMemberCategories(config, setup);
             AddRules(config, setup, timeZone);
         }
@@ -100,7 +103,11 @@ internal static class ScenarioData
         OptString(e, "role") is { } role ? ParseEnum<Role>(role) : baseline?.Role ?? Role.Child,
         e.TryGetProperty("age", out var age) ? age.GetInt32() : baseline?.Age,
         OptString(e, "filterMode") is { } filter ? ParseEnum<FilterMode>(filter) : baseline?.FilterMode ?? FilterMode.Allowlist,
-        OptString(e, "youtubeMode") is { } youtube ? ParseEnum<YouTubeMode>(youtube) : baseline?.YouTubeMode ?? YouTubeMode.Off);
+        OptString(e, "youtubeMode") is { } youtube ? ParseEnum<YouTubeMode>(youtube) : baseline?.YouTubeMode ?? YouTubeMode.Off,
+        e.TryGetProperty("blockImageSearch", out var images) ? images.GetBoolean() : baseline?.BlockImageSearch ?? false,
+        e.TryGetProperty("jumpGuard", out var jump) ? jump.GetBoolean() : baseline?.JumpGuard ?? false,
+        e.TryGetProperty("blockYouTubeShorts", out var shorts) ? shorts.GetBoolean() : baseline?.BlockYouTubeShorts ?? false,
+        e.TryGetProperty("logSearches", out var searches) ? searches.GetBoolean() : baseline?.LogSearches ?? false);
 
     private static void AddMemberCategories(FamilyConfig config, JsonElement source)
     {

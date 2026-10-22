@@ -1496,6 +1496,24 @@ namespace WebFilter.Admin.Resources {
         }
 
         /// <summary>
+        ///   Looks up a localized string similar to חיפושים.
+        /// </summary>
+        public static string EventType_search {
+            get {
+                return ResourceManager.GetString("EventType_search", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to נפתח למרות חסימה.
+        /// </summary>
+        public static string EventType_override {
+            get {
+                return ResourceManager.GetString("EventType_override", resourceCulture);
+            }
+        }
+
+        /// <summary>
         ///   Looks up a localized string similar to ללא הגבלות.
         /// </summary>
         public static string Reason_allowed_unrestricted {
@@ -1690,6 +1708,33 @@ namespace WebFilter.Admin.Resources {
         public static string Reason_redirect_youtube_home {
             get {
                 return ResourceManager.GetString("Reason_redirect_youtube_home", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to חיפוש תמונות חסום.
+        /// </summary>
+        public static string Reason_blocked_image_search {
+            get {
+                return ResourceManager.GetString("Reason_blocked_image_search", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to האתר ניסה לפתוח אתר אחר.
+        /// </summary>
+        public static string Reason_blocked_jump {
+            get {
+                return ResourceManager.GetString("Reason_blocked_jump", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to YouTube Shorts חסום.
+        /// </summary>
+        public static string Reason_blocked_youtube_shorts {
+            get {
+                return ResourceManager.GetString("Reason_blocked_youtube_shorts", resourceCulture);
             }
         }
 

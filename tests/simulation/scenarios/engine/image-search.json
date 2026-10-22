@@ -1,0 +1,93 @@
+{
+  "$schema": "../../schema/scenario.schema.json",
+  "suite": "image-search",
+  "description": "PROTECTION-SPEC §4: a member with blockImageSearch gets built-in image-search blocks (blocked_image_search) that win over every rule, always-allowed included, in every state the member is filtered in.",
+  "layers": ["engine", "integration", "browser"],
+  "platforms": ["windows"],
+  "scenarios": [
+    {
+      "id": "IMG-001",
+      "title": "With blockImageSearch, image search is blocked on every engine; web search and ordinary pages are not",
+      "start": "2026-11-01T16:00",
+      "setup": { "members": [ { "id": "yoav", "blockImageSearch": true } ] },
+      "steps": [
+        {
+          "do": "checkUrls", "member": "yoav", "device": "pc-kids",
+          "cases": [
+            { "url": "https://www.google.com/search?q=cats&udm=2",              "expect": { "decision": "block", "reason": "blocked_image_search", "ruleId": "builtin-image-search-google" } },
+            { "url": "https://www.google.co.il/search?udm=2&q=cats",            "expect": { "decision": "block", "reason": "blocked_image_search", "ruleId": "builtin-image-search-google" }, "note": "any parameter order, any Google domain" },
+            { "url": "https://www.google.com/search?tbm=isch&q=cats&hl=he",     "expect": { "decision": "block", "reason": "blocked_image_search", "ruleId": "builtin-image-search-google" } },
+            { "url": "https://images.google.com/",                              "expect": { "decision": "block", "reason": "blocked_image_search", "ruleId": "builtin-image-search-google-images" } },
+            { "url": "https://lens.google.com/uploadbyurl?url=x",               "expect": { "decision": "block", "reason": "blocked_image_search", "ruleId": "builtin-image-search-google-lens" } },
+            { "url": "https://www.bing.com/images/search?q=cats",               "expect": { "decision": "block", "reason": "blocked_image_search", "ruleId": "builtin-image-search-bing" } },
+            { "url": "https://duckduckgo.com/?q=cats&iax=images&ia=images",     "expect": { "decision": "block", "reason": "blocked_image_search", "ruleId": "builtin-image-search-duckduckgo" } },
+            { "url": "https://yandex.ru/images/search?text=cats",               "expect": { "decision": "block", "reason": "blocked_image_search", "ruleId": "builtin-image-search-yandex" } },
+            { "url": "https://www.google.com/search?q=cats",                    "expect": { "decision": "allow", "reason": "allowed_default" } },
+            { "url": "https://www.google.com/search?q=cats&udm=14",             "expect": { "decision": "allow", "reason": "allowed_default" }, "note": "udm=2 only, not another value" },
+            { "url": "https://www.google.com/search?q=cats#udm=2",              "expect": { "decision": "allow", "reason": "allowed_default" }, "note": "the fragment is not the query" },
+            { "url": "https://www.google.com/search?q=udm%3D2",                 "expect": { "decision": "allow", "reason": "allowed_default" }, "note": "inside another parameter's value" },
+            { "url": "https://www.bing.com/search?q=cats",                      "expect": { "decision": "allow", "reason": "allowed_default" } },
+            { "url": "https://duckduckgo.com/?q=cats&ia=web",                   "expect": { "decision": "allow", "reason": "allowed_default" } }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "IMG-002",
+      "title": "Without the flag, image search follows the ordinary rules",
+      "start": "2026-11-01T16:00",
+      "steps": [
+        {
+          "do": "checkUrls", "member": "yoav",
+          "cases": [
+            { "url": "https://www.google.com/search?q=cats&udm=2",  "expect": { "decision": "allow", "reason": "allowed_default" } },
+            { "url": "https://www.bing.com/images/search?q=cats",   "expect": { "decision": "allow", "reason": "allowed_default" } }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "IMG-003",
+      "title": "An always-allowed site does not reopen image search, also when time is up",
+      "start": "2026-11-01T16:00",
+      "setup": {
+        "members": [ { "id": "noa", "blockImageSearch": true } ],
+        "rules": [ { "id": "r-google", "member": "noa", "pattern": "google.com", "type": "domain", "action": "allow", "alwaysAllowed": true } ]
+      },
+      "steps": [
+        {
+          "do": "checkUrls", "member": "noa",
+          "cases": [
+            { "url": "https://www.google.com/search?q=cats&udm=2", "expect": { "decision": "block", "reason": "blocked_image_search", "ruleId": "builtin-image-search-google" } },
+            { "url": "https://www.google.com/search?q=cats",       "expect": { "decision": "allow", "reason": "allowed_always", "ruleId": "r-google" } }
+          ]
+        },
+        {
+          "do": "checkUrls", "at": "19:30", "member": "noa",
+          "cases": [
+            { "url": "https://www.google.com/search?q=cats&udm=2", "expect": { "decision": "block", "reason": "blocked_image_search", "ruleId": "builtin-image-search-google" } },
+            { "url": "https://www.google.com/search?q=cats",       "expect": { "decision": "allow", "reason": "allowed_always", "ruleId": "r-google" } }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "IMG-004",
+      "title": "Homework keeps the image-search block; a pause lifts it with everything else",
+      "start": "2026-11-01T16:00",
+      "setup": {
+        "members": [ { "id": "noa", "blockImageSearch": true } ],
+        "rules": [ { "id": "r-google", "member": "noa", "pattern": "google.com", "type": "domain", "action": "allow", "alwaysAllowed": true } ]
+      },
+      "steps": [
+        { "do": "admin", "action": "startHomework", "member": "noa", "minutes": 30 },
+        { "do": "navigate", "member": "noa", "url": "https://www.google.com/search?q=cats&udm=2", "expect": { "decision": "block", "reason": "blocked_image_search", "ruleId": "builtin-image-search-google" } },
+        { "do": "navigate", "member": "noa", "url": "https://www.google.com/search?q=cats", "expect": { "decision": "allow", "reason": "allowed_always", "ruleId": "r-google" } },
+        { "do": "admin", "action": "stopHomework", "member": "noa" },
+        { "do": "admin", "action": "pause", "member": "noa", "until": "17:00" },
+        { "do": "navigate", "member": "noa", "url": "https://www.google.com/search?q=cats&udm=2", "expect": { "decision": "allow", "reason": "allowed_paused" } },
+        { "do": "navigate", "at": "17:00", "member": "noa", "url": "https://www.google.com/search?q=cats&udm=2", "expect": { "decision": "block", "reason": "blocked_image_search", "ruleId": "builtin-image-search-google" } }
+      ]
+    }
+  ]
+}

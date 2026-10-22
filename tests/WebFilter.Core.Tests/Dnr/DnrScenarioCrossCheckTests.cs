@@ -10,7 +10,7 @@ namespace WebFilter.Core.Tests.Dnr;
 /// </summary>
 public class DnrScenarioCrossCheckTests
 {
-    private static readonly string[] Files = ["rules.json", "normalization.json", "youtube-decisions.json"];
+    private static readonly string[] Files = ["rules.json", "normalization.json", "youtube-decisions.json", "image-search.json", "ai-mode.json"];
 
     /// <summary>RULE-010: unrestricted adults (no rules by design). RULE-011: non-web schemes (not filtered by DNR).</summary>
     private static readonly HashSet<string> SkippedScenarios = ["RULE-010", "RULE-011"];
@@ -45,7 +45,8 @@ public class DnrScenarioCrossCheckTests
     {
         var (cases, skipped) = Catalog.Value;
         Assert.True(cases.Count >= 69, $"only {cases.Count} cases cross-checked");
-        Assert.All(skipped, s => Assert.Matches("^(RULE-010|RULE-011) ", s));
+        // IMG-004 runs homework and a pause, which only the engine models; ExtensionPolicyTests covers those states for DNR.
+        Assert.All(skipped, s => Assert.Matches(@"^(RULE-010|RULE-011) |^IMG-004 step 1\+ \(admin action not modelled\)$", s));
     }
 
     private static (IReadOnlyDictionary<string, Case>, IReadOnlyList<string>) Load()

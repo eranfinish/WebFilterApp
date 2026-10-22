@@ -17,13 +17,17 @@ public sealed record ExtensionIds(string? ChromeId, string? EdgeId)
 
 /// <summary>
 /// The browser policies of MVP-PLAN §5 as data: machine-wide (force-install, no user-level native hosts, native host
-/// registration) and per restricted account (incognito/guest/profiles/dev mode/DevTools/extensions/SafeSearch/YouTube).
+/// registration) and per restricted account (incognito/guest/profiles/dev mode/DevTools/extensions/SafeSearch/YouTube,
+/// and PROTECTION-SPEC §5: pop-ups, abusive experiences, intrusive ads, no proxy, Edge strict tracking prevention; §11:
+/// Edge's sidebar and Chrome's Gemini off when ai-chat is blocked), plus the Windows policy of PROTECTION-SPEC §2 (no Bing
+/// results in Start search unless the family allows web search there).
 /// </summary>
 public static class BrowserPolicies
 {
     public const string HostName = "com.webfilter.host";
     private const string Chrome = @"SOFTWARE\Policies\Google\Chrome";
     private const string Edge = @"SOFTWARE\Policies\Microsoft\Edge";
+    public const string Explorer = @"SOFTWARE\Policies\Microsoft\Windows\Explorer";
 
     public static IReadOnlyList<PolicyValue> Desired(FamilyConfig config, string deviceId, ExtensionIds ids, string nativeHostManifestPath)
     {
@@ -58,8 +62,24 @@ public static class BrowserPolicies
                 User($@"{browser}\ExtensionInstallBlocklist", "1", "*");
                 User(browser, "ForceGoogleSafeSearch", 1);
                 User(browser, "ForceYouTubeRestrict", member?.YouTubeMode == YouTubeMode.Unrestricted ? 0 : member?.Role == Role.Child ? 2 : 1);
+                // PROTECTION-SPEC §5: no pop-ups, abusive experiences or intrusive ads; no proxy around the filter.
+                User(browser, "DefaultPopupsSetting", 2);
+                User(browser, "AbusiveExperienceInterventionEnforce", 1);
+                User(browser, "AdsSettingForIntrusiveAdsSites", 2);
+                User(browser, "ProxyMode", "direct");
             }
             User(Edge, "ForceBingSafeSearch", member?.Role == Role.Teen ? 1 : 2);
+            User(Edge, "TrackingPrevention", 3);
+            // PROTECTION-SPEC §11: when the member's categories block ai-chat (unlinked accounts: nothing is allowed), the
+            // browsers' own AI goes too. Copilot lives in Edge's sidebar (EdgeCopilotEnabled is for Edge on mobile only, and
+            // Microsoft365CopilotChatIconEnabled for work profiles only), so the sidebar is hidden; Chrome has a Gemini switch.
+            if (member is null || BuiltinRules.BlocksCategory(config, member, BuiltinRules.AiChatCategory))
+            {
+                User(Edge, "HubsSidebarEnabled", 0);
+                User(Chrome, "GeminiSettings", 1);
+            }
+            // PROTECTION-SPEC §2: Start search stays local unless the family allows web search there.
+            if (!config.WindowsFeatures.WebSearchInStart) User(Explorer, "DisableSearchBoxSuggestions", 1);
         }
         return values;
     }

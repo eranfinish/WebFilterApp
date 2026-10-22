@@ -94,8 +94,9 @@ public sealed record AddRule(RuleDto Rule) : AdminMessage;
 
 public sealed record RemoveRule(string RuleId) : AdminMessage;
 
-/// <summary>Changes only the given fields of a family member.</summary>
-public sealed record SetMember(string MemberId, string? DisplayName = null, string? Role = null, int? Age = null, string? FilterMode = null, string? YouTubeMode = null) : AdminMessage;
+/// <summary>Changes only the given fields of a family member (null = unchanged), including the protection flags of PROTECTION-SPEC §1.</summary>
+public sealed record SetMember(string MemberId, string? DisplayName = null, string? Role = null, int? Age = null, string? FilterMode = null, string? YouTubeMode = null,
+    bool? BlockImageSearch = null, bool? JumpGuard = null, bool? BlockYouTubeShorts = null, bool? LogSearches = null) : AdminMessage;
 
 public sealed record ExtendTime(string MemberId, int Minutes) : AdminMessage;
 
@@ -107,11 +108,24 @@ public sealed record StartHomework(string MemberId, int Minutes) : AdminMessage;
 
 public sealed record StopHomework(string MemberId) : AdminMessage;
 
-/// <param name="EventType">time_warning | time_expired | blocked | app_blocked | admin_change | access_request | tamper | service; null = all.</param>
+/// <param name="EventType">
+/// time_warning | time_expired | blocked | app_blocked | admin_change | access_request | tamper | service | search | override;
+/// null = all.
+/// </param>
 public sealed record GetEvents(DateTimeOffset? Since = null, string? EventType = null, string? MemberId = null, int Max = 500) : AdminMessage;
 
 public sealed record EventsResult(IReadOnlyList<EventDto> Events) : AdminMessage;
 
+/// <summary>An activity event. By type (PROTECTION-SPEC §6, §10):</summary>
+/// <remarks>
+/// <list type="bullet">
+/// <item><c>search</c>: <c>detail</c> is "engine:query" — the engine (google, bing, youtube, duckduckgo; lower-case, never
+/// a ':'), then everything after the first ':' is the query as typed; <c>url</c> is the results page.</item>
+/// <item><c>override</c>: a teen chose "open anyway" on a jump block. <c>url</c> is the site opened, <c>reason</c>
+/// <c>blocked_jump</c>.</item>
+/// <item><c>tamper</c>: <c>detail</c> is policy_repaired, network_repaired or unclean_stop.</item>
+/// </list>
+/// </remarks>
 /// <param name="Admin">For admin changes: the Windows user who made it.</param>
 public sealed record EventDto(string Type, DateTimeOffset At, string? MemberId, string? DeviceId, string? Reason, string? Url, string? App, int? RemainingMinutes, string? Detail, string? Admin = null);
 
@@ -172,7 +186,11 @@ public sealed record DiagnosticsResult(IReadOnlyList<CheckResult> Checks) : Admi
 /// </summary>
 public sealed record SetNetworksPrivate : AdminMessage;
 
-/// <param name="Id">service | browsers | browser_policies | extension | network (hub) | hub_port (hub).</param>
+/// <param name="Id">
+/// service | browsers | browser_policies | extension | onedrive | network (hub) | hub_port (hub). onedrive: ok = installed
+/// machine-wide (no detail); ok with detail "none" = not installed; warn = only per-user installs, which restricted accounts
+/// cannot use (detail: the command that switches to a machine-wide install, "OneDriveSetup.exe /allusers").
+/// </param>
 /// <param name="State">ok | warn | fail.</param>
 /// <param name="Detail">Facts the wording needs (browsers found, the public networks, the port) — not user-facing text.</param>
 public sealed record CheckResult(string Id, string State, string? Detail = null);
