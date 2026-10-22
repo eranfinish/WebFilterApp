@@ -89,8 +89,12 @@ public sealed class WfpService(FamilyService family, IOptions<ServiceOptions> op
         }
         foreach (var (sid, app) in result.Skipped)
         {
-            log.LogWarning("{App}, allowed for {Account}, got no network filter and stays blocked: {Reason}",
-                app.Value, sid, app.NotInstalled ? "not installed" : new Win32Exception(app.Error).Message);
+            // Not installed is normal (the machine-wide Chrome or OneDrive on a computer without them): the program gets its
+            // filter once it is installed. Anything else is a real problem.
+            if (app.NotInstalled)
+                log.LogInformation("{App}, allowed for {Account}, is not installed; it gets a network filter once it is", app.Value, sid);
+            else
+                log.LogWarning("{App}, allowed for {Account}, got no network filter and stays blocked: {Reason}", app.Value, sid, new Win32Exception(app.Error).Message);
         }
         if (result.Set + result.Removed > 0) log.LogInformation("Network filters: {Set} accounts set, {Removed} removed", result.Set, result.Removed);
     }
