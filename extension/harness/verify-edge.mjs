@@ -34,6 +34,20 @@ function check(id, ok, detail = {}) {
 // ---- local web server: every host resolves here (--host-resolver-rules) -------------------------------------------
 const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c]);
 const hits = [];
+// Jump-guard fixtures on site A (PROTECTION-SPEC §7). Site B is another registrable domain; www.site-a.test is the same site.
+const B = (path) => `http://site-b.test:${HTTP_PORT}${path}`;
+const JUMP_PAGES = {
+  "/opener": `<a id="same-tab" href="${B("/landing")}">same tab</a>
+    <a id="blank" target="_blank" href="${B("/blank")}">new tab</a>
+    <button id="open" onclick="window.open('${B("/popup")}')">window.open</button>
+    <button id="open-same" onclick="window.open('http://www.site-a.test:${HTTP_PORT}/same')">same site</button>
+    <button id="open-later" onclick="const w = window.open('about:blank'); setTimeout(() => { w.location = '${B("/later")}'; }, 300)">later</button>`,
+  "/meta": `<meta http-equiv="refresh" content="0;url=${B("/frommeta")}"><p>meta</p>`,
+  "/js": `<script>location.replace('${B("/fromjs")}')</script><p>js</p>`,
+  "/meta-same": `<meta http-equiv="refresh" content="0;url=http://www.site-a.test:${HTTP_PORT}/landing"><p>meta</p>`,
+  // A news page with an ad slot from a blocked ad network (the ads-popups list blocks sub_frames).
+  "/with-ad": `<h1>news</h1><iframe id="ad" src="http://ads.test:${HTTP_PORT}/banner?slot=1" width="300" height="250"></iframe>`,
+};
 function handler(req, res) {
   const url = new URL(req.url, `http://${req.headers.host}`);
   const host = url.hostname;
@@ -46,9 +60,13 @@ function handler(req, res) {
     if (url.pathname === "/") return send("YT home", "<h1>home</h1>");
     if (url.pathname === "/watch") {
       // Mimics the trusted source of spike S4: #movie_player.getPlayerResponse().videoDetails for the current URL.
+      // Plus a Shorts shelf and the side menu's Shorts entry, which the bridge hides while Shorts are blocked.
       return send(
         "YT watch",
-        `<div id="movie_player">player</div><script>
+        `<ytd-guide-entry-renderer id="guide-shorts"><a href="/shorts" title="Shorts">Shorts</a></ytd-guide-entry-renderer>
+        <ytd-guide-entry-renderer id="guide-home"><a href="/" title="Home">Home</a></ytd-guide-entry-renderer>
+        <ytd-reel-shelf-renderer id="shelf">shorts shelf</ytd-reel-shelf-renderer>
+        <div id="movie_player">player</div><script>
           const owners = { vidKhan0001: "${KHAN}", vidGamr0001: "${GAMER}" };
           document.getElementById("movie_player").getPlayerResponse = () => {
             const v = new URLSearchParams(location.search).get("v");
@@ -59,6 +77,8 @@ function handler(req, res) {
     }
     return send(`YT ${url.pathname}`, "<h1>yt</h1>");
   }
+  const jump = host === "site-a.test" ? JUMP_PAGES[url.pathname] : undefined;
+  if (jump) return send(`SITE ${host}${url.pathname}`, jump);
   return send(`SITE ${host}${url.pathname}`, `<h1>${esc(host)}</h1>`);
 }
 
@@ -198,6 +218,9 @@ try {
     check("P4 no test hooks in the production worker", await b.sw.evaluate(() => typeof globalThis.wfTest === "undefined"));
 
     const page = await b.context.newPage();
+    const pageLog = [];
+    page.on("console", (m) => pageLog.push(`${m.type()}: ${m.text()}`));
+    page.on("pageerror", (e) => pageLog.push(`pageerror: ${e.message}`));
     await visit(page, S("site.test", "/hello"));
     check("P5 inert extension does not block browsing", (await page.title()) === "SITE site.test/hello", { note: await page.title() });
 
@@ -206,7 +229,9 @@ try {
       const i = await pageInfo(page);
       return i.ready ? i : null;
     }, 20000); // the first extension page after a build can wait on a cold worker
-    check("P6 blocked.html?reason=failclosed: exact window title", info?.title === BLOCKED_TITLE, { note: info?.title });
+    // On a miss, say where the page is (a cold first extension page after a build has been seen to take long).
+    const p6Miss = info?.ready ? "" : ` — missed: ${JSON.stringify({ url: page.url(), now: await pageInfo(page).catch((e) => String(e).split("\n")[0]), log: pageLog })}`;
+    check("P6 blocked.html?reason=failclosed: exact window title", info?.title === BLOCKED_TITLE, { note: `${info?.title}${p6Miss}` });
     check("P7 blocked.html shows the fail-closed reason in Hebrew (RTL)", info?.reason === "failclosed" && /שירות הסינון/.test(info.text) && info.dir === "rtl" && info.lang === "he", { note: info?.text });
 
     await visit(page, b.page("timeup.html"));
@@ -386,6 +411,187 @@ try {
     await visit(page, b.page("popup.html"));
     const popupState = await waitFor(() => page.evaluate(() => document.documentElement.dataset.connection));
     check("T38 popup shows the connection state", popupState === "service", { note: popupState });
+    await b.close();
+  }
+
+  // ===== Test build: protection features (PROTECTION-SPEC §7–§9) ===============================================
+  {
+    const b = await launch(DIST_TEST);
+    await b.sw.evaluate(() => globalThis.wfTest.simulatePolicyInstall());
+    const { rules, timeUp } = compiledRules(b.id, { allowed: ["site-a.test", "site-b.test", "site-c.test", "google.com"], blocked: ["ads.test"] });
+    const youTube = { mode: "allowlist", allowed: [{ channelId: KHAN, handle: "@khankids-sim", title: "Khan Kids (sim)" }], blocked: [] };
+    const child = { jumpGuard: true, blockYouTubeShorts: true, logSearches: true, canOverrideJump: false };
+    const script = { rules: { rulesVersion: 7, dynamicRules: rules, timeUpSessionRules: timeUp, youTube, time: { state: "ok", remainingMinutes: 60, windowEndsAt: null }, features: child } };
+    await b.sw.evaluate((s) => globalThis.wfTest.useFakeHost(s), script);
+    const ready = await b.sw.evaluate(() => globalThis.wfTest.whenReady(5000));
+    const status = await b.sw.evaluate(() => globalThis.wfTest.status());
+    check("F1 features from the rules reply are in force", ready && JSON.stringify(status.features) === JSON.stringify(child), { note: JSON.stringify(status.features) });
+    const received = () => b.sw.evaluate(() => globalThis.wfTest.received());
+    const jumpRuleIds = async () => (await sessionRules(b)).map((r) => r.id).filter((id) => id >= 1_100_000_000);
+    // Generous waits: the dev PC often runs other builds in parallel. On a miss, the note says where the tab is.
+    const blockInfo = async (p) => {
+      const found = await waitFor(async () => {
+        const i = await pageInfo(p);
+        return i.ready && i.title === BLOCKED_TITLE ? { ...i, href: p.url(), canOverride: await p.evaluate(() => document.documentElement.dataset.canOverride ?? null) } : null;
+      }, 20000);
+      if (found) return found;
+      const last = await pageInfo(p).catch(() => null);
+      return { missed: true, href: p.url(), title: last?.title ?? null, ready: last?.ready ?? null, reason: last?.reason ?? null, url: last?.url ?? null };
+    };
+    const miss = (info) => (info?.missed ? ` — missed: ${JSON.stringify(info)}` : "");
+    const opened = async (page, selector) => {
+      const [tab] = await Promise.all([b.context.waitForEvent("page", { timeout: 10000 }), page.click(selector)]);
+      return tab;
+    };
+
+    // ---- jump guard -----------------------------------------------------------------------------------------------
+    const page = await b.context.newPage();
+    await visit(page, S("site-a.test", "/opener"));
+    await page.click("#same-tab");
+    const sameTab = await waitFor(async () => (await page.title()) === "SITE site-b.test/landing", 15000);
+    check("J1 same-tab link click to another site loads", !!sameTab, { note: page.url() });
+
+    await visit(page, S("site-a.test", "/opener"));
+    hits.length = 0;
+    const popup = await opened(page, "#open");
+    const popupInfo = await blockInfo(popup);
+    check("J2 window.open to another site → block page (blocked_jump)", popupInfo?.reason === "blocked_jump" && popupInfo.url === B("/popup"), {
+      note: `${popupInfo?.reason} ${popupInfo?.url}; target requested: ${hits.includes("site-b.test/popup")}${miss(popupInfo)}`,
+    });
+    check("J2b Hebrew text: the site tried to open another site", /האתר ניסה לפתוח אתר אחר/.test(popupInfo?.text ?? ""), { note: popupInfo?.text });
+    check("J2c child: no 'open anyway'", popupInfo?.canOverride === "false" && !(await popup.isVisible("#override")));
+    const blankTab = await opened(page, "#blank");
+    const blankInfo = await blockInfo(blankTab);
+    check("J3 target=_blank link to another site → block page (blocked_jump)", blankInfo?.reason === "blocked_jump" && blankInfo.url === B("/blank"), { note: `${blankInfo?.reason} ${blankInfo?.url}${miss(blankInfo)}` });
+    const sameSite = await opened(page, "#open-same");
+    const sameLoaded = await waitFor(async () => (await sameSite.title()) === "SITE www.site-a.test/same", 15000);
+    check("J4 window.open to the same site (www.) loads", !!sameLoaded, { note: sameSite.url() });
+    hits.length = 0;
+    const later = await opened(page, "#open-later");
+    const laterInfo = await blockInfo(later);
+    check("J5 window.open(about:blank), then opened.location = another site → block page", laterInfo?.reason === "blocked_jump" && laterInfo.url === B("/later"), { note: `${laterInfo?.reason} ${laterInfo?.url}${miss(laterInfo)}` });
+    check("J5b … stopped by the tab's DNR rule before any request", !hits.includes("site-b.test/later"), { note: hits.join(",") });
+    const leftover = await waitFor(async () => ((await jumpRuleIds()).length === 0 ? "none" : null), 5000);
+    check("J6 tab rules are gone once the block pages show (a typed address works there)", leftover === "none", { note: JSON.stringify(await jumpRuleIds()) });
+    await visit(popup, S("site-c.test", "/typed"));
+    check("J7 typed address in a block-page tab loads", (await popup.title()) === "SITE site-c.test/typed", { note: popup.url() });
+
+    hits.length = 0;
+    await visit(page, S("site-a.test", "/meta"));
+    const metaInfo = await blockInfo(page);
+    check("J8 meta-refresh redirect to another site → block page", metaInfo?.reason === "blocked_jump" && metaInfo.url === B("/frommeta"), {
+      note: `${metaInfo?.reason} ${metaInfo?.url}; target requested: ${hits.includes("site-b.test/frommeta")}${miss(metaInfo)}`,
+    });
+    await visit(page, S("site-a.test", "/js"));
+    const jsInfo = await blockInfo(page);
+    check("J9 script redirect while loading to another site → block page", jsInfo?.reason === "blocked_jump" && jsInfo.url === B("/fromjs"), { note: `${jsInfo?.reason} ${jsInfo?.url}${miss(jsInfo)}` });
+    await visit(page, S("site-a.test", "/meta-same"));
+    const metaSame = await waitFor(async () => (await page.title()) === "SITE www.site-a.test/landing", 15000);
+    check("J10 redirect within the same site loads", !!metaSame, { note: page.url() });
+    const jumpReports = (await received()).filter((m) => m.type === "reportBlock" && m.reason === "blocked_jump").map((m) => m.url);
+    check("J11 every jump block reported once as reportBlock {reason: blocked_jump}", [B("/popup"), B("/blank"), B("/later"), B("/frommeta"), B("/fromjs")].every((u) => jumpReports.filter((r) => r === u).length === 1), { note: JSON.stringify(jumpReports) });
+    for (const tab of [popup, blankTab, sameSite, later]) await tab.close();
+
+    // ---- a blocked ad frame: quiet placeholder, nothing reported ---------------------------------------------------
+    hits.length = 0;
+    const adUrl = `http://ads.test:${HTTP_PORT}/banner?slot=1`;
+    await visit(page, S("site-a.test", "/with-ad"));
+    const adFrame = await waitFor(async () => {
+      const frame = page.frames().find((f) => f.url().startsWith(b.page("blocked.html")));
+      if (!frame) return null;
+      const state = await frame.evaluate(() => ({
+        quiet: document.documentElement.dataset.frame ?? null,
+        ready: document.documentElement.dataset.ready ?? null,
+        mainShown: getComputedStyle(document.querySelector("main")).display !== "none",
+        visibleButtons: [...document.querySelectorAll("button")].filter((el) => el.offsetParent !== null).length,
+        text: document.body.innerText.trim(),
+        background: getComputedStyle(document.body).backgroundColor,
+      }));
+      return state.ready === "true" ? { ...state, url: frame.url() } : null;
+    }, 15000);
+    await new Promise((r) => setTimeout(r, 1500)); // anything the frame would send has arrived by now
+    const frameMessages = (await received()).filter((m) => (m.type === "reportBlock" || m.type === "decideUrl") && String(m.url).includes("ads.test"));
+    check("A1 a blocked ad frame shows a quiet empty placeholder (no block page, no buttons)", adFrame?.quiet === "quiet" && !adFrame.mainShown && adFrame.visibleButtons === 0 && adFrame.text === "" && adFrame.url === `${b.page("blocked.html")}#${adUrl}`, {
+      note: JSON.stringify(adFrame),
+    });
+    check("A2 … and sends nothing to the host (no reportBlock, no decideUrl); the ad request never left", frameMessages.length === 0 && !hits.some((h) => h.startsWith("ads.test")) && (await page.title()) === "SITE site-a.test/with-ad", {
+      note: `${JSON.stringify(frameMessages)} ${hits.join(",")}`,
+    });
+
+    // ---- teen: "open anyway" --------------------------------------------------------------------------------------
+    const teen = { ...child, blockYouTubeShorts: false, canOverrideJump: true };
+    await b.sw.evaluate((s) => {
+      globalThis.wfTest.setScript(s);
+      globalThis.wfTest.push({ type: "rulesChanged", rulesVersion: 8 });
+    }, { rules: { ...script.rules, rulesVersion: 8, features: teen } });
+    const teenOn = await waitFor(() => b.sw.evaluate(() => globalThis.wfTest.status().features.canOverrideJump));
+    await visit(page, S("site-a.test", "/opener"));
+    const teenTab = await opened(page, "#open");
+    const teenInfo = await blockInfo(teenTab);
+    const buttonText = await teenTab.textContent("#override").catch(() => null);
+    check("O1 teen: the jump block page offers 'פתח בכל זאת'", !!teenOn && teenInfo?.canOverride === "true" && buttonText === "פתח בכל זאת" && (await teenTab.isVisible("#override")), { note: buttonText });
+    await teenTab.click("#override");
+    const overridden = await waitFor(async () => (await teenTab.title()) === "SITE site-b.test/popup", 15000);
+    check("O2 'open anyway' opens the site", !!overridden, { note: teenTab.url() });
+    const overrides = (await received()).filter((m) => m.type === "reportOverride");
+    check("O3 reportOverride {url, reason: blocked_jump} sent", overrides.length === 1 && overrides[0].url === B("/popup") && overrides[0].reason === "blocked_jump", { note: JSON.stringify(overrides) });
+    const again = await opened(page, "#open");
+    const againInfo = await blockInfo(again);
+    check("O4 once: the same jump again is blocked again", againInfo?.reason === "blocked_jump", { note: againInfo?.reason });
+    await teenTab.close();
+    await again.close();
+
+    // ---- YouTube Shorts (child: blockYouTubeShorts) -----------------------------------------------------------------
+    await b.sw.evaluate((s) => {
+      globalThis.wfTest.setScript(s);
+      globalThis.wfTest.push({ type: "rulesChanged", rulesVersion: 9 });
+    }, { rules: { ...script.rules, rulesVersion: 9, features: child } });
+    await waitFor(() => b.sw.evaluate(() => globalThis.wfTest.status().features.blockYouTubeShorts));
+    const shortsRule = await waitFor(async () => (await sessionRules(b)).find((r) => r.id === 1_000_000_001) ?? null);
+    check("S1 the Shorts session rule is installed", !!shortsRule && shortsRule.priority > 196608 && shortsRule.priority < 262144, { note: JSON.stringify(shortsRule?.condition) });
+    if (https) {
+      hits.length = 0;
+      const short = Y("/shorts/vidKhan0001");
+      await visit(page, short);
+      const shortInfo = await blockInfo(page);
+      check("S2 full load of /shorts/ → block page (blocked_youtube_shorts), never requested", shortInfo?.reason === "blocked_youtube_shorts" && shortInfo.url === short && !hits.some((h) => h.includes("/shorts/")), {
+        note: `${shortInfo?.reason} ${shortInfo?.url} ${hits.join(",")}`,
+      });
+      await visit(page, Y("/watch?v=vidKhan0001"));
+      const watching = await waitFor(() => page.evaluate(() => document.title === "YT watch" && getComputedStyle(document.documentElement).visibility === "visible"));
+      const hidden = await waitFor(() =>
+        page.evaluate(() => {
+          const gone = (id) => getComputedStyle(document.getElementById(id)).display === "none";
+          return document.documentElement.dataset.wfShorts === "hidden" && gone("shelf") && gone("guide-shorts") && !gone("guide-home") ? true : null;
+        }),
+      );
+      check("S3 approved video plays; the Shorts shelf and menu entry are hidden, the rest is not", !!watching && !!hidden);
+      await page.evaluate(() => history.pushState({}, "", "/shorts/vidSpa0001"));
+      const spaInfo = await blockInfo(page);
+      check("S4 in-site (SPA) navigation to /shorts/ → block page (blocked_youtube_shorts)", spaInfo?.reason === "blocked_youtube_shorts" && spaInfo.url === Y("/shorts/vidSpa0001"), { note: `${spaInfo?.reason} ${spaInfo?.url}` });
+      const shortsReports = (await received()).filter((m) => m.type === "reportBlock" && m.reason === "blocked_youtube_shorts");
+      check("S5 Shorts blocks reported with their reason", shortsReports.length === 2, { note: JSON.stringify(shortsReports.map((m) => m.url)) });
+
+      // ---- search log ---------------------------------------------------------------------------------------------
+      const G = (path) => `https://www.google.com:${HTTPS_PORT}${path}`;
+      const searchUrl = G("/search?q=%D7%97%D7%AA%D7%95%D7%9C%D7%99%D7%9D+%D7%95%D7%9B%D7%9C%D7%91%D7%99%D7%9D&hl=he");
+      await visit(page, searchUrl);
+      await page.reload({ waitUntil: "load" });
+      await visit(page, G("/search?q=%D7%97%D7%AA%D7%95%D7%9C%D7%99%D7%9D+%D7%95%D7%9B%D7%9C%D7%91%D7%99%D7%9D&start=10"));
+      const searches = await waitFor(async () => {
+        const s = (await received()).filter((m) => m.type === "reportSearch");
+        return s.length > 0 ? s : null;
+      });
+      await new Promise((r) => setTimeout(r, 500));
+      const allSearches = (await received()).filter((m) => m.type === "reportSearch");
+      check("Q1 a Google /search?q= page sends reportSearch {engine, query, url}", searches?.[0]?.engine === "google" && searches[0].query === "חתולים וכלבים" && searches[0].url === searchUrl, { note: JSON.stringify(searches?.[0]) });
+      check("Q2 … once (not again for the reload or page 2)", allSearches.length === 1, { note: `${allSearches.length} reports` });
+    } else {
+      check("S2–Q2 YouTube and search fixtures skipped (openssl not available)", true, { note: "skipped" });
+    }
+    await visit(page, b.page("popup.html"));
+    const notice = await waitFor(() => page.evaluate(() => (document.getElementById("search-notice")?.hidden === false ? document.getElementById("search-notice").textContent : null)));
+    check("Q3 popup tells the member: החיפושים שלך גלויים להורים", notice === "החיפושים שלך גלויים להורים", { note: notice });
     await b.close();
   }
 } catch (error) {

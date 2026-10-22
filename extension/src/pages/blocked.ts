@@ -1,10 +1,17 @@
-import type { OriginalUrlReply, ReportBlockReply, StatusSnapshot } from "../shared/messages";
+import type { OriginalUrlReply, OverrideJumpReply, ReportBlockReply, StatusSnapshot } from "../shared/messages";
 import { displayUrl, parseBlockPageUrl, safeReturnUrl } from "../shared/pages";
 import { FAILCLOSED, reasonMessageKey, requestActionFor } from "../shared/reasons";
 import { ask, byId, getStatus, localizePage, onBroadcast, t } from "./common";
 import { followDecision, pendingRequestId, returnTo, showResult, wireRequestButtons } from "./requests";
 
 const root = document.documentElement;
+/**
+ * A block inside a frame (an ad slot from a blocked ad network, an embed): a quiet, empty placeholder instead of the
+ * block page, and nothing is reported (no reportBlock, no decideUrl), so a news page with blocked ads neither looks
+ * broken nor floods the parents' activity log. Set before anything renders.
+ */
+const inFrame = window.top !== window;
+if (inFrame) root.dataset.frame = "quiet";
 
 function isTimeReason(reason: string): boolean {
   return reason === "blocked_daily_limit" || reason === "blocked_time_window";
@@ -35,7 +42,25 @@ function markReported(): boolean {
   }
 }
 
+/**
+ * The quiet frame placeholder. Only a fail-closed frame does anything: once the extension is connected it retries its
+ * own address (it asks the worker, never the service).
+ */
+async function quietFrame(): Promise<void> {
+  root.dataset.page = "blocked";
+  const info = parseBlockPageUrl(location.href);
+  root.dataset.reason = info.reason ?? "";
+  root.dataset.ready = "true";
+  if (info.reason !== FAILCLOSED) return;
+  const back = safeReturnUrl((await ask<OriginalUrlReply>({ type: "wf:getOriginalUrl" }))?.url ?? "");
+  if (shouldReturn(FAILCLOSED, false, await getStatus())) returnTo(back);
+  onBroadcast((message) => {
+    if (message.type === "wf:stateChanged" && shouldReturn(FAILCLOSED, false, message.status)) returnTo(back);
+  });
+}
+
 async function main(): Promise<void> {
+  if (inFrame) return quietFrame();
   localizePage();
   root.dataset.page = "blocked";
   const info = parseBlockPageUrl(location.href);
@@ -54,7 +79,7 @@ async function main(): Promise<void> {
       url,
       reason: info.reason,
       ruleId: info.ruleId,
-      frame: window.top === window ? "main_frame" : "sub_frame",
+      frame: "main_frame",
       alreadyReported: markReported(),
     });
   }
@@ -109,6 +134,7 @@ async function main(): Promise<void> {
     if (serviceDown) showResult(t("result_unavailable"), "unavailable");
   }
   root.dataset.canRequest = String(canAsk);
+  wireOverride(reason, back, status);
   if (pendingRequestId()) showResult(t("result_waiting"), "waiting");
   root.dataset.ready = "true";
 
@@ -116,6 +142,28 @@ async function main(): Promise<void> {
   if (!allowedNow && shouldReturn(reason, false, status)) returnTo(back);
   onBroadcast((message) => {
     if (message.type === "wf:stateChanged" && shouldReturn(reason, allowedNow, message.status)) returnTo(back);
+  });
+}
+
+/**
+ * "Open anyway" on a jump block, for a member who may (features.canOverrideJump, teens): the background records the
+ * override (reportOverride) and opens the address in this tab once. Top-level pages only.
+ */
+function wireOverride(reason: string, back: string | null, status: StatusSnapshot | null): void {
+  const features = status?.features;
+  const allowed = reason === "blocked_jump" && !!back && window.top === window && features?.jumpGuard === true && features.canOverrideJump === true;
+  root.dataset.canOverride = String(allowed);
+  if (!allowed) return;
+  const button = byId<HTMLButtonElement>("override");
+  byId("override-row").hidden = false;
+  button.addEventListener("click", async () => {
+    button.disabled = true;
+    const reply = await ask<OverrideJumpReply>({ type: "wf:overrideJump", url: back });
+    root.dataset.override = reply?.ok ? "sent" : (reply?.error ?? "error");
+    if (!reply?.ok) {
+      showResult(t("result_error"), "error");
+      button.disabled = false;
+    }
   });
 }
 

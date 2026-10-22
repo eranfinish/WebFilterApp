@@ -1,6 +1,17 @@
 import { describe, expect, it } from "vitest";
 import { detectBrowser } from "../src/shared/browser";
-import { REPLY_TYPES, encodeRequest, isWebUrl, normalizeTime, normalizeYouTube, parseIncoming } from "../src/shared/protocol";
+import { Correlator, HostError } from "../src/shared/correlation";
+import {
+  NO_FEATURES,
+  REPLY_TYPES,
+  type RulesMessage,
+  encodeRequest,
+  isWebUrl,
+  normalizeFeatures,
+  normalizeTime,
+  normalizeYouTube,
+  parseIncoming,
+} from "../src/shared/protocol";
 
 // Frames exactly as WebFilter.Contracts' AgentProtocol.Serialize writes them (captured from the C# serializer):
 // `type` first, `v`/`id` last, nulls omitted, YouTube → "youTube".
@@ -37,7 +48,26 @@ describe("encodeRequest", () => {
       requestAccess: ["requestAccessResult"],
       decideUrl: ["decideUrlResult"],
       resolveYouTube: ["resolveYouTubeResult"],
+      reportSearch: ["error"],
+      reportOverride: ["error"],
     });
+  });
+
+  it("encodes reportSearch and reportOverride exactly as PROTECTION-SPEC §6 names them", () => {
+    const search = encodeRequest({ type: "reportSearch", engine: "google", query: "חתולים", url: "https://www.google.com/search?q=%D7%97" }, "s-1");
+    expect(JSON.stringify(search)).toBe('{"type":"reportSearch","v":1,"id":"s-1","engine":"google","query":"חתולים","url":"https://www.google.com/search?q=%D7%97"}');
+    const override = encodeRequest({ type: "reportOverride", url: "https://b.example/", reason: "blocked_jump" }, "o-1");
+    expect(JSON.stringify(override)).toBe('{"type":"reportOverride","v":1,"id":"o-1","url":"https://b.example/","reason":"blocked_jump"}');
+  });
+
+  it("reportSearch and reportOverride resolve on error ok and reject on any other error", async () => {
+    const correlator = new Correlator(1000);
+    const ok = correlator.track("1", "reportSearch", REPLY_TYPES.reportSearch);
+    correlator.settle({ type: "error", id: "1", code: "ok", message: "recorded" });
+    await expect(ok).resolves.toMatchObject({ code: "ok" });
+    const unsupported = correlator.track("2", "reportOverride", REPLY_TYPES.reportOverride);
+    correlator.settle({ type: "error", id: "2", code: "unsupported", message: "Unknown message type 'reportOverride'." });
+    await expect(unsupported).rejects.toBeInstanceOf(HostError);
   });
 });
 
@@ -57,6 +87,20 @@ describe("parseIncoming", () => {
     });
     const planSpelling = parseIncoming({ type: "rules", youtube: { mode: "restricted", allowed: [], blocked: [] } });
     expect(planSpelling).toMatchObject({ youTube: { mode: "restricted" }, dynamicRules: [], timeUpSessionRules: [] });
+  });
+
+  it("reads features; absent or malformed means all off (PROTECTION-SPEC §6)", () => {
+    const without = parseIncoming(JSON.parse(CSHARP.rules)) as RulesMessage;
+    expect(without.features).toEqual(NO_FEATURES);
+    const withFeatures = parseIncoming({
+      ...JSON.parse(CSHARP.rules),
+      features: { jumpGuard: true, blockYouTubeShorts: true, logSearches: false, canOverrideJump: true },
+    }) as RulesMessage;
+    expect(withFeatures.features).toEqual({ jumpGuard: true, blockYouTubeShorts: true, logSearches: false, canOverrideJump: true });
+    expect(normalizeFeatures({ jumpGuard: "true", logSearches: 1, blockYouTubeShorts: true })).toEqual({ ...NO_FEATURES, blockYouTubeShorts: true });
+    expect(normalizeFeatures(null)).toEqual(NO_FEATURES);
+    expect(normalizeFeatures([true])).toEqual(NO_FEATURES);
+    expect((parseIncoming({ type: "rules", features: "all" }) as RulesMessage).features).toEqual(NO_FEATURES);
   });
 
   it("drops unknown or malformed messages", () => {

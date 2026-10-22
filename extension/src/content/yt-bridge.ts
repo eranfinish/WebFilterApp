@@ -1,9 +1,11 @@
 /**
  * Isolated-world bridge on YouTube frames: hides the page in allowlist mode until a decision arrives, forwards the
- * MAIN-world detector's findings to the background, and enforces the answer (block page or "my channels").
+ * MAIN-world detector's findings to the background, and enforces the answer (block page or "my channels"). While
+ * Shorts are blocked (PROTECTION-SPEC §8) it also hides the Shorts shelves and menu entries.
  */
 import type { YouTubeDetectReply, YouTubeDetection, YouTubeStoredState } from "../shared/messages";
 import { YOUTUBE_STATE_KEY } from "../shared/messages";
+import { SHORTS_HIDE_CSS } from "../shared/shorts";
 
 (() => {
   const root = document.documentElement;
@@ -17,6 +19,10 @@ import { YOUTUBE_STATE_KEY } from "../shared/messages";
     "ytd-reel-video-renderer .ytd-reel-player-overlay-renderer #comments-button { display: none !important; }",
   ].join("\n");
 
+  // Shorts blocked: no Shorts shelf, no Shorts entry in the menus. Pure CSS, so the channel detection is untouched.
+  const shorts = document.createElement("style");
+  shorts.textContent = SHORTS_HIDE_CSS;
+
   let mode: YouTubeStoredState["mode"] | null = null;
   let leaving = false;
 
@@ -28,6 +34,16 @@ import { YOUTUBE_STATE_KEY } from "../shared/messages";
 
   // Hide first: the mode is read asynchronously, and an allowlist page must not show before its decision.
   hide();
+
+  const applyShorts = (blocked: boolean): void => {
+    if (blocked) {
+      if (!shorts.isConnected) (document.head ?? root).appendChild(shorts);
+      root.dataset.wfShorts = "hidden"; // read by the Edge harness
+    } else {
+      shorts.remove();
+      delete root.dataset.wfShorts;
+    }
+  };
 
   const applyMode = (next: YouTubeStoredState["mode"] | null): void => {
     mode = next ?? "failclosed";
@@ -41,7 +57,11 @@ import { YOUTUBE_STATE_KEY } from "../shared/messages";
 
   chrome.storage.local
     .get(YOUTUBE_STATE_KEY)
-    .then((stored) => applyMode((stored[YOUTUBE_STATE_KEY] as YouTubeStoredState | undefined)?.mode ?? null))
+    .then((stored) => {
+      const state = stored[YOUTUBE_STATE_KEY] as YouTubeStoredState | undefined;
+      applyShorts(state?.blockShorts === true);
+      applyMode(state?.mode ?? null);
+    })
     .catch(() => applyMode(null));
 
   const askAgain = (): void => {
@@ -53,9 +73,11 @@ import { YOUTUBE_STATE_KEY } from "../shared/messages";
     if (area !== "local" || !changes[YOUTUBE_STATE_KEY]) return;
     const before = changes[YOUTUBE_STATE_KEY].oldValue as YouTubeStoredState | undefined;
     const after = changes[YOUTUBE_STATE_KEY].newValue as YouTubeStoredState | undefined;
+    applyShorts(after?.blockShorts === true);
     applyMode(after?.mode ?? null);
     // The policy changed under an open page: decide again.
-    if (before?.mode !== after?.mode || before?.version !== after?.version) askAgain();
+    const changed = before?.mode !== after?.mode || before?.version !== after?.version || before?.blockShorts !== after?.blockShorts;
+    if (changed) askAgain();
   });
 
   document.addEventListener("yt-navigate-start", () => {

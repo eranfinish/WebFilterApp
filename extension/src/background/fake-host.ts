@@ -24,7 +24,12 @@ export interface FakeHostScript {
   legacyReportAck?: boolean;
   /** Answer like the native host fallback (service down): reportBlock and decideUrl → error service_unavailable. */
   hostFallback?: boolean;
+  /** Answer reportSearch / reportOverride like a service without the protection features (error unsupported). */
+  noProtectionMessages?: boolean;
 }
+
+/** A rules reply as it goes over the wire: `features` may be absent (older services). */
+export type WireRules = Omit<RulesMessage, "features"> & Partial<Pick<RulesMessage, "features">>;
 
 export const DEFAULT_HELLO: HelloResult = {
   type: "helloResult",
@@ -36,7 +41,7 @@ export const DEFAULT_HELLO: HelloResult = {
   serverVersion: "test",
 };
 
-export const DEFAULT_RULES: RulesMessage = {
+export const DEFAULT_RULES: WireRules = {
   type: "rules",
   rulesVersion: 1,
   dynamicRules: [],
@@ -110,7 +115,7 @@ export class FakeHost {
     this.port?.hangUp();
   }
 
-  rules(): RulesMessage {
+  rules(): WireRules {
     return { ...DEFAULT_RULES, ...this.script.rules, type: "rules" };
   }
 
@@ -156,6 +161,12 @@ export class FakeHost {
       }
       case "resolveYouTube":
         return { type: "resolveYouTubeResult" };
+      case "reportSearch":
+      case "reportOverride":
+        // PROTECTION-SPEC §6: acknowledged with error "ok".
+        return this.script.noProtectionMessages
+          ? { type: "error", code: "unsupported", message: `Unknown message type '${message.type}'.` }
+          : { type: "error", code: "ok", message: "recorded" };
       default:
         return { type: "error", code: "unsupported", message: `Unknown message type '${String((message as { type?: string }).type)}'.` };
     }

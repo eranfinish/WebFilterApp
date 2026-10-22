@@ -1,6 +1,9 @@
 import type { FilterMode, RequestResult, TimeState } from "./protocol";
 
-/** The closed list of reason codes (MVP-PLAN §6, CLAUDE.md rule 8). Order matches ReasonCode in Decision.cs. */
+/**
+ * The closed list of reason codes (MVP-PLAN §6, CLAUDE.md rule 8). Order matches ReasonCode in Decision.cs; the last
+ * three are the protection features' codes (PROTECTION-SPEC §6).
+ */
 export const REASON_CODES = [
   "allowed_unrestricted",
   "allowed_paused",
@@ -24,6 +27,9 @@ export const REASON_CODES = [
   "blocked_service_unavailable",
   "blocked_app_network",
   "redirect_youtube_home",
+  "blocked_image_search",
+  "blocked_jump",
+  "blocked_youtube_shorts",
 ] as const;
 
 export type ReasonCode = (typeof REASON_CODES)[number];
@@ -70,6 +76,13 @@ export function requestActionFor(reason: string | null | undefined): RequestActi
     case "blocked_app_network":
     case FAILCLOSED:
       return "none";
+    // Member settings, not site rules (PROTECTION-SPEC §1): approving the URL would not lift them. Image search and
+    // Shorts are switched off by the parent on the member page; a jump can be opened by typing the address, and a teen
+    // gets "open anyway" instead.
+    case "blocked_image_search":
+    case "blocked_jump":
+    case "blocked_youtube_shorts":
+      return "none";
     default:
       return isReasonCode(reason) ? "none" : "url";
   }
@@ -82,6 +95,21 @@ export function inferReason(time: TimeState | null, mode: FilterMode | null): Re
   if (mode === "allowlist") return "blocked_not_in_allowlist";
   return "blocked_rule";
 }
+
+/**
+ * Reasons the extension decides from what it sees in the browser, which the service cannot judge from the URL alone
+ * (PROTECTION-SPEC §6): the service keeps the reported reason, a reload never asks again (decideUrl would judge the URL
+ * only), and the block page never offers "allowed now" for them.
+ */
+export const PAGE_DECIDED_REASONS: ReadonlySet<string> = new Set<ReasonCode>([
+  "blocked_youtube_channel",
+  "blocked_youtube_unknown",
+  "blocked_jump",
+  "blocked_youtube_shorts",
+]);
+
+/** Of those, the protection reasons, for which a stale "allow" from the service is ignored. */
+export const EXTENSION_ONLY_REASONS: ReadonlySet<string> = new Set<ReasonCode>(["blocked_jump", "blocked_youtube_shorts"]);
 
 /** reportBlock carries a reason code; the fail-closed page reports as blocked_service_unavailable. */
 export function reportableReason(reason: string): ReasonCode | null {

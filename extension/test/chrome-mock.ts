@@ -173,6 +173,11 @@ export function installChromeMock(initial: Partial<Pick<ChromeMockState, "instal
           .filter((t) => (q.active ? t.active : true))
           .filter((t) => (q.url ? /^https?:/.test(t.url) : true))
           .map((t) => ({ ...t })),
+      get: async (tabId: number) => {
+        const tab = state.tabs.find((t) => t.id === tabId);
+        if (!tab) throw new Error(`No tab with id: ${tabId}.`);
+        return { ...tab };
+      },
       update: async (tabId: number, props: { url: string }) => {
         state.tabUpdates.push({ tabId, url: props.url });
         const tab = state.tabs.find((t) => t.id === tabId);
@@ -202,6 +207,8 @@ export function installChromeMock(initial: Partial<Pick<ChromeMockState, "instal
     webNavigation: {
       onBeforeNavigate: event(state, "webNavigation.onBeforeNavigate"),
       onHistoryStateUpdated: event(state, "webNavigation.onHistoryStateUpdated"),
+      onCommitted: event(state, "webNavigation.onCommitted"),
+      onCreatedNavigationTarget: event(state, "webNavigation.onCreatedNavigationTarget"),
     },
   };
 

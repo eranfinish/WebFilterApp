@@ -51,6 +51,17 @@ body {
   padding: 48px 16px;
 }
 
+/* blocked.html inside a frame (blocked.ts): an empty, transparent placeholder. */
+html[data-frame="quiet"],
+html[data-frame="quiet"] body {
+  background: transparent;
+  padding: 0;
+}
+
+html[data-frame="quiet"] main {
+  display: none !important;
+}
+
 main {
   max-width: 560px;
   margin: 0 auto;

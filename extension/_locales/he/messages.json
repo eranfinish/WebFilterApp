@@ -77,6 +77,15 @@
   "reason_redirect_youtube_home": {
     "message": "דף הבית והחיפוש של YouTube לא זמינים. אפשר לבחור באחד הערוצים שלך."
   },
+  "reason_blocked_image_search": {
+    "message": "חיפוש תמונות כבוי בשבילך."
+  },
+  "reason_blocked_jump": {
+    "message": "האתר ניסה לפתוח אתר אחר."
+  },
+  "reason_blocked_youtube_shorts": {
+    "message": "סרטוני Shorts ב-YouTube כבויים בשבילך."
+  },
   "reason_failclosed": {
     "message": "WebFilter עוד לא מחובר לשירות הסינון, ולכן הגלישה חסומה. הדף ייפתח לבד ברגע שהחיבור יחזור."
   },
@@ -97,6 +106,9 @@
   },
   "tryAgain": {
     "message": "לנסות שוב"
+  },
+  "overrideButton": {
+    "message": "פתח בכל זאת"
   },
   "noteLabel": {
     "message": "למה צריך את זה? (לא חובה)"
@@ -229,6 +241,9 @@
   },
   "labelInstallType": {
     "message": "סוג התקנה"
+  },
+  "searchesVisible": {
+    "message": "החיפושים שלך גלויים להורים"
   },
   "mode_unrestricted": {
     "message": "ללא הגבלה"

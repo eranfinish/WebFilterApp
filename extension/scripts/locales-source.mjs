@@ -35,6 +35,10 @@ const messages = [
   ["reason_blocked_service_unavailable", "The filtering service isn't running, so only always-allowed sites can be opened.", "שירות הסינון לא פועל, ולכן אפשר לפתוח רק אתרים שמותרים תמיד."],
   ["reason_blocked_app_network", "This app isn't allowed to use the internet.", "האפליקציה הזו לא מורשית להתחבר לאינטרנט."],
   ["reason_redirect_youtube_home", "YouTube's home page and search aren't available. Pick one of your channels.", "דף הבית והחיפוש של YouTube לא זמינים. אפשר לבחור באחד הערוצים שלך."],
+  // Protection features (PROTECTION-SPEC §6).
+  ["reason_blocked_image_search", "Image search is turned off for you.", "חיפוש תמונות כבוי בשבילך."],
+  ["reason_blocked_jump", "The site you were on tried to open another site.", "האתר ניסה לפתוח אתר אחר."],
+  ["reason_blocked_youtube_shorts", "YouTube Shorts are turned off for you.", "סרטוני Shorts ב-YouTube כבויים בשבילך."],
   ["reason_failclosed", "WebFilter isn't connected to the filtering service yet, so browsing is blocked. This page will open by itself as soon as it connects.", "WebFilter עוד לא מחובר לשירות הסינון, ולכן הגלישה חסומה. הדף ייפתח לבד ברגע שהחיבור יחזור.", "Static fail-closed ruleset: no profile from the service yet."],
   ["reason_unknown", "This page is blocked.", "הדף הזה חסום."],
 
@@ -44,6 +48,7 @@ const messages = [
   ["labelCategory", "Category:", "קטגוריה:"],
   ["allowedNowHeading", "This page is allowed now", "הדף הזה מותר עכשיו"],
   ["tryAgain", "Try again", "לנסות שוב"],
+  ["overrideButton", "Open anyway", "פתח בכל זאת", "Jump block page, teens only: opens the site once; the parents see that it was opened."],
   ["noteLabel", "Why do you need it? (optional)", "למה צריך את זה? (לא חובה)"],
   ["requestButton", "Ask my parents for access", "לבקש גישה מההורים"],
   ["requestYouTubeButton", "Ask my parents to approve this channel", "לבקש מההורים לאשר את הערוץ"],
@@ -96,6 +101,7 @@ const messages = [
   ["labelTime", "Browsing time left today", "זמן גלישה שנותר היום"],
   ["labelVersion", "Version", "גרסה"],
   ["labelInstallType", "Install type", "סוג התקנה"],
+  ["searchesVisible", "Your searches are visible to your parents", "החיפושים שלך גלויים להורים", "Shown while the search-term log is on (PROTECTION-SPEC §9)."],
   ["mode_unrestricted", "No restrictions", "ללא הגבלה"],
   ["mode_blocklist", "Blocked sites list", "רשימה שחורה"],
   ["mode_allowlist", "Approved sites only", "רק אתרים מאושרים"],

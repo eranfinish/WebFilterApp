@@ -183,6 +183,16 @@ footer {
   font-size: 12px;
 }
 
+.notice {
+  margin: 10px 0 0;
+  padding: 7px 10px;
+  border-radius: 6px;
+  border-inline-start: 3px solid var(--warn-accent);
+  background: var(--warn-bg);
+  color: var(--warn-fg);
+  font-weight: 600;
+}
+
 .diag {
   margin: 8px 0 0;
   font-size: 11.5px;

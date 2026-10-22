@@ -39,10 +39,24 @@ export function createBackground(options: ControllerOptions = {}): Controller {
   chrome.tabs.onUpdated.addListener((_tabId, change, tab) => {
     if (change.url && tab.active) controller.requestHeartbeat();
   });
-  chrome.tabs.onRemoved.addListener((tabId) => controller.forgetTab(tabId));
+  chrome.tabs.onRemoved.addListener((tabId) => {
+    controller.forgetTab(tabId);
+    controller.jumps.onTabRemoved(tabId);
+  });
 
-  // The static fail-closed rule cannot carry the original URL, so remember what each frame tried to load.
-  chrome.webNavigation.onBeforeNavigate.addListener((details) => controller.noteNavigation(details.tabId, details.frameId, details.url));
+  // The static fail-closed rule cannot carry the original URL, so remember what each frame tried to load. The jump
+  // guard re-checks a tab a page opened before its first page loads.
+  chrome.webNavigation.onBeforeNavigate.addListener((details) => {
+    controller.noteNavigation(details.tabId, details.frameId, details.url);
+    controller.jumps.onBeforeNavigate(details.tabId, details.frameId, details.url);
+  });
+
+  // Jump guard (PROTECTION-SPEC §7): tabs and windows opened by pages, and client redirects (seen at commit).
+  chrome.webNavigation.onCreatedNavigationTarget.addListener((details) => void controller.jumps.onCreatedNavigationTarget(details));
+  chrome.webNavigation.onCommitted.addListener((details) => {
+    controller.jumps.onCommitted(details);
+    controller.noteSearch(details);
+  });
 
   // In-page (history API) navigations, which DNR does not see: block them if the rules would. On YouTube the
   // content script decides channels; tell that frame's bridge at once (its own events and URL polling also trigger).
@@ -58,6 +72,8 @@ export function createBackground(options: ControllerOptions = {}): Controller {
       chrome.tabs.sendMessage(details.tabId, message, { frameId: details.frameId }).catch(() => undefined);
     }
     void controller.checkInPageNavigation(details.tabId, details.frameId, details.url);
+    // YouTube and Google change the address in place for a new search.
+    controller.noteSearch(details);
   });
 
   chrome.runtime.onStartup.addListener(() => undefined);
@@ -86,12 +102,17 @@ function handleMessage(
             String(message.url ?? ""),
             message.reason ?? null,
             message.ruleId ?? null,
-            message.frame === "sub_frame" ? "sub_frame" : "main_frame",
+            // The browser's frame id counts, not only what the page says: a frame never reports.
+            message.frame === "sub_frame" || (sender.frameId ?? 0) !== 0 ? "sub_frame" : "main_frame",
             message.alreadyReported === true,
           )
         : undefined;
     case "wf:requestAccess":
       return isExtensionPage(sender) ? controller.requestAccess(message) : undefined;
+    case "wf:overrideJump":
+      return isExtensionPage(sender)
+        ? controller.overrideJump(String(message.url ?? ""), sender.tab?.id, sender.frameId, sender.url)
+        : undefined;
     case "wf:getOriginalUrl":
       return isExtensionPage(sender) ? Promise.resolve({ url: controller.originalUrlFor(sender.tab?.id, sender.frameId) }) : undefined;
     case "wf:ytDetect":

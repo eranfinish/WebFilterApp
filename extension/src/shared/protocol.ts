@@ -15,6 +15,7 @@ export type TimeStateName = "ok" | "warn" | "expired" | "outside_window" | "unli
 export type RequestKind = "url" | "youtube" | "app" | "time";
 export type RequestResult = "created" | "merged" | "rate_limited" | "cooldown" | "queued" | "unavailable";
 export type BrowserName = "edge" | "chrome";
+export type SearchEngine = "google" | "bing" | "youtube" | "duckduckgo";
 
 export type DnrRule = chrome.declarativeNetRequest.Rule;
 
@@ -68,6 +69,27 @@ export interface ResolveYouTubeRequest {
 }
 
 /**
+ * A search the member made (PROTECTION-SPEC §9), sent once per distinct search while `features.logSearches` is on.
+ * Acknowledged with `error {code: "ok"}`; the service drops it when the member does not have logSearches.
+ */
+export interface ReportSearchRequest {
+  type: "reportSearch";
+  engine: SearchEngine;
+  query: string;
+  url: string;
+}
+
+/**
+ * A teen chose "open anyway" on a jump block (PROTECTION-SPEC §6–§7). Acknowledged with `error {code: "ok"}` and
+ * recorded as an `override` event.
+ */
+export interface ReportOverrideRequest {
+  type: "reportOverride";
+  url: string;
+  reason: "blocked_jump";
+}
+
+/**
  * An error report from the extension (e.g. DNR rules the browser refused). `error` is part of the C# message union, so the
  * service accepts it; today it answers "unsupported", which the extension ignores.
  */
@@ -84,7 +106,9 @@ export type RequestBody =
   | ReportBlockRequest
   | RequestAccessRequest
   | DecideUrlRequest
-  | ResolveYouTubeRequest;
+  | ResolveYouTubeRequest
+  | ReportSearchRequest
+  | ReportOverrideRequest;
 
 export type OutgoingBody = RequestBody | ErrorReport;
 
@@ -135,6 +159,24 @@ export interface TimeState {
   windowEndsAt?: string | null;
 }
 
+/**
+ * The member's protection features (PROTECTION-SPEC §6). Absent from the rules reply (older services) → all false.
+ * `canOverrideJump` is true for teens only (false for children and unlinked accounts).
+ */
+export interface ProtectionFeatures {
+  jumpGuard: boolean;
+  blockYouTubeShorts: boolean;
+  logSearches: boolean;
+  canOverrideJump: boolean;
+}
+
+export const NO_FEATURES: Readonly<ProtectionFeatures> = Object.freeze({
+  jumpGuard: false,
+  blockYouTubeShorts: false,
+  logSearches: false,
+  canOverrideJump: false,
+});
+
 export interface RulesMessage extends Envelope {
   type: "rules";
   rulesVersion: number;
@@ -143,6 +185,8 @@ export interface RulesMessage extends Envelope {
   /** C# property `YouTube` → camelCase `youTube` (not `youtube`). */
   youTube: YouTubePolicy;
   time: TimeState;
+  /** Always set after parsing (normalizeFeatures): a missing `features` means all off. */
+  features: ProtectionFeatures;
 }
 
 export interface TimeStateMessage extends Envelope, TimeState {
@@ -245,7 +289,8 @@ const INCOMING_TYPES: ReadonlySet<string> = new Set<IncomingType>([
 
 /**
  * The reply types each request accepts. reportBlock is answered with `reportBlockResult` (v2); services before that
- * acknowledged it with `{type:"error", code:"ok"}`, which is still accepted.
+ * acknowledged it with `{type:"error", code:"ok"}`, which is still accepted. reportSearch and reportOverride are only
+ * ever acknowledged that way (PROTECTION-SPEC §6); any other error code rejects them.
  */
 export const REPLY_TYPES: Readonly<Record<RequestBody["type"], readonly IncomingType[]>> = {
   hello: ["helloResult"],
@@ -255,6 +300,8 @@ export const REPLY_TYPES: Readonly<Record<RequestBody["type"], readonly Incoming
   requestAccess: ["requestAccessResult"],
   decideUrl: ["decideUrlResult"],
   resolveYouTube: ["resolveYouTubeResult"],
+  reportSearch: ["error"],
+  reportOverride: ["error"],
 };
 
 /** Builds the wire object with `type` first, then `v` and `id`; undefined fields are dropped. */
@@ -301,6 +348,17 @@ function normalizeChannels(value: unknown): ChannelRef[] {
     }));
 }
 
+/** A flag is on only when it is exactly `true`; a missing or malformed object means all off. */
+export function normalizeFeatures(value: unknown): ProtectionFeatures {
+  if (!isObject(value)) return { ...NO_FEATURES };
+  return {
+    jumpGuard: value.jumpGuard === true,
+    blockYouTubeShorts: value.blockYouTubeShorts === true,
+    logSearches: value.logSearches === true,
+    canOverrideJump: value.canOverrideJump === true,
+  };
+}
+
 /** An unknown or missing YouTube mode is treated as "off" (fail closed). */
 export function normalizeYouTube(value: unknown): YouTubePolicy {
   if (!isObject(value)) return { mode: "off", allowed: [], blocked: [] };
@@ -317,6 +375,7 @@ function normalizeRules(value: Record<string, unknown>): RulesMessage {
     // The plan (§10.1) spells it `youtube`; the C# contract serializes `youTube`. Accept both.
     youTube: normalizeYouTube(value.youTube ?? value.youtube),
     time: normalizeTime(value.time),
+    features: normalizeFeatures(value.features),
   };
   if (typeof value.v === "number") message.v = value.v;
   if (typeof value.id === "string") message.id = value.id;

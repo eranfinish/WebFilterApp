@@ -45,6 +45,10 @@ function render(status: StatusSnapshot | null): void {
 
   const connected = status?.connection === "service" || status?.connection === "host";
   byId("profile").hidden = !connected;
+  // PROTECTION-SPEC §9: the member is told while their searches are recorded.
+  const logged = connected && status?.features?.logSearches === true;
+  byId("search-notice").hidden = !logged;
+  document.documentElement.dataset.searchLog = String(logged);
   if (status && connected) {
     byId("user").textContent = status.user?.name || "—";
     byId("mode").textContent = status.mode ? t(`mode_${status.mode}`) : "—";
