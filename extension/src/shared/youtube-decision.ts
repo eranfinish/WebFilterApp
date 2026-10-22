@@ -1,6 +1,6 @@
 import type { ChannelRef, FilterMode, TimeState, YouTubePolicy } from "./protocol";
 import type { ReasonCode } from "./reasons";
-import { isShortsUrl, normalizeHandle, parseYouTubeUrl } from "./youtube-url";
+import { isShortsUrl, isYouTubeSignInHost, normalizeHandle, parseYouTubeUrl } from "./youtube-url";
 
 /** What the content script reports (spike S4: channel id only from sources tied to the current URL). */
 export interface YouTubePageReport {
@@ -63,6 +63,8 @@ export function decideYouTube(ctx: YouTubeContext, page: YouTubePageReport): You
   if (ctx.filterMode === "unrestricted") return { decision: "allow", reason: "allowed_unrestricted" };
   if (ctx.time?.state === "outside_window") return { decision: "block", reason: "blocked_time_window" };
   if (ctx.time?.state === "expired") return { decision: "block", reason: "blocked_daily_limit" };
+  // Google sign-in's YouTube cookie host: every YouTube mode allows it, Off included (YT-007).
+  if (isSignInPage(page.url)) return { decision: "allow", reason: "allowed_default" };
 
   const policy = ctx.policy;
   if (policy.mode !== "unrestricted" && policy.mode !== "restricted" && policy.mode !== "allowlist") {
@@ -92,6 +94,14 @@ export function decideYouTube(ctx: YouTubeContext, page: YouTubePageReport): You
   return record?.action === "allow"
     ? withChannel({ decision: "allow", reason: "allowed_youtube_channel" })
     : withChannel({ decision: "block", reason: "blocked_youtube_channel" });
+}
+
+function isSignInPage(url: string): boolean {
+  try {
+    return isYouTubeSignInHost(new URL(url).hostname);
+  } catch {
+    return false;
+  }
 }
 
 /** The channels for "my channels": approved ones, minus any that are also blocked. */
