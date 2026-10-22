@@ -341,6 +341,7 @@ public sealed class MemberDetailViewModelTests
                     JumpGuard = set.JumpGuard ?? x.JumpGuard,
                     BlockYouTubeShorts = set.BlockYouTubeShorts ?? x.BlockYouTubeShorts,
                     LogSearches = set.LogSearches ?? x.LogSearches,
+                    BlockAds = set.BlockAds ?? x.BlockAds,
                 })],
             });
         }
@@ -352,12 +353,12 @@ public sealed class MemberDetailViewModelTests
     [Fact]
     public async Task The_protection_switches_show_the_stored_flags_for_a_filtered_member_only()
     {
-        SetNoa(TestData.Family().Members[0] with { BlockImageSearch = true, JumpGuard = true, BlockYouTubeShorts = true });
+        SetNoa(TestData.Family().Members[0] with { BlockImageSearch = true, JumpGuard = true, BlockYouTubeShorts = true, BlockAds = true });
 
         var vm = await LoadedAsync();
 
         var protection = vm.Protection!;
-        Assert.Equal((true, true, true, false), (protection.BlockImageSearch, protection.JumpGuard, protection.BlockYouTubeShorts, protection.LogSearches));
+        Assert.Equal((true, true, true, true, false), (protection.BlockImageSearch, protection.JumpGuard, protection.BlockYouTubeShorts, protection.BlockAds, protection.LogSearches));
         Assert.False(vm.IsUnrestricted);
         Assert.Empty(_client.SentOf<SetMember>());
 
@@ -371,6 +372,7 @@ public sealed class MemberDetailViewModelTests
     [InlineData("blockImageSearch")]
     [InlineData("jumpGuard")]
     [InlineData("blockYouTubeShorts")]
+    [InlineData("blockAds")]
     [InlineData("logSearches")]
     public async Task Each_switch_saves_at_once_and_alone(string flag)
     {
@@ -383,6 +385,7 @@ public sealed class MemberDetailViewModelTests
             case "blockImageSearch": protection.BlockImageSearch = true; break;
             case "jumpGuard": protection.JumpGuard = true; break;
             case "blockYouTubeShorts": protection.BlockYouTubeShorts = true; break;
+            case "blockAds": protection.BlockAds = true; break;
             default: protection.LogSearches = true; break;
         }
 
@@ -391,14 +394,33 @@ public sealed class MemberDetailViewModelTests
             "blockImageSearch" => new("yoav", BlockImageSearch: true),
             "jumpGuard" => new("yoav", JumpGuard: true),
             "blockYouTubeShorts" => new("yoav", BlockYouTubeShorts: true),
+            "blockAds" => new("yoav", BlockAds: true),
             _ => new("yoav", LogSearches: true),
         };
         Assert.Equal(expected, _client.Single<SetMember>());
         Assert.Equal("ההגדרות של יואב נשמרו.", vm.StatusMessage);
         var stored = _client.Settings.Members.Single(m => m.Id == "yoav");
-        Assert.Equal((stored.BlockImageSearch, stored.JumpGuard, stored.BlockYouTubeShorts, stored.LogSearches),
-            (vm.Protection!.BlockImageSearch, vm.Protection.JumpGuard, vm.Protection.BlockYouTubeShorts, vm.Protection.LogSearches));
-        Assert.Equal(1, new[] { stored.BlockImageSearch, stored.JumpGuard, stored.BlockYouTubeShorts, stored.LogSearches }.Count(f => f));
+        Assert.Equal((stored.BlockImageSearch, stored.JumpGuard, stored.BlockYouTubeShorts, stored.BlockAds, stored.LogSearches),
+            (vm.Protection!.BlockImageSearch, vm.Protection.JumpGuard, vm.Protection.BlockYouTubeShorts, vm.Protection.BlockAds, vm.Protection.LogSearches));
+        Assert.Equal(1, new[] { stored.BlockImageSearch, stored.JumpGuard, stored.BlockYouTubeShorts, stored.BlockAds, stored.LogSearches }.Count(f => f));
+    }
+
+    /// <summary>PROTECTION-SPEC §12: the parent's escape hatch when a site refuses to work with the blocker.</summary>
+    [Fact]
+    public async Task Ad_blocking_can_be_turned_off_for_one_child_and_the_hint_says_what_it_does_not_block()
+    {
+        StoreSetMember();
+        SetNoa(TestData.Family().Members[0] with { JumpGuard = true, BlockAds = true });
+        var vm = await LoadedAsync();
+        Assert.True(vm.Protection!.BlockAds);
+
+        vm.Protection.BlockAds = false;
+
+        Assert.Equal(new SetMember("noa", BlockAds: false), _client.Single<SetMember>());
+        Assert.Equal((false, true), (_client.Settings.Members[0].BlockAds, _client.Settings.Members[0].JumpGuard));
+        Assert.Equal("חסימת פרסומות", Strings.Member_BlockAds);
+        Assert.Contains("YouTube", Strings.Member_BlockAdsHint, StringComparison.Ordinal);
+        Assert.Contains("לכבות", Strings.Member_BlockAdsHint, StringComparison.Ordinal);
     }
 
     [Fact]

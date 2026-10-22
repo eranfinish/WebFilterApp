@@ -387,18 +387,18 @@ internal sealed record MemberTemplate(string FilterMode, string YouTubeMode, boo
     {
         "child" => new("allowlist", "allowlist", true, "15:00", "19:00", 120,
             new Dictionary<string, string> { ["educational"] = "allow", [StarterLists.SchoolTools] = "allow" },
-            new MemberProtection(BlockImageSearch: true, JumpGuard: true, BlockYouTubeShorts: true, LogSearches: false)),
+            new MemberProtection(BlockImageSearch: true, JumpGuard: true, BlockYouTubeShorts: true, LogSearches: false, BlockAds: true)),
         "teen" => new("blocklist", "restricted", true, "14:00", "21:30", 240,
             new Dictionary<string, string> { ["adult"] = "block", ["gambling"] = "block", ["proxies"] = "block", ["unfiltered-search"] = "block", ["ads-popups"] = "block" },
-            new MemberProtection(BlockImageSearch: false, JumpGuard: true, BlockYouTubeShorts: false, LogSearches: false)),
+            new MemberProtection(BlockImageSearch: false, JumpGuard: true, BlockYouTubeShorts: false, LogSearches: false, BlockAds: true)),
         _ => new("unrestricted", "unrestricted", false, "08:00", "22:00", 180, new Dictionary<string, string>(), MemberProtection.None),
     };
 }
 
-/// <summary>The four protection flags of a member (PROTECTION-SPEC §1); filtered members only.</summary>
-internal sealed record MemberProtection(bool BlockImageSearch, bool JumpGuard, bool BlockYouTubeShorts, bool LogSearches)
+/// <summary>The five protection flags of a member (PROTECTION-SPEC §1); filtered members only.</summary>
+internal sealed record MemberProtection(bool BlockImageSearch, bool JumpGuard, bool BlockYouTubeShorts, bool LogSearches, bool BlockAds)
 {
-    public static readonly MemberProtection None = new(false, false, false, false);
+    public static readonly MemberProtection None = new(false, false, false, false, false);
 
     /// <summary>"Block image search, Block jumps to other sites", or null when none is on.</summary>
     public string? Text()
@@ -408,6 +408,7 @@ internal sealed record MemberProtection(bool BlockImageSearch, bool JumpGuard, b
             BlockImageSearch ? Strings.Member_BlockImageSearch : null,
             JumpGuard ? Strings.Member_JumpGuard : null,
             BlockYouTubeShorts ? Strings.Member_BlockYouTubeShorts : null,
+            BlockAds ? Strings.Member_BlockAds : null,
             LogSearches ? Strings.Member_LogSearches : null,
         };
         return Texts.NullIfEmpty(Texts.Join(", ", on));
@@ -504,7 +505,7 @@ public sealed partial class WizardMemberViewModel : ObservableObject
     private MemberProtection Applied => IsFiltered ? Protection : MemberProtection.None;
 
     internal MemberDto ToDto() => new(Id, Name.Trim(), Role, Age, FilterMode, YouTubeMode,
-        Applied.BlockImageSearch, Applied.JumpGuard, Applied.BlockYouTubeShorts, Applied.LogSearches);
+        Applied.BlockImageSearch, Applied.JumpGuard, Applied.BlockYouTubeShorts, Applied.LogSearches, Applied.BlockAds);
 
     /// <summary>A choice per list, from the role's template; choices made earlier are kept.</summary>
     internal void OfferCategories(IEnumerable<WizardCategoryViewModel> lists)
