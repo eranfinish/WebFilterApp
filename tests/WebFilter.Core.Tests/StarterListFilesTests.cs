@@ -102,9 +102,10 @@ public sealed class StarterListFilesTests
         Assert.True(set.TimeUpSessionRules.Count <= DnrLimits.MaxSessionRules);
         Assert.True(set.DynamicRules.Concat(set.TimeUpSessionRules).Count(r => r.Condition.RegexFilter is not null) <= DnrLimits.MaxRegexRules);
 
-        // Every category domain is in exactly one rule's requestDomains (the YouTube rules are fixed, not categories).
+        // Every category domain is in exactly one rule's requestDomains. Only the packed rules count: the fixed rules below
+        // FirstHashed (YouTube, its sign-in exemption, …) are not categories.
         var listed = set.DynamicRules
-            .Where(r => r.Id is not (DnrRuleIds.YouTube or DnrRuleIds.YouTubeShort))
+            .Where(r => r.Id >= DnrRuleIds.FirstHashed)
             .Sum(r => r.Condition.RequestDomains?.Count ?? 0);
         Assert.Equal(policy.CategoryDomains.Count, listed);
         Assert.True(listed <= 150_000, $"{listed} domains in the teen policy");
