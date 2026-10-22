@@ -7,8 +7,11 @@
 
 | חנות | מזהה | מצב |
 |------|------|-----|
-| Chrome Web Store | `lkbhmgdhaalikcmpmefffohinafbjfgh` | הועלה 2026-10-22 |
-| Edge Add-ons | — | |
+| Chrome Web Store | `lkbhmgdhaalikcmpmefffohinafbjfgh` | הוגש 2026-10-22, בבדיקה |
+| Edge Add-ons | `labgagpndiahmbeohjikogfdigebeidl` (CRX ID — זה המזהה במדיניות) | הוגש 2026-10-22, In review |
+
+Edge: ‏Store ID `0RDCKC8CFL4G`, ‏Product ID `9c932b95-94d3-4114-b66a-4c27e152feec`. החשבון בשתי החנויות: `finish.software@gmail.com` (Chrome: non-trader; Edge: Individual).
+להתקנה במעבדה מעבירים את המזהים ל-MSI: ‏`CHROME_EXTENSION_ID=lkbhmgdhaalikcmpmefffohinafbjfgh EDGE_EXTENSION_ID=labgagpndiahmbeohjikogfdigebeidl`.
 
 מדיניות הפרטיות: <https://gilded-zabaione-076cae.netlify.app/> (Netlify, חשבון `finish.software@gmail.com`; לרישום באנגלית: `/#en`).
 
