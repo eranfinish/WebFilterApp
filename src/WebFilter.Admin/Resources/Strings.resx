@@ -730,7 +730,7 @@
     <value>מחשבים שהצימוד שלהם בוטל</value>
   </data>
   <data name="Devices_RevokedHint" xml:space="preserve">
-    <value>הם ממשיכים לאכוף את ההגדרות האחרונות שקיבלו, אבל לא מקבלים עדכונים. כדי לחבר מחשב כזה שוב, צמדו אותו מחדש.</value>
+    <value>מחשב שהצימוד שלו בוטל ממשיך לאכוף את ההגדרות האחרונות שקיבל, אבל לא מקבל עדכונים. במחשב שהסינון הוסר ממנו אין יותר סינון. כדי לחבר מחשב כזה שוב, צמדו אותו מחדש (אחרי התקנה מחדש, אם הסינון הוסר).</value>
   </data>
   <data name="Devices_Col_Name" xml:space="preserve">
     <value>שם המחשב</value>
@@ -772,6 +772,9 @@
   </data>
   <data name="Device_Revoked" xml:space="preserve">
     <value>הצימוד בוטל</value>
+  </data>
+  <data name="Device_Uninstalled" xml:space="preserve">
+    <value>הסינון הוסר</value>
   </data>
   <data name="Device_Online" xml:space="preserve">
     <value>מחובר עכשיו</value>
@@ -1377,5 +1380,8 @@
   </data>
   <data name="Check_hub_port_warn" xml:space="preserve">
     <value>חומת האש לא מאפשרת חיבור לפורט {0}, ולכן מחשבי הילדים לא יוכלו להתחבר. התקינו מחדש מקובץ ההתקנה.</value>
+  </data>
+  <data name="AdminChange_device_uninstalled" xml:space="preserve">
+    <value>הסינון הוסר ממחשב</value>
   </data>
 </root>

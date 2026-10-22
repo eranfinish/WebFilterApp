@@ -726,7 +726,7 @@
     <value>Revoked computers</value>
   </data>
   <data name="Devices_RevokedHint" xml:space="preserve">
-    <value>They keep enforcing the last settings they received but get no updates. To connect one again, pair it again.</value>
+    <value>A revoked computer keeps enforcing the last settings it received but gets no updates. A computer WebFilter was uninstalled from no longer filters at all. To connect one again, pair it again (after reinstalling, if it was uninstalled).</value>
   </data>
   <data name="Devices_Col_Name" xml:space="preserve">
     <value>Computer</value>
@@ -768,6 +768,9 @@ The computer keeps enforcing the last settings it received but stops getting upd
   </data>
   <data name="Device_Revoked" xml:space="preserve">
     <value>Revoked</value>
+  </data>
+  <data name="Device_Uninstalled" xml:space="preserve">
+    <value>Uninstalled</value>
   </data>
   <data name="Device_Online" xml:space="preserve">
     <value>Connected now</value>
@@ -1373,5 +1376,8 @@ Do this only for your home network. On a café, hotel or work network it is safe
   </data>
   <data name="Check_hub_port_warn" xml:space="preserve">
     <value>The firewall does not allow connections to port {0}, so the children's computers cannot connect. Reinstall from the setup file.</value>
+  </data>
+  <data name="AdminChange_device_uninstalled" xml:space="preserve">
+    <value>WebFilter was uninstalled from a computer</value>
   </data>
 </root>

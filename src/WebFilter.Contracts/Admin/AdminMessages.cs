@@ -142,7 +142,11 @@ public sealed record GetDevices : AdminMessage;
 
 public sealed record DevicesResult(IReadOnlyList<DeviceInfo> Devices) : AdminMessage;
 
-public sealed record DeviceInfo(string Id, string Name, string Os, DateTimeOffset PairedAt, DateTimeOffset? LastSeenAt, bool Revoked);
+/// <param name="RevokedReason">
+/// Why a device that revoked itself left (<see cref="Hub.UnregisterRequest.Reasons"/>, e.g. "uninstall"); null when a
+/// parent revoked it, or it is not revoked.
+/// </param>
+public sealed record DeviceInfo(string Id, string Name, string Os, DateTimeOffset PairedAt, DateTimeOffset? LastSeenAt, bool Revoked, string? RevokedReason = null);
 
 /// <summary>Stops accepting a paired computer (it keeps enforcing its last settings until reinstalled or re-paired).</summary>
 public sealed record RevokeDevice(string DeviceId) : AdminMessage;

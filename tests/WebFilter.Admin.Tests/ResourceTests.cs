@@ -69,7 +69,7 @@ public sealed partial class ResourceTests
     [InlineData("FilterMode_", new[] { "unrestricted", "blocklist", "allowlist" })]
     [InlineData("YouTubeMode_", new[] { "off", "restricted", "allowlist", "unrestricted" })]
     [InlineData("RuleType_", new[] { "domain", "wildcard", "prefix", "regex" })]
-    [InlineData("AdminChange_", new[] { "add_rule", "remove_rule", "set_member", "extend_time", "pause", "resume", "start_homework", "stop_homework", "approve_request", "deny_request", "replace_settings", "local_pause", "new_accounts", "accounts_updated", "pair_device" })]
+    [InlineData("AdminChange_", new[] { "add_rule", "remove_rule", "set_member", "extend_time", "pause", "resume", "start_homework", "stop_homework", "approve_request", "deny_request", "replace_settings", "local_pause", "new_accounts", "accounts_updated", "pair_device", "device_uninstalled" })]
     [InlineData("RuleExpiry_", new[] { "permanent", "hour", "today" })]
     [InlineData("AppMatch_", new[] { "path", "package" })]
     [InlineData("CategoryChoice_", new[] { "default", "allow", "block" })]

@@ -219,6 +219,17 @@ public sealed class FamilyService : IDisposable
         WithHub((hub, now) => { hub.AddDevice(deviceId, os, now); return 0; });
     }
 
+    /// <summary>
+    /// A paired device revokes itself (<see cref="UnregisterRequest"/>): revoked as a parent's revoke would, with the
+    /// reason kept for the Devices screen, and an activity event. False when it was already revoked.
+    /// </summary>
+    public bool UnregisterDevice(string deviceId, string reason)
+    {
+        if (!Devices!.Revoke(deviceId, Now, reason)) return false;
+        WithHub((hub, now) => { hub.DeviceUninstalled(deviceId, now); return 0; });
+        return true;
+    }
+
     /// <summary>Evaluates time warnings and flushes state. Called by <see cref="TickService"/>.</summary>
     public void Tick()
     {

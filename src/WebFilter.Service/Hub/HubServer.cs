@@ -86,6 +86,16 @@ public sealed class HubServer(FamilyService family, ILogger<HubServer> log) : Ba
             await context.Response.WriteAsJsonAsync(family.CreateRequestFromAgent(deviceId, body.Request), HubApiJsonContext.Default.CreateRequestResult);
         });
 
+        app.MapPost(HubApi.UnregisterPath, async context =>
+        {
+            if (Authorize(context, certificates) is not { } deviceId) return;
+            var body = await JsonSerializer.DeserializeAsync(context.Request.Body, HubApiJsonContext.Default.UnregisterRequest, context.RequestAborted);
+            if (body is null || !UnregisterRequest.Reasons.Contains(body.Reason)) { context.Response.StatusCode = 400; return; }
+            // False only when a parent revoked it in the meantime: revoked either way.
+            if (family.UnregisterDevice(deviceId, body.Reason)) log.LogInformation("Device {Device} unregistered itself ({Reason})", deviceId, body.Reason);
+            context.Response.StatusCode = 204;
+        });
+
         app.MapGet(HubApi.ChangesPath, async context =>
         {
             if (Authorize(context, certificates) is null) return;

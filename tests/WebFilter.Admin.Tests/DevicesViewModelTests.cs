@@ -80,6 +80,21 @@ public sealed class DevicesViewModelTests
         Assert.False(old.IsOnline);
     }
 
+    [Fact]
+    public async Task A_computer_that_unregistered_itself_on_uninstall_is_listed_with_the_revoked_ones_as_uninstalled()
+    {
+        var index = _client.Devices.FindIndex(d => d.Id == "pc-yoav");
+        _client.Devices[index] = _client.Devices[index] with { Revoked = true, RevokedReason = Contracts.Hub.UnregisterRequest.Uninstall };
+
+        var vm = await LoadedAsync();
+
+        var yoav = vm.Revoked.Single(d => d.Id == "pc-yoav");
+        Assert.True(yoav.IsRevoked);
+        Assert.False(yoav.IsOnline);
+        Assert.Equal("הסינון הוסר", yoav.StatusText);
+        Assert.Equal("הצימוד בוטל", vm.Revoked.Single(d => d.Id == "pc-old").StatusText);
+    }
+
     [Theory]
     [InlineData(-5, "לפני פחות מדקה", true)] // the service's clock slightly behind the device's
     [InlineData(59, "לפני פחות מדקה", true)]

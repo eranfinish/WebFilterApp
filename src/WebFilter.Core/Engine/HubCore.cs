@@ -160,6 +160,16 @@ public sealed class HubCore(FamilyConfig config)
     }
 
     /// <summary>
+    /// A paired device left by itself because it is being uninstalled; recorded for the activity log. Its entry stays, with
+    /// its accounts and their links, so pairing the same computer again restores it as it was.
+    /// </summary>
+    public void DeviceUninstalled(string id, DateTimeOffset now)
+    {
+        Version++;
+        Events.Add(new FamilyEvent(EventType.AdminChange, now, null, id, Detail: "device_uninstalled"));
+    }
+
+    /// <summary>
     /// Records the accounts a device reports (tests/simulation/README.md §8): new ones are added unlinked until a parent
     /// links them; a known one keeps its link and takes the reported name and administrator flag — administrators are
     /// never filtered, so a flag left from before a parent made a child's account a standard one would leave the child
