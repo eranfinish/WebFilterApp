@@ -1,3 +1,4 @@
+using WebFilter.Admin.Services;
 using WebFilter.Admin.ViewModels;
 using WebFilter.Contracts.Admin;
 using WebFilter.Contracts.Hub;
@@ -93,31 +94,39 @@ public sealed class SetupWizardViewModelTests
         Assert.Equal(("14:00", "21:30", "240"), (vm.TimedMembers[1].Start, vm.TimedMembers[1].End, vm.TimedMembers[1].LimitText));
         vm.TimedMembers[1].LimitText = "180";
 
-        // 4. Ready-made lists, all offered; a child starts with the learning sites allowed.
+        // 4. Ready-made lists, all offered (PROTECTION-SPEC §3): a child, who sees only approved sites, starts with the learning
+        // sites and the school tools allowed; a teen with the protection lists blocked and the chatbots offered, not blocked.
         await vm.NextCommand.ExecuteAsync(null);
         Assert.True(vm.IsCategoriesStep);
-        Assert.Equal(["educational", "social", "gaming"], vm.StarterCategories.Select(c => c.Name));
+        Assert.Equal(StarterLists.Names, vm.StarterCategories.Select(c => c.Name));
         Assert.All(vm.StarterCategories, c => Assert.True(c.Include));
-        Assert.Equal(["allow", "default", "default"], vm.TimedMembers[0].Categories.Select(c => c.Choice));
-        Assert.Equal(["default", "default", "default"], vm.TimedMembers[1].Categories.Select(c => c.Choice));
+        Assert.Equal("להוסיף את הרשימה המוכנה תוכן למבוגרים (15,691 אתרים)", vm.StarterCategories.Single(c => c.Name == "adult").Text);
+        Assert.Equal(Choices(("educational", "allow"), ("school-tools", "allow")), vm.TimedMembers[0].Categories.Select(c => (c.Category.Name, c.Choice)));
+        Assert.Equal(Choices(("adult", "block"), ("gambling", "block"), ("proxies", "block"), ("unfiltered-search", "block"), ("ads-popups", "block")),
+            vm.TimedMembers[1].Categories.Select(c => (c.Category.Name, c.Choice)));
         vm.TimedMembers[1].Categories.Single(c => c.Category.Name == "gaming").Choice = "block";
 
-        // 5. Review.
+        // 5. Review: the protections each role starts with are listed too.
         await vm.NextCommand.ExecuteAsync(null);
         Assert.True(vm.IsReviewStep);
-        Assert.Equal("ילד/ה, גיל 8 · רק אתרים מאושרים · YouTube: רק ערוצים מאושרים · 15:00–19:00, עד 120 דקות ביום · לימודים: מותרת תמיד · חשבון: noa",
+        Assert.Equal("ילד/ה, גיל 8 · רק אתרים מאושרים · YouTube: רק ערוצים מאושרים · 15:00–19:00, עד 120 דקות ביום"
+                     + " · חסימת חיפוש תמונות, חסימת קפיצות לאתרים אחרים, חסימת YouTube Shorts · לימודים: מותרת תמיד, כלי בית ספר: מותרת תמיד · חשבון: noa",
             Bidi.Plain(vm.Members[0].SummaryText));
+        Assert.Contains("· חסימת קפיצות לאתרים אחרים ·", vm.Members[1].SummaryText);
         Assert.Contains("משחקים: חסומה", vm.Members[1].SummaryText);
         Assert.Equal("מבוגר/ת · ללא סינון · YouTube: ללא הגבלה · בלי הגבלת זמן · חשבון: Dad", vm.Members[2].SummaryText);
         Assert.Null(vm.AccountsSummary);
-        Assert.Equal("רשימות מוכנות: לימודים, רשתות חברתיות, משחקים.", vm.CategoriesSummary);
+        Assert.Equal("רשימות מוכנות: לימודים, רשתות חברתיות, משחקים, כלי בית ספר, תוכן למבוגרים, הימורים, פרוקסי ועוקפי חסימות, צ'אטבוטים, מנועי חיפוש לא מסוננים, פרסומות וחלונות קופצים.",
+            vm.CategoriesSummary);
 
         await vm.ApplyCommand.ExecuteAsync(null);
 
         var replace = Assert.Single(_client.SentOf<ReplaceSettings>());
         Assert.Equal(2, replace.IfVersion); // the scan added the accounts (version 2)
+        // PROTECTION-SPEC §1 role defaults: image search, jumps and Shorts blocked for a child, jumps for a teen; searches not logged.
         Assert.Equal(
-            [new MemberDto(noa, "נועה", "child", 8, "allowlist", "allowlist"), new MemberDto(yoav, "יואב", "teen", 14, "blocklist", "restricted"),
+            [new MemberDto(noa, "נועה", "child", 8, "allowlist", "allowlist", BlockImageSearch: true, JumpGuard: true, BlockYouTubeShorts: true, LogSearches: false),
+             new MemberDto(yoav, "יואב", "teen", 14, "blocklist", "restricted", BlockImageSearch: false, JumpGuard: true, BlockYouTubeShorts: false, LogSearches: false),
              new MemberDto(dad, "אבא", "adult", null, "unrestricted", "unrestricted")],
             replace.Settings.Members);
         Assert.Equal(new Dictionary<string, string?> { ["noa"] = noa, ["yoav"] = yoav, ["Dad"] = dad },
@@ -125,9 +134,16 @@ public sealed class SetupWizardViewModelTests
         Assert.Equal([$"{noa}:0,1,2,3,4,5,6:15:00-19:00", $"{yoav}:0,1,2,3,4,5,6:14:00-21:30"],
             replace.Settings.Schedules.Select(s => $"{s.Member}:{string.Join(",", s.Days)}:{s.Start}-{s.End}"));
         Assert.Equal([$"{noa}:120", $"{yoav}:180"], replace.Settings.DailyLimits.Select(l => $"{l.Member}:{l.Minutes}"));
-        Assert.Equal(["educational", "social", "gaming"], replace.Settings.Categories.Keys);
+        Assert.Equal(StarterLists.Names, replace.Settings.Categories.Keys);
         Assert.Contains("khanacademy.org", replace.Settings.Categories["educational"]);
-        Assert.Equal([new MemberCategoryDto(noa, "educational", "allow"), new MemberCategoryDto(yoav, "gaming", "block")], replace.Settings.MemberCategories);
+        Assert.Contains("classroom.google.com", replace.Settings.Categories["school-tools"]);
+        Assert.Equal(
+            [new MemberCategoryDto(noa, "educational", "allow"), new MemberCategoryDto(noa, "school-tools", "allow"), new MemberCategoryDto(yoav, "gaming", "block"),
+             new MemberCategoryDto(yoav, "adult", "block"), new MemberCategoryDto(yoav, "gambling", "block"), new MemberCategoryDto(yoav, "proxies", "block"),
+             new MemberCategoryDto(yoav, "unfiltered-search", "block"), new MemberCategoryDto(yoav, "ads-popups", "block")],
+            replace.Settings.MemberCategories);
+        // The school tools allowed for noa bring the Ministry of Education sign-in rules (PROTECTION-SPEC §11).
+        Assert.Equal(SchoolSignIn.Rules, replace.Settings.Rules);
         Assert.True(vm.IsDone);
         Assert.True(vm.ShowsWizard);
         Assert.False(vm.ShowsAlreadySetUp);
@@ -310,6 +326,8 @@ public sealed class SetupWizardViewModelTests
         Assert.Equal(["educational"], settings.Categories.Keys);
         Assert.Equal([new MemberCategoryDto(vm.Members[0].Id, "educational", "allow")], settings.MemberCategories);
         Assert.Equal("רשימות מוכנות: לימודים.", vm.CategoriesSummary);
+        // Without the school tools, no sign-in rules either.
+        Assert.Empty(settings.Rules);
     }
 
     [Fact]
@@ -336,10 +354,65 @@ public sealed class SetupWizardViewModelTests
         var noa = vm.TimedMembers[0];
 
         noa.Role = "teen";
+        Assert.Equal(["adult", "gambling", "proxies", "unfiltered-search", "ads-popups"], noa.Categories.Where(c => c.Choice == "block").Select(c => c.Category.Name));
+        Assert.DoesNotContain(noa.Categories, c => c.Choice == "allow");
+        noa.Role = "adult";
         Assert.All(noa.Categories, c => Assert.Equal(CategoryChoiceViewModel.Default, c.Choice));
         noa.Role = "child";
-        Assert.Equal("allow", noa.Categories.Single(c => c.Category.Name == "educational").Choice);
+        Assert.Equal(["educational", "school-tools"], noa.Categories.Where(c => c.Choice == "allow").Select(c => c.Category.Name));
+        Assert.DoesNotContain(noa.Categories, c => c.Choice == "block");
     }
+
+    [Theory]
+    [InlineData("child", true, true, true)]
+    [InlineData("teen", false, true, false)]
+    [InlineData("adult", false, false, false)]
+    public async Task A_role_brings_its_protections_and_no_search_log(string role, bool imageSearch, bool jumpGuard, bool shorts)
+    {
+        var vm = await LoadedAsync();
+        vm.Members[0].Name = "נועה";
+        vm.Members[0].Role = role;
+        for (var i = 0; i < 4; i++) await vm.NextCommand.ExecuteAsync(null);
+
+        await vm.ApplyCommand.ExecuteAsync(null);
+
+        var member = Assert.Single(_client.Single<ReplaceSettings>().Settings.Members);
+        Assert.Equal((imageSearch, jumpGuard, shorts, false), (member.BlockImageSearch, member.JumpGuard, member.BlockYouTubeShorts, member.LogSearches));
+    }
+
+    [Fact]
+    public async Task A_child_who_is_not_filtered_after_all_is_stored_without_protections()
+    {
+        var vm = await LoadedAsync();
+        vm.Members[0].Name = "נועה";
+        vm.Members[0].FilterMode = "unrestricted";
+        for (var i = 0; i < 4; i++) await vm.NextCommand.ExecuteAsync(null);
+        Assert.DoesNotContain("חסימת", vm.Members[0].SummaryText, StringComparison.Ordinal);
+
+        await vm.ApplyCommand.ExecuteAsync(null);
+
+        var member = Assert.Single(_client.Single<ReplaceSettings>().Settings.Members);
+        Assert.Equal(new MemberDto(member.Id, "נועה", "child", null, "unrestricted", "allowlist"), member);
+    }
+
+    [Fact]
+    public async Task School_tools_not_allowed_to_anyone_bring_no_sign_in_rules()
+    {
+        var vm = await LoadedAsync();
+        vm.Members[0].Name = "נועה";
+        for (var i = 0; i < 3; i++) await vm.NextCommand.ExecuteAsync(null);
+        vm.TimedMembers[0].Categories.Single(c => c.Category.Name == "school-tools").Choice = CategoryChoiceViewModel.Default;
+        await vm.NextCommand.ExecuteAsync(null);
+
+        await vm.ApplyCommand.ExecuteAsync(null);
+
+        var settings = _client.Single<ReplaceSettings>().Settings;
+        Assert.Contains("school-tools", settings.Categories.Keys);
+        Assert.Empty(settings.Rules);
+    }
+
+    private static (string, string)[] Choices(params (string Name, string Choice)[] chosen) =>
+        [.. StarterLists.Names.Select(n => (n, chosen.FirstOrDefault(c => c.Name == n).Choice ?? CategoryChoiceViewModel.Default))];
 
     [Fact]
     public async Task A_refused_setup_stays_on_the_summary_with_the_reason()

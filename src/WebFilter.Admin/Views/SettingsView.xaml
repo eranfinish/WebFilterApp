@@ -66,6 +66,24 @@
             </ItemsControl>
           </StackPanel>
         </Border>
+
+        <!-- Windows features for children (PROTECTION-SPEC §2), family-wide, saved together -->
+        <TextBlock Text="{x:Static res:Strings.Settings_WindowsFeatures}" Style="{StaticResource SectionText}" />
+        <TextBlock Text="{x:Static res:Strings.Settings_WindowsFeaturesHint}" Style="{StaticResource SubtleText}" Margin="0,0,0,8" />
+        <Border Style="{StaticResource Card}" Margin="0,0,0,16" DataContext="{Binding WindowsFeatures}">
+          <StackPanel d:DataContext="{d:DesignInstance Type=vm:WindowsFeaturesEditor}">
+            <CheckBox Content="{x:Static res:Strings.Settings_Feature_NotificationsAndSync}" IsChecked="{Binding NotificationsAndSync}" />
+            <TextBlock Text="{x:Static res:Strings.Settings_Feature_NotificationsAndSyncHint}" Style="{StaticResource SubtleText}" FontSize="12" Margin="22,2,0,10" />
+            <CheckBox Content="{x:Static res:Strings.Settings_Feature_OneDrive}" IsChecked="{Binding OneDrive}" />
+            <TextBlock Text="{x:Static res:Strings.Settings_Feature_OneDriveHint}" Style="{StaticResource SubtleText}" FontSize="12" Margin="22,2,0,10" />
+            <CheckBox Content="{x:Static res:Strings.Settings_Feature_WebSearchInStart}" IsChecked="{Binding WebSearchInStart}" />
+            <TextBlock Text="{x:Static res:Strings.Settings_Feature_WebSearchInStartHint}" Style="{StaticResource SubtleText}" FontSize="12" Margin="22,2,0,0" />
+            <StackPanel Orientation="Horizontal" Margin="0,10,0,0" Visibility="{Binding IsDirty, Converter={StaticResource BoolToVisibility}}">
+              <Button Content="{x:Static res:Strings.Common_Save}" Command="{Binding SaveCommand}" Style="{StaticResource PrimaryButton}" />
+              <Button Content="{x:Static res:Strings.Common_Revert}" Command="{Binding RevertCommand}" />
+            </StackPanel>
+          </StackPanel>
+        </Border>
       </StackPanel>
 
       <!-- What this computer has and lacks -->

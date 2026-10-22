@@ -1,8 +1,9 @@
 # Starter lists
 
-Category lists shipped with the product and offered in the setup wizard. The admin app embeds every `*.json` here
-(`WebFilter.Admin.csproj`, `StarterLists`); the wizard adds the ones the parent keeps to the family's categories, without
-replacing a category the family already has. `educational` is also what homework mode allows
+Category lists shipped with the product and offered in the setup wizard and on the member page. The admin app embeds every
+`*.json` here (`WebFilter.Admin.csproj`, `StarterLists`, in the order of `StarterLists.Names`); the wizard adds the ones the
+parent keeps to the family's categories, and the member page copies a list in when a parent first chooses it for someone,
+in both cases without replacing a category the family already has. `educational` is also what homework mode allows
 (`FamilyConfig.EducationalCategory`).
 
 Not to be confused with the synthetic categories in `tests/simulation/fixtures/family-base.json`, which exist only for tests.
@@ -29,7 +30,7 @@ checks) and, for the lists the wizard offers, `tests/WebFilter.Admin.Tests/Start
 
 ## The lists
 
-| File | Hebrew title (`Category_<name>`; new ones suggested) | Default (PROTECTION-SPEC §3) | Domains | Source | Licence |
+| File | Hebrew title (`Category_<name>`, a `-` written `_`) | Default (PROTECTION-SPEC §3) | Domains | Source | Licence |
 |---|---|---|---:|---|---|
 | `educational.json` | לימודים | allow (children), homework mode | 23 | hand-picked | — |
 | `social.json` | רשתות חברתיות | — | 17 | hand-picked | — |
@@ -84,8 +85,10 @@ Known gaps — they need a URL rule, because a category holds domains only:
 
 - Ministry of Education **Google** accounts (`@educ.org.il`, `@taded.org.il`, …) sign in through SAML, which passes
   through `www.google.com/a/<domain>/ServiceLogin` and posts back to `www.google.com/a/<domain>/acs`. In allowlist mode
-  that is blocked (`www.google.com` is Search). A global prefix allow rule `www.google.com/a/` fixes it without opening
-  Search. Likewise `www.google.com/recaptcha/` if a sign-in shows a captcha frame.
+  that is blocked (`www.google.com` is Search). So while any member has `school-tools` allowed, the admin app keeps two
+  global prefix allow rules, `www.google.com/a/` and `www.google.com/recaptcha/` (a captcha frame during sign-in), with
+  ids `builtin-school-signin-*` (PROTECTION-SPEC §11, `SchoolSignIn`): they open the sign-in without opening Search, and
+  go when no member has the list allowed any more.
 - Google sign-in also visits `accounts.youtube.com` to sign in to YouTube. YouTube hosts follow the member's YouTube
   mode, above every category, so with YouTube **off** that step is blocked. To check in the lab.
 - Shared hosts cannot be split: `docs.google.com` and `sharepoint.com` serve any user's shared files, Gemini runs inside

@@ -460,7 +460,7 @@
     <value>כלל כזה כבר קיים.</value>
   </data>
   <data name="Activity_Intro" xml:space="preserve">
-    <value>חסימות, התראות זמן, בקשות ושינויים שעשו ההורים.</value>
+    <value>חסימות, התראות זמן, בקשות, חיפושים (של מי שתיעוד החיפושים שלו מופעל) ושינויים שעשו ההורים.</value>
   </data>
   <data name="Activity_Member" xml:space="preserve">
     <value>בן משפחה</value>
@@ -891,7 +891,7 @@
     <value>עד סוף היום</value>
   </data>
   <data name="Member_Intro" xml:space="preserve">
-    <value>כל ההגדרות של בן משפחה אחד: שעות ומכסה יומית, אתרים, ערוצי YouTube, אפליקציות וקטגוריות.</value>
+    <value>כל ההגדרות של בן משפחה אחד: הגנות, שעות ומכסה יומית, אתרים, ערוצי YouTube, אפליקציות וקטגוריות.</value>
   </data>
   <data name="Member_NotHub" xml:space="preserve">
     <value>המחשב הזה מנוהל על ידי מחשב ההורים (Hub). את ההגדרות של בני המשפחה משנים בממשק הניהול שבמחשב ההורים.</value>
@@ -1023,7 +1023,7 @@
     <value>קטגוריות</value>
   </data>
   <data name="Member_CategoriesHint" xml:space="preserve">
-    <value>לכל קטגוריה: לפי אופן הסינון, מותרת תמיד, או חסומה.</value>
+    <value>לכל קטגוריה: לפי אופן הסינון, מותרת תמיד, או חסומה. רשימה מוכנה שבוחרים לה משהו מתווספת לקטגוריות של המשפחה.</value>
   </data>
   <data name="Member_NoCategories" xml:space="preserve">
     <value>עדיין לא הוגדרו קטגוריות למשפחה.</value>
@@ -1054,6 +1054,27 @@
   </data>
   <data name="Category_gaming" xml:space="preserve">
     <value>משחקים</value>
+  </data>
+  <data name="Category_school_tools" xml:space="preserve">
+    <value>כלי בית ספר</value>
+  </data>
+  <data name="Category_adult" xml:space="preserve">
+    <value>תוכן למבוגרים</value>
+  </data>
+  <data name="Category_gambling" xml:space="preserve">
+    <value>הימורים</value>
+  </data>
+  <data name="Category_proxies" xml:space="preserve">
+    <value>פרוקסי ועוקפי חסימות</value>
+  </data>
+  <data name="Category_ai_chat" xml:space="preserve">
+    <value>צ'אטבוטים</value>
+  </data>
+  <data name="Category_unfiltered_search" xml:space="preserve">
+    <value>מנועי חיפוש לא מסוננים</value>
+  </data>
+  <data name="Category_ads_popups" xml:space="preserve">
+    <value>פרסומות וחלונות קופצים</value>
   </data>
   <data name="Done_WeekSaved" xml:space="preserve">
     <value>השעות והמכסה של {0} נשמרו.</value>
@@ -1311,7 +1332,7 @@
     <value>קטגוריות</value>
   </data>
   <data name="Setup_CategoriesHint" xml:space="preserve">
-    <value>רשימות מוכנות של אתרים. מה שתבחרו כאן אפשר לשנות אחר כך במסך בני משפחה. רשימת הלימודים היא גם מה שמותר במצב שיעורי בית.</value>
+    <value>רשימות מוכנות של אתרים. מה שתבחרו כאן אפשר לשנות אחר כך במסך בני משפחה. רשימת הלימודים היא גם מה שמותר במצב שיעורי בית. ילדים מתחילים עם הלימודים וכלי בית הספר מותרים, ומתבגרים עם רשימות ההגנה חסומות (הצ'אטבוטים לבחירתכם).</value>
   </data>
   <data name="Setup_IncludeList" xml:space="preserve">
     <value>להוסיף את הרשימה המוכנה {0} ({1} אתרים)</value>
@@ -1398,5 +1419,99 @@
   </data>
   <data name="AdminChange_device_uninstalled" xml:space="preserve">
     <value>הסינון הוסר ממחשב</value>
+  </data>
+  <data name="Member_Protection" xml:space="preserve">
+    <value>הגנות</value>
+  </data>
+  <data name="Member_ProtectionHint" xml:space="preserve">
+    <value>כל מתג נשמר מיד וחל בכל המחשבים.</value>
+  </data>
+  <data name="Member_BlockImageSearch" xml:space="preserve">
+    <value>חסימת חיפוש תמונות</value>
+  </data>
+  <data name="Member_BlockImageSearchHint" xml:space="preserve">
+    <value>חיפוש התמונות של Google (וגם Google Lens), של Bing, של DuckDuckGo ושל Yandex חסום. חיפוש רגיל עובד כרגיל.</value>
+  </data>
+  <data name="Member_JumpGuard" xml:space="preserve">
+    <value>חסימת קפיצות לאתרים אחרים</value>
+  </data>
+  <data name="Member_JumpGuardHint" xml:space="preserve">
+    <value>אתר לא יכול לפתוח אתר אחר בכרטיסייה חדשה, בחלון קופץ או בהפניה אוטומטית. קישורים שלוחצים עליהם עובדים כרגיל. למתבגרים יש כפתור "פתח בכל זאת", ומה שנפתח כך נרשם ביומן הפעילות.</value>
+  </data>
+  <data name="Member_BlockYouTubeShorts" xml:space="preserve">
+    <value>חסימת YouTube Shorts</value>
+  </data>
+  <data name="Member_BlockYouTubeShortsHint" xml:space="preserve">
+    <value>סרטוני Shorts חסומים, והמדף שלהם ב-YouTube מוסתר. שאר הסרטונים לפי הגדרת YouTube.</value>
+  </data>
+  <data name="Member_LogSearches" xml:space="preserve">
+    <value>תיעוד מילות חיפוש</value>
+  </data>
+  <data name="Member_LogSearchesNote" xml:space="preserve">
+    <value>מה שמחפשים ב-Google, ב-Bing, ב-YouTube וב-DuckDuckGo מופיע ביומן הפעילות. בן המשפחה רואה בדפדפן הודעה שהחיפושים שלו גלויים להורים.</value>
+  </data>
+  <data name="Rule_SchoolSignIn" xml:space="preserve">
+    <value>לכניסה לחשבון בית ספר</value>
+  </data>
+  <data name="Rule_SchoolSignInHint" xml:space="preserve">
+    <value>נוסף לבד, כי לבן משפחה מותרים כלי בית ספר: הכניסה לחשבונות Google של משרד החינוך עוברת דרך הכתובת הזו. יוסר לבד כשכלי בית הספר לא יהיו מותרים לאף אחד.</value>
+  </data>
+  <data name="Settings_WindowsFeatures" xml:space="preserve">
+    <value>תכונות Windows לילדים</value>
+  </data>
+  <data name="Settings_WindowsFeaturesHint" xml:space="preserve">
+    <value>חלות על כל החשבונות המסוננים ועל חשבונות שעוד לא קושרו, בכל המחשבים. הן לא פותחות גלישה באתרים.</value>
+  </data>
+  <data name="Settings_Feature_NotificationsAndSync" xml:space="preserve">
+    <value>התראות וסנכרון של Windows</value>
+  </data>
+  <data name="Settings_Feature_NotificationsAndSyncHint" xml:space="preserve">
+    <value>שירותי Windows של החשבון (התראות, סנכרון הגדרות) יכולים להתחבר לרשת, גם כשזמן הגלישה נגמר. בלי זה התראות של Windows ושל אפליקציות לא מגיעות.</value>
+  </data>
+  <data name="Settings_Feature_OneDrive" xml:space="preserve">
+    <value>סנכרון קבצים ב-OneDrive</value>
+  </data>
+  <data name="Settings_Feature_OneDriveHint" xml:space="preserve">
+    <value>OneDrive יכול לסנכרן קבצים (למשל עבודות לבית הספר), גם כשזמן הגלישה נגמר. מותר רק OneDrive שמותקן לכל המשתמשים: עותק בתיקייה של הילד יכול להיות כל תוכנה ששינו את שמה.</value>
+  </data>
+  <data name="Settings_Feature_WebSearchInStart" xml:space="preserve">
+    <value>תוצאות מהאינטרנט בחיפוש של תפריט התחל</value>
+  </data>
+  <data name="Settings_Feature_WebSearchInStartHint" xml:space="preserve">
+    <value>החיפוש בתפריט התחל מציג גם תוצאות Bing. כבוי מראש, כי התוצאות האלה לא עוברות דרך הסינון; חיפוש של קבצים ואפליקציות במחשב עובד בכל מקרה.</value>
+  </data>
+  <data name="Done_WindowsFeaturesSaved" xml:space="preserve">
+    <value>תכונות Windows לילדים נשמרו.</value>
+  </data>
+  <data name="Check_onedrive_ok" xml:space="preserve">
+    <value>OneDrive מותקן לכל המשתמשים, ולכן גם הילדים יכולים להשתמש בו (כשמותר בתכונות Windows לילדים).</value>
+  </data>
+  <data name="Check_onedrive_warn" xml:space="preserve">
+    <value>OneDrive מותקן כאן רק בתיקייה של כל משתמש, ולילדים מותר רק OneDrive שמותקן לכל המשתמשים. כדי שיעבוד גם אצלם, התקינו אותו מחדש לכל המשתמשים: הורידו את OneDriveSetup.exe מהאתר של Microsoft והריצו בשורת פקודה של מנהל:
+{0}</value>
+  </data>
+  <data name="Check_onedrive_none" xml:space="preserve">
+    <value>OneDrive לא מותקן.</value>
+  </data>
+  <data name="Event_SearchType" xml:space="preserve">
+    <value>חיפוש</value>
+  </data>
+  <data name="Event_Search" xml:space="preserve">
+    <value>חיפוש ב-{0}: {1}</value>
+  </data>
+  <data name="Event_SearchEmpty" xml:space="preserve">
+    <value>חיפוש ב-{0}</value>
+  </data>
+  <data name="Event_Override" xml:space="preserve">
+    <value>נפתח בכל זאת: {0}</value>
+  </data>
+  <data name="Tamper_policy_repaired" xml:space="preserve">
+    <value>הגדרות שהסינון מנהל (מדיניות של הדפדפנים או של Windows) שונו, והסינון החזיר אותן</value>
+  </data>
+  <data name="Tamper_network_repaired" xml:space="preserve">
+    <value>מסנני הרשת של החשבון הוסרו, והסינון החזיר אותם</value>
+  </data>
+  <data name="Tamper_unclean_stop" xml:space="preserve">
+    <value>שירות הסינון נעצר באופן לא צפוי והופעל מחדש. זו יכולה להיות הפסקת חשמל או כיבוי בכוח של המחשב, ולא בהכרח ניסיון לעקוף את הסינון</value>
   </data>
 </root>

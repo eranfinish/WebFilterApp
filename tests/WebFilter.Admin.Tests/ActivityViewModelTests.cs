@@ -93,6 +93,63 @@ public sealed class ActivityViewModelTests
     }
 
     [Fact]
+    public async Task Searches_have_a_filter_of_their_own()
+    {
+        var vm = Create();
+        await vm.RefreshAsync();
+
+        Assert.Contains(new Option("search", "חיפושים"), vm.TypeOptions);
+        vm.SelectedType = "search";
+
+        Assert.Equal("search", LastQuery.EventType);
+    }
+
+    [Fact]
+    public async Task Searches_overrides_and_repairs_are_shown_in_plain_words()
+    {
+        _client.Events.AddRange(
+        [
+            new EventDto("search", TestData.Now.AddMinutes(-50), "yoav", "laptop-yoav", null, "https://www.google.com/search?q=lego+star+wars", null, null, "google:lego star wars"),
+            new EventDto("search", TestData.Now.AddMinutes(-45), "noa", "pc-kids", null, "https://www.youtube.com/results?search_query=x", null, null, "youtube:שיר ערש: גרסה 2"),
+            new EventDto("override", TestData.Now.AddMinutes(-40), "yoav", "laptop-yoav", "blocked_jump", "https://news.example/story", null, null, null),
+            new EventDto("tamper", TestData.Now.AddMinutes(-30), "noa", "pc-kids", null, null, null, null, "policy_repaired"),
+            new EventDto("tamper", TestData.Now.AddMinutes(-20), "yoav", "laptop-yoav", null, null, null, null, "network_repaired"),
+            new EventDto("tamper", TestData.Now.AddMinutes(-10), null, "pc-kids", null, null, null, null, "unclean_stop"),
+            new EventDto("blocked", TestData.Now.AddMinutes(-5), "noa", "pc-kids", "blocked_image_search", "https://www.google.com/search?q=cats&udm=2", null, null, null),
+        ]);
+        var vm = Create();
+        await vm.RefreshAsync();
+        var events = vm.Events.Reverse().ToList();
+
+        Assert.Equal("חיפוש", events[0].TypeText);
+        Assert.Equal("חיפוש ב-Google: lego star wars — https://www.google.com/search?q=lego+star+wars", Bidi.Plain(events[0].Details));
+        // A query in Hebrew stays as typed, colons included (only the first ':' separates the engine).
+        Assert.StartsWith("חיפוש ב-YouTube: שיר ערש: גרסה 2 — ", events[1].Details, StringComparison.Ordinal);
+        Assert.False(events[0].IsAlert);
+
+        Assert.Equal("נפתח למרות חסימה", events[2].TypeText);
+        Assert.Equal("נפתח בכל זאת: https://news.example/story — האתר ניסה לפתוח אתר אחר", Bidi.Plain(events[2].Details));
+
+        Assert.Equal("הגדרות שהסינון מנהל (מדיניות של הדפדפנים או של Windows) שונו, והסינון החזיר אותן", events[3].Details);
+        Assert.Equal("מסנני הרשת של החשבון הוסרו, והסינון החזיר אותם", events[4].Details);
+        // Not worded as an attack: a power cut looks the same.
+        Assert.Contains("הפסקת חשמל", events[5].Details, StringComparison.Ordinal);
+        Assert.Contains("לא בהכרח ניסיון לעקוף", events[5].Details, StringComparison.Ordinal);
+        Assert.All(events.Skip(3).Take(3), e => Assert.True(e.IsAlert));
+
+        Assert.Equal("https://www.google.com/search?q=cats&udm=2 — חיפוש תמונות חסום", Bidi.Plain(events[6].Details));
+    }
+
+    [Theory]
+    [InlineData("bing:weather", "חיפוש ב-Bing: weather")]
+    [InlineData("duckduckgo:a:b", "חיפוש ב-DuckDuckGo: a:b")]
+    [InlineData("google:", "חיפוש ב-Google")]
+    [InlineData("newengine:x", "חיפוש ב-newengine: x")]
+    [InlineData(null, "חיפוש ב-")]
+    public void A_search_detail_is_split_at_its_first_colon(string? detail, string text) =>
+        Assert.Equal(text, Bidi.Plain(EventItemViewModel.Search(detail)));
+
+    [Fact]
     public async Task A_member_filter_survives_a_reload()
     {
         var vm = Create();

@@ -4104,5 +4104,347 @@ namespace WebFilter.Admin.Resources {
                 return ResourceManager.GetString("AdminChange_device_uninstalled", resourceCulture);
             }
         }
+
+        /// <summary>
+        ///   Looks up a localized string similar to כלי בית ספר.
+        /// </summary>
+        public static string Category_school_tools {
+            get {
+                return ResourceManager.GetString("Category_school_tools", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to תוכן למבוגרים.
+        /// </summary>
+        public static string Category_adult {
+            get {
+                return ResourceManager.GetString("Category_adult", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to הימורים.
+        /// </summary>
+        public static string Category_gambling {
+            get {
+                return ResourceManager.GetString("Category_gambling", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to פרוקסי ועוקפי חסימות.
+        /// </summary>
+        public static string Category_proxies {
+            get {
+                return ResourceManager.GetString("Category_proxies", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to צ'אטבוטים.
+        /// </summary>
+        public static string Category_ai_chat {
+            get {
+                return ResourceManager.GetString("Category_ai_chat", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to מנועי חיפוש לא מסוננים.
+        /// </summary>
+        public static string Category_unfiltered_search {
+            get {
+                return ResourceManager.GetString("Category_unfiltered_search", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to פרסומות וחלונות קופצים.
+        /// </summary>
+        public static string Category_ads_popups {
+            get {
+                return ResourceManager.GetString("Category_ads_popups", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to הגנות.
+        /// </summary>
+        public static string Member_Protection {
+            get {
+                return ResourceManager.GetString("Member_Protection", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to כל מתג נשמר מיד וחל בכל המחשבים..
+        /// </summary>
+        public static string Member_ProtectionHint {
+            get {
+                return ResourceManager.GetString("Member_ProtectionHint", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to חסימת חיפוש תמונות.
+        /// </summary>
+        public static string Member_BlockImageSearch {
+            get {
+                return ResourceManager.GetString("Member_BlockImageSearch", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to חיפוש התמונות של Google (וגם Google Lens), של Bing, של DuckDuckGo ושל Yandex ....
+        /// </summary>
+        public static string Member_BlockImageSearchHint {
+            get {
+                return ResourceManager.GetString("Member_BlockImageSearchHint", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to חסימת קפיצות לאתרים אחרים.
+        /// </summary>
+        public static string Member_JumpGuard {
+            get {
+                return ResourceManager.GetString("Member_JumpGuard", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to אתר לא יכול לפתוח אתר אחר בכרטיסייה חדשה, בחלון קופץ או בהפניה אוטומטית. קישו....
+        /// </summary>
+        public static string Member_JumpGuardHint {
+            get {
+                return ResourceManager.GetString("Member_JumpGuardHint", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to חסימת YouTube Shorts.
+        /// </summary>
+        public static string Member_BlockYouTubeShorts {
+            get {
+                return ResourceManager.GetString("Member_BlockYouTubeShorts", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to סרטוני Shorts חסומים, והמדף שלהם ב-YouTube מוסתר. שאר הסרטונים לפי הגדרת YouT....
+        /// </summary>
+        public static string Member_BlockYouTubeShortsHint {
+            get {
+                return ResourceManager.GetString("Member_BlockYouTubeShortsHint", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to תיעוד מילות חיפוש.
+        /// </summary>
+        public static string Member_LogSearches {
+            get {
+                return ResourceManager.GetString("Member_LogSearches", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to מה שמחפשים ב-Google, ב-Bing, ב-YouTube וב-DuckDuckGo מופיע ביומן הפעילות. בן ....
+        /// </summary>
+        public static string Member_LogSearchesNote {
+            get {
+                return ResourceManager.GetString("Member_LogSearchesNote", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to לכניסה לחשבון בית ספר.
+        /// </summary>
+        public static string Rule_SchoolSignIn {
+            get {
+                return ResourceManager.GetString("Rule_SchoolSignIn", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to נוסף לבד, כי לבן משפחה מותרים כלי בית ספר: הכניסה לחשבונות Google של משרד החי....
+        /// </summary>
+        public static string Rule_SchoolSignInHint {
+            get {
+                return ResourceManager.GetString("Rule_SchoolSignInHint", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to תכונות Windows לילדים.
+        /// </summary>
+        public static string Settings_WindowsFeatures {
+            get {
+                return ResourceManager.GetString("Settings_WindowsFeatures", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to חלות על כל החשבונות המסוננים ועל חשבונות שעוד לא קושרו, בכל המחשבים. הן לא פו....
+        /// </summary>
+        public static string Settings_WindowsFeaturesHint {
+            get {
+                return ResourceManager.GetString("Settings_WindowsFeaturesHint", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to התראות וסנכרון של Windows.
+        /// </summary>
+        public static string Settings_Feature_NotificationsAndSync {
+            get {
+                return ResourceManager.GetString("Settings_Feature_NotificationsAndSync", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to שירותי Windows של החשבון (התראות, סנכרון הגדרות) יכולים להתחבר לרשת, גם כשזמן....
+        /// </summary>
+        public static string Settings_Feature_NotificationsAndSyncHint {
+            get {
+                return ResourceManager.GetString("Settings_Feature_NotificationsAndSyncHint", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to סנכרון קבצים ב-OneDrive.
+        /// </summary>
+        public static string Settings_Feature_OneDrive {
+            get {
+                return ResourceManager.GetString("Settings_Feature_OneDrive", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to OneDrive יכול לסנכרן קבצים (למשל עבודות לבית הספר), גם כשזמן הגלישה נגמר. מות....
+        /// </summary>
+        public static string Settings_Feature_OneDriveHint {
+            get {
+                return ResourceManager.GetString("Settings_Feature_OneDriveHint", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to תוצאות מהאינטרנט בחיפוש של תפריט התחל.
+        /// </summary>
+        public static string Settings_Feature_WebSearchInStart {
+            get {
+                return ResourceManager.GetString("Settings_Feature_WebSearchInStart", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to החיפוש בתפריט התחל מציג גם תוצאות Bing. כבוי מראש, כי התוצאות האלה לא עוברות ....
+        /// </summary>
+        public static string Settings_Feature_WebSearchInStartHint {
+            get {
+                return ResourceManager.GetString("Settings_Feature_WebSearchInStartHint", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to תכונות Windows לילדים נשמרו..
+        /// </summary>
+        public static string Done_WindowsFeaturesSaved {
+            get {
+                return ResourceManager.GetString("Done_WindowsFeaturesSaved", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to OneDrive מותקן לכל המשתמשים, ולכן גם הילדים יכולים להשתמש בו (כשמותר בתכונות ....
+        /// </summary>
+        public static string Check_onedrive_ok {
+            get {
+                return ResourceManager.GetString("Check_onedrive_ok", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to OneDrive מותקן כאן רק בתיקייה של כל משתמש, ולילדים מותר רק OneDrive שמותקן לכ....
+        /// </summary>
+        public static string Check_onedrive_warn {
+            get {
+                return ResourceManager.GetString("Check_onedrive_warn", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to OneDrive לא מותקן..
+        /// </summary>
+        public static string Check_onedrive_none {
+            get {
+                return ResourceManager.GetString("Check_onedrive_none", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to חיפוש.
+        /// </summary>
+        public static string Event_SearchType {
+            get {
+                return ResourceManager.GetString("Event_SearchType", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to חיפוש ב-{0}: {1}.
+        /// </summary>
+        public static string Event_Search {
+            get {
+                return ResourceManager.GetString("Event_Search", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to חיפוש ב-{0}.
+        /// </summary>
+        public static string Event_SearchEmpty {
+            get {
+                return ResourceManager.GetString("Event_SearchEmpty", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to נפתח בכל זאת: {0}.
+        /// </summary>
+        public static string Event_Override {
+            get {
+                return ResourceManager.GetString("Event_Override", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to הגדרות שהסינון מנהל (מדיניות של הדפדפנים או של Windows) שונו, והסינון החזיר אותן.
+        /// </summary>
+        public static string Tamper_policy_repaired {
+            get {
+                return ResourceManager.GetString("Tamper_policy_repaired", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to מסנני הרשת של החשבון הוסרו, והסינון החזיר אותם.
+        /// </summary>
+        public static string Tamper_network_repaired {
+            get {
+                return ResourceManager.GetString("Tamper_network_repaired", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to שירות הסינון נעצר באופן לא צפוי והופעל מחדש. זו יכולה להיות הפסקת חשמל או כיב....
+        /// </summary>
+        public static string Tamper_unclean_stop {
+            get {
+                return ResourceManager.GetString("Tamper_unclean_stop", resourceCulture);
+            }
+        }
     }
 }

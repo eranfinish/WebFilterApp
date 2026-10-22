@@ -24,7 +24,9 @@ public enum WizardStep
 /// template; this computer's Windows accounts (<see cref="ScanAccounts"/>, then the device in the settings) linked to
 /// them; hours and a daily limit for the filtered ones; the ready-made category lists (data/starter-lists) and what each
 /// filtered member gets of them; a summary with the requirement checks of this computer (<see cref="GetDiagnostics"/>);
-/// then all of it in one <see cref="ReplaceSettings"/>. It ends with how to pair the children's other computers.
+/// then all of it in one <see cref="ReplaceSettings"/>, with each role's protections (PROTECTION-SPEC §1) and, when someone
+/// gets the school tools, the school sign-in rules (<see cref="SchoolSignIn"/>). It ends with how to pair the children's
+/// other computers.
 /// </summary>
 public sealed partial class SetupWizardViewModel : PageViewModel
 {
@@ -230,7 +232,8 @@ public sealed partial class SetupWizardViewModel : PageViewModel
             .SelectMany(m => m.Categories.Where(c => c.Category.Include && c.Choice != CategoryChoiceViewModel.Default).Select(c => new MemberCategoryDto(m.Id, c.Category.Name, c.Choice)))
             .ToList();
 
-        var applied = await RunAsync(() => Context.UpdateSettingsAsync(s => s with
+        // A member allowed the school tools brings the sign-in rules with them (SchoolSignIn).
+        var applied = await RunAsync(() => Context.UpdateSettingsAsync(s => SchoolSignIn.Apply(s with
         {
             Members = [.. s.Members, .. members],
             Devices = [.. s.Devices.Select(d => d.Id != deviceId ? d : d with
@@ -239,9 +242,9 @@ public sealed partial class SetupWizardViewModel : PageViewModel
             })],
             Schedules = [.. s.Schedules, .. schedules],
             DailyLimits = [.. s.DailyLimits, .. limits],
-            Categories = WithLists(s.Categories, lists),
+            Categories = StarterLists.AddTo(s.Categories, lists.Select(l => l.List)),
             MemberCategories = [.. s.MemberCategories, .. choices],
-        }));
+        })));
         if (!applied) return;
         GoTo(WizardStep.Done);
         await RefreshAsync();
@@ -346,14 +349,6 @@ public sealed partial class SetupWizardViewModel : PageViewModel
         return null;
     }
 
-    /// <summary>The family's categories plus the included lists; a category the family already has keeps its own domains.</summary>
-    private static Dictionary<string, IReadOnlyList<string>> WithLists(IReadOnlyDictionary<string, IReadOnlyList<string>> categories, IEnumerable<WizardCategoryViewModel> lists)
-    {
-        var result = new Dictionary<string, IReadOnlyList<string>>(categories, StringComparer.OrdinalIgnoreCase);
-        foreach (var list in lists) result.TryAdd(list.Name, list.Domains);
-        return result;
-    }
-
     private void GoTo(WizardStep step)
     {
         Step = step;
@@ -380,30 +375,57 @@ public sealed partial class SetupWizardViewModel : PageViewModel
 public sealed record WizardStepItem(string Label, bool IsCurrent, bool IsComplete);
 
 /// <summary>
-/// Where a role starts (MVP-PLAN §4.5 templates: young children / teens / adults); the parent can change each part. A
-/// child, who sees only approved sites, starts with the learning sites allowed.
+/// Where a role starts (MVP-PLAN §4.5 templates: young children / teens / adults; PROTECTION-SPEC §1 and §3); the parent can
+/// change each part, the protections later on the member page. A child, who sees only approved sites, starts with the
+/// learning sites and the school tools allowed; a teen, who sees everything not blocked, with the protection lists blocked
+/// (the chatbots are offered, not blocked).
 /// </summary>
 internal sealed record MemberTemplate(string FilterMode, string YouTubeMode, bool LimitTime, string Start, string End, int LimitMinutes,
-    IReadOnlyDictionary<string, string> Categories)
+    IReadOnlyDictionary<string, string> Categories, MemberProtection Protection)
 {
     public static MemberTemplate For(string role) => role switch
     {
-        "child" => new("allowlist", "allowlist", true, "15:00", "19:00", 120, new Dictionary<string, string> { ["educational"] = "allow" }),
-        "teen" => new("blocklist", "restricted", true, "14:00", "21:30", 240, new Dictionary<string, string>()),
-        _ => new("unrestricted", "unrestricted", false, "08:00", "22:00", 180, new Dictionary<string, string>()),
+        "child" => new("allowlist", "allowlist", true, "15:00", "19:00", 120,
+            new Dictionary<string, string> { ["educational"] = "allow", [StarterLists.SchoolTools] = "allow" },
+            new MemberProtection(BlockImageSearch: true, JumpGuard: true, BlockYouTubeShorts: true, LogSearches: false)),
+        "teen" => new("blocklist", "restricted", true, "14:00", "21:30", 240,
+            new Dictionary<string, string> { ["adult"] = "block", ["gambling"] = "block", ["proxies"] = "block", ["unfiltered-search"] = "block", ["ads-popups"] = "block" },
+            new MemberProtection(BlockImageSearch: false, JumpGuard: true, BlockYouTubeShorts: false, LogSearches: false)),
+        _ => new("unrestricted", "unrestricted", false, "08:00", "22:00", 180, new Dictionary<string, string>(), MemberProtection.None),
     };
+}
+
+/// <summary>The four protection flags of a member (PROTECTION-SPEC §1); filtered members only.</summary>
+internal sealed record MemberProtection(bool BlockImageSearch, bool JumpGuard, bool BlockYouTubeShorts, bool LogSearches)
+{
+    public static readonly MemberProtection None = new(false, false, false, false);
+
+    /// <summary>"Block image search, Block jumps to other sites", or null when none is on.</summary>
+    public string? Text()
+    {
+        var on = new[]
+        {
+            BlockImageSearch ? Strings.Member_BlockImageSearch : null,
+            JumpGuard ? Strings.Member_JumpGuard : null,
+            BlockYouTubeShorts ? Strings.Member_BlockYouTubeShorts : null,
+            LogSearches ? Strings.Member_LogSearches : null,
+        };
+        return Texts.NullIfEmpty(Texts.Join(", ", on));
+    }
 }
 
 /// <summary>A ready-made list offered by the wizard: added to the family's categories unless the parent leaves it out.</summary>
 public sealed partial class WizardCategoryViewModel(StarterList list) : ObservableObject
 {
-    public string Name => list.Category;
+    public StarterList List { get; } = list;
+
+    public string Name => List.Category;
 
     public string Label { get; } = Texts.Code("Category_", list.Category);
 
-    public IReadOnlyList<string> Domains => list.Domains;
+    public IReadOnlyList<string> Domains => List.Domains;
 
-    public string Text => Texts.Format(Strings.Setup_IncludeList, Label, Domains.Count);
+    public string Text => Texts.Format(Strings.Setup_IncludeList, Label, Domains.Count.ToString("N0", CultureInfo.CurrentCulture));
 
     /// <summary>A few of the sites, for a tooltip.</summary>
     public string Sample => string.Join(", ", Domains.Take(8)) + (Domains.Count > 8 ? ", …" : "");
@@ -470,12 +492,19 @@ public sealed partial class WizardMemberViewModel : ObservableObject
 
     internal int? LimitMinutes { get; private set; }
 
+    /// <summary>The role's protection flags (PROTECTION-SPEC §1); the parent changes them on the member page.</summary>
+    internal MemberProtection Protection { get; private set; } = MemberProtection.None;
+
     internal void SetTimes(string start, string end, int? minutes) => (StartTime, EndTime, LimitMinutes) = (start, end, minutes);
 
     /// <summary>"15:00–19:00", kept left to right inside the Hebrew summary (a dash between two times would otherwise flip them).</summary>
     private string Hours => Texts.Ltr($"{StartTime}–{EndTime}")!;
 
-    internal MemberDto ToDto() => new(Id, Name.Trim(), Role, Age, FilterMode, YouTubeMode);
+    /// <summary>The protections apply to filtered members only, so an unfiltered one is stored without them.</summary>
+    private MemberProtection Applied => IsFiltered ? Protection : MemberProtection.None;
+
+    internal MemberDto ToDto() => new(Id, Name.Trim(), Role, Age, FilterMode, YouTubeMode,
+        Applied.BlockImageSearch, Applied.JumpGuard, Applied.BlockYouTubeShorts, Applied.LogSearches);
 
     /// <summary>A choice per list, from the role's template; choices made earlier are kept.</summary>
     internal void OfferCategories(IEnumerable<WizardCategoryViewModel> lists)
@@ -497,6 +526,7 @@ public sealed partial class WizardMemberViewModel : ObservableObject
             Texts.Code("FilterMode_", FilterMode),
             Texts.Format(Strings.Setup_Summary_YouTube, Texts.Code("YouTubeMode_", YouTubeMode)),
             time,
+            Applied.Text(),
             CategoriesText(),
             linked.Count == 0 ? Strings.Setup_Summary_NoAccount : Texts.Format(Strings.Setup_Summary_Accounts, string.Join(", ", linked)));
     }
@@ -520,6 +550,7 @@ public sealed partial class WizardMemberViewModel : ObservableObject
         Start = template.Start;
         End = template.End;
         LimitText = template.LimitMinutes.ToString(CultureInfo.InvariantCulture);
+        Protection = template.Protection;
         foreach (var choice in Categories) choice.Choice = template.Categories.GetValueOrDefault(choice.Category.Name, CategoryChoiceViewModel.Default);
     }
 }

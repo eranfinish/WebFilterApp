@@ -107,7 +107,8 @@ public sealed class EventItemViewModel
         Event = item;
         TimeText = context.FormatDateTime(item.At);
         MemberName = item.MemberId is null ? "" : context.MemberName(item.MemberId);
-        TypeText = Texts.Code("EventType_", item.Type);
+        // The filter says "searches"; one row is one search.
+        TypeText = item.Type == "search" ? Strings.Event_SearchType : Texts.Code("EventType_", item.Type);
         DeviceText = item.DeviceId ?? "";
         var reason = Texts.Code("Reason_", item.Reason);
         Details = item.Type switch
@@ -117,8 +118,23 @@ public sealed class EventItemViewModel
             "time_warning" => item.RemainingMinutes is { } left ? Texts.Format(Strings.Event_TimeLeft, Texts.Minutes(left)) : reason,
             "admin_change" => Texts.Join(" — ", Texts.Code("AdminChange_", item.Detail), Texts.Ltr(item.Url)),
             "access_request" => Texts.Join(": ", Texts.Code("RequestKind_", item.Detail), Texts.Ltr(item.Url)),
+            "search" => Texts.Join(" — ", Search(item.Detail), Texts.Ltr(item.Url)),
+            "override" => Texts.Join(" — ", Texts.Format(Strings.Event_Override, Texts.Ltr(item.Url)), reason),
+            "tamper" => Texts.Join(" — ", Texts.Code("Tamper_", item.Detail), reason),
             _ => Texts.Join(" — ", item.Detail, reason, Texts.Ltr(item.Url), Texts.Ltr(item.App)),
         };
+    }
+
+    /// <summary>
+    /// A search event's detail, "engine:query" (the engine never has a ':'; the query may), as "Search on Google: ‹query›".
+    /// </summary>
+    internal static string Search(string? detail)
+    {
+        var text = detail ?? "";
+        var colon = text.IndexOf(':', StringComparison.Ordinal);
+        var (engine, query) = colon < 0 ? (text, "") : (text[..colon], text[(colon + 1)..].Trim());
+        var name = engine switch { "google" => "Google", "bing" => "Bing", "youtube" => "YouTube", "duckduckgo" => "DuckDuckGo", _ => engine };
+        return query.Length == 0 ? Texts.Format(Strings.Event_SearchEmpty, name) : Texts.Format(Strings.Event_Search, name, Texts.Natural(query));
     }
 
     public EventDto Event { get; }

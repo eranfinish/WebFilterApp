@@ -25,6 +25,11 @@ public sealed class ViewRenderTests
         client.Devices.AddRange(TestData.Devices());
         client.Requests.Add(TestData.Request("ar-1", "url", "https://games.example/", "games.example"));
         client.Events.Add(new EventDto("blocked", TestData.Now.AddMinutes(-3), "noa", "pc-kids", "blocked_not_in_allowlist", "https://games.example/", null, null, null));
+        client.Events.Add(new EventDto("search", TestData.Now.AddMinutes(-4), "yoav", "laptop-yoav", null, "https://www.google.com/search?q=lego", null, null, "google:lego"));
+        client.Events.Add(new EventDto("override", TestData.Now.AddMinutes(-5), "yoav", "laptop-yoav", "blocked_jump", "https://news.example/", null, null, null));
+        client.Events.Add(new EventDto("tamper", TestData.Now.AddMinutes(-6), null, "pc-kids", null, null, null, null, "unclean_stop"));
+        client.Settings = client.Settings with { Rules = [.. client.Settings.Rules, .. SchoolSignIn.Rules] };
+        client.Checks.Add(new CheckResult("onedrive", "warn", "OneDriveSetup.exe /allusers"));
         await using var shown = await ShownAsync(client);
 
         foreach (var page in shown.Main.Pages.ToList())
@@ -33,6 +38,8 @@ public sealed class ViewRenderTests
             await shown.Main.CurrentLoad;
             await shown.RenderAsync(page.GetType().Name);
         }
+        shown.Main.Settings.WindowsFeatures!.OneDrive = false;
+        await shown.RenderAsync("SettingsViewModel-features-changed");
         shown.Main.SelectedPage = shown.Main.Rules;
         await shown.Main.CurrentLoad;
         shown.Main.Rules.NewPattern = "games";

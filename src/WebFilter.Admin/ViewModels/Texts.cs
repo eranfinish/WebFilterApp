@@ -16,10 +16,11 @@ internal static class Texts
 
     /// <summary>
     /// Text for a wire code from a closed list (reason codes, event types, roles, …), stored as "<paramref name="prefix"/><paramref name="code"/>"
-    /// in Strings.resx. An unknown code is shown as is rather than hidden.
+    /// in Strings.resx, with a '-' in the code written '_' (resource names are C# identifiers: "school-tools" is
+    /// Category_school_tools). An unknown code is shown as is rather than hidden.
     /// </summary>
     public static string Code(string prefix, string? code) =>
-        string.IsNullOrEmpty(code) ? "" : Strings.ResourceManager.GetString(prefix + code, Strings.Culture) ?? code;
+        string.IsNullOrEmpty(code) ? "" : Strings.ResourceManager.GetString(prefix + code.Replace('-', '_'), Strings.Culture) ?? code;
 
     public static IReadOnlyList<Option> Options(string prefix, params string[] codes) => [.. codes.Select(c => new Option(c, Code(prefix, c)))];
 

@@ -90,6 +90,10 @@
                         Visibility="{Binding AlwaysAllowed, Converter={StaticResource BoolToVisibility}}">
                   <TextBlock Text="{x:Static res:Strings.Rule_AlwaysAllowed}" FontSize="12" Foreground="{StaticResource InfoBrush}" />
                 </Border>
+                <Border Style="{StaticResource Badge}" Background="{StaticResource InfoSoftBrush}" ToolTip="{x:Static res:Strings.Rule_SchoolSignInHint}"
+                        Visibility="{Binding IsSchoolSignIn, Converter={StaticResource BoolToVisibility}}">
+                  <TextBlock Text="{x:Static res:Strings.Rule_SchoolSignIn}" FontSize="12" Foreground="{StaticResource InfoBrush}" />
+                </Border>
               </WrapPanel>
             </DataTemplate>
           </DataGridTemplateColumn.CellTemplate>
