@@ -35,7 +35,7 @@ public class DnrDifferentialTests
     [
         "example.com", "a.example.com", "b.a.example.com", "c.b.a.example.com", "Example.COM.", "example.org", "x.example.org", "y.x.example.org",
         "bücher.example", "www.xn--bcher-kva.example", "192.168.1.50", "3232235826", "10.0.0.1", "[::1]", "[0:0::1]", "other.net",
-        "www.youtube.com", "youtu.be", "www.youtu.be", "notyoutube.com",
+        "www.youtube.com", "accounts.youtube.com", "youtu.be", "www.youtu.be", "notyoutube.com",
     ];
 
     private static readonly string[] UrlPaths = ["/", "/r", "/r/", "/r/learn", "/r/learnmore", "/R/LEARN/deep?x=1", "/r/learn#frag", "/ש", "/a%20b"];

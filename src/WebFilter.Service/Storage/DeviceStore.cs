@@ -45,6 +45,13 @@ public sealed class DeviceStore(SqliteDatabase database)
             new { id, now = StateJson.Instant(now), reason }) > 0;
     }
 
+    /// <summary>Forgets event ids received before <paramref name="cutoff"/> (their events are past retention too).</summary>
+    public void PruneSeenEvents(DateTimeOffset cutoff)
+    {
+        using var db = database.Open();
+        db.Execute("DELETE FROM seen_events WHERE seen_at < @cutoff", new { cutoff = StateJson.Instant(cutoff.ToUniversalTime()) });
+    }
+
     /// <summary>Records an agent event id; false if it was already received (uploads are retried).</summary>
     public bool FirstTimeSeen(string deviceId, string eventId, DateTimeOffset now)
     {

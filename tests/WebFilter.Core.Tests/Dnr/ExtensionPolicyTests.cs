@@ -69,6 +69,77 @@ public class ExtensionPolicyTests
         Assert.Equal((YouTubeMode.Allowlist, true), (normal.YouTube, normal.TimeApplies));
     }
 
+    public static TheoryData<string> StatesWithTimeUp() => ["normal", "paused", "homework", "time_up"];
+
+    /// <summary>
+    /// PROTECTION-SPEC §4 in every member state: noa (child, allowlist, google.com always allowed for school) and yoav
+    /// (teen, blocklist) both block image search. While time is up the extension adds its session rules.
+    /// </summary>
+    [Theory]
+    [MemberData(nameof(StatesWithTimeUp))]
+    public void Image_search_blocks_agree_with_the_service_decision(string state)
+    {
+        var config = Fixture();
+        foreach (var id in new[] { "noa", "yoav" })
+        {
+            var index = config.Members.FindIndex(m => m.Id == id);
+            config.Members[index] = config.Members[index] with { BlockImageSearch = true };
+        }
+        config.Rules.Add(new Rule("r-google", "noa", "google.com", PatternType.Domain, RuleAction.Allow, AlwaysAllowed: true));
+        var hub = new HubCore(config);
+        var now = state == "time_up" ? DateTimeOffset.Parse("2026-11-02T10:00:00+02:00") : InWindow;
+        foreach (var member in new[] { "noa", "yoav" })
+        {
+            if (state == "paused") hub.Pause(member, now.AddHours(1), now);
+            if (state == "homework") hub.StartHomework(member, 60, now);
+        }
+        var view = hub.View();
+
+        foreach (var account in new[] { Noa, Yoav })
+        {
+            var effective = ExtensionPolicy.For(view, account, now);
+            var compiled = effective.UrlPolicy is null ? new DnrRuleSet([], []) : DnrCompiler.Compile(effective.UrlPolicy, Options);
+            var timeUp = effective.TimeApplies && Decider.Time(view, account.MemberId!, now).State is Core.Time.TimeState.OutsideWindow or Core.Time.TimeState.Expired;
+            IEnumerable<DnrRule> installed = timeUp ? compiled.TimeUpSessionRules.Concat(compiled.DynamicRules) : compiled.DynamicRules;
+            foreach (var url in ImageSearchTests.ImageSearchUrls.Concat(ImageSearchTests.OtherUrls).Where(u => !u.Contains("youtube", StringComparison.Ordinal)))
+            {
+                var decision = Decider.Url(view, account.MemberId!, url, now);
+                var service = decision.Decision == Decision.Allow ? DnrOutcome.Allow : DnrOutcome.Block;
+                Assert.True(service == DnrSimulator.Evaluate(installed, url), $"{state} {account.Name} {url}: service {decision}");
+                if (state != "paused" && ImageSearchTests.ImageSearchUrls.Contains(url)) Assert.Equal(ReasonCode.BlockedImageSearch, decision.Reason);
+            }
+        }
+    }
+
+    [Fact]
+    public void Features_follow_the_member_flags_and_the_role_and_are_off_for_everyone_else()
+    {
+        var config = Fixture();
+        var noa = config.Members.FindIndex(m => m.Id == "noa");
+        config.Members[noa] = config.Members[noa] with { JumpGuard = true, BlockYouTubeShorts = true, LogSearches = true, BlockImageSearch = true };
+        var yoav = config.Members.FindIndex(m => m.Id == "yoav");
+        config.Members[yoav] = config.Members[yoav] with { JumpGuard = true };
+        var savta = config.Members.FindIndex(m => m.Id == "savta");
+        config.Members[savta] = config.Members[savta] with { JumpGuard = true, LogSearches = true };
+        var hub = new HubCore(config);
+        var accounts = hub.Config.Device("pc-kids").Accounts;
+        ExtensionFeatures Of(string name, DateTimeOffset? at = null) => ExtensionPolicy.For(hub.View(), accounts.Single(a => a.Name == name), at ?? InWindow).Features;
+
+        Assert.Equal(new ExtensionFeatures(JumpGuard: true, BlockYouTubeShorts: true, LogSearches: true, CanOverrideJump: false), Of("noa"));
+        Assert.Equal(new ExtensionFeatures(JumpGuard: true, BlockYouTubeShorts: false, LogSearches: false, CanOverrideJump: true), Of("yoav"));
+        Assert.Equal(ExtensionFeatures.None, Of("savta"));   // unrestricted adult: flags ignored
+        Assert.Equal(ExtensionFeatures.None, Of("dana"));    // administrator
+        Assert.Equal(ExtensionFeatures.None, Of("visitor")); // unlinked
+
+        hub.StartHomework("noa", 30, InWindow);
+        Assert.Equal(new ExtensionFeatures(true, true, true, false), Of("noa"));
+        hub.StopHomework("noa", InWindow);
+        // A pause lifts the restrictions, not the search log the member was told about.
+        hub.Pause("noa", InWindow.AddHours(1), InWindow);
+        Assert.Equal(new ExtensionFeatures(JumpGuard: false, BlockYouTubeShorts: false, LogSearches: true, CanOverrideJump: false), Of("noa"));
+        Assert.Equal(new ExtensionFeatures(true, true, true, false), Of("noa", InWindow.AddHours(2)));
+    }
+
     private static FamilyConfig Fixture() =>
         FixtureLoader.Load(JsonNode.Parse(File.ReadAllText(Path.Combine(EngineScenarioTests.SimulationDir, "fixtures", "family-base.json")))!.AsObject(), null);
 }

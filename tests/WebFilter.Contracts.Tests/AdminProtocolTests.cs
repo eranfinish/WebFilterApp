@@ -20,6 +20,10 @@ public class AdminProtocolTests
         new AddRule(new RuleDto("r1", "noa", "pbskids.org", "domain", "allow", ExpiresAt: At)),
         new RemoveRule("r1"),
         new SetMember("yoav", YouTubeMode: "off"),
+        new SetMember("noa", BlockImageSearch: true, JumpGuard: true, BlockYouTubeShorts: false, LogSearches: true),
+        new EventsResult([new EventDto("search", At, "noa", "pc-kids", null, "https://www.google.com/search?q=cats", null, null, "google:cats"),
+            new EventDto("override", At, "yoav", "pc-kids", "blocked_jump", "https://other.example/", null, null, null)]),
+        new DiagnosticsResult([new CheckResult("onedrive", "warn", "OneDriveSetup.exe /allusers")]),
         new ExtendTime("noa", 15),
         new Pause("noa", At),
         new Resume("noa"),
@@ -47,5 +51,18 @@ public class AdminProtocolTests
         var back = AdminProtocol.Deserialize(json);
         Assert.Equal(message.GetType(), back.GetType());
         Assert.Equal(Encoding.UTF8.GetString(json), Encoding.UTF8.GetString(AdminProtocol.Serialize(back)));
+    }
+
+    [Fact]
+    public void SetMember_patches_only_the_flags_it_names_and_an_older_message_has_none()
+    {
+        var json = Encoding.UTF8.GetString(AdminProtocol.Serialize(new SetMember("noa", JumpGuard: true)));
+        Assert.Contains("\"jumpGuard\":true", json);
+        Assert.DoesNotContain("blockImageSearch", json);
+
+        var older = Assert.IsType<SetMember>(AdminProtocol.Deserialize("""{"type":"setMember","v":1,"memberId":"noa","filterMode":"blocklist"}"""u8));
+        Assert.Equal((null, null, null, null), (older.BlockImageSearch, older.JumpGuard, older.BlockYouTubeShorts, older.LogSearches));
+        var newer = Assert.IsType<SetMember>(AdminProtocol.Deserialize("""{"type":"setMember","v":1,"memberId":"noa","blockYouTubeShorts":true,"logSearches":false}"""u8));
+        Assert.Equal((true, false), (newer.BlockYouTubeShorts, newer.LogSearches));
     }
 }

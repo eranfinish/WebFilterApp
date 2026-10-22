@@ -86,13 +86,44 @@ public sealed class AgentCore(string deviceId)
         return result;
     }
 
-    /// <summary>A block enforced by the extension itself (DNR or content script), reported for the parents' log.</summary>
     /// <summary>A problem the browser extension reported (e.g. rules it had to drop), recorded as a service event.</summary>
     public void ReportProblem(DeviceAccount account, string detail, DateTimeOffset now) =>
         Raise(new FamilyEvent(EventType.Service, now, account.MemberId, DeviceId, Detail: detail));
 
+    /// <summary>A block enforced by the extension itself (DNR or content script), reported for the parents' log.</summary>
     public void ReportBlock(DeviceAccount account, string url, ReasonCode reason, DateTimeOffset now) =>
         Raise(new FamilyEvent(EventType.Blocked, now, account.MemberId, DeviceId, reason, Url: url));
+
+    /// <summary>
+    /// A search the member made (PROTECTION-SPEC §9), recorded as a <see cref="EventType.Search"/> event with detail
+    /// "engine:query" — only when the account's member is restricted and has <see cref="FamilyMember.LogSearches"/>.
+    /// Returns whether it was recorded.
+    /// </summary>
+    public bool ReportSearch(DeviceAccount account, string engine, string query, string? url, DateTimeOffset now)
+    {
+        if (!ServiceUp || account.MemberId is null || _snapshot is null) return false;
+        var member = _snapshot.Config.Members.Find(m => m.Id == account.MemberId);
+        if (member is not { IsRestricted: true, LogSearches: true }) return false;
+        Raise(new FamilyEvent(EventType.Search, now, member.Id, DeviceId, Url: url, Detail: $"{engine}:{query}"));
+        return true;
+    }
+
+    /// <summary>A teen opened a site the jump guard had blocked ("open anyway", PROTECTION-SPEC §7), recorded as an <see cref="EventType.Override"/> event.</summary>
+    public void ReportOverride(DeviceAccount account, string url, ReasonCode reason, DateTimeOffset now) =>
+        Raise(new FamilyEvent(EventType.Override, now, account.MemberId, DeviceId, reason, Url: url));
+
+    /// <summary>
+    /// Something on this computer worked against the filter and was undone or noticed (<see cref="TamperKinds"/>),
+    /// recorded as a <see cref="EventType.Tamper"/> event; the hub turns it into a parent notification.
+    /// <paramref name="accountId"/> (a Windows SID here) names the account it concerned, when there is one.
+    /// </summary>
+    public void ReportTamper(string? accountId, string detail, DateTimeOffset now)
+    {
+        var memberId = accountId is null ? null
+            : _snapshot?.Config.Devices.FirstOrDefault(d => d.Id == DeviceId)?.Accounts
+                .FirstOrDefault(a => string.Equals(a.AccountId, accountId, StringComparison.OrdinalIgnoreCase))?.MemberId;
+        Raise(new FamilyEvent(EventType.Tamper, now, memberId, DeviceId, Detail: detail));
+    }
 
     /// <summary>A browser heartbeat. The minute counts only when browsing is allowed at this instant.</summary>
     public void Heartbeat(DeviceAccount account, DateTimeOffset now, bool active)
@@ -163,9 +194,13 @@ public sealed class AgentCore(string deviceId)
 
     private void Raise(FamilyEvent e)
     {
+        // The local log is for diagnostics and tests only (the hub keeps the record): keep the recent part.
+        if (_log.Count >= MaxLocalEvents) _log.RemoveRange(0, MaxLocalEvents / 2);
         _log.Add(e);
         _outbox.Add(e);
     }
+
+    private const int MaxLocalEvents = 2000;
 }
 
 /// <summary>An agent's persistent state.</summary>

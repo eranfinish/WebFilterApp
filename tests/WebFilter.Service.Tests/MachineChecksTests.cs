@@ -20,7 +20,7 @@ public sealed class MachineChecksTests
         Assert.Equal(
         [
             new CheckResult("service", "ok"), new CheckResult("browsers", "ok", "edge,chrome"), new CheckResult("browser_policies", "ok"),
-            new CheckResult("extension", "ok"), new CheckResult("network", "ok"), new CheckResult("hub_port", "ok", "47800"),
+            new CheckResult("extension", "ok"), new CheckResult("onedrive", "ok"), new CheckResult("network", "ok"), new CheckResult("hub_port", "ok", "47800"),
         ], checks);
     }
 
@@ -29,7 +29,19 @@ public sealed class MachineChecksTests
     {
         _probe.Networks.Add(("Cafe", "public"));
 
-        Assert.Equal(["service", "browsers", "browser_policies", "extension"], MachineChecks.Run(Installed(), isHub: false, _probe).Select(c => c.Id));
+        Assert.Equal(["service", "browsers", "browser_policies", "extension", "onedrive"], MachineChecks.Run(Installed(), isHub: false, _probe).Select(c => c.Id));
+    }
+
+    [Theory]
+    [InlineData(true, false, "ok", null)]
+    [InlineData(true, true, "ok", null)]
+    [InlineData(false, true, "warn", "OneDriveSetup.exe /allusers")]
+    [InlineData(false, false, "ok", "none")]
+    public void OneDrive_must_be_installed_machine_wide_for_restricted_accounts_to_use_it(bool machineWide, bool perUser, string state, string? detail)
+    {
+        _probe.OneDrive = (machineWide, perUser);
+
+        Assert.Equal(new CheckResult("onedrive", state, detail), Check(MachineChecks.Run(Installed(), isHub: false, _probe), "onedrive"));
     }
 
     [Fact]
@@ -81,6 +93,7 @@ public sealed class MachineChecksTests
         Assert.All(probe.InstalledBrowsers(), b => Assert.Contains(b, new[] { "edge", "chrome" }));
         Assert.All(probe.ConnectedNetworks(), n => Assert.Contains(n.Category, new[] { "public", "private", "domain" }));
         _ = probe.InboundPortAllowed(47800);
+        _ = probe.OneDriveInstalls();
         Assert.Null(probe.MachineValue(@"SOFTWARE\WebFilter.Tests.NoSuchKey", "1"));
     }
 
@@ -101,7 +114,11 @@ public sealed class MachineChecksTests
 
         public bool? PortOpen { get; set; } = true;
 
+        public (bool MachineWide, bool PerUser) OneDrive { get; set; } = (true, false);
+
         public bool RunsAsLocalSystem => LocalSystem;
+
+        public (bool MachineWide, bool PerUser) OneDriveInstalls() => OneDrive;
 
         public IReadOnlyList<string> InstalledBrowsers() => Browsers;
 

@@ -78,6 +78,13 @@ internal sealed class AgentSession(Stream pipe, ClientIdentity client, FamilySer
         GetRulesRequest => Rules(),
         HeartbeatRequest beat => Heartbeat(beat),
         ReportBlockRequest block => ReportBlock(block),
+        ReportSearchRequest search => ReportSearch(search),
+        ReportOverrideRequest overridden => family.WithAgent<AgentMessage>((agent, now) =>
+        {
+            var reason = ReasonCodeExtensions.ParseOrNone(overridden.Reason);
+            agent.ReportOverride(Account(agent), Cap(overridden.Url ?? "", MaxUrlLength), reason == ReasonCode.None ? ReasonCode.BlockedJump : reason, now);
+            return new ErrorMessage("ok", "recorded");
+        }),
         ErrorMessage { Code: "dnr_rules_dropped" } dropped => family.WithAgent<AgentMessage>((agent, now) =>
         {
             var detail = "dnr_rules_dropped: " + dropped.Message;
@@ -126,11 +133,34 @@ internal sealed class AgentSession(Stream pipe, ClientIdentity client, FamilySer
             channels.Where(c => c.Action == RuleAction.Allow).Select(Ref).ToList(),
             channels.Where(c => c.Action == RuleAction.Block).Select(Ref).ToList());
 
+        var features = effective.Features;
         return new RulesResponse(agent.SnapshotVersion ?? 0,
             rules.DynamicRules.Select(r => JsonSerializer.SerializeToElement(r)).ToList(),
             rules.TimeUpSessionRules.Select(r => JsonSerializer.SerializeToElement(r)).ToList(),
-            youtube, TimeStateOf(agent, account, now));
+            youtube, TimeStateOf(agent, account, now),
+            new AgentFeatures(features.JumpGuard, features.BlockYouTubeShorts, features.LogSearches, features.CanOverrideJump));
     });
+
+    private const int MaxUrlLength = 2048;
+    private const int MaxQueryLength = 200;
+
+    private static string Cap(string text, int length) => text.Length > length ? text[..length] : text;
+
+    /// <summary>
+    /// A search from the extension (PROTECTION-SPEC §9): recorded only when the member's searches are logged, always
+    /// acknowledged. The engine must be a short lower-case name, since the event's detail is "engine:query".
+    /// </summary>
+    private AgentMessage ReportSearch(ReportSearchRequest search)
+    {
+        var engine = search.Engine ?? "";
+        if (engine.Length is 0 or > 32 || !engine.All(c => c is (>= 'a' and <= 'z') or (>= '0' and <= '9') or '-' or '_'))
+            return new ErrorMessage("bad_request", "engine must be a lower-case name such as google.");
+        var query = Cap((search.Query ?? "").Trim(), MaxQueryLength);
+        if (query.Length == 0) return new ErrorMessage("ok", "not recorded");
+        var recorded = family.WithAgent((agent, now) =>
+            agent.ReportSearch(Account(agent), engine, query, search.Url is { } url ? Cap(url, MaxUrlLength) : null, now));
+        return new ErrorMessage("ok", recorded ? "recorded" : "not recorded");
+    }
 
     private AgentMessage DecideUrl(string url) => family.WithAgent<AgentMessage>((agent, now) =>
     {
@@ -139,9 +169,10 @@ internal sealed class AgentSession(Stream pipe, ClientIdentity client, FamilySer
     });
 
     /// <summary>
-    /// Records a block the extension enforced and answers with the service's own reason. YouTube channel blocks are
-    /// decided in the page, so the extension's reason stands for those. If the service would allow the URL, the
-    /// extension's rules are stale: nothing is recorded and rulesChanged is pushed.
+    /// Records a block the extension enforced and answers with the service's own reason. YouTube channel and Shorts
+    /// blocks are decided in the page and jump blocks by how the page was opened, so the extension's reason stands for
+    /// those. If the service would allow the URL, the extension's rules are stale: nothing is recorded and rulesChanged
+    /// is pushed.
     /// </summary>
     private AgentMessage ReportBlock(ReportBlockRequest block)
     {
@@ -150,9 +181,15 @@ internal sealed class AgentSession(Stream pipe, ClientIdentity client, FamilySer
         {
             var account = Account(agent);
             var reported = ReasonCodeExtensions.ParseOrNone(block.Reason);
-            var e = reported is ReasonCode.BlockedYouTubeChannel or ReasonCode.BlockedYouTubeUnknown
-                ? new Explanation("block", reported.ToWire(), block.RuleId, null, account.MemberId is not null, "youtube")
-                : Explain(agent, account, block.Url, now);
+            var e = reported switch
+            {
+                ReasonCode.BlockedYouTubeChannel or ReasonCode.BlockedYouTubeUnknown =>
+                    new Explanation("block", reported.ToWire(), block.RuleId, null, account.MemberId is not null, "youtube"),
+                // A parent's approval could not lift these: Shorts and jumps are blocked whatever the site rules say.
+                ReasonCode.BlockedYouTubeShorts => new Explanation("block", reported.ToWire(), block.RuleId, null, false, "youtube"),
+                ReasonCode.BlockedJump => new Explanation("block", reported.ToWire(), block.RuleId, null, false, "url"),
+                _ => Explain(agent, account, block.Url, now),
+            };
             if (e.Decision == "allow") stale = true;
             else agent.ReportBlock(account, block.Url, ReasonCodes.Parse(e.Reason), now);
             return new ReportBlockResult(e.Decision, e.Reason, e.RuleId, e.Category, e.CanRequest, e.RequestKind);
@@ -176,8 +213,10 @@ internal sealed class AgentSession(Stream pipe, ClientIdentity client, FamilySer
                 .FirstOrDefault(c => RuleEvaluator.IsInCategory(config.Categories, c, normalized));
         }
         var aboutTime = result.Reason is ReasonCode.BlockedTimeWindow or ReasonCode.BlockedDailyLimit;
+        // An approved site cannot lift a built-in block (image search, AI Mode), so there is nothing to request.
+        var canRequest = account.MemberId is not null && result.Decision != Decision.Allow && !BuiltinRules.IsBuiltinBlock(result.RuleId);
         return new Explanation(result.Decision == Decision.Allow ? "allow" : "block", result.Reason.ToWire(), result.RuleId, category,
-            account.MemberId is not null && result.Decision != Decision.Allow, aboutTime ? "time" : "url");
+            canRequest, aboutTime ? "time" : "url");
     }
 
     private AgentMessage Heartbeat(HeartbeatRequest beat) => family.WithAgent<AgentMessage>((agent, now) =>

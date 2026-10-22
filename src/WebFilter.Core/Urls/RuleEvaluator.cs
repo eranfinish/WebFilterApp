@@ -22,6 +22,7 @@ public static class RuleEvaluator
 
     /// <summary>
     /// <list type="number">
+    /// <item>Built-in blocks (<see cref="EffectiveUrlPolicy.BuiltinBlocks"/>) → their own reason, e.g. <c>blocked_image_search</c>.</item>
     /// <item>IP literal → <c>blocked_ip_literal</c>, unless an allow rule (member or global) matches that IP.</item>
     /// <item>Member rules: if any match, the most specific wins (tie → block).
     /// allow → <c>allowed_rule</c> (or <c>allowed_always</c> if the rule is always-allowed); block → <c>blocked_rule</c>.</item>
@@ -45,6 +46,8 @@ public static class RuleEvaluator
 
         var index = GetIndex(policy);
         string? href = null;
+        if (index.Builtin.FindBest(url, ref href).Best is { } builtin)
+            return DecisionResult.Block(builtin.BuiltinReason, builtin.Rule!.Id);
         var member = index.Member.FindBest(url, ref href);
         MatchResult? global = null;
 
@@ -65,6 +68,22 @@ public static class RuleEvaluator
         return policy.Mode == FilterMode.Allowlist
             ? DecisionResult.Block(ReasonCode.BlockedNotInAllowlist)
             : DecisionResult.Allow(ReasonCode.AllowedDefault);
+    }
+
+    /// <summary>
+    /// The block of a built-in rule that matches the URL (<see cref="EffectiveUrlPolicy.BuiltinBlocks"/>), or null. The
+    /// engine checks it before homework and time, since built-in blocks apply in every state.
+    /// </summary>
+    public static DecisionResult? BuiltinBlock(EffectiveUrlPolicy policy, NormalizedUrl url)
+    {
+        ArgumentNullException.ThrowIfNull(policy);
+        ArgumentNullException.ThrowIfNull(url);
+        if (policy.BuiltinBlocks.Count == 0)
+            return null;
+        string? href = null;
+        return GetIndex(policy).Builtin.FindBest(url, ref href).Best is { } builtin
+            ? DecisionResult.Block(builtin.BuiltinReason, builtin.Rule!.Id)
+            : null;
     }
 
     /// <summary>True if an always-allowed rule (member or global) matches the URL; returns its id.</summary>
@@ -118,14 +137,18 @@ public static class RuleEvaluator
 
     private sealed record CompiledRule(CompiledPattern? Pattern);
 
-    /// <summary>A rule or category domain with its compiled pattern. <see cref="Rule"/> is null for category domains.</summary>
-    private sealed class Entry(CompiledPattern pattern, Rule? rule, bool isAllow, int order)
+    /// <summary>
+    /// A rule or category domain with its compiled pattern. <see cref="Rule"/> is null for category domains;
+    /// <see cref="BuiltinReason"/> is set for built-in blocks only.
+    /// </summary>
+    private sealed class Entry(CompiledPattern pattern, Rule? rule, bool isAllow, int order, ReasonCode builtinReason = ReasonCode.None)
     {
         public CompiledPattern Pattern { get; } = pattern;
         public Rule? Rule { get; } = rule;
         public bool IsAllow { get; } = isAllow;
         public bool IsAlwaysAllowed { get; } = isAllow && rule?.AlwaysAllowed == true;
         public int Order { get; } = order;
+        public ReasonCode BuiltinReason { get; } = builtinReason;
 
         /// <summary>Tie → block; then rule over category; then always-allowed; then policy order.</summary>
         public bool BeatsOnTie(Entry other) =>
@@ -142,10 +165,17 @@ public static class RuleEvaluator
         public RuleSet Member { get; } = new();
         public RuleSet Global { get; } = new();
         public RuleSet AlwaysAllowed { get; } = new();
+        public RuleSet Builtin { get; } = new();
 
         public PolicyIndex(EffectiveUrlPolicy policy)
         {
             var order = 0;
+            foreach (var builtin in policy.BuiltinBlocks)
+            {
+                if (CompileRule(builtin.Rule) is { } compiled)
+                    Builtin.Add(new Entry(compiled, builtin.Rule, isAllow: false, order++, builtin.Reason));
+            }
+            Builtin.Freeze();
             foreach (var rule in policy.MemberRules)
                 AddRule(Member, rule, order++);
             foreach (var rule in policy.GlobalRules)

@@ -521,6 +521,12 @@
   <data name="EventType_service" xml:space="preserve">
     <value>Filter service</value>
   </data>
+  <data name="EventType_search" xml:space="preserve">
+    <value>Searches</value>
+  </data>
+  <data name="EventType_override" xml:space="preserve">
+    <value>Opened anyway</value>
+  </data>
   <data name="Reason_allowed_unrestricted" xml:space="preserve">
     <value>Unrestricted</value>
   </data>
@@ -586,6 +592,15 @@
   </data>
   <data name="Reason_redirect_youtube_home" xml:space="preserve">
     <value>Sent to the approved channels page</value>
+  </data>
+  <data name="Reason_blocked_image_search" xml:space="preserve">
+    <value>Image search is blocked</value>
+  </data>
+  <data name="Reason_blocked_jump" xml:space="preserve">
+    <value>The site tried to open another site</value>
+  </data>
+  <data name="Reason_blocked_youtube_shorts" xml:space="preserve">
+    <value>YouTube Shorts are blocked</value>
   </data>
   <data name="AdminChange_add_rule" xml:space="preserve">
     <value>Website rule added</value>

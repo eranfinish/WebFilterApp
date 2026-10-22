@@ -12,9 +12,27 @@ public enum PatternType { Domain, Wildcard, Prefix, Regex }
 
 public enum AppMatchType { Path, Package, Publisher }
 
-public sealed record FamilyMember(string Id, string DisplayName, Role Role, int? Age, FilterMode FilterMode, YouTubeMode YouTubeMode)
+/// <param name="BlockImageSearch">Image search pages are blocked (PROTECTION-SPEC §4).</param>
+/// <param name="JumpGuard">A site may not open another site in a new tab or window or by an automatic redirect (extension, §7).</param>
+/// <param name="BlockYouTubeShorts">YouTube /shorts/ is blocked (extension, §8).</param>
+/// <param name="LogSearches">Search terms are recorded for the parents, and the member is told so (§9).</param>
+/// <remarks>The four protection flags apply only to restricted members; unrestricted members ignore them (§1).</remarks>
+public sealed record FamilyMember(string Id, string DisplayName, Role Role, int? Age, FilterMode FilterMode, YouTubeMode YouTubeMode,
+    bool BlockImageSearch = false, bool JumpGuard = false, bool BlockYouTubeShorts = false, bool LogSearches = false)
 {
     public bool IsRestricted => FilterMode != FilterMode.Unrestricted;
+}
+
+/// <summary>
+/// What restricted and unlinked accounts may use of Windows itself (PROTECTION-SPEC §2), family-wide. The defaults are
+/// what a bundle without the section means.
+/// </summary>
+/// <param name="NotificationsAndSync">Per-user Windows services (push notifications, settings sync) reach the network: svchost.exe is allowed, also when time is up.</param>
+/// <param name="OneDrive">The machine-wide OneDrive reaches the network, also when time is up. Never a per-user install.</param>
+/// <param name="WebSearchInStart">Bing results in Start search. When false, the per-user policy DisableSearchBoxSuggestions is set.</param>
+public sealed record WindowsFeatures(bool NotificationsAndSync = true, bool OneDrive = true, bool WebSearchInStart = false)
+{
+    public static readonly WindowsFeatures Default = new();
 }
 
 /// <summary>A Windows (or Android) account on a device. <see cref="MemberId"/> is null until a parent links it.</summary>
@@ -71,6 +89,7 @@ public sealed class FamilyConfig
     public List<YouTubeChannel> YouTubeChannels { get; init; } = [];
     public List<string> SupportedBrowsers { get; init; } = [];
     public List<AppRule> AppRules { get; init; } = [];
+    public WindowsFeatures WindowsFeatures { get; init; } = WindowsFeatures.Default;
 
     public const string EducationalCategory = "educational";
 

@@ -4,13 +4,17 @@ namespace WebFilter.Core.Engine;
 
 /// <summary>
 /// What the browser extension enforces for one account at one instant: the URL policy its DNR rules are compiled from
-/// (null = no rules), the YouTube mode for the content script, whether the time state applies, and until when this
-/// answer holds on its own (a rule expires, a pause or homework ends). Mirrors <see cref="Decider.Url"/>: paused or
-/// unrestricted → nothing; homework → only "always allowed" and the educational category, YouTube off; otherwise the
+/// (null = no rules), the YouTube mode for the content script, whether the time state applies, until when this
+/// answer holds on its own (a rule expires, a pause or homework ends), and the extension-side protections
+/// (<see cref="Features"/>). Mirrors <see cref="Decider.Url"/>: paused or unrestricted → nothing; homework → only
+/// "always allowed" and the educational category, YouTube off, plus the member's built-in blocks; otherwise the
 /// member's policy.
 /// </summary>
 public sealed record ExtensionPolicy(EffectiveUrlPolicy? UrlPolicy, YouTubeMode YouTube, bool TimeApplies, DateTimeOffset ValidUntil)
 {
+    /// <summary>The member's protection flags as the extension applies them (PROTECTION-SPEC §6, <c>RulesResponse.features</c>).</summary>
+    public ExtensionFeatures Features { get; init; } = ExtensionFeatures.None;
+
     public static ExtensionPolicy For(PolicyView view, DeviceAccount account, DateTimeOffset now)
     {
         var config = view.Config;
@@ -24,13 +28,18 @@ public sealed record ExtensionPolicy(EffectiveUrlPolicy? UrlPolicy, YouTubeMode 
 
         var member = config.Member(account.MemberId);
         if (!member.IsRestricted) return new(null, YouTubeMode.Unrestricted, false, DateTimeOffset.MaxValue);
+        var features = ExtensionFeatures.Of(member);
 
         var runtime = view.RuntimeOf(member.Id);
         if (view.IsPaused(member.Id, now))
         {
             var local = view.LocalPauses.TryGetValue(member.Id, out var l) && now < l ? l : DateTimeOffset.MinValue;
             var hub = runtime.PausedUntil is { } h && now < h ? h : DateTimeOffset.MinValue;
-            return new(null, YouTubeMode.Unrestricted, false, local > hub ? local : hub);
+            // A pause lifts the restrictions, not the search log the member is told about.
+            return new(null, YouTubeMode.Unrestricted, false, local > hub ? local : hub)
+            {
+                Features = features with { JumpGuard = false, BlockYouTubeShorts = false },
+            };
         }
 
         var nextExpiry = EffectiveUrlPolicy.NextExpiry(config, member.Id, now);
@@ -40,13 +49,33 @@ public sealed record ExtensionPolicy(EffectiveUrlPolicy? UrlPolicy, YouTubeMode 
                 ? domains.Select(d => new CategoryDomain(d, RuleAction.Allow, FamilyConfig.EducationalCategory)).ToList()
                 : [];
             var policy = new EffectiveUrlPolicy(member.Id, FilterMode.Allowlist, YouTubeMode.Off,
-                AlwaysAllowed(config, member.Id, now), AlwaysAllowed(config, null, now), educational);
-            return new(policy, YouTubeMode.Off, false, homeworkEnds < nextExpiry ? homeworkEnds : nextExpiry);
+                AlwaysAllowed(config, member.Id, now), AlwaysAllowed(config, null, now), educational)
+            {
+                BuiltinBlocks = BuiltinRules.For(config, member),
+            };
+            return new(policy, YouTubeMode.Off, false, homeworkEnds < nextExpiry ? homeworkEnds : nextExpiry) { Features = features };
         }
 
-        return new(view.UrlPolicy(member.Id, now), member.YouTubeMode, true, nextExpiry);
+        return new(view.UrlPolicy(member.Id, now), member.YouTubeMode, true, nextExpiry) { Features = features };
     }
 
     private static List<Rule> AlwaysAllowed(FamilyConfig config, string? memberId, DateTimeOffset now) =>
         config.Rules.Where(r => r.MemberId == memberId && r.AlwaysAllowed && r.Action == RuleAction.Allow && r.IsActiveAt(now)).ToList();
+}
+
+/// <summary>
+/// The protections the extension enforces by itself (PROTECTION-SPEC §6–§9). All false for administrators, unrestricted
+/// members and unlinked accounts.
+/// </summary>
+/// <param name="JumpGuard">Block a site opening another site in a new tab or window or by an automatic redirect (§7).</param>
+/// <param name="BlockYouTubeShorts">Block YouTube /shorts/ in the YouTube logic (§8).</param>
+/// <param name="LogSearches">Report searches (<c>reportSearch</c>) and tell the member so (§9).</param>
+/// <param name="CanOverrideJump">The jump block page offers "open anyway" (teens only).</param>
+public sealed record ExtensionFeatures(bool JumpGuard, bool BlockYouTubeShorts, bool LogSearches, bool CanOverrideJump)
+{
+    public static readonly ExtensionFeatures None = new(false, false, false, false);
+
+    /// <summary>A restricted member's flags; <see cref="None"/> for an unrestricted one (§1: adults ignore all four).</summary>
+    public static ExtensionFeatures Of(FamilyMember member) =>
+        member.IsRestricted ? new(member.JumpGuard, member.BlockYouTubeShorts, member.LogSearches, member.Role == Role.Teen) : None;
 }

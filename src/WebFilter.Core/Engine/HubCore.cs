@@ -27,6 +27,24 @@ public sealed class HubCore(FamilyConfig config)
     public List<FamilyEvent> Events { get; } = [];
     public List<AccessRequest> Requests { get; } = [];
 
+    /// <summary>Raised for every event the hub records (its own and those agents upload), after it is in <see cref="Events"/>.</summary>
+    public event Action<FamilyEvent>? EventRecorded;
+
+    /// <summary>Raised for every new access request (created or delivered from an agent's queue), after it is in <see cref="Requests"/>.</summary>
+    public event Action<AccessRequest>? RequestAccepted;
+
+    /// <summary>
+    /// Drops the oldest events, those before <paramref name="cutoff"/>, from memory (event retention, MVP-PLAN §9). Only a
+    /// leading run is removed, so the order of what remains — which the store relies on to find what is new — is kept.
+    /// </summary>
+    public int PruneEvents(DateTimeOffset cutoff)
+    {
+        var count = 0;
+        while (count < Events.Count && Events[count].At < cutoff) count++;
+        Events.RemoveRange(0, count);
+        return count;
+    }
+
     public MemberRuntime RuntimeOf(string memberId) =>
         _runtime.TryGetValue(memberId, out var runtime) ? runtime : _runtime[memberId] = new MemberRuntime();
 
@@ -64,7 +82,7 @@ public sealed class HubCore(FamilyConfig config)
     {
         var before = Usage.Clone();
         Usage.MergeFrom(upload.Usage);
-        foreach (var e in upload.Events) Events.Add(e);
+        foreach (var e in upload.Events) Record(e);
         foreach (var queued in upload.QueuedRequests) Accept(queued);
         if (!SameUsage(before)) Version++;
     }
@@ -166,7 +184,7 @@ public sealed class HubCore(FamilyConfig config)
     public void DeviceUninstalled(string id, DateTimeOffset now)
     {
         Version++;
-        Events.Add(new FamilyEvent(EventType.AdminChange, now, null, id, Detail: "device_uninstalled"));
+        Record(new FamilyEvent(EventType.AdminChange, now, null, id, Detail: "device_uninstalled"));
     }
 
     /// <summary>
@@ -246,9 +264,9 @@ public sealed class HubCore(FamilyConfig config)
                 if (status.RemainingMinutes is { } remaining && track.Remaining is { } previous)
                     foreach (var threshold in new[] { 10, 5, 1 })
                         if (remaining <= threshold && previous > threshold)
-                            Events.Add(new FamilyEvent(EventType.TimeWarning, now, member.Id, null, RemainingMinutes: threshold));
+                            Record(new FamilyEvent(EventType.TimeWarning, now, member.Id, null, RemainingMinutes: threshold));
                 if (status.State == TimeState.Expired && track.State != TimeState.Expired)
-                    Events.Add(new FamilyEvent(EventType.TimeExpired, now, member.Id, null));
+                    Record(new FamilyEvent(EventType.TimeExpired, now, member.Id, null));
             }
             _timeTracks[member.Id] = new TimeTrack(today, status.RemainingMinutes, status.State);
         }
@@ -267,8 +285,15 @@ public sealed class HubCore(FamilyConfig config)
     private void Accept(AccessRequest request)
     {
         Requests.Add(request);
-        Events.Add(new FamilyEvent(EventType.AccessRequest, request.CreatedAt, request.MemberId, request.DeviceId, Url: request.Target, Detail: request.Kind.ToString().ToLowerInvariant()));
+        Record(new FamilyEvent(EventType.AccessRequest, request.CreatedAt, request.MemberId, request.DeviceId, Url: request.Target, Detail: request.Kind.ToString().ToLowerInvariant()));
         Version++;
+        RequestAccepted?.Invoke(request);
+    }
+
+    private void Record(FamilyEvent e)
+    {
+        Events.Add(e);
+        EventRecorded?.Invoke(e);
     }
 
     private void Decide(AccessRequest request, RequestStatus status, DateTimeOffset now, string detail)
@@ -286,7 +311,7 @@ public sealed class HubCore(FamilyConfig config)
     private void Changed(DateTimeOffset now, string? memberId, string detail)
     {
         Version++;
-        Events.Add(new FamilyEvent(EventType.AdminChange, now, memberId, null, Detail: detail, Admin: Actor));
+        Record(new FamilyEvent(EventType.AdminChange, now, memberId, null, Detail: detail, Admin: Actor));
     }
 
     private bool SameUsage(UsageLedger before) =>

@@ -54,6 +54,8 @@ internal static class FixtureLoader
             }
             config.DailyLimits.Add(limit);
         }
+        foreach (var (name, domains) in setup["categories"]?.AsObject() ?? [])
+            config.Categories[name] = domains!.AsArray().Select(d => d!.GetValue<string>()).ToList();
         config.Rules.AddRange(Array(setup, "rules").Select(r => ParseRule(r, config.TimeZone)));
         config.MemberCategories.AddRange(Array(setup, "memberCategories").Select(ParseMemberCategory));
         config.YouTubeChannels.AddRange(Array(setup, "youtubeChannels").Select(ParseChannel));
@@ -67,11 +69,15 @@ internal static class FixtureLoader
         Age = patch["age"]?.GetValue<int>() ?? member.Age,
         FilterMode = OptStr(patch, "filterMode") is { } fm ? ParseFilterMode(fm) : member.FilterMode,
         YouTubeMode = OptStr(patch, "youtubeMode") is { } ym ? ParseYouTubeMode(ym) : member.YouTubeMode,
+        BlockImageSearch = patch["blockImageSearch"]?.GetValue<bool>() ?? member.BlockImageSearch,
+        JumpGuard = patch["jumpGuard"]?.GetValue<bool>() ?? member.JumpGuard,
+        BlockYouTubeShorts = patch["blockYouTubeShorts"]?.GetValue<bool>() ?? member.BlockYouTubeShorts,
+        LogSearches = patch["logSearches"]?.GetValue<bool>() ?? member.LogSearches,
     };
 
-    private static FamilyMember ParseMember(JsonNode? n) => new(
+    private static FamilyMember ParseMember(JsonNode? n) => PatchMember(new(
         Str(n, "id"), OptStr(n, "displayName") ?? Str(n, "id"), ParseRole(Str(n, "role")), n!["age"]?.GetValue<int>(),
-        ParseFilterMode(Str(n, "filterMode")), ParseYouTubeMode(Str(n, "youtubeMode")));
+        ParseFilterMode(Str(n, "filterMode")), ParseYouTubeMode(Str(n, "youtubeMode"))), n.AsObject());
 
     private static Device ParseDevice(JsonNode? n) => new(
         Str(n, "id"), Str(n, "os"), Str(n, "role"),

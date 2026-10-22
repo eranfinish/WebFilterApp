@@ -28,6 +28,12 @@ public enum ReasonCode
     BlockedServiceUnavailable,
     BlockedAppNetwork,
     RedirectYouTubeHome,
+    /// <summary>A built-in image-search block (PROTECTION-SPEC §4, member flag blockImageSearch).</summary>
+    BlockedImageSearch,
+    /// <summary>The extension's jump guard: a site opened another site (PROTECTION-SPEC §7). Decided by the extension only.</summary>
+    BlockedJump,
+    /// <summary>YouTube Shorts (PROTECTION-SPEC §8). Decided by the extension's YouTube logic only.</summary>
+    BlockedYouTubeShorts,
 }
 
 public readonly record struct DecisionResult(Decision Decision, ReasonCode Reason, string? RuleId = null)
@@ -69,6 +75,9 @@ public static class ReasonCodes
         [ReasonCode.BlockedServiceUnavailable] = "blocked_service_unavailable",
         [ReasonCode.BlockedAppNetwork] = "blocked_app_network",
         [ReasonCode.RedirectYouTubeHome] = "redirect_youtube_home",
+        [ReasonCode.BlockedImageSearch] = "blocked_image_search",
+        [ReasonCode.BlockedJump] = "blocked_jump",
+        [ReasonCode.BlockedYouTubeShorts] = "blocked_youtube_shorts",
     };
 
     private static readonly Dictionary<string, ReasonCode> FromWireMap = ToWireMap.ToDictionary(kv => kv.Value, kv => kv.Key);

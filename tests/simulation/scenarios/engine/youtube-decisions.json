@@ -75,6 +75,29 @@
       "steps": [
         { "do": "youtube", "member": "dana", "page": { "url": "https://www.youtube.com/watch?v=vidGamr0001", "channelId": "UCgamerX0000000000000003" }, "expect": { "decision": "allow", "reason": "allowed_unrestricted" } }
       ]
+    },
+    {
+      "id": "YT-007",
+      "title": "YouTube off does not break Google sign-in: accounts.youtube.com is allowed in every YouTube mode",
+      "start": "2026-11-01T16:00",
+      "setup": { "members": [ { "id": "yoav", "youtubeMode": "off" }, { "id": "noa", "youtubeMode": "off" } ] },
+      "steps": [
+        {
+          "do": "checkUrls", "member": "yoav",
+          "cases": [
+            { "url": "https://accounts.youtube.com/accounts/SetSID?ssdc=1", "expect": { "decision": "allow", "reason": "allowed_default" } },
+            { "url": "https://www.youtube.com/",                            "expect": { "decision": "block", "reason": "blocked_youtube_off" } },
+            { "url": "https://studio.youtube.com/",                         "expect": { "decision": "block", "reason": "blocked_youtube_off" } }
+          ]
+        },
+        {
+          "do": "checkUrls", "member": "noa",
+          "cases": [
+            { "url": "https://accounts.youtube.com/accounts/SetSID?ssdc=1", "expect": { "decision": "allow", "reason": "allowed_default" }, "note": "allowlist mode too: the YouTube handling decides YouTube hosts, and it never blocks the sign-in host" },
+            { "url": "https://m.youtube.com/",                              "expect": { "decision": "block", "reason": "blocked_youtube_off" } }
+          ]
+        }
+      ]
     }
   ]
 }

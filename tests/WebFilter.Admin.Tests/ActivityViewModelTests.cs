@@ -20,7 +20,7 @@ public sealed class ActivityViewModelTests
         Assert.Equal(new GetEvents(TestData.Now.AddHours(-24), null, null, ActivityViewModel.MaxEvents), LastQuery);
         Assert.Equal(["", "noa", "yoav", "dana", "savta"], vm.MemberOptions.Select(o => o.Value));
         Assert.Equal("הכל", vm.MemberOptions[0].Label);
-        Assert.Equal(9, vm.TypeOptions.Count);
+        Assert.Equal(11, vm.TypeOptions.Count); // "all" and the ten event types (search and override: PROTECTION-SPEC §6)
         Assert.True(vm.HasNoEvents);
     }
 

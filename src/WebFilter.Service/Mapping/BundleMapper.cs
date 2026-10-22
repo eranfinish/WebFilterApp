@@ -11,7 +11,8 @@ public static class BundleMapper
     {
         Version = version,
         TimeZone = ZoneId(config.TimeZone),
-        Members = config.Members.Select(m => new MemberDto(m.Id, m.DisplayName, Lower(m.Role), m.Age, Lower(m.FilterMode), Lower(m.YouTubeMode))).ToList(),
+        Members = config.Members.Select(m => new MemberDto(m.Id, m.DisplayName, Lower(m.Role), m.Age, Lower(m.FilterMode), Lower(m.YouTubeMode),
+            m.BlockImageSearch, m.JumpGuard, m.BlockYouTubeShorts, m.LogSearches)).ToList(),
         Devices = config.Devices.Select(d => new DeviceDto(d.Id, d.Os, d.Role, d.Accounts.Select(a => new AccountDto(a.AccountId, a.Name, a.MemberId, a.IsAdmin)).ToList())).ToList(),
         Categories = config.Categories.ToDictionary(kv => kv.Key, kv => kv.Value),
         MemberCategories = config.MemberCategories.Select(c => new MemberCategoryDto(c.MemberId, c.Category, Lower(c.Action))).ToList(),
@@ -21,11 +22,13 @@ public static class BundleMapper
         YouTubeChannels = config.YouTubeChannels.Select(c => new YouTubeChannelDto(c.ChannelId, c.Handle, c.Title, c.MemberId, Lower(c.Action))).ToList(),
         SupportedBrowsers = [.. config.SupportedBrowsers],
         AppRules = config.AppRules.Select(r => new AppRuleDto(r.Id, r.MemberId, Lower(r.Match), r.Value, Lower(r.Action), r.AlwaysAllowed, r.ExpiresAt)).ToList(),
+        WindowsFeatures = new WindowsFeaturesDto(config.WindowsFeatures.NotificationsAndSync, config.WindowsFeatures.OneDrive, config.WindowsFeatures.WebSearchInStart),
     };
 
     /// <remarks>
     /// A list the JSON leaves out arrives as null (the property initializers do not run when deserializing), so every
     /// list is read as empty when missing — a bootstrap file, snapshot or admin request with fewer sections is valid.
+    /// Missing member flags are false and missing Windows features take their defaults (PROTECTION-SPEC §1, §2).
     /// </remarks>
     public static FamilyConfig ToConfig(FamilyBundle bundle)
     {
@@ -33,7 +36,8 @@ public static class BundleMapper
         var config = new FamilyConfig
         {
             TimeZone = TimeZoneInfo.FindSystemTimeZoneById(bundle.TimeZone),
-            Members = (bundle.Members ?? []).Select(m => new FamilyMember(m.Id, m.DisplayName, Parse<Role>(m.Role), m.Age, Parse<FilterMode>(m.FilterMode), Parse<YouTubeMode>(m.YouTubeMode))).ToList(),
+            Members = (bundle.Members ?? []).Select(m => new FamilyMember(m.Id, m.DisplayName, Parse<Role>(m.Role), m.Age, Parse<FilterMode>(m.FilterMode), Parse<YouTubeMode>(m.YouTubeMode),
+                m.BlockImageSearch, m.JumpGuard, m.BlockYouTubeShorts, m.LogSearches)).ToList(),
             Devices = (bundle.Devices ?? []).Select(d => new Device(d.Id, d.Os, d.Role, (d.Accounts ?? []).Select(a => new DeviceAccount(a.AccountId, a.Name, a.Member, a.IsAdmin)).ToList())).ToList(),
             MemberCategories = (bundle.MemberCategories ?? []).Select(c => new MemberCategory(c.Member, c.Category, Parse<RuleAction>(c.Action))).ToList(),
             Rules = (bundle.Rules ?? []).Select(r => new Rule(r.Id, r.Member, r.Pattern, Parse<PatternType>(r.Type), Parse<RuleAction>(r.Action), r.AlwaysAllowed, r.ExpiresAt)).ToList(),
@@ -42,6 +46,9 @@ public static class BundleMapper
             YouTubeChannels = (bundle.YouTubeChannels ?? []).Select(c => new YouTubeChannel(c.ChannelId, c.Handle, c.Title, c.Member, Parse<RuleAction>(c.Action))).ToList(),
             SupportedBrowsers = [.. bundle.SupportedBrowsers ?? []],
             AppRules = (bundle.AppRules ?? []).Select(r => new AppRule(r.Id, r.Member, Parse<AppMatchType>(r.Match), r.Value, Parse<RuleAction>(r.Action), r.AlwaysAllowed, r.ExpiresAt)).ToList(),
+            WindowsFeatures = bundle.WindowsFeatures is { } features
+                ? new WindowsFeatures(features.NotificationsAndSync, features.OneDrive, features.WebSearchInStart)
+                : WindowsFeatures.Default,
         };
         foreach (var (name, domains) in bundle.Categories ?? new Dictionary<string, IReadOnlyList<string>>()) config.Categories[name] = domains ?? [];
         return config;

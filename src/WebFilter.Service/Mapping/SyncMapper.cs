@@ -59,26 +59,29 @@ public static class SyncMapper
     public static EventDto ToDto(FamilyEvent e) => new(EventWire(e.Type), e.At, e.MemberId, e.DeviceId,
         e.Reason == ReasonCode.None ? null : e.Reason.ToWire(), e.Url, e.App, e.RemainingMinutes, e.Detail);
 
+    /// <summary>An event an agent uploaded. A reason code this version does not know (a newer agent) is dropped, not refused.</summary>
     public static FamilyEvent FromDto(EventDto e, string deviceId) => new(ParseEvent(e.Type), e.At, e.MemberId, deviceId,
-        e.Reason is null ? ReasonCode.None : ReasonCodes.Parse(e.Reason), e.Url, e.App, e.RemainingMinutes, e.Detail);
+        ReasonCodeExtensions.ParseOrNone(e.Reason), e.Url, e.App, e.RemainingMinutes, e.Detail);
 
     /// <summary>Stable id of an agent event, so a retried upload does not duplicate it.</summary>
     public static string EventId(FamilyEvent e) =>
         Convert.ToHexString(SHA256.HashData(Encoding.UTF8.GetBytes(
             $"{e.Type}|{e.At.UtcTicks}|{e.MemberId}|{e.DeviceId}|{e.Reason}|{e.Url}|{e.App}|{e.RemainingMinutes}|{e.Detail}")))[..32];
 
+    /// <summary>An event type's wire name (sync and admin protocols; see <see cref="EventType"/>).</summary>
     public static string EventWire(EventType type) => type switch
     {
         EventType.TimeWarning => "time_warning", EventType.TimeExpired => "time_expired", EventType.Blocked => "blocked",
         EventType.AppBlocked => "app_blocked", EventType.AdminChange => "admin_change", EventType.AccessRequest => "access_request",
-        EventType.Tamper => "tamper", _ => "service",
+        EventType.Tamper => "tamper", EventType.Search => "search", EventType.Override => "override", _ => "service",
     };
 
-    private static EventType ParseEvent(string wire) => wire switch
+    /// <summary>An event type from its wire name; a name this version does not know (a newer agent) is a service event.</summary>
+    public static EventType ParseEvent(string wire) => wire switch
     {
         "time_warning" => EventType.TimeWarning, "time_expired" => EventType.TimeExpired, "blocked" => EventType.Blocked,
         "app_blocked" => EventType.AppBlocked, "admin_change" => EventType.AdminChange, "access_request" => EventType.AccessRequest,
-        "tamper" => EventType.Tamper, _ => EventType.Service,
+        "tamper" => EventType.Tamper, "search" => EventType.Search, "override" => EventType.Override, _ => EventType.Service,
     };
 
     private static List<UsageDto> Usage(UsageLedger ledger, DateTimeOffset now)

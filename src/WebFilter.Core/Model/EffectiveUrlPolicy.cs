@@ -5,7 +5,8 @@ public sealed record CategoryDomain(string Domain, RuleAction Action, string Cat
 
 /// <summary>
 /// Everything the URL rule evaluator and the DNR compiler need for one member at one instant:
-/// active member rules, active global rules, and the member's category domains. Expired rules are excluded.
+/// active member rules, active global rules, the member's category domains, and the built-in blocks of the member's
+/// protection flags (<see cref="BuiltinBlocks"/>). Expired rules are excluded.
 /// </summary>
 public sealed record EffectiveUrlPolicy(
     string MemberId,
@@ -15,6 +16,9 @@ public sealed record EffectiveUrlPolicy(
     IReadOnlyList<Rule> GlobalRules,
     IReadOnlyList<CategoryDomain> CategoryDomains)
 {
+    /// <summary>Blocks that win over every rule above (<see cref="BuiltinRules"/>), e.g. image search.</summary>
+    public IReadOnlyList<BuiltinBlock> BuiltinBlocks { get; init; } = [];
+
     public static EffectiveUrlPolicy For(FamilyConfig config, string memberId, DateTimeOffset now)
     {
         var member = config.Member(memberId);
@@ -24,7 +28,10 @@ public sealed record EffectiveUrlPolicy(
             .Where(mc => mc.MemberId == memberId && config.Categories.ContainsKey(mc.Category))
             .SelectMany(mc => config.Categories[mc.Category].Select(d => new CategoryDomain(d, mc.Action, mc.Category)))
             .ToList();
-        return new EffectiveUrlPolicy(memberId, member.FilterMode, member.YouTubeMode, memberRules, globalRules, categoryDomains);
+        return new EffectiveUrlPolicy(memberId, member.FilterMode, member.YouTubeMode, memberRules, globalRules, categoryDomains)
+        {
+            BuiltinBlocks = BuiltinRules.For(config, member),
+        };
     }
 
     /// <summary>

@@ -261,7 +261,7 @@ public sealed class HubSyncTests : IAsyncLifetime
         Assert.Equal(_clock.GetUtcNow(), status.Hub.LastContactAt);
         // The requirement checks are answered on an agent too, without the hub-only ones.
         var checks = Assert.IsType<Contracts.Admin.DiagnosticsResult>(admin.Handle(new Contracts.Admin.GetDiagnostics(), "parent")).Checks;
-        Assert.Equal(["service", "browsers", "browser_policies", "extension"], checks.Select(c => c.Id));
+        Assert.Equal(["service", "browsers", "browser_policies", "extension", "onedrive"], checks.Select(c => c.Id));
 
         Assert.IsType<Contracts.Admin.AdminOk>(admin.Handle(new Contracts.Admin.Pause("yoav", _clock.GetUtcNow().AddMinutes(30)), "parent"));
         var paused = _agent.WithAgent((agent, now) => agent.DecideUrl(agent.AccountOf("yoav"), "https://www.instagram.com/", now));
@@ -347,6 +347,39 @@ public sealed class HubSyncTests : IAsyncLifetime
         }), _clock, NullLogger<FamilyService>.Instance);
         afterCrash.Start();
         Assert.Contains(afterCrash.WithHub((hub, _) => hub.Config.Rules.ToList()), r => r.Id == "r-crash");
+    }
+
+    /// <summary>
+    /// PROTECTION-SPEC §6 and §10 end to end: a search and an override on an agent computer, uploaded over HTTPS, are in
+    /// the hub's activity (GetEvents) with their details; a tamper there becomes a notification on the hub.
+    /// </summary>
+    [Fact]
+    public async Task Searches_overrides_and_tamper_on_an_agent_reach_the_hub()
+    {
+        await PairAndSyncAsync();
+        _hub.WithHub((hub, now) => { hub.SetMember(hub.Config.Member("yoav") with { LogSearches = true, JumpGuard = true }, now); return 0; }, "parent");
+        await Eventually(() => _agent.AgentSnapshotVersion == HubVersion, "settings with logSearches on the agent");
+
+        Assert.True(_agent.WithAgent((agent, now) => agent.ReportSearch(agent.AccountOf("yoav"), "bing", "minecraft seeds", "https://www.bing.com/search?q=minecraft+seeds", now)));
+        _agent.WithAgent((agent, now) => { agent.ReportOverride(agent.AccountOf("yoav"), "https://other.example/", Core.Decisions.ReasonCode.BlockedJump, now); return 0; });
+        _agent.ReportTamper("S-1-5-21-3000-1001", TamperKinds.NetworkRepaired); // yoav's account on laptop-yoav
+        _sync.Wake();
+        await Eventually(() => _hub.WithHub((hub, _) => hub.Events.Count(e => e.Type is EventType.Search or EventType.Override or EventType.Tamper)) == 3, "events uploaded");
+
+        var hubAdmin = new Pipes.AdminPipeServer(_hub, Options.Create(_hub.Options), _clock, NullLogger<Pipes.AdminPipeServer>.Instance);
+        var search = Assert.Single(Assert.IsType<Contracts.Admin.EventsResult>(hubAdmin.Handle(new Contracts.Admin.GetEvents(EventType: "search"), "parent")).Events);
+        Assert.Equal(("yoav", "laptop-yoav", "bing:minecraft seeds", "https://www.bing.com/search?q=minecraft+seeds"), (search.MemberId, search.DeviceId, search.Detail, search.Url));
+        var overridden = Assert.Single(Assert.IsType<Contracts.Admin.EventsResult>(hubAdmin.Handle(new Contracts.Admin.GetEvents(EventType: "override"), "parent")).Events);
+        Assert.Equal(("yoav", "blocked_jump", "https://other.example/"), (overridden.MemberId, overridden.Reason, overridden.Url));
+
+        var tamper = Assert.Single(_hub.NotificationsSince(null), n => n.Kind == "tamper");
+        Assert.Equal(("network_repaired", "yoav", "laptop-yoav"), (tamper.Detail, tamper.MemberId, tamper.DeviceId));
+
+        // A retried upload (same event ids) records nothing twice.
+        _sync.Wake();
+        await Task.Delay(300);
+        Assert.Equal(3, _hub.WithHub((hub, _) => hub.Events.Count(e => e.Type is EventType.Search or EventType.Override or EventType.Tamper)));
+        Assert.Single(_hub.NotificationsSince(null), n => n.Kind == "tamper");
     }
 
     private RequestResult Request(string url) => _agent.WithAgent((agent, now) =>

@@ -23,12 +23,30 @@ public sealed record FamilyBundle
     public IReadOnlyList<YouTubeChannelDto> YouTubeChannels { get; init; } = [];
     public IReadOnlyList<string> SupportedBrowsers { get; init; } = [];
     public IReadOnlyList<AppRuleDto> AppRules { get; init; } = [];
+
+    /// <summary>
+    /// Family-wide Windows features for restricted and unlinked accounts (PROTECTION-SPEC §2). Null when the bundle has no
+    /// such section (an older bundle): read as <see cref="WindowsFeaturesDto"/>'s defaults.
+    /// </summary>
+    public WindowsFeaturesDto? WindowsFeatures { get; init; }
 }
 
 /// <param name="Role">child | teen | adult.</param>
 /// <param name="FilterMode">unrestricted | blocklist | allowlist.</param>
 /// <param name="YouTubeMode">off | restricted | allowlist | unrestricted.</param>
-public sealed record MemberDto(string Id, string DisplayName, string Role, int? Age, string FilterMode, string YouTubeMode);
+/// <param name="BlockImageSearch">Image search pages are blocked (PROTECTION-SPEC §4). False when missing.</param>
+/// <param name="JumpGuard">A site may not open another site in a new tab or window or by an automatic redirect (§7). False when missing.</param>
+/// <param name="BlockYouTubeShorts">YouTube /shorts/ is blocked (§8). False when missing.</param>
+/// <param name="LogSearches">Search terms are recorded for the parents; the member is told (§9). False when missing.</param>
+/// <remarks>The four flags apply to restricted members only; unrestricted members (adults) ignore them.</remarks>
+public sealed record MemberDto(string Id, string DisplayName, string Role, int? Age, string FilterMode, string YouTubeMode,
+    bool BlockImageSearch = false, bool JumpGuard = false, bool BlockYouTubeShorts = false, bool LogSearches = false);
+
+/// <summary>Wire: <c>windowsFeatures: { notificationsAndSync, oneDrive, webSearchInStart }</c>; a missing field takes its default.</summary>
+/// <param name="NotificationsAndSync">Per-user Windows services (push notifications, settings sync) may use the network — svchost.exe is allowed, also when time is up.</param>
+/// <param name="OneDrive">The machine-wide OneDrive may use the network, also when time is up. A per-user OneDrive never is.</param>
+/// <param name="WebSearchInStart">Bing results in Start search; when false, DisableSearchBoxSuggestions is set for each such account.</param>
+public sealed record WindowsFeaturesDto(bool NotificationsAndSync = true, bool OneDrive = true, bool WebSearchInStart = false);
 
 public sealed record DeviceDto(string Id, string Os, string Role, IReadOnlyList<AccountDto> Accounts);
 

@@ -29,6 +29,7 @@ builder.Services.AddSingleton<IMachineProbe, WindowsMachineProbe>();
 builder.Services.AddHostedService<TickService>();
 builder.Services.AddHostedService<AgentPipeServer>();
 builder.Services.AddHostedService<AdminPipeServer>();
+builder.Services.AddHostedService<NotifyPipeServer>();
 // After AddWindowsService: as a Windows service its lifetime is replaced by one that also reports user logons.
 builder.Services.AddSessionEvents();
 builder.Services.AddHostedService<PolicyService>();
@@ -39,6 +40,9 @@ builder.Services.AddSingleton<HubSyncService>();
 builder.Services.AddHostedService(sp => sp.GetRequiredService<HubSyncService>());
 
 var host = builder.Build();
-host.Services.GetRequiredService<FamilyService>().Start();
+var family = host.Services.GetRequiredService<FamilyService>();
+family.Start();
+// A requested stop counts as clean from its first moment (Windows may end a slow shutdown); a crash or kill does not.
+host.Services.GetRequiredService<IHostApplicationLifetime>().ApplicationStopping.Register(family.StoppingCleanly);
 host.Run();
 return 0;

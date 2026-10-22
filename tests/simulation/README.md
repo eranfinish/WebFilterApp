@@ -46,9 +46,10 @@ cd tests/simulation/tools && npm install && npm run validate
 
 | שדה | כלל מיזוג |
 |-----|-----------|
-| `members` | מיזוג שדות לפי `id` |
+| `members` | מיזוג שדות לפי `id` (כולל דגלי ההגנה `blockImageSearch`, `jumpGuard`, `blockYouTubeShorts`, `logSearches` — ברירת מחדל `false`) |
 | `schedules` | אם מופיע בן משפחה — **מחליף את כל** חלונות הזמן שלו מה-fixture |
 | `dailyLimits` | מחליף את המכסה של אותו בן משפחה באותם ימים |
+| `categories` | מתווספת (קטגוריה באותו שם מוחלפת) |
 | `rules`, `memberCategories`, `youtubeChannels`, `appRules` | מתווסף |
 
 ## 4. שעון
@@ -76,9 +77,12 @@ cd tests/simulation/tools && npm install && npm run validate
 | כתובת IP | למשתמש מוגבל: חסום (`blocked_ip_literal`) אלא אם יש כלל `allow` מפורש לאותה כתובת. צורות עשרוניות/הקסה מנורמלות ל-IPv4 רגיל |
 | `sub` frame | אותם כללים כמו `main` |
 | סכמה לא http/https | `not_applicable` |
-| YouTube | הדומיינים של YouTube נקבעים לפי `youtubeMode` **בלבד**, בלי קשר ל-`filterMode` |
+| YouTube | הדומיינים של YouTube נקבעים לפי `youtubeMode` **בלבד**, בלי קשר ל-`filterMode`. חריג: `accounts.youtube.com` (שדרכו עובר הכניסה לחשבון Google, בלי תוכן) מותר (`allowed_default`) בכל מצב YouTube — גם `off` וגם בשיעורי בית; כשהזמן נגמר הוא חסום כמו כל השאר |
 | ערוץ YouTube | התאמה לפי `channelId`, או לפי `handle` אם הוא שמור ברשומת הערוץ (לא רגיש לאותיות). במצב "רק מאושרים": בלי זהות ערוץ → `blocked_youtube_unknown`; דף הבית והחיפוש → `redirect_youtube_home` |
 | חשבון לא מקושר | חשבון Windows לא-מנהל שעדיין לא קושר לבן משפחה מקבל "רק מאושרים" בלי שום היתר מלבד "מותר תמיד", עד שההורה מקשר אותו |
+| חיפוש תמונות (`blockImageSearch`) | לבן משפחה מסונן עם הדגל — כללים מובנים (`builtin-image-search-*`) → `blocked_image_search`: Google ‏`/search` עם `udm=2` או `tbm=isch` (פרמטר בכל מקום ב-query, לא ב-fragment ולא בתוך ערך של פרמטר אחר) ו-`/imghp`, `images.google.*`, `lens.google.com`, `bing.com/images`, DuckDuckGo עם `ia=images`/`iax=images`, Yandex ‏`/images`. גוברים על **כל** כלל, גם "מותר תמיד" וחינוכי, ובכל מצב שבו בן המשפחה מסונן — בתוך החלון, כשהזמן נגמר ובשיעורי בית; השהיה מבטלת אותם. בלי הדגל, או לבן משפחה ללא הגבלה — אין כללים כאלה. חיפוש רגיל ותמונות בתוך דף תוצאות רגיל לא נחסמים |
+| AI Mode של Google | כשהקטגוריות של בן משפחה מסונן חוסמות את `ai-chat` — היא חסומה לו, או שהוא במצב "רק מאושרים" וההורה לא התיר אותה — כלל מובנה `builtin-ai-mode-google` חוסם את `google.*/search` עם `udm=50` (בכל סדר פרמטרים) → `blocked_rule`, וגובר על כל כלל כמו חיפוש התמונות. חיפוש רגיל לא נחסם |
+| `blocked_jump`, `blocked_youtube_shorts` | החלטות של התוסף בלבד (PROTECTION-SPEC §7–§8); אין להן תרחישי `engine`. השירות שומר את הסיבה שהתוסף מדווח |
 
 ## 6. סמנטיקה של זמן
 

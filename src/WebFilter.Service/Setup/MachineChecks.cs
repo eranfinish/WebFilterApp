@@ -21,6 +21,9 @@ public interface IMachineProbe
 
     /// <summary>Whether an enabled inbound firewall rule allows TCP <paramref name="port"/>; null when that cannot be read.</summary>
     bool? InboundPortAllowed(int port);
+
+    /// <summary>Where OneDrive is installed: machine-wide (Program Files), and/or per user (in a profile's AppData\Local).</summary>
+    (bool MachineWide, bool PerUser) OneDriveInstalls();
 }
 
 /// <summary>
@@ -33,6 +36,12 @@ public static class MachineChecks
     public const string Warn = "warn";
     public const string Fail = "fail";
 
+    /// <summary>The onedrive check's detail when only per-user installs exist: how to switch to a machine-wide install.</summary>
+    public const string OneDriveSwitchCommand = "OneDriveSetup.exe /allusers";
+
+    /// <summary>The onedrive check's detail when OneDrive is not installed at all.</summary>
+    public const string OneDriveNone = "none";
+
     public static IReadOnlyList<CheckResult> Run(ServiceOptions options, bool isHub, IMachineProbe probe)
     {
         ArgumentNullException.ThrowIfNull(options);
@@ -43,6 +52,7 @@ public static class MachineChecks
             probe.InstalledBrowsers() is { Count: > 0 } browsers ? new("browsers", Ok, string.Join(",", browsers)) : new("browsers", Fail),
             new("browser_policies", options.ManageBrowserPolicies ? Ok : Warn),
             Extension(options, probe),
+            OneDrive(probe),
         };
         if (!isHub) return checks;
 
@@ -69,6 +79,18 @@ public static class MachineChecks
                                           && probe.MachineValue(b.Key, "1") is { } value && value.StartsWith(b.Id + ";", StringComparison.OrdinalIgnoreCase));
         return new("extension", installed ? Ok : Fail);
     }
+
+    /// <summary>
+    /// PROTECTION-SPEC §2: restricted accounts may use only a machine-wide OneDrive (a per-user one lives where the child can
+    /// write, so it never gets network access). Only per-user installs → a warning with the command that switches.
+    /// </summary>
+    private static CheckResult OneDrive(IMachineProbe probe)
+    {
+        var (machineWide, perUser) = probe.OneDriveInstalls();
+        return machineWide ? new("onedrive", Ok)
+            : perUser ? new("onedrive", Warn, OneDriveSwitchCommand)
+            : new("onedrive", Ok, OneDriveNone);
+    }
 }
 
 /// <summary>Reads this Windows computer (registry, Network List Manager, firewall rules); never writes.</summary>
@@ -86,6 +108,34 @@ public sealed class WindowsMachineProbe : IMachineProbe
         if (Exists("Microsoft", "Edge", "Application", "msedge.exe")) found.Add("edge");
         if (Exists("Google", "Chrome", "Application", "chrome.exe")) found.Add("chrome");
         return found;
+    }
+
+    public (bool MachineWide, bool PerUser) OneDriveInstalls()
+    {
+        string[] programFiles = [Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles), Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86)];
+        var machineWide = programFiles.Any(root => !string.IsNullOrEmpty(root) && File.Exists(Path.Combine(root, "Microsoft OneDrive", "OneDrive.exe")));
+        var perUser = false;
+        try
+        {
+            // Every local profile (ProfileList), whether or not its user is logged on.
+            using var root = RegistryKey.OpenBaseKey(RegistryHive.LocalMachine, RegistryView.Registry64);
+            using var profiles = root.OpenSubKey(@"SOFTWARE\Microsoft\Windows NT\CurrentVersion\ProfileList");
+            foreach (var sid in profiles?.GetSubKeyNames() ?? [])
+            {
+                if (!sid.StartsWith("S-1-5-21-", StringComparison.Ordinal)) continue;
+                using var profile = profiles!.OpenSubKey(sid);
+                if (profile?.GetValue("ProfileImagePath") is not string path) continue;
+                if (File.Exists(Path.Combine(Environment.ExpandEnvironmentVariables(path), "AppData", "Local", "Microsoft", "OneDrive", "OneDrive.exe")))
+                {
+                    perUser = true;
+                    break;
+                }
+            }
+        }
+        catch (Exception ex) when (ex is System.Security.SecurityException or UnauthorizedAccessException or IOException)
+        {
+        }
+        return (machineWide, perUser);
     }
 
     public string? MachineValue(string keyPath, string name)

@@ -25,6 +25,9 @@ public class AgentProtocolTests
         new RequestAccessResponse("created", "ar-1"),
         new ResolveYouTubeRequest("@sesame-sim", null),
         new ResolveYouTubeResponse("UCsesame0000000000000002"),
+        new RulesResponse(7, [], [], new YouTubePolicy("off", [], []), new TimeStateMessage("ok", 45, "19:00"), new AgentFeatures(true, true, false, true)),
+        new ReportSearchRequest("google", "how do volcanoes work", "https://www.google.com/search?q=volcano"),
+        new ReportOverrideRequest("https://other.example/", "blocked_jump"),
         new RulesChangedMessage(8),
         new AccessDecidedMessage("ar-1", "approved", DateTimeOffset.Parse("2026-11-01T16:20:00+02:00")),
         new ErrorMessage("service_unavailable", "The filtering service is not running"),
@@ -51,6 +54,35 @@ public class AgentProtocolTests
         Assert.Equal("9", root.GetProperty("id").GetString());
         Assert.Equal("blocked_rule", root.GetProperty("reason").GetString());
         Assert.False(root.TryGetProperty("ruleId", out _));
+    }
+
+    /// <summary>PROTECTION-SPEC §6: the exact wire shapes the extension relies on.</summary>
+    [Fact]
+    public void Protection_messages_use_the_spec_wire_names()
+    {
+        var rules = Encoding.UTF8.GetString(AgentProtocol.Serialize(new RulesResponse(1, [], [], new YouTubePolicy("off", [], []),
+            new TimeStateMessage("ok", null, null), new AgentFeatures(JumpGuard: true, BlockYouTubeShorts: true, LogSearches: true, CanOverrideJump: true))));
+        Assert.Contains("\"features\":{\"jumpGuard\":true,\"blockYouTubeShorts\":true,\"logSearches\":true,\"canOverrideJump\":true}", rules);
+
+        var search = Assert.IsType<ReportSearchRequest>(AgentProtocol.Deserialize(
+            """{"type":"reportSearch","v":1,"id":"s1","engine":"youtube","query":"lego","url":"https://www.youtube.com/results?search_query=lego"}"""u8));
+        Assert.Equal(("youtube", "lego", "s1"), (search.Engine, search.Query, search.Id));
+        var overridden = Assert.IsType<ReportOverrideRequest>(AgentProtocol.Deserialize(
+            """{"type":"reportOverride","v":1,"url":"https://other.example/","reason":"blocked_jump"}"""u8));
+        Assert.Equal("blocked_jump", overridden.Reason);
+    }
+
+    [Fact]
+    public void Rules_from_an_older_service_have_no_features_and_missing_flags_are_false()
+    {
+        var older = Assert.IsType<RulesResponse>(AgentProtocol.Deserialize(
+            """{"type":"rules","v":1,"rulesVersion":3,"dynamicRules":[],"timeUpSessionRules":[],"youtube":{"mode":"off","allowed":[],"blocked":[]},"time":{"type":"timeState","state":"ok"}}"""u8));
+        Assert.Null(older.Features);
+        Assert.DoesNotContain("features", Encoding.UTF8.GetString(AgentProtocol.Serialize(older)));
+
+        var partial = Assert.IsType<RulesResponse>(AgentProtocol.Deserialize(
+            """{"type":"rules","v":1,"rulesVersion":3,"dynamicRules":[],"timeUpSessionRules":[],"youtube":{"mode":"off","allowed":[],"blocked":[]},"time":{"type":"timeState","state":"ok"},"features":{"jumpGuard":true}}"""u8));
+        Assert.Equal(new AgentFeatures(JumpGuard: true), partial.Features);
     }
 
     [Fact]

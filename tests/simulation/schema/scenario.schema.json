@@ -121,7 +121,10 @@
         "blocked_youtube_off",
         "blocked_service_unavailable",
         "blocked_app_network",
-        "redirect_youtube_home"
+        "redirect_youtube_home",
+        "blocked_image_search",
+        "blocked_jump",
+        "blocked_youtube_shorts"
       ]
     },
     "expectDecision": {
@@ -181,6 +184,22 @@
             "allowlist",
             "unrestricted"
           ]
+        },
+        "blockImageSearch": {
+          "type": "boolean",
+          "description": "PROTECTION-SPEC §4: built-in image-search blocks (blocked_image_search). Default false."
+        },
+        "jumpGuard": {
+          "type": "boolean",
+          "description": "PROTECTION-SPEC §7 (extension). Default false."
+        },
+        "blockYouTubeShorts": {
+          "type": "boolean",
+          "description": "PROTECTION-SPEC §8 (extension). Default false."
+        },
+        "logSearches": {
+          "type": "boolean",
+          "description": "PROTECTION-SPEC §9: searches are recorded as search events. Default false."
         }
       }
     },
@@ -419,7 +438,7 @@
       }
     },
     "setup": {
-      "description": "Patch applied on top of the fixture. See README: members merge by id; schedules replace per member; dailyLimits replace per member+day; other arrays append.",
+      "description": "Patch applied on top of the fixture. See README: members merge by id; schedules replace per member; dailyLimits replace per member+day; categories add or replace by name; other arrays append.",
       "type": "object",
       "additionalProperties": false,
       "properties": {
@@ -427,6 +446,16 @@
           "type": "array",
           "items": {
             "$ref": "#/$defs/member"
+          }
+        },
+        "categories": {
+          "description": "Category name -> registrable domains, added to the fixture's categories (a name already there is replaced).",
+          "type": "object",
+          "additionalProperties": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
           }
         },
         "rules": {
