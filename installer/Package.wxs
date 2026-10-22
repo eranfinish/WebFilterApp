@@ -60,6 +60,7 @@
       <ComponentGroupRef Id="Payload" />
       <ComponentRef Id="Service" />
       <ComponentRef Id="Admin" />
+      <ComponentRef Id="WfpNative" />
       <ComponentRef Id="NativeHostRegistration" />
       <ComponentRef Id="InstallState" />
       <ComponentRef Id="DataFolder" />
@@ -71,6 +72,7 @@
       <Files Include="$(var.PayloadDir)**">
         <Exclude Files="$(var.PayloadDir)WebFilter.Service.exe" />
         <Exclude Files="$(var.PayloadDir)WebFilter.Admin.exe" />
+        <Exclude Files="$(var.PayloadDir)WebFilter.Wfp.Native.dll" />
         <Exclude Files="$(var.PayloadDir)appsettings*.json" />
         <Exclude Files="$(var.PayloadDir)**\*.pdb" />
       </Files>
@@ -96,6 +98,14 @@
         <Shortcut Id="AdminShortcut" Directory="ProgramMenuFolder" Name="!(loc.AdminShortcutName)"
                   Description="!(loc.AdminShortcutDescription)" WorkingDirectory="INSTALLFOLDER" Advertise="yes" />
       </File>
+    </Component>
+
+    <!--
+      The WFP engine (MVP-PLAN §5.3), loaded by the service from its own folder. Named here rather than left to the
+      payload wildcard, so an MSI cannot be built without it. The .wixproj builds it from src/WebFilter.Wfp.Native.
+    -->
+    <Component Id="WfpNative" Directory="INSTALLFOLDER">
+      <File Id="WfpNativeDll" Source="$(var.PayloadDir)WebFilter.Wfp.Native.dll" KeyPath="yes" />
     </Component>
 
     <!--

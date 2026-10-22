@@ -8,6 +8,15 @@ dotnet build installer/WebFilter.Installer.wixproj -c Release
 
 Output: `installer/bin/Release/he-IL/WebFilter.msi` (Hebrew UI) and `installer/bin/Release/en-US/WebFilter.msi` (English, for the lab VMs). The project publishes the service, the native host and the admin app (Release, self-contained, `win-x64`) into `obj/payload` first, so the target PC needs no .NET runtime. It is not in `WebFilter.slnx`, so `dotnet test` does not build an MSI. Simulation builds are refused.
 
+The WFP engine `WebFilter.Wfp.Native.dll` is C++ (`src/WebFilter.Wfp.Native`), which `dotnet build` cannot compile. The `BuildWfpNative` target of the `.wixproj` therefore runs Visual Studio's MSBuild on the `.vcxproj` (Release|x64) and copies the DLL into the payload. It finds MSBuild with `vswhere` and needs the "Desktop development with C++" workload; it clears the SDK paths `dotnet build` sets in its environment (`MSBuildExtensionsPath`, `MSBuildSDKsPath`, …) so the child build uses Visual Studio's own. Without the workload the build stops with a message saying so. Alternatives:
+
+```bash
+dotnet build installer/WebFilter.Installer.wixproj -c Release -p:VsMSBuildExe="C:\...\MSBuild\Current\Bin\MSBuild.exe"   # a specific MSBuild
+dotnet build installer/WebFilter.Installer.wixproj -c Release -p:WfpNativeDll="C:\...\WebFilter.Wfp.Native.dll"           # a DLL built elsewhere
+```
+
+`Package.wxs` names the DLL as its own file (not through the payload wildcard), so an MSI cannot be built without it.
+
 WiX comes from NuGet (`WixToolset.Sdk` 5.0.2 and its Util, Firewall and UI extensions); nothing is installed system-wide. 5.0.2 is the last release under plain MS-RL: WiX 6 and 7 require accepting the Open Source Maintenance Fee EULA, which is the project owner's call.
 
 Never run the MSI, or `WebFilter.Service.exe cleanup`, on the development PC: both change the machine (service, HKLM, firewall, every user's registry, `%ProgramData%\WebFilter`). Use the Hyper-V lab.
@@ -32,15 +41,15 @@ Install, repair and upgrade:
 
 - Files to `%ProgramFiles%\WebFilter` (fixed: the service trusts only the native host there). Start-menu shortcut to the admin app.
 - Service `WebFilter`: LocalSystem, automatic start, restart on failure (10 s; failure count reset daily), also registered for Safe Mode with Networking. A failed background service counts as a failure: the service then ends its process with exit code 1 instead of stopping cleanly (`src/WebFilter.Service/FaultExit.cs`).
-- `WebFilter.Service.exe configure` (custom action, before the service starts) writes `appsettings.json` (role, `ManageBrowserPolicies=true`, store ids) and the native host manifest `com.webfilter.host.json` (allowed origins = the store ids).
+- `WebFilter.Service.exe configure` (custom action, before the service starts) writes `appsettings.json` (role, `ManageBrowserPolicies=true`, `ManageNetwork=true`, store ids) and the native host manifest `com.webfilter.host.json` (allowed origins = the store ids).
 - Native host keys `HKLM\SOFTWARE\{Google\Chrome,Microsoft\Edge}\NativeMessagingHosts\com.webfilter.host`.
 - `%ProgramData%\WebFilter` created with a protected ACL: SYSTEM and Administrators only (each profile cache file grants its own user read access).
 - Hub only: inbound firewall rule "WebFilter Hub", TCP 47800, the service executable, Private profile.
-- The browser policies themselves (force-install, `NativeMessagingUserLevelHosts`, per-child restrictions) are written by the running service, not by the MSI.
+- The browser policies themselves (force-install, `NativeMessagingUserLevelHosts`, per-child restrictions) are written by the running service, not by the MSI. So are the WFP filters (MVP-PLAN §5.3): every non-admin account gets network access for its allowed programs only, through `WebFilter.Wfp.Native.dll` next to the service. The filters are persistent: they stay when the service stops and after a reboot.
 
 Uninstall (not the removal of the old version during an upgrade):
 
-- The service is stopped, then `WebFilter.Service.exe cleanup` removes every browser policy value the service wrote — in HKLM and in every user's hive, loading the hives of users who are not logged on — the WFP filters (once the native engine exists), and `%ProgramData%\WebFilter`. Best effort: what it could not remove is listed in the MSI log and the uninstall continues.
+- The service is stopped, then `WebFilter.Service.exe cleanup` removes every browser policy value the service wrote — in HKLM and in every user's hive, loading the hives of users who are not logged on — our WFP provider, sublayer and filters (`WFP: provider, sublayer and filters removed.` in the log), and `%ProgramData%\WebFilter`. Best effort: what it could not remove is listed in the MSI log and the uninstall continues.
 - On a paired agent, before the data folder (and with it the client key) is deleted, `cleanup` unregisters the computer from its hub: `POST /v1/unregister` over the existing mutual-TLS link, waiting at most 5 seconds. The hub revokes the computer, as a parent's revoke would, and keeps it listed: the Devices screen shows it among the revoked computers with the status "Uninstalled" ("הסינון הוסר"), and the activity log gets "WebFilter was uninstalled from a computer". It is not deleted, so the parent sees that the filter was removed, and pairing the same computer again after a reinstall restores it with its account links. When the hub is off or does not answer in time, the MSI log says so (`Hub: this computer could not be unregistered …`), the uninstall still completes, and the computer stays listed as active until a parent revokes it.
 - The MSI removes the service, the files, the generated files, the host keys, `HKLM\SOFTWARE\WebFilter`, the Safe Mode key and the firewall rule.
 
