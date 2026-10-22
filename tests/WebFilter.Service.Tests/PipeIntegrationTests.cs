@@ -434,6 +434,31 @@ public sealed class PipeIntegrationTests : IAsyncLifetime
         Assert.Equal(("block", "blocked_rule", "builtin-ai-mode-google", false), (aiMode.Decision, aiMode.Reason, aiMode.RuleId, aiMode.CanRequest));
     }
 
+    /// <summary>PROTECTION-SPEC §12: the ad blocking switch reaches the rules reply on its own, and a pause turns it off with the rest of the filtering.</summary>
+    [Fact]
+    public async Task Ad_blocking_follows_its_switch_and_stops_while_paused()
+    {
+        await using var agent = await AgentClient.ConnectAsync(_options.AgentPipeName);
+        await agent.RequestAsync<HelloResponse>(new HelloRequest("0.0.1", "edge", "abcdefghijklmnopabcdefghijklmnop"));
+        await using var admin = await AdminClient.ConnectAsync(_options.AdminPipeName);
+        async Task<AgentFeatures?> Features() => (await agent.RequestAsync<RulesResponse>(new GetRulesRequest())).Features;
+        Assert.Equal(new AgentFeatures(), await Features());
+
+        Assert.IsType<AdminOk>(await admin.RequestAsync(new SetMember("noa", BlockAds: true)));
+        Assert.NotNull(await agent.WaitForAsync<RulesChangedMessage>());
+        Assert.Equal(new AgentFeatures(BlockAds: true), await Features());
+        var noa = Assert.IsType<SettingsResult>(await admin.RequestAsync(new GetSettings())).Settings.Members.Single(m => m.Id == "noa");
+        Assert.Equal((true, false, false, false, false), (noa.BlockAds, noa.BlockImageSearch, noa.JumpGuard, noa.BlockYouTubeShorts, noa.LogSearches));
+
+        Assert.IsType<AdminOk>(await admin.RequestAsync(new Pause("noa", _clock.GetUtcNow().AddMinutes(30))));
+        Assert.Equal(new AgentFeatures(), await Features());
+        Assert.IsType<AdminOk>(await admin.RequestAsync(new Resume("noa")));
+        Assert.Equal(new AgentFeatures(BlockAds: true), await Features());
+
+        Assert.IsType<AdminOk>(await admin.RequestAsync(new SetMember("noa", BlockAds: false)));
+        Assert.Equal(new AgentFeatures(), await Features());
+    }
+
     [Fact]
     public async Task Searches_are_recorded_only_while_the_members_searches_are_logged()
     {

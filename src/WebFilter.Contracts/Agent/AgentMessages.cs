@@ -66,18 +66,21 @@ public sealed record RulesResponse(
     AgentFeatures? Features = null) : AgentMessage;
 
 /// <summary>
-/// Wire: <c>features: { jumpGuard, blockYouTubeShorts, logSearches, canOverrideJump }</c>. All false for administrators,
-/// unrestricted members and unlinked accounts; jumpGuard and blockYouTubeShorts are also false while the member is paused.
+/// Wire: <c>features: { jumpGuard, blockYouTubeShorts, logSearches, canOverrideJump, blockAds }</c>. All false for
+/// administrators, unrestricted members and unlinked accounts; jumpGuard, blockYouTubeShorts and blockAds are also false
+/// while the member is paused.
 /// </summary>
 /// <param name="JumpGuard">Block a site opening another site in a new tab or window or by an automatic client redirect (§7).</param>
 /// <param name="BlockYouTubeShorts">Block YouTube /shorts/, SPA navigations included (§8).</param>
 /// <param name="LogSearches">Send <see cref="ReportSearchRequest"/> for searches, and tell the member their searches are visible (§9).</param>
 /// <param name="CanOverrideJump">The jump block page offers "open anyway" (teens; false for children and unlinked accounts).</param>
+/// <param name="BlockAds">Enable the extension's static ad-server ruleset (§12).</param>
 public sealed record AgentFeatures(
     bool JumpGuard = false,
     [property: JsonPropertyName("blockYouTubeShorts")] bool BlockYouTubeShorts = false,
     bool LogSearches = false,
-    bool CanOverrideJump = false);
+    bool CanOverrideJump = false,
+    bool BlockAds = false);
 
 /// <param name="Mode">off | restricted | allowlist | unrestricted.</param>
 public sealed record YouTubePolicy(string Mode, IReadOnlyList<YouTubeChannelRef> Allowed, IReadOnlyList<YouTubeChannelRef> Blocked);

@@ -38,9 +38,10 @@ public sealed record FamilyBundle
 /// <param name="JumpGuard">A site may not open another site in a new tab or window or by an automatic redirect (§7). False when missing.</param>
 /// <param name="BlockYouTubeShorts">YouTube /shorts/ is blocked (§8). False when missing.</param>
 /// <param name="LogSearches">Search terms are recorded for the parents; the member is told (§9). False when missing.</param>
-/// <remarks>The four flags apply to restricted members only; unrestricted members (adults) ignore them.</remarks>
+/// <param name="BlockAds">Requests to EasyList's ad servers are blocked in the browser (§12). False when missing.</param>
+/// <remarks>The five flags apply to restricted members only; unrestricted members (adults) ignore them.</remarks>
 public sealed record MemberDto(string Id, string DisplayName, string Role, int? Age, string FilterMode, string YouTubeMode,
-    bool BlockImageSearch = false, bool JumpGuard = false, bool BlockYouTubeShorts = false, bool LogSearches = false);
+    bool BlockImageSearch = false, bool JumpGuard = false, bool BlockYouTubeShorts = false, bool LogSearches = false, bool BlockAds = false);
 
 /// <summary>Wire: <c>windowsFeatures: { notificationsAndSync, oneDrive, webSearchInStart }</c>; a missing field takes its default.</summary>
 /// <param name="NotificationsAndSync">Per-user Windows services (push notifications, settings sync) may use the network — svchost.exe is allowed, also when time is up.</param>

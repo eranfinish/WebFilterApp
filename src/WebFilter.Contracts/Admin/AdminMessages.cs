@@ -96,7 +96,7 @@ public sealed record RemoveRule(string RuleId) : AdminMessage;
 
 /// <summary>Changes only the given fields of a family member (null = unchanged), including the protection flags of PROTECTION-SPEC §1.</summary>
 public sealed record SetMember(string MemberId, string? DisplayName = null, string? Role = null, int? Age = null, string? FilterMode = null, string? YouTubeMode = null,
-    bool? BlockImageSearch = null, bool? JumpGuard = null, bool? BlockYouTubeShorts = null, bool? LogSearches = null) : AdminMessage;
+    bool? BlockImageSearch = null, bool? JumpGuard = null, bool? BlockYouTubeShorts = null, bool? LogSearches = null, bool? BlockAds = null) : AdminMessage;
 
 public sealed record ExtendTime(string MemberId, int Minutes) : AdminMessage;
 

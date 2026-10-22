@@ -138,7 +138,7 @@ internal sealed class AgentSession(Stream pipe, ClientIdentity client, FamilySer
             rules.DynamicRules.Select(r => JsonSerializer.SerializeToElement(r)).ToList(),
             rules.TimeUpSessionRules.Select(r => JsonSerializer.SerializeToElement(r)).ToList(),
             youtube, TimeStateOf(agent, account, now),
-            new AgentFeatures(features.JumpGuard, features.BlockYouTubeShorts, features.LogSearches, features.CanOverrideJump));
+            new AgentFeatures(features.JumpGuard, features.BlockYouTubeShorts, features.LogSearches, features.CanOverrideJump, features.BlockAds));
     });
 
     private const int MaxUrlLength = 2048;

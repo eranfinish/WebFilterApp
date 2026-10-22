@@ -5,10 +5,10 @@ Sets up the lab family on the hub: noa (child) and yoav (teen), linked to their 
 .DESCRIPTION
 Reads the hub's settings (getSettings), keeps its devices and accounts, and replaces the rest (replaceSettings with
 ifVersion) with the role defaults of docs/PROTECTION-SPEC.md:
-- noa: child, allowlist, YouTube restricted; blockImageSearch, jumpGuard and blockYouTubeShorts on; educational and
-  school-tools allowed, plus the school sign-in prefix rules (section 11).
-- yoav: teen, blocklist, YouTube restricted; jumpGuard on; adult, gambling, proxies, unfiltered-search and ads-popups
-  blocked (ai-chat is offered but not checked).
+- noa: child, allowlist, YouTube restricted; blockImageSearch, jumpGuard, blockYouTubeShorts and blockAds on;
+  educational and school-tools allowed, plus the school sign-in prefix rules (section 11).
+- yoav: teen, blocklist, YouTube restricted; jumpGuard and blockAds on; adult, gambling, proxies, unfiltered-search and
+  ads-popups blocked (ai-chat is offered but not checked).
 The lists come from data/starter-lists. Accounts named noa and yoav are linked on every device; other non-admin accounts
 stay unlinked (restricted). No schedules or limits, so time never runs out during a lab check.
 
@@ -58,10 +58,10 @@ $bundle = [ordered]@{
     members = @(
         [ordered]@{ id = 'noa'; displayName = (-join [char[]](0x05E0, 0x05D5, 0x05E2, 0x05D4)); role = 'child'; age = 9
             filterMode = 'allowlist'; youTubeMode = 'restricted'
-            blockImageSearch = $true; jumpGuard = $true; blockYouTubeShorts = $true; logSearches = [bool] $LogSearches }
+            blockImageSearch = $true; jumpGuard = $true; blockYouTubeShorts = $true; logSearches = [bool] $LogSearches; blockAds = $true }
         [ordered]@{ id = 'yoav'; displayName = (-join [char[]](0x05D9, 0x05D5, 0x05D0, 0x05D1)); role = 'teen'; age = 14
             filterMode = 'blocklist'; youTubeMode = 'restricted'
-            blockImageSearch = $false; jumpGuard = $true; blockYouTubeShorts = $false; logSearches = [bool] $LogSearches }
+            blockImageSearch = $false; jumpGuard = $true; blockYouTubeShorts = $false; logSearches = [bool] $LogSearches; blockAds = $true }
     )
     devices = $devices
     categories = $categories

@@ -4,6 +4,7 @@ using WebFilter.Core.Dnr;
 using WebFilter.Core.Engine;
 using WebFilter.Core.Model;
 using WebFilter.Core.Tests.Simulation;
+using WebFilter.Core.Time;
 using static WebFilter.Core.Tests.Dnr.DnrTestPolicies;
 
 namespace WebFilter.Core.Tests.Dnr;
@@ -116,28 +117,66 @@ public class ExtensionPolicyTests
     {
         var config = Fixture();
         var noa = config.Members.FindIndex(m => m.Id == "noa");
-        config.Members[noa] = config.Members[noa] with { JumpGuard = true, BlockYouTubeShorts = true, LogSearches = true, BlockImageSearch = true };
+        config.Members[noa] = config.Members[noa] with { JumpGuard = true, BlockYouTubeShorts = true, LogSearches = true, BlockImageSearch = true, BlockAds = true };
         var yoav = config.Members.FindIndex(m => m.Id == "yoav");
         config.Members[yoav] = config.Members[yoav] with { JumpGuard = true };
         var savta = config.Members.FindIndex(m => m.Id == "savta");
-        config.Members[savta] = config.Members[savta] with { JumpGuard = true, LogSearches = true };
+        config.Members[savta] = config.Members[savta] with { JumpGuard = true, LogSearches = true, BlockAds = true };
         var hub = new HubCore(config);
         var accounts = hub.Config.Device("pc-kids").Accounts;
         ExtensionFeatures Of(string name, DateTimeOffset? at = null) => ExtensionPolicy.For(hub.View(), accounts.Single(a => a.Name == name), at ?? InWindow).Features;
 
-        Assert.Equal(new ExtensionFeatures(JumpGuard: true, BlockYouTubeShorts: true, LogSearches: true, CanOverrideJump: false), Of("noa"));
-        Assert.Equal(new ExtensionFeatures(JumpGuard: true, BlockYouTubeShorts: false, LogSearches: false, CanOverrideJump: true), Of("yoav"));
+        Assert.Equal(new ExtensionFeatures(JumpGuard: true, BlockYouTubeShorts: true, LogSearches: true, CanOverrideJump: false, BlockAds: true), Of("noa"));
+        Assert.Equal(new ExtensionFeatures(JumpGuard: true, BlockYouTubeShorts: false, LogSearches: false, CanOverrideJump: true, BlockAds: false), Of("yoav"));
         Assert.Equal(ExtensionFeatures.None, Of("savta"));   // unrestricted adult: flags ignored
         Assert.Equal(ExtensionFeatures.None, Of("dana"));    // administrator
         Assert.Equal(ExtensionFeatures.None, Of("visitor")); // unlinked
 
         hub.StartHomework("noa", 30, InWindow);
-        Assert.Equal(new ExtensionFeatures(true, true, true, false), Of("noa"));
+        Assert.Equal(new ExtensionFeatures(true, true, true, false, true), Of("noa"));
         hub.StopHomework("noa", InWindow);
-        // A pause lifts the restrictions, not the search log the member was told about.
+        // A pause lifts the restrictions (ad blocking included), not the search log the member was told about.
         hub.Pause("noa", InWindow.AddHours(1), InWindow);
-        Assert.Equal(new ExtensionFeatures(JumpGuard: false, BlockYouTubeShorts: false, LogSearches: true, CanOverrideJump: false), Of("noa"));
-        Assert.Equal(new ExtensionFeatures(true, true, true, false), Of("noa", InWindow.AddHours(2)));
+        Assert.Equal(new ExtensionFeatures(JumpGuard: false, BlockYouTubeShorts: false, LogSearches: true, CanOverrideJump: false, BlockAds: false), Of("noa"));
+        Assert.Equal(new ExtensionFeatures(true, true, true, false, true), Of("noa", InWindow.AddHours(2)));
+    }
+
+    /// <summary>
+    /// PROTECTION-SPEC §12: ad blocking stays on while the member is filtered — homework and time up included — and is off
+    /// for any pause (the hub's or this computer's own), like the other filtering. Children and teens alike.
+    /// </summary>
+    [Fact]
+    public void Ad_blocking_follows_the_flag_while_filtered_and_stops_with_any_pause()
+    {
+        var config = Fixture();
+        foreach (var id in new[] { "noa", "yoav" })
+        {
+            var i = config.Members.FindIndex(m => m.Id == id);
+            config.Members[i] = config.Members[i] with { BlockAds = true };
+        }
+        var hub = new HubCore(config);
+        bool Ads(PolicyView view, DeviceAccount account, DateTimeOffset now) => ExtensionPolicy.For(view, account, now).Features.BlockAds;
+
+        Assert.True(Ads(hub.View(), Noa, InWindow));
+        Assert.True(Ads(hub.View(), Yoav, InWindow));
+        var night = DateTimeOffset.Parse("2026-11-02T23:30:00+02:00"); // outside noa's window: time is up, the filtering goes on
+        Assert.Equal(TimeState.OutsideWindow, Decider.Time(hub.View(), "noa", night).State);
+        Assert.True(Ads(hub.View(), Noa, night));
+
+        hub.StartHomework("noa", 30, InWindow);
+        Assert.True(Ads(hub.View(), Noa, InWindow));
+        hub.StopHomework("noa", InWindow);
+
+        hub.Pause("yoav", InWindow.AddHours(1), InWindow);
+        Assert.False(Ads(hub.View(), Yoav, InWindow));
+        Assert.True(Ads(hub.View(), Yoav, InWindow.AddHours(2)));
+
+        var local = hub.View() with { LocalPauses = new Dictionary<string, DateTimeOffset> { ["noa"] = InWindow.AddMinutes(30) } };
+        Assert.False(Ads(local, Noa, InWindow));
+        Assert.True(Ads(local, Noa, InWindow.AddHours(1)));
+
+        hub.SetMember(hub.Config.Member("noa") with { BlockAds = false }, InWindow);
+        Assert.False(Ads(hub.View(), Noa, InWindow));
     }
 
     private static FamilyConfig Fixture() =>

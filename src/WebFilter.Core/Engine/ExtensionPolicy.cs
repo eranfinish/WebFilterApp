@@ -35,10 +35,10 @@ public sealed record ExtensionPolicy(EffectiveUrlPolicy? UrlPolicy, YouTubeMode 
         {
             var local = view.LocalPauses.TryGetValue(member.Id, out var l) && now < l ? l : DateTimeOffset.MinValue;
             var hub = runtime.PausedUntil is { } h && now < h ? h : DateTimeOffset.MinValue;
-            // A pause lifts the restrictions, not the search log the member is told about.
+            // A pause lifts the restrictions (ad blocking included: no filtering at all), not the search log the member is told about.
             return new(null, YouTubeMode.Unrestricted, false, local > hub ? local : hub)
             {
-                Features = features with { JumpGuard = false, BlockYouTubeShorts = false },
+                Features = features with { JumpGuard = false, BlockYouTubeShorts = false, BlockAds = false },
             };
         }
 
@@ -64,18 +64,19 @@ public sealed record ExtensionPolicy(EffectiveUrlPolicy? UrlPolicy, YouTubeMode 
 }
 
 /// <summary>
-/// The protections the extension enforces by itself (PROTECTION-SPEC §6–§9). All false for administrators, unrestricted
-/// members and unlinked accounts.
+/// The protections the extension enforces by itself (PROTECTION-SPEC §6–§9, §12). All false for administrators,
+/// unrestricted members and unlinked accounts.
 /// </summary>
 /// <param name="JumpGuard">Block a site opening another site in a new tab or window or by an automatic redirect (§7).</param>
 /// <param name="BlockYouTubeShorts">Block YouTube /shorts/ in the YouTube logic (§8).</param>
 /// <param name="LogSearches">Report searches (<c>reportSearch</c>) and tell the member so (§9).</param>
 /// <param name="CanOverrideJump">The jump block page offers "open anyway" (teens only).</param>
-public sealed record ExtensionFeatures(bool JumpGuard, bool BlockYouTubeShorts, bool LogSearches, bool CanOverrideJump)
+/// <param name="BlockAds">Enable the extension's static ad-server ruleset (§12).</param>
+public sealed record ExtensionFeatures(bool JumpGuard, bool BlockYouTubeShorts, bool LogSearches, bool CanOverrideJump, bool BlockAds)
 {
-    public static readonly ExtensionFeatures None = new(false, false, false, false);
+    public static readonly ExtensionFeatures None = new(false, false, false, false, false);
 
-    /// <summary>A restricted member's flags; <see cref="None"/> for an unrestricted one (§1: adults ignore all four).</summary>
+    /// <summary>A restricted member's flags; <see cref="None"/> for an unrestricted one (§1: adults ignore all of them).</summary>
     public static ExtensionFeatures Of(FamilyMember member) =>
-        member.IsRestricted ? new(member.JumpGuard, member.BlockYouTubeShorts, member.LogSearches, member.Role == Role.Teen) : None;
+        member.IsRestricted ? new(member.JumpGuard, member.BlockYouTubeShorts, member.LogSearches, member.Role == Role.Teen, member.BlockAds) : None;
 }

@@ -357,8 +357,9 @@ public sealed class HubSyncTests : IAsyncLifetime
     public async Task Searches_overrides_and_tamper_on_an_agent_reach_the_hub()
     {
         await PairAndSyncAsync();
-        _hub.WithHub((hub, now) => { hub.SetMember(hub.Config.Member("yoav") with { LogSearches = true, JumpGuard = true }, now); return 0; }, "parent");
+        _hub.WithHub((hub, now) => { hub.SetMember(hub.Config.Member("yoav") with { LogSearches = true, JumpGuard = true, BlockAds = true }, now); return 0; }, "parent");
         await Eventually(() => _agent.AgentSnapshotVersion == HubVersion, "settings with logSearches on the agent");
+        Assert.True(_agent.WithAgent((agent, now) => ExtensionPolicy.For(agent.View(), agent.AccountOf("yoav"), now).Features.BlockAds)); // §12 travels with the settings
 
         Assert.True(_agent.WithAgent((agent, now) => agent.ReportSearch(agent.AccountOf("yoav"), "bing", "minecraft seeds", "https://www.bing.com/search?q=minecraft+seeds", now)));
         _agent.WithAgent((agent, now) => { agent.ReportOverride(agent.AccountOf("yoav"), "https://other.example/", Core.Decisions.ReasonCode.BlockedJump, now); return 0; });

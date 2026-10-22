@@ -73,6 +73,7 @@ internal static class FixtureLoader
         JumpGuard = patch["jumpGuard"]?.GetValue<bool>() ?? member.JumpGuard,
         BlockYouTubeShorts = patch["blockYouTubeShorts"]?.GetValue<bool>() ?? member.BlockYouTubeShorts,
         LogSearches = patch["logSearches"]?.GetValue<bool>() ?? member.LogSearches,
+        BlockAds = patch["blockAds"]?.GetValue<bool>() ?? member.BlockAds,
     };
 
     private static FamilyMember ParseMember(JsonNode? n) => PatchMember(new(

@@ -40,7 +40,7 @@ public class FamilyBundleTests
     public void An_older_bundle_has_the_flags_off_and_the_default_windows_features()
     {
         var bundle = FamilyBundleJson.Deserialize(File.ReadAllText(Path.Combine(FixturesDir(), "family-base.json")));
-        Assert.All(bundle.Members, m => Assert.Equal((false, false, false, false), (m.BlockImageSearch, m.JumpGuard, m.BlockYouTubeShorts, m.LogSearches)));
+        Assert.All(bundle.Members, m => Assert.Equal((false, false, false, false, false), (m.BlockImageSearch, m.JumpGuard, m.BlockYouTubeShorts, m.LogSearches, m.BlockAds)));
         Assert.Null(bundle.WindowsFeatures);
 
         var partial = FamilyBundleJson.Deserialize("""{"timeZone":"Asia/Jerusalem","windowsFeatures":{"oneDrive":false}}""");
@@ -53,12 +53,12 @@ public class FamilyBundleTests
         var bundle = new FamilyBundle
         {
             TimeZone = "Asia/Jerusalem",
-            Members = [new MemberDto("noa", "נועה", "child", 8, "allowlist", "allowlist", BlockImageSearch: true, JumpGuard: true, BlockYouTubeShorts: true, LogSearches: true)],
+            Members = [new MemberDto("noa", "נועה", "child", 8, "allowlist", "allowlist", BlockImageSearch: true, JumpGuard: true, BlockYouTubeShorts: true, LogSearches: true, BlockAds: true)],
             WindowsFeatures = new WindowsFeaturesDto(NotificationsAndSync: false, OneDrive: true, WebSearchInStart: true),
         };
         var json = FamilyBundleJson.Serialize(bundle);
 
-        Assert.Contains("\"blockImageSearch\":true,\"jumpGuard\":true,\"blockYouTubeShorts\":true,\"logSearches\":true", json);
+        Assert.Contains("\"blockImageSearch\":true,\"jumpGuard\":true,\"blockYouTubeShorts\":true,\"logSearches\":true,\"blockAds\":true", json);
         Assert.Contains("\"windowsFeatures\":{\"notificationsAndSync\":false,\"oneDrive\":true,\"webSearchInStart\":true}", json);
         var back = FamilyBundleJson.Deserialize(json);
         Assert.Equal(bundle.Members, back.Members);
