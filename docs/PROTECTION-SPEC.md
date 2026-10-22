@@ -125,3 +125,19 @@ The admin app's activity page shows searches (filter "חיפושים").
   the hub computer for every user by the installer, exits at once for non-admin users, polls the pipe, and opens the
   admin app (UAC) when clicked.
 - Tamper sources that do not exist yet are added where cheap (the WFP and policy services already report repairs).
+
+## 11. Additions after the lists work (2026-10-22)
+
+- **List titles** (admin app, in this order): `school-tools` "כלי בית ספר", `adult` "תוכן למבוגרים", `gambling` "הימורים",
+  `proxies` "פרוקסי ועוקפי חסימות", `ai-chat` "צ'אטבוטים", `unfiltered-search` "מנועי חיפוש לא מסוננים",
+  `ads-popups` "פרסומות וחלונות קופצים". The files carry `source` and `license` fields; the notices ship in the embedded files,
+  so copying a list into a bundle's categories needs no notice of its own.
+- **Ministry of Education Google sign-in** for children in allowlist mode goes through `www.google.com/a/<domain>/...`:
+  when a parent picks `school-tools`, the admin app also adds global prefix allow rules `www.google.com/a/` and
+  `www.google.com/recaptcha/` (ids `builtin-school-signin-*`).
+- **YouTube off** exempts `accounts.youtube.com` (a Google sign-in cookie endpoint) from the YouTube-mode rule.
+- **AI chat:** when a member's categories block `ai-chat`, built-in rules also block Google's AI Mode
+  (`google.com/search?...udm=50`), and per-user browser policies turn off Copilot in Edge's sidebar and Gemini in Chrome
+  (exact policy names verified against the official lists by the core work).
+- **Blocked frames** (e.g. ad iframes from `ads-popups`): the block page inside a frame is a quiet placeholder and sends
+  no `reportBlock`, so ads do not flood the activity log.
