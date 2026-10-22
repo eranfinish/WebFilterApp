@@ -68,6 +68,20 @@ Get-NetConnectionProfile | Set-NetConnectionProfile -NetworkCategory Private
   taskkill /f /im WebFilter.Service.exe
   ```
 
+- [ ] הפעלה מחדש אחרי כשל של רכיב (`FaultExit`, לא קריסה): תופסים את שם ה-admin pipe לפני שהשירות עולה, ולכן `AdminPipeServer` נכשל מיד. צפוי: אירוע 7031 חדש ("terminated unexpectedly", "Restart the service"), וב-Application log של `WebFilter.Service` השורה `AdminPipeServer stopped unexpectedly; ending the process with exit code 1`:
+
+  ```powershell
+  Stop-Service WebFilter; $pipe = New-Object System.IO.Pipes.NamedPipeServerStream('WebFilter.Admin', 'InOut', 1); Start-Service WebFilter; Start-Sleep 5; Get-WinEvent -FilterHashtable @{LogName='System'; ProviderName='Service Control Manager'; Id=7031} -MaxEvents 1 | Format-List TimeCreated, Message
+  ```
+
+  משחררים את השם (באותו חלון): תוך כ-15 שניות השירות `Running` ונשאר כך.
+
+  ```powershell
+  $pipe.Dispose(); Start-Sleep 15; Get-Service WebFilter; Get-WinEvent -FilterHashtable @{LogName='Application'; ProviderName='WebFilter.Service'} -MaxEvents 20 | Where-Object Message -like '*exit code 1*' | Select-Object -First 1 | Format-List TimeCreated, Message
+  ```
+
+  ועצירה רגילה נשארת "נקייה": אחרי `Stop-Service WebFilter` השירות נשאר `Stopped` ואין אירוע 7031 חדש. אחר כך `Start-Service WebFilter`.
+
 - [ ] קיצור הדרך "WebFilter Admin" בתפריט התחל פותח את ממשק הניהול (UAC). מסך "מכשירים" → קוד צימוד.
 
 ## ב. סוכן (`lab-kids`)

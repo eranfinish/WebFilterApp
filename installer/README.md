@@ -31,7 +31,7 @@ msiexec /x WebFilter.msi /qn /l*v uninstall.log
 Install, repair and upgrade:
 
 - Files to `%ProgramFiles%\WebFilter` (fixed: the service trusts only the native host there). Start-menu shortcut to the admin app.
-- Service `WebFilter`: LocalSystem, automatic start, restart on failure (10 s; failure count reset daily), also registered for Safe Mode with Networking.
+- Service `WebFilter`: LocalSystem, automatic start, restart on failure (10 s; failure count reset daily), also registered for Safe Mode with Networking. A failed background service counts as a failure: the service then ends its process with exit code 1 instead of stopping cleanly (`src/WebFilter.Service/FaultExit.cs`).
 - `WebFilter.Service.exe configure` (custom action, before the service starts) writes `appsettings.json` (role, `ManageBrowserPolicies=true`, store ids) and the native host manifest `com.webfilter.host.json` (allowed origins = the store ids).
 - Native host keys `HKLM\SOFTWARE\{Google\Chrome,Microsoft\Edge}\NativeMessagingHosts\com.webfilter.host`.
 - `%ProgramData%\WebFilter` created with a protected ACL: SYSTEM and Administrators only (each profile cache file grants its own user read access).
@@ -46,6 +46,6 @@ Uninstall (not the removal of the old version during an upgrade):
 ## Known gaps
 
 - The device is not unregistered from the hub on uninstall; revoke it on the hub's Devices screen.
-- A background service that throws stops the service cleanly, and Windows restarts only services that end without a clean stop.
+- The restart after a failed background service is covered by unit tests (`FaultExitTests`) but not yet checked on an installed service (`docs/LAB-INSTALLER-CHECKLIST.md`, section א).
 - The MSI is not signed (SmartScreen warns). The native host is not NativeAOT yet (needs Visual Studio's C++ workload; then build with `-p:NativeHostAot=true`).
 - The dialogs use WixUI's left-to-right layout, also in Hebrew.
