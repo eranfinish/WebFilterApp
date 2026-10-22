@@ -38,6 +38,7 @@ namespace WebFilter.Contracts.Admin;
 [JsonDerivedType(typeof(ScanAccounts), "scanAccounts")]
 [JsonDerivedType(typeof(GetDiagnostics), "getDiagnostics")]
 [JsonDerivedType(typeof(DiagnosticsResult), "diagnosticsResult")]
+[JsonDerivedType(typeof(SetNetworksPrivate), "setNetworksPrivate")]
 [JsonDerivedType(typeof(AdminOk), "ok")]
 [JsonDerivedType(typeof(AdminError), "error")]
 public abstract record AdminMessage
@@ -160,6 +161,12 @@ public sealed record ScanAccounts : AdminMessage;
 public sealed record GetDiagnostics : AdminMessage;
 
 public sealed record DiagnosticsResult(IReadOnlyList<CheckResult> Checks) : AdminMessage;
+
+/// <summary>
+/// Hub only: sets the connected networks Windows marks Public to Private, so agents can reach the hub (its firewall rule is
+/// for Private networks only). Answered with <see cref="AdminOk"/> whose detail lists the networks changed (comma-separated).
+/// </summary>
+public sealed record SetNetworksPrivate : AdminMessage;
 
 /// <param name="Id">service | browsers | browser_policies | extension | network (hub) | hub_port (hub).</param>
 /// <param name="State">ok | warn | fail.</param>

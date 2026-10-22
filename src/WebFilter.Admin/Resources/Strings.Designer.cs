@@ -3978,6 +3978,51 @@ namespace WebFilter.Admin.Resources {
                 return ResourceManager.GetString("Check_network_fail", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The network {0} is set as Public....
+        /// </summary>
+        public static string Banner_PublicNetwork {
+            get {
+                return ResourceManager.GetString("Banner_PublicNetwork", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Set as a private network.
+        /// </summary>
+        public static string Banner_PublicNetwork_Fix {
+            get {
+                return ResourceManager.GetString("Banner_PublicNetwork_Fix", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Private network.
+        /// </summary>
+        public static string Network_MakePrivate_Title {
+            get {
+                return ResourceManager.GetString("Network_MakePrivate_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Set {0} as a private network?....
+        /// </summary>
+        public static string Network_MakePrivate_Confirm {
+            get {
+                return ResourceManager.GetString("Network_MakePrivate_Confirm", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Windows did not change the network type: {0}.
+        /// </summary>
+        public static string Network_MakePrivate_Failed {
+            get {
+                return ResourceManager.GetString("Network_MakePrivate_Failed", resourceCulture);
+            }
+        }
 
         /// <summary>
         ///   Looks up a localized string similar to חומת האש מאפשרת למחשבי הילדים להתחבר (פורט {0})..

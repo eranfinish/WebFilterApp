@@ -33,6 +33,7 @@ public class AdminProtocolTests
         new SetClock(At),
         new ScanAccounts(),
         new GetDiagnostics(),
+        new SetNetworksPrivate(),
         new DiagnosticsResult([new CheckResult("network", "warn", "Network 3"), new CheckResult("service", "ok")]),
         new AdminOk("done"),
         new AdminError("bad_request", "nope"),

@@ -1,7 +1,9 @@
 using System.Collections.ObjectModel;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using WebFilter.Admin.Resources;
 using WebFilter.Admin.Services;
+using WebFilter.Contracts.Admin;
 
 namespace WebFilter.Admin.ViewModels;
 
@@ -17,15 +19,20 @@ public sealed partial class MainViewModel : ObservableObject, INavigator, IDispo
     public static readonly TimeSpan RefreshInterval = TimeSpan.FromSeconds(10);
 
     private readonly IUiTimer _timer;
+    private readonly IDialogService _dialogs;
     private readonly SynchronizationContext? _ui;
     private readonly IReadOnlyList<PageViewModel> _hubPages;
     private IDisposable? _ticker;
     private bool _setupOpened;
+    private int _ticks;
+    private bool _networkChecked;
+    private string _publicNetworks = "";
 
     public MainViewModel(IAdminClient client, IUiTimer timer, IDialogService dialogs, IClipboardService clipboard, TimeProvider? time = null)
     {
         ArgumentNullException.ThrowIfNull(client);
         _timer = timer ?? throw new ArgumentNullException(nameof(timer));
+        _dialogs = dialogs ?? throw new ArgumentNullException(nameof(dialogs));
         _ui = SynchronizationContext.Current;
         Context = new FamilyContext(client, time);
         Dashboard = new DashboardViewModel(Context);
@@ -76,6 +83,19 @@ public sealed partial class MainViewModel : ObservableObject, INavigator, IDispo
     [ObservableProperty]
     private bool _isConnected;
 
+    /// <summary>
+    /// The hub is on a network Windows marks Public: its firewall rule is for Private networks only, so the children's
+    /// computers cannot reach it. The banner says so on every page and offers to switch the network to Private.
+    /// </summary>
+    [ObservableProperty]
+    private bool _hasPublicNetwork;
+
+    [ObservableProperty]
+    private string _publicNetworkText = "";
+
+    /// <summary>Every 6th tick (about once a minute) the hub's network is checked again.</summary>
+    public const int NetworkCheckTicks = 6;
+
     /// <summary>The load started by the last page change (tests await it).</summary>
     public Task CurrentLoad { get; private set; } = Task.CompletedTask;
 
@@ -88,6 +108,7 @@ public sealed partial class MainViewModel : ObservableObject, INavigator, IDispo
 
     public async Task TickAsync()
     {
+        if (++_ticks % NetworkCheckTicks == 0) await CheckNetworkAsync();
         if (SelectedPage is { AutoRefresh: true } page)
         {
             await page.RefreshAsync();
@@ -130,6 +151,42 @@ public sealed partial class MainViewModel : ObservableObject, INavigator, IDispo
     {
         await page.RefreshAsync();
         UpdatePages();
+        if (!_networkChecked) await CheckNetworkAsync();
+    }
+
+    /// <summary>Reads the hub's network check (<see cref="GetDiagnostics"/>); agents and services without the check show nothing.</summary>
+    public async Task CheckNetworkAsync()
+    {
+        if (Context.Status is not { IsHub: true }) return;
+        try
+        {
+            var checks = (await Context.Client.RequestAsync<DiagnosticsResult>(new GetDiagnostics())).Checks;
+            _networkChecked = true;
+            var network = checks.FirstOrDefault(c => c.Id == "network");
+            HasPublicNetwork = network?.State == "warn";
+            _publicNetworks = HasPublicNetwork ? network!.Detail ?? "" : "";
+            PublicNetworkText = HasPublicNetwork ? Texts.Format(Strings.Banner_PublicNetwork, Texts.Ltr(network!.Detail)) : "";
+        }
+        catch (AdminClientException)
+        {
+            // Connection problems have their own banner; the next check tries again.
+        }
+    }
+
+    /// <summary>After the parent confirms that this is the home network, asks the service to switch it to Private.</summary>
+    [RelayCommand]
+    private async Task MakeNetworkPrivate()
+    {
+        if (!_dialogs.Confirm(Texts.Format(Strings.Network_MakePrivate_Confirm, Texts.Ltr(_publicNetworks)), Strings.Network_MakePrivate_Title)) return;
+        try
+        {
+            await Context.Client.RequestAsync<AdminOk>(new SetNetworksPrivate());
+            await CheckNetworkAsync();
+        }
+        catch (AdminClientException ex)
+        {
+            PublicNetworkText = Texts.Format(Strings.Network_MakePrivate_Failed, ex.Message);
+        }
     }
 
     /// <summary>

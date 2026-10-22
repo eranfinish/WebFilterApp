@@ -1351,6 +1351,23 @@ The computer keeps enforcing the last settings it received but stops getting upd
   <data name="Check_network_fail" xml:space="preserve">
     <value>This computer is not connected to a network.</value>
   </data>
+  <data name="Banner_PublicNetwork" xml:space="preserve">
+    <value>The network {0} is set as Public, so the children's computers cannot connect to this computer or receive settings from it.</value>
+  </data>
+  <data name="Banner_PublicNetwork_Fix" xml:space="preserve">
+    <value>Set as a private network</value>
+  </data>
+  <data name="Network_MakePrivate_Title" xml:space="preserve">
+    <value>Private network</value>
+  </data>
+  <data name="Network_MakePrivate_Confirm" xml:space="preserve">
+    <value>Set {0} as a private network?
+
+Do this only for your home network. On a café, hotel or work network it is safer to leave it public.</value>
+  </data>
+  <data name="Network_MakePrivate_Failed" xml:space="preserve">
+    <value>Windows did not change the network type: {0}</value>
+  </data>
   <data name="Check_hub_port_ok" xml:space="preserve">
     <value>The firewall lets the children's computers connect (port {0}).</value>
   </data>

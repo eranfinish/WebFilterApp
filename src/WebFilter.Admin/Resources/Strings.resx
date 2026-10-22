@@ -1355,6 +1355,23 @@
   <data name="Check_network_fail" xml:space="preserve">
     <value>המחשב לא מחובר לרשת.</value>
   </data>
+  <data name="Banner_PublicNetwork" xml:space="preserve">
+    <value>הרשת {0} מוגדרת כרשת ציבורית (Public), ולכן מחשבי הילדים לא יכולים להתחבר למחשב הזה ולקבל ממנו הגדרות.</value>
+  </data>
+  <data name="Banner_PublicNetwork_Fix" xml:space="preserve">
+    <value>הגדר כרשת פרטית</value>
+  </data>
+  <data name="Network_MakePrivate_Title" xml:space="preserve">
+    <value>רשת פרטית</value>
+  </data>
+  <data name="Network_MakePrivate_Confirm" xml:space="preserve">
+    <value>להגדיר את {0} כרשת פרטית?
+
+עשה זאת רק אם זו הרשת של הבית. ברשת של בית קפה, מלון או מקום עבודה עדיף להשאיר אותה ציבורית.</value>
+  </data>
+  <data name="Network_MakePrivate_Failed" xml:space="preserve">
+    <value>Windows לא שינה את סוג הרשת: {0}</value>
+  </data>
   <data name="Check_hub_port_ok" xml:space="preserve">
     <value>חומת האש מאפשרת למחשבי הילדים להתחבר (פורט {0}).</value>
   </data>

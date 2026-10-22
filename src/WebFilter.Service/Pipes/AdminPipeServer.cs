@@ -10,6 +10,7 @@ using WebFilter.Core.Model;
 using WebFilter.Core.Time;
 using WebFilter.Service.Accounts;
 using WebFilter.Service.Mapping;
+using WebFilter.Service.Network;
 using WebFilter.Service.Setup;
 
 namespace WebFilter.Service.Pipes;
@@ -19,11 +20,12 @@ namespace WebFilter.Service.Pipes;
 /// unelevated token cannot even open it; each client is also checked to be elevated (or the service account).
 /// </summary>
 public sealed class AdminPipeServer(FamilyService family, IOptions<ServiceOptions> options, TimeProvider time, ILogger<AdminPipeServer> log,
-    ILocalAccounts? accounts = null, IMachineProbe? machine = null) : BackgroundService
+    ILocalAccounts? accounts = null, IMachineProbe? machine = null, INetworkProfiles? networks = null) : BackgroundService
 {
     private readonly ServiceOptions _options = options.Value;
     private readonly ILocalAccounts _accounts = accounts ?? new WindowsLocalAccounts();
     private readonly IMachineProbe _machine = machine ?? new WindowsMachineProbe();
+    private readonly INetworkProfiles _networks = networks ?? new WindowsNetworkProfiles();
     private static readonly SecurityIdentifier Self = WindowsIdentity.GetCurrent().User!;
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
@@ -146,6 +148,7 @@ public sealed class AdminPipeServer(FamilyService family, IOptions<ServiceOption
             ? new AdminOk()
             : new AdminError("not_found", "No such paired device."),
         ScanAccounts => ScanLocalAccounts(adminName),
+        SetNetworksPrivate => MakeNetworksPrivate(adminName),
         GetDiagnostics => new DiagnosticsResult(MachineChecks.Run(_options, isHub: true, _machine)),
         _ => new AdminError("unsupported", $"Unsupported message type {request.GetType().Name}."),
     };
@@ -185,6 +188,14 @@ public sealed class AdminPipeServer(FamilyService family, IOptions<ServiceOption
     }
 
     /// <summary>Reads the Windows accounts outside the gate (it may take a moment), then records the new ones.</summary>
+    /// <summary>A machine setting, not a family one: logged with the admin's name, the settings version does not change.</summary>
+    private AdminMessage MakeNetworksPrivate(string adminName)
+    {
+        var changed = _networks.MakePublicNetworksPrivate();
+        if (changed.Count > 0) log.LogInformation("{Admin} set the network(s) {Networks} to Private", adminName, string.Join(", ", changed));
+        return new AdminOk(string.Join(", ", changed));
+    }
+
     private AdminMessage ScanLocalAccounts(string adminName)
     {
         var seen = _accounts.List();

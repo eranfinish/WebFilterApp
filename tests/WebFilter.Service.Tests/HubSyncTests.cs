@@ -135,6 +135,32 @@ public sealed class HubSyncTests : IAsyncLifetime
     }
 
     [Fact]
+    public async Task The_hub_switches_its_public_networks_to_private_on_request_and_an_agent_refers_it_to_the_hub()
+    {
+        await PairAndSyncAsync();
+        var networks = new FakeNetworks(["Network 2"]);
+        var hubAdmin = new Pipes.AdminPipeServer(_hub, Options.Create(_hub.Options), _clock, NullLogger<Pipes.AdminPipeServer>.Instance, networks: networks);
+        var ok = Assert.IsType<Contracts.Admin.AdminOk>(hubAdmin.Handle(new Contracts.Admin.SetNetworksPrivate(), "parent"));
+        Assert.Equal("Network 2", ok.Detail);
+        Assert.Empty(networks.Public);
+
+        var agentAdmin = new Pipes.AdminPipeServer(_agent, Options.Create(_agent.Options), _clock, NullLogger<Pipes.AdminPipeServer>.Instance, networks: networks);
+        Assert.Equal("not_hub", Assert.IsType<Contracts.Admin.AdminError>(agentAdmin.Handle(new Contracts.Admin.SetNetworksPrivate(), "parent")).Code);
+    }
+
+    private sealed class FakeNetworks(IEnumerable<string> publicOnes) : Network.INetworkProfiles
+    {
+        public List<string> Public { get; } = [.. publicOnes];
+
+        public IReadOnlyList<string> MakePublicNetworksPrivate()
+        {
+            var changed = Public.ToList();
+            Public.Clear();
+            return changed;
+        }
+    }
+
+    [Fact]
     public async Task On_an_agent_the_admin_pipe_gives_status_and_a_local_pause_and_refers_the_rest_to_the_hub()
     {
         await PairAndSyncAsync();

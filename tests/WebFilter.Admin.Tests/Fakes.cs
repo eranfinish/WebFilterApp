@@ -105,11 +105,22 @@ internal sealed class FakeAdminClient : IAdminClient
             ReplaceSettings replace => Replace(replace),
             ScanAccounts => Scan(),
             GetDiagnostics => new DiagnosticsResult([.. Checks]),
+            SetNetworksPrivate => MakeNetworksPrivate(),
             _ => (AdminMessage)new AdminOk(),
         };
         return Task.FromResult(reply);
     }
 
+
+    /// <summary>Like the service: every Public network (the "network" check's detail) becomes Private.</summary>
+    private AdminOk MakeNetworksPrivate()
+    {
+        var index = Checks.FindIndex(c => c.Id == "network" && c.State == "warn");
+        if (index < 0) return new AdminOk("");
+        var names = Checks[index].Detail ?? "";
+        Checks[index] = new CheckResult("network", "ok");
+        return new AdminOk(names);
+    }
     /// <summary>The agent's admin pipe (AdminPipeServer.HandleOnAgent): null for the messages it answers like the hub.</summary>
     private AdminMessage? AsAgent(AdminMessage request) => request switch
     {
