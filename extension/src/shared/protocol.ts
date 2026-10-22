@@ -161,13 +161,15 @@ export interface TimeState {
 
 /**
  * The member's protection features (PROTECTION-SPEC §6). Absent from the rules reply (older services) → all false.
- * `canOverrideJump` is true for teens only (false for children and unlinked accounts).
+ * `canOverrideJump` is true for teens only (false for children and unlinked accounts). `blockAds` enables the static
+ * ad-server ruleset (§12); the service sends it false while the member is paused.
  */
 export interface ProtectionFeatures {
   jumpGuard: boolean;
   blockYouTubeShorts: boolean;
   logSearches: boolean;
   canOverrideJump: boolean;
+  blockAds: boolean;
 }
 
 export const NO_FEATURES: Readonly<ProtectionFeatures> = Object.freeze({
@@ -175,6 +177,7 @@ export const NO_FEATURES: Readonly<ProtectionFeatures> = Object.freeze({
   blockYouTubeShorts: false,
   logSearches: false,
   canOverrideJump: false,
+  blockAds: false,
 });
 
 export interface RulesMessage extends Envelope {
@@ -356,6 +359,7 @@ export function normalizeFeatures(value: unknown): ProtectionFeatures {
     blockYouTubeShorts: value.blockYouTubeShorts === true,
     logSearches: value.logSearches === true,
     canOverrideJump: value.canOverrideJump === true,
+    blockAds: value.blockAds === true,
   };
 }
 

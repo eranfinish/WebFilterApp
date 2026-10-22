@@ -48,6 +48,21 @@ const JUMP_PAGES = {
   // A news page with an ad slot from a blocked ad network (the ads-popups list blocks sub_frames).
   "/with-ad": `<h1>news</h1><iframe id="ad" src="http://ads.test:${HTTP_PORT}/banner?slot=1" width="300" height="250"></iframe>`,
 };
+// Ad blocking (PROTECTION-SPEC §12) with real hosts of the shipped ruleset: they resolve here like every other host, so
+// nothing leaves the PC. AdSense's loader host is blocked for any party; the first third-party domain only from other sites.
+const AD_RULESET = JSON.parse(readFileSync(join(ROOT, "rulesets", "ads.json"), "utf8"));
+const AD_HOST = "pagead2.googlesyndication.com";
+const AD_3P = AD_RULESET.find((r) => r.condition.domainType === "thirdParty").condition.requestDomains[0];
+const A = (host, path) => `http://${host}:${HTTP_PORT}${path}`;
+const AD_PAGE = `<h1>news</h1><img id="own" src="/own.png" width="20" height="20">
+  <script src="${A(AD_HOST, "/pagead/js/adsbygoogle.js")}"></script>
+  <img id="ad-img" src="${A(AD_HOST, "/ad.gif")}" width="300" height="50">
+  <iframe id="ad-frame" src="${A(AD_HOST, "/frame")}" width="300" height="250"></iframe>
+  <script src="${A(AD_3P, "/tag.js")}"></script>
+  <script>
+    fetch("${A(AD_HOST, "/xhr")}", { mode: "no-cors" }).then(() => "loaded", () => "blocked").then((r) => { document.documentElement.dataset.xhr = r; });
+    navigator.sendBeacon("${A(AD_HOST, "/beacon")}", "x");
+  </script>`;
 function handler(req, res) {
   const url = new URL(req.url, `http://${req.headers.host}`);
   const host = url.hostname;
@@ -79,6 +94,8 @@ function handler(req, res) {
   }
   const jump = host === "site-a.test" ? JUMP_PAGES[url.pathname] : undefined;
   if (jump) return send(`SITE ${host}${url.pathname}`, jump);
+  if (host === "site-a.test" && url.pathname === "/with-ads") return send(`SITE ${host}${url.pathname}`, AD_PAGE);
+  if (host === AD_3P && url.pathname === "/home") return send(`SITE ${host}${url.pathname}`, `<script src="/own.js"></script><h1>own page</h1>`);
   return send(`SITE ${host}${url.pathname}`, `<h1>${esc(host)}</h1>`);
 }
 
@@ -215,6 +232,7 @@ try {
       return r.includes("failclosed") ? null : r;
     });
     check("P3 not policy-installed → failclosed disabled, no dynamic rules", Array.isArray(rulesets) && (await dynamicRules(b)).length === 0, { note: JSON.stringify(rulesets) });
+    check("P3b … and the ads ruleset stays off (manifest: enabled false)", Array.isArray(rulesets) && !rulesets.includes("ads"), { note: JSON.stringify(rulesets) });
     check("P4 no test hooks in the production worker", await b.sw.evaluate(() => typeof globalThis.wfTest === "undefined"));
 
     const page = await b.context.newPage();
@@ -420,7 +438,7 @@ try {
     await b.sw.evaluate(() => globalThis.wfTest.simulatePolicyInstall());
     const { rules, timeUp } = compiledRules(b.id, { allowed: ["site-a.test", "site-b.test", "site-c.test", "google.com"], blocked: ["ads.test"] });
     const youTube = { mode: "allowlist", allowed: [{ channelId: KHAN, handle: "@khankids-sim", title: "Khan Kids (sim)" }], blocked: [] };
-    const child = { jumpGuard: true, blockYouTubeShorts: true, logSearches: true, canOverrideJump: false };
+    const child = { jumpGuard: true, blockYouTubeShorts: true, logSearches: true, canOverrideJump: false, blockAds: false };
     const script = { rules: { rulesVersion: 7, dynamicRules: rules, timeUpSessionRules: timeUp, youTube, time: { state: "ok", remainingMinutes: 60, windowEndsAt: null }, features: child } };
     await b.sw.evaluate((s) => globalThis.wfTest.useFakeHost(s), script);
     const ready = await b.sw.evaluate(() => globalThis.wfTest.whenReady(5000));
@@ -592,6 +610,69 @@ try {
     await visit(page, b.page("popup.html"));
     const notice = await waitFor(() => page.evaluate(() => (document.getElementById("search-notice")?.hidden === false ? document.getElementById("search-notice").textContent : null)));
     check("Q3 popup tells the member: החיפושים שלך גלויים להורים", notice === "החיפושים שלך גלויים להורים", { note: notice });
+    await b.close();
+  }
+
+  // ===== Test build: ad blocking (PROTECTION-SPEC §12) ===============================================================
+  {
+    const b = await launch(DIST_TEST);
+    await b.sw.evaluate(() => globalThis.wfTest.simulatePolicyInstall());
+    check("B0 the fixtures use hosts of the shipped ruleset", AD_RULESET.some((r) => r.condition.requestDomains.includes(AD_HOST)) && !!AD_3P, { note: `${AD_HOST}, ${AD_3P}` });
+    // A child in allowlist mode: the news site and the third-party ad domain's own site are allowed by URL rules.
+    const { rules, timeUp } = compiledRules(b.id, { allowed: ["site-a.test", AD_3P] });
+    const base = { rulesVersion: 11, dynamicRules: rules, timeUpSessionRules: timeUp, youTube: { mode: "restricted", allowed: [], blocked: [] }, time: { state: "ok", remainingMinutes: 60, windowEndsAt: null } };
+    const withAds = (blockAds, version) => ({ rules: { ...base, rulesVersion: version, features: { jumpGuard: false, blockYouTubeShorts: false, logSearches: false, canOverrideJump: false, blockAds } } });
+    await b.sw.evaluate((s) => globalThis.wfTest.useFakeHost(s), withAds(true, 11));
+    const ready = await b.sw.evaluate(() => globalThis.wfTest.whenReady(5000));
+    const on = await waitFor(async () => {
+      const r = await enabledRulesets(b);
+      return r.includes("ads") && !r.includes("failclosed") ? r : null;
+    });
+    check("B1 features.blockAds → the ads ruleset is on, fail-closed off", ready && !!on, { note: JSON.stringify(await enabledRulesets(b)) });
+    const staticRules = await b.sw.evaluate(() => chrome.declarativeNetRequest.getAvailableStaticRuleCount());
+    check("B1b Edge accepted the static ruleset (rules left for other extensions)", typeof staticRules === "number" && staticRules > 0, { note: `${staticRules} static rules available` });
+
+    const page = await b.context.newPage();
+    const adHits = () => hits.filter((h) => h.startsWith(AD_HOST) || h.startsWith(`${AD_3P}/tag`));
+    hits.length = 0;
+    await visit(page, S("site-a.test", "/with-ads"));
+    const loaded = await waitFor(() => page.evaluate(() => (document.documentElement.dataset.xhr ? { title: document.title, xhr: document.documentElement.dataset.xhr } : null)));
+    await new Promise((r) => setTimeout(r, 1000)); // the beacon and the frame have been sent (or not) by now
+    const slot = await page.evaluate(() => {
+      const frame = document.getElementById("ad-frame").getBoundingClientRect();
+      return { width: Math.round(frame.width), height: Math.round(frame.height) };
+    });
+    check("B2 an allowed page loads with its own image while ads are blocked", loaded?.title === "SITE site-a.test/with-ads" && hits.includes("site-a.test/own.png"), { note: `${loaded?.title} ${hits.join(",")}` });
+    check("B3 no request to the ad servers left the browser: script, image, frame, fetch, beacon (and the third-party tag)", adHits().length === 0 && loaded?.xhr === "blocked", {
+      note: `xhr ${loaded?.xhr}; ${adHits().join(",") || "none"}`,
+    });
+    check("B4 the blocked ad frame is collapsed (no block page in the slot)", slot.height === 0 && !page.frames().some((f) => f.url().startsWith(b.page("blocked.html"))), { note: JSON.stringify(slot) });
+    const quiet = (await b.sw.evaluate(() => globalThis.wfTest.received())).filter((m) => m.type === "reportBlock" || m.type === "decideUrl");
+    check("B5 ad blocks are quiet: no reportBlock, no decideUrl", quiet.length === 0, { note: JSON.stringify(quiet) });
+
+    hits.length = 0;
+    await visit(page, A(AD_3P, "/home"));
+    const own = await waitFor(async () => ((await page.title()) === `SITE ${AD_3P}/home` && hits.includes(`${AD_3P}/own.js`) ? true : null));
+    check("B6 a third-party-only ad domain: its own page (main_frame) loads with its own script", !!own, { note: `${await page.title()} ${hits.join(",")}` });
+
+    await visit(page, b.page("popup.html"));
+    const adsNotice = await waitFor(() => page.evaluate(() => (document.getElementById("ads-notice")?.hidden === false ? document.getElementById("ads-notice").textContent : null)));
+    check("B7 popup: חסימת פרסומות פעילה", adsNotice === "חסימת פרסומות פעילה", { note: adsNotice });
+
+    // The parent turns it off for this child (and a pause sends blockAds false too): the same page loads its ads.
+    await b.sw.evaluate((s) => {
+      globalThis.wfTest.setScript(s);
+      globalThis.wfTest.push({ type: "rulesChanged", rulesVersion: 12 });
+    }, withAds(false, 12));
+    const off = await waitFor(async () => (!(await enabledRulesets(b)).includes("ads") ? true : null));
+    hits.length = 0;
+    await visit(page, S("site-a.test", "/with-ads"));
+    // (The ad frame is still blocked there: in allowlist mode the URL rules block frames of sites not allowed.)
+    const reached = await waitFor(() => (["/pagead/js/adsbygoogle.js", "/ad.gif", "/xhr"].every((p) => adHits().includes(`${AD_HOST}${p}`)) ? true : null));
+    check("B8 switched off → the ads ruleset is off and the same ad requests reach the server", !!off && !!reached, { note: adHits().join(",") });
+    await visit(page, b.page("popup.html"));
+    const hidden = await waitFor(() => page.evaluate(() => (document.documentElement.dataset.adBlocking === "false" ? true : null)));
+    check("B9 popup: no ad blocking line when it is off", !!hidden);
     await b.close();
   }
 } catch (error) {

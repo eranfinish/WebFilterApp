@@ -102,6 +102,7 @@ const messages = [
   ["labelVersion", "Version", "גרסה"],
   ["labelInstallType", "Install type", "סוג התקנה"],
   ["searchesVisible", "Your searches are visible to your parents", "החיפושים שלך גלויים להורים", "Shown while the search-term log is on (PROTECTION-SPEC §9)."],
+  ["adsBlocked", "Ad blocking is on", "חסימת פרסומות פעילה", "Shown while the ad-server ruleset is on (PROTECTION-SPEC §12)."],
   ["mode_unrestricted", "No restrictions", "ללא הגבלה"],
   ["mode_blocklist", "Blocked sites list", "רשימה שחורה"],
   ["mode_allowlist", "Approved sites only", "רק אתרים מאושרים"],

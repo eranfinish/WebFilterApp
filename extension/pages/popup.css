@@ -193,6 +193,14 @@ footer {
   font-weight: 600;
 }
 
+/* A protection that is on and needs nothing from the member (PROTECTION-SPEC §12). */
+.notice.calm {
+  border-inline-start-color: var(--ok-accent);
+  background: var(--ok-bg);
+  color: var(--ok-fg);
+  font-weight: 400;
+}
+
 .diag {
   margin: 8px 0 0;
   font-size: 11.5px;

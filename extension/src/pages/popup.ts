@@ -49,6 +49,10 @@ function render(status: StatusSnapshot | null): void {
   const logged = connected && status?.features?.logSearches === true;
   byId("search-notice").hidden = !logged;
   document.documentElement.dataset.searchLog = String(logged);
+  // PROTECTION-SPEC §12: a short line while ads are blocked.
+  const ads = connected && status?.features?.blockAds === true;
+  byId("ads-notice").hidden = !ads;
+  document.documentElement.dataset.adBlocking = String(ads);
   if (status && connected) {
     byId("user").textContent = status.user?.name || "—";
     byId("mode").textContent = status.mode ? t(`mode_${status.mode}`) : "—";

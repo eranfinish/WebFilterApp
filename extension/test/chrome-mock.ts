@@ -13,7 +13,10 @@ export interface MockTab {
 
 export interface ChromeMockState {
   installType: string;
+  /** As after install: the manifest's `enabled` rulesets (failclosed on, ads off). */
   enabledRulesets: Set<string>;
+  /** Every ruleset change, in order: "+ads", "-failclosed", … */
+  rulesetUpdates: string[];
   dynamicRules: Map<number, Rule>;
   sessionRules: Map<number, Rule>;
   dynamicUpdates: number;
@@ -52,6 +55,9 @@ function hasNull(value: unknown): boolean {
 /** Stand-in for RE2's compiled-program limit: longer regexes are refused. */
 export const MAX_REGEX = 2000;
 
+/** The static rulesets of manifest.json (an unknown id makes updateEnabledRulesets fail, as in Chrome). */
+export const STATIC_RULESETS = ["failclosed", "ads"];
+
 function applyUpdate(target: Map<number, Rule>, update: { removeRuleIds?: number[]; addRules?: Rule[] }): void {
   for (const id of update.removeRuleIds ?? []) target.delete(id);
   for (const rule of update.addRules ?? []) {
@@ -66,6 +72,7 @@ export function installChromeMock(initial: Partial<Pick<ChromeMockState, "instal
   const state: ChromeMockState = {
     installType: initial.installType ?? "admin",
     enabledRulesets: new Set(["failclosed"]),
+    rulesetUpdates: [],
     dynamicRules: new Map(),
     sessionRules: new Map(),
     dynamicUpdates: 0,
@@ -125,6 +132,10 @@ export function installChromeMock(initial: Partial<Pick<ChromeMockState, "instal
     },
     declarativeNetRequest: {
       updateEnabledRulesets: async (o: { enableRulesetIds?: string[]; disableRulesetIds?: string[] }) => {
+        for (const id of [...(o.disableRulesetIds ?? []), ...(o.enableRulesetIds ?? [])]) {
+          if (!STATIC_RULESETS.includes(id)) throw new Error(`Invalid ruleset id: ${id}.`);
+        }
+        state.rulesetUpdates.push(...(o.enableRulesetIds ?? []).map((id) => `+${id}`), ...(o.disableRulesetIds ?? []).map((id) => `-${id}`));
         for (const id of o.disableRulesetIds ?? []) state.enabledRulesets.delete(id);
         for (const id of o.enableRulesetIds ?? []) state.enabledRulesets.add(id);
       },
