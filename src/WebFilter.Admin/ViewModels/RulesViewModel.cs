@@ -176,6 +176,9 @@ public sealed class RuleItemViewModel
 
     public bool AlwaysAllowed => Rule.AlwaysAllowed;
 
+    /// <summary>Added by the app with the school tools list (<see cref="SchoolSignIn"/>), not by a parent.</summary>
+    public bool IsSchoolSignIn => SchoolSignIn.IsOurs(Rule);
+
     public string TypeText { get; }
 
     public string ActionText { get; }

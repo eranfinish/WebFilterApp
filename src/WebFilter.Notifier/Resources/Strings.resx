@@ -1,0 +1,143 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Tray_Text" xml:space="preserve">
+    <value>WebFilter — התראות להורים</value>
+  </data>
+  <data name="Menu_Open" xml:space="preserve">
+    <value>פתח את ניהול המשפחה</value>
+  </data>
+  <data name="Menu_Exit" xml:space="preserve">
+    <value>יציאה</value>
+  </data>
+  <data name="Open_Hint" xml:space="preserve">
+    <value>לחצו כאן כדי לפתוח את ניהול המשפחה.</value>
+  </data>
+  <data name="Request_Title" xml:space="preserve">
+    <value>בקשה חדשה</value>
+  </data>
+  <data name="Request_Url" xml:space="preserve">
+    <value>בקשה לגשת לאתר {0}</value>
+  </data>
+  <data name="Request_YouTube" xml:space="preserve">
+    <value>בקשה לצפות בערוץ YouTube</value>
+  </data>
+  <data name="Request_App" xml:space="preserve">
+    <value>בקשה להשתמש בתוכנה {0}</value>
+  </data>
+  <data name="Request_Time" xml:space="preserve">
+    <value>בקשה לעוד {0} דקות גלישה</value>
+  </data>
+  <data name="Request_Other" xml:space="preserve">
+    <value>בקשה חדשה מאחד הילדים</value>
+  </data>
+  <data name="Request_Sentence" xml:space="preserve">
+    <value>{0}.</value>
+  </data>
+  <data name="Request_FromComputer" xml:space="preserve">
+    <value>{0} (מהמחשב {1}).</value>
+  </data>
+  <data name="Tamper_Policy_Title" xml:space="preserve">
+    <value>הגדרות הסינון שונו</value>
+  </data>
+  <data name="Tamper_Policy_Text" xml:space="preserve">
+    <value>במחשב {0} שונו הגדרות שהסינון מנהל, והסינון החזיר אותן.</value>
+  </data>
+  <data name="Tamper_Network_Title" xml:space="preserve">
+    <value>מסנני הרשת הוסרו</value>
+  </data>
+  <data name="Tamper_Network_Text" xml:space="preserve">
+    <value>במחשב {0} הוסרו מסנני הרשת של חשבון, והסינון החזיר אותם.</value>
+  </data>
+  <data name="Tamper_UncleanStop_Title" xml:space="preserve">
+    <value>שירות הסינון נעצר</value>
+  </data>
+  <data name="Tamper_UncleanStop_Text" xml:space="preserve">
+    <value>במחשב {0} שירות הסינון נעצר באופן לא צפוי והופעל מחדש. ייתכן שהייתה הפסקת חשמל או כיבוי בכוח.</value>
+  </data>
+  <data name="Tamper_Other_Title" xml:space="preserve">
+    <value>שינוי בסינון</value>
+  </data>
+  <data name="Tamper_Other_Text" xml:space="preserve">
+    <value>במחשב {0} קרה משהו שכדאי לבדוק ביומן הפעילות.</value>
+  </data>
+  <data name="Computer_Unknown" xml:space="preserve">
+    <value>לא ידוע</value>
+  </data>
+  <data name="Device_Title" xml:space="preserve">
+    <value>מחשב לא מדווח</value>
+  </data>
+  <data name="Device_Text" xml:space="preserve">
+    <value>המחשב {0} לא דיווח למחשב ההורים יותר מיום (לאחרונה ב-{1}).</value>
+  </data>
+  <data name="Device_NeverText" xml:space="preserve">
+    <value>המחשב {0} צומד, אבל לא דיווח למחשב ההורים כבר יותר מיום.</value>
+  </data>
+  <data name="Summary_Title" xml:space="preserve">
+    <value>{0} התראות חדשות מ-WebFilter</value>
+  </data>
+  <data name="Summary_Request" xml:space="preserve">
+    <value>בקשה חדשה</value>
+  </data>
+  <data name="Summary_Requests" xml:space="preserve">
+    <value>{0} בקשות חדשות</value>
+  </data>
+  <data name="Summary_Tamper" xml:space="preserve">
+    <value>התראה על הסינון</value>
+  </data>
+  <data name="Summary_Tampers" xml:space="preserve">
+    <value>{0} התראות על הסינון</value>
+  </data>
+  <data name="Summary_Device" xml:space="preserve">
+    <value>מחשב שלא מדווח</value>
+  </data>
+  <data name="Summary_Devices" xml:space="preserve">
+    <value>{0} מחשבים שלא מדווחים</value>
+  </data>
+  <data name="Other_Title" xml:space="preserve">
+    <value>התראה חדשה</value>
+  </data>
+  <data name="Other_Text" xml:space="preserve">
+    <value>יש התראה חדשה בניהול המשפחה. לחצו כאן כדי לפתוח.</value>
+  </data>
+</root>

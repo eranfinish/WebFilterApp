@@ -82,6 +82,27 @@
           </StackPanel>
         </Border>
 
+        <!-- Protections (PROTECTION-SPEC §1): filtered members only; each switch saves at once (SetMember) -->
+        <StackPanel Visibility="{Binding IsUnrestricted, Converter={StaticResource InverseBoolToVisibility}}">
+          <TextBlock Text="{x:Static res:Strings.Member_Protection}" Style="{StaticResource SectionText}" />
+          <TextBlock Text="{x:Static res:Strings.Member_ProtectionHint}" Style="{StaticResource SubtleText}" Margin="0,0,0,8" />
+          <Border Style="{StaticResource Card}" Margin="0,0,0,16" DataContext="{Binding Protection}">
+            <StackPanel d:DataContext="{d:DesignInstance Type=vm:ProtectionEditor}">
+              <CheckBox Content="{x:Static res:Strings.Member_BlockImageSearch}" IsChecked="{Binding BlockImageSearch}" />
+              <TextBlock Text="{x:Static res:Strings.Member_BlockImageSearchHint}" Style="{StaticResource SubtleText}" FontSize="12" Margin="22,2,0,10" />
+              <CheckBox Content="{x:Static res:Strings.Member_JumpGuard}" IsChecked="{Binding JumpGuard}" />
+              <TextBlock Text="{x:Static res:Strings.Member_JumpGuardHint}" Style="{StaticResource SubtleText}" FontSize="12" Margin="22,2,0,10" />
+              <CheckBox Content="{x:Static res:Strings.Member_BlockYouTubeShorts}" IsChecked="{Binding BlockYouTubeShorts}" />
+              <TextBlock Text="{x:Static res:Strings.Member_BlockYouTubeShortsHint}" Style="{StaticResource SubtleText}" FontSize="12" Margin="22,2,0,10" />
+              <CheckBox Content="{x:Static res:Strings.Member_LogSearches}" IsChecked="{Binding LogSearches}" />
+              <TextBlock Text="{x:Static res:Strings.Member_LogSearchesNote}" Style="{StaticResource SubtleText}" FontSize="12" Margin="22,2,0,0" />
+              <Border Style="{StaticResource ErrorBanner}" Visibility="{Binding Message, Converter={StaticResource HasValueToVisibility}}">
+                <TextBlock Text="{Binding Message}" Foreground="{StaticResource DangerBrush}" TextWrapping="Wrap" />
+              </Border>
+            </StackPanel>
+          </Border>
+        </StackPanel>
+
         <!-- Weekly hours and daily limits -->
         <TextBlock Text="{x:Static res:Strings.Member_Week}" Style="{StaticResource SectionText}" />
         <TextBlock Text="{x:Static res:Strings.Member_WeekHint}" Style="{StaticResource SubtleText}" Margin="0,0,0,8" />

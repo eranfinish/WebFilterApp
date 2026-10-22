@@ -1,4 +1,5 @@
 using WebFilter.Admin.Resources;
+using WebFilter.Admin.Services;
 using WebFilter.Admin.ViewModels;
 using WebFilter.Contracts.Admin;
 using WebFilter.Contracts.Hub;
@@ -61,8 +62,9 @@ public sealed class MemberDetailViewModelTests
         Assert.True(vm.HasNoApps);
         Assert.True(vm.HasNoRules);
 
-        Assert.Equal(new Dictionary<string, string> { ["educational"] = "לימודים", ["social"] = "רשתות חברתיות", ["gaming"] = "משחקים" },
-            vm.Categories!.Items.ToDictionary(c => c.Name, c => c.Label));
+        // Every ready-made list in its order (PROTECTION-SPEC §11), the family's own domains for the ones it has.
+        Assert.Equal(StarterLists.Names, vm.Categories!.Items.Select(c => c.Name));
+        Assert.Equal(["לימודים", "רשתות חברתיות", "משחקים", "כלי בית ספר"], vm.Categories.Items.Take(4).Select(c => c.Label));
         Assert.Equal("allow", vm.Categories.Items.Single(c => c.Name == "educational").Choice);
         Assert.Equal(CategoryChoiceViewModel.Default, vm.Categories.Items.Single(c => c.Name == "social").Choice);
         Assert.Equal("khanacademy.org, wikipedia.org, scratch.mit.edu", vm.Categories.Items.Single(c => c.Name == "educational").DomainsText);
@@ -80,7 +82,7 @@ public sealed class MemberDetailViewModelTests
         Assert.Equal(["אפליקציה מהחנות", "תוכנה (נתיב)"], vm.Apps.Select(a => a.MatchText));
         Assert.Equal(["GamerX (sim)"], vm.Channels.Select(c => c.Name));
         Assert.False(vm.Channels[0].IsAllow);
-        Assert.Equal(["block", "block"], vm.Categories!.Items.Where(c => c.Name != "educational").Select(c => c.Choice));
+        Assert.Equal(["block", "block"], vm.Categories!.Items.Where(c => c.Name is "social" or "gaming").Select(c => c.Choice));
         Assert.Single(_client.SentOf<GetSettings>());
     }
 
@@ -324,6 +326,109 @@ public sealed class MemberDetailViewModelTests
         Assert.Equal(TestData.Family().Members.Where(m => m.Id != "noa"), LastReplace.Settings.Members.Where(m => m.Id != "noa"));
     }
 
+    // ---- protections (PROTECTION-SPEC §1) -----------------------------------------------------------------------
+
+    /// <summary>Like the service: a SetMember changes the flags it names on the stored member and bumps the version.</summary>
+    private void StoreSetMember() => _client.Reply = m =>
+    {
+        if (m is SetMember set)
+        {
+            _client.BumpVersion(_client.Settings with
+            {
+                Members = [.. _client.Settings.Members.Select(x => x.Id != set.MemberId ? x : x with
+                {
+                    BlockImageSearch = set.BlockImageSearch ?? x.BlockImageSearch,
+                    JumpGuard = set.JumpGuard ?? x.JumpGuard,
+                    BlockYouTubeShorts = set.BlockYouTubeShorts ?? x.BlockYouTubeShorts,
+                    LogSearches = set.LogSearches ?? x.LogSearches,
+                })],
+            });
+        }
+        return null;
+    };
+
+    private void SetNoa(MemberDto noa) => _client.Settings = _client.Settings with { Members = [.. _client.Settings.Members.Select(m => m.Id == noa.Id ? noa : m)] };
+
+    [Fact]
+    public async Task The_protection_switches_show_the_stored_flags_for_a_filtered_member_only()
+    {
+        SetNoa(TestData.Family().Members[0] with { BlockImageSearch = true, JumpGuard = true, BlockYouTubeShorts = true });
+
+        var vm = await LoadedAsync();
+
+        var protection = vm.Protection!;
+        Assert.Equal((true, true, true, false), (protection.BlockImageSearch, protection.JumpGuard, protection.BlockYouTubeShorts, protection.LogSearches));
+        Assert.False(vm.IsUnrestricted);
+        Assert.Empty(_client.SentOf<SetMember>());
+
+        vm.Show("dana");
+        Assert.True(vm.IsUnrestricted); // the view hides the switches: the unrestricted ignore them
+        Assert.Equal("dana", vm.Protection!.MemberId);
+        Assert.Empty(_client.SentOf<SetMember>());
+    }
+
+    [Theory]
+    [InlineData("blockImageSearch")]
+    [InlineData("jumpGuard")]
+    [InlineData("blockYouTubeShorts")]
+    [InlineData("logSearches")]
+    public async Task Each_switch_saves_at_once_and_alone(string flag)
+    {
+        StoreSetMember();
+        var vm = await LoadedAsync("yoav");
+        var protection = vm.Protection!;
+
+        switch (flag)
+        {
+            case "blockImageSearch": protection.BlockImageSearch = true; break;
+            case "jumpGuard": protection.JumpGuard = true; break;
+            case "blockYouTubeShorts": protection.BlockYouTubeShorts = true; break;
+            default: protection.LogSearches = true; break;
+        }
+
+        SetMember expected = flag switch
+        {
+            "blockImageSearch" => new("yoav", BlockImageSearch: true),
+            "jumpGuard" => new("yoav", JumpGuard: true),
+            "blockYouTubeShorts" => new("yoav", BlockYouTubeShorts: true),
+            _ => new("yoav", LogSearches: true),
+        };
+        Assert.Equal(expected, _client.Single<SetMember>());
+        Assert.Equal("ההגדרות של יואב נשמרו.", vm.StatusMessage);
+        var stored = _client.Settings.Members.Single(m => m.Id == "yoav");
+        Assert.Equal((stored.BlockImageSearch, stored.JumpGuard, stored.BlockYouTubeShorts, stored.LogSearches),
+            (vm.Protection!.BlockImageSearch, vm.Protection.JumpGuard, vm.Protection.BlockYouTubeShorts, vm.Protection.LogSearches));
+        Assert.Equal(1, new[] { stored.BlockImageSearch, stored.JumpGuard, stored.BlockYouTubeShorts, stored.LogSearches }.Count(f => f));
+    }
+
+    [Fact]
+    public async Task A_switch_turned_off_sends_false()
+    {
+        StoreSetMember();
+        SetNoa(TestData.Family().Members[0] with { BlockImageSearch = true, JumpGuard = true, BlockYouTubeShorts = true });
+        var vm = await LoadedAsync();
+
+        vm.Protection!.JumpGuard = false;
+
+        Assert.Equal(new SetMember("noa", JumpGuard: false), _client.Single<SetMember>());
+        Assert.False(_client.Settings.Members[0].JumpGuard);
+        Assert.True(vm.Protection!.BlockImageSearch);
+    }
+
+    [Fact]
+    public async Task A_refused_switch_goes_back_and_says_why()
+    {
+        _client.Reply = m => m is SetMember ? new AdminError("bad_request", "Unknown member.") : null;
+        var vm = await LoadedAsync();
+
+        vm.Protection!.LogSearches = true;
+
+        Assert.False(vm.Protection.LogSearches);
+        Assert.Equal("שירות הסינון לא ביצע את הפעולה: Unknown member.", vm.Protection.Message);
+        Assert.Null(vm.ErrorMessage);
+        Assert.Single(_client.SentOf<SetMember>());
+    }
+
     // ---- site rules ---------------------------------------------------------------------------------------------
 
     [Fact]
@@ -534,6 +639,66 @@ public sealed class MemberDetailViewModelTests
             LastReplace.Settings.MemberCategories);
         Assert.Equal("הקטגוריות של נועה נשמרו.", vm.StatusMessage);
         Assert.False(vm.Categories!.IsDirty);
+    }
+
+    [Fact]
+    public async Task A_ready_made_list_the_family_lacks_is_copied_into_its_categories_when_chosen()
+    {
+        var vm = await LoadedAsync("yoav");
+        var adult = vm.Categories!.Items.Single(c => c.Name == "adult");
+        Assert.StartsWith(string.Join(", ", StarterLists.Find("adult")!.Domains.Take(4)), adult.DomainsText, StringComparison.Ordinal);
+        adult.Choice = "block";
+
+        await vm.Categories.SaveCommand.ExecuteAsync(null);
+
+        var settings = LastReplace.Settings;
+        Assert.Equal(["educational", "social", "gaming", "adult"], settings.Categories.Keys);
+        Assert.Equal(StarterLists.Find("adult")!.Domains, settings.Categories["adult"]);
+        // The family's own lists keep their own sites; lists nobody chose are not copied.
+        Assert.Equal(["khanacademy.org", "wikipedia.org", "scratch.mit.edu"], settings.Categories["educational"]);
+        Assert.Contains(new MemberCategoryDto("yoav", "adult", "block"), settings.MemberCategories);
+        Assert.Equal(["r-school"], settings.Rules.Select(r => r.Id));
+    }
+
+    [Fact]
+    public async Task Allowing_the_school_tools_adds_the_sign_in_rules_and_taking_them_away_removes_them()
+    {
+        var vm = await LoadedAsync();
+        vm.Categories!.Items.Single(c => c.Name == "school-tools").Choice = "allow";
+
+        await vm.Categories.SaveCommand.ExecuteAsync(null);
+
+        Assert.Equal(["r-school", .. SchoolSignIn.Rules.Select(r => r.Id)], LastReplace.Settings.Rules.Select(r => r.Id));
+        Assert.Contains("accounts.google.com", LastReplace.Settings.Categories["school-tools"]);
+        Assert.Contains(new MemberCategoryDto("noa", "school-tools", "allow"), LastReplace.Settings.MemberCategories);
+
+        // Another category saved later (the fake service keeps what it was sent): nothing doubles.
+        vm.Categories!.Items.Single(c => c.Name == "gaming").Choice = "block";
+        await vm.Categories.SaveCommand.ExecuteAsync(null);
+        Assert.Equal(3, LastReplace.Settings.Rules.Count);
+
+        vm.Categories!.Items.Single(c => c.Name == "school-tools").Choice = "block";
+        await vm.Categories.SaveCommand.ExecuteAsync(null);
+
+        Assert.Equal(["r-school"], LastReplace.Settings.Rules.Select(r => r.Id));
+    }
+
+    [Fact]
+    public async Task The_sign_in_rules_stay_while_another_member_still_has_the_school_tools()
+    {
+        _client.Settings = SchoolSignIn.Apply(_client.Settings with
+        {
+            Categories = StarterLists.AddTo(_client.Settings.Categories, [StarterLists.Find("school-tools")!]),
+            MemberCategories = [.. _client.Settings.MemberCategories, new("noa", "school-tools", "allow"), new("yoav", "school-tools", "allow")],
+        });
+        var vm = await LoadedAsync("yoav");
+        Assert.Equal("allow", vm.Categories!.Items.Single(c => c.Name == "school-tools").Choice);
+
+        vm.Categories.Items.Single(c => c.Name == "school-tools").Choice = CategoryChoiceViewModel.Default;
+        await vm.Categories.SaveCommand.ExecuteAsync(null);
+
+        Assert.Equal(3, LastReplace.Settings.Rules.Count);
+        Assert.DoesNotContain(LastReplace.Settings.MemberCategories, c => c is { Member: "yoav", Category: "school-tools" });
     }
 
     [Fact]

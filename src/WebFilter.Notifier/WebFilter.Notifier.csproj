@@ -1,0 +1,37 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!--
+    Parent notifications in the tray (PROTECTION-SPEC §10). Started at logon for every user on the hub computer (the
+    installer's Run value); it exits at once for anyone the service does not answer as an administrator. Runs as the
+    user, unelevated: the notify pipe admits administrators' accounts whether elevated or not.
+  -->
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net10.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <UseWindowsForms>true</UseWindowsForms>
+    <AssemblyTitle>WebFilter parents' notifications</AssemblyTitle>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+    <ApplicationIcon>notifier.ico</ApplicationIcon>
+    <ApplicationHighDpiMode>PerMonitorV2</ApplicationHighDpiMode>
+    <!-- Hebrew is the neutral (built-in) language; Strings.en.resx becomes a satellite assembly. -->
+    <NeutralLanguage>he</NeutralLanguage>
+    <SatelliteResourceLanguages>en</SatelliteResourceLanguages>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\WebFilter.Contracts\WebFilter.Contracts.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- The tray icon at the small icon size (the exe's own icon resource is the large one). -->
+    <EmbeddedResource Include="notifier.ico" LogicalName="WebFilter.Notifier.notifier.ico" />
+    <None Include="app.manifest" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <InternalsVisibleTo Include="WebFilter.Notifier.Tests" />
+  </ItemGroup>
+
+</Project>

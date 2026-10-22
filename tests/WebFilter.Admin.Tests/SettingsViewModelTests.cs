@@ -1,6 +1,7 @@
 using WebFilter.Admin.Services;
 using WebFilter.Admin.ViewModels;
 using WebFilter.Contracts.Admin;
+using WebFilter.Contracts.Hub;
 
 namespace WebFilter.Admin.Tests;
 
@@ -82,6 +83,85 @@ public sealed class SettingsViewModelTests
         Assert.Equal("allowlist", noa.YouTubeMode);
         Assert.False(noa.IsDirty);
         Assert.Empty(_client.SentOf<SetMember>());
+    }
+
+    // ---- Windows features for children (PROTECTION-SPEC §2) ------------------------------------------------------
+
+    [Fact]
+    public async Task A_family_without_the_section_shows_the_defaults()
+    {
+        var vm = await LoadedAsync();
+
+        var features = vm.WindowsFeatures!;
+        Assert.Null(_client.Settings.WindowsFeatures);
+        Assert.Equal((true, true, false), (features.NotificationsAndSync, features.OneDrive, features.WebSearchInStart));
+        Assert.False(features.IsDirty);
+        Assert.False(features.SaveCommand.CanExecute(null));
+    }
+
+    [Fact]
+    public async Task The_switches_are_saved_together_and_replace_only_that_part()
+    {
+        var vm = await LoadedAsync();
+        var features = vm.WindowsFeatures!;
+        features.OneDrive = false;
+        features.WebSearchInStart = true;
+        Assert.True(features.IsDirty);
+
+        await features.SaveCommand.ExecuteAsync(null);
+
+        var replace = _client.Single<ReplaceSettings>();
+        Assert.Equal(7, replace.IfVersion);
+        Assert.Equal(new WindowsFeaturesDto(NotificationsAndSync: true, OneDrive: false, WebSearchInStart: true), replace.Settings.WindowsFeatures);
+        // Nothing else changes.
+        Assert.Equal(FamilyBundleJson.Serialize(TestData.Family() with { WindowsFeatures = replace.Settings.WindowsFeatures }),
+            FamilyBundleJson.Serialize(replace.Settings with { Version = 7 }));
+        Assert.Equal("תכונות Windows לילדים נשמרו.", vm.StatusMessage);
+        Assert.False(vm.WindowsFeatures!.IsDirty);
+        Assert.Equal((true, false, true), (vm.WindowsFeatures.NotificationsAndSync, vm.WindowsFeatures.OneDrive, vm.WindowsFeatures.WebSearchInStart));
+        Assert.Empty(_client.SentOf<SetMember>());
+    }
+
+    [Fact]
+    public async Task Stored_switches_are_shown_and_can_be_reverted()
+    {
+        _client.Settings = _client.Settings with { WindowsFeatures = new WindowsFeaturesDto(NotificationsAndSync: false, OneDrive: true, WebSearchInStart: true) };
+        var vm = await LoadedAsync();
+        var features = vm.WindowsFeatures!;
+        Assert.Equal((false, true, true), (features.NotificationsAndSync, features.OneDrive, features.WebSearchInStart));
+
+        features.NotificationsAndSync = true;
+        features.RevertCommand.Execute(null);
+
+        Assert.False(features.NotificationsAndSync);
+        Assert.False(features.IsDirty);
+        Assert.Empty(_client.SentOf<ReplaceSettings>());
+    }
+
+    [Fact]
+    public async Task Switches_being_changed_survive_a_reload()
+    {
+        var vm = await LoadedAsync();
+        var features = vm.WindowsFeatures!;
+        features.OneDrive = false;
+
+        _client.BumpVersion();
+        await vm.RefreshAsync();
+
+        Assert.Same(features, vm.WindowsFeatures);
+        Assert.False(vm.WindowsFeatures!.OneDrive);
+        Assert.True(vm.WindowsFeatures.IsDirty);
+    }
+
+    [Fact]
+    public async Task An_agent_computer_has_no_family_wide_switches()
+    {
+        _client.IsHub = false;
+
+        var vm = await LoadedAsync();
+
+        Assert.True(vm.IsAgent);
+        Assert.Null(vm.WindowsFeatures);
     }
 
     [Fact]

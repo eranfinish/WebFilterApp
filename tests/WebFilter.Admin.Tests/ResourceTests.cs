@@ -73,12 +73,25 @@ public sealed partial class ResourceTests
     [InlineData("RuleExpiry_", new[] { "permanent", "hour", "today" })]
     [InlineData("AppMatch_", new[] { "path", "package" })]
     [InlineData("CategoryChoice_", new[] { "default", "allow", "block" })]
-    [InlineData("Category_", new[] { "educational", "social", "gaming" })]
+    [InlineData("Category_", new[] { "educational", "social", "gaming", "school-tools", "adult", "gambling", "proxies", "ai-chat", "unfiltered-search", "ads-popups" })]
+    [InlineData("Tamper_", new[] { TamperKinds.PolicyRepaired, TamperKinds.NetworkRepaired, TamperKinds.UncleanStop })]
     [InlineData("Setup_Step_", new[] { "Members", "Accounts", "Time", "Categories", "Review" })]
     [InlineData("DeviceOs_", new[] { "windows", "android" })]
     public void Every_wire_value_has_wording(string prefix, string[] codes)
     {
-        foreach (var code in codes) Assert.True(Hebrew.ContainsKey(prefix + code), $"missing {prefix}{code}");
+        // Resource names are C# identifiers: a '-' in a code is '_' in its name (Texts.Code).
+        foreach (var code in codes)
+        {
+            Assert.True(Hebrew.ContainsKey(prefix + code.Replace('-', '_')), $"missing {prefix}{code}");
+            Assert.NotEqual(code, Texts.Code(prefix, code));
+        }
+    }
+
+    [Fact]
+    public void Every_tamper_kind_is_in_the_list_above()
+    {
+        var kinds = typeof(TamperKinds).GetFields(BindingFlags.Public | BindingFlags.Static).Select(f => (string)f.GetValue(null)!);
+        Assert.Equal(new[] { TamperKinds.PolicyRepaired, TamperKinds.NetworkRepaired, TamperKinds.UncleanStop }.Order(), kinds.Order());
     }
 
     [Fact]

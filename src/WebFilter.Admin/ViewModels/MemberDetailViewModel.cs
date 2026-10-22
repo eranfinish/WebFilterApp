@@ -10,7 +10,8 @@ using WebFilter.Contracts.Hub;
 namespace WebFilter.Admin.ViewModels;
 
 /// <summary>
-/// One family member in full (MVP-PLAN §4.5): name, role and modes (<see cref="SetMember"/>); weekly hours and daily
+/// One family member in full (MVP-PLAN §4.5): name, role and modes (<see cref="SetMember"/>); the protection switches
+/// (PROTECTION-SPEC §1, <see cref="SetMember"/> one flag at a time); weekly hours and daily
 /// limits, YouTube channels, approved apps and categories (<see cref="ReplaceSettings"/> through
 /// <see cref="FamilyContext.UpdateSettingsAsync"/>, which replaces only this member's part); and personal site rules
 /// (<see cref="AddRule"/> / <see cref="RemoveRule"/>). A section with unsaved edits keeps them when the page reloads, and
@@ -55,6 +56,10 @@ public sealed partial class MemberDetailViewModel : PageViewModel
 
     [ObservableProperty]
     private MemberProfileEditor? _profile;
+
+    /// <summary>The protection switches; shown for filtered members only (the unrestricted ignore them).</summary>
+    [ObservableProperty]
+    private ProtectionEditor? _protection;
 
     [ObservableProperty]
     private WeekEditor? _week;
@@ -303,6 +308,13 @@ public sealed partial class MemberDetailViewModel : PageViewModel
         await SaveAsync(() => Client.ExecuteAsync(set), done, m => editor.Message = m, editor.MarkSaved);
     }
 
+    /// <summary>One protection switch, alone (<paramref name="change"/> sets only that flag); refused, the switch goes back.</summary>
+    internal async Task SaveProtectionAsync(ProtectionEditor editor, SetMember change)
+    {
+        if (!await SaveAsync(() => Client.ExecuteAsync(change), Texts.Format(Strings.Done_MemberSaved, Context.MemberName(editor.MemberId)), m => editor.Message = m))
+            editor.Load(editor.Member);
+    }
+
     internal async Task SaveWeekAsync(WeekEditor editor)
     {
         if (!editor.TryBuild(out var days)) return;
@@ -311,15 +323,21 @@ public sealed partial class MemberDetailViewModel : PageViewModel
             Texts.Format(Strings.Done_WeekSaved, Context.MemberName(editor.MemberId)), m => editor.Message = m, editor.MarkSaved);
     }
 
+    /// <summary>
+    /// Replaces this member's choices for the categories shown. A ready-made list the family does not have yet is copied
+    /// into its categories when chosen; the school sign-in rules follow the school tools (<see cref="SchoolSignIn"/>).
+    /// </summary>
     internal async Task SaveCategoriesAsync(CategoriesEditor editor)
     {
         var shown = editor.Items.Select(i => i.Name).ToHashSet(StringComparer.OrdinalIgnoreCase);
         var chosen = editor.Items.Where(i => i.Choice != CategoryChoiceViewModel.Default)
             .Select(i => new MemberCategoryDto(editor.MemberId, i.Name, i.Choice)).ToList();
-        await UpdateAsync(s => s with
+        var lists = chosen.Select(c => StarterLists.Find(c.Category)).OfType<StarterList>().ToList();
+        await UpdateAsync(s => SchoolSignIn.Apply(s with
             {
+                Categories = StarterLists.AddTo(s.Categories, lists),
                 MemberCategories = [.. s.MemberCategories.Where(c => c.Member != editor.MemberId || !shown.Contains(c.Category)), .. chosen],
-            },
+            }),
             Texts.Format(Strings.Done_CategoriesSaved, Context.MemberName(editor.MemberId)), m => editor.Message = m, editor.MarkSaved);
     }
 
@@ -364,6 +382,7 @@ public sealed partial class MemberDetailViewModel : PageViewModel
         if (settings is null || member is null)
         {
             Profile = null;
+            Protection = null;
             Week = null;
             Categories = null;
             IsUnrestricted = false;
@@ -373,6 +392,8 @@ public sealed partial class MemberDetailViewModel : PageViewModel
         IsUnrestricted = member.FilterMode == "unrestricted";
         if (Profile is not { IsDirty: true } profile || profile.MemberId != member.Id) Profile = new MemberProfileEditor(this, member);
         else profile.Rebase(member);
+        if (Protection is not { } protection || protection.MemberId != member.Id) Protection = new ProtectionEditor(this, member);
+        else protection.Load(member);
         if (Week is not { IsDirty: true } week || week.MemberId != member.Id)
         {
             var (restricts, days) = WeeklyPlan.From(settings, member.Id);
@@ -515,6 +536,70 @@ public sealed partial class MemberProfileEditor : ObservableObject
     }
 
     private static string AgeOf(MemberDto member) => member.Age?.ToString(CultureInfo.InvariantCulture) ?? "";
+}
+
+/// <summary>
+/// The protection switches of a filtered member (PROTECTION-SPEC §1): image search, jumps to other sites, YouTube Shorts
+/// and the search-term log. Each switch saves at once and alone (<see cref="SetMember"/> with only that flag).
+/// </summary>
+public sealed partial class ProtectionEditor : ObservableObject
+{
+    private readonly MemberDetailViewModel? _owner;
+    private bool _loading;
+
+    internal ProtectionEditor(MemberDetailViewModel? owner, MemberDto member)
+    {
+        _owner = owner;
+        Member = member ?? throw new ArgumentNullException(nameof(member));
+        Load(member);
+    }
+
+    /// <summary>The member as stored.</summary>
+    public MemberDto Member { get; private set; }
+
+    public string MemberId => Member.Id;
+
+    [ObservableProperty] private bool _blockImageSearch;
+    [ObservableProperty] private bool _jumpGuard;
+    [ObservableProperty] private bool _blockYouTubeShorts;
+    [ObservableProperty] private bool _logSearches;
+
+    /// <summary>The service's refusal of the last switch.</summary>
+    [ObservableProperty]
+    private string? _message;
+
+    /// <summary>Shows <paramref name="member"/>'s flags as stored, without saving anything.</summary>
+    internal void Load(MemberDto member)
+    {
+        _loading = true;
+        try
+        {
+            Member = member;
+            BlockImageSearch = member.BlockImageSearch;
+            JumpGuard = member.JumpGuard;
+            BlockYouTubeShorts = member.BlockYouTubeShorts;
+            LogSearches = member.LogSearches;
+        }
+        finally
+        {
+            _loading = false;
+        }
+    }
+
+    partial void OnBlockImageSearchChanged(bool value) => Save(value == Member.BlockImageSearch ? null : new SetMember(MemberId, BlockImageSearch: value));
+
+    partial void OnJumpGuardChanged(bool value) => Save(value == Member.JumpGuard ? null : new SetMember(MemberId, JumpGuard: value));
+
+    partial void OnBlockYouTubeShortsChanged(bool value) => Save(value == Member.BlockYouTubeShorts ? null : new SetMember(MemberId, BlockYouTubeShorts: value));
+
+    partial void OnLogSearchesChanged(bool value) => Save(value == Member.LogSearches ? null : new SetMember(MemberId, LogSearches: value));
+
+    private void Save(SetMember? change)
+    {
+        if (_loading || change is null || _owner is null) return;
+        Message = null;
+        _ = _owner.SaveProtectionAsync(this, change);
+    }
 }
 
 /// <summary>Checks shared by the member page and the setup wizard.</summary>
@@ -767,7 +852,11 @@ public sealed partial class WindowEditor(DayEditor day, string start, string end
     partial void OnEndChanged(string value) => day.Changed();
 }
 
-/// <summary>The member's choice for each category the family has: as the filter mode says, always allowed, or blocked.</summary>
+/// <summary>
+/// The member's choice for each category: as the filter mode says, always allowed, or blocked. Offered: the ready-made
+/// lists in their order (PROTECTION-SPEC §11), with the family's own domains for those it already has, then the family's
+/// other categories by name. A ready-made list the family does not have is copied into the settings when chosen.
+/// </summary>
 public sealed partial class CategoriesEditor : ObservableObject
 {
     private readonly MemberDetailViewModel? _owner;
@@ -777,8 +866,12 @@ public sealed partial class CategoriesEditor : ObservableObject
         ArgumentNullException.ThrowIfNull(settings);
         _owner = owner;
         MemberId = memberId;
-        Items = [.. settings.Categories.OrderBy(c => Texts.Code("Category_", c.Key), StringComparer.CurrentCulture).Select(c => new CategoryChoiceViewModel(this, c.Key, c.Value,
-            settings.MemberCategories.LastOrDefault(mc => mc.Member == memberId && string.Equals(mc.Category, c.Key, StringComparison.OrdinalIgnoreCase))?.Action))];
+        var family = new Dictionary<string, IReadOnlyList<string>>(settings.Categories, StringComparer.OrdinalIgnoreCase);
+        var ready = StarterLists.All.Select(l => (Name: l.Category, Domains: family.GetValueOrDefault(l.Category) ?? l.Domains));
+        var own = family.Where(c => StarterLists.Find(c.Key) is null).OrderBy(c => Texts.Code("Category_", c.Key), StringComparer.CurrentCulture)
+            .Select(c => (Name: c.Key, Domains: c.Value));
+        Items = [.. ready.Concat(own).Select(c => new CategoryChoiceViewModel(this, c.Name, c.Domains,
+            settings.MemberCategories.LastOrDefault(mc => mc.Member == memberId && string.Equals(mc.Category, c.Name, StringComparison.OrdinalIgnoreCase))?.Action))];
     }
 
     public string MemberId { get; }

@@ -58,6 +58,18 @@ public sealed class RulesViewModelTests
         Assert.Equal(["", "noa", "yoav", "dana", "savta"], vm.AppliesToOptions.Select(o => o.Value));
     }
 
+    [Fact]
+    public async Task The_school_sign_in_rules_are_marked_as_the_apps_own()
+    {
+        _client.Settings = _client.Settings with { Rules = [.. _client.Settings.Rules, .. SchoolSignIn.Rules] };
+
+        var vm = await LoadedAsync();
+
+        Assert.Equal(["mashov.info", "www.google.com/a/", "www.google.com/recaptcha/"], vm.Rules.Where(r => r.Rule.Member is null).Select(r => r.Pattern));
+        Assert.Equal([false, true, true], vm.Rules.Where(r => r.Rule.Member is null).Select(r => r.IsSchoolSignIn));
+        Assert.Equal("דף או תיקייה באתר", vm.Rules.Single(r => r.Id == "builtin-school-signin-google-a").TypeText);
+    }
+
     [Theory]
     [InlineData(RulesViewModel.AllRules, new[] { "r-school", "r-yt", "r-old" })]
     [InlineData(RulesViewModel.Global, new[] { "r-school" })]

@@ -456,7 +456,7 @@
     <value>This rule already exists.</value>
   </data>
   <data name="Activity_Intro" xml:space="preserve">
-    <value>Blocks, time alerts, requests and changes made by parents.</value>
+    <value>Blocks, time warnings, requests, searches (of members whose searches are logged) and changes the parents made.</value>
   </data>
   <data name="Activity_Member" xml:space="preserve">
     <value>Family member</value>
@@ -887,7 +887,7 @@ The computer keeps enforcing the last settings it received but stops getting upd
     <value>Until the end of the day</value>
   </data>
   <data name="Member_Intro" xml:space="preserve">
-    <value>Everything for one family member: hours and daily limit, websites, YouTube channels, apps and categories.</value>
+    <value>Everything about one family member: protections, hours and daily limits, sites, YouTube channels, apps and categories.</value>
   </data>
   <data name="Member_NotHub" xml:space="preserve">
     <value>This computer is managed by the parents' computer (hub). Family members' settings are changed in the admin app there.</value>
@@ -1019,7 +1019,7 @@ The computer keeps enforcing the last settings it received but stops getting upd
     <value>Categories</value>
   </data>
   <data name="Member_CategoriesHint" xml:space="preserve">
-    <value>For each category: as the filtering says, always allowed, or blocked.</value>
+    <value>For each category: as the filter mode says, always allowed, or blocked. A ready-made list you choose something for is added to the family's categories.</value>
   </data>
   <data name="Member_NoCategories" xml:space="preserve">
     <value>No categories are set up for the family yet.</value>
@@ -1050,6 +1050,27 @@ The computer keeps enforcing the last settings it received but stops getting upd
   </data>
   <data name="Category_gaming" xml:space="preserve">
     <value>Games</value>
+  </data>
+  <data name="Category_school_tools" xml:space="preserve">
+    <value>School tools</value>
+  </data>
+  <data name="Category_adult" xml:space="preserve">
+    <value>Adult content</value>
+  </data>
+  <data name="Category_gambling" xml:space="preserve">
+    <value>Gambling</value>
+  </data>
+  <data name="Category_proxies" xml:space="preserve">
+    <value>Proxies and filter bypass</value>
+  </data>
+  <data name="Category_ai_chat" xml:space="preserve">
+    <value>Chatbots</value>
+  </data>
+  <data name="Category_unfiltered_search" xml:space="preserve">
+    <value>Unfiltered search engines</value>
+  </data>
+  <data name="Category_ads_popups" xml:space="preserve">
+    <value>Ads and pop-ups</value>
   </data>
   <data name="Done_WeekSaved" xml:space="preserve">
     <value>Hours and limit for {0} saved.</value>
@@ -1307,7 +1328,7 @@ The computer keeps enforcing the last settings it received but stops getting upd
     <value>Categories</value>
   </data>
   <data name="Setup_CategoriesHint" xml:space="preserve">
-    <value>Ready-made lists of sites. Anything chosen here can be changed later on the family members page. The learning list is also what homework mode allows.</value>
+    <value>Ready-made lists of sites. You can change what you choose here later on the family members page. The education list is also what homework mode allows. Children start with education and school tools allowed, teens with the protection lists blocked (chatbots are up to you).</value>
   </data>
   <data name="Setup_IncludeList" xml:space="preserve">
     <value>Add the ready-made list {0} ({1} sites)</value>
@@ -1394,5 +1415,99 @@ Do this only for your home network. On a café, hotel or work network it is safe
   </data>
   <data name="AdminChange_device_uninstalled" xml:space="preserve">
     <value>WebFilter was uninstalled from a computer</value>
+  </data>
+  <data name="Member_Protection" xml:space="preserve">
+    <value>Protections</value>
+  </data>
+  <data name="Member_ProtectionHint" xml:space="preserve">
+    <value>Each switch is saved at once and applies on every computer.</value>
+  </data>
+  <data name="Member_BlockImageSearch" xml:space="preserve">
+    <value>Block image search</value>
+  </data>
+  <data name="Member_BlockImageSearchHint" xml:space="preserve">
+    <value>Image search on Google (and Google Lens), Bing, DuckDuckGo and Yandex is blocked. Ordinary search works as usual.</value>
+  </data>
+  <data name="Member_JumpGuard" xml:space="preserve">
+    <value>Block jumps to other sites</value>
+  </data>
+  <data name="Member_JumpGuardHint" xml:space="preserve">
+    <value>A site cannot open another site in a new tab, a pop-up or an automatic redirect. Links the member clicks work as usual. Teens get an "Open anyway" button, and what they open that way is recorded in the activity log.</value>
+  </data>
+  <data name="Member_BlockYouTubeShorts" xml:space="preserve">
+    <value>Block YouTube Shorts</value>
+  </data>
+  <data name="Member_BlockYouTubeShortsHint" xml:space="preserve">
+    <value>Shorts are blocked and their shelf on YouTube is hidden. Other videos follow the YouTube mode.</value>
+  </data>
+  <data name="Member_LogSearches" xml:space="preserve">
+    <value>Log search terms</value>
+  </data>
+  <data name="Member_LogSearchesNote" xml:space="preserve">
+    <value>What is searched on Google, Bing, YouTube and DuckDuckGo appears in the activity log. The member sees a message in the browser saying their searches are visible to the parents.</value>
+  </data>
+  <data name="Rule_SchoolSignIn" xml:space="preserve">
+    <value>For school sign-in</value>
+  </data>
+  <data name="Rule_SchoolSignInHint" xml:space="preserve">
+    <value>Added by the app because school tools are allowed for a family member: Ministry of Education Google accounts sign in through this address. Removed by the app once school tools are allowed for no one.</value>
+  </data>
+  <data name="Settings_WindowsFeatures" xml:space="preserve">
+    <value>Windows features for children</value>
+  </data>
+  <data name="Settings_WindowsFeaturesHint" xml:space="preserve">
+    <value>They apply to every filtered account and every account not linked yet, on every computer. They do not open any websites.</value>
+  </data>
+  <data name="Settings_Feature_NotificationsAndSync" xml:space="preserve">
+    <value>Windows notifications and sync</value>
+  </data>
+  <data name="Settings_Feature_NotificationsAndSyncHint" xml:space="preserve">
+    <value>The account's Windows services (notifications, settings sync) may use the network, also when browsing time is up. Without it, Windows and app notifications do not arrive.</value>
+  </data>
+  <data name="Settings_Feature_OneDrive" xml:space="preserve">
+    <value>OneDrive file sync</value>
+  </data>
+  <data name="Settings_Feature_OneDriveHint" xml:space="preserve">
+    <value>OneDrive may sync files (school work, for example), also when browsing time is up. Only a OneDrive installed for all users is allowed: a copy in the child's own folder could be any program given its name.</value>
+  </data>
+  <data name="Settings_Feature_WebSearchInStart" xml:space="preserve">
+    <value>Web results in Start menu search</value>
+  </data>
+  <data name="Settings_Feature_WebSearchInStartHint" xml:space="preserve">
+    <value>Start menu search also shows Bing results. Off by default, because those results do not go through the filter; searching for files and apps on the computer works either way.</value>
+  </data>
+  <data name="Done_WindowsFeaturesSaved" xml:space="preserve">
+    <value>The Windows features for children were saved.</value>
+  </data>
+  <data name="Check_onedrive_ok" xml:space="preserve">
+    <value>OneDrive is installed for all users, so the children can use it too (when allowed under Windows features for children).</value>
+  </data>
+  <data name="Check_onedrive_warn" xml:space="preserve">
+    <value>OneDrive is installed here only in each user's own folder, and children may use only a OneDrive installed for all users. To make it work for them too, reinstall it for all users: download OneDriveSetup.exe from Microsoft and run, in an administrator command prompt:
+{0}</value>
+  </data>
+  <data name="Check_onedrive_none" xml:space="preserve">
+    <value>OneDrive is not installed.</value>
+  </data>
+  <data name="Event_SearchType" xml:space="preserve">
+    <value>Search</value>
+  </data>
+  <data name="Event_Search" xml:space="preserve">
+    <value>Search on {0}: {1}</value>
+  </data>
+  <data name="Event_SearchEmpty" xml:space="preserve">
+    <value>Search on {0}</value>
+  </data>
+  <data name="Event_Override" xml:space="preserve">
+    <value>Opened anyway: {0}</value>
+  </data>
+  <data name="Tamper_policy_repaired" xml:space="preserve">
+    <value>Settings the filter manages (browser or Windows policies) had been changed, and the filter restored them</value>
+  </data>
+  <data name="Tamper_network_repaired" xml:space="preserve">
+    <value>The account's network filters had been removed, and the filter restored them</value>
+  </data>
+  <data name="Tamper_unclean_stop" xml:space="preserve">
+    <value>The filter service stopped unexpectedly and started again. This can be a power cut or the computer being switched off by force, not necessarily an attempt to get around the filter</value>
   </data>
 </root>
