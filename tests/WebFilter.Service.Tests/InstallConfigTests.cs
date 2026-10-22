@@ -29,12 +29,13 @@ public sealed class InstallConfigTests : IDisposable
     [Theory]
     [InlineData("hub")]
     [InlineData("agent")]
-    public void The_service_reads_its_role_and_manages_browser_policies(string role)
+    public void The_service_reads_its_role_and_manages_browser_policies_and_the_network(string role)
     {
         var options = Bind(InstallConfig.AppSettings(role, new ExtensionIds(ChromeId, EdgeId)));
 
         Assert.Equal(role, options.Role);
         Assert.True(options.ManageBrowserPolicies);
+        Assert.True(options.ManageNetwork);
         Assert.Equal(ChromeId, options.ChromeExtensionId);
         Assert.Equal(EdgeId, options.EdgeExtensionId);
     }
@@ -52,6 +53,30 @@ public sealed class InstallConfigTests : IDisposable
         Assert.Equal(defaults.DataDirectory, options.DataDirectory);
         Assert.Equal(defaults.TrustedClientPaths, options.TrustedClientPaths);
         Assert.Equal(defaults.HubPort, options.HubPort);
+    }
+
+    [Fact]
+    public void Development_runs_change_neither_browser_policies_nor_the_network()
+    {
+        var defaults = new ServiceOptions();
+        Assert.False(defaults.ManageBrowserPolicies);
+        Assert.False(defaults.ManageNetwork);
+
+        // The appsettings files a `dotnet run` reads keep those defaults; only the installer's generated file turns them on.
+        var serviceDir = Path.Combine(RepoRoot(), "src", "WebFilter.Service");
+        foreach (var file in Directory.GetFiles(serviceDir, "appsettings*.json"))
+        {
+            var options = Bind(File.ReadAllText(file));
+            Assert.False(options.ManageBrowserPolicies, file);
+            Assert.False(options.ManageNetwork, file);
+        }
+    }
+
+    private static string RepoRoot()
+    {
+        var dir = new DirectoryInfo(AppContext.BaseDirectory);
+        while (!File.Exists(Path.Combine(dir.FullName, "WebFilter.slnx"))) dir = dir.Parent ?? throw new InvalidOperationException("WebFilter.slnx not found");
+        return dir.FullName;
     }
 
     [Fact]

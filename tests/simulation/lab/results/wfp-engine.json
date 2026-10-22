@@ -1,0 +1,234 @@
+﻿{
+    "date":  "2026-10-22T20:39:36+03:00",
+    "vm":  "lab-kids",
+    "os":  "Microsoft Windows 11 Home 10.0.26300",
+    "account":  "S-1-5-21-1895681668-2447207637-2414315679-1004",
+    "dll":  "36F327C6EA27DD7F630CB0084D64D87179006708F13F20E82B835AC6FA5C9AFF",
+    "finalWfp":  "provider=no sublayer=no filters=0",
+    "passed":  36,
+    "failed":  0,
+    "steps":  [
+                  {
+                      "id":  "baseline",
+                      "title":  "No WebFilter objects; everything connects",
+                      "checks":  [
+                                     {
+                                         "check":  "clean start: no provider, sublayer or filters",
+                                         "pass":  true,
+                                         "evidence":  "\"provider=no sublayer=no filters=0\""
+                                     },
+                                     {
+                                         "check":  "powershell.exe connects",
+                                         "pass":  true,
+                                         "evidence":  "{\"account\":\"lab-kids\\\\labadmin\",\"program\":\"C:\\\\Windows\\\\System32\\\\WindowsPowerShell\\\\v1.0\\\\powershell.exe\",\"http\":\"200\",\"tcp4\":\"connected\",\"tcp6\":\"timeout\",\"loopback4\":\"connected\",\"loopback6\":\"connected\"}"
+                                     },
+                                     {
+                                         "check":  "IPv6 to the host is not refused by WFP (timeout or refusal)",
+                                         "pass":  true,
+                                         "evidence":  "timeout"
+                                     },
+                                     {
+                                         "check":  "curl.exe connects",
+                                         "pass":  true,
+                                         "evidence":  "{\"Exit\":0,\"Status\":\"200\",\"Tries\":1,\"Output\":\"200\"}"
+                                     },
+                                     {
+                                         "check":  "curl.exe in an AppContainer connects",
+                                         "pass":  true,
+                                         "evidence":  "{\"CurlExit\":0,\"Tries\":2,\"Output\":\"appcontainer=S-1-15-2-572274494-3097678375-1592928226-2235655692-395336036-3885444240-2901663658 exit=0\"}"
+                                     }
+                                 ]
+                  },
+                  {
+                      "id":  "a",
+                      "title":  "Only curl.exe allowed for the account",
+                      "checks":  [
+                                     {
+                                         "check":  "set succeeds",
+                                         "pass":  true,
+                                         "evidence":  "[\"app C:\\\\Windows\\\\System32\\\\curl.exe: allowed (0)\",\"app C:\\\\Lab\\\\wfp\\\\not-installed\\\\game.exe: skipped (3)\"]"
+                                     },
+                                     {
+                                         "check":  "curl.exe got its filter",
+                                         "pass":  true,
+                                         "evidence":  "\"app C:\\\\Windows\\\\System32\\\\curl.exe: allowed (0)\""
+                                     },
+                                     {
+                                         "check":  "the program that is not installed is skipped and reported (error 2 or 3)",
+                                         "pass":  true,
+                                         "evidence":  "\"app C:\\\\Lab\\\\wfp\\\\not-installed\\\\game.exe: skipped (3)\""
+                                     },
+                                     {
+                                         "check":  "list returns the SID",
+                                         "pass":  true,
+                                         "evidence":  "\"S-1-5-21-1895681668-2447207637-2414315679-1004\""
+                                     },
+                                     {
+                                         "check":  "status: provider, sublayer, 6 filters (2 layers x block, loopback, curl.exe)",
+                                         "pass":  true,
+                                         "evidence":  "\"provider=yes sublayer=yes filters=6\""
+                                     },
+                                     {
+                                         "check":  "powershell.exe is blocked over IPv4 (socket error 10013)",
+                                         "pass":  true,
+                                         "evidence":  "{\"account\":\"lab-kids\\\\labadmin\",\"program\":\"C:\\\\Windows\\\\System32\\\\WindowsPowerShell\\\\v1.0\\\\powershell.exe\",\"http\":\"error: An attempt was made to access a socket in a way forbidden by its access permissions 23.221.30.94:443\",\"tcp4\":\"socket error 10013 AccessDenied\",\"tcp6\":\"socket error 10013 AccessDenied\",\"loopback4\":\"connected\",\"loopback6\":\"connected\"}"
+                                     },
+                                     {
+                                         "check":  "powershell.exe is blocked over IPv6 (socket error 10013)",
+                                         "pass":  true,
+                                         "evidence":  "socket error 10013 AccessDenied"
+                                     },
+                                     {
+                                         "check":  "loopback still works (127.0.0.1 and ::1)",
+                                         "pass":  true,
+                                         "evidence":  "{\"account\":\"lab-kids\\\\labadmin\",\"program\":\"C:\\\\Windows\\\\System32\\\\WindowsPowerShell\\\\v1.0\\\\powershell.exe\",\"http\":\"error: An attempt was made to access a socket in a way forbidden by its access permissions 23.221.30.94:443\",\"tcp4\":\"socket error 10013 AccessDenied\",\"tcp6\":\"socket error 10013 AccessDenied\",\"loopback4\":\"connected\",\"loopback6\":\"connected\"}"
+                                     },
+                                     {
+                                         "check":  "curl.exe connects",
+                                         "pass":  true,
+                                         "evidence":  "{\"Exit\":0,\"Status\":\"200\",\"Tries\":1,\"Output\":\"200\"}"
+                                     },
+                                     {
+                                         "check":  "a copy of curl.exe in another folder is blocked (curl exit 7)",
+                                         "pass":  true,
+                                         "evidence":  "{\"Exit\":7,\"Status\":\"000\",\"Tries\":1,\"Output\":\"curl: (7) Failed to connect to www.microsoft.com:443 after 9 ms: Could not connect to server 000\"}"
+                                     },
+                                     {
+                                         "check":  "SYSTEM is unaffected (powershell.exe from a scheduled task)",
+                                         "pass":  true,
+                                         "evidence":  "{\"account\":\"NT AUTHORITY\\\\SYSTEM\",\"program\":\"C:\\\\Windows\\\\System32\\\\WindowsPowerShell\\\\v1.0\\\\powershell.exe\",\"http\":\"200\",\"tcp4\":\"connected\",\"loopback4\":\"connected\",\"loopback6\":\"connected\"}"
+                                     },
+                                     {
+                                         "check":  "netsh wfp show state / show filters list our provider, sublayer and filters",
+                                         "pass":  true,
+                                         "evidence":  "{\"StateProvider\":8,\"StateSublayer\":7,\"FilterProvider\":7,\"FilterNames\":6}"
+                                     }
+                                 ]
+                  },
+                  {
+                      "id":  "e",
+                      "title":  "Store apps (an AppContainer process of the account)",
+                      "checks":  [
+                                     {
+                                         "check":  "not allowed: blocked (curl exit 7)",
+                                         "pass":  true,
+                                         "evidence":  "{\"CurlExit\":7,\"Tries\":1,\"Output\":\"appcontainer=S-1-15-2-572274494-3097678375-1592928226-2235655692-395336036-3885444240-2901663658 exit=7\"}"
+                                     },
+                                     {
+                                         "check":  "package WebFilter.LabTest allowed: it connects",
+                                         "pass":  true,
+                                         "evidence":  "[\"package WebFilter.LabTest: allowed (0)\",\"appcontainer=S-1-15-2-572274494-3097678375-1592928226-2235655692-395336036-3885444240-2901663658 exit=0\"]"
+                                     },
+                                     {
+                                         "check":  "the same curl.exe outside the AppContainer stays blocked (curl exit 7)",
+                                         "pass":  true,
+                                         "evidence":  "{\"Exit\":7,\"Status\":\"000\",\"Tries\":1,\"Output\":\"curl: (7) Failed to connect to www.microsoft.com:443 after 9 ms: Could not connect to server 000\"}"
+                                     },
+                                     {
+                                         "check":  "the package name matches in any case",
+                                         "pass":  true,
+                                         "evidence":  "[\"package webfilter.labtest: allowed (0)\",\"appcontainer=S-1-15-2-572274494-3097678375-1592928226-2235655692-395336036-3885444240-2901663658 exit=0\"]"
+                                     }
+                                 ]
+                  },
+                  {
+                      "id":  "b",
+                      "title":  "powershell.exe allowed too",
+                      "checks":  [
+                                     {
+                                         "check":  "set succeeds",
+                                         "pass":  true,
+                                         "evidence":  "[\"app C:\\\\Windows\\\\System32\\\\curl.exe: allowed (0)\",\"app C:\\\\Windows\\\\System32\\\\WindowsPowerShell\\\\v1.0\\\\powershell.exe: allowed (0)\"]"
+                                     },
+                                     {
+                                         "check":  "powershell.exe connects again",
+                                         "pass":  true,
+                                         "evidence":  "{\"account\":\"lab-kids\\\\labadmin\",\"program\":\"C:\\\\Windows\\\\System32\\\\WindowsPowerShell\\\\v1.0\\\\powershell.exe\",\"http\":\"200\",\"tcp4\":\"connected\",\"tcp6\":\"timeout\",\"loopback4\":\"connected\",\"loopback6\":\"connected\"}"
+                                     },
+                                     {
+                                         "check":  "and over IPv6 is no longer refused by WFP",
+                                         "pass":  true,
+                                         "evidence":  "timeout"
+                                     }
+                                 ]
+                  },
+                  {
+                      "id":  "c",
+                      "title":  "Persistence: curl.exe only, then a reboot",
+                      "checks":  [
+                                     {
+                                         "check":  "set before the reboot",
+                                         "pass":  true,
+                                         "evidence":  "\"provider=yes sublayer=yes filters=6\""
+                                     },
+                                     {
+                                         "check":  "the VM rebooted",
+                                         "pass":  true,
+                                         "evidence":  "boot before: 10/22/2026 20:36:50, after: 10/22/2026 20:39:16"
+                                     },
+                                     {
+                                         "check":  "after the reboot list returns the SID",
+                                         "pass":  true,
+                                         "evidence":  "\"S-1-5-21-1895681668-2447207637-2414315679-1004\""
+                                     },
+                                     {
+                                         "check":  "after the reboot the 6 filters are there",
+                                         "pass":  true,
+                                         "evidence":  "\"provider=yes sublayer=yes filters=6\""
+                                     },
+                                     {
+                                         "check":  "after the reboot powershell.exe is still blocked",
+                                         "pass":  true,
+                                         "evidence":  "{\"account\":\"lab-kids\\\\labadmin\",\"program\":\"C:\\\\Windows\\\\System32\\\\WindowsPowerShell\\\\v1.0\\\\powershell.exe\",\"http\":\"error: An attempt was made to access a socket in a way forbidden by its access permissions 23.221.30.94:443\",\"tcp4\":\"socket error 10013 AccessDenied\",\"tcp6\":\"socket error 10013 AccessDenied\",\"loopback4\":\"connected\",\"loopback6\":\"connected\"}"
+                                     },
+                                     {
+                                         "check":  "after the reboot curl.exe connects",
+                                         "pass":  true,
+                                         "evidence":  "{\"Exit\":0,\"Status\":\"200\",\"Tries\":1,\"Output\":\"200\"}"
+                                     }
+                                 ]
+                  },
+                  {
+                      "id":  "d",
+                      "title":  "RemoveAll restores everything",
+                      "checks":  [
+                                     {
+                                         "check":  "remove-all succeeds",
+                                         "pass":  true,
+                                         "evidence":  {
+
+                                                      }
+                                     },
+                                     {
+                                         "check":  "status: no provider, no sublayer, no filters",
+                                         "pass":  true,
+                                         "evidence":  "\"provider=no sublayer=no filters=0\""
+                                     },
+                                     {
+                                         "check":  "list is empty",
+                                         "pass":  true,
+                                         "evidence":  {
+
+                                                      }
+                                     },
+                                     {
+                                         "check":  "netsh wfp show state / show filters: nothing of ours",
+                                         "pass":  true,
+                                         "evidence":  "{\"StateProvider\":0,\"StateSublayer\":0,\"FilterProvider\":0,\"FilterNames\":0}"
+                                     },
+                                     {
+                                         "check":  "powershell.exe connects",
+                                         "pass":  true,
+                                         "evidence":  "{\"account\":\"lab-kids\\\\labadmin\",\"program\":\"C:\\\\Windows\\\\System32\\\\WindowsPowerShell\\\\v1.0\\\\powershell.exe\",\"http\":\"200\",\"tcp4\":\"connected\",\"tcp6\":\"timeout\",\"loopback4\":\"connected\",\"loopback6\":\"connected\"}"
+                                     },
+                                     {
+                                         "check":  "remove-all again (nothing to remove) succeeds",
+                                         "pass":  true,
+                                         "evidence":  {
+
+                                                      }
+                                     }
+                                 ]
+                  }
+              ]
+}

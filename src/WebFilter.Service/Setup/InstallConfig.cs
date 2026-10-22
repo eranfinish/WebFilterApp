@@ -24,12 +24,13 @@ public static class InstallConfig
     public static bool IsExtensionId(string? id) => id is { Length: 32 } && id.All(c => c is >= 'a' and <= 'p');
 
     /// <summary>
-    /// The installed service's settings: its role, browser policies on (the service runs as LocalSystem), and the
-    /// store ids when known — without them no force-install policy is written and the host admits no extension.
+    /// The installed service's settings: its role, browser policies and WFP network filters on (the service runs as
+    /// LocalSystem), and the store ids when known — without them no force-install policy is written and the host admits
+    /// no extension.
     /// </summary>
     public static string AppSettings(string role, ExtensionIds ids)
     {
-        var settings = new JsonObject { ["Role"] = role, ["ManageBrowserPolicies"] = true };
+        var settings = new JsonObject { ["Role"] = role, ["ManageBrowserPolicies"] = true, ["ManageNetwork"] = true };
         if (ids.ChromeId is { } chrome) settings["ChromeExtensionId"] = chrome;
         if (ids.EdgeId is { } edge) settings["EdgeExtensionId"] = edge;
         var root = new JsonObject

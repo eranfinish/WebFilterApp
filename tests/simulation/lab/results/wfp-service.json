@@ -1,0 +1,93 @@
+﻿{
+    "date":  "2026-10-22T20:42:43+03:00",
+    "vm":  "lab-kids",
+    "os":  "Microsoft Windows 11 Home 10.0.26300",
+    "finalWfp":  "provider=no sublayer=no filters=0",
+    "passed":  13,
+    "failed":  0,
+    "checks":  [
+                   {
+                       "check":  "clean start",
+                       "pass":  true,
+                       "evidence":  "provider=no sublayer=no filters=0"
+                   },
+                   {
+                       "check":  "every non-admin account has filters (noa linked, the others unlinked)",
+                       "pass":  true,
+                       "evidence":  "S-1-5-21-1895681668-2447207637-2414315679-1006 | S-1-5-21-1895681668-2447207637-2414315679-1002 | S-1-5-21-1895681668-2447207637-2414315679-1003 | S-1-5-21-1895681668-2447207637-2414315679-1005"
+                   },
+                   {
+                       "check":  "no administrator has filters",
+                       "pass":  true,
+                       "evidence":  "administrators: S-1-5-21-1895681668-2447207637-2414315679-1001, S-1-5-21-1895681668-2447207637-2414315679-500, S-1-5-21-1895681668-2447207637-2414315679-1004"
+                   },
+                   {
+                       "check":  "status: 32 filters",
+                       "pass":  true,
+                       "evidence":  "provider=yes sublayer=yes filters=32"
+                   },
+                   {
+                       "check":  "the service logged the pass",
+                       "pass":  true,
+                       "evidence":  "      Network filters: 1 accounts set, 0 removed |       Network filters: 3 accounts set, 0 removed"
+                   },
+                   {
+                       "check":  "logged as skipped, staying blocked",
+                       "pass":  true,
+                       "evidence":  "      C:\\Lab\\wfp-svc\\later\\app.exe, allowed for S-1-5-21-1895681668-2447207637-2414315679-1005, got no network filter and stays blocked: not installed"
+                   },
+                   {
+                       "check":  "once installed it gets its filters on the next tick (+2)",
+                       "pass":  true,
+                       "evidence":  "provider=yes sublayer=yes filters=34"
+                   },
+                   {
+                       "check":  "the filters of S-1-5-21-1895681668-2447207637-2414315679-1003, deleted with wfpctl, are back within a tick",
+                       "pass":  true,
+                       "evidence":  "removed: True, back: True"
+                   },
+                   {
+                       "check":  "with a warning in the log",
+                       "pass":  true,
+                       "evidence":  "      The network filters of S-1-5-21-1895681668-2447207637-2414315679-1003 had been removed; restored"
+                   },
+                   {
+                       "check":  "pausing noa (admin pipe) lifts her filters within 3 seconds",
+                       "pass":  true,
+                       "evidence":  "reply: ok, lifted: True"
+                   },
+                   {
+                       "check":  "resuming puts them back within 3 seconds",
+                       "pass":  true,
+                       "evidence":  "reply: ok, back: True"
+                   },
+                   {
+                       "check":  "after the service process ended, the filters are all still there",
+                       "pass":  true,
+                       "evidence":  "provider=yes sublayer=yes filters=34"
+                   },
+                   {
+                       "check":  "no error in the service log",
+                       "pass":  true,
+                       "evidence":  ""
+                   }
+               ],
+    "log":  [
+                "warn: WebFilter.Service.Network.WfpService[0]",
+                "C:\\Lab\\wfp-svc\\later\\app.exe, allowed for S-1-5-21-1895681668-2447207637-2414315679-1005, got no network filter and stays blocked: not installed",
+                "info: WebFilter.Service.Network.WfpService[0]",
+                "Network filters: 1 accounts set, 0 removed",
+                "info: WebFilter.Service.Network.WfpService[0]",
+                "Network filters: 3 accounts set, 0 removed",
+                "info: WebFilter.Service.Network.WfpService[0]",
+                "Network filters: 1 accounts set, 0 removed",
+                "warn: WebFilter.Service.Network.WfpService[0]",
+                "The network filters of S-1-5-21-1895681668-2447207637-2414315679-1003 had been removed; restored",
+                "info: WebFilter.Service.Network.WfpService[0]",
+                "Network filters: 1 accounts set, 0 removed",
+                "info: WebFilter.Service.Network.WfpService[0]",
+                "Network filters: 0 accounts set, 1 removed",
+                "info: WebFilter.Service.Network.WfpService[0]",
+                "Network filters: 1 accounts set, 0 removed"
+            ]
+}

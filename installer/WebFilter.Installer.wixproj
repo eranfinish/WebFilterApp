@@ -5,8 +5,9 @@
       dotnet build installer/WebFilter.Installer.wixproj -c Release
 
     Publishes the service, the native host and the admin app (Release, self-contained, win-x64) into one payload folder,
-    then builds bin/x64/<Configuration>/he-IL/WebFilter.msi and en-US/WebFilter.msi. Not in WebFilter.slnx, so
-    `dotnet test` does not build an MSI.
+    adds the WFP engine (C++, built with Visual Studio's MSBuild — see BuildWfpNative), then builds
+    bin/x64/<Configuration>/he-IL/WebFilter.msi and en-US/WebFilter.msi. Not in WebFilter.slnx, so `dotnet test` does
+    not build an MSI.
 
     WiX 5.0.2 is the last WiX release under the plain MS-RL license; 6.x and 7.x require accepting the Open Source
     Maintenance Fee EULA, which is the project owner's decision.
@@ -30,6 +31,19 @@
     <DotnetExe Condition="'$(DotnetExe)' == ''">dotnet</DotnetExe>
   </PropertyGroup>
 
+  <!--
+    The WFP engine, WebFilter.Wfp.Native.dll (C++, src/WebFilter.Wfp.Native). `dotnet build` cannot build a .vcxproj, so
+    BuildWfpNative runs Visual Studio's MSBuild on it (Release|x64), found by vswhere with the "Desktop development with
+    C++" workload; -p:VsMSBuildExe=<path to MSBuild.exe> picks one by hand. Or pass a DLL built elsewhere and skip that
+    step: -p:WfpNativeDll=<path>\WebFilter.Wfp.Native.dll.
+  -->
+  <PropertyGroup>
+    <WfpNativeProject>$(MSBuildProjectDirectory)\..\src\WebFilter.Wfp.Native\WebFilter.Wfp.Native.vcxproj</WfpNativeProject>
+    <WfpNativePrebuilt Condition="'$(WfpNativeDll)' != ''">true</WfpNativePrebuilt>
+    <WfpNativeDll Condition="'$(WfpNativeDll)' == ''">$(MSBuildProjectDirectory)\..\src\WebFilter.Wfp.Native\bin\x64\Release\WebFilter.Wfp.Native.dll</WfpNativeDll>
+    <VsWhereExe>$(MSBuildProgramFiles32)\Microsoft Visual Studio\Installer\vswhere.exe</VsWhereExe>
+  </PropertyGroup>
+
   <ItemGroup>
     <PackageReference Include="WixToolset.Firewall.wixext" Version="5.0.2" />
     <PackageReference Include="WixToolset.UI.wixext" Version="5.0.2" />
@@ -51,5 +65,26 @@
     <Error Condition="'$(Configuration)' == 'Simulation'" Text="The installer is never built from Simulation binaries. Use -c Release." />
     <RemoveDir Directories="$(PayloadDir)" />
     <Exec Command="&quot;$(DotnetExe)&quot; publish &quot;%(PayloadProject.FullPath)&quot; -c Release -r win-x64 --self-contained --nologo -v:minimal --artifacts-path &quot;$(PayloadArtifacts.TrimEnd('\'))&quot; -o &quot;$(PayloadDir.TrimEnd('\'))&quot; %(PayloadProject.ExtraArgs)" />
+  </Target>
+
+  <!--
+    Builds the WFP engine with Visual Studio's MSBuild and adds it to the payload (Package.wxs names it, so a missing DLL
+    fails the MSI). The child MSBuild must not inherit the SDK paths that `dotnet build` sets for its own process.
+  -->
+  <Target Name="BuildWfpNative" BeforeTargets="BeforeBuild" DependsOnTargets="PublishPayload">
+    <Exec Condition="'$(WfpNativePrebuilt)' != 'true' And '$(VsMSBuildExe)' == '' And Exists('$(VsWhereExe)')"
+          Command="&quot;$(VsWhereExe)&quot; -latest -products * -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 -find MSBuild\**\Bin\MSBuild.exe"
+          ConsoleToMSBuild="true" StandardOutputImportance="low">
+      <Output TaskParameter="ConsoleOutput" PropertyName="VsMSBuildExe" />
+    </Exec>
+    <PropertyGroup Condition="'$(VsMSBuildExe)' != ''">
+      <VsMSBuildExe>$(VsMSBuildExe.Split(';')[0].Trim())</VsMSBuildExe>
+    </PropertyGroup>
+    <Error Condition="'$(WfpNativePrebuilt)' != 'true' And ('$(VsMSBuildExe)' == '' Or !Exists('$(VsMSBuildExe)'))"
+           Text="WebFilter.Wfp.Native.dll is built with Visual Studio's MSBuild and the 'Desktop development with C++' workload, which vswhere did not find. Install it, give its MSBuild with -p:VsMSBuildExe=..., or pass a DLL built elsewhere with -p:WfpNativeDll=...\WebFilter.Wfp.Native.dll." />
+    <Exec Condition="'$(WfpNativePrebuilt)' != 'true'"
+          Command="set MSBuildExtensionsPath=&#xD;&#xA;set MSBuildSDKsPath=&#xD;&#xA;set MSBuildLoadMicrosoftTargetsReadOnly=&#xD;&#xA;set MSBUILDFAILONDRIVEENUMERATINGWILDCARD=&#xD;&#xA;&quot;$(VsMSBuildExe)&quot; &quot;$(WfpNativeProject)&quot; -p:Configuration=Release -p:Platform=x64 -nologo -v:minimal" />
+    <Error Condition="!Exists('$(WfpNativeDll)')" Text="$(WfpNativeDll) does not exist." />
+    <Copy SourceFiles="$(WfpNativeDll)" DestinationFolder="$(PayloadDir)" />
   </Target>
 </Project>

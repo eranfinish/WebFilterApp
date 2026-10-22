@@ -43,7 +43,7 @@ Get-NetConnectionProfile | Set-NetConnectionProfile -NetworkCategory Private
   sc.exe qc WebFilter; sc.exe qfailure WebFilter
   ```
 
-- [ ] `C:\Program Files\WebFilter\appsettings.json` — `"Role": "hub"`, `"ManageBrowserPolicies": true`. לידו `com.webfilter.host.json`.
+- [ ] `C:\Program Files\WebFilter\appsettings.json` — `"Role": "hub"`, `"ManageBrowserPolicies": true`, `"ManageNetwork": true`. לידו `com.webfilter.host.json` ו-`WebFilter.Wfp.Native.dll`.
 - [ ] רישום ה-host ומדיניות המכונה:
 
   ```powershell
@@ -93,7 +93,7 @@ Get-NetConnectionProfile | Set-NetConnectionProfile -NetworkCategory Private
   ```
 
 - [ ] ב-log מופיע `Paired lab-kids with hub`; במסך "מכשירים" ב-Hub מופיע `lab-kids`.
-- [ ] `appsettings.json` עם `"Role": "agent"`; **אין** כלל חומת אש "WebFilter Hub".
+- [ ] `appsettings.json` עם `"Role": "agent"` ו-`"ManageNetwork": true`; **אין** כלל חומת אש "WebFilter Hub".
 - [ ] תיקון (`msiexec /fa C:\Lab\WebFilter.msi /qn`) — התפקיד נשאר `agent` והצימוד נשמר.
 - [ ] קוד שגוי (מנקודת `clean`): ההתקנה מצליחה, ב-log מופיע `Pairing failed`, וצימוד ידני מ-PowerShell כמנהל עובד:
 
@@ -101,6 +101,13 @@ Get-NetConnectionProfile | Set-NetConnectionProfile -NetworkCategory Private
   & "C:\Program Files\WebFilter\WebFilter.Service.exe" pair --hub lab-hub.local:47800 --code XXXX-XXXX-XXXX
   ```
 
+- [ ] רשת לפי תוכנה (WFP): אחרי שהסוכן קיבל הגדרות, לכל חשבון שאינו מנהל יש מסננים, ולמנהלים אין. ב-`noa` (מקושרת לבן משפחה מוגבל): Edge גולש, אבל ב-PowerShell שלה `Invoke-WebRequest https://www.microsoft.com -UseBasicParsing` נכשל ב-"An attempt was made to access a socket in a way forbidden by its access permissions". מספר המסננים של `noa` (לפחות 6 — חסימה, loopback ודפדפן, בשתי השכבות) ושל `labadmin` (0):
+
+  ```powershell
+  netsh wfp show filters file=C:\Lab\filters.xml | Out-Null; foreach ($u in 'noa', 'labadmin') { $sid = (Get-LocalUser $u).SID.Value; "$u " + (Select-String -Path C:\Lab\filters.xml -Pattern "for account $sid" -SimpleMatch).Count }
+  ```
+
+  והמסננים נשארים כשהשירות עצור (fail closed): אחרי `Stop-Service WebFilter` אותה פקודה מחזירה אותו מספר. אחר כך `Start-Service WebFilter`.
 - [ ] ב-`noa`: ב-Edge אין InPrivate, ו-`edge://policy` מציג את מדיניות WebFilter (אחרי שהיא קושרה לבן משפחה מוגבל ב-Hub).
 - [ ] מדיניות המשתמש נכתבת מיד בכניסה, לא עד דקה אחריה. השירות יכול לכתוב את המדיניות של `noa` רק כשה-hive שלה טעון, כלומר כשהיא מחוברת, ועכשיו הוא כותב אותה ברגע ש-Windows מדווח על הכניסה.
 
@@ -128,7 +135,7 @@ Get-NetConnectionProfile | Set-NetConnectionProfile -NetworkCategory Private
   msiexec /x C:\Lab\WebFilter.msi /qn /l*v C:\Lab\uninstall.log
   ```
 
-- [ ] ב-log: `Browser policies: N values removed, 0 left.` ו-`Data folder C:\ProgramData\WebFilter deleted.`
+- [ ] ב-log: `Browser policies: N values removed, 0 left.`, `WFP: provider, sublayer and filters removed.` ו-`Data folder C:\ProgramData\WebFilter deleted.`; ו-`netsh wfp show state file=C:\Lab\state.xml` לא מכיל `WebFilter`.
 - [ ] ביטול הרישום ב-Hub — בסוכן, ב-log: `Hub: this computer was unregistered; the hub's Devices screen shows it as uninstalled.` (וב-Hub עצמו: `Hub: this computer is not paired with a hub; nothing to unregister.`). ב-Hub, במסך "מכשירים", `lab-kids` עבר ל"מחשבים שהצימוד שלהם בוטל" במצב **"הסינון הוסר"**, ובמסך "פעילות" מופיע "הסינון הוסר ממחשב" עם `lab-kids`. או מהמחשב שלך — ב-`lab-kids` מופיעים `"revoked":true` ו-`"revokedReason":"uninstall"`:
 
   ```powershell
@@ -158,6 +165,22 @@ Get-NetConnectionProfile | Set-NetConnectionProfile -NetworkCategory Private
   ```powershell
   dotnet build installer\WebFilter.Installer.wixproj -c Release -p:ProductVersion=0.7.1
   ```
+
+## ה. מנוע ה-WFP (אוטומטי, מהמחשב שלך)
+
+בודקים את `WebFilter.Wfp.Native.dll` בלי MSI, ב-`lab-kids`, כ-`labadmin` (המסננים חלים על כל SID). הסקריפטים בונים, מעתיקים ומריצים, ובסוף מוחקים כל אובייקט WFP של WebFilter ובודקים שלא נשאר כלום. דורשים את רכיב ה-C++ של Visual Studio.
+
+```powershell
+.\tests\simulation\lab\Test-LabWfp.ps1 -VMName lab-kids
+```
+
+- [ ] מנוע (כולל אתחול של המכונה): כשרק `curl.exe` מותר — `powershell.exe` נחסם (10013) ב-IPv4 וב-IPv6 ו-`curl.exe` מתחבר; עותק של `curl.exe` נחסם; loopback ו-SYSTEM לא מושפעים; תוכנה שלא מותקנת מדולגת; AppContainer נחסם ומותר לפי שם החבילה; אחרי אתחול המסננים עדיין שם; `RemoveAll` לא משאיר כלום. התוצאות ב-`tests\simulation\lab\results\wfp-engine.json`.
+
+```powershell
+.\tests\simulation\lab\Test-LabWfpService.ps1 -VMName lab-kids
+```
+
+- [ ] השירות האמיתי עם `ManageNetwork=true` (כתהליך, לצד השירות המותקן): מסננים לכל חשבון שאינו מנהל ולא למנהלים, תוכנה שהותקנה מאוחר מקבלת מסנן, מסננים שנמחקו חוזרים, השהיה דרך ה-admin pipe מסירה את המסננים מיד, והמסננים נשארים כשהשירות נעצר. התוצאות ב-`tests\simulation\lab\results\wfp-service.json`.
 
 ## מה לשלוח לי
 

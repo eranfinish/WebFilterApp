@@ -265,7 +265,12 @@ public sealed class CleanupTests : IDisposable
         public bool Fails { get; init; }
         public bool RemovedAll { get; private set; }
         public IReadOnlyCollection<string> FilteredUsers() => _users;
-        public void SetUserPolicy(UserNetworkPolicy policy) => _users.Add(policy.UserSid);
+        public IReadOnlyList<SkippedApp> SetUserPolicy(UserNetworkPolicy policy)
+        {
+            _users.Add(policy.UserSid);
+            return [];
+        }
+
         public void RemoveUser(string userSid) => _users.Remove(userSid);
 
         public void RemoveAll()

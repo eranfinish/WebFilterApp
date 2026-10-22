@@ -1,6 +1,7 @@
 using WebFilter.Service;
 using WebFilter.Service.Accounts;
 using WebFilter.Service.Hub;
+using WebFilter.Service.Network;
 using WebFilter.Service.Pipes;
 using WebFilter.Service.Policies;
 using WebFilter.Service.Setup;
@@ -31,6 +32,7 @@ builder.Services.AddHostedService<AdminPipeServer>();
 // After AddWindowsService: as a Windows service its lifetime is replaced by one that also reports user logons.
 builder.Services.AddSessionEvents();
 builder.Services.AddHostedService<PolicyService>();
+builder.Services.AddHostedService<WfpService>();
 builder.Services.AddSingleton<HubServer>();
 builder.Services.AddHostedService(sp => sp.GetRequiredService<HubServer>());
 builder.Services.AddSingleton<HubSyncService>();

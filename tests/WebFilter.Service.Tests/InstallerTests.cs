@@ -90,6 +90,22 @@ public sealed class InstallerTests
     }
 
     [Fact]
+    public void The_native_wfp_engine_is_installed_next_to_the_service_and_built_with_the_msi()
+    {
+        // Authored as its own file rather than through the payload wildcard, so a build without the DLL fails.
+        var source = "$(var.PayloadDir)" + Network.NativeWfpEngine.LibraryName;
+        var file = Package.Descendants(Wix + "File").Single(f => Attr(f, "Source") == source);
+        Assert.Equal("INSTALLFOLDER", Attr(file.Parent!, "Directory"));
+        Assert.Contains(Package.Descendants(Wix + "Exclude"), e => Attr(e, "Files") == source);
+
+        // The .wixproj builds the .vcxproj with Visual Studio's MSBuild and copies the DLL into the payload.
+        var wixproj = XDocument.Load(Path.Combine(RepoRoot(), "installer", "WebFilter.Installer.wixproj"));
+        var project = wixproj.Descendants("WfpNativeProject").Single().Value.Replace("$(MSBuildProjectDirectory)", Path.Combine(RepoRoot(), "installer"), StringComparison.Ordinal);
+        Assert.True(File.Exists(project), project);
+        Assert.Contains(wixproj.Descendants("Copy"), c => Attr(c, "DestinationFolder") == "$(PayloadDir)" && Attr(c, "SourceFiles") == "$(WfpNativeDll)");
+    }
+
+    [Fact]
     public void Chrome_and_Edge_find_the_native_host_through_the_same_HKLM_values_the_service_maintains()
     {
         var keys = Single("Component", "NativeHostRegistration").Elements(Wix + "RegistryKey").ToList();
@@ -153,7 +169,7 @@ public sealed class InstallerTests
             Assert.Equal(0, ConfigureCommand.Run([.. args[2..], "--dir", dir]));
             var options = new ServiceOptions();
             new ConfigurationBuilder().AddJsonFile(Path.Combine(dir, InstallConfig.AppSettingsFileName)).Build().GetSection("WebFilter").Bind(options);
-            Assert.Equal(("agent", true, null, edge), (options.Role, options.ManageBrowserPolicies, options.ChromeExtensionId, options.EdgeExtensionId));
+            Assert.Equal(("agent", true, true, null, edge), (options.Role, options.ManageBrowserPolicies, options.ManageNetwork, options.ChromeExtensionId, options.EdgeExtensionId));
         }
         finally
         {
