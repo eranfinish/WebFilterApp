@@ -4,19 +4,27 @@ using Microsoft.Extensions.Options;
 namespace WebFilter.Service.Policies;
 
 /// <summary>
-/// Applies the browser policies when the service starts, after every settings change, and every
-/// <see cref="ServiceOptions.PolicyInterval"/> (which repairs tampering and covers users who logged on since).
+/// Applies the browser policies when the service starts, after every settings change, as soon as a user logs on (a user's
+/// policies can be written only while their registry hive is loaded, MVP-PLAN §5.2), and every
+/// <see cref="ServiceOptions.PolicyInterval"/> (which repairs tampering and covers hives loaded without a logon).
 /// Does nothing unless <see cref="ServiceOptions.ManageBrowserPolicies"/> is set. On an agent it waits for the first
 /// settings from the hub. A failure is logged and retried on the next pass; it never stops the service.
 /// </summary>
 [SupportedOSPlatform("windows")]
-public sealed class PolicyService(FamilyService family, IOptions<ServiceOptions> options, ILogger<PolicyService> log, IPolicyStore? store = null)
-    : BackgroundService
+public sealed class PolicyService(FamilyService family, SessionEvents sessions, IOptions<ServiceOptions> options, ILogger<PolicyService> log,
+    IPolicyStore? store = null) : BackgroundService
 {
     /// <summary>In <see cref="ServiceOptions.DataDirectory"/>: what <see cref="PolicyManager"/> wrote (read again by uninstall).</summary>
     public const string StateFileName = "managed-policies.json";
 
+    /// <summary>
+    /// Passes after the one a logon triggers, <see cref="ServiceOptions.LogonRecheck"/> apart, in case Windows reported the
+    /// logon before the user's hive was loaded.
+    /// </summary>
+    internal const int LogonRechecks = 3;
+
     private readonly SemaphoreSlim _wake = new(0);
+    private int _rechecks;
 
     /// <summary>Completed after each pass (for tests): true when policies were applied, false while waiting for settings.</summary>
     internal event Action<bool>? Passed;
@@ -28,7 +36,14 @@ public sealed class PolicyService(FamilyService family, IOptions<ServiceOptions>
         var manager = new PolicyManager(store ?? new RegistryPolicyStore(), Path.Combine(settings.DataDirectory, StateFileName));
         var ids = new ExtensionIds(settings.ChromeExtensionId, settings.EdgeExtensionId);
         void OnSettings(int _) => _wake.Release();
+        void OnLogon(int session)
+        {
+            log.LogInformation("A user logged on to session {Session}; applying browser policies", session);
+            Volatile.Write(ref _rechecks, LogonRechecks);
+            _wake.Release();
+        }
         family.SettingsChanged += OnSettings;
+        sessions.LoggedOn += OnLogon;
         var waitingLogged = false;
         try
         {
@@ -60,7 +75,13 @@ public sealed class PolicyService(FamilyService family, IOptions<ServiceOptions>
                     log.LogError(ex, "Could not apply browser policies; retrying on the next pass");
                 }
                 Passed?.Invoke(applied);
-                await _wake.WaitAsync(settings.PolicyInterval, stoppingToken);
+                var wait = settings.PolicyInterval;
+                if (Volatile.Read(ref _rechecks) > 0)
+                {
+                    Interlocked.Decrement(ref _rechecks);
+                    wait = settings.LogonRecheck;
+                }
+                await _wake.WaitAsync(wait, stoppingToken);
             }
         }
         catch (OperationCanceledException) when (stoppingToken.IsCancellationRequested)
@@ -69,6 +90,7 @@ public sealed class PolicyService(FamilyService family, IOptions<ServiceOptions>
         finally
         {
             family.SettingsChanged -= OnSettings;
+            sessions.LoggedOn -= OnLogon;
         }
     }
 }

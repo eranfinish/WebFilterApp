@@ -49,6 +49,9 @@ public sealed class ServiceOptions
     /// <summary>How often the registry policies are checked and repaired, besides every settings change.</summary>
     public TimeSpan PolicyInterval { get; set; } = TimeSpan.FromMinutes(1);
 
+    /// <summary>After a user logs on: the gap between the extra policy passes that cover a hive Windows loads late.</summary>
+    public TimeSpan LogonRecheck { get; set; } = TimeSpan.FromSeconds(5);
+
     /// <summary>Store ids of the published extension (after spike S1). Without them no force-install policy is written.</summary>
     public string? ChromeExtensionId { get; set; }
 

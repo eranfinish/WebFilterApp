@@ -28,6 +28,8 @@ builder.Services.AddSingleton<IMachineProbe, WindowsMachineProbe>();
 builder.Services.AddHostedService<TickService>();
 builder.Services.AddHostedService<AgentPipeServer>();
 builder.Services.AddHostedService<AdminPipeServer>();
+// After AddWindowsService: as a Windows service its lifetime is replaced by one that also reports user logons.
+builder.Services.AddSessionEvents();
 builder.Services.AddHostedService<PolicyService>();
 builder.Services.AddSingleton<HubServer>();
 builder.Services.AddHostedService(sp => sp.GetRequiredService<HubServer>());
