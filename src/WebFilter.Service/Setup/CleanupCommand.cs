@@ -1,4 +1,5 @@
 using WebFilter.Service.Hub;
+using WebFilter.Service.Network;
 using WebFilter.Service.Policies;
 
 namespace WebFilter.Service.Setup;
@@ -16,8 +17,8 @@ internal static class CleanupCommand
         var log = Console.Out;
         var options = new ServiceOptions();
         using var hives = new RegistryUserHives(log);
-        // The native WFP engine (WebFilter.Wfp.Native) is not built yet, so there are no filters to remove; pass it here once it exists.
-        var cleanup = new MachineCleanup(new RegistryPolicyStore(), hives, wfp: null, new HubUnregistration(options.DataDirectory), log);
+        // WebFilter.Wfp.Native.dll is installed next to this executable; removing what does not exist succeeds.
+        var cleanup = new MachineCleanup(new RegistryPolicyStore(), hives, new NativeWfpEngine(), new HubUnregistration(options.DataDirectory), log);
         var result = cleanup.Run(ServiceOptions.MachineDataRoot, Path.Combine(options.DataDirectory, PolicyService.StateFileName));
         return result.Complete ? 0 : 1;
     }

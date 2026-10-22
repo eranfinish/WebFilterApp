@@ -52,6 +52,14 @@ public sealed class ServiceOptions
     /// <summary>After a user logs on: the gap between the extra policy passes that cover a hive Windows loads late.</summary>
     public TimeSpan LogonRecheck { get; set; } = TimeSpan.FromSeconds(5);
 
+    /// <summary>
+    /// Keep the WFP filters of MVP-PLAN §5.3 (which programs each restricted account may reach the network with) through
+    /// <c>WebFilter.Wfp.Native.dll</c>, after every settings change and every <see cref="TickInterval"/>. True in the
+    /// installed service (LocalSystem); false for development runs, which must not change the machine's network policy.
+    /// Turning it off leaves the persistent filters in place; uninstall (<c>cleanup</c>) removes them.
+    /// </summary>
+    public bool ManageNetwork { get; set; }
+
     /// <summary>Store ids of the published extension (after spike S1). Without them no force-install policy is written.</summary>
     public string? ChromeExtensionId { get; set; }
 
