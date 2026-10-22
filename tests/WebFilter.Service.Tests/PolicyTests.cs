@@ -111,7 +111,7 @@ public sealed class PolicyTests : IDisposable
         Assert.Equal(0, _manager.Apply(Desired()).Written);
     }
 
-    /// <summary>PROTECTION-SPEC §5: pop-ups, abusive experiences, intrusive ads, proxies and (Edge) tracking, per restricted account.</summary>
+    /// <summary>PROTECTION-SPEC §5: pop-ups, abusive experiences, intrusive ads, proxies and (Edge) tracking and the news feed, per restricted account.</summary>
     [Fact]
     public void Restricted_and_unlinked_accounts_get_the_protection_policies_adults_and_admins_do_not()
     {
@@ -127,6 +127,7 @@ public sealed class PolicyTests : IDisposable
             }
             Assert.Equal(3, _store.User(sid, Edge, "TrackingPrevention"));
             Assert.Null(_store.User(sid, Chrome, "TrackingPrevention"));
+            Assert.Equal(0, _store.User(sid, Edge, "NewTabPageContentEnabled"));
         }
         Assert.Empty(_store.ValuesOf(Dana));
         Assert.Empty(_store.ValuesOf(Savta));

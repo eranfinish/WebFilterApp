@@ -18,9 +18,9 @@ public sealed record ExtensionIds(string? ChromeId, string? EdgeId)
 /// <summary>
 /// The browser policies of MVP-PLAN §5 as data: machine-wide (force-install, no user-level native hosts, native host
 /// registration) and per restricted account (incognito/guest/profiles/dev mode/DevTools/extensions/SafeSearch/YouTube,
-/// and PROTECTION-SPEC §5: pop-ups, abusive experiences, intrusive ads, no proxy, Edge strict tracking prevention; §11:
-/// Edge's sidebar and Chrome's Gemini off when ai-chat is blocked), plus the Windows policy of PROTECTION-SPEC §2 (no Bing
-/// results in Start search unless the family allows web search there).
+/// and PROTECTION-SPEC §5: pop-ups, abusive experiences, intrusive ads, no proxy, Edge strict tracking prevention and no
+/// news feed on Edge's new tab page; §11: Edge's sidebar and Chrome's Gemini off when ai-chat is blocked), plus the Windows
+/// policy of PROTECTION-SPEC §2 (no Bing results in Start search unless the family allows web search there).
 /// </summary>
 public static class BrowserPolicies
 {
@@ -70,6 +70,8 @@ public static class BrowserPolicies
             }
             User(Edge, "ForceBingSafeSearch", member?.Role == Role.Teen ? 1 : 2);
             User(Edge, "TrackingPrevention", 3);
+            // No Microsoft News feed (celebrities, politics, ads) on Edge's new tab page; the search box and quick links stay.
+            User(Edge, "NewTabPageContentEnabled", 0);
             // PROTECTION-SPEC §11: when the member's categories block ai-chat (unlinked accounts: nothing is allowed), the
             // browsers' own AI goes too. Copilot lives in Edge's sidebar (EdgeCopilotEnabled is for Edge on mobile only, and
             // Microsoft365CopilotChatIconEnabled for work profiles only), so the sidebar is hidden; Chrome has a Gemini switch.
