@@ -83,6 +83,11 @@ Get-NetConnectionProfile | Set-NetConnectionProfile -NetworkCategory Private
   ועצירה רגילה נשארת "נקייה": אחרי `Stop-Service WebFilter` השירות נשאר `Stopped` ואין אירוע 7031 חדש. אחר כך `Start-Service WebFilter`.
 
 - [ ] קיצור הדרך "WebFilter Admin" בתפריט התחל פותח את ממשק הניהול (UAC). מסך "מכשירים" → קוד צימוד.
+- [ ] ההתראות להורים (PROTECTION-SPEC §10): הערך `WebFilter Notifier` תחת `Run` מצביע על `"C:\Program Files\WebFilter\WebFilter.Notifier.exe"`. אחרי התחברות מחדש כ-`labadmin` — סמל המגן של WebFilter באזור ההתראות, ובתפריט שלו "פתח את ניהול המשפחה" ו"יציאה". אחרי שהסוכן מצומד: בקשת גישה מ-`noa` ב-`lab-kids` מציגה כאן תוך כ-30 שניות בלון "בקשה חדשה", ולחיצה עליו פותחת את ממשק הניהול (UAC). בהתחברות של חשבון רגיל ל-`lab-hub` אין תהליך `WebFilter.Notifier` (הוא יוצא מיד, ב-`%LOCALAPPDATA%\WebFilter\notifier.log` שלו: `not an administrator`).
+
+  ```powershell
+  reg query HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Run /v "WebFilter Notifier"; Get-Process WebFilter.Notifier -IncludeUserName -ErrorAction SilentlyContinue
+  ```
 
 ## ב. סוכן (`lab-kids`)
 
@@ -93,7 +98,7 @@ Get-NetConnectionProfile | Set-NetConnectionProfile -NetworkCategory Private
   ```
 
 - [ ] ב-log מופיע `Paired lab-kids with hub`; במסך "מכשירים" ב-Hub מופיע `lab-kids`.
-- [ ] `appsettings.json` עם `"Role": "agent"` ו-`"ManageNetwork": true`; **אין** כלל חומת אש "WebFilter Hub".
+- [ ] `appsettings.json` עם `"Role": "agent"` ו-`"ManageNetwork": true`; **אין** כלל חומת אש "WebFilter Hub", ו**אין** ערך `WebFilter Notifier` תחת `HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Run`.
 - [ ] תיקון (`msiexec /fa C:\Lab\WebFilter.msi /qn`) — התפקיד נשאר `agent` והצימוד נשמר.
 - [ ] קוד שגוי (מנקודת `clean`): ההתקנה מצליחה, ב-log מופיע `Pairing failed`, וצימוד ידני מ-PowerShell כמנהל עובד:
 
@@ -143,10 +148,10 @@ Get-NetConnectionProfile | Set-NetConnectionProfile -NetworkCategory Private
   ```
 
 - [ ] Hub כבוי (מנקודת `clean`: Hub + סוכן מותקנים ומצומדים): מכבים את ה-Hub (במחשב שלך `Stop-VM -Name lab-hub`) ומסירים את הסוכן. ההסרה מסתיימת בהצלחה, ולכל היותר כ-5 שניות יותר מהרגיל; ב-log `Hub: this computer could not be unregistered (...). It stays on the hub's Devices screen until a parent revokes it there.` אחרי `Start-VM -Name lab-hub` — `lab-kids` עדיין "פעיל" במסך המכשירים, וביטול צימוד ידני שם עובד.
-- [ ] לא נשאר כלום: השירות, `C:\Program Files\WebFilter`, `C:\ProgramData\WebFilter`, `HKLM\SOFTWARE\WebFilter`, מפתחות ה-host, ערכי WebFilter תחת `HKLM\SOFTWARE\Policies\{Microsoft\Edge,Google\Chrome}`, `HKLM\SYSTEM\CurrentControlSet\Control\SafeBoot\Network\WebFilter`, כלל חומת האש:
+- [ ] לא נשאר כלום: השירות, `C:\Program Files\WebFilter`, `C:\ProgramData\WebFilter`, `HKLM\SOFTWARE\WebFilter`, מפתחות ה-host, ערכי WebFilter תחת `HKLM\SOFTWARE\Policies\{Microsoft\Edge,Google\Chrome}`, `HKLM\SYSTEM\CurrentControlSet\Control\SafeBoot\Network\WebFilter`, כלל חומת האש, וב-Hub גם ערך ה-`Run` של ההתראות ותהליך `WebFilter.Notifier` (ההסרה סוגרת אותו גם כש-`labadmin` מחובר, בלי לבקש אתחול):
 
   ```powershell
-  Get-Service WebFilter -ErrorAction SilentlyContinue; Test-Path "C:\Program Files\WebFilter", C:\ProgramData\WebFilter, HKLM:\SOFTWARE\WebFilter; reg query HKLM\SOFTWARE\Policies\Microsoft\Edge; Get-NetFirewallRule -DisplayName "WebFilter Hub" -ErrorAction SilentlyContinue
+  Get-Service WebFilter -ErrorAction SilentlyContinue; Test-Path "C:\Program Files\WebFilter", C:\ProgramData\WebFilter, HKLM:\SOFTWARE\WebFilter; reg query HKLM\SOFTWARE\Policies\Microsoft\Edge; Get-NetFirewallRule -DisplayName "WebFilter Hub" -ErrorAction SilentlyContinue; reg query HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Run /v "WebFilter Notifier"; Get-Process WebFilter.Notifier -ErrorAction SilentlyContinue
   ```
 
 - [ ] המדיניות של `noa` (לא מחוברת) נמחקה, ואין מפתח `WebFilter.Cleanup.*` שנשאר טעון:

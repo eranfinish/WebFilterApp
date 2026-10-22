@@ -4,7 +4,7 @@
 
       dotnet build installer/WebFilter.Installer.wixproj -c Release
 
-    Publishes the service, the native host and the admin app (Release, self-contained, win-x64) into one payload folder,
+    Publishes the service, the native host, the admin app and the notifier (Release, self-contained, win-x64) into one payload folder,
     adds the WFP engine (C++, built with Visual Studio's MSBuild — see BuildWfpNative), then builds
     bin/x64/<Configuration>/he-IL/WebFilter.msi and en-US/WebFilter.msi. Not in WebFilter.slnx, so `dotnet test` does
     not build an MSI.
@@ -54,6 +54,7 @@
     <PayloadProject Include="..\src\WebFilter.Service\WebFilter.Service.csproj" />
     <PayloadProject Include="..\src\WebFilter.NativeHost\WebFilter.NativeHost.csproj" ExtraArgs="-p:PublishAot=$(NativeHostAot)" />
     <PayloadProject Include="..\src\WebFilter.Admin\WebFilter.Admin.csproj" />
+    <PayloadProject Include="..\src\WebFilter.Notifier\WebFilter.Notifier.csproj" />
   </ItemGroup>
 
   <!--

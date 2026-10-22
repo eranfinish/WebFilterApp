@@ -147,6 +147,38 @@ public sealed class InstallerTests
     }
 
     [Fact]
+    public void The_notifier_is_installed_and_starts_at_logon_for_every_user_on_the_hub_only()
+    {
+        // PROTECTION-SPEC §10. Its own file (not through the payload wildcard), so the Run value can name it.
+        var source = "$(var.PayloadDir)WebFilter.Notifier.exe";
+        var file = Package.Descendants(Wix + "File").Single(f => Attr(f, "Source") == source);
+        Assert.Equal(("NotifierExe", "INSTALLFOLDER"), (Attr(file, "Id"), Attr(file.Parent!, "Directory")));
+        Assert.Contains(Package.Descendants(Wix + "Exclude"), e => Attr(e, "Files") == source);
+
+        var autostart = Single("Component", "NotifierAutostart");
+        Assert.Equal(Attr(Single("Component", "HubFirewall"), "Condition"), Attr(autostart, "Condition"));
+        Assert.Equal("ROLE~=\"hub\"", Attr(autostart, "Condition"));
+        var run = autostart.Element(Wix + "RegistryValue")!;
+        Assert.Equal(("HKLM", @"SOFTWARE\Microsoft\Windows\CurrentVersion\Run", "string", "\"[INSTALLFOLDER]WebFilter.Notifier.exe\""),
+            (Attr(run, "Root"), Attr(run, "Key"), Attr(run, "Type"), Attr(run, "Value")));
+        var feature = Package.Descendants(Wix + "Feature").Single();
+        Assert.All(new[] { "Notifier", "NotifierAutostart" }, id => Assert.Contains(feature.Elements(Wix + "ComponentRef"), r => Attr(r, "Id") == id));
+
+        // A running notifier does not keep its files from being removed or replaced.
+        var close = Package.Descendants(Util + "CloseApplication").Single();
+        Assert.Equal(("WebFilter.Notifier.exe", "no"), (Attr(close, "Target"), Attr(close, "RebootPrompt")));
+        Assert.NotNull(Attr(close, "TerminateProcess"));
+
+        // The .wixproj publishes it into the payload, and the project builds an exe of that name.
+        var wixproj = XDocument.Load(Path.Combine(RepoRoot(), "installer", "WebFilter.Installer.wixproj"));
+        var project = wixproj.Descendants("PayloadProject").Select(p => Attr(p, "Include")!).Single(p => p.Contains("Notifier", StringComparison.Ordinal));
+        var csproj = XDocument.Load(Path.Combine(RepoRoot(), "installer", project));
+        Assert.Equal("WebFilter.Notifier.csproj", Path.GetFileName(project));
+        Assert.Empty(csproj.Descendants("AssemblyName"));
+        Assert.Equal("WinExe", csproj.Descendants("OutputType").Single().Value);
+    }
+
+    [Fact]
     public void Configure_runs_before_the_service_starts_and_its_command_line_works()
     {
         var scheduled = Scheduled("ConfigureService");
