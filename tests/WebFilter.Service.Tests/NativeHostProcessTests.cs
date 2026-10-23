@@ -99,6 +99,11 @@ public sealed class NativeHostProcessTests : IAsyncLifetime
             Assert.Equal(hello.User.IsAdmin ? "unrestricted" : "allowlist", hello.Mode);
             var access = Assert.IsType<RequestAccessResponse>(await AskAsync(host, new RequestAccessRequest("url", "https://x.example/", null, null)));
             Assert.Equal("unavailable", access.Result);
+            // PROTECTION-SPEC §13: the parents' baseline comes from the service only. While it is down a parent is
+            // unrestricted as before — no rules, no features, no mode in the rules reply — never blocked more.
+            var rules = Assert.IsType<RulesResponse>(await AskAsync(host, new GetRulesRequest { Id = "3" }));
+            if (hello.User.IsAdmin)
+                Assert.Equal((0, (AgentFeatures?)null, (string?)null, "unrestricted"), (rules.DynamicRules.Count, rules.Features, rules.Mode, rules.YouTube.Mode));
         }
         finally
         {

@@ -241,6 +241,34 @@ public sealed class PolicyServiceTests : IDisposable
         Assert.Equal((TamperKinds.PolicyRepaired, "noa", "pc-kids"), (tamper.Detail, tamper.MemberId, tamper.DeviceId));
     }
 
+    /// <summary>
+    /// PROTECTION-SPEC §13: a parent who removes the baseline's SafeSearch from their own account gets it back (the switch
+    /// is in the admin app's settings), and nobody is told — it is not a child working around the filter.
+    /// </summary>
+    [Fact]
+    public async Task A_parents_own_SafeSearch_is_restored_without_a_tamper_report()
+    {
+        const string Dana = "S-1-5-21-2000-1003", Savta = "S-1-5-21-2000-1004";
+        var options = Settings(policyInterval: TimeSpan.FromHours(1));
+        using var family = Synced(options);
+        var store = new MemoryPolicyStore();
+        using var service = Policies(family, options, store);
+        var passes = new Passes(service);
+
+        await service.StartAsync(CancellationToken.None);
+        await passes.Next();
+        Assert.Equal(1, store.User(Dana, Edge, "ForceGoogleSafeSearch"));
+        store.Delete(PolicyHive.User, Dana, Edge, "ForceGoogleSafeSearch");
+        store.Set(PolicyHive.User, Savta, Edge, "ForceBingSafeSearch", 0);
+        _sessions.OnSessionChange(SessionChangeReason.SessionLogon, 2);
+        await passes.Next();
+        await service.StopAsync(CancellationToken.None);
+
+        Assert.Equal(1, store.User(Dana, Edge, "ForceGoogleSafeSearch"));
+        Assert.Equal(1, store.User(Savta, Edge, "ForceBingSafeSearch"));
+        Assert.Empty(family.WithAgent((agent, _) => agent.LocalEvents.Where(e => e.Type == EventType.Tamper).ToList()));
+    }
+
     [Fact]
     public async Task A_pass_that_fails_is_retried_at_the_next_logon_and_does_not_end_the_component()
     {

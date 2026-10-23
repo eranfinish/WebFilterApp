@@ -55,9 +55,14 @@ public sealed class PolicyService(FamilyService family, SessionEvents sessions, 
                 {
                     // An agent has no family settings until its first sync with the hub (a fresh install, or a hub that is
                     // off or unreachable): write nothing yet rather than act on an empty family.
-                    var desired = family.WithAgent((agent, _) => agent.SnapshotVersion is null
-                        ? null
-                        : BrowserPolicies.Desired(agent.View().Config, agent.DeviceId, ids, settings.NativeHostManifestPath));
+                    var (desired, parents) = family.WithAgent<(IReadOnlyList<PolicyValue>?, HashSet<string>?)>((agent, _) =>
+                    {
+                        if (agent.SnapshotVersion is null) return (null, null);
+                        var config = agent.View().Config;
+                        var accounts = config.Devices.FirstOrDefault(d => d.Id == agent.DeviceId)?.Accounts ?? [];
+                        return (BrowserPolicies.Desired(config, agent.DeviceId, ids, settings.NativeHostManifestPath),
+                            accounts.Where(a => BrowserPolicies.IsParentAccount(config, a)).Select(a => a.AccountId).ToHashSet(StringComparer.OrdinalIgnoreCase));
+                    });
                     if (desired is null)
                     {
                         if (!waitingLogged) log.LogInformation("Browser policies wait for the first settings from the hub");
@@ -67,7 +72,8 @@ public sealed class PolicyService(FamilyService family, SessionEvents sessions, 
                     {
                         var result = manager.Apply(desired);
                         foreach (var value in result.Repaired) log.LogWarning("Browser policy {Value} had been changed; restored", value);
-                        foreach (var user in result.RepairedUsers) family.ReportTamper(user, TamperKinds.PolicyRepaired);
+                        // A parent's own baseline SafeSearch (PROTECTION-SPEC §13) is restored without telling anyone.
+                        foreach (var user in result.RepairedUsers.Where(u => u is null || !parents!.Contains(u))) family.ReportTamper(user, TamperKinds.PolicyRepaired);
                         if (result.Written + result.Deleted > 0) log.LogInformation("Browser policies: {Written} written, {Deleted} removed", result.Written, result.Deleted);
                         applied = true;
                     }

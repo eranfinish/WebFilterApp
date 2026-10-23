@@ -87,6 +87,21 @@ public sealed class StorageTests : IDisposable
         Assert.All(older.Members, m => Assert.False(m.BlockImageSearch || m.JumpGuard || m.BlockYouTubeShorts || m.LogSearches || m.BlockAds));
     }
 
+    /// <summary>PROTECTION-SPEC §13 through the bundle: the baseline switches round-trip; an older bundle has them all on.</summary>
+    [Fact]
+    public void The_baseline_round_trips_and_is_all_on_when_missing()
+    {
+        var config = PolicyTests.WithBaseline(Fixture(), new BaselineProtection(BlockAdult: false, JumpGuard: true, BlockAds: false, SafeSearch: true));
+        var bundle = BundleMapper.ToBundle(config, 3);
+        Assert.Equal(new BaselineDto(BlockAdult: false, JumpGuard: true, BlockAds: false, SafeSearch: true), bundle.Baseline);
+
+        var back = BundleMapper.ToConfig(FamilyBundleJson.Deserialize(FamilyBundleJson.Serialize(bundle)));
+        Assert.Equal(config.Baseline, back.Baseline);
+        Assert.Equal(config.Baseline, back.Clone().Baseline);
+        Assert.Equal(BaselineProtection.Default, Fixture().Baseline);
+        Assert.Equal(new BaselineProtection(true, true, true, true), Fixture().Baseline);
+    }
+
     /// <summary>A guest answer is carried like the link: through the bundle and a restart; a linked account is never a guest.</summary>
     [Fact]
     public void An_accounts_guest_flag_round_trips_survives_a_restart_and_is_dropped_once_linked()
