@@ -7,7 +7,7 @@
 
 | חנות | מזהה | מצב |
 |------|------|-----|
-| Chrome Web Store | `lkbhmgdhaalikcmpmefffohinafbjfgh` | הוגש 2026-10-22, בבדיקה |
+| Chrome Web Store | `lkbhmgdhaalikcmpmefffohinafbjfgh` | אושר ופורסם (Unlisted) עד 2026-10-23. S1 ב-Chrome עבר במעבדה — ראו MVP-PLAN, S1 |
 | Edge Add-ons | `labgagpndiahmbeohjikogfdigebeidl` (CRX ID — זה המזהה במדיניות) | פורסם 2026-10-23 (Hidden). S1 ב-Edge עבר במעבדה — ראו MVP-PLAN, S1 |
 
 Edge: ‏Store ID `0RDCKC8CFL4G`, ‏Product ID `9c932b95-94d3-4114-b66a-4c27e152feec`. החשבון בשתי החנויות: `finish.software@gmail.com` (Chrome: non-trader; Edge: Individual).
