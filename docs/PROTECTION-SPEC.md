@@ -124,9 +124,25 @@ The admin app's activity page shows searches (filter "חיפושים").
   Kinds: `request` (new access request), `tamper` (filters or policies repaired, extension silent while a browser runs
   in a child's session, the service found it had stopped uncleanly), `device` (a paired computer stopped reporting for a
   day).
-- A small notifier app `src/WebFilter.Notifier` (asInvoker, tray icon with balloon notifications), started at logon on
-  the hub computer for every user by the installer, exits at once for non-admin users, polls the pipe, and opens the
-  admin app (UAC) when clicked.
+- A small notifier app `src/WebFilter.Notifier` (asInvoker, tray icon with "פתח את ניהול המשפחה" and "יציאה"), started
+  at logon on the hub computer for every user by the installer, exits at once for non-admin users, polls the pipe, and
+  shows what arrives as Windows toast notifications: one toast per poll (a summary when it brings several), Hebrew
+  wording that names the computer, never the child.
+  - Toasts, not tray balloons: a balloon is gone after a few seconds and is not kept in the notification center. The
+    notifier uses `Microsoft.Toolkit.Uwp.Notifications` 7.1.3 (MIT; `ToastContentBuilder`, `ToastNotificationManagerCompat`)
+    as an app without a package, built for `net10.0-windows10.0.17763.0`. Its app id is `WebFilter.Notifier`, shown as
+    "WebFilter" with the shield icon. It registers in the user's HKCU (the app id with name, icon and a COM activator,
+    and that activator's `LocalServer32`) the first time the service answers it as a parent, so children's accounts
+    register nothing.
+  - Every toast stays in the notification center (Win+N) until opened or cleared. Tamper (alone or in a summary) uses
+    the reminder scenario and stays on the screen until the parent clicks "פתח את ניהול המשפחה" or "סגור" (a system
+    dismissal); requests and silent computers show for the normal few seconds.
+  - A click on the toast or on "פתח את ניהול המשפחה" opens the admin app through the shell (UAC); the notifier never
+    elevates. A running notifier gets the click through COM. With none running (after "יציאה", or after a reboot
+    before the Run value starts it) Windows starts the notifier with `-ToastActivated`; it opens the admin app and stays
+    as the session's notifier. If one runs but has not registered yet, the new copy opens the admin app and exits.
+  - Uninstall on the hub runs `WebFilter.Notifier.exe --unregister` as the uninstalling user (their toasts and
+    registration). Other users' keys stay: harmless, they only name the deleted exe (`installer/README.md`).
 - Tamper sources that do not exist yet are added where cheap (the WFP and policy services already report repairs).
 
 ## 11. Additions after the lists work (2026-10-22)
