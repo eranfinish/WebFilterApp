@@ -87,6 +87,33 @@ public sealed class StorageTests : IDisposable
         Assert.All(older.Members, m => Assert.False(m.BlockImageSearch || m.JumpGuard || m.BlockYouTubeShorts || m.LogSearches || m.BlockAds));
     }
 
+    /// <summary>A guest answer is carried like the link: through the bundle and a restart; a linked account is never a guest.</summary>
+    [Fact]
+    public void An_accounts_guest_flag_round_trips_survives_a_restart_and_is_dropped_once_linked()
+    {
+        var config = Fixture();
+        var kids = config.Devices.FindIndex(d => d.Id == "pc-kids");
+        config.Devices[kids] = config.Devices[kids] with { Accounts = [.. config.Devices[kids].Accounts.Select(a => a.Name == "visitor" ? a with { Guest = true } : a)] };
+
+        var bundle = BundleMapper.ToBundle(config, 3);
+        Assert.True(bundle.Devices.Single(d => d.Id == "pc-kids").Accounts.Single(a => a.Name == "visitor").Guest);
+        var back = BundleMapper.ToConfig(FamilyBundleJson.Deserialize(FamilyBundleJson.Serialize(bundle)));
+        Assert.Equal(config.Devices.SelectMany(d => d.Accounts), back.Devices.SelectMany(d => d.Accounts));
+
+        var store = new HubStore(Db("hub.db", "hub"));
+        store.Save(new HubCore(config).Export(), Now);
+        var restored = HubCore.Restore(new HubStore(Db("hub.db", "hub")).Load()!);
+        Assert.True(restored.Config.Device("pc-kids").Accounts.Single(a => a.Name == "visitor").Guest);
+
+        // A bundle that links the account and still says guest (an older admin app, say): the link wins.
+        var linked = bundle with
+        {
+            Devices = [.. bundle.Devices.Select(d => d.Id != "pc-kids" ? d : d with { Accounts = [.. d.Accounts.Select(a => a.Name == "visitor" ? a with { Member = "yoav" } : a)] })],
+        };
+        var visitor = BundleMapper.ToConfig(linked).Device("pc-kids").Accounts.Single(a => a.Name == "visitor");
+        Assert.Equal(("yoav", false), (visitor.MemberId, visitor.Guest));
+    }
+
     [Fact]
     public void Search_and_override_events_survive_a_restart_on_the_hub_and_in_the_agent_outbox()
     {

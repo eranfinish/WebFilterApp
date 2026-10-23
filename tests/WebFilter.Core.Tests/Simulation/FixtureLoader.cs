@@ -82,7 +82,8 @@ internal static class FixtureLoader
 
     private static Device ParseDevice(JsonNode? n) => new(
         Str(n, "id"), Str(n, "os"), Str(n, "role"),
-        Array(n, "accounts").Select(a => new DeviceAccount(Str(a, "accountId"), Str(a, "name"), OptStr(a, "member"), a!["isAdmin"]!.GetValue<bool>())).ToList());
+        Array(n, "accounts").Select(a => new DeviceAccount(Str(a, "accountId"), Str(a, "name"), OptStr(a, "member"), a!["isAdmin"]!.GetValue<bool>(),
+            a["guest"]?.GetValue<bool>() ?? false)).ToList());
 
     public static Rule ParseRule(JsonNode? n, TimeZoneInfo zone) => new(
         Str(n, "id"), OptStr(n, "member"), Str(n, "pattern"), ParsePatternType(Str(n, "type")),

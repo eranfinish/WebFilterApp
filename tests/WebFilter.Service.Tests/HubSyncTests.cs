@@ -304,6 +304,50 @@ public sealed class HubSyncTests : IAsyncLifetime
         await Eventually(() => _agent.WithAgent((agent, _) => agent.AccountOf("yoav").IsAdmin), "the agent got the new flag");
     }
 
+    /// <summary>
+    /// The parents keep an account as a guest from the admin app (ReplaceSettings, as the app saves): the answer survives
+    /// the computer reporting its accounts again and reaches the agent; linking the account later drops it.
+    /// </summary>
+    [Fact]
+    public async Task A_guest_answer_survives_a_new_account_report_and_the_sync_and_linking_drops_it()
+    {
+        var accounts = new FakeLocalAccounts(
+            new DeviceAccount("S-1-5-21-3000-1001", "yoav", null, IsAdmin: false),
+            new DeviceAccount("S-1-5-21-3000-1002", "guest", null, IsAdmin: false));
+        await PairAndSyncAsync(accounts);
+        await Eventually(() => HubAccounts("laptop-yoav").Count == 2, "accounts reported");
+        var admin = new Pipes.AdminPipeServer(_hub, Options.Create(_hub.Options), _clock, NullLogger<Pipes.AdminPipeServer>.Instance);
+
+        Replace(admin, a => a.Name == "guest" ? a with { Guest = true } : a);
+        Assert.True(HubAccounts("laptop-yoav").Single(a => a.Name == "guest").Guest);
+
+        // The computer reports again (the account was renamed, yoav's became an administrator): the answer stays.
+        accounts.Set(new DeviceAccount("S-1-5-21-3000-1001", "yoav", null, IsAdmin: true), new DeviceAccount("S-1-5-21-3000-1002", "visitor", null, IsAdmin: false));
+        _sync.Wake();
+        await Eventually(() => HubAccounts("laptop-yoav").Single(a => a.AccountId == "S-1-5-21-3000-1002").Name == "visitor", "renamed account reported");
+        Assert.Equal(new DeviceAccount("S-1-5-21-3000-1002", "visitor", null, false, Guest: true), HubAccounts("laptop-yoav").Single(a => a.Name == "visitor"));
+        await Eventually(() => _agent.AgentSnapshotVersion == HubVersion, "settings synced");
+        Assert.True(_agent.WithAgent((agent, _) => agent.AccountNamed("visitor").Guest));
+        var blocked = _agent.WithAgent((agent, now) => agent.DecideUrl(agent.AccountNamed("visitor"), "https://www.wikipedia.org/", now));
+        Assert.Equal(Core.Decisions.ReasonCode.BlockedNotInAllowlist, blocked.Reason);
+
+        // Linked to a member later: no longer a guest, even though the bundle sent back still says so.
+        Replace(admin, a => a.Name == "visitor" ? a with { Member = "yoav" } : a);
+        var linked = HubAccounts("laptop-yoav").Single(a => a.Name == "visitor");
+        Assert.Equal(("yoav", false), (linked.MemberId, linked.Guest));
+    }
+
+    /// <summary>Reads the settings, changes laptop-yoav's accounts and replaces them with <c>ifVersion</c>, as the admin app does.</summary>
+    private static void Replace(Pipes.AdminPipeServer admin, Func<Contracts.Hub.AccountDto, Contracts.Hub.AccountDto> change)
+    {
+        var settings = Assert.IsType<Contracts.Admin.SettingsResult>(admin.Handle(new Contracts.Admin.GetSettings(), "parent")).Settings;
+        var changed = settings with
+        {
+            Devices = [.. settings.Devices.Select(d => d.Id != "laptop-yoav" ? d : d with { Accounts = [.. d.Accounts.Select(change)] })],
+        };
+        Assert.IsType<Contracts.Admin.AdminOk>(admin.Handle(new Contracts.Admin.ReplaceSettings(changed, settings.Version), "parent"));
+    }
+
     [Fact]
     public async Task The_hub_reports_its_own_accounts()
     {

@@ -37,7 +37,12 @@ public sealed record WindowsFeatures(bool NotificationsAndSync = true, bool OneD
 }
 
 /// <summary>A Windows (or Android) account on a device. <see cref="MemberId"/> is null until a parent links it.</summary>
-public sealed record DeviceAccount(string AccountId, string Name, string? MemberId, bool IsAdmin);
+/// <param name="Guest">
+/// The parents confirmed that this account stays unlinked (a guest). Decisions do not read it: a guest is restricted
+/// like every unlinked account. It only records the parents' answer, so the admin app stops asking; a report of the
+/// device's accounts keeps it, and linking the account drops it.
+/// </param>
+public sealed record DeviceAccount(string AccountId, string Name, string? MemberId, bool IsAdmin, bool Guest = false);
 
 public sealed record Device(string Id, string Os, string Role, IReadOnlyList<DeviceAccount> Accounts);
 

@@ -304,7 +304,7 @@
 
 **קודי סיבה** (משותפים לכל הרכיבים ולסימולציות): `allowed_unrestricted`, `allowed_paused`, `allowed_always`, `allowed_rule`, `allowed_category`, `allowed_default`, `allowed_homework`, `allowed_youtube_channel`, `allowed_browser`, `blocked_rule`, `blocked_category`, `blocked_not_in_allowlist`, `blocked_time_window`, `blocked_daily_limit`, `blocked_homework`, `blocked_ip_literal`, `blocked_youtube_channel`, `blocked_youtube_unknown`, `blocked_youtube_off`, `blocked_service_unavailable`, `blocked_app_network`, `redirect_youtube_home`, `blocked_image_search`, `blocked_jump`, `blocked_youtube_shorts` (שני האחרונים — החלטה של התוסף בלבד; השירות שומר את הסיבה שהתוסף דיווח).
 
-**חשבון לא מקושר:** חשבון Windows לא-מנהל שעדיין לא קושר לבן משפחה מקבל רק "מותר תמיד", עד שההורה מקשר אותו.
+**חשבון לא מקושר:** חשבון Windows לא-מנהל שעדיין לא קושר לבן משפחה מקבל רק "מותר תמיד", עד שההורה מקשר אותו. ההורה יכול גם לענות "להשאיר חסום (אורח)" (`guest` בחשבון): הסינון לא משתנה, רק ממשק הניהול מפסיק לשאול עליו.
 
 הסמנטיקה המדויקת (גבולות, ספירת דקות, הארכות, ניתוק Hub) מוגדרת ב-[tests/simulation/README.md](../tests/simulation/README.md) ונבדקת בתרחישים.
 
@@ -460,7 +460,7 @@ Retention של `events`: 90 יום כברירת מחדל — מוחל ב-Hub ב�
 אותה מסגרת. CRUD לכל ישות + `getDashboard`, `extendTime`, `pause`, `startHomework`, `getEvents`, `decideAccessRequest {id, decision, scope?, minutes?\|today\|always}`, `createPairingCode`, `getDevices`, `getDiagnostics`. כל שינוי נרשם כ-`admin_change` עם שם המנהל (מה-token).
 
 - `replaceSettings {settings, ifVersion?}` — מחליף את כל ההגדרות (אשף, מסך בן משפחה, ייבוא). עם `ifVersion`: אם ההגדרות השתנו מאז שנקראו (אישור בקשה, צימוד מחשב, ספירת שימוש) התשובה `conflict` ולא משתנה דבר, והממשק קורא שוב ומחיל את השינוי שלו מחדש — כך עריכה של בן משפחה אחד לא מוחקת שינוי שנעשה בינתיים. השירות בודק את ההגדרות כולן לפני שהן נכנסות: הפניה לבן משפחה שלא קיים (חשבון, כלל, שעות, מכסה, ערוץ, אפליקציה, קטגוריה), מזהים כפולים, שעות ומכסות מחוץ ליום; כלל אתר חדש או ששונה עובר גם את `RuleValidator`. סירוב מגיע עם הסיבה.
-- `scanAccounts` (Hub בלבד) — קורא את חשבונות ה-Windows המופעלים של המחשב הזה (`NetUserEnum`, קריאה בלבד) ומעדכן מיד את ההתקן שלו בהגדרות. בנוסף, כל מחשב מדווח על החשבונות שלו בעצמו כשהם משתנים (סוכן בהעלאה ל-Hub, ה-Hub ישירות): חשבון חדש נוסף לא מקושר; לחשבון מוכר מתעדכנים השם והאם הוא מנהל, והקישור נשמר (תרחיש MD-008).
+- `scanAccounts` (Hub בלבד) — קורא את חשבונות ה-Windows המופעלים של המחשב הזה (`NetUserEnum`, קריאה בלבד) ומעדכן מיד את ההתקן שלו בהגדרות. בנוסף, כל מחשב מדווח על החשבונות שלו בעצמו כשהם משתנים (סוכן בהעלאה ל-Hub, ה-Hub ישירות): חשבון חדש נוסף לא מקושר; לחשבון מוכר מתעדכנים השם והאם הוא מנהל, והקישור ותשובת "אורח" של ההורים נשמרים (תרחיש MD-008).
 - `getStatus` מחזיר גם את אזור הזמן של המשפחה, ובמחשב סוכן את ה-Hub שמנהל אותו (שם, כתובת, האם הסנכרון האחרון הצליח ומתי) — לתצוגת "מנוהל ע"י Hub". סוכן שעוד לא קיבל הגדרות מחזיר סטטוס בלי בני משפחה.
 - `getDiagnostics` — בדיקות קריאה בלבד של המחשב, ב-Hub ובסוכן: השירות רץ כשירות מערכת, יש Chrome או Edge, מדיניות הדפדפנים מנוהלת, מדיניות ההתקנה של התוסף קיימת; וב-Hub גם רשת ש-Windows מסווג Public (כך הסוכן לא מגיע ל-Hub) והפורט של ה-Hub בחומת האש. תשובה: קוד בדיקה, `ok`/`warn`/`fail` ופרט; הממשק מנסח. בדיקת `onedrive` (PROTECTION-SPEC §2): `ok` — מותקן לכל המחשב; `warn` עם `OneDriveSetup.exe /allusers` — רק התקנות למשתמש; `ok` עם `none` — לא מותקן.
 - `setMember` מעדכן גם את דגלי ההגנה (`blockImageSearch`, `jumpGuard`, `blockYouTubeShorts`, `logSearches`, `blockAds`); `getEvents` מחזיר גם `search` ו-`override`.
