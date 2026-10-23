@@ -1276,15 +1276,6 @@ The computer keeps enforcing the last settings it received but stops getting upd
   <data name="Member_ResumeOnHub" xml:space="preserve">
     <value>Filtering is resumed from the parents' computer.</value>
   </data>
-  <data name="Dashboard_UnlinkedAccounts_One" xml:space="preserve">
-    <value>One Windows account is not linked to a family member yet, and browsing there is almost entirely blocked.</value>
-  </data>
-  <data name="Dashboard_UnlinkedAccounts_Many" xml:space="preserve">
-    <value>{0} Windows accounts are not linked to family members yet, and browsing there is almost entirely blocked.</value>
-  </data>
-  <data name="Dashboard_OpenDevices" xml:space="preserve">
-    <value>Link accounts</value>
-  </data>
   <data name="Diagnostics_Hub" xml:space="preserve">
     <value>Parents' computer</value>
   </data>
@@ -1292,7 +1283,7 @@ The computer keeps enforcing the last settings it received but stops getting upd
     <value>Windows accounts</value>
   </data>
   <data name="Devices_AccountsHint" xml:space="preserve">
-    <value>Choose whom each account belongs to. A standard account that is not linked can hardly browse; administrators are not filtered. Each computer reports its own accounts, within a minute of their creation.</value>
+    <value>A Windows account is what someone signs in to the computer with, and a family member is someone you set up here in WebFilter: assign each account to the family member who uses it, so it gets their settings. Until then a standard account can hardly browse (only always-allowed sites); a new account shows up here within a minute of being created in Windows.</value>
   </data>
   <data name="Devices_ThisComputer" xml:space="preserve">
     <value>This computer ({0})</value>
@@ -1314,9 +1305,6 @@ The computer keeps enforcing the last settings it received but stops getting upd
   </data>
   <data name="Devices_AccountUnlinked" xml:space="preserve">
     <value>The account {0} on {1} is no longer linked.</value>
-  </data>
-  <data name="Devices_UnlinkedWarning" xml:space="preserve">
-    <value>Not linked — browsing in this account is almost entirely blocked.</value>
   </data>
   <data name="AdminChange_accounts_updated" xml:space="preserve">
     <value>Windows account details updated</value>
@@ -1515,5 +1503,95 @@ Do this only for your home network. On a café, hotel or work network it is safe
   </data>
   <data name="Tamper_unclean_stop" xml:space="preserve">
     <value>The filter service stopped unexpectedly and started again. This can be a power cut or the computer being switched off by force, not necessarily an attempt to get around the filter</value>
+  </data>
+  <data name="Devices_BadgeToolTip" xml:space="preserve">
+    <value>New Windows accounts not yet assigned to a family member</value>
+  </data>
+  <data name="Devices_AdminNotFiltered" xml:space="preserve">
+    <value>Administrator — not filtered</value>
+  </data>
+  <data name="Devices_AdminToolTip" xml:space="preserve">
+    <value>Administrator accounts are never filtered: anyone with administrator rights can remove any program, WebFilter included. Children need a standard Windows account.</value>
+  </data>
+  <data name="Devices_AdminOwner" xml:space="preserve">
+    <value>Belongs to:</value>
+  </data>
+  <data name="Devices_AdminOwnerNone" xml:space="preserve">
+    <value>Not specified</value>
+  </data>
+  <data name="Devices_AdminOwnerHint" xml:space="preserve">
+    <value>Optional: which adult in the family this administrator account belongs to. It does not change any filtering.</value>
+  </data>
+  <data name="Devices_Unlink" xml:space="preserve">
+    <value>Unlink</value>
+  </data>
+  <data name="Devices_GuestAccount" xml:space="preserve">
+    <value>Guest — blocked, only always-allowed sites</value>
+  </data>
+  <data name="Devices_GuestToolTip" xml:space="preserve">
+    <value>You chose to keep this account without a family member. It is blocked like every unassigned account, and does not count as new.</value>
+  </data>
+  <data name="Devices_ChangeGuest" xml:space="preserve">
+    <value>Change…</value>
+  </data>
+  <data name="NewAccount_Title" xml:space="preserve">
+    <value>New Windows account found: {0} (on {1})</value>
+  </data>
+  <data name="NewAccount_TitleThisComputer" xml:space="preserve">
+    <value>New Windows account found: {0} (on this computer)</value>
+  </data>
+  <data name="NewAccount_Text" xml:space="preserve">
+    <value>For now browsing in this account is almost entirely blocked, until you choose which family member it belongs to.</value>
+  </data>
+  <data name="NewAccount_Existing" xml:space="preserve">
+    <value>Existing family member…</value>
+  </data>
+  <data name="NewAccount_ExistingHint" xml:space="preserve">
+    <value>The account gets the settings of the family member you choose: a child, a teen or an adult.</value>
+  </data>
+  <data name="NewAccount_NewChild" xml:space="preserve">
+    <value>New child…</value>
+  </data>
+  <data name="NewAccount_NewChildHint" xml:space="preserve">
+    <value>Adds a new family member with a child's or teen's starting settings, as in the setup wizard, and assigns the account to them.</value>
+  </data>
+  <data name="NewAccount_Adult" xml:space="preserve">
+    <value>Adult, no filtering</value>
+  </data>
+  <data name="NewAccount_AdultHint" xml:space="preserve">
+    <value>For an adult's account: browsing there is not filtered.</value>
+  </data>
+  <data name="NewAccount_Guest" xml:space="preserve">
+    <value>Keep blocked (guest)</value>
+  </data>
+  <data name="NewAccount_GuestHint" xml:space="preserve">
+    <value>The account stays blocked (only always-allowed sites) and no longer counts as new. You can change this on the Devices page.</value>
+  </data>
+  <data name="NewAccount_WhichMember" xml:space="preserve">
+    <value>Family member</value>
+  </data>
+  <data name="NewAccount_WhichAdult" xml:space="preserve">
+    <value>Adult</value>
+  </data>
+  <data name="NewAccount_NewAdult" xml:space="preserve">
+    <value>A new adult</value>
+  </data>
+  <data name="NewAccount_Link" xml:space="preserve">
+    <value>Assign</value>
+  </data>
+  <data name="NewAccount_AddAndLink" xml:space="preserve">
+    <value>Add and assign</value>
+  </data>
+  <data name="NewAccount_ChildLater" xml:space="preserve">
+    <value>You can change all of this later on the Family members page.</value>
+  </data>
+  <data name="NewAccount_MemberAdded" xml:space="preserve">
+    <value>{0} was added to the family, and the account {1} on {2} is now {0}'s.</value>
+  </data>
+  <data name="NewAccount_KeptAsGuest" xml:space="preserve">
+    <value>The account {0} on {1} stays blocked, as a guest account.</value>
+  </data>
+  <data name="Common_Cancel" xml:space="preserve">
+    <value>Cancel</value>
   </data>
 </root>

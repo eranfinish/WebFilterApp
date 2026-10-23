@@ -1280,15 +1280,6 @@
   <data name="Member_ResumeOnHub" xml:space="preserve">
     <value>את הסינון מחדשים ממחשב ההורים.</value>
   </data>
-  <data name="Dashboard_UnlinkedAccounts_One" xml:space="preserve">
-    <value>חשבון Windows אחד עוד לא קושר לבן משפחה, והגלישה בו חסומה כמעט לגמרי.</value>
-  </data>
-  <data name="Dashboard_UnlinkedAccounts_Many" xml:space="preserve">
-    <value>{0} חשבונות Windows עוד לא קושרו לבני משפחה, והגלישה בהם חסומה כמעט לגמרי.</value>
-  </data>
-  <data name="Dashboard_OpenDevices" xml:space="preserve">
-    <value>לקישור החשבונות</value>
-  </data>
   <data name="Diagnostics_Hub" xml:space="preserve">
     <value>מחשב ההורים</value>
   </data>
@@ -1296,7 +1287,7 @@
     <value>חשבונות Windows</value>
   </data>
   <data name="Devices_AccountsHint" xml:space="preserve">
-    <value>בחרו לכל חשבון למי הוא שייך. בחשבון רגיל שלא מקושר הגלישה חסומה כמעט לגמרי; מנהלים לא מסוננים. כל מחשב מדווח על החשבונות שלו בעצמו, תוך דקה מרגע שנוצרו.</value>
+    <value>חשבון Windows הוא מה שנכנסים איתו למחשב, ובן משפחה הוא מי שהגדרתם כאן ב-WebFilter: שייכו כל חשבון לבן המשפחה שמשתמש בו, כדי שיקבל את ההגדרות שלו. עד אז הגלישה בחשבון רגיל חסומה כמעט לגמרי (רק אתרים שמותרים תמיד); חשבון חדש מופיע כאן תוך דקה מרגע שנוצר ב-Windows.</value>
   </data>
   <data name="Devices_ThisComputer" xml:space="preserve">
     <value>המחשב הזה ({0})</value>
@@ -1318,9 +1309,6 @@
   </data>
   <data name="Devices_AccountUnlinked" xml:space="preserve">
     <value>הקישור של החשבון {0} ב-{1} בוטל.</value>
-  </data>
-  <data name="Devices_UnlinkedWarning" xml:space="preserve">
-    <value>לא מקושר — הגלישה בחשבון הזה חסומה כמעט לגמרי.</value>
   </data>
   <data name="AdminChange_accounts_updated" xml:space="preserve">
     <value>פרטי חשבונות Windows עודכנו</value>
@@ -1519,5 +1507,95 @@
   </data>
   <data name="Tamper_unclean_stop" xml:space="preserve">
     <value>שירות הסינון נעצר באופן לא צפוי והופעל מחדש. זו יכולה להיות הפסקת חשמל או כיבוי בכוח של המחשב, ולא בהכרח ניסיון לעקוף את הסינון</value>
+  </data>
+  <data name="Devices_BadgeToolTip" xml:space="preserve">
+    <value>חשבונות Windows חדשים שעדיין לא שויכו לבן משפחה</value>
+  </data>
+  <data name="Devices_AdminNotFiltered" xml:space="preserve">
+    <value>מנהל — לא מסונן</value>
+  </data>
+  <data name="Devices_AdminToolTip" xml:space="preserve">
+    <value>חשבונות מנהל לא מסוננים אף פעם: מי שיש לו הרשאות מנהל יכול להסיר כל תוכנה, גם את WebFilter. לילדים צריך חשבון Windows רגיל.</value>
+  </data>
+  <data name="Devices_AdminOwner" xml:space="preserve">
+    <value>שייך ל:</value>
+  </data>
+  <data name="Devices_AdminOwnerNone" xml:space="preserve">
+    <value>לא צוין</value>
+  </data>
+  <data name="Devices_AdminOwnerHint" xml:space="preserve">
+    <value>רשות: לאיזה מבוגר במשפחה שייך חשבון המנהל. זה לא משנה שום סינון.</value>
+  </data>
+  <data name="Devices_Unlink" xml:space="preserve">
+    <value>ביטול הקישור</value>
+  </data>
+  <data name="Devices_GuestAccount" xml:space="preserve">
+    <value>אורח — חסום, רק אתרים שמותרים תמיד</value>
+  </data>
+  <data name="Devices_GuestToolTip" xml:space="preserve">
+    <value>בחרתם להשאיר את החשבון הזה בלי בן משפחה. הוא חסום כמו כל חשבון שלא שויך, ולא נספר כחשבון חדש.</value>
+  </data>
+  <data name="Devices_ChangeGuest" xml:space="preserve">
+    <value>שינוי…</value>
+  </data>
+  <data name="NewAccount_Title" xml:space="preserve">
+    <value>נמצא חשבון Windows חדש: {0} (במחשב {1})</value>
+  </data>
+  <data name="NewAccount_TitleThisComputer" xml:space="preserve">
+    <value>נמצא חשבון Windows חדש: {0} (במחשב הזה)</value>
+  </data>
+  <data name="NewAccount_Text" xml:space="preserve">
+    <value>כרגע הגלישה בחשבון הזה חסומה כמעט לגמרי, עד שתבחרו לאיזה בן משפחה הוא שייך.</value>
+  </data>
+  <data name="NewAccount_Existing" xml:space="preserve">
+    <value>בן משפחה קיים…</value>
+  </data>
+  <data name="NewAccount_ExistingHint" xml:space="preserve">
+    <value>החשבון יקבל את ההגדרות של בן המשפחה שתבחרו: ילד, נער או מבוגר.</value>
+  </data>
+  <data name="NewAccount_NewChild" xml:space="preserve">
+    <value>ילד חדש…</value>
+  </data>
+  <data name="NewAccount_NewChildHint" xml:space="preserve">
+    <value>מוסיף בן משפחה חדש עם הגדרות ההתחלה של ילד/ה או נער/ה, כמו באשף ההגדרה, ומשייך אליו את החשבון.</value>
+  </data>
+  <data name="NewAccount_Adult" xml:space="preserve">
+    <value>מבוגר, בלי סינון</value>
+  </data>
+  <data name="NewAccount_AdultHint" xml:space="preserve">
+    <value>לחשבון של מבוגר במשפחה: הגלישה בו לא תסונן.</value>
+  </data>
+  <data name="NewAccount_Guest" xml:space="preserve">
+    <value>להשאיר חסום (אורח)</value>
+  </data>
+  <data name="NewAccount_GuestHint" xml:space="preserve">
+    <value>החשבון יישאר חסום — רק אתרים שמותרים תמיד — ולא ייספר יותר כחשבון חדש. אפשר לשנות את זה בדף המכשירים.</value>
+  </data>
+  <data name="NewAccount_WhichMember" xml:space="preserve">
+    <value>בן משפחה</value>
+  </data>
+  <data name="NewAccount_WhichAdult" xml:space="preserve">
+    <value>מבוגר/ת</value>
+  </data>
+  <data name="NewAccount_NewAdult" xml:space="preserve">
+    <value>מבוגר/ת חדש/ה</value>
+  </data>
+  <data name="NewAccount_Link" xml:space="preserve">
+    <value>שיוך</value>
+  </data>
+  <data name="NewAccount_AddAndLink" xml:space="preserve">
+    <value>הוספה ושיוך</value>
+  </data>
+  <data name="NewAccount_ChildLater" xml:space="preserve">
+    <value>אפשר לשנות את כל אלה אחר כך בדף בני המשפחה.</value>
+  </data>
+  <data name="NewAccount_MemberAdded" xml:space="preserve">
+    <value>{0} נוסף/ה לבני המשפחה, והחשבון {1} ב-{2} שויך ל{0}.</value>
+  </data>
+  <data name="NewAccount_KeptAsGuest" xml:space="preserve">
+    <value>החשבון {0} ב-{1} נשאר חסום, כחשבון אורח.</value>
+  </data>
+  <data name="Common_Cancel" xml:space="preserve">
+    <value>ביטול</value>
   </data>
 </root>

@@ -32,11 +32,11 @@ public sealed partial class DevicesViewModel : PageViewModel, IDisposable
         _dialogs = dialogs ?? throw new ArgumentNullException(nameof(dialogs));
         _clipboard = clipboard ?? throw new ArgumentNullException(nameof(clipboard));
         _timer = timer ?? throw new ArgumentNullException(nameof(timer));
-        // The navigation shows how many standard accounts wait to be linked (browsing there is blocked meanwhile).
+        // The navigation shows how many standard accounts wait for an answer (browsing there is blocked meanwhile).
+        UpdateBadge();
         Context.PropertyChanged += (_, e) =>
         {
-            if (e.PropertyName == nameof(FamilyContext.UnlinkedAccountCount))
-                Badge = Context.UnlinkedAccountCount > 0 ? Context.UnlinkedAccountCount.ToString(CultureInfo.CurrentCulture) : null;
+            if (e.PropertyName == nameof(FamilyContext.UnlinkedAccountCount)) UpdateBadge();
         };
     }
 
@@ -45,6 +45,8 @@ public sealed partial class DevicesViewModel : PageViewModel, IDisposable
     public override string Intro => Strings.Devices_Intro;
 
     public override bool AutoRefresh => true;
+
+    public override string BadgeToolTip => Strings.Devices_BadgeToolTip;
 
     /// <summary>Paired computers that still receive settings, by name.</summary>
     public ObservableCollection<DeviceItemViewModel> Active { get; } = [];
@@ -86,6 +88,8 @@ public sealed partial class DevicesViewModel : PageViewModel, IDisposable
             ShowNotHub();
             return;
         }
+        // Which computers still get settings, for the accounts waiting for an answer (the badge and the dashboard's cards).
+        Context.UsePairedDevices(result.Devices);
         // The family's time zone and the service's clock, for "seen 5 minutes ago".
         await Context.RefreshStatusAsync();
         // The tick reloads only the shown page; this keeps the requests badge current meanwhile.
@@ -157,6 +161,9 @@ public sealed partial class DevicesViewModel : PageViewModel, IDisposable
 
     public void Dispose() => ClosePairing();
 
+    private void UpdateBadge() =>
+        Badge = Context.UnlinkedAccountCount > 0 ? Context.UnlinkedAccountCount.ToString(CultureInfo.CurrentCulture) : null;
+
     private void ShowNotHub()
     {
         IsHub = false;
@@ -221,7 +228,7 @@ public sealed partial class DeviceItemViewModel(string id) : ObservableObject
 
     internal void Update(DeviceInfo device, FamilyContext context, DateTimeOffset now)
     {
-        Name = string.IsNullOrWhiteSpace(device.Name) ? device.Id : device.Name.Trim();
+        Name = FamilyContext.DeviceName(device);
         IdText = Texts.Format(Strings.Device_Id, device.Id);
         OsText = Texts.Code("DeviceOs_", device.Os);
         PairedText = context.FormatDate(device.PairedAt);

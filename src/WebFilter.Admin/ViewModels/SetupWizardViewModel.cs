@@ -45,7 +45,7 @@ public sealed partial class SetupWizardViewModel : PageViewModel
     public override string Intro => Strings.Setup_Intro;
 
     /// <summary>Creates ids for new members (the rules, hours and accounts refer to them).</summary>
-    internal Func<string> NewMemberId { get; set; } = () => $"m-{Guid.NewGuid():N}"[..10];
+    internal Func<string> NewMemberId { get; set; } = MemberTemplate.NewId;
 
     public ObservableCollection<WizardMemberViewModel> Members { get; } = [];
 
@@ -223,10 +223,9 @@ public sealed partial class SetupWizardViewModel : PageViewModel
         var deviceId = Context.Status?.DeviceId;
         var members = Members.Select(m => m.ToDto()).ToList();
         var links = Accounts.Where(a => a.MemberId != NotLinked).ToDictionary(a => a.AccountId, a => a.MemberId, StringComparer.OrdinalIgnoreCase);
-        var allDays = Enumerable.Range(0, WeeklyPlan.Days).ToList();
         var timed = Members.Where(m => m.IsFiltered && m.LimitTime).ToList();
-        var schedules = timed.Select(m => new ScheduleDto(m.Id, allDays, m.StartTime, m.EndTime)).ToList();
-        var limits = timed.Where(m => m.LimitMinutes is not null).Select(m => new DailyLimitDto(m.Id, allDays, m.LimitMinutes!.Value)).ToList();
+        var schedules = timed.Select(m => new ScheduleDto(m.Id, MemberTemplate.EveryDay, m.StartTime, m.EndTime)).ToList();
+        var limits = timed.Where(m => m.LimitMinutes is not null).Select(m => new DailyLimitDto(m.Id, MemberTemplate.EveryDay, m.LimitMinutes!.Value)).ToList();
         var lists = StarterCategories.Where(c => c.Include).ToList();
         var choices = Members.Where(m => m.IsFiltered)
             .SelectMany(m => m.Categories.Where(c => c.Category.Include && c.Choice != CategoryChoiceViewModel.Default).Select(c => new MemberCategoryDto(m.Id, c.Category.Name, c.Choice)))
@@ -393,12 +392,72 @@ internal sealed record MemberTemplate(string FilterMode, string YouTubeMode, boo
             new MemberProtection(BlockImageSearch: false, JumpGuard: true, BlockYouTubeShorts: false, LogSearches: false, BlockAds: true)),
         _ => new("unrestricted", "unrestricted", false, "08:00", "22:00", 180, new Dictionary<string, string>(), MemberProtection.None),
     };
+
+    /// <summary>Sunday to Saturday: the wizard gives each filtered member the same hours and limit every day.</summary>
+    public static readonly IReadOnlyList<int> EveryDay = [.. Enumerable.Range(0, WeeklyPlan.Days)];
+
+    /// <summary>A new member's id (the rules, hours and accounts refer to it).</summary>
+    public static string NewId() => $"m-{Guid.NewGuid():N}"[..10];
+
+    public bool IsFiltered => FilterMode != "unrestricted";
+
+    /// <summary>A new member of <paramref name="role"/> with the template's modes and, when filtered, its protections.</summary>
+    public static MemberDto NewMember(string id, string name, string role, int? age)
+    {
+        var template = For(role);
+        return (template.IsFiltered ? template.Protection : MemberProtection.None).ApplyTo(new MemberDto(id, name, role, age, template.FilterMode, template.YouTubeMode));
+    }
+
+    /// <summary>
+    /// <paramref name="settings"/> with a new member of <paramref name="role"/>, as the setup wizard adds one whose template
+    /// the parent kept (the "new Windows account" card does this): the role's modes and protections, its hours and daily
+    /// limit on every day, and its choices of the ready-made lists — a list the family does not have yet is copied into
+    /// its categories, one it has keeps its own sites — with the school sign-in rules when they are needed now
+    /// (<see cref="SchoolSignIn"/>).
+    /// </summary>
+    public static FamilyBundle AddMember(FamilyBundle settings, string id, string name, string role, int? age)
+    {
+        ArgumentNullException.ThrowIfNull(settings);
+        var template = For(role);
+        var timed = template.IsFiltered && template.LimitTime;
+        var choices = template.IsFiltered ? template.Categories.Select(c => new MemberCategoryDto(id, c.Key, c.Value)).ToList() : [];
+        return SchoolSignIn.Apply(settings with
+        {
+            Members = [.. settings.Members, NewMember(id, name, role, age)],
+            Schedules = timed ? [.. settings.Schedules, new ScheduleDto(id, EveryDay, template.Start, template.End)] : settings.Schedules,
+            DailyLimits = timed ? [.. settings.DailyLimits, new DailyLimitDto(id, EveryDay, template.LimitMinutes)] : settings.DailyLimits,
+            Categories = StarterLists.AddTo(settings.Categories, choices.Select(c => StarterLists.Find(c.Category)).OfType<StarterList>()),
+            MemberCategories = [.. settings.MemberCategories, .. choices],
+        });
+    }
+
+    /// <summary>
+    /// What a member of this role starts with, in one line: "Only approved sites · YouTube: … · 15:00–19:00, up to 120
+    /// minutes a day · the protections · the ready-made lists".
+    /// </summary>
+    public string Text()
+    {
+        if (!IsFiltered) return Texts.Join(" · ", Texts.Code("FilterMode_", FilterMode), Strings.Setup_Summary_NoTimeLimit);
+        var hours = Texts.Ltr($"{Start}–{End}");
+        return Texts.Join(" · ",
+            Texts.Code("FilterMode_", FilterMode),
+            Texts.Format(Strings.Setup_Summary_YouTube, Texts.Code("YouTubeMode_", YouTubeMode)),
+            LimitTime ? Texts.Format(Strings.Setup_Summary_Time, hours, Texts.Minutes(LimitMinutes)) : Strings.Setup_Summary_NoTimeLimit,
+            Protection.Text(),
+            string.Join(", ", Categories.Select(c => Texts.Format(Strings.Setup_Summary_Category, Texts.Code("Category_", c.Key), Texts.Code("CategoryChoice_", c.Value)))));
+    }
 }
 
 /// <summary>The five protection flags of a member (PROTECTION-SPEC §1); filtered members only.</summary>
 internal sealed record MemberProtection(bool BlockImageSearch, bool JumpGuard, bool BlockYouTubeShorts, bool LogSearches, bool BlockAds)
 {
     public static readonly MemberProtection None = new(false, false, false, false, false);
+
+    /// <summary><paramref name="member"/> with these five flags.</summary>
+    public MemberDto ApplyTo(MemberDto member) => member with
+    {
+        BlockImageSearch = BlockImageSearch, JumpGuard = JumpGuard, BlockYouTubeShorts = BlockYouTubeShorts, LogSearches = LogSearches, BlockAds = BlockAds,
+    };
 
     /// <summary>"Block image search, Block jumps to other sites", or null when none is on.</summary>
     public string? Text()
@@ -504,8 +563,7 @@ public sealed partial class WizardMemberViewModel : ObservableObject
     /// <summary>The protections apply to filtered members only, so an unfiltered one is stored without them.</summary>
     private MemberProtection Applied => IsFiltered ? Protection : MemberProtection.None;
 
-    internal MemberDto ToDto() => new(Id, Name.Trim(), Role, Age, FilterMode, YouTubeMode,
-        Applied.BlockImageSearch, Applied.JumpGuard, Applied.BlockYouTubeShorts, Applied.LogSearches, Applied.BlockAds);
+    internal MemberDto ToDto() => Applied.ApplyTo(new MemberDto(Id, Name.Trim(), Role, Age, FilterMode, YouTubeMode));
 
     /// <summary>A choice per list, from the role's template; choices made earlier are kept.</summary>
     internal void OfferCategories(IEnumerable<WizardCategoryViewModel> lists)

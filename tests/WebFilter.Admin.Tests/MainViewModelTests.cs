@@ -116,6 +116,7 @@ public sealed class MainViewModelTests
         var panel = main.Devices.Pairing!;
         panel.SelectedAddress = TestData.HubAddresses[1];
         Assert.Equal([MainViewModel.RefreshInterval, PairingViewModel.CountdownInterval], _timer.Running);
+        var devicesCalls = _client.SentOf<GetDevices>().Count();
 
         _time.Now += TimeSpan.FromSeconds(10);
         _client.Status = _client.Status with { Now = TestData.Now.AddSeconds(10) };
@@ -124,7 +125,7 @@ public sealed class MainViewModelTests
         await _timer.FireAsync();
         await _timer.FireAsync(PairingViewModel.CountdownInterval);
 
-        Assert.Equal(2, _client.SentOf<GetDevices>().Count());
+        Assert.Equal(devicesCalls + 1, _client.SentOf<GetDevices>().Count());
         Assert.Contains(main.Devices.Active, d => d.Id == "pc-new");
         Assert.Equal("1", main.Requests.Badge);
         Assert.Same(panel, main.Devices.Pairing);
