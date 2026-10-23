@@ -12,6 +12,9 @@ public sealed class AdminLauncher(string adminPath, Func<ProcessStartInfo, Proce
 {
     public const string AdminExeName = "WebFilter.Admin.exe";
 
+    /// <summary>The admin app's devices page, where a new Windows account's card is (its <c>--page devices</c>).</summary>
+    public const string DevicesPage = "devices";
+
     /// <summary>ERROR_CANCELLED: the user said no to the UAC prompt.</summary>
     private const int Cancelled = 1223;
 
@@ -20,13 +23,20 @@ public sealed class AdminLauncher(string adminPath, Func<ProcessStartInfo, Proce
 
     public string AdminPath { get; } = adminPath;
 
-    /// <summary>Starts the admin app; false when it did not start (the prompt was declined, or the file is missing).</summary>
-    public bool Open()
+    /// <summary>
+    /// Starts the admin app, on <paramref name="page"/> when one is given (<c>--page</c>, which the shell passes on through
+    /// the UAC prompt; an admin app without the option ignores it); false when it did not start (the prompt was declined,
+    /// or the file is missing). Only a plain page name reaches the command line.
+    /// </summary>
+    public bool Open(string? page = null)
     {
+        var info = new ProcessStartInfo(AdminPath) { UseShellExecute = true, WorkingDirectory = Path.GetDirectoryName(AdminPath) ?? "" };
+        if (page is { Length: > 0 } && page.All(char.IsAsciiLetterLower)) info.Arguments = $"--page {page}";
+        else if (page is not null) log.Write($"A click asked for the admin page '{page}', which is not a page name; opening the start page.");
         try
         {
             // The shell, not CreateProcess: only ShellExecute raises the UAC prompt a requireAdministrator manifest needs.
-            using var process = start(new ProcessStartInfo(AdminPath) { UseShellExecute = true, WorkingDirectory = Path.GetDirectoryName(AdminPath) ?? "" });
+            using var process = start(info);
             return true;
         }
         catch (Win32Exception ex) when (ex.NativeErrorCode == Cancelled)

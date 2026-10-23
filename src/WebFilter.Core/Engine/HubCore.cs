@@ -33,6 +33,9 @@ public sealed class HubCore(FamilyConfig config)
     /// <summary>Raised for every new access request (created or delivered from an agent's queue), after it is in <see cref="Requests"/>.</summary>
     public event Action<AccessRequest>? RequestAccepted;
 
+    /// <summary>Raised when a device reports accounts the settings did not have (<see cref="ReportAccounts"/>), after they are in <see cref="Config"/>.</summary>
+    public event Action<NewAccounts>? AccountsAdded;
+
     /// <summary>
     /// Drops the oldest events, those before <paramref name="cutoff"/>, from memory (event retention, MVP-PLAN §9). Only a
     /// leading run is removed, so the order of what remains — which the store relies on to find what is new — is kept.
@@ -191,14 +194,17 @@ public sealed class HubCore(FamilyConfig config)
     /// Records the accounts a device reports (tests/simulation/README.md §8): new ones are added unlinked (and not guests)
     /// until a parent answers for them; a known one keeps its link and the parents' guest answer, and takes the reported
     /// name and administrator flag — administrators are never filtered, so a flag left from before a parent made a
-    /// child's account a standard one would leave the child unfiltered. Accounts missing from the report are kept.
+    /// child's account a standard one would leave the child unfiltered. Accounts missing from the report are kept. New
+    /// accounts raise <see cref="AccountsAdded"/>.
     /// </summary>
     public void ReportAccounts(string deviceId, IEnumerable<DeviceAccount> seen, DateTimeOffset now)
     {
         var index = Config.Devices.FindIndex(d => d.Id == deviceId);
         if (index < 0) return;
         var accounts = Config.Devices[index].Accounts.ToList();
-        var (added, updated) = (false, false);
+        var first = accounts.Count == 0;
+        var added = new List<DeviceAccount>();
+        var updated = false;
         foreach (var account in seen)
         {
             var known = accounts.FindIndex(a => string.Equals(a.AccountId, account.AccountId, StringComparison.OrdinalIgnoreCase));
@@ -206,7 +212,7 @@ public sealed class HubCore(FamilyConfig config)
             {
                 // Links and guest answers are the parents' to give, never the reporting computer's.
                 accounts.Add(account with { MemberId = null, Guest = false });
-                added = true;
+                added.Add(accounts[^1]);
             }
             else if (accounts[known].Name != account.Name || accounts[known].IsAdmin != account.IsAdmin)
             {
@@ -214,9 +220,10 @@ public sealed class HubCore(FamilyConfig config)
                 updated = true;
             }
         }
-        if (!added && !updated) return;
+        if (added.Count == 0 && !updated) return;
         Config.Devices[index] = Config.Devices[index] with { Accounts = accounts };
-        Changed(now, null, added ? "new_accounts" : "accounts_updated");
+        Changed(now, null, added.Count > 0 ? "new_accounts" : "accounts_updated");
+        if (added.Count > 0) AccountsAdded?.Invoke(new NewAccounts(deviceId, added, first));
     }
 
     public void AddRule(Rule rule, DateTimeOffset now)
@@ -320,6 +327,13 @@ public sealed class HubCore(FamilyConfig config)
 
     private static string StripWww(string host) => host.StartsWith("www.", StringComparison.Ordinal) ? host[4..] : host;
 }
+
+/// <summary>Accounts a device reported that the settings did not have (<see cref="HubCore.AccountsAdded"/>), as stored: unlinked.</summary>
+/// <param name="FirstReport">
+/// The device had no accounts in the settings before: what it reports first after pairing, or the hub's own at first
+/// setup — the accounts the computer already had, not ones just created.
+/// </param>
+public sealed record NewAccounts(string DeviceId, IReadOnlyList<DeviceAccount> Accounts, bool FirstReport);
 
 /// <summary>A hub's persistent state.</summary>
 public sealed record HubState(

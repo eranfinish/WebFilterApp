@@ -8,9 +8,9 @@ using WebFilter.Contracts.Admin;
 namespace WebFilter.Admin.ViewModels;
 
 /// <summary>
-/// The main window: navigation between the pages, the connection banner, and the periodic refresh (every
-/// <see cref="RefreshInterval"/> the shown page reloads if it auto-refreshes; otherwise only the pending-request count
-/// does). A failed refresh is retried on the next tick, which is also how the app reconnects after the service restarts.
+/// The main window: navigation between the pages (it opens on the dashboard, or on the page <c>--page</c> names), the
+/// connection banner, and the periodic refresh (every <see cref="RefreshInterval"/> the shown page reloads if it
+/// auto-refreshes; otherwise only the pending-request count does). A failed refresh is retried on the next tick, which is also how the app reconnects after the service restarts.
 /// While the hub's family is empty the setup wizard joins the navigation and opens once by itself. On an agent computer
 /// only the dashboard (status and the local emergency pause) and the settings page are shown (MVP-PLAN §4.5).
 /// </summary>
@@ -99,12 +99,28 @@ public sealed partial class MainViewModel : ObservableObject, INavigator, IDispo
     /// <summary>The load started by the last page change (tests await it).</summary>
     public Task CurrentLoad { get; private set; } = Task.CompletedTask;
 
-    /// <summary>Shows the dashboard and starts the periodic refresh.</summary>
-    public void Start()
+    /// <summary>Shows the page <paramref name="startPage"/> names (<see cref="AdminAppOptions.StartPage"/>), or the dashboard, and starts the periodic refresh.</summary>
+    public void Start(string? startPage = null)
     {
-        SelectedPage ??= Dashboard;
+        SelectedPage ??= PageNamed(startPage) ?? Dashboard;
         _ticker ??= _timer.Start(RefreshInterval, TickAsync);
     }
+
+    /// <summary>
+    /// A hub page by its command-line name (the notifier opens "devices" for a new Windows account); anything else is null.
+    /// On an agent a hub-only page gives way to the dashboard once the status says what this computer is.
+    /// </summary>
+    private PageViewModel? PageNamed(string? name) => name?.Trim().ToLowerInvariant() switch
+    {
+        "dashboard" => Dashboard,
+        "requests" => Requests,
+        "members" => MemberDetail,
+        "rules" => Rules,
+        "activity" => Activity,
+        "devices" => Devices,
+        "settings" => Settings,
+        _ => null,
+    };
 
     public async Task TickAsync()
     {
@@ -150,6 +166,19 @@ public sealed partial class MainViewModel : ObservableObject, INavigator, IDispo
     private async Task LoadAsync(PageViewModel page)
     {
         await page.RefreshAsync();
+        // A page that loaded without the status (a hub-only page an agent refused, opened by --page) would leave the hub's
+        // navigation up: the status says which pages this computer has.
+        if (Context.Status is null && page.HasLoaded)
+        {
+            try
+            {
+                await Context.RefreshStatusAsync();
+            }
+            catch (AdminClientException)
+            {
+                // The banner reports connection problems; the next tick tries again.
+            }
+        }
         UpdatePages();
         if (!_networkChecked) await CheckNetworkAsync();
     }

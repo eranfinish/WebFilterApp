@@ -18,6 +18,7 @@ public class NotifyProtocolTests
             new NotificationDto("request:ar-1:1", "request", At, "noa", "pc-kids", "url:pbskids.org"),
             new NotificationDto("tamper:AB12", "tamper", At.AddTicks(1), null, "laptop-yoav", "unclean_stop"),
             new NotificationDto("device:laptop-yoav:1", "device", At.AddTicks(2), DeviceId: "laptop-yoav"),
+            new NotificationDto("account:pc-kids:S-1-5-21-2000-1010", "account", At.AddTicks(3), DeviceId: "pc-kids", Detail: "tom"),
         ]),
         new NotifyError(NotifyError.NotAdmin, "no"),
     };
@@ -46,7 +47,7 @@ public class NotifyProtocolTests
         var item = doc.RootElement.GetProperty("items")[0];
         Assert.Equal(["id", "kind", "at", "deviceId"], item.EnumerateObject().Select(p => p.Name));
         Assert.Equal("WebFilter.Notify", NotifyProtocol.PipeName);
-        Assert.Equal(["request", "tamper", "device"], new[] { NotificationKinds.Request, NotificationKinds.Tamper, NotificationKinds.Device });
+        Assert.Equal(["request", "tamper", "device", "account"], new[] { NotificationKinds.Request, NotificationKinds.Tamper, NotificationKinds.Device, NotificationKinds.Account });
     }
 
     [Fact]

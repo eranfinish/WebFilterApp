@@ -70,6 +70,26 @@ public sealed class NotificationTextsTests
     }
 
     [Fact]
+    public void A_new_account_says_which_account_on_which_computer_and_why_it_matters()
+    {
+        var shown = One(TestData.Account(1, "tom", "pc-kids"));
+
+        Assert.Equal("נמצא חשבון Windows חדש", shown.Title);
+        Assert.Equal("החשבון tom במחשב pc-kids: הגלישה בו חסומה עד שתבחרו לאיזה בן משפחה הוא שייך. לחצו כאן כדי לפתוח את ניהול המשפחה.",
+            Bidi.Plain(shown.Text));
+        // The Latin name stays in one piece, and the sentence starts in Hebrew, so the toast reads right to left.
+        Assert.Contains("‎tom‎", shown.Text, StringComparison.Ordinal);
+        Assert.StartsWith("החשבון", shown.Text, StringComparison.Ordinal);
+    }
+
+    [Fact]
+    public void A_new_account_without_a_name_or_a_computer_still_reads_well()
+    {
+        Assert.StartsWith("חשבון חדש במחשב pc-kids: הגלישה בו חסומה", Bidi.Plain(One(TestData.Account(1, name: null)).Text), StringComparison.Ordinal);
+        Assert.StartsWith("החשבון tom במחשב לא ידוע: הגלישה בו חסומה", Bidi.Plain(One(TestData.Account(1, device: null)).Text), StringComparison.Ordinal);
+    }
+
+    [Fact]
     public void Several_at_once_make_one_summary()
     {
         var shown = NotificationTexts.For([TestData.Request(1), TestData.Request(2), TestData.Request(3), TestData.Tamper(4, "policy_repaired")]);
@@ -79,6 +99,11 @@ public sealed class NotificationTextsTests
 
         var requests = NotificationTexts.For([TestData.Request(1), TestData.Device(2, null), TestData.Device(3, null)]);
         Assert.Equal("בקשה חדשה\n2 מחשבים שלא מדווחים\nלחצו כאן כדי לפתוח את ניהול המשפחה.", requests.Text);
+
+        var accounts = NotificationTexts.For([TestData.Account(1), TestData.Request(2), TestData.Account(3, "maya")]);
+        Assert.Equal("בקשה חדשה\n2 חשבונות Windows חדשים\nלחצו כאן כדי לפתוח את ניהול המשפחה.", accounts.Text);
+        var account = NotificationTexts.For([TestData.Account(1), TestData.Tamper(2, "unclean_stop")]);
+        Assert.Equal("התראה על הסינון\nחשבון Windows חדש\nלחצו כאן כדי לפתוח את ניהול המשפחה.", account.Text);
     }
 
     [Fact]
@@ -87,6 +112,17 @@ public sealed class NotificationTextsTests
         var shown = One(new NotificationDto("x", "quota", TestData.Now));
 
         Assert.Equal(("התראה חדשה", "יש התראה חדשה בניהול המשפחה. לחצו כאן כדי לפתוח."), (shown.Title, shown.Text));
+    }
+
+    /// <summary>A summary counts every item: kinds this notifier does not know share a line, so the lines add up to the title.</summary>
+    [Fact]
+    public void Unknown_kinds_in_a_summary_have_a_line_of_their_own()
+    {
+        var one = NotificationTexts.For([TestData.Device(1, null), new NotificationDto("x", "quota", TestData.Now.AddMinutes(2))]);
+        var two = NotificationTexts.For([TestData.Request(1), new NotificationDto("x", "quota", TestData.Now.AddMinutes(2)), new NotificationDto("y", "", TestData.Now.AddMinutes(3))]);
+
+        Assert.Equal(("2 התראות חדשות מ-WebFilter", "מחשב שלא מדווח\nהתראה אחרת\nלחצו כאן כדי לפתוח את ניהול המשפחה."), (one.Title, one.Text));
+        Assert.Equal(("3 התראות חדשות מ-WebFilter", "בקשה חדשה\n2 התראות אחרות\nלחצו כאן כדי לפתוח את ניהול המשפחה."), (two.Title, two.Text));
     }
 
     [Fact]

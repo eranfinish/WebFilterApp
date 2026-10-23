@@ -39,7 +39,10 @@ public sealed record NotificationsResult(IReadOnlyList<NotificationDto> Items) :
 
 /// <summary>One thing a parent should know about.</summary>
 /// <param name="Id">Stable and unique; the same notification is never listed under another id.</param>
-/// <param name="Kind"><see cref="NotificationKinds"/>: request | tamper | device.</param>
+/// <param name="Kind">
+/// <see cref="NotificationKinds"/>: request | tamper | device | account. More may come: a notifier shows a kind it does not
+/// know with generic wording.
+/// </param>
 /// <param name="At">When the hub recorded it (strictly increasing).</param>
 /// <param name="MemberId">The family member it concerns, when there is one.</param>
 /// <param name="DeviceId">The computer it concerns, when there is one.</param>
@@ -47,6 +50,7 @@ public sealed record NotificationsResult(IReadOnlyList<NotificationDto> Items) :
 /// request: "kind:target" — url:host, youtube:channelId, app:path or time:minutes (split at the first ':').
 /// tamper: policy_repaired | network_repaired | unclean_stop (the tamper event's detail).
 /// device: when the computer last reported (ISO-8601), or absent if it never did.
+/// account: the Windows account's name.
 /// </param>
 public sealed record NotificationDto(string Id, string Kind, DateTimeOffset At, string? MemberId = null, string? DeviceId = null, string? Detail = null);
 
@@ -60,6 +64,12 @@ public static class NotificationKinds
 
     /// <summary>A paired computer has not reported to the hub for a day.</summary>
     public const string Device = "device";
+
+    /// <summary>
+    /// A new standard Windows account appeared on a computer (the hub or a paired one). Browsing there is blocked until a
+    /// parent says whose it is, in the admin app's new-account card.
+    /// </summary>
+    public const string Account = "account";
 }
 
 /// <param name="Code"><see cref="NotAdmin"/>, "unsupported" (a message other than getNotifications) or "internal_error".</param>

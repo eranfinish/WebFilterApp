@@ -23,9 +23,9 @@ public sealed class NotificationToastsTests
     }
 
     /// <summary>A click on the toast itself: foreground (the click comes to the notifier), asking for the admin app.</summary>
-    private static void OpensWhenClicked(XElement toast)
+    private static void OpensWhenClicked(XElement toast, string launch = "action=open")
     {
-        Assert.Equal("action=open", (string?)toast.Attribute("launch"));
+        Assert.Equal(launch, (string?)toast.Attribute("launch"));
         Assert.Null(toast.Attribute("activationType"));
     }
 
@@ -78,6 +78,37 @@ public sealed class NotificationToastsTests
         Assert.Equal([("פתח את ניהול המשפחה", "action=open", null)], ToastXml.Buttons(toast));
     }
 
+    /// <summary>A new Windows account: the normal few seconds, then the notification center; a click opens the devices page.</summary>
+    [Fact]
+    public void A_new_account_shows_for_the_normal_time_and_opens_the_devices_page()
+    {
+        var item = TestData.Account(1);
+
+        var toast = Toast(item);
+
+        HasWording(toast, item);
+        OpensWhenClicked(toast, "action=open;page=devices");
+        Assert.Null(toast.Attribute("scenario"));
+        Assert.Null(toast.Attribute("duration"));
+        Assert.Equal([("פתח את ניהול המשפחה", "action=open;page=devices", null)], ToastXml.Buttons(toast));
+    }
+
+    [Fact]
+    public void Only_a_toast_of_new_accounts_alone_opens_the_devices_page()
+    {
+        var accounts = Toast(TestData.Account(1), TestData.Account(2, "maya"));
+        var mixed = Toast(TestData.Account(1), TestData.Request(2));
+        var urgent = Toast(TestData.Account(1), TestData.Tamper(2, "network_repaired"));
+
+        OpensWhenClicked(accounts, "action=open;page=devices");
+        Assert.Null(accounts.Attribute("scenario"));
+        // With anything else, the dashboard: it lists the pending requests and the new accounts' cards too.
+        OpensWhenClicked(mixed);
+        OpensWhenClicked(urgent);
+        Assert.Equal("reminder", (string?)urgent.Attribute("scenario"));
+        Assert.Equal([("פתח את ניהול המשפחה", "action=open", null), ("סגור", "dismiss", "system")], ToastXml.Buttons(urgent));
+    }
+
     [Fact]
     public void A_summary_stays_on_the_screen_when_it_holds_tamper()
     {
@@ -119,4 +150,15 @@ public sealed class NotificationToastsTests
     [InlineData(null, false)]
     public void Only_a_click_that_asks_for_it_opens_family_management(string? arguments, bool opens) =>
         Assert.Equal(opens, NotificationToasts.Opens(arguments));
+
+    [Theory]
+    [InlineData("action=open;page=devices", "devices")]
+    [InlineData("page=devices;action=open", "devices")]
+    [InlineData("action=open", null)] // a toast from an older notifier, or any other kind
+    [InlineData("action=open;page=", null)]
+    [InlineData("dismiss", null)]
+    [InlineData("", null)]
+    [InlineData(null, null)]
+    public void A_click_names_the_admin_page_only_when_the_toast_does(string? arguments, string? page) =>
+        Assert.Equal(page, NotificationToasts.PageOf(arguments));
 }

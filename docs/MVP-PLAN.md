@@ -467,7 +467,7 @@ Retention של `events`: 90 יום כברירת מחדל — מוחל ב-Hub ב�
 
 ההגדרה המחייבת: `src/WebFilter.Contracts/Admin/AdminMessages.cs`.
 
-**התראות להורים** (PROTECTION-SPEC §10): `\\.\pipe\WebFilter.Notify` ב-Hub, קריאה בלבד. כל משתמש מחובר יכול לפתוח אותו, והשירות עונה רק לחשבון מנהל (מוגבה או לא, לפי הטוקן). `getNotifications {since?}` ← `notificationsResult {items: [{id, kind: request|tamper|device, at, memberId?, deviceId?, detail?}]}` — `at` הוא מתי ה-Hub רשם את ההתראה ועולה תמיד, כך ש-`since` הוא סמן מדויק. ההגדרה המחייבת: `src/WebFilter.Contracts/Notify/NotifyMessages.cs`.
+**התראות להורים** (PROTECTION-SPEC §10): `\\.\pipe\WebFilter.Notify` ב-Hub, קריאה בלבד. כל משתמש מחובר יכול לפתוח אותו, והשירות עונה רק לחשבון מנהל (מוגבה או לא, לפי הטוקן). `getNotifications {since?}` ← `notificationsResult {items: [{id, kind: request|tamper|device|account, at, memberId?, deviceId?, detail?}]}` — `at` הוא מתי ה-Hub רשם את ההתראה ועולה תמיד, כך ש-`since` הוא סמן מדויק. `account` — חשבון Windows רגיל חדש במחשב (לא בדיווח הראשון של מחשב שצומד, ולא של ה-Hub בהגדרה הראשונית), ולחיצה על ההודעה פותחת את ממשק הניהול במסך "מכשירים" (`--page devices`). ההגדרה המחייבת: `src/WebFilter.Contracts/Notify/NotifyMessages.cs`.
 
 ### 10.3 Hub ↔ Agent (HTTPS, TLS הדדי)
 

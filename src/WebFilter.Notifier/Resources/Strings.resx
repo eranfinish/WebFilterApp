@@ -119,6 +119,15 @@
   <data name="Device_NeverText" xml:space="preserve">
     <value>המחשב {0} צומד, אבל לא דיווח למחשב ההורים כבר יותר מיום.</value>
   </data>
+  <data name="Account_Title" xml:space="preserve">
+    <value>נמצא חשבון Windows חדש</value>
+  </data>
+  <data name="Account_Text" xml:space="preserve">
+    <value>החשבון {0} במחשב {1}: הגלישה בו חסומה עד שתבחרו לאיזה בן משפחה הוא שייך.</value>
+  </data>
+  <data name="Account_NoNameText" xml:space="preserve">
+    <value>חשבון חדש במחשב {0}: הגלישה בו חסומה עד שתבחרו לאיזה בן משפחה הוא שייך.</value>
+  </data>
   <data name="Summary_Title" xml:space="preserve">
     <value>{0} התראות חדשות מ-WebFilter</value>
   </data>
@@ -139,6 +148,18 @@
   </data>
   <data name="Summary_Devices" xml:space="preserve">
     <value>{0} מחשבים שלא מדווחים</value>
+  </data>
+  <data name="Summary_Account" xml:space="preserve">
+    <value>חשבון Windows חדש</value>
+  </data>
+  <data name="Summary_Accounts" xml:space="preserve">
+    <value>{0} חשבונות Windows חדשים</value>
+  </data>
+  <data name="Summary_Other" xml:space="preserve">
+    <value>התראה אחרת</value>
+  </data>
+  <data name="Summary_Others" xml:space="preserve">
+    <value>{0} התראות אחרות</value>
   </data>
   <data name="Other_Title" xml:space="preserve">
     <value>התראה חדשה</value>

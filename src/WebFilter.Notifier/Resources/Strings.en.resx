@@ -119,6 +119,15 @@
   <data name="Device_NeverText" xml:space="preserve">
     <value>{0} was paired but has not reported to the parents' computer for over a day.</value>
   </data>
+  <data name="Account_Title" xml:space="preserve">
+    <value>New Windows account found</value>
+  </data>
+  <data name="Account_Text" xml:space="preserve">
+    <value>The account {0} on {1}: browsing there is blocked until you choose which family member it belongs to.</value>
+  </data>
+  <data name="Account_NoNameText" xml:space="preserve">
+    <value>A new account on {0}: browsing there is blocked until you choose which family member it belongs to.</value>
+  </data>
   <data name="Summary_Title" xml:space="preserve">
     <value>{0} new WebFilter notifications</value>
   </data>
@@ -139,6 +148,18 @@
   </data>
   <data name="Summary_Devices" xml:space="preserve">
     <value>{0} computers not reporting</value>
+  </data>
+  <data name="Summary_Account" xml:space="preserve">
+    <value>A new Windows account</value>
+  </data>
+  <data name="Summary_Accounts" xml:space="preserve">
+    <value>{0} new Windows accounts</value>
+  </data>
+  <data name="Summary_Other" xml:space="preserve">
+    <value>Another notification</value>
+  </data>
+  <data name="Summary_Others" xml:space="preserve">
+    <value>{0} other notifications</value>
   </data>
   <data name="Other_Title" xml:space="preserve">
     <value>New notification</value>

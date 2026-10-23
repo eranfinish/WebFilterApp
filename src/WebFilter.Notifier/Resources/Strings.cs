@@ -45,6 +45,10 @@ internal static class Strings
     public static string Device_Text => Get();
     public static string Device_NeverText => Get();
 
+    public static string Account_Title => Get();
+    public static string Account_Text => Get();
+    public static string Account_NoNameText => Get();
+
     public static string Summary_Title => Get();
     public static string Summary_Request => Get();
     public static string Summary_Requests => Get();
@@ -52,6 +56,10 @@ internal static class Strings
     public static string Summary_Tampers => Get();
     public static string Summary_Device => Get();
     public static string Summary_Devices => Get();
+    public static string Summary_Account => Get();
+    public static string Summary_Accounts => Get();
+    public static string Summary_Other => Get();
+    public static string Summary_Others => Get();
 
     public static string Other_Title => Get();
     public static string Other_Text => Get();

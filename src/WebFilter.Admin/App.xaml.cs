@@ -19,7 +19,7 @@ public partial class App : Application
         _main = new MainViewModel(_client, new DispatcherUiTimer(), new MessageBoxDialogService(), new WpfClipboardService());
         MainWindow = new MainWindow { DataContext = _main };
         MainWindow.Show();
-        _main.Start();
+        _main.Start(options.StartPage);
     }
 
     protected override void OnExit(ExitEventArgs e)

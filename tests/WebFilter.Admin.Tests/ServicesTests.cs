@@ -35,4 +35,19 @@ public sealed class AdminAppOptionsTests
     [InlineData(new[] { "--unknown", "x" }, "WebFilter.Admin")]
     public void Parses_the_pipe_name(string[] args, string expected) =>
         Assert.Equal(expected, AdminAppOptions.Parse(args).PipeName);
+
+    /// <summary>The notifier opens the admin app with <c>--page devices</c> for a new Windows account (PROTECTION-SPEC §10).</summary>
+    [Theory]
+    [InlineData(new string[0], null)]
+    [InlineData(new[] { "--page", "devices" }, "devices")]
+    [InlineData(new[] { "--PAGE=Devices" }, "devices")]
+    [InlineData(new[] { "--pipe", "WebFilter.Test.Admin", "--page", " requests " }, "requests")]
+    [InlineData(new[] { "--page" }, null)]
+    [InlineData(new[] { "--page=" }, null)]
+    public void Parses_the_start_page(string[] args, string? expected) =>
+        Assert.Equal(expected, AdminAppOptions.Parse(args).StartPage);
+
+    [Fact]
+    public void The_page_and_the_pipe_are_read_together() =>
+        Assert.Equal(new AdminAppOptions("Other", "devices"), AdminAppOptions.Parse(["--page=devices", "--pipe=Other"]));
 }

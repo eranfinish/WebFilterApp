@@ -123,11 +123,19 @@ The admin app's activity page shows searches (filter "חיפושים").
   `getNotifications { since }` → `notificationsResult { items: [{ id, kind, at, memberId?, deviceId?, detail? }] }`.
   Kinds: `request` (new access request), `tamper` (filters or policies repaired, extension silent while a browser runs
   in a child's session, the service found it had stopped uncleanly), `device` (a paired computer stopped reporting for a
-  day).
+  day), `account` (a new standard Windows account on the hub or a paired computer: browsing there is almost fully blocked
+  until a parent answers the admin app's "נמצא חשבון Windows חדש" card; `deviceId` is the computer, `detail` the
+  account's name, id `account:{deviceId}:{accountId}`, so one per account however often it is reported). No `account`
+  for an administrator's account (never filtered), for one already linked or kept as a guest, or for what a computer
+  reports first — the accounts it already had when it was paired, or the hub's own at first setup: a device with no
+  accounts in the settings yet (`HubCore.AccountsAdded`, `FirstReport`). A computer paired again keeps its accounts, so
+  one created meanwhile is notified. Kinds may be added: the notifier shows one it does not know with generic wording.
 - A small notifier app `src/WebFilter.Notifier` (asInvoker, tray icon with "פתח את ניהול המשפחה" and "יציאה"), started
   at logon on the hub computer for every user by the installer, exits at once for non-admin users, polls the pipe, and
-  shows what arrives as Windows toast notifications: one toast per poll (a summary when it brings several), Hebrew
-  wording that names the computer, never the child.
+  shows what arrives as Windows toast notifications: one toast per poll (a summary when it brings several, one line per
+  kind and one for kinds it does not know), Hebrew wording that names the computer (and a new account's Windows name),
+  never the family member. A new account reads "נמצא חשבון Windows חדש" / "החשבון ‹name› במחשב ‹computer›: הגלישה בו
+  חסומה עד שתבחרו לאיזה בן משפחה הוא שייך."
   - Toasts, not tray balloons: a balloon is gone after a few seconds and is not kept in the notification center. The
     notifier uses `Microsoft.Toolkit.Uwp.Notifications` 7.1.3 (MIT; `ToastContentBuilder`, `ToastNotificationManagerCompat`)
     as an app without a package, built for `net10.0-windows10.0.17763.0`. Its app id is `WebFilter.Notifier`, shown as
@@ -136,11 +144,16 @@ The admin app's activity page shows searches (filter "חיפושים").
     register nothing.
   - Every toast stays in the notification center (Win+N) until opened or cleared. Tamper (alone or in a summary) uses
     the reminder scenario and stays on the screen until the parent clicks "פתח את ניהול המשפחה" or "סגור" (a system
-    dismissal); requests and silent computers show for the normal few seconds.
+    dismissal); requests, silent computers and new accounts show for the normal few seconds.
   - A click on the toast or on "פתח את ניהול המשפחה" opens the admin app through the shell (UAC); the notifier never
-    elevates. A running notifier gets the click through COM. With none running (after "יציאה", or after a reboot
-    before the Run value starts it) Windows starts the notifier with `-ToastActivated`; it opens the admin app and stays
-    as the session's notifier. If one runs but has not registered yet, the new copy opens the admin app and exits.
+    elevates. A running notifier gets the click through COM. With none running (after "יציאה", or after a reboot before
+    the Run value starts it) Windows starts the notifier with `-ToastActivated`; it opens the admin app and stays as the
+    session's notifier. If one runs but has not registered yet, the new copy opens the admin app and exits.
+  - Where it opens: a toast of new accounts alone carries `action=open;page=devices` and opens the devices page, with the
+    accounts' cards (`WebFilter.Admin.exe --page devices`; the shell keeps the arguments through UAC). Any other toast
+    carries `action=open` and opens the dashboard, which shows the pending requests and the new-account cards too. So do
+    toasts of older notifiers, an `account` an older notifier shows generically, and the two cases where the click does
+    not reach a registered notifier (a copy that opens the admin app by itself).
   - Uninstall on the hub runs `WebFilter.Notifier.exe --unregister` as the uninstalling user (their toasts and
     registration). Other users' keys stay: harmless, they only name the deleted exe (`installer/README.md`).
 - Tamper sources that do not exist yet are added where cheap (the WFP and policy services already report repairs).
