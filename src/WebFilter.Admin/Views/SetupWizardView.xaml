@@ -254,6 +254,8 @@
               <TextBlock Text="{Binding CategoriesSummary}" Style="{StaticResource SubtleText}" Margin="0,8,0,0" />
               <TextBlock Text="{Binding AccountsSummary}" Style="{StaticResource SubtleText}" Margin="0,4,0,0"
                          Visibility="{Binding AccountsSummary, Converter={StaticResource HasValueToVisibility}}" />
+              <TextBlock Text="{Binding BaselineSummary}" Style="{StaticResource SubtleText}" Margin="0,4,0,0" TextWrapping="Wrap"
+                         Visibility="{Binding BaselineSummary, Converter={StaticResource HasValueToVisibility}}" />
             </StackPanel>
           </Border>
         </StackPanel>

@@ -84,6 +84,30 @@
             </StackPanel>
           </StackPanel>
         </Border>
+
+        <!-- Baseline protection for the parents and adults (PROTECTION-SPEC §13), family-wide, saved together -->
+        <TextBlock Text="{x:Static res:Strings.Settings_Baseline}" Style="{StaticResource SectionText}" />
+        <TextBlock Text="{x:Static res:Strings.Settings_BaselineHint}" Style="{StaticResource SubtleText}" Margin="0,0,0,8" TextWrapping="Wrap" />
+        <Border Style="{StaticResource Card}" Margin="0,0,0,16" DataContext="{Binding Baseline}">
+          <StackPanel d:DataContext="{d:DesignInstance Type=vm:BaselineEditor}">
+            <CheckBox Content="{x:Static res:Strings.Settings_Baseline_BlockAdult}" IsChecked="{Binding BlockAdult}" />
+            <TextBlock Text="{x:Static res:Strings.Settings_Baseline_BlockAdultHint}" Style="{StaticResource SubtleText}" FontSize="12" Margin="22,2,0,10" />
+            <CheckBox Content="{x:Static res:Strings.Settings_Baseline_JumpGuard}" IsChecked="{Binding JumpGuard}" />
+            <TextBlock Text="{x:Static res:Strings.Settings_Baseline_JumpGuardHint}" Style="{StaticResource SubtleText}" FontSize="12" Margin="22,2,0,10" />
+            <CheckBox Content="{x:Static res:Strings.Settings_Baseline_BlockAds}" IsChecked="{Binding BlockAds}" />
+            <TextBlock Text="{x:Static res:Strings.Settings_Baseline_BlockAdsHint}" Style="{StaticResource SubtleText}" FontSize="12" Margin="22,2,0,10" />
+            <CheckBox Content="{x:Static res:Strings.Settings_Baseline_SafeSearch}" IsChecked="{Binding SafeSearch}" />
+            <TextBlock Text="{x:Static res:Strings.Settings_Baseline_SafeSearchHint}" Style="{StaticResource SubtleText}" FontSize="12" Margin="22,2,0,0" />
+            <Border Background="{StaticResource WarningSoftBrush}" CornerRadius="6" Padding="10,6" Margin="0,10,0,0"
+                    Visibility="{Binding NeedsAdultList, Converter={StaticResource BoolToVisibility}}">
+              <TextBlock Text="{x:Static res:Strings.Settings_Baseline_AdultListMissing}" Foreground="{StaticResource WarningBrush}" TextWrapping="Wrap" />
+            </Border>
+            <StackPanel Orientation="Horizontal" Margin="0,10,0,0" Visibility="{Binding IsDirty, Converter={StaticResource BoolToVisibility}}">
+              <Button Content="{x:Static res:Strings.Common_Save}" Command="{Binding SaveCommand}" Style="{StaticResource PrimaryButton}" />
+              <Button Content="{x:Static res:Strings.Common_Revert}" Command="{Binding RevertCommand}" />
+            </StackPanel>
+          </StackPanel>
+        </Border>
       </StackPanel>
 
       <!-- What this computer has and lacks -->

@@ -2630,7 +2630,7 @@ namespace WebFilter.Admin.Resources {
         }
 
         /// <summary>
-        ///   Looks up a localized string similar to הגלישה של בן המשפחה הזה לא מסוננת, ולכן השעות, האתרים, האפליקציות והקטגוריות שלמ....
+        ///   Looks up a localized string similar to הגלישה של בן המשפחה הזה לא מסוננת, מלבד ההגנה הבסיסית להורים ולמבוגרים (בהגדרות), ולכן השעו....
         /// </summary>
         public static string Member_UnrestrictedNote {
             get {
@@ -3341,7 +3341,7 @@ namespace WebFilter.Admin.Resources {
         }
 
         /// <summary>
-        ///   Looks up a localized string similar to בחרו לכל חשבון Windows במחשב הזה למי הוא שייך. חשבון שלא מקושר לאף אחד: מנהלים ל....
+        ///   Looks up a localized string similar to בחרו לכל חשבון Windows במחשב הזה למי הוא שייך. חשבון שלא מקושר לאף אחד: מנהלים מ....
         /// </summary>
         public static string Setup_AccountsHint {
             get {
@@ -4448,7 +4448,7 @@ namespace WebFilter.Admin.Resources {
         }
 
         /// <summary>
-        ///   Looks up a localized string similar to מנהל — לא מסונן.
+        ///   Looks up a localized string similar to מנהל — לא מסונן, מלבד ההגנה הבסיסית.
         /// </summary>
         public static string Devices_AdminNotFiltered {
             get {
@@ -4601,7 +4601,7 @@ namespace WebFilter.Admin.Resources {
         }
 
         /// <summary>
-        ///   Looks up a localized string similar to לחשבון של מבוגר במשפחה: הגלישה בו לא תסונן..
+        ///   Looks up a localized string similar to לחשבון של מבוגר במשפחה: הגלישה בו לא תסונן, מלבד ההגנה הבסיסית להורים ולמבוגרים..
         /// </summary>
         public static string NewAccount_AdultHint {
             get {
@@ -4705,6 +4705,132 @@ namespace WebFilter.Admin.Resources {
         public static string Common_Cancel {
             get {
                 return ResourceManager.GetString("Common_Cancel", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to הגנה בסיסית להורים ולמבוגרים.
+        /// </summary>
+        public static string Settings_Baseline {
+            get {
+                return ResourceManager.GetString("Settings_Baseline", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to חלה על חשבונות המנהלים ועל בני המשפחה ללא הגבלה, בכל המחשבים — הגלישה שלכם עצמכם....
+        /// </summary>
+        public static string Settings_BaselineHint {
+            get {
+                return ResourceManager.GetString("Settings_BaselineHint", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to חסימת אתרים למבוגרים.
+        /// </summary>
+        public static string Settings_Baseline_BlockAdult {
+            get {
+                return ResourceManager.GetString("Settings_Baseline_BlockAdult", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to אתרים מרשימת התוכן למבוגרים חסומים, עם הסבר בדף החסימה ובלי בקשת גישה. כלל היתר ....
+        /// </summary>
+        public static string Settings_Baseline_BlockAdultHint {
+            get {
+                return ResourceManager.GetString("Settings_Baseline_BlockAdultHint", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to חסימת קפיצות לאתרים אחרים.
+        /// </summary>
+        public static string Settings_Baseline_JumpGuard {
+            get {
+                return ResourceManager.GetString("Settings_Baseline_JumpGuard", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to אתר לא יכול לפתוח אתר אחר בחלון חדש או בהפניה אוטומטית. בדף החסימה יש "פתח בכל ז....
+        /// </summary>
+        public static string Settings_Baseline_JumpGuardHint {
+            get {
+                return ResourceManager.GetString("Settings_Baseline_JumpGuardHint", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to חסימת פרסומות.
+        /// </summary>
+        public static string Settings_Baseline_BlockAds {
+            get {
+                return ResourceManager.GetString("Settings_Baseline_BlockAds", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to בקשות לשרתי פרסומות מוכרים נחסמות בדפדפן. פרסומות שאתר מגיש מהכתובת שלו לא נחסמו....
+        /// </summary>
+        public static string Settings_Baseline_BlockAdsHint {
+            get {
+                return ResourceManager.GetString("Settings_Baseline_BlockAdsHint", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to חיפוש בטוח.
+        /// </summary>
+        public static string Settings_Baseline_SafeSearch {
+            get {
+                return ResourceManager.GetString("Settings_Baseline_SafeSearch", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to חיפוש בטוח כפוי ב-Google (ב-Chrome וב-Edge) וב-Bing (ב-Edge, ברמה מתונה). שאר הג....
+        /// </summary>
+        public static string Settings_Baseline_SafeSearchHint {
+            get {
+                return ResourceManager.GetString("Settings_Baseline_SafeSearchHint", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to רשימת האתרים למבוגרים עוד לא נמצאת בהגדרות המשפחה, ולכן עוד לא נחסם דבר. היא תתו....
+        /// </summary>
+        public static string Settings_Baseline_AdultListMissing {
+            get {
+                return ResourceManager.GetString("Settings_Baseline_AdultListMissing", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to ההגנה הבסיסית להורים ולמבוגרים נשמרה..
+        /// </summary>
+        public static string Done_BaselineSaved {
+            get {
+                return ResourceManager.GetString("Done_BaselineSaved", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to הגנה בסיסית להורים ולמבוגרים: {0}. אפשר לשנות בהגדרות..
+        /// </summary>
+        public static string Setup_Summary_Baseline {
+            get {
+                return ResourceManager.GetString("Setup_Summary_Baseline", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to הגנה בסיסית להורים ולמבוגרים: כבויה. אפשר להפעיל בהגדרות..
+        /// </summary>
+        public static string Setup_Summary_BaselineOff {
+            get {
+                return ResourceManager.GetString("Setup_Summary_BaselineOff", resourceCulture);
             }
         }
     }

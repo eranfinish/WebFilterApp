@@ -25,8 +25,9 @@ public enum WizardStep
 /// them; hours and a daily limit for the filtered ones; the ready-made category lists (data/starter-lists) and what each
 /// filtered member gets of them; a summary with the requirement checks of this computer (<see cref="GetDiagnostics"/>);
 /// then all of it in one <see cref="ReplaceSettings"/>, with each role's protections (PROTECTION-SPEC §1) and, when someone
-/// gets the school tools, the school sign-in rules (<see cref="SchoolSignIn"/>). It ends with how to pair the children's
-/// other computers.
+/// gets the school tools, the school sign-in rules (<see cref="SchoolSignIn"/>). The summary also says what the parents'
+/// own accounts get (the baseline protection, §13), and the adult list it blocks goes into the categories. It ends with
+/// how to pair the children's other computers.
 /// </summary>
 public sealed partial class SetupWizardViewModel : PageViewModel
 {
@@ -107,6 +108,10 @@ public sealed partial class SetupWizardViewModel : PageViewModel
     /// <summary>On the review step: which ready-made lists are added.</summary>
     [ObservableProperty]
     private string? _categoriesSummary;
+
+    /// <summary>On the review step: the family's baseline protection for the parents and adults (PROTECTION-SPEC §13).</summary>
+    [ObservableProperty]
+    private string? _baselineSummary;
 
     /// <summary>On the review step: what this computer has and lacks (MVP-PLAN §4.5 requirements check). Saving is allowed either way.</summary>
     public ObservableCollection<CheckItem> Checks { get; } = [];
@@ -197,6 +202,7 @@ public sealed partial class SetupWizardViewModel : PageViewModel
                 AccountsSummary = unlinked.Count == 0 ? null : Texts.Format(Strings.Setup_UnlinkedAccounts, string.Join(", ", unlinked));
                 var included = StarterCategories.Where(c => c.Include).Select(c => c.Label).ToList();
                 CategoriesSummary = included.Count == 0 ? Strings.Setup_NoCategories : Texts.Format(Strings.Setup_CategoriesAdded, string.Join(", ", included));
+                BaselineSummary = BaselineText(Context.Settings?.Baseline ?? new BaselineDto());
                 GoTo(WizardStep.Review);
                 await LoadChecksAsync();
                 break;
@@ -231,7 +237,8 @@ public sealed partial class SetupWizardViewModel : PageViewModel
             .SelectMany(m => m.Categories.Where(c => c.Category.Include && c.Choice != CategoryChoiceViewModel.Default).Select(c => new MemberCategoryDto(m.Id, c.Category.Name, c.Choice)))
             .ToList();
 
-        // A member allowed the school tools brings the sign-in rules with them (SchoolSignIn).
+        // A member allowed the school tools brings the sign-in rules with them (SchoolSignIn). The parents' baseline (on unless
+        // the family turned it off) blocks the adult list, so that list goes in even if it was left out above (§13).
         var applied = await RunAsync(() => Context.UpdateSettingsAsync(s => SchoolSignIn.Apply(s with
         {
             Members = [.. s.Members, .. members],
@@ -241,7 +248,7 @@ public sealed partial class SetupWizardViewModel : PageViewModel
             })],
             Schedules = [.. s.Schedules, .. schedules],
             DailyLimits = [.. s.DailyLimits, .. limits],
-            Categories = StarterLists.AddTo(s.Categories, lists.Select(l => l.List)),
+            Categories = StarterLists.AddTo(s.Categories, WithBaselineList(s, lists.Select(l => l.List))),
             MemberCategories = [.. s.MemberCategories, .. choices],
         })));
         if (!applied) return;
@@ -257,6 +264,26 @@ public sealed partial class SetupWizardViewModel : PageViewModel
 
     [RelayCommand]
     private void OpenMembers() => Navigator?.NavigateTo<MemberDetailViewModel>();
+
+    /// <summary>
+    /// "Baseline protection for parents and adults: block adult sites, block jumps to other sites, block ads, SafeSearch.
+    /// You can change it in Settings." — what administrators and unrestricted members will get (PROTECTION-SPEC §13).
+    /// </summary>
+    internal static string BaselineText(BaselineDto baseline)
+    {
+        var on = new[]
+        {
+            baseline.BlockAdult ? Strings.Settings_Baseline_BlockAdult : null,
+            baseline.JumpGuard ? Strings.Settings_Baseline_JumpGuard : null,
+            baseline.BlockAds ? Strings.Settings_Baseline_BlockAds : null,
+            baseline.SafeSearch ? Strings.Settings_Baseline_SafeSearch : null,
+        };
+        return Texts.NullIfEmpty(Texts.Join(", ", on)) is { } list ? Texts.Format(Strings.Setup_Summary_Baseline, list) : Strings.Setup_Summary_BaselineOff;
+    }
+
+    /// <summary><paramref name="lists"/>, plus the adult list while the family's baseline blocks adult sites (on when the settings do not say).</summary>
+    internal static IEnumerable<StarterList> WithBaselineList(FamilyBundle settings, IEnumerable<StarterList> lists) =>
+        (settings.Baseline ?? new BaselineDto()).BlockAdult && StarterLists.Find(StarterLists.Adult) is { } adult ? lists.Append(adult) : lists;
 
     internal void UpdateAccountWarnings()
     {
