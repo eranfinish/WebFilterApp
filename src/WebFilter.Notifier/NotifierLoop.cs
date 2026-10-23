@@ -26,17 +26,30 @@ public sealed class NotifierLoop(NotificationPoller poller, Func<TimeSpan, Cance
         misses <= 0 ? Interval : TimeSpan.FromTicks(Math.Min(MaxWait.Ticks, Interval.Ticks << Math.Min(misses, 16)));
 
     /// <summary>Polls at once, then on and on until cancelled or refused; <paramref name="show"/> gets each poll's new items.</summary>
-    public async Task<NotifierExit> RunAsync(Action<IReadOnlyList<NotificationDto>> show, CancellationToken ct)
+    public Task<NotifierExit> RunAsync(Action<IReadOnlyList<NotificationDto>> show, CancellationToken ct) => RunAsync(show, () => { }, ct);
+
+    /// <summary>
+    /// As above, and <paramref name="admitted"/> is called once, when the service first answers this user — an
+    /// administrator, a parent — before that poll's items are shown (the tray then registers for toast clicks).
+    /// </summary>
+    public async Task<NotifierExit> RunAsync(Action<IReadOnlyList<NotificationDto>> show, Action admitted, CancellationToken ct)
     {
         ArgumentNullException.ThrowIfNull(show);
+        ArgumentNullException.ThrowIfNull(admitted);
         var wait = TimeSpan.Zero;
         var misses = 0;
+        var answered = false;
         try
         {
             while (true)
             {
                 await delay(wait, ct);
                 var result = await poller.PollAsync(ct);
+                if (result.Status == PollStatus.Ok && !answered)
+                {
+                    answered = true;
+                    admitted();
+                }
                 if (result.Items.Count > 0) show(result.Items);
                 switch (result.Status)
                 {

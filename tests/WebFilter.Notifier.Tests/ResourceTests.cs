@@ -48,9 +48,11 @@ public sealed partial class ResourceTests
     }
 
     [Fact]
-    public void The_tray_menu_says_what_the_spec_says()
+    public void The_tray_menu_and_the_toast_buttons_say_what_the_spec_says()
     {
         Assert.Equal("פתח את ניהול המשפחה", Strings.Menu_Open);
+        Assert.Equal(Strings.Menu_Open, Strings.Toast_Open);
+        Assert.Equal("סגור", Strings.Toast_Close);
         Assert.Equal("יציאה", Strings.Menu_Exit);
         Assert.True(Strings.Tray_Text.Length < 128, "a NotifyIcon's text is at most 127 characters");
     }

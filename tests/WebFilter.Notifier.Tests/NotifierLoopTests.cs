@@ -9,6 +9,7 @@ public sealed class NotifierLoopTests
     private readonly ListLog _log = new();
     private readonly List<TimeSpan> _waits = [];
     private readonly List<IReadOnlyList<NotificationDto>> _shown = [];
+    private readonly List<string> _tray = [];
     private readonly CancellationTokenSource _stop = new();
 
     /// <summary>
@@ -32,7 +33,11 @@ public sealed class NotifierLoopTests
             ct.ThrowIfCancellationRequested();
             return Task.CompletedTask;
         }, _log);
-        return loop.RunAsync(_shown.Add, _stop.Token);
+        return loop.RunAsync(items =>
+        {
+            _shown.Add(items);
+            _tray.Add("show");
+        }, () => _tray.Add("admitted"), _stop.Token);
     }
 
     [Fact]
@@ -47,6 +52,7 @@ public sealed class NotifierLoopTests
         Assert.Equal(NotifierExit.Stopped, exit);
         Assert.Equal([TimeSpan.Zero, NotifierLoop.Interval, NotifierLoop.Interval, NotifierLoop.Interval], _waits);
         Assert.Equal(["request:1", "tamper:2"], Assert.Single(_shown).Select(i => i.Id));
+        Assert.Equal(["admitted", "show"], _tray);
         Assert.Empty(_log.Lines);
     }
 
@@ -58,6 +64,7 @@ public sealed class NotifierLoopTests
         Assert.Equal(NotifierExit.NotAdmin, exit);
         Assert.Equal([TimeSpan.Zero], _waits);
         Assert.Empty(_shown);
+        Assert.Empty(_tray);
         Assert.Contains("not an administrator", Assert.Single(_log.Lines), StringComparison.Ordinal);
     }
 
@@ -70,6 +77,7 @@ public sealed class NotifierLoopTests
         Assert.Equal([0, 60, 120, 240, 300, 300, 300, 30, 30], _waits.Select(w => (int)w.TotalSeconds));
         Assert.Equal(["The notify pipe is not available; polling less often until it is back.", "The notify pipe is back."], _log.Lines);
         Assert.Single(_shown);
+        Assert.Equal(["admitted", "show"], _tray);
     }
 
     [Fact]
@@ -80,6 +88,7 @@ public sealed class NotifierLoopTests
         Assert.Equal(NotifierExit.Stopped, exit);
         Assert.Equal([0, 30, 30, 30], _waits.Select(w => (int)w.TotalSeconds));
         Assert.Equal(3, _log.Lines.Count);
+        Assert.Empty(_tray);
     }
 
     [Theory]

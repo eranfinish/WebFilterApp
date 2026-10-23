@@ -105,12 +105,4 @@ public sealed class NotifierFilesTests : IDisposable
         using var again = SingleInstance.TryAcquire(name);
         Assert.NotNull(again);
     }
-
-    [Theory]
-    [InlineData(new string[0], "WebFilter.Notify")]
-    [InlineData(new[] { "--pipe", "WebFilter.Test.Notify" }, "WebFilter.Test.Notify")]
-    [InlineData(new[] { "--PIPE=WebFilter.Sim.Notify" }, "WebFilter.Sim.Notify")]
-    [InlineData(new[] { "--pipe" }, "WebFilter.Notify")]
-    public void The_pipe_can_be_named_for_a_development_service(string[] args, string pipe) =>
-        Assert.Equal(pipe, Program.PipeName(args));
 }

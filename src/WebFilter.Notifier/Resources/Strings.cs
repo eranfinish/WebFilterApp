@@ -19,6 +19,8 @@ internal static class Strings
     public static string Menu_Open => Get();
     public static string Menu_Exit => Get();
     public static string Open_Hint => Get();
+    public static string Toast_Open => Get();
+    public static string Toast_Close => Get();
 
     public static string Request_Title => Get();
     public static string Request_Url => Get();
@@ -54,6 +56,6 @@ internal static class Strings
     public static string Other_Title => Get();
     public static string Other_Text => Get();
 
-    /// <summary>A missing entry shows its name rather than failing a balloon (the tests make sure none is missing).</summary>
+    /// <summary>A missing entry shows its name rather than failing a toast (the tests make sure none is missing).</summary>
     private static string Get([CallerMemberName] string name = "") => Manager.GetString(name, Culture) ?? name;
 }

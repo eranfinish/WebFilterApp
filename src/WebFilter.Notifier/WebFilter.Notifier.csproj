@@ -7,11 +7,21 @@
   -->
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
-    <TargetFramework>net10.0-windows</TargetFramework>
+    <!--
+      A Windows 10 1809 (17763) TFM: the lowest that Microsoft.Toolkit.Uwp.Notifications ships ToastNotificationManagerCompat
+      for (its net5.0-windows10.0.17763 asset; the plain net5.0 one has no toasts). It brings the WinRT projection
+      (Microsoft.Windows.SDK.NET.dll, WinRT.Runtime.dll) into the output, and so into the MSI's payload.
+    -->
+    <TargetFramework>net10.0-windows10.0.17763.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <UseWindowsForms>true</UseWindowsForms>
-    <AssemblyTitle>WebFilter parents' notifications</AssemblyTitle>
+    <!--
+      The name Windows shows on our toasts and in the notification center: the toolkit takes it from the entry assembly's
+      title (there is no Start-menu shortcut for the notifier). Task Manager shows it too.
+    -->
+    <AssemblyTitle>WebFilter</AssemblyTitle>
+    <Description>WebFilter parents' notifications</Description>
     <ApplicationManifest>app.manifest</ApplicationManifest>
     <ApplicationIcon>notifier.ico</ApplicationIcon>
     <ApplicationHighDpiMode>PerMonitorV2</ApplicationHighDpiMode>
@@ -25,7 +35,17 @@
   </ItemGroup>
 
   <ItemGroup>
-    <!-- The tray icon at the small icon size (the exe's own icon resource is the large one). -->
+    <!--
+      Windows Community Toolkit notifications, MIT licence (https://licenses.nuget.org/MIT; .NET Foundation). 7.1.3 is the
+      last release; ToastContentBuilder builds the toasts, ToastNotificationManagerCompat registers an unpackaged app for
+      them (WindowsToasts). Its System.Drawing.Common / Registry / Reflection.Emit dependencies come from the shared
+      framework (pruned at restore).
+    -->
+    <PackageReference Include="Microsoft.Toolkit.Uwp.Notifications" Version="7.1.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- The tray icon at the small icon size (the exe's own icon resource is the large one, and the toasts' icon). -->
     <EmbeddedResource Include="notifier.ico" LogicalName="WebFilter.Notifier.notifier.ico" />
     <None Include="app.manifest" />
   </ItemGroup>

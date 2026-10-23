@@ -53,6 +53,12 @@
   <data name="Open_Hint" xml:space="preserve">
     <value>Click here to open family management.</value>
   </data>
+  <data name="Toast_Open" xml:space="preserve">
+    <value>Open family management</value>
+  </data>
+  <data name="Toast_Close" xml:space="preserve">
+    <value>Close</value>
+  </data>
   <data name="Request_Title" xml:space="preserve">
     <value>New request</value>
   </data>
