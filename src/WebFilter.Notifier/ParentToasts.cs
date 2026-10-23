@@ -62,12 +62,20 @@ public sealed class ParentToasts(IToastPlatform windows, AdminLauncher admin, IN
     }
 
     /// <summary>
-    /// A click, on Windows' thread: the admin app opens on the tray's thread, after Windows has had its answer (the UAC
-    /// prompt may wait for the parent). The close button never comes here: Windows dismisses the toast itself.
+    /// A click, on Windows' thread: the admin app opens on the tray's thread — on the page the toast names, if any — after
+    /// Windows has had its answer (the UAC prompt may wait for the parent). The close button never comes here: Windows
+    /// dismisses the toast itself.
     /// </summary>
     private void Clicked(string arguments)
     {
-        if (NotificationToasts.Opens(arguments)) post(() => admin.Open());
-        else log.Write($"A toast click with arguments this notifier does not know was ignored: '{arguments}'.");
+        if (NotificationToasts.Opens(arguments))
+        {
+            var page = NotificationToasts.PageOf(arguments);
+            post(() => admin.Open(page));
+        }
+        else
+        {
+            log.Write($"A toast click with arguments this notifier does not know was ignored: '{arguments}'.");
+        }
     }
 }

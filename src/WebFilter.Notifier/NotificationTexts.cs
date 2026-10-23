@@ -10,8 +10,8 @@ public sealed record NotificationText(string Title, string Text);
 /// <summary>
 /// The Hebrew wording of the toasts (PROTECTION-SPEC §10); <see cref="NotificationToasts"/> adds the buttons and how long
 /// each stays. Notifications carry member ids, not names, and the names are in the settings only the elevated admin pipe
-/// serves; the notifier never elevates, so a toast names the computer (a readable device id such as the computer's name)
-/// and the request's target, never the child.
+/// serves; the notifier never elevates, so a toast names the computer (a readable device id such as the computer's name),
+/// the request's target and a new account's Windows name, never the family member.
 /// </summary>
 public static class NotificationTexts
 {
@@ -37,6 +37,8 @@ public static class NotificationTexts
         NotificationKinds.Request => new(Strings.Request_Title, Join(Request(item), Strings.Open_Hint)),
         NotificationKinds.Tamper => Tamper(item),
         NotificationKinds.Device => new(Strings.Device_Title, Join(Device(item, zone), Strings.Open_Hint)),
+        NotificationKinds.Account => new(Strings.Account_Title, Join(Account(item), Strings.Open_Hint)),
+        // A kind from a newer service: a toast that still leads to the admin app, never a lost notification.
         _ => new(Strings.Other_Title, Strings.Other_Text),
     };
 
@@ -80,16 +82,30 @@ public static class NotificationTexts
             : Format(Strings.Device_NeverText, computer);
     }
 
-    /// <summary>"3 new notifications": one line per kind, with how many.</summary>
+    /// <summary>
+    /// "The account tom on kids-pc: browsing there is blocked until you choose which family member it belongs to.";
+    /// detail is the Windows account's name. The sentence starts in Hebrew, so a Latin name does not turn its direction.
+    /// </summary>
+    private static string Account(NotificationDto item)
+    {
+        var computer = Computer(item.DeviceId);
+        return item.Detail is { Length: > 0 } name ? Format(Strings.Account_Text, Ltr(name), computer) : Format(Strings.Account_NoNameText, computer);
+    }
+
+    /// <summary>"3 new notifications": one line per kind, with how many; kinds this notifier does not know share one line.</summary>
     private static NotificationText Summary(IReadOnlyList<NotificationDto> items)
     {
         int Count(string kind) => items.Count(i => i.Kind == kind);
-        var (requests, tamper, devices) = (Count(NotificationKinds.Request), Count(NotificationKinds.Tamper), Count(NotificationKinds.Device));
+        var (requests, tamper, devices, accounts) =
+            (Count(NotificationKinds.Request), Count(NotificationKinds.Tamper), Count(NotificationKinds.Device), Count(NotificationKinds.Account));
+        var others = items.Count - requests - tamper - devices - accounts;
         var lines = new[]
         {
             requests == 0 ? null : requests == 1 ? Strings.Summary_Request : Format(Strings.Summary_Requests, requests),
             tamper == 0 ? null : tamper == 1 ? Strings.Summary_Tamper : Format(Strings.Summary_Tampers, tamper),
             devices == 0 ? null : devices == 1 ? Strings.Summary_Device : Format(Strings.Summary_Devices, devices),
+            accounts == 0 ? null : accounts == 1 ? Strings.Summary_Account : Format(Strings.Summary_Accounts, accounts),
+            others == 0 ? null : others == 1 ? Strings.Summary_Other : Format(Strings.Summary_Others, others),
             Strings.Open_Hint,
         };
         return new(Format(Strings.Summary_Title, items.Count), string.Join("\n", lines.Where(l => l is not null)));

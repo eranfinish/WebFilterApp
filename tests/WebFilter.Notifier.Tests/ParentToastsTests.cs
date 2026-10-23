@@ -37,11 +37,13 @@ public sealed partial class ParentToastsTests
         while (_posted.TryDequeue(out var action)) action();
     }
 
-    private void OpenedTheAdminAppOnce()
+    /// <param name="arguments">The admin app's command line: none (its dashboard), or the page a toast names.</param>
+    private void OpenedTheAdminAppOnce(string arguments = "")
     {
         var info = Assert.Single(_started);
         Assert.Equal(AdminPath, info.FileName);
-        Assert.True(info.UseShellExecute); // through the shell, so Windows asks for elevation
+        Assert.True(info.UseShellExecute); // through the shell, so Windows asks for elevation (and passes the arguments on)
+        Assert.Equal(arguments, info.Arguments);
     }
 
     [Fact]
@@ -90,6 +92,34 @@ public sealed partial class ParentToastsTests
         RunPosted();
         OpenedTheAdminAppOnce();
         Assert.Empty(_log.Lines);
+    }
+
+    [Theory]
+    [InlineData("toast")]
+    [InlineData("button")]
+    public void A_click_on_a_new_account_toast_opens_family_management_on_the_devices_page(string where)
+    {
+        _toasts.Show([TestData.Account(1)]);
+        var toast = ToastXml.Of(_windows.Shown.Single());
+        var arguments = where == "toast" ? (string)toast.Attribute("launch")! : ToastXml.Buttons(toast).Single().Arguments!;
+
+        _windows.Click(arguments);
+        RunPosted();
+
+        OpenedTheAdminAppOnce("--page devices");
+        Assert.Empty(_log.Lines);
+    }
+
+    [Fact]
+    public void A_page_that_is_not_a_plain_name_never_reaches_the_command_line()
+    {
+        _toasts.Admitted();
+
+        _windows.Click("action=open;page=devices --pipe Other");
+        RunPosted();
+
+        OpenedTheAdminAppOnce();
+        Assert.Contains("'devices --pipe Other'", Assert.Single(_log.Lines), StringComparison.Ordinal);
     }
 
     [Fact]

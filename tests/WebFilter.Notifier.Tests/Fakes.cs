@@ -37,6 +37,9 @@ internal static class TestData
 
     public static NotificationDto Device(int minutes, string? lastSeen, string device = "laptop-yoav") =>
         new($"device:{minutes}", NotificationKinds.Device, Now.AddMinutes(minutes), null, device, lastSeen);
+
+    public static NotificationDto Account(int minutes, string? name = "tom", string? device = "pc-kids") =>
+        new($"account:{device}:S-1-5-21-2000-{1010 + minutes}", NotificationKinds.Account, Now.AddMinutes(minutes), null, device, name);
 }
 
 internal static class Bidi
