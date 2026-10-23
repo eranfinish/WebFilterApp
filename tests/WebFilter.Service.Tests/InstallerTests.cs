@@ -236,6 +236,21 @@ public sealed class InstallerTests
     }
 
     [Fact]
+    public void The_notifier_unregisters_its_toasts_for_the_uninstalling_user_on_the_hub()
+    {
+        var scheduled = Scheduled("UnregisterNotifier");
+        // While its exe is still there, on uninstall only, and only where it ran (the hub).
+        Assert.Equal("RemoveFiles", Attr(scheduled, "Before"));
+        Assert.Equal("REMOVE~=\"ALL\" AND NOT UPGRADINGPRODUCTCODE AND ROLE~=\"hub\"", Attr(scheduled, "Condition"));
+        // Impersonated: the registration is in the HKCU of the user who uninstalls, not LocalSystem's.
+        var action = Single("CustomAction", "UnregisterNotifier");
+        Assert.Equal(("deferred", "yes", "ignore"), (Attr(action, "Execute"), Attr(action, "Impersonate"), Attr(action, "Return")));
+
+        var args = CommandLine("UnregisterNotifier", new() { ["INSTALLFOLDER"] = @"C:\Program Files\WebFilter\" });
+        Assert.Equal([@"C:\Program Files\WebFilter\WebFilter.Notifier.exe", "--unregister"], args);
+    }
+
+    [Fact]
     public void The_data_folder_is_created_for_SYSTEM_and_Administrators_only()
     {
         var folder = Package.Descendants(Wix + "StandardDirectory").Single(d => Attr(d, "Id") == "CommonAppDataFolder").Element(Wix + "Directory")!;
