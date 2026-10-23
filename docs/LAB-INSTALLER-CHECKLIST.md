@@ -199,7 +199,7 @@ Get-NetConnectionProfile | Set-NetConnectionProfile -NetworkCategory Private
   dotnet build installer\WebFilter.Installer.wixproj -c Release -p:ProductVersion=0.7.1
   ```
 
-- [ ] שדרוג ב-Hub כשהורה מחובר ואפליקציית ההתראות רצה אצלו: שדרוג שקט (`/qn REBOOT=ReallySuppress`) מסתיים בקוד **0**, לא 3010 או 1641; ב-log פעולת `CloseNotifiers` רצה לפני `RemoveExistingProducts`; אין `PendingFileRenameOperations` שמזכיר את `C:\Program Files\WebFilter`. ושדרוג בלחיצה כפולה (ממשק מלא) מעלה את אפליקציית ההתראות מחדש מיד בסופו, בחשבון של ההורה, בלי הרשאות מנהל.
+- [ ] שדרוג ב-Hub כשהורה מחובר ואפליקציית ההתראות רצה אצלו: שדרוג שקט (`/qn REBOOT=ReallySuppress`) מסתיים בקוד **0**, לא 3010 או 1641; ב-log פעולת `CloseNotifiers` רצה לפני `InstallValidate` ו-`RemoveExistingProducts`; אין `PendingFileRenameOperations` שמזכיר את `C:\Program Files\WebFilter`. ושדרוג בלחיצה כפולה (ממשק מלא) מעלה את אפליקציית ההתראות מחדש מיד בסופו, בחשבון של ההורה, בלי הרשאות מנהל.
 - [ ] אותו שדרוג ב-Hub, כש-`labadmin` מחובר ויש הודעה של WebFilter במרכז ההודעות: ההודעה נשארת, הרישום נשאר (`reg query HKCU\Software\Classes\AppUserModelId\WebFilter.Notifier`), וב-log **אין** `--unregister`. בכניסה הבאה ההתראות עולות, ולחיצה על ההודעה הישנה עדיין פותחת את ממשק הניהול.
 
 ## ה. מנוע ה-WFP (אוטומטי, מהמחשב שלך)

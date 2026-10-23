@@ -234,21 +234,21 @@ public sealed class InstallerTests
     [Fact]
     public void Running_notifiers_are_ended_in_every_session_before_the_old_version_or_any_file_is_removed()
     {
-        // A silent upgrade with a parent signed in restarted the lab hub: the old version's files were in use. The old
-        // version is now removed inside the transaction, and CloseNotifiers (LocalSystem, every session) runs just before.
-        Assert.Equal("afterInstallInitialize", Attr(Package.Descendants(Wix + "MajorUpgrade").Single(), "Schedule"));
+        // A silent upgrade with a parent signed in restarted the lab hub: the old version's files were in use. CloseNotifiers
+        // now runs before InstallValidate (which checks for files in use) and so before RemoveExistingProducts, which keeps
+        // its standard place: a deferred action before it fails the install with error 2613 (seen in the lab).
+        Assert.Null(Attr(Package.Descendants(Wix + "MajorUpgrade").Single(), "Schedule"));
         var scheduled = Scheduled("CloseNotifiers");
-        Assert.Equal(("RemoveExistingProducts", "Installed OR WIX_UPGRADE_DETECTED"), (Attr(scheduled, "Before"), Attr(scheduled, "Condition")));
+        Assert.Equal(("InstallValidate", "Installed OR WIX_UPGRADE_DETECTED"), (Attr(scheduled, "Before"), Attr(scheduled, "Condition")));
         Assert.Equal("InstallExecuteSequence", scheduled.Parent!.Name.LocalName);
         var action = Single("CustomAction", "CloseNotifiers");
-        Assert.Equal(("deferred", "no", "ignore"), (Attr(action, "Execute"), Attr(action, "Impersonate"), Attr(action, "Return")));
+        Assert.Equal(("WixQuietExec", "immediate", "ignore"), (Attr(action, "DllEntry"), Attr(action, "Execute"), Attr(action, "Return")));
+        // In immediate mode WixQuietExec reads its command line from WixQuietExecCmdLine, set just before.
+        var command = Single("SetProperty", "WixQuietExecCmdLine");
+        Assert.Equal(("execute", "CloseNotifiers"), (Attr(command, "Sequence"), Attr(command, "Before")));
         Assert.Equal([@"C:\Windows\system32\taskkill.exe", "/F", "/IM", "WebFilter.Notifier.exe"],
-            CommandLine("CloseNotifiers", new() { ["System64Folder"] = @"C:\Windows\system32\" }));
+            CommandLine("WixQuietExecCmdLine", new() { ["System64Folder"] = @"C:\Windows\system32\" }));
         Assert.Empty(Package.Descendants(Util + "CloseApplication"));
-
-        // ICE63 flags any action between InstallInitialize and RemoveExistingProducts; this one has nothing to roll back.
-        var wixproj = XDocument.Load(Path.Combine(RepoRoot(), "installer", "WebFilter.Installer.wixproj"));
-        Assert.Contains("ICE63", wixproj.Descendants("SuppressIces").Single().Value.Split(';'));
     }
 
     [Fact]
