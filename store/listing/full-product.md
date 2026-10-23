@@ -71,6 +71,19 @@ Connects to com.webfilter.host, the native messaging host installed by the WebFi
 Enforces the parents' rules. Navigations of pages and frames to sites that are not allowed are redirected to the extension's own block page, which shows the reason and, for children, a "request access" button. A static ruleset blocks navigation until the local WebFilter service confirms the user's rules (fail-closed); session rules block browsing when a child's time is over, block YouTube Shorts when the parents chose so, and keep a tab that a site opened to another site on the block page (jump protection). These rules filter only main_frame and sub_frame requests. A second static ruleset, disabled by default and generated ahead of time from EasyList, is enabled when the parents turn on ad blocking: it blocks the requests pages make to known ad servers (scripts, images, frames and other resources); it never blocks a page itself and reports nothing.
 ```
 
+### Host permission justification (the dashboard's single field, 897 characters)
+
+Chrome's dashboard has **one** "Host permission justification" field (at most 1,000 characters), and it covers both
+`<all_urls>` and the content scripts' match patterns. Paste this combined text there:
+
+```text
+<all_urls>: parents choose which sites are allowed or blocked for each child, and the adult-content and jump protections apply to any site, so the rules must be able to apply to every address, and redirecting a blocked navigation to the extension's block page requires host access to that address. The extension does not read or change the content of web pages, except on YouTube.
+
+YouTube content scripts (youtube.com, youtube-nocookie.com): they identify the channel of the video, Short, channel page or embedded player being shown and apply the parents' YouTube rules: allow it, block it, block Shorts if the parents chose so, or send the home page and search to the child's approved channels. A script in the page's main world reads the player's own data, which identifies the channel reliably after in-page navigation. The page is hidden until the decision is made, and the decision is local.
+```
+
+The two longer texts below are the same explanations in full, for reviewers' questions and the Edge notes.
+
 ### Host permission: `<all_urls>`
 
 ```text
