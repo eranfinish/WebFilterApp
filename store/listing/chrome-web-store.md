@@ -5,7 +5,7 @@ Every text is given in English and Hebrew. The primary listing language is **Eng
 
 Fields that only the reviewers read (single purpose, justifications, test instructions): paste the **English** text.
 
-This file describes **only version 0.1.0**. Text for the full product is in [future-full-product.md](future-full-product.md) — do not paste it now.
+This file describes **only version 0.1.0** (the first submission, kept for the record). The texts for the full version are in [full-product.md](full-product.md).
 
 ---
 
