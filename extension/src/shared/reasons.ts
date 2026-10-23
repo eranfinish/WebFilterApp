@@ -1,8 +1,8 @@
 import type { FilterMode, RequestResult, TimeState } from "./protocol";
 
 /**
- * The closed list of reason codes (MVP-PLAN §6, CLAUDE.md rule 8). Order matches ReasonCode in Decision.cs; the last
- * three are the protection features' codes (PROTECTION-SPEC §6).
+ * The closed list of reason codes (MVP-PLAN §6, CLAUDE.md rule 8). Order matches ReasonCode in Decision.cs; then the
+ * protection features' codes (PROTECTION-SPEC §6) and the parents' baseline protection's (§13).
  */
 export const REASON_CODES = [
   "allowed_unrestricted",
@@ -30,6 +30,7 @@ export const REASON_CODES = [
   "blocked_image_search",
   "blocked_jump",
   "blocked_youtube_shorts",
+  "blocked_baseline_adult",
 ] as const;
 
 export type ReasonCode = (typeof REASON_CODES)[number];
@@ -83,6 +84,9 @@ export function requestActionFor(reason: string | null | undefined): RequestActi
     case "blocked_jump":
     case "blocked_youtube_shorts":
       return "none";
+    // A parent's own block (PROTECTION-SPEC §13): nobody to ask; the protection is turned off in the admin app's settings.
+    case "blocked_baseline_adult":
+      return "none";
     default:
       return isReasonCode(reason) ? "none" : "url";
   }
@@ -90,6 +94,8 @@ export function requestActionFor(reason: string | null | undefined): RequestActi
 
 /** The reason to show when a block-page URL carries none (a compiled rule that only passes the original URL). */
 export function inferReason(time: TimeState | null, mode: FilterMode | null): ReasonCode {
+  // A parent's baseline blocks the adult list only, and time never applies to it.
+  if (mode === "baseline") return "blocked_baseline_adult";
   if (time?.state === "expired") return "blocked_daily_limit";
   if (time?.state === "outside_window") return "blocked_time_window";
   if (mode === "allowlist") return "blocked_not_in_allowlist";

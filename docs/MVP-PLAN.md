@@ -66,7 +66,7 @@
 ### 2.4 קריטריוני הצלחה ל-MVP (מדידים)
 
 1. ילד בחשבון רגיל **לא מצליח** להגיע לאתר חסום ב-Edge או ב-Chrome, ולא להפעיל אפליקציה לא מאושרת עם רשת, באף אחד מתרחישי העקיפה (סימולציות רמה 4).
-2. מבוגר לא מרגיש שום הבדל בגלישה ובאפליקציות.
+2. מבוגר לא מרגיש שום הבדל בגלישה ובאפליקציות, מלבד ההגנה הבסיסית שהמשפחה בחרה ([PROTECTION-SPEC §13](PROTECTION-SPEC.md): אתרים למבוגרים, קפיצות לאתרים אחרים, פרסומות, SafeSearch — אפשר לכבות בהגדרות).
 3. החלטת סינון בסוכן: p99 < 2ms עם 10,000 כללים. הסוכן: < 100MB זיכרון, < 1% CPU במנוחה.
 4. התקנה על VM נקי: < 10 דקות למחשב כולל צימוד. הסרה: לא נשארות מדיניות דפדפן ולא מסנני WFP.
 5. המערכת ממשיכה לעבוד אחרי אתחול ועדכון Windows/דפדפן.
@@ -187,7 +187,7 @@
 
 - Chrome/Edge מפעילים אותו כתהליך בן של הדפדפן, **בהרשאות המשתמש**
 - מעביר הודעות בין stdin/stdout (מסגרת: 4 בתים אורך + JSON) לבין ה-pipe של השירות
-- אם השירות לא זמין: מנהל (לפי `TokenElevationType` = `limited`/`full` — `IsInRole` מחזיר false להורה שגולש לא-מוגבה) → "ללא הגבלה"; משתמש מוגבל → רק אתרי "מותר תמיד" מה-`ProfileCache`, וכל השאר **חסום** עם הודעה "שירות הסינון לא פועל"; אין קובץ → חסימה מלאה
+- אם השירות לא זמין: מנהל (לפי `TokenElevationType` = `limited`/`full` — `IsInRole` מחזיר false להורה שגולש לא-מוגבה) → "ללא הגבלה"; משתמש מוגבל → רק אתרי "מותר תמיד" מה-`ProfileCache`, וכל השאר **חסום** עם הודעה "שירות הסינון לא פועל"; אין קובץ → חסימה מלאה ההגנה הבסיסית להורים ולמבוגרים (PROTECTION-SPEC §13) מגיעה רק מהשירות, ולכן כשהוא לא זמין מנהל ומבוגר גולשים כמו קודם — בלי אותה ובלי שום חסימה נוספת.
 - NativeAOT כדי שיעלה מהר (עשרות ms)
 - רישום: `HKLM\SOFTWARE\Google\Chrome\NativeMessagingHosts\com.webfilter.host` ו-`HKLM\SOFTWARE\Microsoft\Edge\NativeMessagingHosts\com.webfilter.host`; ה-manifest מתיר רק את מזהי התוסף שלנו (מזהה שונה ב-Chrome Web Store וב-Edge Add-ons)
 
@@ -224,7 +224,7 @@
 | רשימות | רשימות גלובליות, קטגוריות מוכנות, ייבוא/ייצוא JSON |
 | YouTube | הוספת ערוץ לפי URL או handle, היתר/חסימה לכל בן משפחה או לכולם |
 | יומן | חסימות, אפליקציות שנחסמו, ניסיונות עקיפה, שינויי הגדרות; סינון וייצוא CSV |
-| הגדרות ואבחון | אזור זמן, מצב השירות בכל מחשב, מדיניות, WFP, heartbeat של התוסף, המלצה ל-DNS משפחתי בראוטר |
+| הגדרות ואבחון | אזור זמן, מצב השירות בכל מחשב, מדיניות, WFP, heartbeat של התוסף, המלצה ל-DNS משפחתי בראוטר, **הגנה בסיסית להורים ולמבוגרים** (PROTECTION-SPEC §13) |
 
 ### 4.6 מתקין (WiX, MSI x64 per-machine)
 
@@ -242,7 +242,7 @@
 
 **חשוב:** במחשב שאינו בדומיין, Chrome ו-Edge מתקינים בכפייה **רק תוסף שמפורסם בחנות שלהם** (Chrome Web Store / Microsoft Edge Add-ons). התוסף יתפרסם בשתי החנויות כ-unlisted. חלופה ל-Chrome: Chrome Enterprise Core.
 
-### 5.1 HKLM — לכל המשתמשים (התוסף קיים אצל כולם; למבוגרים הוא שקוף)
+### 5.1 HKLM — לכל המשתמשים (התוסף קיים אצל כולם; למבוגרים — רק ההגנה הבסיסית, PROTECTION-SPEC §13)
 
 | מדיניות (Chrome ו-Edge) | ערך | מטרה |
 |------------------------|-----|------|
@@ -261,6 +261,8 @@
 | `ExtensionInstallBlocklist` | `*` | אין התקנת תוספים אחרים |
 | `ForceGoogleSafeSearch` (+ `ForceBingSafeSearch` ב-Edge) | `1` | SafeSearch |
 | `ForceYouTubeRestrict` | `1`/`2` לפי פרופיל | YouTube Restricted Mode |
+
+> **חשבונות מנהלים ובני משפחה ללא הגבלה** לא מקבלים את הטבלה הזו. מההגנה הבסיסית להורים ולמבוגרים ([PROTECTION-SPEC §13](PROTECTION-SPEC.md)) הם מקבלים, כשהמתג פועל, רק `ForceGoogleSafeSearch = 1` (Chrome ו-Edge) ו-`ForceBingSafeSearch = 1` (Edge, מתון) — בלי שום מדיניות אחרת, ותיקון שלהן לא נרשם כניסיון עקיפה.
 
 > אם ספייק S1 יראה שחלק מהמדיניות לא נאכפת מ-HKCU במחשב לא מנוהל — חוזרים ל-HKLM לאותן מדיניות (המחיר: גם המבוגרים יאבדו גלישה בסתר והתקנת תוספים).
 
@@ -283,7 +285,7 @@
 
 סדר הבדיקה ל-URL ראשי (`main_frame`/`sub_frame`):
 
-1. משתמש **ללא הגבלה**, או שההגבלות מושהות לו כרגע → **מותר** (וזמן לא נספר)
+1. משתמש **ללא הגבלה** (בן משפחה מבוגר, או חשבון מנהל) → **מותר** וזמן לא נספר, חוץ מ**ההגנה הבסיסית להורים** ([PROTECTION-SPEC §13](PROTECTION-SPEC.md)): אתר מקטגוריית `adult` → **חסום (`blocked_baseline_adult`)**, אלא אם כלל `allow` של ההורים מתאים לו; השהיה לא חלה עליהם. ההגבלות של בן משפחה מסונן מושהות לו כרגע → **מותר** (וזמן לא נספר)
 2. סכמה שאינה http/https → לפי מדיניות הדפדפן, לא דרכנו
    - **חסימות מובנות** של בן המשפחה — חיפוש תמונות (`blockImageSearch`, [PROTECTION-SPEC §4](PROTECTION-SPEC.md)) → **חסום (`blocked_image_search`)**; AI Mode של Google (`udm=50`) כשהקטגוריות שלו חוסמות `ai-chat` (§11) → **חסום (`blocked_rule`, `builtin-ai-mode-google`)** — לפני שיעורי בית וזמן וגם מול "מותר תמיד". ב-DNR הן בעדיפות 327,680, מעל כללי "הזמן נגמר"
    - `accounts.youtube.com` (הכניסה לחשבון Google עוברת דרכו) — מצב ה-YouTube לא חוסם אותו לעולם, גם `off` ובשיעורי בית (§11)
@@ -302,7 +304,7 @@
 
 **Regex:** חייב להיות תואם RE2 (מתורגם ל-`regexFilter`, עד 1,000). ממשק הניהול דוחה lookaround ו-backreferences.
 
-**קודי סיבה** (משותפים לכל הרכיבים ולסימולציות): `allowed_unrestricted`, `allowed_paused`, `allowed_always`, `allowed_rule`, `allowed_category`, `allowed_default`, `allowed_homework`, `allowed_youtube_channel`, `allowed_browser`, `blocked_rule`, `blocked_category`, `blocked_not_in_allowlist`, `blocked_time_window`, `blocked_daily_limit`, `blocked_homework`, `blocked_ip_literal`, `blocked_youtube_channel`, `blocked_youtube_unknown`, `blocked_youtube_off`, `blocked_service_unavailable`, `blocked_app_network`, `redirect_youtube_home`, `blocked_image_search`, `blocked_jump`, `blocked_youtube_shorts` (שני האחרונים — החלטה של התוסף בלבד; השירות שומר את הסיבה שהתוסף דיווח).
+**קודי סיבה** (משותפים לכל הרכיבים ולסימולציות): `allowed_unrestricted`, `allowed_paused`, `allowed_always`, `allowed_rule`, `allowed_category`, `allowed_default`, `allowed_homework`, `allowed_youtube_channel`, `allowed_browser`, `blocked_rule`, `blocked_category`, `blocked_not_in_allowlist`, `blocked_time_window`, `blocked_daily_limit`, `blocked_homework`, `blocked_ip_literal`, `blocked_youtube_channel`, `blocked_youtube_unknown`, `blocked_youtube_off`, `blocked_service_unavailable`, `blocked_app_network`, `redirect_youtube_home`, `blocked_image_search`, `blocked_jump`, `blocked_youtube_shorts` (שני אלה — החלטה של התוסף בלבד; השירות שומר את הסיבה שהתוסף דיווח), `blocked_baseline_adult` (אתר למבוגרים בהגנה הבסיסית להורים, PROTECTION-SPEC §13).
 
 **חשבון לא מקושר:** חשבון Windows לא-מנהל שעדיין לא קושר לבן משפחה מקבל רק "מותר תמיד", עד שההורה מקשר אותו. ההורה יכול גם לענות "להשאיר חסום (אורח)" (`guest` בחשבון): הסינון לא משתנה, רק ממשק הניהול מפסיק לשאול עליו.
 
@@ -442,7 +444,7 @@ Retention של `events`: 90 יום כברירת מחדל — מוחל ב-Hub ב�
 | הודעה | כיוון | תוכן |
 |-------|-------|------|
 | `hello` | → | `{extVersion, browser}` ← `{user:{accountId,name,role}, mode, rulesVersion, serverVersion}` |
-| `getRules` | → | ← `{version, dnrRules[], youtube:{mode, allowed[], blocked[]}, alwaysAllowed[], time:{state, remaining}, features?:{jumpGuard, blockYouTubeShorts, logSearches, canOverrideJump, blockAds}}` |
+| `getRules` | → | ← `{version, dnrRules[], youtube:{mode, allowed[], blocked[]}, alwaysAllowed[], time:{state, remaining}, features?:{jumpGuard, blockYouTubeShorts, logSearches, canOverrideJump, blockAds}, mode?}` |
 | `heartbeat` | → | `{focused, idle, hasWebTab}` ← `{state, remainingMinutes}` |
 | `reportBlock` | → | `{url, reason, ruleId}` |
 | `reportSearch` | → | `{engine, query, url}` ← `error {code: ok}` — נרשם (`search`) רק כש-`logSearches` |
@@ -575,6 +577,8 @@ PolicyManager, WfpManager, ProcessGuard, TamperMonitor. **תנאי סיום:** �
 > **במעבדה, 2026-10-23 (0.7.1–0.7.4):** שדרוג שומר תפקיד, צימוד והגדרות ולא מריץ `cleanup`. Edge גולש לילד גם בלי `supportedBrowsers`, דרך הזיהוי של Chrome ו-Edge שמותקנים לכל המחשב. מדיניות שנמחקה או שונתה בחשבון ילד חוזרת תוך 6–43 שניות ונרשמת כ-`tamper`, וההתראה מגיעה ל-Hub תוך שניות. אפליקציית ההתראות מציגה אותה כהודעת Windows בשם WebFilter, ההודעה על ניסיון עקיפה נשארת על המסך עד שלוחצים, ולחיצה פותחת את ממשק הניהול דרך UAC. שדרוג שקט כשהורה מחובר: הגרסה הראשונה של אפליקציית ההתראות החזיקה קבצים, ו-msiexec הפעיל מחדש את ה-Hub (1641). תוקן: `CloseNotifiers` לפני `InstallValidate`, ועכשיו קוד 0 בלי הפעלה מחדש. Chrome ב-Home קיבל את התוסף מהחנות לפי המדיניות (`location=7`). כרטיס "נמצא חשבון Windows חדש" הופיע בממשק הניהול האמיתי, והורה הבין אותו. חשבון חדש (`ariel`) שנוצר ב-`lab-kids` אחרי השדרוג ל-0.7.5 הביא להורה ב-Hub התראה "נמצא חשבון Windows חדש", ולחיצה עליה פתחה את ממשק הניהול דרך UAC עם `--page devices`. השדרוג ל-0.7.5 כשממשק הניהול היה פתוח הסתיים ב-3010 (`ReplacedInUseFiles`), בלי הפעלה מחדש. עוד לא נבדק: התוסף המלא (בחנויות יש רק 0.1.0).
 >
 > **חסימת פרסומות (2026-10-23, [PROTECTION-SPEC §12](PROTECTION-SPEC.md)):** דגל בן משפחה `blockAds` (ברירת מחדל באשף: ילד ומתבגר — כן) בחבילה, ב-`setMember` וב-`features` של `rules`; כבוי בהשהיה. בתוסף ruleset סטטי `ads` (כבוי ב-manifest) שנוצר מ-EasyList בקומיט נעוץ (`tools/starter-lists/ad-ruleset.mjs`): רק כללי דומיין שלם, חוסם כל סוג בקשה חוץ מטעינת דף, בעדיפות 1, ומופעל לפי `features.blockAds` (ובמצב fail-closed). אין בו דומיינים של `educational`, `school-tools` וחברות הליבה. נבדק ב-Edge (`npm run verify:edge`, ו-`npm run e2e:real` מול השירות האמיתי); לא נבדק במעבדה.
+>
+> **הגנה בסיסית להורים ולמבוגרים (2026-10-23, [PROTECTION-SPEC §13](PROTECTION-SPEC.md)):** לבקשת ההורה, גם חשבונות המנהלים (מקושרים למבוגר או לא מקושרים) ובני משפחה ללא הגבלה מקבלים הגנה משפחתית קלה: `baseline` בראש החבילה (`blockAdult`, `jumpGuard`, `blockAds`, `safeSearch`; כולם פועלים כשאין הגדרה, כך שגם משפחות קיימות מקבלות אותה). אתרי קטגוריית `adult` חסומים להם (`blocked_baseline_adult`, דרך ה-Core ומהדר ה-DNR ככל חסימת קטגוריה — לא ruleset סטטי חדש; כלל היתר של ההורים גובר; בלי חסימת כתובות IP, YouTube וזמן), שומר הקפיצות עם "פתח בכל זאת", ה-ruleset של הפרסומות, ו-SafeSearch של Google ושל Bing (מתון) כמדיניות HKCU — ושום מדיניות אחרת, בלי WFP, בלי ספירת זמן ובלי השהיה. שום דבר מהגלישה שלהם לא נרשם (חסימות, "פתח בכל זאת", חיפושים, בקשות). בפרוטוקול: מצב `baseline` ב-`helloResult` וב-`mode` החדש של `rules` (כך קישור מחדש או שינוי מתג חלים עם `rulesChanged`); כשהכול כבוי — `unrestricted` כמו קודם; כשהשירות לא זמין ה-host עונה `unrestricted` כמו קודם. ממשק הניהול: סעיף "הגנה בסיסית להורים ולמבוגרים" בהגדרות (ארבעה מתגים; שמירה מוסיפה את רשימת `adult` לקטגוריות המשפחה) ושורה בסיכום האשף. תרחישי `BASE-001`–`BASE-008` ו-`FC-005`; נבדק ב-Edge (`npm run verify:edge`) ומקצה לקצה מול השירות וה-host האמיתיים (`npm run e2e:real`); לא נבדק במעבדה. משפחה קיימת מקבלת את חסימת האתרים למבוגרים רק אחרי שמירה של הסעיף (הרשימה לא מתווספת לבד).
 >
 > חסר ב-M4 — **האזנה להפעלת תהליכים (ProcessGuard) — הצעד הבא**, אירוע "אפליקציה ניסתה להתחבר" (`FwpmNetEventSubscribe`; אירועי החסימה של המסננים שלנו כבר מופיעים ב-`netsh wfp show netevents`), TamperMonitor (כולל "התוסף שותק בזמן שדפדפן רץ אצל ילד"), ובדיקת אפליקציות Store אמיתיות ו-WebView2, ותרחישי `system` על VM עם התוסף מהחנות. `ALE_AUTH_RECV_ACCEPT` לא מסונן (חיבורים נכנסים — חומת האש של Windows חוסמת אותם למשתמש רגיל).
 

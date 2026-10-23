@@ -47,6 +47,29 @@ public class FamilyBundleTests
         Assert.Equal(new WindowsFeaturesDto(NotificationsAndSync: true, OneDrive: false, WebSearchInStart: false), partial.WindowsFeatures);
     }
 
+    /// <summary>
+    /// PROTECTION-SPEC §13: <c>baseline: { blockAdult, jumpGuard, blockAds, safeSearch }</c> round-trips; an older bundle has
+    /// none (all on), and a switch left out of the section is on.
+    /// </summary>
+    [Fact]
+    public void The_baseline_uses_the_spec_wire_names_and_is_on_when_missing()
+    {
+        var older = FamilyBundleJson.Deserialize(File.ReadAllText(Path.Combine(FixturesDir(), "family-base.json")));
+        Assert.Null(older.Baseline);
+        Assert.Equal(new BaselineDto(BlockAdult: true, JumpGuard: true, BlockAds: true, SafeSearch: true), new BaselineDto());
+
+        var partial = FamilyBundleJson.Deserialize("""{"timeZone":"Asia/Jerusalem","baseline":{"jumpGuard":false}}""");
+        Assert.Equal(new BaselineDto(BlockAdult: true, JumpGuard: false, BlockAds: true, SafeSearch: true), partial.Baseline);
+        var empty = FamilyBundleJson.Deserialize("""{"timeZone":"Asia/Jerusalem","baseline":{}}""");
+        Assert.Equal(new BaselineDto(), empty.Baseline);
+
+        var bundle = new FamilyBundle { TimeZone = "Asia/Jerusalem", Baseline = new BaselineDto(BlockAdult: false, JumpGuard: true, BlockAds: false, SafeSearch: true) };
+        var json = FamilyBundleJson.Serialize(bundle);
+        Assert.Contains("\"baseline\":{\"blockAdult\":false,\"jumpGuard\":true,\"blockAds\":false,\"safeSearch\":true}", json);
+        Assert.Equal(bundle.Baseline, FamilyBundleJson.Deserialize(json).Baseline);
+        Assert.DoesNotContain("baseline", FamilyBundleJson.Serialize(older), StringComparison.Ordinal);
+    }
+
     /// <summary>An account the parents kept as a guest: <c>guest: true</c> on the wire, left out when false, false when missing.</summary>
     [Fact]
     public void The_guest_flag_round_trips_and_is_left_out_when_false()

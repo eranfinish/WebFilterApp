@@ -49,6 +49,20 @@
         { "do": "navigate", "account": "visitor", "device": "pc-kids", "url": "https://www.wikipedia.org/", "expect": { "decision": "block", "reason": "blocked_not_in_allowlist" } },
         { "do": "navigate", "account": "visitor", "device": "pc-kids", "url": "https://mashov.info/",       "expect": { "decision": "allow", "reason": "allowed_always" } }
       ]
+    },
+    {
+      "id": "FC-005",
+      "title": "Parents keep the fallback they had while the service is down: no baseline protection, nothing more blocked; it returns with the service",
+      "start": "2026-11-01T16:00",
+      "setup": { "categories": { "adult": ["adult-site.example"] } },
+      "steps": [
+        { "do": "navigate", "member": "dana",  "device": "pc-kids", "url": "https://adult-site.example/", "expect": { "decision": "block", "reason": "blocked_baseline_adult" } },
+        { "do": "service", "device": "pc-kids", "state": "down", "profileCache": "present" },
+        { "do": "navigate", "member": "dana",  "device": "pc-kids", "url": "https://adult-site.example/", "expect": { "decision": "allow", "reason": "allowed_unrestricted" }, "note": "Windows admin: the host answers unrestricted, as before" },
+        { "do": "navigate", "member": "savta", "device": "pc-kids", "url": "https://adult-site.example/", "expect": { "decision": "allow", "reason": "allowed_unrestricted" }, "note": "the cache says unrestricted" },
+        { "do": "service", "at": "16:05", "device": "pc-kids", "state": "up" },
+        { "do": "navigate", "member": "savta", "device": "pc-kids", "url": "https://adult-site.example/", "expect": { "decision": "block", "reason": "blocked_baseline_adult" } }
+      ]
     }
   ]
 }

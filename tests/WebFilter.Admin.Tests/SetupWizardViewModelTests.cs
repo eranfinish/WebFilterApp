@@ -324,11 +324,47 @@ public sealed class SetupWizardViewModelTests
         await vm.ApplyCommand.ExecuteAsync(null);
 
         var settings = _client.Single<ReplaceSettings>().Settings;
-        Assert.Equal(["educational"], settings.Categories.Keys);
+        // The parents' baseline (on unless turned off) still needs the adult list, PROTECTION-SPEC §13; nobody's choice is made for it.
+        Assert.Equal(["adult", "educational"], settings.Categories.Keys.Order(StringComparer.Ordinal));
         Assert.Equal([new MemberCategoryDto(vm.Members[0].Id, "educational", "allow")], settings.MemberCategories);
         Assert.Equal("רשימות מוכנות: לימודים.", vm.CategoriesSummary);
         // Without the school tools, no sign-in rules either.
         Assert.Empty(settings.Rules);
+    }
+
+    /// <summary>PROTECTION-SPEC §13: the summary says what the parents' own accounts get; the adult list it blocks goes in.</summary>
+    [Fact]
+    public async Task The_review_names_the_parents_baseline_and_its_adult_list_goes_in()
+    {
+        var vm = await LoadedAsync();
+        TypeFamily(vm);
+        for (var i = 0; i < 4; i++) await vm.NextCommand.ExecuteAsync(null);
+        Assert.True(vm.IsReviewStep);
+        Assert.Equal("הגנה בסיסית להורים ולמבוגרים: חסימת אתרים למבוגרים, חסימת קפיצות לאתרים אחרים, חסימת פרסומות, חיפוש בטוח. אפשר לשנות בהגדרות.", vm.BaselineSummary);
+
+        await vm.ApplyCommand.ExecuteAsync(null);
+
+        var settings = _client.Single<ReplaceSettings>().Settings;
+        Assert.Equal(StarterLists.Find("adult")!.Domains, settings.Categories["adult"]);
+        Assert.Null(settings.Baseline); // left as it is: on until the parent changes it in the settings
+    }
+
+    [Fact]
+    public async Task A_family_that_turned_the_baseline_off_is_told_so_and_gets_no_adult_list_for_it()
+    {
+        _client.Settings = EmptyFamily() with { Baseline = new BaselineDto(BlockAdult: false, JumpGuard: false, BlockAds: false, SafeSearch: false) };
+        var vm = await LoadedAsync();
+        vm.Members[0].Name = "נועה";
+        for (var i = 0; i < 3; i++) await vm.NextCommand.ExecuteAsync(null);
+        foreach (var list in vm.StarterCategories.Where(c => c.Name != "educational")) list.Include = false;
+        await vm.NextCommand.ExecuteAsync(null);
+        Assert.Equal("הגנה בסיסית להורים ולמבוגרים: כבויה. אפשר להפעיל בהגדרות.", vm.BaselineSummary);
+
+        await vm.ApplyCommand.ExecuteAsync(null);
+
+        Assert.Equal(["educational"], _client.Single<ReplaceSettings>().Settings.Categories.Keys);
+        Assert.Equal("הגנה בסיסית להורים ולמבוגרים: חסימת אתרים למבוגרים, חיפוש בטוח. אפשר לשנות בהגדרות.",
+            SetupWizardViewModel.BaselineText(new BaselineDto(BlockAdult: true, JumpGuard: false, BlockAds: false, SafeSearch: true)));
     }
 
     [Fact]

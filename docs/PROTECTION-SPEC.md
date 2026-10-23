@@ -18,7 +18,7 @@ role defaults below.
 | `logSearches` | Search terms are recorded for the parents (§9). The member is told it is on | false | false | — |
 | `blockAds` | Requests to EasyList's ad servers are blocked in the browser (§12) | true | true | — |
 
-Adults (unrestricted) ignore all five.
+Adults (unrestricted) ignore all five; administrators and adults get the family's baseline protection instead (§13).
 
 ## 2. Family-wide Windows features for children
 
@@ -91,7 +91,7 @@ Added to `BrowserPolicies`: `DefaultPopupsSetting = 2`, `AbusiveExperienceInterv
   them from the URL alone), like the YouTube channel reasons.
 - `RulesResponse` gains `features: { "jumpGuard": bool, "blockYouTubeShorts": bool, "logSearches": bool,
   "canOverrideJump": bool, "blockAds": bool }` (`canOverrideJump` = teen; false for children and unlinked accounts;
-  `blockAds` from §12). Absent → all false.
+  `blockAds` from §12; for administrators and adults the baseline's switches, §13). Absent → all false.
 
 ## 7. Jump guard (extension, `features.jumpGuard`)
 
@@ -188,7 +188,7 @@ turn it off per child.
   stored without it. Admin: the switch "חסימת פרסומות" among the member's protection switches, with a hint that ads a
   site serves from its own address are not blocked and that the switch is the way out when a site refuses to work.
 - **When it is on:** a restricted member with the flag, while filtered — normal, homework and time up alike. Off for
-  administrators, unrestricted members and unlinked accounts (like every feature), and **while the member is paused**
+  unlinked accounts (like every feature; administrators and unrestricted members get the baseline's switch, §13), and **while the member is paused**
   (the hub's pause or this computer's own): a pause means no filtering. The native host's own answers (service down)
   carry no features, so it is off then; only always-allowed sites load in that mode.
 - **Extension:** a static ruleset `ads` (`rulesets/ads.json`, `"enabled": false` in the manifest), enabled with
@@ -230,3 +230,80 @@ turn it off per child.
   gzipped. The extension's zip grows from about 60 KB to 520 KB (unpacked 0.18 → 1.36 MB); the browser also keeps its
   own index of the static rulesets, disabled ones included (about 1.5 MB per profile, `_metadata` in Edge 156). It uses
   65 of the 330,000 static rules Chrome shares between extensions.
+
+## 13. Baseline protection for parents and adults (`baseline`, 2026-10-23)
+
+Decided with the user ("I want filtering for the administrator too: I don't want all kinds of sites popping up at me, and
+adult content blocked by default for everyone"). Until now administrators and unrestricted members got no filtering at
+all. They now get a family-wide **baseline**, much lighter than a child's, and nothing of their browsing is recorded.
+
+- **Setting:** bundle top level `baseline: { "blockAdult": bool, "jumpGuard": bool, "blockAds": bool, "safeSearch": bool }`,
+  like `windowsFeatures`. A missing section, or a missing switch in it, is `true`: existing families get the baseline.
+  Core `FamilyConfig.Baseline` (`BaselineProtection`), Contracts `BaselineDto`; the service writes the section out in
+  full. Admin: the settings section "הגנה בסיסית להורים ולמבוגרים" (below).
+- **Who it applies to** (`BaselineProtection.AppliesTo`): an administrator account linked to nobody or to an
+  unrestricted member, and any account linked to an unrestricted member — the accounts no member settings filter. An
+  administrator account linked to a filtered member is filtered as that member (the admin app warns about such a link).
+  Children, teens, unlinked standard accounts and guests are unchanged: they follow their own settings, which are
+  stronger. For the browser policies (below), every administrator account, whoever it is linked to, and every
+  unrestricted member's account get the baseline's SafeSearch and nothing else.
+- **`blockAdult`:** the bundle's `adult` category (`data/starter-lists/adult.json`) is blocked with reason
+  **`blocked_baseline_adult`** (a new code: Core `ReasonCode.BlockedBaselineAdult`, wire, scenario schema, MVP-PLAN §6,
+  scenarios `BASE-*`, admin and extension wording). The list is not a new static ruleset: it goes through the Core and the
+  DNR compiler like any category block. `EffectiveUrlPolicy.ForBaseline` holds the category's domains as blocks (global
+  band) and the parents' active **allow** rules — the member's own and the global ones — as member rules above them, so
+  a parent's explicit allow wins whatever its specificity (scenario BASE-003, an expiring one BASE-004). The parents'
+  block rules and the family's global block rules are not part of it. Nothing else is filtered: no default block, no
+  IP-literal block (a router's page opens), no YouTube rule, no built-in blocks, no time-up rules
+  (`EffectiveUrlPolicy.Baseline`, read the same way by `RuleEvaluator` and `DnrCompiler`; random differential tests and
+  the scenario cross-check keep them equal). The service's `Decider.Baseline` answers `allowed_unrestricted` outside
+  the category, and inside it the allow rule's reason and id or `blocked_baseline_adult`. **The adult domains must be
+  in the bundle:** the admin app copies the shipped list into the family's categories when the section is saved with
+  `blockAdult` on, and in the setup wizard (a family's own `adult` category is kept). A family without the category
+  blocks nothing (BASE-006).
+- **`jumpGuard`:** the extension's jump guard (§7) for these accounts, always with "פתח בכל זאת"
+  (`canOverrideJump: true`). The override is not reported.
+- **`blockAds`:** the extension's `ads` static ruleset (§12).
+- **`safeSearch`:** per-user policies `ForceGoogleSafeSearch = 1` (Chrome and Edge) and `ForceBingSafeSearch = 1` (Edge,
+  moderate) for these accounts (`BrowserPolicies`, `PolicyService`). **No other policy for them:** InPrivate, guest,
+  profiles, developer mode and DevTools, extensions, proxy, pop-ups, tracking prevention, the new tab page, the sidebar,
+  Gemini, YouTube Restricted Mode and Start search stay as they are. Restoring one of these values is not reported as
+  tamper (they are the parent's own settings). Turned off, the values the service wrote are removed.
+- **Wire:** `helloResult.mode` is **`baseline`** for these accounts while any switch is on, and `unrestricted` — exactly
+  the old answer, no rules, no features — when all four are off. The `rules` reply gains an optional **`mode`** with the
+  same values as the hello's (`unrestricted | blocklist | allowlist | baseline`), so a re-linked account or a changed
+  switch applies with `rulesChanged`, without a new hello; absent (an older service, the native host's fallback) or
+  unknown, the hello's mode stands. For a parent the reply carries the compiled baseline rules, `timeUpSessionRules: []`,
+  `youtube.mode: "unrestricted"`, `time: unlimited` and `features: { jumpGuard, blockAds, canOverrideJump: true,
+  logSearches: false, blockYouTubeShorts: false }` (with only SafeSearch on: mode `baseline`, no rules, jump guard and
+  ads off).
+- **Nothing is reported:** no `blocked`, `override` or `search` event and no access request for these accounts, whatever
+  the switches. The service answers `reportBlock` with its reason and records nothing, answers `reportOverride` with
+  "not recorded", drops `reportSearch` (no `logSearches`), answers `requestAccess` with `unavailable`, and gives
+  `canRequest: false`; heartbeats count no time. The extension in mode `baseline` never sends `reportBlock` (the block
+  page asks with `decideUrl`, which records nothing; a jump block asks nothing), `reportOverride`, `reportSearch` or
+  `requestAccess`, and shows no request button.
+- **A pause** does not apply to parents: they have none, and a pause set for an adult changes nothing (BASE-008).
+- **Block page:** "אתר למבוגרים — חסום בהגנה הבסיסית של המשפחה." with no request button and the hint "אפשר לכבות את
+  ההגנה הזו בממשק הניהול של WebFilter, בדף ההגדרות (הגנה בסיסית להורים ולמבוגרים)." The popup shows the mode
+  "הגנה בסיסית להורים" and "שום דבר מהגלישה שלך לא נרשם".
+- **Service down:** the native host's own answers are unchanged: an administrator, or an account whose profile cache says
+  unrestricted, is `unrestricted` with no rules and no features, so the baseline is off until the service is back and a
+  stopped service never blocks a parent more than before (scenario FC-005). With no host at all the extension is
+  fail-closed for everyone, as before.
+- **An older extension** with a newer service gets `baseline` in the hello and handles it as a filtered mode: it installs
+  the rules and the features; the service records nothing of its reports and offers no request, and its block page shows
+  the generic "הדף הזה חסום".
+- **Admin app:** Settings, section "הגנה בסיסית להורים ולמבוגרים" (hub only): the four switches with a line each, saved
+  together through `ReplaceSettings` like the Windows features, and a note that it applies to the administrators and the
+  unrestricted members, that children and teens follow their own settings, that an administrator can turn it off, that
+  blocking does not work in InPrivate/incognito windows, and that nothing is recorded. While `blockAdult` is on and the
+  family has no adult list, the section says so and saving adds it. The setup wizard's summary names the baseline and
+  adds the adult list. Texts that said administrators and adults are "not filtered" say "apart from the baseline".
+- **Not done (limits):** the extension does not run in the parents' InPrivate/incognito windows (they are not disabled
+  for parents), so the adult list, the jump guard and ad blocking do not apply there; SafeSearch, a policy, does. Other
+  browsers are not covered for parents; no WFP filters, no time counting and no browser lockdown for them. The switches
+  are family-wide, not per parent. An existing family gets the jump guard, ad blocking and SafeSearch at once, but the
+  adult list only once a parent saves the section (or the wizard runs): nothing adds it by itself. A Windows
+  administrator can undo any of it (policies, the extension's state); the service restores the policies silently. Not
+  checked in the lab.

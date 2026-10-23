@@ -20,6 +20,7 @@ import { BLOCK_PAGE, MY_CHANNELS_PAGE, TIMEUP_PAGE, buildBlockPageUrl, buildTime
 import {
   type AccessDecidedMessage,
   type DnrRule,
+  type FilterMode,
   type HelloResult,
   type IncomingMessage,
   NO_FEATURES,
@@ -150,10 +151,23 @@ export class Controller {
     return this.connection;
   }
 
-  /** The member's protection features in force: the last rules' `features` while ready and restricted, else all off. */
+  /**
+   * The protection features in force: the last rules' `features` while ready and not unrestricted (a member's flags, or
+   * a parent's baseline switches), else all off.
+   */
   get features(): ProtectionFeatures {
-    if (!this.ready || this.hello?.mode === "unrestricted") return NO_FEATURES;
+    if (!this.ready || this.mode === "unrestricted") return NO_FEATURES;
     return this.rules?.features ?? NO_FEATURES;
+  }
+
+  /** The account's mode in force: the last rules' (PROTECTION-SPEC §13: it follows a re-link without a new hello), else the hello's. */
+  get mode(): FilterMode | null {
+    return this.rules?.mode ?? this.hello?.mode ?? null;
+  }
+
+  /** A parent's own account with the family's baseline protection (§13): nothing is reported, nothing can be requested. */
+  private get baseline(): boolean {
+    return this.mode === "baseline";
   }
 
   /** Replaces the native host connector (test build: in-worker fake host). Takes effect on the next connect. */
@@ -372,11 +386,15 @@ export class Controller {
     await this.applyRules(rules);
   }
 
-  /** Installs a rules message; the fail-closed ruleset is disabled only after the rules are in place. */
+  /**
+   * Installs a rules message; the fail-closed ruleset is disabled only after the rules are in place. A parent's baseline
+   * (mode baseline, PROTECTION-SPEC §13) is installed like a member's rules: the adult list, the jump guard and the ads
+   * ruleset by its features, with unlimited time.
+   */
   private async applyRules(rules: RulesMessage): Promise<void> {
     const hello = this.hello;
     if (!hello) return;
-    if (hello.mode === "unrestricted") {
+    if ((rules.mode ?? hello.mode) === "unrestricted") {
       await replaceDynamicRules([]);
       await replaceSessionRules([]);
       await this.clearProtection();
@@ -451,7 +469,7 @@ export class Controller {
 
   /** Applies a time state: time-up session rules, open tabs, badge, warnings. */
   private async applyTime(time: TimeState, rulesChanged = false): Promise<void> {
-    if (!this.rules || this.hello?.mode === "unrestricted") return;
+    if (!this.rules || this.mode === "unrestricted") return;
     const previous = this.time;
     this.time = time;
     const up = isTimeUp(time);
@@ -550,7 +568,7 @@ export class Controller {
   private async storeYouTubeState(mode: YouTubeStoredState["mode"]): Promise<void> {
     try {
       const blockShorts =
-        mode !== "inert" && mode !== "failclosed" && this.hello?.mode !== "unrestricted" && this.rules?.features.blockYouTubeShorts === true;
+        mode !== "inert" && mode !== "failclosed" && this.mode !== "unrestricted" && this.rules?.features.blockYouTubeShorts === true;
       const state: YouTubeStoredState = { mode, version: this.rules?.rulesVersion ?? null, ...(blockShorts ? { blockShorts } : {}) };
       await chrome.storage.local.set({ [YOUTUBE_STATE_KEY]: state });
     } catch {
@@ -650,7 +668,7 @@ export class Controller {
   // ---- page and content-script requests ---------------------------------------------------------------------------
 
   snapshot(): StatusSnapshot {
-    const mode = this.hello?.mode ?? null;
+    const mode = this.mode;
     return {
       version: chrome.runtime.getManifest().version,
       installType: this.installType,
@@ -665,7 +683,7 @@ export class Controller {
       rulesVersion: this.rules?.rulesVersion ?? null,
       serverVersion: this.hello?.serverVersion ?? null,
       inferredReason: inferReason(this.time, mode),
-      canRequest: this.connection === "service",
+      canRequest: this.connection === "service" && mode !== "baseline",
       features: { ...this.features },
     };
   }
@@ -675,7 +693,8 @@ export class Controller {
    * reportBlock (first load: records the block) or decideUrl (reloads: records nothing) returns the service's reason,
    * category, whether a request can be sent, and what kind. The reason the page sends is a guess from the installed
    * rules (explainBlock); it stands only for YouTube channel reasons, and it is what the page shows when the service
-   * cannot answer (disconnected, or an older service). The host fallback answers service_unavailable.
+   * cannot answer (disconnected, or an older service). The host fallback answers service_unavailable. A parent's own
+   * block (mode baseline, PROTECTION-SPEC §13) is never reported: decideUrl only, and never a request.
    */
   async reportBlock(
     url: string,
@@ -684,14 +703,15 @@ export class Controller {
     frame: "main_frame" | "sub_frame" = "main_frame",
     alreadyReported = false,
   ): Promise<ReportBlockReply> {
-    const guess: string = reason ?? (isWebUrl(url) ? this.explain(url, frame) : inferReason(this.time, this.hello?.mode ?? null));
+    const guess: string = reason ?? (isWebUrl(url) ? this.explain(url, frame) : inferReason(this.time, this.mode));
     const action = requestActionFor(guess);
+    const baseline = this.baseline;
     const offline: ReportBlockReply = {
       decision: "block",
       reason: guess,
       source: reason ? "page" : "local",
       category: null,
-      canRequest: this.connection === "service" && reason !== FAILCLOSED,
+      canRequest: this.connection === "service" && reason !== FAILCLOSED && !baseline,
       requestKind: action === "none" ? null : action,
       reported: false,
     };
@@ -701,14 +721,17 @@ export class Controller {
     // Channel, Shorts and jump reasons are decided by the extension (the service cannot see page data or where a page
     // came from, and decideUrl would judge the URL only): a reload keeps the page's reason without asking again.
     const pageDecided = typeof reason === "string" && PAGE_DECIDED_REASONS.has(reason);
-    if (pageDecided && alreadyReported) return offline;
+    // Nor does a parent's (a jump): there is nothing to record and nothing to ask.
+    if (pageDecided && (alreadyReported || baseline)) return offline;
     // A blocked search is a search too (e.g. image search, or a search engine that is not allowed).
     if (!alreadyReported) this.logSearch(url);
     // For the protection reasons the URL itself may well be allowed: a service that answers "allow" (or an older one
     // that judges the URL) must not turn the page into "allowed now".
     const extensionOnly = typeof reason === "string" && EXTENSION_ONLY_REASONS.has(reason);
+    // decideUrl records nothing: every reload, and every block of a parent's.
+    const askOnly = alreadyReported || baseline;
     try {
-      const reply = alreadyReported
+      const reply = askOnly
         ? await this.client.request({ type: "decideUrl", url })
         : await this.client.request({ type: "reportBlock", url, reason: reportableReason(guess) ?? guess, ...(ruleId ? { ruleId } : {}) });
       if (reply.type === "reportBlockResult" || reply.type === "decideUrlResult") {
@@ -721,17 +744,17 @@ export class Controller {
           reason: typeof reply.reason === "string" && reply.reason ? reply.reason : guess,
           source: "service",
           category: reply.category ?? null,
-          canRequest: reply.canRequest === true,
+          canRequest: reply.canRequest === true && !baseline,
           requestKind: kind,
           reported: reply.type === "reportBlockResult" && reply.decision !== "allow",
         };
       }
-      return { ...offline, reported: !alreadyReported }; // an older service acknowledged with error "ok"
+      return { ...offline, reported: !askOnly }; // an older service acknowledged with error "ok"
     } catch (error) {
       if (error instanceof HostError && error.code === "service_unavailable") {
         return { ...offline, reason: "blocked_service_unavailable", source: "host", canRequest: false, requestKind: null };
       }
-      this.log(alreadyReported ? "decideUrl failed" : "reportBlock failed", errorText(error));
+      this.log(askOnly ? "decideUrl failed" : "reportBlock failed", errorText(error));
       return offline;
     }
   }
@@ -739,13 +762,14 @@ export class Controller {
   /** The reason the installed rules give for blocking `url` (see shared/explain.ts). */
   explain(url: string, frame: "main_frame" | "sub_frame" = "main_frame"): ReasonCode {
     const session = this.sessionRulesInstalled ? this.installedSession : [];
-    const ctx = { connection: this.connection, mode: this.hello?.mode ?? null, time: this.time };
+    const ctx = { connection: this.connection, mode: this.mode, time: this.time };
     return explainBlock(url, this.installedDynamic, session, ctx, frame);
   }
 
   async requestAccess(message: RequestAccessPageMessage): Promise<RequestAccessReply> {
     if (!REQUEST_KINDS.has(message.kind)) return { result: "error", requestId: null };
-    if (!this.ready || this.connection !== "service") return { result: "unavailable", requestId: null };
+    // A parent has no one to ask (PROTECTION-SPEC §13); the service would answer "unavailable" too.
+    if (!this.ready || this.connection !== "service" || this.baseline) return { result: "unavailable", requestId: null };
     const note = typeof message.note === "string" && message.note.trim() ? message.note.trim().slice(0, MAX_NOTE) : undefined;
     let target: string | undefined;
     let minutes: number | undefined;
@@ -793,7 +817,7 @@ export class Controller {
     return {
       inert: !this.policyInstalled,
       ready: this.ready,
-      filterMode: this.hello?.mode ?? null,
+      filterMode: this.mode,
       policy: this.rules?.youTube ?? null,
       time: this.time,
       blockShorts: this.features.blockYouTubeShorts,
@@ -821,7 +845,7 @@ export class Controller {
    * content script), and only when every applicable rule could be evaluated here.
    */
   async checkInPageNavigation(tabId: number, frameId: number, url: string): Promise<boolean> {
-    if (!this.ready || frameId !== 0 || tabId < 0 || !isWebUrl(url) || this.hello?.mode === "unrestricted") return false;
+    if (!this.ready || frameId !== 0 || tabId < 0 || !isWebUrl(url) || this.mode === "unrestricted") return false;
     const rules = [...(this.sessionRulesInstalled ? this.installedSession : []), ...this.installedDynamic];
     let target: string | null = null;
     if (classifyNavigation(rules, url) === "block") target = `${chrome.runtime.getURL(BLOCK_PAGE)}#${url}`;
@@ -840,8 +864,9 @@ export class Controller {
   // ---- protection features: jump override, search log ----------------------------------------------------------
 
   /**
-   * "Open anyway" on a jump block (teens, features.canOverrideJump). Only a top-level blocked.html?reason=blocked_jump
-   * page may ask, for its own URL. reportOverride is sent, the tab stops being guarded, and the target opens once.
+   * "Open anyway" on a jump block (teens and parents, features.canOverrideJump). Only a top-level
+   * blocked.html?reason=blocked_jump page may ask, for its own URL. reportOverride is sent (never for a parent's own,
+   * PROTECTION-SPEC §13), the tab stops being guarded, and the target opens once.
    */
   async overrideJump(url: string, tabId: number | undefined, frameId: number | undefined, pageUrl: string | undefined): Promise<OverrideJumpReply> {
     const features = this.features;
@@ -850,9 +875,11 @@ export class Controller {
     const page = parseBlockPageUrl(pageUrl ?? "");
     const samePage = page.reason === JUMP_REASON && (!page.url || safeReturnUrl(page.url) === target);
     if (tabId === undefined || tabId < 0 || frameId !== 0 || !target || !samePage) return { ok: false, error: "bad_request" };
-    this.client
-      .request({ type: "reportOverride", url: target, reason: "blocked_jump" })
-      .catch((error: unknown) => this.log("reportOverride failed", errorText(error)));
+    if (!this.baseline) {
+      this.client
+        .request({ type: "reportOverride", url: target, reason: "blocked_jump" })
+        .catch((error: unknown) => this.log("reportOverride failed", errorText(error)));
+    }
     await this.jumps.allowOnce(tabId);
     try {
       await chrome.tabs.update(tabId, { url: target });
@@ -881,7 +908,7 @@ export class Controller {
   }
 
   private logSearch(url: string): void {
-    if (!this.features.logSearches || this.connection !== "service") return;
+    if (!this.features.logSearches || this.connection !== "service" || this.baseline) return;
     const hit = extractSearch(url);
     if (!hit || hit.page > 1 || !this.searches.admit(hit.key, this.now())) return;
     this.client

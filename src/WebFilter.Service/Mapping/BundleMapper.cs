@@ -23,12 +23,14 @@ public static class BundleMapper
         SupportedBrowsers = [.. config.SupportedBrowsers],
         AppRules = config.AppRules.Select(r => new AppRuleDto(r.Id, r.MemberId, Lower(r.Match), r.Value, Lower(r.Action), r.AlwaysAllowed, r.ExpiresAt)).ToList(),
         WindowsFeatures = new WindowsFeaturesDto(config.WindowsFeatures.NotificationsAndSync, config.WindowsFeatures.OneDrive, config.WindowsFeatures.WebSearchInStart),
+        Baseline = new BaselineDto(config.Baseline.BlockAdult, config.Baseline.JumpGuard, config.Baseline.BlockAds, config.Baseline.SafeSearch),
     };
 
     /// <remarks>
     /// A list the JSON leaves out arrives as null (the property initializers do not run when deserializing), so every
     /// list is read as empty when missing — a bootstrap file, snapshot or admin request with fewer sections is valid.
-    /// Missing member flags are false and missing Windows features take their defaults (PROTECTION-SPEC §1, §2). An
+    /// Missing member flags are false and missing Windows features and baseline switches take their defaults
+    /// (PROTECTION-SPEC §1, §2, §13: the baseline is on when missing). An
     /// account is a guest only while it is unlinked: linking it drops the flag, whoever sent the bundle.
     /// </remarks>
     public static FamilyConfig ToConfig(FamilyBundle bundle)
@@ -51,6 +53,9 @@ public static class BundleMapper
             WindowsFeatures = bundle.WindowsFeatures is { } features
                 ? new WindowsFeatures(features.NotificationsAndSync, features.OneDrive, features.WebSearchInStart)
                 : WindowsFeatures.Default,
+            Baseline = bundle.Baseline is { } baseline
+                ? new BaselineProtection(baseline.BlockAdult, baseline.JumpGuard, baseline.BlockAds, baseline.SafeSearch)
+                : BaselineProtection.Default,
         };
         foreach (var (name, domains) in bundle.Categories ?? new Dictionary<string, IReadOnlyList<string>>()) config.Categories[name] = domains ?? [];
         return config;

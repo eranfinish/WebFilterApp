@@ -82,8 +82,9 @@ internal sealed class AgentSession(Stream pipe, ClientIdentity client, FamilySer
         ReportOverrideRequest overridden => family.WithAgent<AgentMessage>((agent, now) =>
         {
             var reason = ReasonCodeExtensions.ParseOrNone(overridden.Reason);
-            agent.ReportOverride(Account(agent), Cap(overridden.Url ?? "", MaxUrlLength), reason == ReasonCode.None ? ReasonCode.BlockedJump : reason, now);
-            return new ErrorMessage("ok", "recorded");
+            // A parent's own "open anyway" (PROTECTION-SPEC §13) is acknowledged and not recorded.
+            var recorded = agent.ReportOverride(Account(agent), Cap(overridden.Url ?? "", MaxUrlLength), reason == ReasonCode.None ? ReasonCode.BlockedJump : reason, now);
+            return new ErrorMessage("ok", recorded ? "recorded" : "not recorded");
         }),
         ErrorMessage { Code: "dnr_rules_dropped" } dropped => family.WithAgent<AgentMessage>((agent, now) =>
         {
@@ -103,13 +104,14 @@ internal sealed class AgentSession(Stream pipe, ClientIdentity client, FamilySer
     private AgentMessage Hello(HelloRequest hello)
     {
         _extensionId = hello.ExtensionId;
-        return family.WithAgent<AgentMessage>((agent, _) =>
+        return family.WithAgent<AgentMessage>((agent, now) =>
         {
             var account = Account(agent);
             var member = account.MemberId is null ? null : agent.View().Config.Member(account.MemberId);
             return new HelloResponse(
                 new AgentUser(account.AccountId, client.UserName ?? account.Name, member is null ? "unlinked" : Lower(member.Role), account.IsAdmin),
-                Mode(account, member), "service", true, agent.SnapshotVersion ?? 0, typeof(AgentSession).Assembly.GetName().Version?.ToString() ?? "0");
+                Mode(account, member, ExtensionPolicy.For(agent.View(), account, now)), "service", true, agent.SnapshotVersion ?? 0,
+                typeof(AgentSession).Assembly.GetName().Version?.ToString() ?? "0");
         });
     }
 
@@ -134,11 +136,13 @@ internal sealed class AgentSession(Stream pipe, ClientIdentity client, FamilySer
             channels.Where(c => c.Action == RuleAction.Block).Select(Ref).ToList());
 
         var features = effective.Features;
+        var member = account.MemberId is null ? null : view.Config.Member(account.MemberId);
         return new RulesResponse(agent.SnapshotVersion ?? 0,
             rules.DynamicRules.Select(r => JsonSerializer.SerializeToElement(r)).ToList(),
             rules.TimeUpSessionRules.Select(r => JsonSerializer.SerializeToElement(r)).ToList(),
             youtube, TimeStateOf(agent, account, now),
-            new AgentFeatures(features.JumpGuard, features.BlockYouTubeShorts, features.LogSearches, features.CanOverrideJump, features.BlockAds));
+            new AgentFeatures(features.JumpGuard, features.BlockYouTubeShorts, features.LogSearches, features.CanOverrideJump, features.BlockAds),
+            Mode(account, member, effective));
     });
 
     private const int MaxUrlLength = 2048;
@@ -172,7 +176,7 @@ internal sealed class AgentSession(Stream pipe, ClientIdentity client, FamilySer
     /// Records a block the extension enforced and answers with the service's own reason. YouTube channel and Shorts
     /// blocks are decided in the page and jump blocks by how the page was opened, so the extension's reason stands for
     /// those. If the service would allow the URL, the extension's rules are stale: nothing is recorded and rulesChanged
-    /// is pushed.
+    /// is pushed. A parent's own block (PROTECTION-SPEC §13) is answered and never recorded (AgentCore.ReportBlock).
     /// </summary>
     private AgentMessage ReportBlock(ReportBlockRequest block)
     {
@@ -184,7 +188,7 @@ internal sealed class AgentSession(Stream pipe, ClientIdentity client, FamilySer
             var e = reported switch
             {
                 ReasonCode.BlockedYouTubeChannel or ReasonCode.BlockedYouTubeUnknown =>
-                    new Explanation("block", reported.ToWire(), block.RuleId, null, account.MemberId is not null, "youtube"),
+                    new Explanation("block", reported.ToWire(), block.RuleId, null, account.MemberId is not null && !agent.IsParent(account), "youtube"),
                 // A parent's approval could not lift these: Shorts and jumps are blocked whatever the site rules say.
                 ReasonCode.BlockedYouTubeShorts => new Explanation("block", reported.ToWire(), block.RuleId, null, false, "youtube"),
                 ReasonCode.BlockedJump => new Explanation("block", reported.ToWire(), block.RuleId, null, false, "url"),
@@ -213,8 +217,10 @@ internal sealed class AgentSession(Stream pipe, ClientIdentity client, FamilySer
                 .FirstOrDefault(c => RuleEvaluator.IsInCategory(config.Categories, c, normalized));
         }
         var aboutTime = result.Reason is ReasonCode.BlockedTimeWindow or ReasonCode.BlockedDailyLimit;
-        // An approved site cannot lift a built-in block (image search, AI Mode), so there is nothing to request.
-        var canRequest = account.MemberId is not null && result.Decision != Decision.Allow && !BuiltinRules.IsBuiltinBlock(result.RuleId);
+        // An approved site cannot lift a built-in block (image search, AI Mode), so there is nothing to request; a parent
+        // does not ask anyone (PROTECTION-SPEC §13: the protection is turned off in the admin app's settings).
+        var canRequest = account.MemberId is not null && result.Decision != Decision.Allow && !BuiltinRules.IsBuiltinBlock(result.RuleId)
+            && !agent.IsParent(account);
         return new Explanation(result.Decision == Decision.Allow ? "allow" : "block", result.Reason.ToWire(), result.RuleId, category,
             canRequest, aboutTime ? "time" : "url");
     }
@@ -231,7 +237,8 @@ internal sealed class AgentSession(Stream pipe, ClientIdentity client, FamilySer
     private AgentMessage RequestAccess(RequestAccessRequest request) => family.WithAgent<AgentMessage>((agent, now) =>
     {
         var account = Account(agent);
-        if (account.MemberId is null) return new RequestAccessResponse("unavailable", null);
+        // Unlinked accounts have no one to ask for; parents' own accounts are never offered a request (PROTECTION-SPEC §13).
+        if (account.MemberId is null || agent.IsParent(account)) return new RequestAccessResponse("unavailable", null);
         var kind = request.Kind switch { "youtube" => RequestKind.YouTube, "app" => RequestKind.App, "time" => RequestKind.Time, _ => RequestKind.Url };
         var target = request.Target ?? "";
         var draft = new AccessRequestDraft(account.MemberId, agent.DeviceId, kind, target,
@@ -287,8 +294,13 @@ internal sealed class AgentSession(Stream pipe, ClientIdentity client, FamilySer
             status.WindowEndsAtMinute is { } w ? $"{w / 60:00}:{w % 60:00}" : null);
     }
 
-    private static string Mode(DeviceAccount account, FamilyMember? member) =>
-        member is not null ? Lower(member.FilterMode) : account.IsAdmin ? "unrestricted" : "allowlist";
+    /// <summary>
+    /// The mode the hello and rules replies give: baseline for a parent's account while the family's baseline protection is
+    /// on (PROTECTION-SPEC §13, <see cref="ExtensionPolicy.Baseline"/>), else the member's filter mode, unrestricted for an
+    /// administrator linked to nobody, allowlist for an unlinked standard account.
+    /// </summary>
+    private static string Mode(DeviceAccount account, FamilyMember? member, ExtensionPolicy effective) =>
+        effective.Baseline ? "baseline" : member is not null ? Lower(member.FilterMode) : account.IsAdmin ? "unrestricted" : "allowlist";
 
     private static string Lower<T>(T value) where T : struct, Enum => value.ToString().ToLowerInvariant();
 }

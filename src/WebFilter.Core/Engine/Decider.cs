@@ -25,6 +25,10 @@ public sealed record PolicyView(
     public EffectiveUrlPolicy UrlPolicy(string memberId, DateTimeOffset now) =>
         Policies is not null && ReferenceEquals(Policies.Config, Config) ? Policies.Get(memberId, now) : EffectiveUrlPolicy.For(Config, memberId, now);
 
+    /// <summary>The parents' baseline policy of an unrestricted member, or of administrators linked to nobody (null).</summary>
+    public EffectiveUrlPolicy BaselinePolicy(string? memberId, DateTimeOffset now) =>
+        Policies is not null && ReferenceEquals(Policies.Config, Config) ? Policies.GetBaseline(memberId, now) : EffectiveUrlPolicy.ForBaseline(Config, memberId, now);
+
     private static readonly MemberRuntime Empty = new();
 
     public MemberRuntime RuntimeOf(string memberId) => Runtime.TryGetValue(memberId, out var r) ? r : Empty;
@@ -59,7 +63,7 @@ public static class Decider
     {
         if (!UrlNormalizer.IsWebUrl(rawUrl)) return DecisionResult.NotApplicable;
         var member = view.Config.Member(memberId);
-        if (!member.IsRestricted) return DecisionResult.Allow(ReasonCode.AllowedUnrestricted);
+        if (!member.IsRestricted) return Baseline(view, memberId, rawUrl, now);
         if (view.IsPaused(memberId, now)) return DecisionResult.Allow(ReasonCode.AllowedPaused);
         if (!UrlNormalizer.TryNormalize(rawUrl, out var url)) return DecisionResult.Block(ReasonCode.BlockedRule);
 
@@ -80,6 +84,23 @@ public static class Decider
                 : DecisionResult.Allow(ReasonCode.AllowedDefault);
 
         return RuleEvaluator.Evaluate(policy, url);
+    }
+
+    /// <summary>
+    /// The parents' own browsing (PROTECTION-SPEC §13): an unrestricted member's account, or an administrator account linked
+    /// to nobody (<paramref name="memberId"/> null). With the family's <see cref="BaselineProtection.BlockAdult"/>, a site
+    /// of the <see cref="BaselineProtection.AdultCategory"/> category is blocked (<c>blocked_baseline_adult</c>) unless a
+    /// parent's allow rule matches it (then that rule's reason and id); everything else is <c>allowed_unrestricted</c> —
+    /// IP addresses, YouTube, any hour. A pause changes nothing: parents have none.
+    /// </summary>
+    public static DecisionResult Baseline(PolicyView view, string? memberId, string rawUrl, DateTimeOffset now)
+    {
+        if (!UrlNormalizer.IsWebUrl(rawUrl)) return DecisionResult.NotApplicable;
+        if (!view.Config.Baseline.BlockAdult || !UrlNormalizer.TryNormalize(rawUrl, out var url)
+            || !RuleEvaluator.IsInCategory(view.Config.Categories, BaselineProtection.AdultCategory, url))
+            return DecisionResult.Allow(ReasonCode.AllowedUnrestricted);
+        var result = RuleEvaluator.Evaluate(view.BaselinePolicy(memberId, now), url);
+        return result.Reason == ReasonCode.AllowedDefault ? DecisionResult.Allow(ReasonCode.AllowedUnrestricted) : result;
     }
 
     /// <summary>

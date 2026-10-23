@@ -12,6 +12,9 @@ namespace WebFilter.NativeHost;
 /// The host's own answers while the service is unreachable (README §9): administrators are unrestricted; restricted
 /// accounts get only their always-allowed sites (from the profile cache); without a cache everything is blocked.
 /// Meanwhile it checks whether the service is back, and exits when it is, so the extension reconnects to the service.
+/// The parents' baseline protection (PROTECTION-SPEC §13) comes from the service only: administrators and unrestricted
+/// members are answered "unrestricted" here as before it existed (no rules, no features), so a stopped service never
+/// blocks a parent more than it used to; the baseline returns with the service.
 /// </summary>
 internal sealed class Fallback(HostSettings settings)
 {

@@ -61,8 +61,9 @@ describe("block page URLs", () => {
 });
 
 describe("reasons", () => {
-  it("the closed list matches MVP-PLAN §6 plus PROTECTION-SPEC §6 (25 codes)", () => {
-    expect(REASON_CODES).toHaveLength(25);
+  it("the closed list matches MVP-PLAN §6 plus PROTECTION-SPEC §6 and §13 (26 codes)", () => {
+    expect(REASON_CODES).toHaveLength(26);
+    expect(REASON_CODES.at(-1)).toBe("blocked_baseline_adult");
     const plan = readFileSync(join(ROOT, "..", "docs", "MVP-PLAN.md"), "utf8");
     const line = plan.split("\n").find((l) => l.startsWith("**קודי סיבה**"))!;
     const fromPlan = [...line.matchAll(/`([a-z_]+)`/g)].map((m) => m[1]!);
@@ -106,6 +107,8 @@ describe("reasons", () => {
     expect(requestActionFor("blocked_image_search")).toBe("none");
     expect(requestActionFor("blocked_jump")).toBe("none");
     expect(requestActionFor("blocked_youtube_shorts")).toBe("none");
+    // A parent's own block (PROTECTION-SPEC §13): nobody to ask.
+    expect(requestActionFor("blocked_baseline_adult")).toBe("none");
   });
 
   it("the protection reasons are decided by the extension, like the YouTube channel reasons", () => {
@@ -122,6 +125,11 @@ describe("reasons", () => {
     expect(he.reason_blocked_youtube_shorts!.message).toContain("Shorts");
     expect(he.overrideButton!.message).toBe("פתח בכל זאת");
     expect(he.searchesVisible!.message).toBe("החיפושים שלך גלויים להורים");
+    expect(he.reason_blocked_baseline_adult!.message).toBe("אתר למבוגרים — חסום בהגנה הבסיסית של המשפחה.");
+    expect(en.reason_blocked_baseline_adult!.message).toMatch(/baseline protection/);
+    expect(he.baselineHint!.message).toContain("ממשק הניהול");
+    expect(he.baselineHint!.message).toContain("הגדרות");
+    expect(he.mode_baseline!.message).toContain("הגנה בסיסית");
   });
 
   it("infers a reason when the page has none, and reports fail-closed as service unavailable", () => {
@@ -129,6 +137,9 @@ describe("reasons", () => {
     expect(inferReason({ state: "outside_window" }, "allowlist")).toBe("blocked_time_window");
     expect(inferReason({ state: "ok" }, "allowlist")).toBe("blocked_not_in_allowlist");
     expect(inferReason(null, "blocklist")).toBe("blocked_rule");
+    // A parent's baseline (PROTECTION-SPEC §13) blocks the adult list only, whatever the time says.
+    expect(inferReason({ state: "unlimited" }, "baseline")).toBe("blocked_baseline_adult");
+    expect(inferReason({ state: "expired" }, "baseline")).toBe("blocked_baseline_adult");
     expect(reportableReason(FAILCLOSED)).toBe("blocked_service_unavailable");
     expect(reportableReason("blocked_rule")).toBe("blocked_rule");
     expect(reportableReason("nope")).toBeNull();

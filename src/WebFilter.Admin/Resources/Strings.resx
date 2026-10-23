@@ -606,6 +606,9 @@
   <data name="Reason_blocked_youtube_shorts" xml:space="preserve">
     <value>YouTube Shorts חסום</value>
   </data>
+  <data name="Reason_blocked_baseline_adult" xml:space="preserve">
+    <value>אתר למבוגרים — חסום בהגנה הבסיסית של המשפחה</value>
+  </data>
   <data name="AdminChange_add_rule" xml:space="preserve">
     <value>נוסף כלל אתר</value>
   </data>
@@ -903,7 +906,7 @@
     <value>בן משפחה:</value>
   </data>
   <data name="Member_UnrestrictedNote" xml:space="preserve">
-    <value>הגלישה של בן המשפחה הזה לא מסוננת, ולכן השעות, האתרים, האפליקציות והקטגוריות שלמטה לא חלים עליו כרגע. כדי שיחולו, בחרו סינון אתרים אחר.</value>
+    <value>הגלישה של בן המשפחה הזה לא מסוננת, מלבד ההגנה הבסיסית להורים ולמבוגרים (בהגדרות), ולכן השעות, האפליקציות והקטגוריות שלמטה לא חלים עליו כרגע; כלל היתר לאתר גובר על ההגנה הבסיסית. כדי שהכול יחול, בחרו סינון אתרים אחר.</value>
   </data>
   <data name="Member_Profile" xml:space="preserve">
     <value>פרטים ואופן הסינון</value>
@@ -1161,7 +1164,7 @@
     <value>+ בן משפחה</value>
   </data>
   <data name="Setup_AccountsHint" xml:space="preserve">
-    <value>בחרו לכל חשבון Windows במחשב הזה למי הוא שייך. חשבון שלא מקושר לאף אחד: מנהלים לא מסוננים, וחשבון רגיל חסום.</value>
+    <value>בחרו לכל חשבון Windows במחשב הזה למי הוא שייך. חשבון שלא מקושר לאף אחד: מנהלים מקבלים רק את ההגנה הבסיסית להורים ולמבוגרים, וחשבון רגיל חסום.</value>
   </data>
   <data name="Setup_NoAccounts" xml:space="preserve">
     <value>לא נמצאו חשבונות Windows במחשב הזה. אם יצרתם עכשיו חשבון לילד, לחצו על חיפוש מחדש.</value>
@@ -1512,7 +1515,7 @@
     <value>חשבונות Windows חדשים שעדיין לא שויכו לבן משפחה</value>
   </data>
   <data name="Devices_AdminNotFiltered" xml:space="preserve">
-    <value>מנהל — לא מסונן</value>
+    <value>מנהל — לא מסונן, מלבד ההגנה הבסיסית</value>
   </data>
   <data name="Devices_AdminToolTip" xml:space="preserve">
     <value>חשבונות מנהל לא מסוננים אף פעם: מי שיש לו הרשאות מנהל יכול להסיר כל תוכנה, גם את WebFilter. לילדים צריך חשבון Windows רגיל.</value>
@@ -1563,7 +1566,7 @@
     <value>מבוגר, בלי סינון</value>
   </data>
   <data name="NewAccount_AdultHint" xml:space="preserve">
-    <value>לחשבון של מבוגר במשפחה: הגלישה בו לא תסונן.</value>
+    <value>לחשבון של מבוגר במשפחה: הגלישה בו לא תסונן, מלבד ההגנה הבסיסית להורים ולמבוגרים.</value>
   </data>
   <data name="NewAccount_Guest" xml:space="preserve">
     <value>להשאיר חסום (אורח)</value>
@@ -1597,5 +1600,47 @@
   </data>
   <data name="Common_Cancel" xml:space="preserve">
     <value>ביטול</value>
+  </data>
+  <data name="Settings_Baseline" xml:space="preserve">
+    <value>הגנה בסיסית להורים ולמבוגרים</value>
+  </data>
+  <data name="Settings_BaselineHint" xml:space="preserve">
+    <value>חלה על חשבונות המנהלים ועל בני המשפחה ללא הגבלה, בכל המחשבים — הגלישה שלכם עצמכם. ילדים ובני נוער מסוננים לפי ההגדרות שלהם, שחזקות ממנה. מנהל יכול לכבות אותה כאן. חסימת האתרים, הקפיצות והפרסומות לא פועלת בחלון InPrivate או בגלישה בסתר. שום דבר מהגלישה שלכם לא נרשם ביומן.</value>
+  </data>
+  <data name="Settings_Baseline_BlockAdult" xml:space="preserve">
+    <value>חסימת אתרים למבוגרים</value>
+  </data>
+  <data name="Settings_Baseline_BlockAdultHint" xml:space="preserve">
+    <value>אתרים מרשימת התוכן למבוגרים חסומים, עם הסבר בדף החסימה ובלי בקשת גישה. כלל היתר שלכם לאתר גובר על החסימה.</value>
+  </data>
+  <data name="Settings_Baseline_JumpGuard" xml:space="preserve">
+    <value>חסימת קפיצות לאתרים אחרים</value>
+  </data>
+  <data name="Settings_Baseline_JumpGuardHint" xml:space="preserve">
+    <value>אתר לא יכול לפתוח אתר אחר בחלון חדש או בהפניה אוטומטית. בדף החסימה יש "פתח בכל זאת".</value>
+  </data>
+  <data name="Settings_Baseline_BlockAds" xml:space="preserve">
+    <value>חסימת פרסומות</value>
+  </data>
+  <data name="Settings_Baseline_BlockAdsHint" xml:space="preserve">
+    <value>בקשות לשרתי פרסומות מוכרים נחסמות בדפדפן. פרסומות שאתר מגיש מהכתובת שלו לא נחסמות.</value>
+  </data>
+  <data name="Settings_Baseline_SafeSearch" xml:space="preserve">
+    <value>חיפוש בטוח</value>
+  </data>
+  <data name="Settings_Baseline_SafeSearchHint" xml:space="preserve">
+    <value>חיפוש בטוח כפוי ב-Google (ב-Chrome וב-Edge) וב-Bing (ב-Edge, ברמה מתונה). שאר הגדרות הדפדפן שלכם לא משתנות.</value>
+  </data>
+  <data name="Settings_Baseline_AdultListMissing" xml:space="preserve">
+    <value>רשימת האתרים למבוגרים עוד לא נמצאת בהגדרות המשפחה, ולכן עוד לא נחסם דבר. היא תתווסף כשתשמרו.</value>
+  </data>
+  <data name="Done_BaselineSaved" xml:space="preserve">
+    <value>ההגנה הבסיסית להורים ולמבוגרים נשמרה.</value>
+  </data>
+  <data name="Setup_Summary_Baseline" xml:space="preserve">
+    <value>הגנה בסיסית להורים ולמבוגרים: {0}. אפשר לשנות בהגדרות.</value>
+  </data>
+  <data name="Setup_Summary_BaselineOff" xml:space="preserve">
+    <value>הגנה בסיסית להורים ולמבוגרים: כבויה. אפשר להפעיל בהגדרות.</value>
   </data>
 </root>

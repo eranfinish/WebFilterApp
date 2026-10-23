@@ -29,6 +29,7 @@ const isBlocking = (rule: DnrRule | null): rule is DnrRule => rule?.action.type 
  *   YouTube host rule (ids 3, 4)        → blocked_youtube_off
  *   member or global band               → blocked_rule (category domains share rules with global rules, so
  *                                          blocked_category cannot be told apart here)
+ *   a parent's baseline (mode baseline) → blocked_baseline_adult (its only block rules are the adult list, §13)
  * Anything else falls back to the time state and the filter mode.
  */
 export function explainBlock(
@@ -39,6 +40,7 @@ export function explainBlock(
   resourceType: "main_frame" | "sub_frame" = "main_frame",
 ): ReasonCode {
   if (ctx.connection === "host") return "blocked_service_unavailable";
+  if (ctx.mode === "baseline") return "blocked_baseline_adult";
   const session = winningRule(sessionRules, url, resourceType);
   const dynamic = winningRule(dynamicRules, url, resourceType);
   // Session rules sit above every dynamic rule in the layout; compare priorities anyway.

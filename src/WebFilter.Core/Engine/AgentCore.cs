@@ -57,21 +57,24 @@ public sealed class AgentCore(string deviceId)
     {
         if (!ServiceUp) return Decider.FailClosed(account, Cache(account, now), url);
         return account.MemberId is null
-            ? (account.IsAdmin ? DecisionResult.Allow(ReasonCode.AllowedUnrestricted) : Decider.UnlinkedUrl(View(), url, now))
+            ? (account.IsAdmin ? Decider.Baseline(View(), null, url, now) : Decider.UnlinkedUrl(View(), url, now))
             : Decider.Url(View(), account.MemberId, url, now);
     }
 
+    /// <summary>Decides and records a block — except for the parents' own accounts, whose browsing is never recorded (PROTECTION-SPEC §13).</summary>
     public DecisionResult DecideUrl(DeviceAccount account, string url, DateTimeOffset now)
     {
         var result = ExplainUrl(account, url, now);
-        if (result.Decision == Decision.Block && ServiceUp) Raise(new FamilyEvent(EventType.Blocked, now, account.MemberId, DeviceId, result.Reason, Url: url));
+        if (result.Decision == Decision.Block && ServiceUp && !IsParent(account))
+            Raise(new FamilyEvent(EventType.Blocked, now, account.MemberId, DeviceId, result.Reason, Url: url));
         return result;
     }
 
     public DecisionResult DecideYouTube(DeviceAccount account, YouTubePage page, DateTimeOffset now)
     {
         if (!ServiceUp) return Decider.FailClosed(account, Cache(account, now), page.Url);
-        if (account.MemberId is null) return Decider.UnlinkedUrl(View(), page.Url, now);
+        // An administrator's YouTube is never filtered, like an unrestricted member's (Decider.YouTube).
+        if (account.MemberId is null) return account.IsAdmin ? DecisionResult.Allow(ReasonCode.AllowedUnrestricted) : Decider.UnlinkedUrl(View(), page.Url, now);
         var result = Decider.YouTube(View(), account.MemberId, page, now);
         if (result.Decision == Decision.Block) Raise(new FamilyEvent(EventType.Blocked, now, account.MemberId, DeviceId, result.Reason, Url: page.Url));
         return result;
@@ -90,9 +93,16 @@ public sealed class AgentCore(string deviceId)
     public void ReportProblem(DeviceAccount account, string detail, DateTimeOffset now) =>
         Raise(new FamilyEvent(EventType.Service, now, account.MemberId, DeviceId, Detail: detail));
 
-    /// <summary>A block enforced by the extension itself (DNR or content script), reported for the parents' log.</summary>
-    public void ReportBlock(DeviceAccount account, string url, ReasonCode reason, DateTimeOffset now) =>
+    /// <summary>
+    /// A block enforced by the extension itself (DNR or content script), reported for the parents' log. A parent's own
+    /// block (the baseline protection, PROTECTION-SPEC §13) is not recorded. Returns whether it was.
+    /// </summary>
+    public bool ReportBlock(DeviceAccount account, string url, ReasonCode reason, DateTimeOffset now)
+    {
+        if (IsParent(account)) return false;
         Raise(new FamilyEvent(EventType.Blocked, now, account.MemberId, DeviceId, reason, Url: url));
+        return true;
+    }
 
     /// <summary>
     /// A search the member made (PROTECTION-SPEC §9), recorded as a <see cref="EventType.Search"/> event with detail
@@ -108,9 +118,23 @@ public sealed class AgentCore(string deviceId)
         return true;
     }
 
-    /// <summary>A teen opened a site the jump guard had blocked ("open anyway", PROTECTION-SPEC §7), recorded as an <see cref="EventType.Override"/> event.</summary>
-    public void ReportOverride(DeviceAccount account, string url, ReasonCode reason, DateTimeOffset now) =>
+    /// <summary>
+    /// A teen opened a site the jump guard had blocked ("open anyway", PROTECTION-SPEC §7), recorded as an
+    /// <see cref="EventType.Override"/> event. A parent's own "open anyway" (§13) is not recorded. Returns whether it was.
+    /// </summary>
+    public bool ReportOverride(DeviceAccount account, string url, ReasonCode reason, DateTimeOffset now)
+    {
+        if (IsParent(account)) return false;
         Raise(new FamilyEvent(EventType.Override, now, account.MemberId, DeviceId, reason, Url: url));
+        return true;
+    }
+
+    /// <summary>
+    /// One of the parents' own accounts (<see cref="BaselineProtection.AppliesTo"/>: an administrator linked to nobody, an
+    /// unrestricted member's account), whose browsing is never recorded — however its baseline switches are set.
+    /// </summary>
+    public bool IsParent(DeviceAccount account) =>
+        account.MemberId is null ? account.IsAdmin : _snapshot is { } snapshot && BaselineProtection.AppliesTo(snapshot.Config, account);
 
     /// <summary>
     /// Something on this computer worked against the filter and was undone or noticed (<see cref="TamperKinds"/>),

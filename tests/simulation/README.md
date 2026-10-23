@@ -51,6 +51,7 @@ cd tests/simulation/tools && npm install && npm run validate
 | `dailyLimits` | מחליף את המכסה של אותו בן משפחה באותם ימים |
 | `categories` | מתווספת (קטגוריה באותו שם מוחלפת) |
 | `rules`, `memberCategories`, `youtubeChannels`, `appRules` | מתווסף |
+| `baseline` | ההגנה הבסיסית של המשפחה (`blockAdult`, `jumpGuard`, `blockAds`, `safeSearch`); מתג שחסר — `true`, וכך גם כשאין את השדה בכלל |
 
 ## 4. שעון
 
@@ -83,6 +84,7 @@ cd tests/simulation/tools && npm install && npm run validate
 | חיפוש תמונות (`blockImageSearch`) | לבן משפחה מסונן עם הדגל — כללים מובנים (`builtin-image-search-*`) → `blocked_image_search`: Google ‏`/search` עם `udm=2` או `tbm=isch` (פרמטר בכל מקום ב-query, לא ב-fragment ולא בתוך ערך של פרמטר אחר) ו-`/imghp`, `images.google.*`, `lens.google.com`, `bing.com/images`, DuckDuckGo עם `ia=images`/`iax=images`, Yandex ‏`/images`. גוברים על **כל** כלל, גם "מותר תמיד" וחינוכי, ובכל מצב שבו בן המשפחה מסונן — בתוך החלון, כשהזמן נגמר ובשיעורי בית; השהיה מבטלת אותם. בלי הדגל, או לבן משפחה ללא הגבלה — אין כללים כאלה. חיפוש רגיל ותמונות בתוך דף תוצאות רגיל לא נחסמים |
 | AI Mode של Google | כשהקטגוריות של בן משפחה מסונן חוסמות את `ai-chat` — היא חסומה לו, או שהוא במצב "רק מאושרים" וההורה לא התיר אותה — כלל מובנה `builtin-ai-mode-google` חוסם את `google.*/search` עם `udm=50` (בכל סדר פרמטרים) → `blocked_rule`, וגובר על כל כלל כמו חיפוש התמונות. חיפוש רגיל לא נחסם |
 | `blocked_jump`, `blocked_youtube_shorts` | החלטות של התוסף בלבד (PROTECTION-SPEC §7–§8); אין להן תרחישי `engine`. השירות שומר את הסיבה שהתוסף מדווח |
+| הגנה בסיסית להורים (PROTECTION-SPEC §13) | לחשבון מנהל (מקושר למבוגר או לא מקושר) ולבן משפחה ללא הגבלה, כש-`blockAdult` פועל: דומיין מקטגוריית `adult` (ותתי-הדומיינים שלו) → `blocked_baseline_adult`, אלא אם כלל `allow` פעיל של ההורים מתאים לו — כלל של בן המשפחה עצמו או כלל גלובלי, בכל ספציפיות — ואז הסיבה והמזהה של הכלל. כל השאר `allowed_unrestricted`: כתובות IP, YouTube, כללי חסימה של המשפחה ושל ההורה, בכל שעה. משפחה בלי קטגוריית `adult` — לא נחסם כלום. השהיה לא משנה דבר (להורים אין השהיה), זמן לא נספר, ושום דבר מהגלישה שלהם לא נרשם (לא `blocked`, לא `override`, לא `search`). ילדים, נוער וחשבונות רגילים לא מקושרים — לפי ההגדרות שלהם, בלי קשר ל-`baseline` |
 
 ## 6. סמנטיקה של זמן
 
@@ -138,8 +140,8 @@ cd tests/simulation/tools && npm install && npm run validate
 
 | חשבון | תוצאה |
 |-------|-------|
-| מנהל Windows | `allowed_unrestricted` |
-| יש `ProfileCache`, משתמש ללא הגבלה | `allowed_unrestricted` |
+| מנהל Windows | `allowed_unrestricted` (גם אתר מקטגוריית `adult`: ההגנה הבסיסית להורים מגיעה רק מהשירות, FC-005) |
+| יש `ProfileCache`, משתמש ללא הגבלה | `allowed_unrestricted` (כנ"ל) |
 | יש `ProfileCache`, משתמש מוגבל | "מותר תמיד" → `allowed_always`; כל השאר → `blocked_service_unavailable` |
 | אין `ProfileCache` | `blocked_service_unavailable` |
 

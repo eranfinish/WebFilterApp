@@ -1,3 +1,4 @@
+using WebFilter.Admin.Resources;
 using WebFilter.Admin.Services;
 using WebFilter.Admin.ViewModels;
 using WebFilter.Contracts.Admin;
@@ -162,6 +163,121 @@ public sealed class SettingsViewModelTests
 
         Assert.True(vm.IsAgent);
         Assert.Null(vm.WindowsFeatures);
+        Assert.Null(vm.Baseline);
+    }
+
+    // ---- Baseline protection for parents and adults (PROTECTION-SPEC §13) ----------------------------------------
+
+    private static FamilyBundle WithAdultList(FamilyBundle settings) =>
+        settings with { Categories = new Dictionary<string, IReadOnlyList<string>>(settings.Categories) { ["adult"] = ["own-adult.example"] } };
+
+    [Fact]
+    public async Task The_baseline_is_all_on_when_the_family_never_set_it()
+    {
+        _client.Settings = WithAdultList(_client.Settings);
+        var vm = await LoadedAsync();
+
+        var baseline = vm.Baseline!;
+        Assert.Null(_client.Settings.Baseline);
+        Assert.Equal((true, true, true, true), (baseline.BlockAdult, baseline.JumpGuard, baseline.BlockAds, baseline.SafeSearch));
+        Assert.True(baseline.AdultListPresent);
+        Assert.False(baseline.NeedsAdultList);
+        Assert.False(baseline.IsDirty);
+        Assert.False(baseline.SaveCommand.CanExecute(null));
+    }
+
+    [Fact]
+    public async Task The_baseline_switches_are_saved_together_and_replace_only_that_part()
+    {
+        _client.Settings = WithAdultList(_client.Settings);
+        var vm = await LoadedAsync();
+        var baseline = vm.Baseline!;
+        baseline.JumpGuard = false;
+        baseline.SafeSearch = false;
+        Assert.True(baseline.IsChanged && baseline.IsDirty);
+
+        await baseline.SaveCommand.ExecuteAsync(null);
+
+        var replace = _client.Single<ReplaceSettings>();
+        Assert.Equal(7, replace.IfVersion);
+        Assert.Equal(new BaselineDto(BlockAdult: true, JumpGuard: false, BlockAds: true, SafeSearch: false), replace.Settings.Baseline);
+        // Nothing else changes, and the family's own adult list is kept.
+        Assert.Equal(FamilyBundleJson.Serialize(WithAdultList(TestData.Family()) with { Baseline = replace.Settings.Baseline }),
+            FamilyBundleJson.Serialize(replace.Settings with { Version = 7 }));
+        Assert.Equal("ההגנה הבסיסית להורים ולמבוגרים נשמרה.", vm.StatusMessage);
+        Assert.False(vm.Baseline!.IsDirty);
+        Assert.Equal((true, false, true, false), (vm.Baseline.BlockAdult, vm.Baseline.JumpGuard, vm.Baseline.BlockAds, vm.Baseline.SafeSearch));
+        Assert.Empty(_client.SentOf<SetMember>());
+    }
+
+    [Fact]
+    public async Task Without_the_adult_list_the_section_says_so_and_saving_adds_the_shipped_list()
+    {
+        var vm = await LoadedAsync(); // the fixture family has no adult category
+        var baseline = vm.Baseline!;
+        Assert.False(baseline.AdultListPresent);
+        Assert.True(baseline.NeedsAdultList);
+        Assert.False(baseline.IsChanged);
+        Assert.True(baseline.IsDirty);
+        Assert.True(baseline.SaveCommand.CanExecute(null));
+        Assert.False(baseline.RevertCommand.CanExecute(null));
+
+        await baseline.SaveCommand.ExecuteAsync(null);
+
+        var settings = _client.Single<ReplaceSettings>().Settings;
+        Assert.Equal(StarterLists.Find("adult")!.Domains, settings.Categories["adult"]);
+        Assert.Equal(new BaselineDto(), settings.Baseline);
+        Assert.Equal(TestData.Family().Categories.Keys.Append("adult").Order(), settings.Categories.Keys.Order());
+        Assert.False(vm.Baseline!.NeedsAdultList);
+        Assert.False(vm.Baseline.IsDirty);
+    }
+
+    [Fact]
+    public async Task Turning_adult_sites_off_needs_no_list_and_keeps_the_categories_as_they_are()
+    {
+        var vm = await LoadedAsync();
+        var baseline = vm.Baseline!;
+        baseline.BlockAdult = false;
+        Assert.False(baseline.NeedsAdultList);
+        Assert.True(baseline.IsDirty);
+
+        await baseline.SaveCommand.ExecuteAsync(null);
+
+        var settings = _client.Single<ReplaceSettings>().Settings;
+        Assert.Equal(new BaselineDto(BlockAdult: false), settings.Baseline);
+        Assert.False(settings.Categories.ContainsKey("adult"));
+    }
+
+    [Fact]
+    public async Task Stored_baseline_switches_are_shown_reverted_and_survive_a_reload()
+    {
+        _client.Settings = WithAdultList(_client.Settings) with { Baseline = new BaselineDto(BlockAdult: true, JumpGuard: false, BlockAds: false, SafeSearch: true) };
+        var vm = await LoadedAsync();
+        var baseline = vm.Baseline!;
+        Assert.Equal((true, false, false, true), (baseline.BlockAdult, baseline.JumpGuard, baseline.BlockAds, baseline.SafeSearch));
+
+        baseline.BlockAds = true;
+        _client.BumpVersion();
+        await vm.RefreshAsync();
+        Assert.Same(baseline, vm.Baseline);
+        Assert.True(vm.Baseline!.BlockAds && vm.Baseline.IsChanged);
+
+        vm.Baseline.RevertCommand.Execute(null);
+        Assert.False(vm.Baseline.BlockAds);
+        Assert.False(vm.Baseline.IsDirty);
+        Assert.Empty(_client.SentOf<ReplaceSettings>());
+    }
+
+    [Fact]
+    public void The_section_explains_whom_it_covers_and_where_it_does_not_apply()
+    {
+        Assert.Equal("הגנה בסיסית להורים ולמבוגרים", Strings.Settings_Baseline);
+        Assert.Contains("ילדים ובני נוער מסוננים לפי ההגדרות שלהם", Strings.Settings_BaselineHint);
+        Assert.Contains("מנהל יכול לכבות אותה", Strings.Settings_BaselineHint);
+        Assert.Contains("InPrivate", Strings.Settings_BaselineHint);
+        Assert.Contains("בגלישה בסתר", Strings.Settings_BaselineHint);
+        foreach (var hint in new[] { Strings.Settings_Baseline_BlockAdultHint, Strings.Settings_Baseline_JumpGuardHint, Strings.Settings_Baseline_BlockAdsHint, Strings.Settings_Baseline_SafeSearchHint })
+            Assert.False(string.IsNullOrWhiteSpace(hint));
     }
 
     [Fact]

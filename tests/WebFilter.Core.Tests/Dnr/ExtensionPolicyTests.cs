@@ -112,8 +112,12 @@ public class ExtensionPolicyTests
         }
     }
 
+    /// <summary>
+    /// Restricted members get their own flags; the parents (administrators, unrestricted members) the family's baseline
+    /// (PROTECTION-SPEC §13), whatever their member flags say; unlinked standard accounts nothing.
+    /// </summary>
     [Fact]
-    public void Features_follow_the_member_flags_and_the_role_and_are_off_for_everyone_else()
+    public void Features_follow_the_member_flags_and_the_role_and_the_baseline_for_parents()
     {
         var config = Fixture();
         var noa = config.Members.FindIndex(m => m.Id == "noa");
@@ -128,8 +132,9 @@ public class ExtensionPolicyTests
 
         Assert.Equal(new ExtensionFeatures(JumpGuard: true, BlockYouTubeShorts: true, LogSearches: true, CanOverrideJump: false, BlockAds: true), Of("noa"));
         Assert.Equal(new ExtensionFeatures(JumpGuard: true, BlockYouTubeShorts: false, LogSearches: false, CanOverrideJump: true, BlockAds: false), Of("yoav"));
-        Assert.Equal(ExtensionFeatures.None, Of("savta"));   // unrestricted adult: flags ignored
-        Assert.Equal(ExtensionFeatures.None, Of("dana"));    // administrator
+        var baseline = new ExtensionFeatures(JumpGuard: true, BlockYouTubeShorts: false, LogSearches: false, CanOverrideJump: true, BlockAds: true);
+        Assert.Equal(baseline, Of("savta"));                 // unrestricted adult: her flags ignored, the baseline instead
+        Assert.Equal(baseline, Of("dana"));                  // administrator
         Assert.Equal(ExtensionFeatures.None, Of("visitor")); // unlinked
 
         hub.StartHomework("noa", 30, InWindow);

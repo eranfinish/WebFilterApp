@@ -602,6 +602,9 @@
   <data name="Reason_blocked_youtube_shorts" xml:space="preserve">
     <value>YouTube Shorts are blocked</value>
   </data>
+  <data name="Reason_blocked_baseline_adult" xml:space="preserve">
+    <value>Adult site — blocked by the family's baseline protection</value>
+  </data>
   <data name="AdminChange_add_rule" xml:space="preserve">
     <value>Website rule added</value>
   </data>
@@ -899,7 +902,7 @@ The computer keeps enforcing the last settings it received but stops getting upd
     <value>Family member:</value>
   </data>
   <data name="Member_UnrestrictedNote" xml:space="preserve">
-    <value>This member's browsing is not filtered, so the hours, sites, apps and categories below do not apply now. Choose another website filtering to apply them.</value>
+    <value>This member's browsing is not filtered apart from the baseline protection for parents and adults (Settings), so the hours, apps and categories below do not apply now; an allow rule for a site wins over the baseline protection. Choose another website filtering to apply them all.</value>
   </data>
   <data name="Member_Profile" xml:space="preserve">
     <value>Details and filtering</value>
@@ -1157,7 +1160,7 @@ The computer keeps enforcing the last settings it received but stops getting upd
     <value>+ Family member</value>
   </data>
   <data name="Setup_AccountsHint" xml:space="preserve">
-    <value>Choose whom each Windows account on this computer belongs to. Accounts linked to no one: administrators are not filtered and standard accounts are blocked.</value>
+    <value>Choose whom each Windows account on this computer belongs to. Accounts linked to no one: administrators get only the baseline protection for parents and adults, and standard accounts are blocked.</value>
   </data>
   <data name="Setup_NoAccounts" xml:space="preserve">
     <value>No Windows accounts were found on this computer. If you just created an account for a child, look again.</value>
@@ -1508,7 +1511,7 @@ Do this only for your home network. On a café, hotel or work network it is safe
     <value>New Windows accounts not yet assigned to a family member</value>
   </data>
   <data name="Devices_AdminNotFiltered" xml:space="preserve">
-    <value>Administrator — not filtered</value>
+    <value>Administrator — not filtered, apart from the baseline protection</value>
   </data>
   <data name="Devices_AdminToolTip" xml:space="preserve">
     <value>Administrator accounts are never filtered: anyone with administrator rights can remove any program, WebFilter included. Children need a standard Windows account.</value>
@@ -1559,7 +1562,7 @@ Do this only for your home network. On a café, hotel or work network it is safe
     <value>Adult, no filtering</value>
   </data>
   <data name="NewAccount_AdultHint" xml:space="preserve">
-    <value>For an adult's account: browsing there is not filtered.</value>
+    <value>For an adult's account: browsing there is not filtered, apart from the baseline protection for parents and adults.</value>
   </data>
   <data name="NewAccount_Guest" xml:space="preserve">
     <value>Keep blocked (guest)</value>
@@ -1593,5 +1596,47 @@ Do this only for your home network. On a café, hotel or work network it is safe
   </data>
   <data name="Common_Cancel" xml:space="preserve">
     <value>Cancel</value>
+  </data>
+  <data name="Settings_Baseline" xml:space="preserve">
+    <value>Baseline protection for parents and adults</value>
+  </data>
+  <data name="Settings_BaselineHint" xml:space="preserve">
+    <value>Applies to the administrator accounts and to unrestricted family members on every computer — your own browsing. Children and teens are filtered by their own settings, which are stronger. An administrator can turn it off here. Blocking sites, jumps and ads does not work in InPrivate or incognito windows. Nothing of your browsing is recorded in the activity log.</value>
+  </data>
+  <data name="Settings_Baseline_BlockAdult" xml:space="preserve">
+    <value>Block adult sites</value>
+  </data>
+  <data name="Settings_Baseline_BlockAdultHint" xml:space="preserve">
+    <value>Sites of the adult content list are blocked, with an explanation on the block page and no access request. Your own allow rule for a site wins.</value>
+  </data>
+  <data name="Settings_Baseline_JumpGuard" xml:space="preserve">
+    <value>Block jumps to other sites</value>
+  </data>
+  <data name="Settings_Baseline_JumpGuardHint" xml:space="preserve">
+    <value>A site cannot open another site in a new window or by an automatic redirect. The block page has "Open anyway".</value>
+  </data>
+  <data name="Settings_Baseline_BlockAds" xml:space="preserve">
+    <value>Block ads</value>
+  </data>
+  <data name="Settings_Baseline_BlockAdsHint" xml:space="preserve">
+    <value>Requests to known ad servers are blocked in the browser. Ads a site serves from its own address are not.</value>
+  </data>
+  <data name="Settings_Baseline_SafeSearch" xml:space="preserve">
+    <value>SafeSearch</value>
+  </data>
+  <data name="Settings_Baseline_SafeSearchHint" xml:space="preserve">
+    <value>SafeSearch is forced in Google (Chrome and Edge) and in Bing (Edge, moderate). Your other browser settings do not change.</value>
+  </data>
+  <data name="Settings_Baseline_AdultListMissing" xml:space="preserve">
+    <value>The adult sites list is not in the family's settings yet, so nothing is blocked yet. It is added when you save.</value>
+  </data>
+  <data name="Done_BaselineSaved" xml:space="preserve">
+    <value>The baseline protection for parents and adults was saved.</value>
+  </data>
+  <data name="Setup_Summary_Baseline" xml:space="preserve">
+    <value>Baseline protection for parents and adults: {0}. You can change it in Settings.</value>
+  </data>
+  <data name="Setup_Summary_BaselineOff" xml:space="preserve">
+    <value>Baseline protection for parents and adults: off. You can turn it on in Settings.</value>
   </data>
 </root>

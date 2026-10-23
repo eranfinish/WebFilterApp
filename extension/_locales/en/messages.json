@@ -90,6 +90,9 @@
   "reason_blocked_youtube_shorts": {
     "message": "YouTube Shorts are turned off for you."
   },
+  "reason_blocked_baseline_adult": {
+    "message": "Adult site — blocked by the family's baseline protection."
+  },
   "reason_failclosed": {
     "message": "WebFilter isn't connected to the filtering service yet, so browsing is blocked. This page will open by itself as soon as it connects.",
     "description": "Static fail-closed ruleset: no profile from the service yet."
@@ -114,7 +117,11 @@
   },
   "overrideButton": {
     "message": "Open anyway",
-    "description": "Jump block page, teens only: opens the site once; the parents see that it was opened."
+    "description": "Jump block page, teens and parents: opens the site once; for a teen, the parents see that it was opened."
+  },
+  "baselineHint": {
+    "message": "A parent can turn this protection off in the WebFilter admin app, on the Settings page (Baseline protection for parents and adults).",
+    "description": "Block page of a parent's own account (PROTECTION-SPEC §13): how to turn the baseline protection off."
   },
   "noteLabel": {
     "message": "Why do you need it? (optional)"
@@ -218,6 +225,10 @@
   "statusServiceDetail": {
     "message": "Filtering and time limits are active."
   },
+  "statusBaselineDetail": {
+    "message": "The family's baseline protection is on (set in the WebFilter admin app). Nothing of your browsing is recorded.",
+    "description": "Popup of a parent's own account (PROTECTION-SPEC §13)."
+  },
   "statusHost": {
     "message": "The filtering service isn't running"
   },
@@ -264,6 +275,10 @@
   },
   "mode_allowlist": {
     "message": "Approved sites only"
+  },
+  "mode_baseline": {
+    "message": "Baseline protection for parents",
+    "description": "A parent's own account with the family's baseline protection (PROTECTION-SPEC §13)."
   },
   "time_unlimited": {
     "message": "No limit"

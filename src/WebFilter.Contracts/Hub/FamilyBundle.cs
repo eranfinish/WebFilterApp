@@ -29,6 +29,13 @@ public sealed record FamilyBundle
     /// such section (an older bundle): read as <see cref="WindowsFeaturesDto"/>'s defaults.
     /// </summary>
     public WindowsFeaturesDto? WindowsFeatures { get; init; }
+
+    /// <summary>
+    /// The family's baseline protection for administrators and unrestricted members (PROTECTION-SPEC §13). Null when the
+    /// bundle has no such section (an older bundle, a family that never changed it): read as <see cref="BaselineDto"/>'s
+    /// defaults, all on.
+    /// </summary>
+    public BaselineDto? Baseline { get; init; }
 }
 
 /// <param name="Role">child | teen | adult.</param>
@@ -48,6 +55,17 @@ public sealed record MemberDto(string Id, string DisplayName, string Role, int? 
 /// <param name="OneDrive">The machine-wide OneDrive may use the network, also when time is up. A per-user OneDrive never is.</param>
 /// <param name="WebSearchInStart">Bing results in Start search; when false, DisableSearchBoxSuggestions is set for each such account.</param>
 public sealed record WindowsFeaturesDto(bool NotificationsAndSync = true, bool OneDrive = true, bool WebSearchInStart = false);
+
+/// <summary>
+/// Wire: <c>baseline: { blockAdult, jumpGuard, blockAds, safeSearch }</c>; a missing field is true. For administrator
+/// accounts (linked to an adult or to nobody) and unrestricted members' accounts only; children, teens and unlinked
+/// standard accounts follow their own settings.
+/// </summary>
+/// <param name="BlockAdult">The bundle's <c>adult</c> category is blocked (<c>blocked_baseline_adult</c>) unless a parent's allow rule matches; the admin app copies the list in when this is on.</param>
+/// <param name="JumpGuard">The extension's jump guard (§7), with "open anyway".</param>
+/// <param name="BlockAds">The extension's ad-server ruleset (§12).</param>
+/// <param name="SafeSearch">Per-user policies ForceGoogleSafeSearch (Chrome, Edge) and ForceBingSafeSearch moderate (Edge); no other policy.</param>
+public sealed record BaselineDto(bool BlockAdult = true, bool JumpGuard = true, bool BlockAds = true, bool SafeSearch = true);
 
 public sealed record DeviceDto(string Id, string Os, string Role, IReadOnlyList<AccountDto> Accounts);
 

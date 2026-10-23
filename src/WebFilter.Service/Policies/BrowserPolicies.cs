@@ -20,7 +20,8 @@ public sealed record ExtensionIds(string? ChromeId, string? EdgeId)
 /// registration) and per restricted account (incognito/guest/profiles/dev mode/DevTools/extensions/SafeSearch/YouTube,
 /// and PROTECTION-SPEC §5: pop-ups, abusive experiences, intrusive ads, no proxy, Edge strict tracking prevention and no
 /// news feed on Edge's new tab page; §11: Edge's sidebar and Chrome's Gemini off when ai-chat is blocked), plus the Windows
-/// policy of PROTECTION-SPEC §2 (no Bing results in Start search unless the family allows web search there).
+/// policy of PROTECTION-SPEC §2 (no Bing results in Start search unless the family allows web search there). Parents'
+/// accounts — administrators and unrestricted members — get only the baseline's SafeSearch (§13).
 /// </summary>
 public static class BrowserPolicies
 {
@@ -29,12 +30,20 @@ public static class BrowserPolicies
     private const string Edge = @"SOFTWARE\Policies\Microsoft\Edge";
     public const string Explorer = @"SOFTWARE\Policies\Microsoft\Windows\Explorer";
 
+    /// <summary>
+    /// An account that gets the parents' policies only — the baseline's SafeSearch (PROTECTION-SPEC §13): an administrator
+    /// (linked to anyone or to nobody; a Windows administrator can remove any policy anyway) or an unrestricted member's.
+    /// Restoring one of these values is not reported as tampering: they are the parent's own settings.
+    /// </summary>
+    public static bool IsParentAccount(FamilyConfig config, DeviceAccount account) =>
+        account.IsAdmin || (account.MemberId is { } id && config.Members.FirstOrDefault(m => m.Id == id) is { IsRestricted: false });
+
     public static IReadOnlyList<PolicyValue> Desired(FamilyConfig config, string deviceId, ExtensionIds ids, string nativeHostManifestPath)
     {
         var values = new List<PolicyValue>();
         void Machine(string key, string name, object value) => values.Add(new PolicyValue(PolicyHive.Machine, null, key, name, value));
 
-        // Machine-wide: the extension is installed for everyone; for adults it is transparent.
+        // Machine-wide: the extension is installed for everyone; for adults it applies only the family's baseline (§13).
         if (ids.ChromeId is { } chrome) Machine($@"{Chrome}\ExtensionInstallForcelist", "1", $"{chrome};{ExtensionIds.ChromeUpdateUrl}");
         if (ids.EdgeId is { } edge) Machine($@"{Edge}\ExtensionInstallForcelist", "1", $"{edge};{ExtensionIds.EdgeUpdateUrl}");
         Machine(Chrome, "NativeMessagingUserLevelHosts", 0);
@@ -45,11 +54,19 @@ public static class BrowserPolicies
         var device = config.Devices.FirstOrDefault(d => d.Id == deviceId);
         foreach (var account in device?.Accounts ?? [])
         {
-            if (account.IsAdmin) continue;
-            var member = account.MemberId is null ? null : config.Members.FirstOrDefault(m => m.Id == account.MemberId);
-            // Unlinked non-admin accounts are restricted too (README §5).
-            if (member is { IsRestricted: false }) continue;
             void User(string key, string name, object value) => values.Add(new PolicyValue(PolicyHive.User, account.AccountId, key, name, value));
+            var member = account.MemberId is null ? null : config.Members.FirstOrDefault(m => m.Id == account.MemberId);
+            // Unlinked non-admin accounts are restricted too (README §5). Administrators (whoever they are linked to) and
+            // unrestricted members get only the family's baseline SafeSearch (PROTECTION-SPEC §13), nothing else: no
+            // InPrivate, guest, profile, DevTools, extension or proxy policy.
+            if (IsParentAccount(config, account))
+            {
+                if (!config.Baseline.SafeSearch) continue;
+                User(Chrome, "ForceGoogleSafeSearch", 1);
+                User(Edge, "ForceGoogleSafeSearch", 1);
+                User(Edge, "ForceBingSafeSearch", 1); // moderate
+                continue;
+            }
 
             User(Chrome, "IncognitoModeAvailability", 1);
             User(Edge, "InPrivateModeAvailability", 1);

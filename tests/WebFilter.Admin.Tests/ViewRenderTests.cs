@@ -40,6 +40,10 @@ public sealed class ViewRenderTests
         }
         shown.Main.Settings.WindowsFeatures!.OneDrive = false;
         await shown.RenderAsync("SettingsViewModel-features-changed");
+        // The fixture family has no adult list: the baseline section says so (PROTECTION-SPEC §13); a switch changed too.
+        Assert.True(shown.Main.Settings.Baseline!.NeedsAdultList);
+        shown.Main.Settings.Baseline.JumpGuard = false;
+        await shown.RenderAsync("SettingsViewModel-baseline-changed");
         shown.Main.SelectedPage = shown.Main.Rules;
         await shown.Main.CurrentLoad;
         shown.Main.Rules.NewPattern = "games";

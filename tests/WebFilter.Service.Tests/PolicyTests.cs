@@ -67,8 +67,8 @@ public sealed class PolicyTests : IDisposable
                 Assert.Equal(1, _store.User(sid, browser, "ForceGoogleSafeSearch"));
             }
         }
-        Assert.Empty(_store.ValuesOf(Dana));  // admin
-        Assert.Empty(_store.ValuesOf(Savta)); // unrestricted adult
+        AssertOnlyBaseline(Dana);  // admin: the baseline's SafeSearch only (PROTECTION-SPEC §13)
+        AssertOnlyBaseline(Savta); // unrestricted adult
     }
 
     [Fact]
@@ -92,7 +92,8 @@ public sealed class PolicyTests : IDisposable
         var result = _manager.Apply(Desired());
 
         Assert.True(result.Deleted > 0);
-        Assert.Equal(new[] { "SomeoneElsesPolicy" }, _store.ValuesOf(Yoav).Select(v => v.Name));
+        // An unrestricted member now gets the parents' baseline (PROTECTION-SPEC §13): the restricted set goes, SafeSearch stays.
+        Assert.Equal(new[] { "ForceBingSafeSearch", "ForceGoogleSafeSearch", "ForceGoogleSafeSearch", "SomeoneElsesPolicy" }, _store.ValuesOf(Yoav).Select(v => v.Name).Order());
         Assert.Equal(1, _store.User(Noa, Chrome, "IncognitoModeAvailability"));
     }
 
@@ -135,8 +136,8 @@ public sealed class PolicyTests : IDisposable
             Assert.Null(_store.User(sid, Chrome, "TrackingPrevention"));
             Assert.Equal(0, _store.User(sid, Edge, "NewTabPageContentEnabled"));
         }
-        Assert.Empty(_store.ValuesOf(Dana));
-        Assert.Empty(_store.ValuesOf(Savta));
+        AssertOnlyBaseline(Dana);
+        AssertOnlyBaseline(Savta);
     }
 
     /// <summary>
@@ -154,8 +155,8 @@ public sealed class PolicyTests : IDisposable
         }
         Assert.Null(_store.User(Yoav, Edge, "HubsSidebarEnabled")); // a teen: ai-chat is only offered
         Assert.Null(_store.User(Yoav, Chrome, "GeminiSettings"));
-        Assert.Empty(_store.ValuesOf(Dana));
-        Assert.Empty(_store.ValuesOf(Savta));
+        AssertOnlyBaseline(Dana);
+        AssertOnlyBaseline(Savta);
 
         _config.MemberCategories.Add(new MemberCategory("yoav", "ai-chat", RuleAction.Block));
         _config.MemberCategories.Add(new MemberCategory("noa", "ai-chat", RuleAction.Allow));
@@ -174,7 +175,7 @@ public sealed class PolicyTests : IDisposable
         _manager.Apply(Desired());
         foreach (var sid in new[] { Noa, Yoav, Visitor })
             Assert.Equal(1, _store.User(sid, BrowserPolicies.Explorer, "DisableSearchBoxSuggestions"));
-        Assert.Empty(_store.ValuesOf(Dana));
+        AssertOnlyBaseline(Dana);
 
         _config = WithFeatures(_config, new WindowsFeatures(WebSearchInStart: true));
         var result = _manager.Apply(Desired());
@@ -210,11 +211,70 @@ public sealed class PolicyTests : IDisposable
         Assert.Equal(new[] { "SomeoneElsesPolicy" }, _store.All.Select(v => v.Name));
     }
 
+    /// <summary>
+    /// PROTECTION-SPEC §13: the parents' accounts — administrators linked to an adult, to nobody or even to a filtered
+    /// member, and unrestricted members — get the baseline's SafeSearch and nothing else; the children keep theirs.
+    /// </summary>
+    [Fact]
+    public void Parents_get_only_the_baselines_SafeSearch()
+    {
+        const string Parent2 = "S-1-5-21-2000-1010", TeenAdmin = "S-1-5-21-2000-1011";
+        var kids = _config.Devices.FindIndex(d => d.Id == "pc-kids");
+        _config.Devices[kids] = _config.Devices[kids] with
+        {
+            Accounts = [.. _config.Devices[kids].Accounts, new DeviceAccount(Parent2, "parent2", null, IsAdmin: true), new DeviceAccount(TeenAdmin, "yoav-admin", "yoav", IsAdmin: true)],
+        };
+        _manager.Apply(Desired());
+
+        foreach (var sid in new[] { Dana, Savta, Parent2, TeenAdmin }) AssertOnlyBaseline(sid);
+        Assert.Equal(2, _store.User(Noa, Edge, "ForceBingSafeSearch")); // the children's own strength
+        Assert.Equal(1, _store.User(Noa, Chrome, "IncognitoModeAvailability"));
+
+        // The other switches are the extension's: they change no policy.
+        _config = WithBaseline(_config, new BaselineProtection(BlockAdult: false, JumpGuard: false, BlockAds: false, SafeSearch: true));
+        var again = _manager.Apply(Desired());
+        Assert.Equal((0, 0), (again.Written, again.Deleted));
+    }
+
+    [Fact]
+    public void Turning_the_baselines_SafeSearch_off_removes_the_parents_values_only()
+    {
+        _manager.Apply(Desired());
+        _config = WithBaseline(_config, BaselineProtection.Default with { SafeSearch = false });
+
+        var result = _manager.Apply(Desired());
+
+        Assert.Equal(6, result.Deleted); // three each for dana and savta
+        Assert.Empty(_store.ValuesOf(Dana));
+        Assert.Empty(_store.ValuesOf(Savta));
+        Assert.Equal(1, _store.User(Noa, Chrome, "ForceGoogleSafeSearch"));
+        Assert.Equal(1, _store.User(Yoav, Edge, "ForceBingSafeSearch"));
+        Assert.True(BrowserPolicies.IsParentAccount(_config, new DeviceAccount(Dana, "dana", "dana", IsAdmin: true)));
+        Assert.False(BrowserPolicies.IsParentAccount(_config, new DeviceAccount(Visitor, "visitor", null, IsAdmin: false)));
+    }
+
+    /// <summary>Exactly Google SafeSearch in Chrome and Edge and Bing SafeSearch moderate in Edge.</summary>
+    private void AssertOnlyBaseline(string sid)
+    {
+        Assert.Equal([(Chrome, "ForceGoogleSafeSearch"), (Edge, "ForceBingSafeSearch"), (Edge, "ForceGoogleSafeSearch")],
+            _store.ValuesOf(sid).OrderBy(v => v.Key, StringComparer.Ordinal).ThenBy(v => v.Name, StringComparer.Ordinal));
+        Assert.Equal(1, _store.User(sid, Chrome, "ForceGoogleSafeSearch"));
+        Assert.Equal(1, _store.User(sid, Edge, "ForceGoogleSafeSearch"));
+        Assert.Equal(1, _store.User(sid, Edge, "ForceBingSafeSearch"));
+    }
+
     internal static FamilyConfig WithFeatures(FamilyConfig c, WindowsFeatures features) => new()
     {
         TimeZone = c.TimeZone, Members = c.Members, Devices = c.Devices, Categories = c.Categories, MemberCategories = c.MemberCategories,
         Rules = c.Rules, Schedules = c.Schedules, DailyLimits = c.DailyLimits, YouTubeChannels = c.YouTubeChannels,
-        SupportedBrowsers = c.SupportedBrowsers, AppRules = c.AppRules, WindowsFeatures = features,
+        SupportedBrowsers = c.SupportedBrowsers, AppRules = c.AppRules, WindowsFeatures = features, Baseline = c.Baseline,
+    };
+
+    internal static FamilyConfig WithBaseline(FamilyConfig c, BaselineProtection baseline) => new()
+    {
+        TimeZone = c.TimeZone, Members = c.Members, Devices = c.Devices, Categories = c.Categories, MemberCategories = c.MemberCategories,
+        Rules = c.Rules, Schedules = c.Schedules, DailyLimits = c.DailyLimits, YouTubeChannels = c.YouTubeChannels,
+        SupportedBrowsers = c.SupportedBrowsers, AppRules = c.AppRules, WindowsFeatures = c.WindowsFeatures, Baseline = baseline,
     };
 
     internal static FamilyConfig Fixture(Func<FamilyMember, FamilyMember>? patch = null)

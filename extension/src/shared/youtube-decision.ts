@@ -60,7 +60,8 @@ function channelByHandle(policy: YouTubePolicy, handle: string): ChannelRef | un
 export function decideYouTube(ctx: YouTubeContext, page: YouTubePageReport): YouTubeDecision {
   if (ctx.inert) return { decision: "allow", reason: "allowed_unrestricted" };
   if (!ctx.ready || !ctx.policy) return { decision: "block", reason: "blocked_service_unavailable" };
-  if (ctx.filterMode === "unrestricted") return { decision: "allow", reason: "allowed_unrestricted" };
+  // A parent's YouTube is never filtered, baseline protection or not (PROTECTION-SPEC §13).
+  if (ctx.filterMode === "unrestricted" || ctx.filterMode === "baseline") return { decision: "allow", reason: "allowed_unrestricted" };
   if (ctx.time?.state === "outside_window") return { decision: "block", reason: "blocked_time_window" };
   if (ctx.time?.state === "expired") return { decision: "block", reason: "blocked_daily_limit" };
   // Google sign-in's YouTube cookie host: every YouTube mode allows it, Off included (YT-007).

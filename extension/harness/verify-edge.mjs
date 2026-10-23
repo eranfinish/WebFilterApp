@@ -675,6 +675,106 @@ try {
     check("B9 popup: no ad blocking line when it is off", !!hidden);
     await b.close();
   }
+
+  // ===== Test build: the parents' baseline protection (PROTECTION-SPEC §13) =========================================
+  {
+    const b = await launch(DIST_TEST);
+    await b.sw.evaluate(() => globalThis.wfTest.simulatePolicyInstall());
+    // What the compiler emits for a parent: the family's adult list blocked (global band), the parent's own allow rule above
+    // it (member band), and nothing else — no default block, no IP-literal gate, no YouTube rule, no time-up rules.
+    const redirect = { type: "redirect", redirect: { regexSubstitution: `chrome-extension://${b.id}/blocked.html#\\0` } };
+    const baselineRules = [
+      { id: 2001, priority: 65545, action: redirect, condition: { resourceTypes: FRAMES, requestDomains: ["adult-site.test", "nsfw.test"], regexFilter: "^(.*)$" } },
+      { id: 2002, priority: 131080, action: { type: "allow" }, condition: { resourceTypes: FRAMES, requestDomains: ["ok.nsfw.test"] } },
+    ];
+    const features = { jumpGuard: true, blockYouTubeShorts: false, logSearches: false, canOverrideJump: true, blockAds: true };
+    const adultUrl = S("www.adult-site.test", "/video?id=1");
+    const unlimited = { state: "unlimited", remainingMinutes: null, windowEndsAt: null };
+    const parent = (version, extra = {}) => ({
+      hello: { mode: "baseline", user: { accountId: "S-1-5-21-parent", name: "dana", role: "adult", isAdmin: true } },
+      rules: { rulesVersion: version, dynamicRules: baselineRules, timeUpSessionRules: [], youTube: { mode: "unrestricted", allowed: [], blocked: [] }, time: unlimited, features, mode: "baseline", ...extra },
+      // The service's answer for a parent: its reason, and never a request.
+      decide: { [adultUrl]: { reason: "blocked_baseline_adult", canRequest: false, requestKind: "url" } },
+    });
+    await b.sw.evaluate((s) => globalThis.wfTest.useFakeHost(s), parent(21));
+    const ready = await b.sw.evaluate(() => globalThis.wfTest.whenReady(5000));
+    const on = await waitFor(async () => {
+      const r = await enabledRulesets(b);
+      return r.includes("ads") && !r.includes("failclosed") ? r : null;
+    });
+    const st = await b.sw.evaluate(() => globalThis.wfTest.status());
+    const installed = (await dynamicRules(b)).map((r) => r.id).sort((x, y) => x - y).join(",");
+    check("PB1 mode baseline: the adult rules installed, fail-closed off, ads ruleset on, unlimited time, no time-up rules",
+      ready && !!on && st.mode === "baseline" && installed === "2001,2002" && (await sessionRules(b)).length === 0 && st.time?.state === "unlimited" && st.canRequest === false,
+      { note: JSON.stringify({ mode: st.mode, installed, rulesets: await enabledRulesets(b), time: st.time }) });
+    const received = () => b.sw.evaluate(() => globalThis.wfTest.received());
+    const blockInfo = (p) =>
+      waitFor(async () => {
+        const i = await pageInfo(p);
+        return i.ready && i.title === BLOCKED_TITLE ? { ...i, canOverride: await p.evaluate(() => document.documentElement.dataset.canOverride ?? null) } : null;
+      }, 20000);
+    const opened = async (p, selector) => {
+      const [tab] = await Promise.all([b.context.waitForEvent("page", { timeout: 10000 }), p.click(selector)]);
+      return tab;
+    };
+
+    const page = await b.context.newPage();
+    hits.length = 0;
+    await visit(page, S("news.test", "/today"));
+    const ordinary = await page.title();
+    await visit(page, `http://127.0.0.1:${HTTP_PORT}/router`);
+    const router = await page.title();
+    check("PB2 ordinary pages load, an IP address too (no IP-literal block for parents)", ordinary === "SITE news.test/today" && router === "SITE 127.0.0.1/router", { note: `${ordinary} | ${router}` });
+
+    hits.length = 0;
+    const landed = await visit(page, adultUrl);
+    const info = await blockInfo(page);
+    const hint = await page.evaluate(() => {
+      const el = document.getElementById("baseline-hint");
+      return { shown: el?.hidden === false, text: el?.textContent ?? "", buttons: [...document.querySelectorAll("button")].filter((x) => x.offsetParent !== null).map((x) => x.id) };
+    });
+    check("PB3 a page of the adult list → block page with blocked_baseline_adult in Hebrew; the request never left the browser",
+      landed === `${b.page("blocked.html")}#${adultUrl}` && info?.reason === "blocked_baseline_adult" && info.reasonSource === "service"
+        && info.text === "אתר למבוגרים — חסום בהגנה הבסיסית של המשפחה." && !hits.some((h) => h.includes("adult-site.test")),
+      { note: `${landed} ${JSON.stringify(info)} ${hits.join(",")}` });
+    check("PB4 … no request button, and the hint that the protection is turned off in the admin app's settings",
+      info?.canRequest === "false" && !(await page.isVisible("#request")) && !(await page.isVisible("#ask-url")) && hint.shown && /ממשק הניהול/.test(hint.text) && hint.buttons.length === 0,
+      { note: JSON.stringify(hint) });
+    const asked = (await received()).filter((m) => m.type === "reportBlock" || m.type === "decideUrl");
+    check("PB5 nothing reported: the block page asks with decideUrl only, never reportBlock",
+      asked.length === 1 && asked[0].type === "decideUrl" && asked[0].url === adultUrl, { note: JSON.stringify(asked) });
+    await visit(page, S("ok.nsfw.test", "/"));
+    check("PB6 the parent's own allow rule wins over the list", (await page.title()) === "SITE ok.nsfw.test/", { note: await page.title() });
+
+    // Jump guard with "open anyway", and nothing reported for it.
+    await visit(page, S("site-a.test", "/opener"));
+    const jumped = await opened(page, "#open");
+    const jumpInfo = await blockInfo(jumped);
+    check("PB7 the jump guard runs for parents: window.open to another site → blocked_jump with 'פתח בכל זאת'",
+      jumpInfo?.reason === "blocked_jump" && jumpInfo.canOverride === "true" && (await jumped.isVisible("#override")), { note: JSON.stringify(jumpInfo) });
+    await jumped.click("#override");
+    const through = await waitFor(async () => (await jumped.title()) === "SITE site-b.test/popup", 15000);
+    const reports = (await received()).filter((m) => m.type === "reportOverride" || m.type === "reportBlock" || m.type === "reportSearch");
+    check("PB8 'open anyway' opens it, and no reportOverride or reportBlock is sent", !!through && reports.length === 0, { note: JSON.stringify(reports) });
+    await jumped.close();
+
+    await visit(page, b.page("popup.html"));
+    const popup = await waitFor(() =>
+      page.evaluate(() => (document.documentElement.dataset.connection === "service" ? { mode: document.getElementById("mode").textContent, detail: document.getElementById("status-detail").textContent } : null)));
+    check("PB9 popup: mode 'הגנה בסיסית להורים', nothing recorded", popup?.mode === "הגנה בסיסית להורים" && /לא נרשם/.test(popup.detail), { note: JSON.stringify(popup) });
+
+    // Every switch off: the rules reply says unrestricted, and the extension removes everything without a new hello.
+    await b.sw.evaluate((s) => {
+      globalThis.wfTest.setScript(s);
+      globalThis.wfTest.push({ type: "rulesChanged", rulesVersion: 22 });
+    }, parent(22, { dynamicRules: [], features: { jumpGuard: false, blockYouTubeShorts: false, logSearches: false, canOverrideJump: false, blockAds: false }, mode: "unrestricted" }));
+    const off = await waitFor(async () => ((await dynamicRules(b)).length === 0 && !(await enabledRulesets(b)).includes("ads") ? true : null));
+    await visit(page, adultUrl);
+    const openNow = await page.title();
+    check("PB10 all switches off → mode unrestricted from the rules reply: rules and ads ruleset removed, the page loads",
+      !!off && openNow === "SITE www.adult-site.test/video" && (await b.sw.evaluate(() => globalThis.wfTest.status().mode)) === "unrestricted", { note: openNow });
+    await b.close();
+  }
 } catch (error) {
   check("harness error", false, { note: error?.stack ?? String(error) });
 } finally {

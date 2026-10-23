@@ -72,6 +72,25 @@ public class AgentProtocolTests
         Assert.Equal("blocked_jump", overridden.Reason);
     }
 
+    /// <summary>
+    /// PROTECTION-SPEC §13: the rules reply says the account's mode (baseline for a parent); an older service's reply, and
+    /// the native host's own, have none (the extension keeps the hello's).
+    /// </summary>
+    [Fact]
+    public void The_rules_reply_carries_the_mode_and_an_older_one_has_none()
+    {
+        var baseline = Encoding.UTF8.GetString(AgentProtocol.Serialize(new RulesResponse(4, [], [], new YouTubePolicy("unrestricted", [], []),
+            new TimeStateMessage("unlimited", null, null), new AgentFeatures(JumpGuard: true, CanOverrideJump: true, BlockAds: true), "baseline")));
+        Assert.Contains("\"features\":{\"jumpGuard\":true,\"blockYouTubeShorts\":false,\"logSearches\":false,\"canOverrideJump\":true,\"blockAds\":true},\"mode\":\"baseline\"", baseline);
+        Assert.Equal("baseline", Assert.IsType<RulesResponse>(AgentProtocol.Deserialize(Encoding.UTF8.GetBytes(baseline))).Mode);
+
+        var older = Assert.IsType<RulesResponse>(AgentProtocol.Deserialize(
+            """{"type":"rules","v":1,"rulesVersion":3,"dynamicRules":[],"timeUpSessionRules":[],"youtube":{"mode":"off","allowed":[],"blocked":[]},"time":{"type":"timeState","state":"ok"}}"""u8));
+        Assert.Null(older.Mode);
+        using var json = JsonDocument.Parse(AgentProtocol.Serialize(older));
+        Assert.False(json.RootElement.TryGetProperty("mode", out _));
+    }
+
     [Fact]
     public void Rules_from_an_older_service_have_no_features_and_missing_flags_are_false()
     {

@@ -16,6 +16,9 @@ public static class StarterLists
     /// <summary>Sign-in and school platforms (PROTECTION-SPEC §3); allowing it for a member also adds <c>SchoolSignIn</c>'s rules.</summary>
     public const string SchoolTools = "school-tools";
 
+    /// <summary>Adult sites (PROTECTION-SPEC §3): blocked for teens by the wizard, and what the parents' baseline protection blocks (§13).</summary>
+    public const string Adult = "adult";
+
     /// <summary>In the order the wizard and the member page offer them: the first three, then PROTECTION-SPEC §11's.</summary>
     public static readonly string[] Names =
         ["educational", "social", "gaming", SchoolTools, "adult", "gambling", "proxies", "ai-chat", "unfiltered-search", "ads-popups"];

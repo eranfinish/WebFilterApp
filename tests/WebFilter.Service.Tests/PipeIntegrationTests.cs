@@ -503,6 +503,107 @@ public sealed class PipeIntegrationTests : IAsyncLifetime
         Assert.Equal(0, agent.CountOf<RulesChangedMessage>());
     }
 
+    // ---- PROTECTION-SPEC §13: the parents' baseline protection on the wire --------------------------------------------
+
+    /// <summary>The test's own account becomes dana's (an unrestricted adult), with the adult list in the family's categories.</summary>
+    private void LinkTheUserToAnAdult(Core.Model.BaselineProtection? baseline = null) => _family.WithHub((hub, now) =>
+    {
+        var config = hub.Config.Clone();
+        var kids = config.Devices.FindIndex(d => d.Id == "pc-kids");
+        config.Devices[kids] = config.Devices[kids] with
+        {
+            Accounts = [.. config.Devices[kids].Accounts.Select(a => a.AccountId == UserSid ? a with { MemberId = "dana" } : a)],
+        };
+        config.Categories["adult"] = ["adult-site.example", "nsfw.example"];
+        hub.ReplaceSettings(baseline is null ? config : PolicyTests.WithBaseline(config, baseline), now);
+        return 0;
+    });
+
+    [Fact]
+    public async Task A_parent_gets_mode_baseline_with_the_adult_rules_and_the_switches_as_features()
+    {
+        LinkTheUserToAnAdult();
+        await using var agent = await AgentClient.ConnectAsync(_options.AgentPipeName);
+        var hello = await agent.RequestAsync<HelloResponse>(new HelloRequest("0.0.1", "edge", "abcdefghijklmnopabcdefghijklmnop"));
+        Assert.Equal(("adult", "baseline"), (hello.User.Role, hello.Mode));
+
+        var rules = await agent.RequestAsync<RulesResponse>(new GetRulesRequest());
+        Assert.Equal("baseline", rules.Mode);
+        Assert.Equal(new AgentFeatures(JumpGuard: true, BlockYouTubeShorts: false, LogSearches: false, CanOverrideJump: true, BlockAds: true), rules.Features);
+        Assert.Equal(("unrestricted", "unlimited"), (rules.YouTube.Mode, rules.Time.State));
+        Assert.Empty(rules.TimeUpSessionRules);
+        var block = Assert.Single(rules.DynamicRules, r => r.GetProperty("action").GetProperty("type").GetString() == "redirect");
+        Assert.Equal(["adult-site.example", "nsfw.example"], block.GetProperty("condition").GetProperty("requestDomains").EnumerateArray().Select(d => d.GetString()));
+        Assert.Contains("chrome-extension://abcdefghijklmnopabcdefghijklmnop/blocked.html", block.ToString(), StringComparison.Ordinal);
+        // No default block, IP-literal gate or YouTube rule: only the list and the parents' allow rules.
+        Assert.DoesNotContain(rules.DynamicRules, r => r.GetProperty("id").GetInt32() < 1000);
+
+        var adult = await agent.RequestAsync<DecideUrlResponse>(new DecideUrlRequest("https://www.adult-site.example/x"));
+        Assert.Equal(("block", "blocked_baseline_adult", false), (adult.Decision, adult.Reason, adult.CanRequest));
+        var router = await agent.RequestAsync<DecideUrlResponse>(new DecideUrlRequest("http://192.168.1.1/"));
+        Assert.Equal(("allow", "allowed_unrestricted"), (router.Decision, router.Reason));
+        Assert.Equal("unlimited", (await agent.RequestAsync<TimeStateMessage>(new HeartbeatRequest(true, "active", true))).State);
+    }
+
+    [Fact]
+    public async Task Nothing_a_parent_does_is_recorded_or_requested()
+    {
+        LinkTheUserToAnAdult();
+        await using var agent = await AgentClient.ConnectAsync(_options.AgentPipeName);
+        await agent.RequestAsync<HelloResponse>(new HelloRequest("0.0.1", "edge"));
+        await using var admin = await AdminClient.ConnectAsync(_options.AdminPipeName);
+        async Task<int> Events(string type) => Assert.IsType<EventsResult>(await admin.RequestAsync(new GetEvents(EventType: type))).Events.Count;
+        var blocksBefore = await Events("blocked");
+
+        var reported = await agent.RequestAsync<ReportBlockResult>(new ReportBlockRequest("https://nsfw.example/", "blocked_rule", null));
+        Assert.Equal(("block", "blocked_baseline_adult", false), (reported.Decision, reported.Reason, reported.CanRequest));
+        var jump = await agent.RequestAsync<ReportBlockResult>(new ReportBlockRequest("https://other.example/", "blocked_jump", null));
+        Assert.Equal(("block", "blocked_jump", false), (jump.Decision, jump.Reason, jump.CanRequest));
+        var overridden = await agent.RequestAsync<ErrorMessage>(new ReportOverrideRequest("https://other.example/", "blocked_jump"));
+        Assert.Equal(("ok", "not recorded"), (overridden.Code, overridden.Message));
+        var search = await agent.RequestAsync<ErrorMessage>(new ReportSearchRequest("google", "anything", "https://www.google.com/search?q=anything"));
+        Assert.Equal(("ok", "not recorded"), (search.Code, search.Message));
+        Assert.Equal("unavailable", (await agent.RequestAsync<RequestAccessResponse>(new RequestAccessRequest("url", "https://nsfw.example/", null, null))).Result);
+        await agent.RequestAsync<TimeStateMessage>(new HeartbeatRequest(true, "active", true));
+
+        Assert.Equal(blocksBefore, await Events("blocked"));
+        Assert.Equal(0, await Events("override"));
+        Assert.Equal(0, await Events("search"));
+        Assert.Empty(Assert.IsType<RequestsResult>(await admin.RequestAsync(new GetRequests("pending"))).Requests);
+    }
+
+    [Fact]
+    public async Task With_every_switch_off_a_parent_is_unrestricted_again_and_a_change_reaches_the_extension_with_the_rules()
+    {
+        LinkTheUserToAnAdult();
+        await using var agent = await AgentClient.ConnectAsync(_options.AgentPipeName);
+        Assert.Equal("baseline", (await agent.RequestAsync<HelloResponse>(new HelloRequest("0.0.1", "edge"))).Mode);
+
+        LinkTheUserToAnAdult(new Core.Model.BaselineProtection(BlockAdult: false, JumpGuard: false, BlockAds: false, SafeSearch: false));
+        Assert.NotNull(await agent.WaitForAsync<RulesChangedMessage>());
+        var off = await agent.RequestAsync<RulesResponse>(new GetRulesRequest());
+        Assert.Equal("unrestricted", off.Mode);
+        Assert.Empty(off.DynamicRules);
+        Assert.Equal(new AgentFeatures(), off.Features);
+        var adult = await agent.RequestAsync<DecideUrlResponse>(new DecideUrlRequest("https://adult-site.example/"));
+        Assert.Equal(("allow", "allowed_unrestricted"), (adult.Decision, adult.Reason));
+
+        // Only blockAdult off: still the baseline mode (the other switches), no rules.
+        LinkTheUserToAnAdult(Core.Model.BaselineProtection.Default with { BlockAdult = false });
+        Assert.NotNull(await Poll(() => agent.CountOf<RulesChangedMessage>() >= 2 ? "pushed" : null));
+        var noAdult = await agent.RequestAsync<RulesResponse>(new GetRulesRequest());
+        Assert.Equal(("baseline", 0), (noAdult.Mode, noAdult.DynamicRules.Count));
+        Assert.True(noAdult.Features!.JumpGuard && noAdult.Features.BlockAds);
+    }
+
+    [Fact]
+    public async Task A_childs_rules_say_their_mode_too()
+    {
+        await using var agent = await AgentClient.ConnectAsync(_options.AgentPipeName);
+        await agent.RequestAsync<HelloResponse>(new HelloRequest("0.0.1", "edge"));
+        Assert.Equal("allowlist", (await agent.RequestAsync<RulesResponse>(new GetRulesRequest())).Mode);
+    }
+
     // ---- PROTECTION-SPEC §10: the notify pipe, with real pipes and the OS-reported identity --------------------------
 
     /// <summary>

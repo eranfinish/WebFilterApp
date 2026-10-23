@@ -46,9 +46,10 @@ internal static class ReferenceEvaluator
             return DnrOutcome.Allow;
         if (MatchesBuiltin(policy, url))
             return DnrOutcome.Block;
-        if (IsYouTubeHost(url.DomainHost))
+        // The parents' baseline (PROTECTION-SPEC §13) has no YouTube handling and no IP-literal block: rules and categories only.
+        if (IsYouTubeHost(url.DomainHost) && !policy.Baseline)
             return policy.YouTube == YouTubeMode.Off && !Under(url.DomainHost, "accounts.youtube.com") ? DnrOutcome.Block : DnrOutcome.Allow;
-        if (url.IsIpLiteral && !policy.MemberRules.Concat(policy.GlobalRules).Any(r => r.Action == RuleAction.Allow && Match(r, url) is not null))
+        if (url.IsIpLiteral && !policy.Baseline && !policy.MemberRules.Concat(policy.GlobalRules).Any(r => r.Action == RuleAction.Allow && Match(r, url) is not null))
             return DnrOutcome.Block;
 
         var member = Best(policy.MemberRules.Select(r => (Match(r, url), r.Action)));

@@ -40,7 +40,11 @@ public abstract record AgentMessage
 public sealed record HelloRequest(string ExtVersion, string Browser, string? ExtensionId = null) : AgentMessage;
 
 /// <param name="Source">"service", or "host" when the native host answers by itself because the service is down.</param>
-/// <param name="Mode">unrestricted | blocklist | allowlist — the extension disables its fail-closed ruleset for unrestricted users.</param>
+/// <param name="Mode">
+/// unrestricted | blocklist | allowlist | baseline — the extension removes all its rules for unrestricted users; baseline
+/// (PROTECTION-SPEC §13) is a parent's account with the family's baseline protection on: the rules reply's compiled rules
+/// and features apply, nothing is reported. The rules reply repeats it (<see cref="RulesResponse.Mode"/>).
+/// </param>
 public sealed record HelloResponse(
     AgentUser User,
     string Mode,
@@ -57,23 +61,31 @@ public sealed record GetRulesRequest(int? KnownVersion = null) : AgentMessage;
 /// <param name="DynamicRules">declarativeNetRequest rules, passed through verbatim to updateDynamicRules.</param>
 /// <param name="TimeUpSessionRules">Installed with updateSessionRules while time is up.</param>
 /// <param name="Features">The protections the extension enforces by itself (PROTECTION-SPEC §6). Absent (an older service, the native host's fallback) = all false.</param>
+/// <param name="Mode">
+/// The account's mode as of these rules, as in <see cref="HelloResponse.Mode"/> (PROTECTION-SPEC §13), so a change of the
+/// account's link or of the baseline switches applies with <c>rulesChanged</c>, without a new hello. Absent (an older
+/// service, the native host's fallback) = the hello's mode.
+/// </param>
 public sealed record RulesResponse(
     int RulesVersion,
     IReadOnlyList<JsonElement> DynamicRules,
     IReadOnlyList<JsonElement> TimeUpSessionRules,
     [property: JsonPropertyName("youtube")] YouTubePolicy YouTube,
     TimeStateMessage Time,
-    AgentFeatures? Features = null) : AgentMessage;
+    AgentFeatures? Features = null,
+    string? Mode = null) : AgentMessage;
 
 /// <summary>
 /// Wire: <c>features: { jumpGuard, blockYouTubeShorts, logSearches, canOverrideJump, blockAds }</c>. All false for
-/// administrators, unrestricted members and unlinked accounts; jumpGuard, blockYouTubeShorts and blockAds are also false
-/// while the member is paused.
+/// unlinked accounts, and for administrators and unrestricted members when the family's baseline protection is all off;
+/// in the baseline (mode <c>baseline</c>, PROTECTION-SPEC §13) jumpGuard and blockAds are the family's switches,
+/// canOverrideJump is true and the other two are false. jumpGuard, blockYouTubeShorts and blockAds are also false while a
+/// member is paused.
 /// </summary>
 /// <param name="JumpGuard">Block a site opening another site in a new tab or window or by an automatic client redirect (§7).</param>
 /// <param name="BlockYouTubeShorts">Block YouTube /shorts/, SPA navigations included (§8).</param>
 /// <param name="LogSearches">Send <see cref="ReportSearchRequest"/> for searches, and tell the member their searches are visible (§9).</param>
-/// <param name="CanOverrideJump">The jump block page offers "open anyway" (teens; false for children and unlinked accounts).</param>
+/// <param name="CanOverrideJump">The jump block page offers "open anyway" (teens and parents; false for children and unlinked accounts).</param>
 /// <param name="BlockAds">Enable the extension's static ad-server ruleset (§12).</param>
 public sealed record AgentFeatures(
     bool JumpGuard = false,
@@ -98,7 +110,8 @@ public sealed record ReportBlockRequest(string Url, string Reason, string? RuleI
 /// Reply to reportBlock: the service's own decision for the URL (the extension's reason is only a guess from its rules).
 /// Decision "allow" means the extension's rules are stale; the service also pushes rulesChanged. Blocks only the extension
 /// can judge keep the extension's reason: blocked_youtube_channel, blocked_youtube_unknown (request kind "youtube"),
-/// blocked_youtube_shorts and blocked_jump (no request possible). blocked_image_search cannot be requested either.
+/// blocked_youtube_shorts and blocked_jump (no request possible). blocked_image_search cannot be requested either, nor
+/// anything a parent's own account meets (blocked_baseline_adult, PROTECTION-SPEC §13), which is never recorded.
 /// </summary>
 public sealed record ReportBlockResult(string Decision, string Reason, string? RuleId, string? Category, bool CanRequest, string RequestKind) : AgentMessage;
 
@@ -128,7 +141,7 @@ public sealed record DecideUrlRequest(string Url) : AgentMessage;
 
 /// <param name="Decision">allow | block.</param>
 /// <param name="Reason">A reason code wire name (README §5), e.g. blocked_rule, blocked_category, blocked_daily_limit.</param>
-/// <param name="CanRequest">The user may send the parents a request (a linked family member).</param>
+/// <param name="CanRequest">The user may send the parents a request (a linked family member who is filtered; never a parent's own account).</param>
 /// <param name="RequestKind">What a request should ask for: url, or time when the block is about time.</param>
 public sealed record DecideUrlResponse(string Decision, string Reason, string? RuleId, string? Category, bool CanRequest, string RequestKind) : AgentMessage;
 

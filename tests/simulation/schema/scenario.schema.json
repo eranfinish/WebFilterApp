@@ -124,7 +124,8 @@
         "redirect_youtube_home",
         "blocked_image_search",
         "blocked_jump",
-        "blocked_youtube_shorts"
+        "blocked_youtube_shorts",
+        "blocked_baseline_adult"
       ]
     },
     "expectDecision": {
@@ -500,6 +501,29 @@
           "type": "array",
           "items": {
             "$ref": "#/$defs/appRule"
+          }
+        },
+        "baseline": {
+          "description": "PROTECTION-SPEC §13: the family's baseline protection for administrator accounts and unrestricted members. Every switch is true when missing (also when the whole section is missing).",
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "blockAdult": {
+              "type": "boolean",
+              "description": "The 'adult' category is blocked for them (blocked_baseline_adult) unless a parent's allow rule matches."
+            },
+            "jumpGuard": {
+              "type": "boolean",
+              "description": "Extension only (§7, with open anyway); URL decisions do not change."
+            },
+            "blockAds": {
+              "type": "boolean",
+              "description": "Extension only (§12); URL decisions do not change."
+            },
+            "safeSearch": {
+              "type": "boolean",
+              "description": "Browser policies only; URL decisions do not change."
+            }
           }
         }
       }

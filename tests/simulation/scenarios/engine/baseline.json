@@ -1,0 +1,140 @@
+{
+  "$schema": "../../schema/scenario.schema.json",
+  "suite": "baseline",
+  "description": "The parents' baseline protection (PROTECTION-SPEC §13): administrator accounts and unrestricted members get the family's adult list blocked (blocked_baseline_adult) unless a parent's own allow rule matches, and nothing else. Nothing of their browsing is recorded. Children, teens and unlinked standard accounts follow their own settings. adult-site.example and nsfw.example stand for the shipped adult list.",
+  "layers": ["engine", "integration", "browser"],
+  "platforms": ["windows", "android"],
+  "scenarios": [
+    {
+      "id": "BASE-001",
+      "title": "A parent's adult sites are blocked by the family's baseline (on when the bundle does not say), everything else stays open at any hour",
+      "start": "2026-11-01T23:30",
+      "setup": {
+        "categories": { "adult": ["adult-site.example", "nsfw.example"] },
+        "rules": [ { "id": "r-family-block", "pattern": "videosite.example", "type": "domain", "action": "block" } ]
+      },
+      "steps": [
+        {
+          "do": "checkUrls", "member": "dana", "device": "pc-kids", "note": "a Windows administrator linked to an unrestricted member",
+          "cases": [
+            { "url": "https://adult-site.example/",                 "expect": { "decision": "block", "reason": "blocked_baseline_adult" } },
+            { "url": "https://www.adult-site.example/video?id=1",   "expect": { "decision": "block", "reason": "blocked_baseline_adult" }, "note": "subdomains too" },
+            { "url": "https://nsfw.example/",                       "expect": { "decision": "block", "reason": "blocked_baseline_adult" } },
+            { "url": "https://adult-site.example/x", "frame": "sub", "expect": { "decision": "block", "reason": "blocked_baseline_adult" } },
+            { "url": "https://notadult-site.example/",              "expect": { "decision": "allow", "reason": "allowed_unrestricted" }, "note": "another domain" },
+            { "url": "https://videosite.example/",                  "expect": { "decision": "allow", "reason": "allowed_unrestricted" }, "note": "the family's block rules are for the children" },
+            { "url": "https://www.instagram.com/",                  "expect": { "decision": "allow", "reason": "allowed_unrestricted" } },
+            { "url": "http://192.168.1.1/",                         "expect": { "decision": "allow", "reason": "allowed_unrestricted" }, "note": "no IP-address block: the router's page opens" },
+            { "url": "https://www.youtube.com/watch?v=vidGamr0001", "expect": { "decision": "allow", "reason": "allowed_unrestricted" } }
+          ]
+        },
+        {
+          "do": "checkUrls", "member": "savta", "device": "pc-kids", "note": "not a Windows administrator, an unrestricted member",
+          "cases": [
+            { "url": "https://www.nsfw.example/",  "expect": { "decision": "block", "reason": "blocked_baseline_adult" } },
+            { "url": "https://videosite.example/", "expect": { "decision": "allow", "reason": "allowed_unrestricted" } }
+          ]
+        },
+        { "do": "expectEvents", "type": "blocked", "expect": { "count": 0 }, "note": "nothing of a parent's browsing is recorded" },
+        { "do": "expectEvents", "type": "blocked", "device": "pc-kids", "expect": { "count": 0 } }
+      ]
+    },
+    {
+      "id": "BASE-002",
+      "title": "Children, teens and unlinked standard accounts follow their own settings, not the baseline",
+      "start": "2026-11-01T16:00",
+      "setup": { "categories": { "adult": ["adult-site.example", "nsfw.example"] } },
+      "steps": [
+        { "do": "navigate", "member": "noa", "device": "pc-kids", "url": "https://adult-site.example/", "expect": { "decision": "block", "reason": "blocked_not_in_allowlist" }, "note": "a child sees approved sites only" },
+        { "do": "navigate", "member": "yoav", "device": "pc-kids", "url": "https://adult-site.example/", "expect": { "decision": "allow", "reason": "allowed_default" }, "note": "a teen gets the adult list from his own categories (the wizard blocks it for teens), not from the parents' baseline" },
+        { "do": "navigate", "account": "visitor", "device": "pc-kids", "url": "https://adult-site.example/", "expect": { "decision": "block", "reason": "blocked_not_in_allowlist" } },
+        { "do": "expectEvents", "type": "blocked", "member": "noa", "expect": { "count": 1, "items": [ { "reason": "blocked_not_in_allowlist", "url": "https://adult-site.example/" } ] }, "note": "children's blocks are recorded as before" }
+      ]
+    },
+    {
+      "id": "BASE-003",
+      "title": "A parent's own allow rule, or a family-wide one, wins over the baseline; another parent's does not count",
+      "start": "2026-11-01T16:00",
+      "setup": {
+        "categories": { "adult": ["adult-site.example", "nsfw.example"] },
+        "rules": [
+          { "id": "r-dana-nsfw",     "member": "dana", "pattern": "nsfw.example",              "type": "domain", "action": "allow" },
+          { "id": "r-family-health", "pattern": "adult-site.example/health",                   "type": "prefix", "action": "allow" },
+          { "id": "r-dana-block",    "member": "dana", "pattern": "news.example",              "type": "domain", "action": "block" }
+        ]
+      },
+      "steps": [
+        {
+          "do": "checkUrls", "member": "dana", "device": "pc-kids",
+          "cases": [
+            { "url": "https://www.nsfw.example/page",                "expect": { "decision": "allow", "reason": "allowed_rule", "ruleId": "r-dana-nsfw" } },
+            { "url": "https://adult-site.example/health/clinic",     "expect": { "decision": "allow", "reason": "allowed_rule", "ruleId": "r-family-health" } },
+            { "url": "https://adult-site.example/",                  "expect": { "decision": "block", "reason": "blocked_baseline_adult" } },
+            { "url": "https://mashov.info/",                         "expect": { "decision": "allow", "reason": "allowed_unrestricted" }, "note": "an allow rule outside the list changes nothing" },
+            { "url": "https://news.example/",                        "expect": { "decision": "allow", "reason": "allowed_unrestricted" }, "note": "a parent's block rules are not part of the baseline" }
+          ]
+        },
+        { "do": "navigate", "member": "savta", "device": "pc-kids", "url": "https://www.nsfw.example/page", "expect": { "decision": "block", "reason": "blocked_baseline_adult" }, "note": "dana's rule is hers" }
+      ]
+    },
+    {
+      "id": "BASE-004",
+      "title": "A parent's temporary allow rule lifts the block until it expires",
+      "start": "2026-11-01T14:00",
+      "setup": {
+        "categories": { "adult": ["adult-site.example"] },
+        "rules": [ { "id": "r-dana-tmp", "member": "dana", "pattern": "adult-site.example", "type": "domain", "action": "allow", "expiresAt": "2026-11-01T15:00" } ]
+      },
+      "steps": [
+        { "do": "navigate", "at": "14:59", "member": "dana", "device": "pc-kids", "url": "https://adult-site.example/", "expect": { "decision": "allow", "reason": "allowed_rule", "ruleId": "r-dana-tmp" } },
+        { "do": "navigate", "at": "15:00", "member": "dana", "device": "pc-kids", "url": "https://adult-site.example/", "expect": { "decision": "block", "reason": "blocked_baseline_adult" } }
+      ]
+    },
+    {
+      "id": "BASE-005",
+      "title": "With blockAdult off, or without the adult list in the bundle, a parent's sites are all open; the children's are not",
+      "start": "2026-11-01T16:00",
+      "setup": {
+        "categories": { "adult": ["adult-site.example"] },
+        "baseline": { "blockAdult": false }
+      },
+      "steps": [
+        { "do": "navigate", "member": "dana",  "device": "pc-kids", "url": "https://adult-site.example/", "expect": { "decision": "allow", "reason": "allowed_unrestricted" } },
+        { "do": "navigate", "member": "savta", "device": "pc-kids", "url": "https://adult-site.example/", "expect": { "decision": "allow", "reason": "allowed_unrestricted" } },
+        { "do": "navigate", "member": "noa",   "device": "pc-kids", "url": "https://adult-site.example/", "expect": { "decision": "block", "reason": "blocked_not_in_allowlist" } }
+      ]
+    },
+    {
+      "id": "BASE-006",
+      "title": "A family whose bundle has no adult list blocks nothing for the parents",
+      "start": "2026-11-01T16:00",
+      "steps": [
+        { "do": "navigate", "member": "dana", "device": "pc-kids", "url": "https://adult-site.example/", "expect": { "decision": "allow", "reason": "allowed_unrestricted" } }
+      ]
+    },
+    {
+      "id": "BASE-007",
+      "title": "An administrator account linked to nobody gets the baseline too, and nothing of it is recorded",
+      "start": "2026-11-02T15:00",
+      "setup": { "categories": { "adult": ["adult-site.example"] } },
+      "steps": [
+        { "do": "reportAccounts", "device": "pc-kids", "accounts": [ { "accountId": "S-1-5-21-2000-1010", "name": "parent2", "isAdmin": true } ] },
+        { "do": "navigate", "account": "parent2", "device": "pc-kids", "url": "https://www.adult-site.example/", "expect": { "decision": "block", "reason": "blocked_baseline_adult" } },
+        { "do": "navigate", "account": "parent2", "device": "pc-kids", "url": "https://www.wikipedia.org/",      "expect": { "decision": "allow", "reason": "allowed_unrestricted" } },
+        { "do": "expectEvents", "type": "blocked", "expect": { "count": 0 } }
+      ]
+    },
+    {
+      "id": "BASE-008",
+      "title": "A pause does not apply to parents: the baseline stays",
+      "start": "2026-11-01T16:00",
+      "setup": { "categories": { "adult": ["adult-site.example"] } },
+      "steps": [
+        { "do": "navigate", "member": "dana", "device": "pc-kids", "url": "https://adult-site.example/", "expect": { "decision": "block", "reason": "blocked_baseline_adult" } },
+        { "do": "admin", "at": "16:01", "action": "pause", "member": "dana", "until": "18:00" },
+        { "do": "navigate", "member": "dana", "device": "pc-kids", "url": "https://adult-site.example/", "expect": { "decision": "block", "reason": "blocked_baseline_adult" } },
+        { "do": "expectTime", "member": "dana", "state": "unlimited" }
+      ]
+    }
+  ]
+}

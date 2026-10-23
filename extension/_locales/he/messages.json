@@ -86,6 +86,9 @@
   "reason_blocked_youtube_shorts": {
     "message": "סרטוני Shorts ב-YouTube כבויים בשבילך."
   },
+  "reason_blocked_baseline_adult": {
+    "message": "אתר למבוגרים — חסום בהגנה הבסיסית של המשפחה."
+  },
   "reason_failclosed": {
     "message": "WebFilter עוד לא מחובר לשירות הסינון, ולכן הגלישה חסומה. הדף ייפתח לבד ברגע שהחיבור יחזור."
   },
@@ -109,6 +112,9 @@
   },
   "overrideButton": {
     "message": "פתח בכל זאת"
+  },
+  "baselineHint": {
+    "message": "אפשר לכבות את ההגנה הזו בממשק הניהול של WebFilter, בדף ההגדרות (הגנה בסיסית להורים ולמבוגרים)."
   },
   "noteLabel": {
     "message": "למה צריך את זה? (לא חובה)"
@@ -212,6 +218,9 @@
   "statusServiceDetail": {
     "message": "הסינון ומגבלות הזמן פעילים."
   },
+  "statusBaselineDetail": {
+    "message": "ההגנה הבסיסית של המשפחה פעילה (נקבעת בממשק הניהול של WebFilter). שום דבר מהגלישה שלך לא נרשם."
+  },
   "statusHost": {
     "message": "שירות הסינון לא פועל"
   },
@@ -256,6 +265,9 @@
   },
   "mode_allowlist": {
     "message": "רק אתרים מאושרים"
+  },
+  "mode_baseline": {
+    "message": "הגנה בסיסית להורים"
   },
   "time_unlimited": {
     "message": "ללא הגבלה"

@@ -22,6 +22,7 @@ internal static class FixtureLoader
             YouTubeChannels = Array(fixture, "youtubeChannels").Select(ParseChannel).ToList(),
             SupportedBrowsers = Array(fixture, "supportedBrowsers").Select(n => n!.GetValue<string>()).ToList(),
             AppRules = Array(fixture, "appRules").Select(ParseAppRule).ToList(),
+            Baseline = ParseBaseline(setup?["baseline"]),
         };
         foreach (var (name, domains) in fixture["categories"]!.AsObject())
             config.Categories[name] = domains!.AsArray().Select(d => d!.GetValue<string>()).ToList();
@@ -91,6 +92,11 @@ internal static class FixtureLoader
         OptStr(n, "expiresAt") is { } expires ? LocalTime.ToInstant(DateTime.Parse(expires, CultureInfo.InvariantCulture), zone) : null);
 
     private static MemberCategory ParseMemberCategory(JsonNode? n) => new(Str(n, "member"), Str(n, "category"), ParseAction(Str(n, "action")));
+
+    /// <summary>The setup's baseline switches (PROTECTION-SPEC §13); a missing section or switch is on.</summary>
+    public static BaselineProtection ParseBaseline(JsonNode? n) => n is null ? BaselineProtection.Default : new(
+        n["blockAdult"]?.GetValue<bool>() ?? true, n["jumpGuard"]?.GetValue<bool>() ?? true,
+        n["blockAds"]?.GetValue<bool>() ?? true, n["safeSearch"]?.GetValue<bool>() ?? true);
 
     private static Schedule ParseSchedule(JsonNode? n) => new(Str(n, "member"), Days(n), Minutes(Str(n, "start")), Minutes(Str(n, "end")));
 
