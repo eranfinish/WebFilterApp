@@ -92,6 +92,10 @@ async function main(): Promise<void> {
   root.dataset.url = url;
   if (allowedNow) byId("heading").textContent = t("allowedNowHeading");
   byId("reason").textContent = t(reasonMessageKey(reason));
+  // A parent's own block (PROTECTION-SPEC §13): no request, but where the protection is turned off.
+  const baselineBlock = !allowedNow && reason === "blocked_baseline_adult";
+  byId("baseline-hint").hidden = !baselineBlock;
+  root.dataset.baselineHint = String(baselineBlock);
   byId("url").textContent = url ? displayUrl(url) : "—";
   byId("url-row").hidden = !url;
   if (reply?.category) {

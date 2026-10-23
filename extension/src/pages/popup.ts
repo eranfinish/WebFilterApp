@@ -10,7 +10,8 @@ function connectionView(status: StatusSnapshot | null): { look: Look; title: str
     case "inert":
       return { look: "idle", title: t("statusInert"), detail: t("statusInertDetail") };
     case "service":
-      return { look: "ok", title: t("statusService"), detail: t("statusServiceDetail") };
+      // A parent's own account (PROTECTION-SPEC §13): only the baseline applies, and nothing of it is recorded.
+      return { look: "ok", title: t("statusService"), detail: t(status.mode === "baseline" ? "statusBaselineDetail" : "statusServiceDetail") };
     case "host":
       return { look: "warn", title: t("statusHost"), detail: t("statusHostDetail") };
     case "starting":

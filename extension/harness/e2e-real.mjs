@@ -803,6 +803,41 @@ try {
         && khan === "SITE www.khanacademy.org/back",
       { note: `connection ${(recovered ?? (await status())).connection} after ${recoveredMs} ms; games.test → ${rInfo?.reason}/${rInfo?.reasonSource}; khan → ${khan}` });
   }
+
+  // ===== 9. The parents' baseline protection (PROTECTION-SPEC §13) ===================================================
+  {
+    // The parent links this Windows account to dana (an unrestricted adult) and the family has an adult list. The service
+    // runs without ManageBrowserPolicies, so the baseline's SafeSearch policies are not written anywhere.
+    const read = await adminOk({ type: "getSettings" });
+    const settings = read.settings;
+    for (const account of settings.devices.find((d) => d.id === "pc-kids").accounts) if (account.accountId === userSid) account.member = "dana";
+    settings.categories = { ...settings.categories, adult: ["adult-site.test"] };
+    await adminOk({ type: "replaceSettings", settings, ifVersion: settings.version });
+    const parent = await waitFor(async () => {
+      const s = await status();
+      return s.mode === "baseline" ? s : null;
+    }, 8000, 100);
+    const rulesets = await enabledRulesets();
+    check("9a re-linked to an adult → mode baseline from the real rules reply, without a reconnect: ads ruleset on, unlimited time, no request",
+      parent?.connection === "service" && parent.time?.state === "unlimited" && parent.canRequest === false && parent.features?.jumpGuard === true
+        && parent.features.canOverrideJump === true && rulesets.includes("ads") && (await sessionRules()).length === 0,
+      { note: JSON.stringify({ mode: parent?.mode ?? (await status()).mode, time: parent?.time, features: parent?.features, rulesets }) });
+
+    hits.length = 0;
+    const adultUrl = U("www.adult-site.test", fresh("/video"));
+    const landed = await visit(page, adultUrl);
+    const info = await readyInfo(page);
+    const hintShown = info ? await page.isVisible("#baseline-hint") : false;
+    check("9b a site of the adult list → blocked_baseline_adult from the service, no request button, the hint shown",
+      landed.startsWith(extPage("blocked.html")) && info?.reason === "blocked_baseline_adult" && info.reasonSource === "service" && info.canRequest === "false"
+        && !(await page.isVisible("#ask-url")) && hintShown && !hits.some((h) => h.startsWith("www.adult-site.test")),
+      { note: `${landed} ${JSON.stringify(info)} hint ${hintShown}` });
+    await visit(page, U("games.test", fresh("/play")));
+    const games = await page.title();
+    check("9c a site noa could not open loads for the parent", games === "SITE games.test/play", { note: games });
+    const blocked = (await adminOk({ type: "getEvents", eventType: "blocked" })).events.filter((e) => e.memberId === "dana" || String(e.url).includes("adult-site.test"));
+    check("9d nothing of the parent's browsing is recorded", blocked.length === 0, { note: JSON.stringify(blocked) });
+  }
 } catch (error) {
   check("harness error", false, { note: error?.stack ?? String(error) });
 } finally {

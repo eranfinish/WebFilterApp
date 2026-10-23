@@ -110,6 +110,22 @@ describe("parseIncoming", () => {
     expect((parseIncoming({ type: "rules", features: "all" }) as RulesMessage).features).toEqual(NO_FEATURES);
   });
 
+  it("reads the account's mode from the rules reply (PROTECTION-SPEC §13); absent or unknown leaves it to the hello", () => {
+    const base = JSON.parse(CSHARP.rules);
+    expect((parseIncoming(base) as RulesMessage).mode).toBeUndefined();
+    // As the C# RulesResponse writes it: mode after features.
+    const parent = parseIncoming({
+      ...base,
+      features: { jumpGuard: true, blockYouTubeShorts: false, logSearches: false, canOverrideJump: true, blockAds: true },
+      mode: "baseline",
+    }) as RulesMessage;
+    expect(parent.mode).toBe("baseline");
+    expect(parent.features).toEqual({ ...NO_FEATURES, jumpGuard: true, canOverrideJump: true, blockAds: true });
+    for (const mode of ["unrestricted", "blocklist", "allowlist"]) expect((parseIncoming({ ...base, mode }) as RulesMessage).mode).toBe(mode);
+    expect((parseIncoming({ ...base, mode: "something-newer" }) as RulesMessage).mode).toBeUndefined();
+    expect((parseIncoming({ ...base, mode: 3 }) as RulesMessage).mode).toBeUndefined();
+  });
+
   it("drops unknown or malformed messages", () => {
     expect(parseIncoming(null)).toBeNull();
     expect(parseIncoming("rules")).toBeNull();

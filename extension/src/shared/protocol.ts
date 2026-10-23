@@ -9,7 +9,12 @@
 export const PROTOCOL_VERSION = 1;
 export const NATIVE_HOST_NAME = "com.webfilter.host";
 
-export type FilterMode = "unrestricted" | "blocklist" | "allowlist";
+/**
+ * The account's mode. `baseline` (PROTECTION-SPEC §13) is a parent's account with the family's baseline protection on:
+ * the rules reply's compiled rules (the adult list) and features (jump guard, ads) apply, there is no time, and nothing is
+ * reported — no reportBlock, reportOverride or reportSearch, and no request button.
+ */
+export type FilterMode = "unrestricted" | "blocklist" | "allowlist" | "baseline";
 export type YouTubeMode = "off" | "restricted" | "allowlist" | "unrestricted";
 export type TimeStateName = "ok" | "warn" | "expired" | "outside_window" | "unlimited";
 export type RequestKind = "url" | "youtube" | "app" | "time";
@@ -161,8 +166,9 @@ export interface TimeState {
 
 /**
  * The member's protection features (PROTECTION-SPEC §6). Absent from the rules reply (older services) → all false.
- * `canOverrideJump` is true for teens only (false for children and unlinked accounts). `blockAds` enables the static
- * ad-server ruleset (§12); the service sends it false while the member is paused.
+ * `canOverrideJump` is true for teens and for parents in the baseline (false for children and unlinked accounts).
+ * `blockAds` enables the static ad-server ruleset (§12); the service sends it false while the member is paused. In the
+ * baseline mode (§13) `jumpGuard` and `blockAds` are the family's switches and the other two are false.
  */
 export interface ProtectionFeatures {
   jumpGuard: boolean;
@@ -190,6 +196,12 @@ export interface RulesMessage extends Envelope {
   time: TimeState;
   /** Always set after parsing (normalizeFeatures): a missing `features` means all off. */
   features: ProtectionFeatures;
+  /**
+   * The account's mode as of these rules (PROTECTION-SPEC §13), so a change of the account's link or of the baseline
+   * switches applies with rulesChanged, without a new hello. Absent (older services, the host fallback) or unknown: the
+   * hello's mode.
+   */
+  mode?: FilterMode;
 }
 
 export interface TimeStateMessage extends Envelope, TimeState {
@@ -328,6 +340,7 @@ export function parseIncoming(value: unknown): IncomingMessage | null {
 
 const TIME_STATES: ReadonlySet<string> = new Set<TimeStateName>(["ok", "warn", "expired", "outside_window", "unlimited"]);
 const YOUTUBE_MODES: ReadonlySet<string> = new Set<YouTubeMode>(["off", "restricted", "allowlist", "unrestricted"]);
+const FILTER_MODES: ReadonlySet<string> = new Set<FilterMode>(["unrestricted", "blocklist", "allowlist", "baseline"]);
 
 /** A time state with a known `state`; an unknown state is treated as expired (fail closed). */
 export function normalizeTime(value: unknown): TimeState {
@@ -381,6 +394,7 @@ function normalizeRules(value: Record<string, unknown>): RulesMessage {
     time: normalizeTime(value.time),
     features: normalizeFeatures(value.features),
   };
+  if (typeof value.mode === "string" && FILTER_MODES.has(value.mode)) message.mode = value.mode as FilterMode;
   if (typeof value.v === "number") message.v = value.v;
   if (typeof value.id === "string") message.id = value.id;
   return message;
