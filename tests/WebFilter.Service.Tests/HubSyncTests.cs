@@ -296,12 +296,16 @@ public sealed class HubSyncTests : IAsyncLifetime
         await Eventually(() => HubAccounts("laptop-yoav").Count == 2, "accounts reported");
         Assert.Equal("yoav", HubAccounts("laptop-yoav").Single(a => a.Name == "yoav").MemberId);
         Assert.Null(HubAccounts("laptop-yoav").Single(a => a.Name == "guest").MemberId);
+        // The settings had laptop-yoav with yoav's account before it was paired (as after a reinstall), so "guest" is an
+        // account that appeared since: the parents hear of it (PROTECTION-SPEC §10).
+        Assert.Equal([("laptop-yoav", "guest")], AccountNotifications());
 
         // The parent gave yoav's account administrator rights by mistake: the hub learns it (and keeps the link).
         accounts.Set(new DeviceAccount("S-1-5-21-3000-1001", "yoav", null, IsAdmin: true), new DeviceAccount("S-1-5-21-3000-1002", "guest", null, IsAdmin: false));
         _sync.Wake();
         await Eventually(() => HubAccounts("laptop-yoav").Single(a => a.Name == "yoav") is { IsAdmin: true, MemberId: "yoav" }, "admin flag updated");
         await Eventually(() => _agent.WithAgent((agent, _) => agent.AccountOf("yoav").IsAdmin), "the agent got the new flag");
+        Assert.Single(AccountNotifications());
     }
 
     /// <summary>
@@ -363,6 +367,8 @@ public sealed class HubSyncTests : IAsyncLifetime
 
             accounts.Add(new DeviceAccount("S-1-5-21-1000-1003", "guest", null, IsAdmin: false));
             await Eventually(() => HubAccounts("pc-parents").Any(a => a.Name == "guest"), "an account created later");
+            // Recorded with the account, under the same lock: the notifier's next poll has it.
+            Assert.Contains(("pc-parents", "guest"), AccountNotifications());
         }
         finally
         {
@@ -371,6 +377,9 @@ public sealed class HubSyncTests : IAsyncLifetime
     }
 
     private IReadOnlyList<DeviceAccount> HubAccounts(string deviceId) => _hub.WithHub((hub, _) => hub.Config.Device(deviceId).Accounts.ToList());
+
+    private List<(string? DeviceId, string? Name)> AccountNotifications() =>
+        [.. _hub.NotificationsSince(null).Where(n => n.Kind == Contracts.Notify.NotificationKinds.Account).Select(n => (n.DeviceId, n.Detail))];
 
     [Fact]
     public async Task A_new_pairing_code_replaces_the_previous_one()

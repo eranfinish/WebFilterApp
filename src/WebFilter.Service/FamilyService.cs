@@ -98,6 +98,7 @@ public sealed class FamilyService : IDisposable
                 _hub = state is not null ? HubCore.Restore(state) : new HubCore(Bootstrap());
                 _hub.EventRecorded += OnHubEvent;
                 _hub.RequestAccepted += OnHubRequest;
+                _hub.AccountsAdded += OnHubAccounts;
                 Certificates = HubCertificates.LoadOrCreate(Path.Combine(_options.DataDirectory, "certs"));
                 _log.LogInformation("Hub {HubId} started at settings version {Version}", Certificates.HubId, _hub.Version);
             }
@@ -337,6 +338,25 @@ public sealed class FamilyService : IDisposable
         };
         Notify($"request:{request.Id}:{request.CreatedAt.UtcTicks}", Contracts.Notify.NotificationKinds.Request, request.MemberId, request.DeviceId,
             $"{request.Kind.ToString().ToLowerInvariant()}:{target}");
+    }
+
+    /// <summary>
+    /// A new standard account on any computer (the hub's own included) becomes an "account" notification, detail its
+    /// Windows name: browsing there is blocked until a parent answers the admin app's new-account card. Not for
+    /// administrators (never filtered), and not for a computer's first report — the accounts it already had when it was
+    /// paired, or the hub's own at first setup, which the parent links while setting it up. One per account. Under the gate.
+    /// </summary>
+    private void OnHubAccounts(NewAccounts added)
+    {
+        if (added.FirstReport) return;
+        var stored = _hub!.Config.Devices.Find(d => d.Id == added.DeviceId)?.Accounts ?? [];
+        foreach (var account in added.Accounts)
+        {
+            // As the settings have it now: an account a parent has already answered for needs no notification.
+            var current = stored.FirstOrDefault(a => string.Equals(a.AccountId, account.AccountId, StringComparison.OrdinalIgnoreCase)) ?? account;
+            if (current.IsAdmin || current.MemberId is not null || current.Guest) continue;
+            Notify($"account:{added.DeviceId}:{current.AccountId}", Contracts.Notify.NotificationKinds.Account, null, added.DeviceId, current.Name);
+        }
     }
 
     /// <summary>Paired computers that have not reported for <see cref="DeviceSilence"/>: one notification per silence.</summary>

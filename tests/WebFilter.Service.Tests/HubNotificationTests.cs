@@ -2,13 +2,15 @@ using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Options;
 using WebFilter.Contracts.Notify;
 using WebFilter.Core.Engine;
+using WebFilter.Core.Model;
 using WebFilter.Service.Storage;
 
 namespace WebFilter.Service.Tests;
 
 /// <summary>
-/// PROTECTION-SPEC §10 on the hub without pipes: computers that stop reporting, the tamper throttle, and event retention
-/// (search terms are events, so they leave after the same 90 days). The pipe itself is covered in PipeIntegrationTests.
+/// PROTECTION-SPEC §10 on the hub without pipes: computers that stop reporting, new Windows accounts, the tamper
+/// throttle, and event retention (search terms are events, so they leave after the same 90 days). The pipe itself is
+/// covered in PipeIntegrationTests.
 /// </summary>
 public sealed class HubNotificationTests : IDisposable
 {
@@ -21,15 +23,70 @@ public sealed class HubNotificationTests : IDisposable
         try { Directory.Delete(_dir, recursive: true); } catch (IOException) { } catch (UnauthorizedAccessException) { }
     }
 
-    private FamilyService Hub()
+    /// <param name="fixture">The family of the simulation fixture; otherwise a new install's empty family.</param>
+    private FamilyService Hub(bool fixture = true)
     {
         var family = new FamilyService(Options.Create(new ServiceOptions
         {
             Role = "hub", DeviceId = "pc-parents", DataDirectory = Path.Combine(_dir, "data"), ProfileDirectory = Path.Combine(_dir, "profiles"),
-            BootstrapBundlePath = Path.Combine(RepoRoot(), "tests", "simulation", "fixtures", "family-base.json"),
+            BootstrapBundlePath = fixture ? Path.Combine(RepoRoot(), "tests", "simulation", "fixtures", "family-base.json") : null,
         }), _clock, NullLogger<FamilyService>.Instance);
         family.Start();
         return family;
+    }
+
+    [Fact]
+    public void A_new_standard_account_on_a_paired_computer_is_one_notification_but_not_what_it_reports_first()
+    {
+        using var hub = Hub();
+        hub.RegisterPairedDevice("pc-new", "NEW-PC", "windows", "CC");
+
+        // Its first report: the accounts it already had when it was paired, which the parent goes through then.
+        hub.IngestUpload("pc-new", Upload(("S-1-5-21-4000-500", "owner", true), ("S-1-5-21-4000-1001", "maya", false)));
+        Assert.Empty(NewAccounts(hub));
+
+        // Later a parent creates a standard account for a child, and an administrator (never filtered: no notification).
+        _clock.Now = Start.AddMinutes(5);
+        hub.IngestUpload("pc-new", Upload(("S-1-5-21-4000-500", "owner", true), ("S-1-5-21-4000-1001", "maya", false),
+            ("S-1-5-21-4000-1002", "tom", false), ("S-1-5-21-4000-1003", "grandpa", true)));
+        var account = Assert.Single(NewAccounts(hub));
+        Assert.Equal(("account:pc-new:S-1-5-21-4000-1002", "pc-new", null, "tom", Start.AddMinutes(5)),
+            (account.Id, account.DeviceId, account.MemberId, account.Detail, account.At));
+
+        // Reported again, renamed, or dropped from the settings and reported anew: still the one notification.
+        hub.IngestUpload("pc-new", Upload(("S-1-5-21-4000-1002", "tommy", false)));
+        hub.WithHub((core, now) =>
+        {
+            var config = core.Config.Clone();
+            var index = config.Devices.FindIndex(d => d.Id == "pc-new");
+            config.Devices[index] = config.Devices[index] with { Accounts = [.. config.Devices[index].Accounts.Where(a => a.Name != "tommy")] };
+            core.ReplaceSettings(config, now);
+            return 0;
+        });
+        hub.IngestUpload("pc-new", Upload(("S-1-5-21-4000-1002", "tommy", false)));
+        Assert.Contains(hub.WithHub((core, _) => core.Config.Device("pc-new").Accounts.ToList()), a => a.Name == "tommy");
+        Assert.Single(NewAccounts(hub));
+    }
+
+    [Fact]
+    public void The_hubs_own_accounts_at_first_setup_are_no_notification_and_one_created_later_is()
+    {
+        using var hub = Hub(fixture: false);
+        var accounts = new FakeLocalAccounts(
+            new DeviceAccount("S-1-5-21-1000-1001", "dana", null, IsAdmin: true),
+            new DeviceAccount("S-1-5-21-1000-1002", "kids", null, IsAdmin: false));
+        var admin = new Pipes.AdminPipeServer(hub, Options.Create(hub.Options), _clock, NullLogger<Pipes.AdminPipeServer>.Instance, accounts);
+
+        // The service's own first look at this computer's accounts (or the wizard's): what the computer already had.
+        Assert.Equal("2", Assert.IsType<Contracts.Admin.AdminOk>(admin.Handle(new Contracts.Admin.ScanAccounts(), "dana")).Detail);
+        Assert.Empty(NewAccounts(hub));
+
+        accounts.Add(new DeviceAccount("S-1-5-21-1000-1003", "noa", null, IsAdmin: false));
+        accounts.Add(new DeviceAccount("S-1-5-21-1000-1004", "avi", null, IsAdmin: true));
+        Assert.Equal("2", Assert.IsType<Contracts.Admin.AdminOk>(admin.Handle(new Contracts.Admin.ScanAccounts(), "dana")).Detail);
+
+        var account = Assert.Single(NewAccounts(hub));
+        Assert.Equal(("account:pc-parents:S-1-5-21-1000-1003", "pc-parents", "noa"), (account.Id, account.DeviceId, account.Detail));
     }
 
     [Fact]
@@ -100,6 +157,12 @@ public sealed class HubNotificationTests : IDisposable
     }
 
     private static List<NotificationDto> Devices(FamilyService hub) => hub.NotificationsSince(null).Where(n => n.Kind == NotificationKinds.Device).ToList();
+
+    private static List<NotificationDto> NewAccounts(FamilyService hub) => hub.NotificationsSince(null).Where(n => n.Kind == NotificationKinds.Account).ToList();
+
+    /// <summary>An agent's upload with only its accounts, as its <c>HubSyncService</c> sends it when they change.</summary>
+    private static Contracts.Hub.UploadDto Upload(params (string Id, string Name, bool IsAdmin)[] accounts) =>
+        new("ignored", [], [], [], [.. accounts.Select(a => new Contracts.Hub.AccountDto(a.Id, a.Name, null, a.IsAdmin))]);
 
     private static List<FamilyEvent> Tamper(FamilyService hub) => hub.WithHub((core, _) => core.Events.Where(e => e.Type == EventType.Tamper).ToList());
 
