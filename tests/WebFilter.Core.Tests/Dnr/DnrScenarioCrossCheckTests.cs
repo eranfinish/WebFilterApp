@@ -5,15 +5,16 @@ using WebFilter.Core.Model;
 namespace WebFilter.Core.Tests.Dnr;
 
 /// <summary>
-/// For every URL check in the rule, normalization and YouTube-off scenarios (restricted members only), the compiled DNR rules,
-/// run through <see cref="DnrSimulator"/>, must reach the scenario's decision (allow vs block; redirect counts as block).
+/// For every URL check in the rule, normalization, YouTube-off, image-search, AI Mode and baseline scenarios, the compiled DNR
+/// rules, run through <see cref="DnrSimulator"/>, must reach the scenario's decision (allow vs block; redirect counts as block).
+/// Unrestricted members get the family's baseline policy (PROTECTION-SPEC §13), as the extension does.
 /// </summary>
 public class DnrScenarioCrossCheckTests
 {
-    private static readonly string[] Files = ["rules.json", "normalization.json", "youtube-decisions.json", "image-search.json", "ai-mode.json"];
+    private static readonly string[] Files = ["rules.json", "normalization.json", "youtube-decisions.json", "image-search.json", "ai-mode.json", "baseline.json"];
 
-    /// <summary>RULE-010: unrestricted adults (no rules by design). RULE-011: non-web schemes (not filtered by DNR).</summary>
-    private static readonly HashSet<string> SkippedScenarios = ["RULE-010", "RULE-011"];
+    /// <summary>RULE-011: non-web schemes (not filtered by DNR).</summary>
+    private static readonly HashSet<string> SkippedScenarios = ["RULE-011"];
 
     internal sealed record Case(string Label, EffectiveUrlPolicy Policy, string Url, string ResourceType, DnrOutcome Expected);
 
@@ -45,8 +46,10 @@ public class DnrScenarioCrossCheckTests
     {
         var (cases, skipped) = Catalog.Value;
         Assert.True(cases.Count >= 69, $"only {cases.Count} cases cross-checked");
-        // IMG-004 runs homework and a pause, which only the engine models; ExtensionPolicyTests covers those states for DNR.
-        Assert.All(skipped, s => Assert.Matches(@"^(RULE-010|RULE-011) |^IMG-004 step 1\+ \(admin action not modelled\)$", s));
+        // IMG-004 runs homework and a pause, which only the engine models; ExtensionPolicyTests covers those states for DNR, and
+        // BaselineProtectionTests an administrator linked to nobody (an account step) and a pause set for a parent.
+        Assert.All(skipped, s => Assert.Matches(
+            @"^RULE-011 |^IMG-004 step 1\+ \(admin action not modelled\)$|^BASE-\d{3} step \d+(\+ \(admin action not modelled\)| \(an account, not a member\))$", s));
     }
 
     private static (IReadOnlyDictionary<string, Case>, IReadOnlyList<string>) Load()
@@ -87,8 +90,16 @@ public class DnrScenarioCrossCheckTests
                     if (kind is not ("checkUrls" or "navigate"))
                         continue;
 
-                    var memberId = step.GetProperty("member").GetString()!;
-                    var policy = EffectiveUrlPolicy.For(config, memberId, now);
+                    if (!step.TryGetProperty("member", out var member))
+                    {
+                        skipped.Add($"{id} step {stepIndex} (an account, not a member)");
+                        continue;
+                    }
+                    var memberId = member.GetString()!;
+                    // A parent's account gets the family's baseline protection (PROTECTION-SPEC §13), or nothing without blockAdult.
+                    var policy = config.Member(memberId).IsRestricted || !config.Baseline.BlockAdult
+                        ? EffectiveUrlPolicy.For(config, memberId, now)
+                        : EffectiveUrlPolicy.ForBaseline(config, memberId, now);
                     List<JsonElement> checks = kind == "navigate" ? [step] : step.GetProperty("cases").EnumerateArray().ToList();
                     var caseIndex = 0;
                     foreach (var check in checks)
@@ -97,7 +108,7 @@ public class DnrScenarioCrossCheckTests
                         var url = check.GetProperty("url").GetString()!;
                         var decision = check.GetProperty("expect").GetProperty("decision").GetString();
                         var label = $"{id} {stepIndex}.{caseIndex} {memberId} {url}";
-                        if (decision == "not_applicable" || !config.Member(memberId).IsRestricted)
+                        if (decision == "not_applicable")
                         {
                             skipped.Add(label);
                             continue;

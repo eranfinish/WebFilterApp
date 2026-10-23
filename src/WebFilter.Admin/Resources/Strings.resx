@@ -606,6 +606,9 @@
   <data name="Reason_blocked_youtube_shorts" xml:space="preserve">
     <value>YouTube Shorts חסום</value>
   </data>
+  <data name="Reason_blocked_baseline_adult" xml:space="preserve">
+    <value>אתר למבוגרים — חסום בהגנה הבסיסית של המשפחה</value>
+  </data>
   <data name="AdminChange_add_rule" xml:space="preserve">
     <value>נוסף כלל אתר</value>
   </data>

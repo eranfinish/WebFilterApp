@@ -1,5 +1,8 @@
+using WebFilter.Core.Decisions;
 using WebFilter.Core.Dnr;
+using WebFilter.Core.Engine;
 using WebFilter.Core.Model;
+using WebFilter.Core.Time;
 using WebFilter.Core.Urls;
 using static WebFilter.Core.Tests.Dnr.DnrTestPolicies;
 
@@ -101,7 +104,7 @@ public class DnrDifferentialTests
                 if (hasRegex && chrome.Host.EndsWith('.'))
                     continue;
                 Assert.True(UrlNormalizer.TryNormalize(raw, out var normalized), raw);
-                var core = RuleEvaluator.Evaluate(policy, normalized).Decision == Decisions.Decision.Allow ? DnrOutcome.Allow : DnrOutcome.Block;
+                var core = RuleEvaluator.Evaluate(policy, normalized).Decision == Decision.Allow ? DnrOutcome.Allow : DnrOutcome.Block;
                 var dnr = DnrSimulator.Evaluate(rules.DynamicRules, chrome);
                 if (core != dnr)
                     failures.Add($"#{iteration} {raw}: core {core}, DNR {dnr}\n  policy: {Describe(policy)}");
@@ -109,6 +112,115 @@ public class DnrDifferentialTests
         }
 
         Assert.True(failures.Count == 0, string.Join("\n", failures));
+    }
+
+    /// <summary>
+    /// PROTECTION-SPEC §13: random baseline policies — the parents' allow rules over random adult-category blocks — compiled
+    /// and through <see cref="DnrSimulator"/> agree with the reference on every URL, YouTube hosts and IP literals included
+    /// (the baseline has neither rule), and there are no time-up rules.
+    /// </summary>
+    [Fact]
+    public void RandomBaselinePolicies_MatchTheReferenceEvaluator()
+    {
+        var random = new Random(20261023);
+        var urls = AllUrls().Select(ChromeUrl.Parse).ToList();
+        var failures = new List<string>();
+
+        for (var iteration = 0; iteration < 300 && failures.Count < 10; iteration++)
+        {
+            var (_, policy) = RandomBaseline(random);
+            var rules = DnrCompiler.Compile(policy, Options);
+            Assert.Empty(rules.TimeUpSessionRules);
+            var hasRegex = policy.MemberRules.Any(r => r.Type == PatternType.Regex);
+            foreach (var url in urls)
+            {
+                if (hasRegex && url.Host.EndsWith('.'))
+                    continue;
+                var expected = ReferenceEvaluator.Evaluate(policy, url);
+                var actual = DnrSimulator.Evaluate(rules.DynamicRules, url);
+                if (expected != actual)
+                    failures.Add($"#{iteration} {url}: reference {expected}, DNR {actual}\n  policy: {Describe(policy)}");
+            }
+        }
+
+        Assert.True(failures.Count == 0, string.Join("\n", failures));
+    }
+
+    /// <summary>
+    /// The service decides a parent's URL with <see cref="Decider.Baseline"/> (a category lookup first, then the
+    /// evaluator); the extension with the compiled baseline policy. Both must agree on random families, for an unrestricted
+    /// member and for an administrator linked to nobody, and the service blocks only with blocked_baseline_adult.
+    /// </summary>
+    [Fact]
+    public void RandomBaselineFamilies_ServiceAgreesWithTheCompiledRules()
+    {
+        var random = new Random(20261024);
+        var urls = AllUrls().ToList();
+        var now = DateTimeOffset.Parse("2026-11-02T15:30:00+02:00", System.Globalization.CultureInfo.InvariantCulture);
+        var failures = new List<string>();
+
+        for (var iteration = 0; iteration < 300 && failures.Count < 10; iteration++)
+        {
+            var (config, _) = RandomBaseline(random);
+            var view = new PolicyView(config, new Dictionary<string, MemberRuntime>(), new UsageLedger(), new Dictionary<string, DateTimeOffset>());
+            foreach (var memberId in new[] { "m", null })
+            {
+                var policy = EffectiveUrlPolicy.ForBaseline(config, memberId, now);
+                var rules = DnrCompiler.Compile(policy, Options).DynamicRules;
+                var hasRegex = policy.MemberRules.Any(r => r.Type == PatternType.Regex);
+                foreach (var raw in urls)
+                {
+                    var chrome = ChromeUrl.Parse(raw);
+                    if (hasRegex && chrome.Host.EndsWith('.'))
+                        continue;
+                    var decision = Decider.Baseline(view, memberId, raw, now);
+                    var service = decision.Decision == Decision.Allow ? DnrOutcome.Allow : DnrOutcome.Block;
+                    var dnr = DnrSimulator.Evaluate(rules, chrome);
+                    if (service != dnr)
+                        failures.Add($"#{iteration} {memberId ?? "admin"} {raw}: service {decision}, DNR {dnr}\n  policy: {Describe(policy)}");
+                    if (decision.Decision == Decision.Block && decision.Reason != ReasonCode.BlockedBaselineAdult)
+                        failures.Add($"#{iteration} {raw}: blocked with {decision}");
+                }
+            }
+        }
+
+        Assert.True(failures.Count == 0, string.Join("\n", failures));
+    }
+
+    private static IEnumerable<string> AllUrls() =>
+        from host in UrlHosts
+        from path in UrlPaths
+        from userinfo in new[] { "", "u:p@" }
+        select $"http{(path.Length % 2 == 0 ? "s" : "")}://{userinfo}{host}{path}";
+
+    /// <summary>A family with one unrestricted member "m": random allow rules (his and global, some expired) and a random adult list (IP literals included).</summary>
+    private static (FamilyConfig Config, EffectiveUrlPolicy Policy) RandomBaseline(Random random)
+    {
+        var now = DateTimeOffset.Parse("2026-11-02T15:30:00+02:00", System.Globalization.CultureInfo.InvariantCulture);
+        string[] adultHosts = [.. CategoryHosts, "192.168.1.50", "10.0.0.1"];
+        var config = new FamilyConfig
+        {
+            TimeZone = TimeZoneInfo.Utc,
+            Members = [new FamilyMember("m", "M", Role.Adult, null, FilterMode.Unrestricted, YouTubeMode.Unrestricted)],
+        };
+        config.Categories[BaselineProtection.AdultCategory] = Enumerable.Range(0, random.Next(1, 5)).Select(_ => adultHosts[random.Next(adultHosts.Length)]).Distinct().ToList();
+        var ruleCount = random.Next(7);
+        for (var i = 0; i < ruleCount; i++)
+        {
+            var host = Hosts[random.Next(Hosts.Length)];
+            var (pattern, type) = random.Next(5) switch
+            {
+                0 or 1 => (host, PatternType.Domain),
+                2 when !host.StartsWith('[') && !char.IsAsciiDigit(host[0]) => ("*." + host, PatternType.Wildcard),
+                2 or 3 => (host + PrefixPaths[random.Next(PrefixPaths.Length)], PatternType.Prefix),
+                _ => (Regexes[random.Next(Regexes.Length)], PatternType.Regex),
+            };
+            // Block rules of the parents and expired allows are not part of the baseline.
+            var action = random.Next(4) == 0 ? RuleAction.Block : RuleAction.Allow;
+            var expires = random.Next(5) == 0 ? now.AddMinutes(-1) : (DateTimeOffset?)null;
+            config.Rules.Add(new Rule($"r{i}", random.Next(2) == 0 ? "m" : null, pattern, type, action, random.Next(4) == 0, expires));
+        }
+        return (config, EffectiveUrlPolicy.ForBaseline(config, "m", now));
     }
 
     private static EffectiveUrlPolicy RandomPolicy(Random random)
@@ -139,7 +251,7 @@ public class DnrDifferentialTests
     }
 
     private static string Describe(EffectiveUrlPolicy p) =>
-        $"{p.Mode}, YouTube {p.YouTube}; member [{string.Join(", ", p.MemberRules.Select(R))}]; global [{string.Join(", ", p.GlobalRules.Select(R))}]; " +
+        $"{(p.Baseline ? "Baseline " : "")}{p.Mode}, YouTube {p.YouTube}; member [{string.Join(", ", p.MemberRules.Select(R))}]; global [{string.Join(", ", p.GlobalRules.Select(R))}]; " +
         $"categories [{string.Join(", ", p.CategoryDomains.Select(c => $"{c.Action} {c.Domain}"))}]";
 
     private static string R(Rule r) => $"{r.Action} {r.Type} {r.Pattern}{(r.AlwaysAllowed ? " (always)" : "")}";

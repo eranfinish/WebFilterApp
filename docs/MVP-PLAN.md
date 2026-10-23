@@ -283,7 +283,7 @@
 
 סדר הבדיקה ל-URL ראשי (`main_frame`/`sub_frame`):
 
-1. משתמש **ללא הגבלה**, או שההגבלות מושהות לו כרגע → **מותר** (וזמן לא נספר)
+1. משתמש **ללא הגבלה** (בן משפחה מבוגר, או חשבון מנהל) → **מותר** וזמן לא נספר, חוץ מ**ההגנה הבסיסית להורים** ([PROTECTION-SPEC §13](PROTECTION-SPEC.md)): אתר מקטגוריית `adult` → **חסום (`blocked_baseline_adult`)**, אלא אם כלל `allow` של ההורים מתאים לו; השהיה לא חלה עליהם. ההגבלות של בן משפחה מסונן מושהות לו כרגע → **מותר** (וזמן לא נספר)
 2. סכמה שאינה http/https → לפי מדיניות הדפדפן, לא דרכנו
    - **חסימות מובנות** של בן המשפחה — חיפוש תמונות (`blockImageSearch`, [PROTECTION-SPEC §4](PROTECTION-SPEC.md)) → **חסום (`blocked_image_search`)**; AI Mode של Google (`udm=50`) כשהקטגוריות שלו חוסמות `ai-chat` (§11) → **חסום (`blocked_rule`, `builtin-ai-mode-google`)** — לפני שיעורי בית וזמן וגם מול "מותר תמיד". ב-DNR הן בעדיפות 327,680, מעל כללי "הזמן נגמר"
    - `accounts.youtube.com` (הכניסה לחשבון Google עוברת דרכו) — מצב ה-YouTube לא חוסם אותו לעולם, גם `off` ובשיעורי בית (§11)
@@ -302,7 +302,7 @@
 
 **Regex:** חייב להיות תואם RE2 (מתורגם ל-`regexFilter`, עד 1,000). ממשק הניהול דוחה lookaround ו-backreferences.
 
-**קודי סיבה** (משותפים לכל הרכיבים ולסימולציות): `allowed_unrestricted`, `allowed_paused`, `allowed_always`, `allowed_rule`, `allowed_category`, `allowed_default`, `allowed_homework`, `allowed_youtube_channel`, `allowed_browser`, `blocked_rule`, `blocked_category`, `blocked_not_in_allowlist`, `blocked_time_window`, `blocked_daily_limit`, `blocked_homework`, `blocked_ip_literal`, `blocked_youtube_channel`, `blocked_youtube_unknown`, `blocked_youtube_off`, `blocked_service_unavailable`, `blocked_app_network`, `redirect_youtube_home`, `blocked_image_search`, `blocked_jump`, `blocked_youtube_shorts` (שני האחרונים — החלטה של התוסף בלבד; השירות שומר את הסיבה שהתוסף דיווח).
+**קודי סיבה** (משותפים לכל הרכיבים ולסימולציות): `allowed_unrestricted`, `allowed_paused`, `allowed_always`, `allowed_rule`, `allowed_category`, `allowed_default`, `allowed_homework`, `allowed_youtube_channel`, `allowed_browser`, `blocked_rule`, `blocked_category`, `blocked_not_in_allowlist`, `blocked_time_window`, `blocked_daily_limit`, `blocked_homework`, `blocked_ip_literal`, `blocked_youtube_channel`, `blocked_youtube_unknown`, `blocked_youtube_off`, `blocked_service_unavailable`, `blocked_app_network`, `redirect_youtube_home`, `blocked_image_search`, `blocked_jump`, `blocked_youtube_shorts` (שני אלה — החלטה של התוסף בלבד; השירות שומר את הסיבה שהתוסף דיווח), `blocked_baseline_adult` (אתר למבוגרים בהגנה הבסיסית להורים, PROTECTION-SPEC §13).
 
 **חשבון לא מקושר:** חשבון Windows לא-מנהל שעדיין לא קושר לבן משפחה מקבל רק "מותר תמיד", עד שההורה מקשר אותו. ההורה יכול גם לענות "להשאיר חסום (אורח)" (`guest` בחשבון): הסינון לא משתנה, רק ממשק הניהול מפסיק לשאול עליו.
 

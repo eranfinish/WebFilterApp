@@ -30,7 +30,9 @@ public static class RuleEvaluator
     /// Category domains behave like domain rules; reasons <c>allowed_category</c> / <c>blocked_category</c>.</item>
     /// <item>Default: allowlist → <c>blocked_not_in_allowlist</c>; blocklist → <c>allowed_default</c>.</item>
     /// </list>
-    /// RuleId in the result is the winning rule's id (null for categories and defaults).
+    /// RuleId in the result is the winning rule's id (null for categories and defaults). A baseline policy
+    /// (<see cref="EffectiveUrlPolicy.Baseline"/>, PROTECTION-SPEC §13) skips step 2 and reports its category blocks as
+    /// <c>blocked_baseline_adult</c>.
     /// </summary>
     /// <remarks>
     /// An IP literal that an allow rule matches continues through steps 2–4, so a more specific (or member) block rule
@@ -51,7 +53,8 @@ public static class RuleEvaluator
         var member = index.Member.FindBest(url, ref href);
         MatchResult? global = null;
 
-        if (url.IsIpLiteral && !member.AnyAllow)
+        // The parents' baseline filters nothing but its category: IP addresses (a router's page) stay open.
+        if (url.IsIpLiteral && !member.AnyAllow && !policy.Baseline)
         {
             global = index.Global.FindBest(url, ref href);
             if (!global.Value.AnyAllow)
@@ -59,11 +62,11 @@ public static class RuleEvaluator
         }
 
         if (member.Best is { } memberWinner)
-            return ToResult(memberWinner);
+            return ToResult(memberWinner, policy);
 
         global ??= index.Global.FindBest(url, ref href);
         if (global.Value.Best is { } globalWinner)
-            return ToResult(globalWinner);
+            return ToResult(globalWinner, policy);
 
         return policy.Mode == FilterMode.Allowlist
             ? DecisionResult.Block(ReasonCode.BlockedNotInAllowlist)
@@ -122,13 +125,13 @@ public static class RuleEvaluator
         CompiledRules.GetValue(rule, static r =>
             new CompiledRule(PatternMatcher.TryCompile(r.Pattern, r.Type, out var compiled, out _) ? compiled : null)).Pattern;
 
-    private static DecisionResult ToResult(Entry winner)
+    private static DecisionResult ToResult(Entry winner, EffectiveUrlPolicy policy)
     {
         if (winner.Rule is null)
         {
             return winner.IsAllow
                 ? DecisionResult.Allow(ReasonCode.AllowedCategory)
-                : DecisionResult.Block(ReasonCode.BlockedCategory);
+                : DecisionResult.Block(policy.Baseline ? ReasonCode.BlockedBaselineAdult : ReasonCode.BlockedCategory);
         }
         if (!winner.IsAllow)
             return DecisionResult.Block(ReasonCode.BlockedRule, winner.Rule.Id);

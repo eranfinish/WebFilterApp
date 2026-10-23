@@ -34,6 +34,8 @@ public enum ReasonCode
     BlockedJump,
     /// <summary>YouTube Shorts (PROTECTION-SPEC §8). Decided by the extension's YouTube logic only.</summary>
     BlockedYouTubeShorts,
+    /// <summary>An adult site, blocked for a parent by the family's baseline protection (PROTECTION-SPEC §13, blockAdult).</summary>
+    BlockedBaselineAdult,
 }
 
 public readonly record struct DecisionResult(Decision Decision, ReasonCode Reason, string? RuleId = null)
@@ -78,6 +80,7 @@ public static class ReasonCodes
         [ReasonCode.BlockedImageSearch] = "blocked_image_search",
         [ReasonCode.BlockedJump] = "blocked_jump",
         [ReasonCode.BlockedYouTubeShorts] = "blocked_youtube_shorts",
+        [ReasonCode.BlockedBaselineAdult] = "blocked_baseline_adult",
     };
 
     private static readonly Dictionary<string, ReasonCode> FromWireMap = ToWireMap.ToDictionary(kv => kv.Value, kv => kv.Key);

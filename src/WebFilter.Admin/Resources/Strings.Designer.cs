@@ -1739,6 +1739,15 @@ namespace WebFilter.Admin.Resources {
         }
 
         /// <summary>
+        ///   Looks up a localized string similar to אתר למבוגרים — חסום בהגנה הבסיסית של המשפחה.
+        /// </summary>
+        public static string Reason_blocked_baseline_adult {
+            get {
+                return ResourceManager.GetString("Reason_blocked_baseline_adult", resourceCulture);
+            }
+        }
+
+        /// <summary>
         ///   Looks up a localized string similar to נוסף כלל אתר.
         /// </summary>
         public static string AdminChange_add_rule {

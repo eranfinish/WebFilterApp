@@ -23,5 +23,6 @@ public static class ConfigCloning
         SupportedBrowsers = [.. config.SupportedBrowsers],
         AppRules = [.. config.AppRules],
         WindowsFeatures = config.WindowsFeatures,
+        Baseline = config.Baseline,
     };
 }

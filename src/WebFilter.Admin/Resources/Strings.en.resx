@@ -602,6 +602,9 @@
   <data name="Reason_blocked_youtube_shorts" xml:space="preserve">
     <value>YouTube Shorts are blocked</value>
   </data>
+  <data name="Reason_blocked_baseline_adult" xml:space="preserve">
+    <value>Adult site — blocked by the family's baseline protection</value>
+  </data>
   <data name="AdminChange_add_rule" xml:space="preserve">
     <value>Website rule added</value>
   </data>

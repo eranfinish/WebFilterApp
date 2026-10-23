@@ -6,7 +6,8 @@ namespace WebFilter.Core.Dnr;
 
 /// <summary>
 /// Compiles a member's <see cref="EffectiveUrlPolicy"/> into declarativeNetRequest rules whose outcome (allow vs block)
-/// equals <see cref="Urls.RuleEvaluator"/> for every URL, plus the YouTube-mode and IP-literal rules.
+/// equals <see cref="Urls.RuleEvaluator"/> for every URL, plus the YouTube-mode and IP-literal rules (not for the parents'
+/// baseline, <see cref="EffectiveUrlPolicy.Baseline"/>, which has only its category blocks and the parents' allow rules).
 /// Only main_frame and sub_frame are filtered. Blocks redirect to the block page with the original URL.
 /// See spikes/S3-S4/REPORT.md for what DNR supports and its limits, and <see cref="DnrPriorities"/> for the layout.
 /// </summary>
@@ -35,7 +36,8 @@ public static class DnrCompiler
 
         var redirect = new DnrAction("redirect", new DnrRedirect(RegexSubstitution: $"chrome-extension://{options.ExtensionId}{options.BlockPagePath}#\\0"));
         var dynamicRules = CompileDynamic(policy, redirect);
-        var sessionRules = CompileTimeUp(policy, redirect);
+        // Time never applies to the parents' baseline (PROTECTION-SPEC §13): no time-up rules.
+        var sessionRules = policy.Baseline ? [] : CompileTimeUp(policy, redirect);
         CheckLimits(policy.MemberId, dynamicRules, sessionRules);
         return new DnrRuleSet(dynamicRules, sessionRules);
     }
@@ -44,9 +46,10 @@ public static class DnrCompiler
     {
         var builder = new RuleSetBuilder("dynamic", redirect);
 
-        if (policy.Mode == FilterMode.Allowlist)
+        // The parents' baseline (PROTECTION-SPEC §13) blocks its category only: no default, no IP-literal or YouTube rules.
+        if (policy.Mode == FilterMode.Allowlist && !policy.Baseline)
             builder.AddFixed(DnrRuleIds.AllowlistDefault, DnrPriorities.AllowlistDefault, block: true, null, DnrPatterns.AnyWebUrl, null);
-        else
+        else if (!policy.Baseline)
             // Below every rule: an IP-literal URL that no rule matches is blocked. When rules match, the winner decides —
             // a winning allow rule is exactly the "explicit allow" that lifts the IP block (README §5), and a block stays a block.
             builder.AddFixed(DnrRuleIds.IpLiteralGate, DnrPriorities.IpLiteralGate, block: true, null, DnrPatterns.IpLiteralHost, null);
@@ -70,6 +73,9 @@ public static class DnrCompiler
             if (DnrPatterns.FromRule(builtin.Rule) is { } match)
                 builder.AddAtPriority(match, DnrPriorities.BuiltinBlock, block: true);
         }
+
+        if (policy.Baseline)
+            return builder.Build();
 
         // YouTube hosts follow the YouTube mode only: off → block, otherwise allow (the content script decides channels).
         var youTubeBlock = policy.YouTube == YouTubeMode.Off;

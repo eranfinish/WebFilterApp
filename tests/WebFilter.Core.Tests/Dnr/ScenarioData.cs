@@ -25,6 +25,9 @@ internal static class ScenarioData
         var config = new FamilyConfig
         {
             TimeZone = TimeZoneInfo.FindSystemTimeZoneById(fixture.GetProperty("timezone").GetString()!),
+            Baseline = setup is { } b && b.TryGetProperty("baseline", out var baseline)
+                ? Simulation.FixtureLoader.ParseBaseline(System.Text.Json.Nodes.JsonNode.Parse(baseline.GetRawText()))
+                : BaselineProtection.Default,
         };
 
         var members = fixture.GetProperty("members").EnumerateArray().Select(m => m.Clone()).ToList();

@@ -1,5 +1,7 @@
 using System.Text.Json;
+using WebFilter.Core.Decisions;
 using WebFilter.Core.Dnr;
+using WebFilter.Core.Engine;
 using WebFilter.Core.Model;
 using WebFilter.Core.Tests.Dnr;
 using WebFilter.Core.Urls;
@@ -117,6 +119,37 @@ public sealed class StarterListFilesTests
         var set = ChildRules.Value;
         Assert.True(set.DynamicRules.Count <= 20, $"{set.DynamicRules.Count} dynamic rules");
         Assert.True(set.DynamicRules.Count(r => r.Action.Type == "redirect") <= DnrLimits.MaxUnsafeDynamicRules);
+    }
+
+    /// <summary>
+    /// PROTECTION-SPEC §13: the shipped adult list as the parents' baseline compiles into a handful of block rules and no
+    /// time-up rules; the service and the rules block the adult sites only — not gambling, chatbots, the router or YouTube.
+    /// </summary>
+    [Theory]
+    [InlineData("https://www.pornhub.com/", false)]
+    [InlineData("https://xhamster.com/videos/x", false)]
+    [InlineData("https://www.bet365.com/", true)]
+    [InlineData("https://chatgpt.com/", true)]
+    [InlineData("https://www.google.com/search?q=x", true)]
+    [InlineData("https://www.youtube.com/watch?v=dQw4w9WgXcQ", true)]
+    [InlineData("http://192.168.1.1/", true)]
+    [InlineData("https://www.ynet.co.il/news", true)]
+    public void The_parents_baseline_blocks_the_adult_list_only(string url, bool allowed)
+    {
+        var config = new FamilyConfig { TimeZone = TimeZoneInfo.Utc, Members = [new FamilyMember("dana", "Dana", Role.Adult, null, FilterMode.Unrestricted, YouTubeMode.Unrestricted)] };
+        config.Categories[BaselineProtection.AdultCategory] = Lists.Value["adult"];
+        var now = DateTimeOffset.UnixEpoch;
+        var rules = DnrCompiler.Compile(EffectiveUrlPolicy.ForBaseline(config, "dana", now), DnrTestPolicies.Options);
+        Assert.InRange(rules.DynamicRules.Count, 1, 10);
+        Assert.Empty(rules.TimeUpSessionRules);
+        Assert.Equal(Lists.Value["adult"].Count, rules.DynamicRules.Sum(r => r.Condition.RequestDomains?.Count ?? 0));
+
+        var dnr = DnrSimulator.Evaluate(rules.DynamicRules, url);
+        Assert.True(dnr == (allowed ? DnrOutcome.Allow : DnrOutcome.Block), $"DNR {dnr} for {url}");
+        var view = new PolicyView(config, new Dictionary<string, MemberRuntime>(), new Core.Time.UsageLedger(), new Dictionary<string, DateTimeOffset>());
+        var decision = Decider.Url(view, "dana", url, now);
+        Assert.True(decision.IsAllowed == allowed, $"service {decision} for {url}");
+        Assert.Equal(allowed ? ReasonCode.AllowedUnrestricted : ReasonCode.BlockedBaselineAdult, decision.Reason);
     }
 
     // --- spot checks ---------------------------------------------------------------------------------------------------

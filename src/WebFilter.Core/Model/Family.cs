@@ -36,6 +36,41 @@ public sealed record WindowsFeatures(bool NotificationsAndSync = true, bool OneD
     public static readonly WindowsFeatures Default = new();
 }
 
+/// <summary>
+/// The family's baseline protection for the parents' own browsing (PROTECTION-SPEC §13), family-wide: what administrator
+/// accounts and unrestricted members' accounts get (<see cref="AppliesTo"/>). The defaults are what a bundle without the
+/// section means: all on, so existing families get it. Children, teens and unlinked standard accounts follow their own
+/// settings, which are already stronger.
+/// </summary>
+/// <param name="BlockAdult">The family's <see cref="AdultCategory"/> category is blocked (<c>blocked_baseline_adult</c>), unless a parent's allow rule matches. A family without the category blocks nothing.</param>
+/// <param name="JumpGuard">The extension's jump guard (§7), with "open anyway".</param>
+/// <param name="BlockAds">The extension's ad-server ruleset (§12).</param>
+/// <param name="SafeSearch">Per-user browser policies force Google SafeSearch (Chrome and Edge) and Bing SafeSearch, moderate (Edge).</param>
+public sealed record BaselineProtection(bool BlockAdult = true, bool JumpGuard = true, bool BlockAds = true, bool SafeSearch = true)
+{
+    public static readonly BaselineProtection Default = new();
+
+    /// <summary>The starter-list category of adult sites (data/starter-lists/adult.json), which the admin app copies into the bundle.</summary>
+    public const string AdultCategory = "adult";
+
+    /// <summary>Any of the four is on: the extension is told it is in the parents' baseline mode, not unrestricted.</summary>
+    public bool IsOn => BlockAdult || JumpGuard || BlockAds || SafeSearch;
+
+    /// <summary>
+    /// Whether <paramref name="account"/> is one of the parents' (or another adult's): an administrator account linked to
+    /// nobody, or an account linked to an unrestricted member. These are the accounts no member settings filter; the
+    /// baseline is all they get, and nothing of their browsing is reported. An administrator account linked to a filtered
+    /// member is filtered as that member.
+    /// </summary>
+    public static bool AppliesTo(FamilyConfig config, DeviceAccount account)
+    {
+        ArgumentNullException.ThrowIfNull(config);
+        ArgumentNullException.ThrowIfNull(account);
+        if (account.MemberId is null) return account.IsAdmin;
+        return config.Members.Find(m => m.Id == account.MemberId) is { IsRestricted: false };
+    }
+}
+
 /// <summary>A Windows (or Android) account on a device. <see cref="MemberId"/> is null until a parent links it.</summary>
 /// <param name="Guest">
 /// The parents confirmed that this account stays unlinked (a guest). Decisions do not read it: a guest is restricted
@@ -96,6 +131,7 @@ public sealed class FamilyConfig
     public List<string> SupportedBrowsers { get; init; } = [];
     public List<AppRule> AppRules { get; init; } = [];
     public WindowsFeatures WindowsFeatures { get; init; } = WindowsFeatures.Default;
+    public BaselineProtection Baseline { get; init; } = BaselineProtection.Default;
 
     public const string EducationalCategory = "educational";
 
