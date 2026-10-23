@@ -24,8 +24,12 @@
     <NativeHostAot Condition="'$(NativeHostAot)' == ''">false</NativeHostAot>
     <PayloadDir>$(MSBuildProjectDirectory)\obj\payload\</PayloadDir>
     <PayloadArtifacts>$(MSBuildProjectDirectory)\obj\payload-build\</PayloadArtifacts>
-    <!-- ICE60: e_sqlite3.dll (native SQLite) has a version but no language; harmless for file versioning. -->
-    <SuppressIces>ICE60</SuppressIces>
+    <!--
+      ICE60: e_sqlite3.dll (native SQLite) has a version but no language; harmless for file versioning.
+      ICE63: CloseNotifiers runs between InstallInitialize and RemoveExistingProducts on purpose (Package.wxs). It only ends
+      notifier processes, which has nothing to roll back.
+    -->
+    <SuppressIces>ICE60;ICE63</SuppressIces>
     <DefineConstants>PayloadDir=$(PayloadDir);ProductVersion=$(ProductVersion);ChromeExtensionId=$(ChromeExtensionId);EdgeExtensionId=$(EdgeExtensionId)</DefineConstants>
     <DotnetExe Condition="'$(DOTNET_HOST_PATH)' != ''">$(DOTNET_HOST_PATH)</DotnetExe>
     <DotnetExe Condition="'$(DotnetExe)' == ''">dotnet</DotnetExe>

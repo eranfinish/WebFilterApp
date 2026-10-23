@@ -164,10 +164,6 @@ public sealed class InstallerTests
         var feature = Package.Descendants(Wix + "Feature").Single();
         Assert.All(new[] { "Notifier", "NotifierAutostart" }, id => Assert.Contains(feature.Elements(Wix + "ComponentRef"), r => Attr(r, "Id") == id));
 
-        // A running notifier does not keep its files from being removed or replaced.
-        var close = Package.Descendants(Util + "CloseApplication").Single();
-        Assert.Equal(("WebFilter.Notifier.exe", "no"), (Attr(close, "Target"), Attr(close, "RebootPrompt")));
-        Assert.NotNull(Attr(close, "TerminateProcess"));
 
         // The .wixproj publishes it into the payload, and the project builds an exe of that name.
         var wixproj = XDocument.Load(Path.Combine(RepoRoot(), "installer", "WebFilter.Installer.wixproj"));
@@ -233,6 +229,39 @@ public sealed class InstallerTests
         var action = Single("CustomAction", "CleanupMachine");
         Assert.Equal(("deferred", "no", "ignore"), (Attr(action, "Execute"), Attr(action, "Impersonate"), Attr(action, "Return")));
         Assert.Equal(["cleanup"], CommandLine("CleanupMachine", new() { ["INSTALLFOLDER"] = @"C:\Program Files\WebFilter\" })[1..]);
+    }
+
+    [Fact]
+    public void Running_notifiers_are_ended_in_every_session_before_the_old_version_or_any_file_is_removed()
+    {
+        // A silent upgrade with a parent signed in restarted the lab hub: the old version's files were in use. The old
+        // version is now removed inside the transaction, and CloseNotifiers (LocalSystem, every session) runs just before.
+        Assert.Equal("afterInstallInitialize", Attr(Package.Descendants(Wix + "MajorUpgrade").Single(), "Schedule"));
+        var scheduled = Scheduled("CloseNotifiers");
+        Assert.Equal(("RemoveExistingProducts", "Installed OR WIX_UPGRADE_DETECTED"), (Attr(scheduled, "Before"), Attr(scheduled, "Condition")));
+        Assert.Equal("InstallExecuteSequence", scheduled.Parent!.Name.LocalName);
+        var action = Single("CustomAction", "CloseNotifiers");
+        Assert.Equal(("deferred", "no", "ignore"), (Attr(action, "Execute"), Attr(action, "Impersonate"), Attr(action, "Return")));
+        Assert.Equal([@"C:\Windows\system32\taskkill.exe", "/F", "/IM", "WebFilter.Notifier.exe"],
+            CommandLine("CloseNotifiers", new() { ["System64Folder"] = @"C:\Windows\system32\" }));
+        Assert.Empty(Package.Descendants(Util + "CloseApplication"));
+
+        // ICE63 flags any action between InstallInitialize and RemoveExistingProducts; this one has nothing to roll back.
+        var wixproj = XDocument.Load(Path.Combine(RepoRoot(), "installer", "WebFilter.Installer.wixproj"));
+        Assert.Contains("ICE63", wixproj.Descendants("SuppressIces").Single().Value.Split(';'));
+    }
+
+    [Fact]
+    public void After_an_install_with_the_full_UI_on_the_hub_the_notifier_starts_again_in_the_parents_session()
+    {
+        // The UI sequence runs in the parent's own unelevated process, so the notifier starts as them, not as LocalSystem.
+        var scheduled = Scheduled("StartNotifier");
+        Assert.Equal("InstallUISequence", scheduled.Parent!.Name.LocalName);
+        Assert.Equal(("ExecuteAction", "ROLE~=\"hub\" AND NOT REMOVE~=\"ALL\""), (Attr(scheduled, "After"), Attr(scheduled, "Condition")));
+        var action = Single("CustomAction", "StartNotifier");
+        Assert.Equal(("WixShellExec", "immediate"), (Attr(action, "DllEntry"), Attr(action, "Execute")));
+        var target = Single("SetProperty", "WixShellExecTarget");
+        Assert.Equal(("[#NotifierExe]", "ui"), (Attr(target, "Value"), Attr(target, "Sequence")));
     }
 
     [Fact]

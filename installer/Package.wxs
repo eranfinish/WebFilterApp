@@ -14,7 +14,11 @@
      xmlns:util="http://wixtoolset.org/schemas/v4/wxs/util">
   <Package Name="WebFilter" Manufacturer="WebFilter" Version="$(var.ProductVersion)"
            UpgradeCode="46A1BD2D-B5F1-4861-8EB4-8DE387BCCB15" Scope="perMachine" Language="!(loc.ProductLanguage)">
-    <MajorUpgrade DowngradeErrorMessage="!(loc.DowngradeError)" />
+    <!--
+      The old version is removed inside the transaction (after InstallInitialize), so CloseNotifiers, a deferred action
+      running as LocalSystem, can end running notifiers in every session before any file is removed or replaced.
+    -->
+    <MajorUpgrade Schedule="afterInstallInitialize" DowngradeErrorMessage="!(loc.DowngradeError)" />
     <MediaTemplate EmbedCab="yes" CompressionLevel="high" />
 
     <!--
@@ -121,12 +125,6 @@
                      Value="&quot;[INSTALLFOLDER]WebFilter.Notifier.exe&quot;" KeyPath="yes" />
     </Component>
 
-    <!--
-      Uninstall, repair and upgrade: a notifier running in a signed-in session holds its files, so it is ended first (by the
-      elevated custom action, in every session) rather than leaving the files for a reboot. It holds nothing that matters:
-      its cursor is saved after every notification. On the hub it starts again at the next logon.
-    -->
-    <util:CloseApplication Id="CloseNotifier" Target="WebFilter.Notifier.exe" TerminateProcess="1" RebootPrompt="no" />
 
     <!--
       The WFP engine (MVP-PLAN §5.3), loaded by the service from its own folder. Named here rather than left to the
@@ -206,12 +204,35 @@
                  Value="&quot;[INSTALLFOLDER]WebFilter.Notifier.exe&quot; --unregister" />
     <CustomAction Id="UnregisterNotifier" BinaryRef="Wix4UtilCA_X64" DllEntry="WixQuietExec" Execute="deferred" Impersonate="yes" Return="ignore" />
 
+    <!--
+      Upgrade, repair and uninstall: a notifier running in a signed-in session holds its files, and Restart Manager cannot
+      close a tray app in another session, so the files would be left for a reboot (a silent upgrade then restarts the
+      computer, seen in the lab on 2026-10-23). It is ended first, as LocalSystem in every session, before the old version
+      is removed. It holds nothing that matters: its cursor is saved after every notification. Not found = nothing to do.
+    -->
+    <SetProperty Id="CloseNotifiers" Sequence="execute" Before="CloseNotifiers"
+                 Value="&quot;[System64Folder]taskkill.exe&quot; /F /IM WebFilter.Notifier.exe" />
+    <CustomAction Id="CloseNotifiers" BinaryRef="Wix4UtilCA_X64" DllEntry="WixQuietExec" Execute="deferred" Impersonate="no" Return="ignore" />
+
+    <!--
+      After an install or upgrade a parent ran with the full UI on the hub, the notifier starts again at once in their
+      session, unelevated (the UI sequence runs in the parent's own process), instead of at the next logon. Silent installs
+      leave it to the Run value. It exits by itself for anyone the service does not answer as an administrator.
+    -->
+    <SetProperty Id="WixShellExecTarget" Sequence="ui" Before="StartNotifier" Value="[#NotifierExe]" />
+    <CustomAction Id="StartNotifier" BinaryRef="Wix4UtilCA_X64" DllEntry="WixShellExec" Execute="immediate" Return="ignore" />
+
     <InstallExecuteSequence>
+      <Custom Action="CloseNotifiers" Before="RemoveExistingProducts" Condition="Installed OR WIX_UPGRADE_DETECTED" />
       <Custom Action="ConfigureService" After="InstallFiles" Condition="NOT REMOVE~=&quot;ALL&quot;" />
       <Custom Action="PairWithHub" After="ConfigureService" Condition="NOT REMOVE~=&quot;ALL&quot; AND ROLE~=&quot;agent&quot; AND HUB AND PAIRCODE" />
       <Custom Action="CleanupMachine" Before="RemoveFiles" Condition="REMOVE~=&quot;ALL&quot; AND NOT UPGRADINGPRODUCTCODE" />
       <Custom Action="UnregisterNotifier" Before="RemoveFiles" Condition="REMOVE~=&quot;ALL&quot; AND NOT UPGRADINGPRODUCTCODE AND ROLE~=&quot;hub&quot;" />
     </InstallExecuteSequence>
+
+    <InstallUISequence>
+      <Custom Action="StartNotifier" After="ExecuteAction" Condition="ROLE~=&quot;hub&quot; AND NOT REMOVE~=&quot;ALL&quot;" />
+    </InstallUISequence>
 
     <UIRef Id="WebFilterUI" />
   </Package>

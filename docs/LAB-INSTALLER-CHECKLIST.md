@@ -1,6 +1,7 @@
 # בדיקת המתקין במעבדה (M7)
 
 > בודקים את ה-MSI רק במכונות המעבדה (`lab-hub`, `lab-kids` — ראו [LAB-AND-ACCOUNTS.md](LAB-AND-ACCOUNTS.md)), **לא** במחשב הפיתוח.
+> כל התקנה, תיקון או הסרה שקטים (`/qn`) רצים עם `REBOOT=ReallySuppress`, ובודקים את קוד היציאה: 0 תקין, 3010 = צריך הפעלה מחדש. בלי זה, msiexec שקט מפעיל מחדש את המכונה בעצמו אם קובץ היה בשימוש (קרה ב-`lab-hub` ב-2026-10-23, קוד 1641, כשמשתמש היה מחובר).
 > כל בדיקה מתחילה מנקודת השחזור `clean`. בתוך המכונות — PowerShell **כמנהל** (`labadmin`).
 > מה המתקין עושה: [installer/README.md](../installer/README.md).
 
@@ -115,12 +116,12 @@ Get-NetConnectionProfile | Set-NetConnectionProfile -NetworkCategory Private
 - [ ] התקנה שקטה עם צימוד (קוד מסעיף א'). **תנאי סיום M7:** התקנה + צימוד בפחות מ-10 דקות.
 
   ```powershell
-  msiexec /i C:\Lab\WebFilter.msi /qn ROLE=agent HUB=lab-hub.local:47800 PAIRCODE=XXXX-XXXX-XXXX /l*v C:\Lab\agent-install.log
+  msiexec /i C:\Lab\WebFilter.msi /qn REBOOT=ReallySuppress ROLE=agent HUB=lab-hub.local:47800 PAIRCODE=XXXX-XXXX-XXXX /l*v C:\Lab\agent-install.log
   ```
 
 - [ ] ב-log מופיע `Paired lab-kids with hub`; במסך "מכשירים" ב-Hub מופיע `lab-kids`.
 - [ ] `appsettings.json` עם `"Role": "agent"` ו-`"ManageNetwork": true`; **אין** כלל חומת אש "WebFilter Hub", ו**אין** ערך `WebFilter Notifier` תחת `HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Run`.
-- [ ] תיקון (`msiexec /fa C:\Lab\WebFilter.msi /qn`) — התפקיד נשאר `agent` והצימוד נשמר.
+- [ ] תיקון (`msiexec /fa C:\Lab\WebFilter.msi /qn REBOOT=ReallySuppress`) — התפקיד נשאר `agent` והצימוד נשמר.
 - [ ] קוד שגוי (מנקודת `clean`): ההתקנה מצליחה, ב-log מופיע `Pairing failed`, וצימוד ידני מ-PowerShell כמנהל עובד:
 
   ```powershell
@@ -158,7 +159,7 @@ Get-NetConnectionProfile | Set-NetConnectionProfile -NetworkCategory Private
 - [ ] הסרה:
 
   ```powershell
-  msiexec /x C:\Lab\WebFilter.msi /qn /l*v C:\Lab\uninstall.log
+  msiexec /x C:\Lab\WebFilter.msi /qn REBOOT=ReallySuppress /l*v C:\Lab\uninstall.log
   ```
 
 - [ ] ב-log: `Browser policies: N values removed, 0 left.`, `WFP: provider, sublayer and filters removed.` ו-`Data folder C:\ProgramData\WebFilter deleted.`; ו-`netsh wfp show state file=C:\Lab\state.xml` לא מכיל `WebFilter`.
@@ -198,6 +199,7 @@ Get-NetConnectionProfile | Set-NetConnectionProfile -NetworkCategory Private
   dotnet build installer\WebFilter.Installer.wixproj -c Release -p:ProductVersion=0.7.1
   ```
 
+- [ ] שדרוג ב-Hub כשהורה מחובר ואפליקציית ההתראות רצה אצלו: שדרוג שקט (`/qn REBOOT=ReallySuppress`) מסתיים בקוד **0**, לא 3010 או 1641; ב-log פעולת `CloseNotifiers` רצה לפני `RemoveExistingProducts`; אין `PendingFileRenameOperations` שמזכיר את `C:\Program Files\WebFilter`. ושדרוג בלחיצה כפולה (ממשק מלא) מעלה את אפליקציית ההתראות מחדש מיד בסופו, בחשבון של ההורה, בלי הרשאות מנהל.
 - [ ] אותו שדרוג ב-Hub, כש-`labadmin` מחובר ויש הודעה של WebFilter במרכז ההודעות: ההודעה נשארת, הרישום נשאר (`reg query HKCU\Software\Classes\AppUserModelId\WebFilter.Notifier`), וב-log **אין** `--unregister`. בכניסה הבאה ההתראות עולות, ולחיצה על ההודעה הישנה עדיין פותחת את ממשק הניהול.
 
 ## ה. מנוע ה-WFP (אוטומטי, מהמחשב שלך)
