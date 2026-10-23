@@ -91,6 +91,8 @@ Get-NetConnectionProfile | Set-NetConnectionProfile -NetworkCategory Private
   reg query HKCU\Software\Classes\AppUserModelId\WebFilter.Notifier
   ```
 
+- [ ] אחרי ההתקנה וההגדרה הראשונית **אין** הודעה "נמצא חשבון Windows חדש" על החשבונות שכבר היו ב-`lab-hub`: הם הדיווח הראשון של ה-Hub על עצמו, והאשף מקשר אותם (חשבון חדש שנוצר אחר כך כן מודיע — סעיף ב').
+
 - [ ] הודעה על בקשה (אחרי שהסוכן מצומד, סעיף ב'): בקשת גישה מ-`noa` ב-`lab-kids` מציגה ב-`lab-hub` תוך כ-30 שניות הודעת Windows (toast) "בקשה חדשה" בשם **WebFilter** עם סמל המגן (לא שם כללי), הטקסט מימין לשמאל ושם האתר והמחשב שלמים, והכפתור "פתח את ניהול המשפחה". אחרי כמה שניות היא יורדת מהמסך ו**נשארת** במרכז ההודעות (Win+N) תחת WebFilter. לחיצה עליה שם, או על הכפתור, → UAC → ממשק הניהול נפתח, וההודעה יוצאת ממרכז ההודעות. הרישום נמצא ב-HKCU של `labadmin` בלבד: `DisplayName` הוא `WebFilter`, `IconUri` מצביע על `Icon.png` תחת `%LOCALAPPDATA%\ToastNotificationManagerCompat\Apps\WebFilter.Notifier`, `CustomActivator` הוא `{10ba0946-57a5-4d37-7c5f-89f39a01c46b}`, ושרת ה-COM שלו מפעיל את `WebFilter.Notifier.exe` עם `-ToastActivated`:
 
   ```powershell
@@ -120,6 +122,7 @@ Get-NetConnectionProfile | Set-NetConnectionProfile -NetworkCategory Private
   ```
 
 - [ ] ב-log מופיע `Paired lab-kids with hub`; במסך "מכשירים" ב-Hub מופיע `lab-kids`.
+- [ ] הצימוד לא מביא הודעה "נמצא חשבון Windows חדש" ב-`lab-hub` (מחכים שתי דקות): החשבונות שכבר היו ב-`lab-kids` הם הדיווח הראשון שלו, וההורה עונה עליהם במסך "מכשירים" (שם יש לרגילים שבהם כרטיס).
 - [ ] `appsettings.json` עם `"Role": "agent"` ו-`"ManageNetwork": true`; **אין** כלל חומת אש "WebFilter Hub", ו**אין** ערך `WebFilter Notifier` תחת `HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Run`.
 - [ ] תיקון (`msiexec /fa C:\Lab\WebFilter.msi /qn REBOOT=ReallySuppress`) — התפקיד נשאר `agent` והצימוד נשמר.
 - [ ] קוד שגוי (מנקודת `clean`): ההתקנה מצליחה, ב-log מופיע `Pairing failed`, וצימוד ידני מ-PowerShell כמנהל עובד:
@@ -151,6 +154,20 @@ Get-NetConnectionProfile | Set-NetConnectionProfile -NetworkCategory Private
   ```
 
   במכונה מתחברים כ-`noa` ופותחים מיד את Edge. צפוי: המדידה מדפיסה פחות מ-5 שניות (בדרך כלל פחות משנייה); ב-Edge אין InPrivate (Ctrl+Shift+N לא פותח חלון), ו-`edge://policy` מציג את המדיניות כבר בפתיחה הראשונה. (לפני התיקון: עד 60 שניות.)
+- [ ] הודעה על חשבון Windows חדש (PROTECTION-SPEC §10): `labadmin` מחובר ל-`lab-hub` וסמל המגן שם. ב-`lab-kids`, ב-PowerShell כמנהל, יוצרים חשבון רגיל:
+
+  ```powershell
+  New-LocalUser -Name tom -NoPassword; Add-LocalGroupMember -Group Users -Member tom
+  ```
+
+  צפוי: ב-`lab-hub`, תוך כדקה (לכל היותר כשתי דקות: הסוכן קורא את החשבונות פעם בדקה ומסנכרן כל 10 שניות, וההתראות שואלות כל 30 שניות), הודעה "נמצא חשבון Windows חדש" עם הטקסט "החשבון tom במחשב lab-kids: הגלישה בו חסומה עד שתבחרו לאיזה בן משפחה הוא שייך." — מימין לשמאל, `tom` ו-`lab-kids` שלמים — והכפתור "פתח את ניהול המשפחה" בלבד (בלי "סגור"). היא יורדת מהמסך אחרי כמה שניות ונשארת במרכז ההודעות (Win+N). לחיצה עליה שם, או על הכפתור, → UAC → ממשק הניהול נפתח **במסך "מכשירים"** (לא בלוח הבקרה), ובקבוצה של `lab-kids` מופיע `tom` עם הכרטיס "נמצא חשבון Windows חדש".
+- [ ] אותו חשבון לא מודיע שוב, ומנהל לא מודיע בכלל: `Rename-LocalUser tom -NewName tommy`, ואחריו חשבון מנהל — אין הודעה חדשה במשך שתי דקות, ו-`helper` מופיע במסך "מכשירים" כמנהל, בלי כרטיס:
+
+  ```powershell
+  New-LocalUser -Name helper -NoPassword; Add-LocalGroupMember -Group Administrators -Member helper
+  ```
+
+  ובמחשב ה-Hub עצמו: אותה פקודה ליצירת `tom` ב-`lab-hub` מביאה את אותה הודעה עם `lab-hub`. ניקוי: עונים בכרטיסים (למשל "להשאיר חסום (אורח)") ומוחקים את החשבונות (`Remove-LocalUser tommy; Remove-LocalUser helper`, וב-`lab-hub` `Remove-LocalUser tom`). ה-Hub שומר במסך "מכשירים" גם חשבונות שנמחקו.
 
 ## ג. הסרה (בשתי המכונות)
 
