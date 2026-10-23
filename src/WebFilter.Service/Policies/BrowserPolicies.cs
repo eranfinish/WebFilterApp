@@ -69,7 +69,8 @@ public static class BrowserPolicies
                 // PROTECTION-SPEC §5: no pop-ups or intrusive ads; no proxy around the filter.
                 User(browser, "DefaultPopupsSetting", 2);
                 User(browser, "AdsSettingForIntrusiveAdsSites", 2);
-                User(browser, "ProxyMode", "direct");
+                // ProxySettings, not the older ProxyMode, which chrome://policy reports as deprecated (lab, 2026-10-23).
+                User(browser, "ProxySettings", """{"ProxyMode":"direct"}""");
             }
             User(Edge, "ForceBingSafeSearch", member?.Role == Role.Teen ? 1 : 2);
             User(Edge, "TrackingPrevention", 3);

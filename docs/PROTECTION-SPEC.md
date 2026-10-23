@@ -72,7 +72,7 @@ Images inside ordinary result pages are not blocked (SafeSearch, already forced 
 ## 5. Browser policies for restricted accounts (per user, MVP-PLAN §5.2)
 
 Added to `BrowserPolicies`: `DefaultPopupsSetting = 2`, `AbusiveExperienceInterventionEnforce = 1` (Chrome only; Edge has no such policy),
-`AdsSettingForIntrusiveAdsSites = 2`, `ProxyMode = "direct"`, and in Edge `TrackingPrevention = 3` (strict) and
+`AdsSettingForIntrusiveAdsSites = 2`, `ProxySettings = {"ProxyMode":"direct"}` (not the deprecated `ProxyMode`), and in Edge `TrackingPrevention = 3` (strict) and
 `NewTabPageContentEnabled = 0` (no Microsoft News feed on the new tab page, seen in the lab on 2026-10-23). Plus §2's
 `DisableSearchBoxSuggestions`. Whether each is honoured from HKCU on an unmanaged PC is checked in the lab (S1).
 

@@ -126,7 +126,8 @@ public sealed class PolicyTests : IDisposable
             {
                 Assert.Equal(2, _store.User(sid, browser, "DefaultPopupsSetting"));
                 Assert.Equal(2, _store.User(sid, browser, "AdsSettingForIntrusiveAdsSites"));
-                Assert.Equal("direct", _store.User(sid, browser, "ProxyMode"));
+                Assert.Equal("""{"ProxyMode":"direct"}""", _store.User(sid, browser, "ProxySettings"));
+                Assert.Null(_store.User(sid, browser, "ProxyMode"));
             }
             Assert.Equal(1, _store.User(sid, Chrome, "AbusiveExperienceInterventionEnforce"));
             Assert.Null(_store.User(sid, Edge, "AbusiveExperienceInterventionEnforce"));
