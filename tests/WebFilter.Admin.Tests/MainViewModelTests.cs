@@ -29,6 +29,37 @@ public sealed class MainViewModelTests
         Assert.Equal(2, _client.SentOf<GetStatus>().Count());
     }
 
+    /// <summary><c>--page devices</c>: a click on the notifier's new-account toast opens the devices page and its card.</summary>
+    [Fact]
+    public async Task Starts_on_the_page_the_command_line_names()
+    {
+        _client.Devices.AddRange(TestData.Devices());
+        using var main = Create();
+
+        main.Start("devices");
+        await main.CurrentLoad;
+
+        Assert.Same(main.Devices, main.SelectedPage);
+        Assert.Single(_client.SentOf<GetDevices>());
+        // pc-kids' "visitor" is a standard account nobody answered for: its card is there.
+        Assert.Contains(main.Devices.AccountGroups.Single(g => g.DeviceId == "pc-kids").Accounts, a => a is { Name: "visitor", ShowsCard: true });
+        Assert.Equal(7, main.Pages.Count);
+    }
+
+    [Theory]
+    [InlineData(null)]
+    [InlineData("")]
+    [InlineData("quota")]
+    public async Task Starts_on_the_dashboard_without_a_page_it_knows(string? page)
+    {
+        using var main = Create();
+
+        main.Start(page);
+        await main.CurrentLoad;
+
+        Assert.Same(main.Dashboard, main.SelectedPage);
+    }
+
     [Fact]
     public void Lists_the_seven_screens_in_order()
     {

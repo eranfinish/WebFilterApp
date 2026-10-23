@@ -30,6 +30,19 @@ public sealed class AgentModeTests
         Assert.Null(main.Settings.ErrorMessage);
     }
 
+    /// <summary><c>--page devices</c> on an agent (the notifier runs only on the hub, but anyone may type it): the dashboard.</summary>
+    [Fact]
+    public async Task A_hub_only_start_page_gives_way_to_the_dashboard()
+    {
+        using var main = Create();
+
+        main.Start("devices");
+        await main.CurrentLoad;
+
+        Assert.Equal([main.Dashboard, main.Settings], main.Pages);
+        Assert.Same(main.Dashboard, main.SelectedPage);
+    }
+
     [Fact]
     public async Task The_dashboard_says_which_hub_manages_this_computer_and_offers_only_the_local_pause()
     {
