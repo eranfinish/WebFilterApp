@@ -40,8 +40,9 @@ public sealed class ViewRenderTests
         }
         shown.Main.Settings.WindowsFeatures!.OneDrive = false;
         await shown.RenderAsync("SettingsViewModel-features-changed");
-        // The fixture family has no adult list: the baseline section says so (PROTECTION-SPEC §13); a switch changed too.
-        Assert.True(shown.Main.Settings.Baseline!.NeedsAdultList);
+        // The fixture family had no adult list: the hub's admin app added it at start (PROTECTION-SPEC §13); a switch changed.
+        Assert.Contains(StarterLists.Adult, client.Settings.Categories.Keys);
+        Assert.False(shown.Main.Settings.Baseline!.NeedsAdultList);
         shown.Main.Settings.Baseline.JumpGuard = false;
         await shown.RenderAsync("SettingsViewModel-baseline-changed");
         shown.Main.SelectedPage = shown.Main.Rules;
@@ -150,6 +151,8 @@ public sealed class ViewRenderTests
                 },
                 _ => d,
             })],
+            // Without the adult block the hub's admin app adds no adult list at start, so nothing is saved while the cards render.
+            Baseline = new Contracts.Hub.BaselineDto(BlockAdult: false),
         };
         await using var shown = await ShownAsync(client);
         var cards = shown.Main.Dashboard.NewAccounts;

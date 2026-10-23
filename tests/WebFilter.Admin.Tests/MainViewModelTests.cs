@@ -101,6 +101,48 @@ public sealed class MainViewModelTests
     }
 
     [Fact]
+    public async Task A_family_set_up_before_the_baseline_protection_gets_the_adult_list_once_at_start()
+    {
+        // The fixture family has no baseline section (all switches on) and no adult list (PROTECTION-SPEC §13).
+        Assert.DoesNotContain(StarterLists.Adult, _client.Settings.Categories.Keys);
+        using var main = Create();
+
+        main.Start();
+        await main.CurrentLoad;
+        await _timer.FireAsync();
+        await _timer.FireAsync();
+
+        var saved = Assert.Single(_client.SentOf<ReplaceSettings>());
+        Assert.Equal(StarterLists.Find(StarterLists.Adult)!.Domains, saved.Settings.Categories[StarterLists.Adult]);
+        Assert.Equal(_client.Settings.Rules, saved.Settings.Rules);
+        Assert.False(main.Settings.Baseline?.NeedsAdultList ?? false);
+    }
+
+    [Fact]
+    public async Task No_adult_list_is_added_when_the_parents_turned_the_adult_block_off_or_before_setup()
+    {
+        _client.Settings = _client.Settings with { Baseline = new Contracts.Hub.BaselineDto(BlockAdult: false) };
+        using (var main = Create())
+        {
+            main.Start();
+            await main.CurrentLoad;
+            await _timer.FireAsync();
+        }
+        Assert.Empty(_client.SentOf<ReplaceSettings>());
+
+        // An empty family: the setup wizard adds the list with the rest.
+        _client.Settings = SetupWizardViewModelTests.EmptyFamily();
+        _client.Status = TestData.Status(1) with { Members = [] };
+        using (var main = Create())
+        {
+            main.Start();
+            await main.CurrentLoad;
+            await _timer.FireAsync();
+        }
+        Assert.Empty(_client.SentOf<ReplaceSettings>());
+    }
+
+    [Fact]
     public async Task A_family_that_is_set_up_never_sees_the_wizard()
     {
         using var main = Create();

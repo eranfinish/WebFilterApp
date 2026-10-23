@@ -178,7 +178,7 @@ Administrators and unrestricted members (the parents, other adults) get the fami
 - Force-install from both stores (`installType: "admin"`), the real native host registered in HKLM, and the real service. Check that hello → rules → `failclosed` off happens in a child session.
 - Worker lifetime with the port open, outside Playwright (S2: Playwright keeps workers alive).
 - Browser restart with session restore: tabs that hit `failclosed` before the worker connected must come back by themselves.
-- Store submission of this build to the existing S1 items. The listing texts and permission justifications are in `store/listing/future-full-product.md`. The new permissions are nativeMessaging, declarativeNetRequest, storage, alarms, idle, tabs, notifications, webNavigation and `<all_urls>`. There is no zip script for this build yet (`store/build-s1.ps1` packages S1 only).
+- Store submission of this build to the existing S1 items. The listing texts and permission justifications are in `store/listing/full-product.md`, and `store/build-full.ps1` builds and checks the zip (the guide: `store/README.md`). The new permissions are nativeMessaging, declarativeNetRequest, storage, alarms, idle, tabs, notifications, webNavigation and `<all_urls>`. There is no zip script for this build yet (`store/build-s1.ps1` packages S1 only).
 
 **Level-3 simulations (`browser` layer)**
 - `npm run e2e:real` drives the real NativeHost and service (Simulation builds) with the host registered in HKCU of the test user only, as a fixed sequence of checks. A runner for scenario files with `"layers": ["browser"]` (none exist yet) would reuse it.

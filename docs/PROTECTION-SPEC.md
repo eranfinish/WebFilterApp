@@ -298,12 +298,13 @@ all. They now get a family-wide **baseline**, much lighter than a child's, and n
   together through `ReplaceSettings` like the Windows features, and a note that it applies to the administrators and the
   unrestricted members, that children and teens follow their own settings, that an administrator can turn it off, that
   blocking does not work in InPrivate/incognito windows, and that nothing is recorded. While `blockAdult` is on and the
-  family has no adult list, the section says so and saving adds it. The setup wizard's summary names the baseline and
-  adds the adult list. Texts that said administrators and adults are "not filtered" say "apart from the baseline".
+  family has no adult list, the section says so and saving adds it; the hub's admin app also adds it by itself once at
+  start (`MainViewModel.EnsureBaselineListAsync`), so a family set up before the baseline gets it without a save. The
+  setup wizard's summary names the baseline and adds the adult list. Texts that said administrators and adults are "not
+  filtered" say "apart from the baseline".
 - **Not done (limits):** the extension does not run in the parents' InPrivate/incognito windows (they are not disabled
   for parents), so the adult list, the jump guard and ad blocking do not apply there; SafeSearch, a policy, does. Other
   browsers are not covered for parents; no WFP filters, no time counting and no browser lockdown for them. The switches
-  are family-wide, not per parent. An existing family gets the jump guard, ad blocking and SafeSearch at once, but the
-  adult list only once a parent saves the section (or the wizard runs): nothing adds it by itself. A Windows
-  administrator can undo any of it (policies, the extension's state); the service restores the policies silently. Not
-  checked in the lab.
+  are family-wide, not per parent. An existing family gets the jump guard, ad blocking and SafeSearch at once, and the
+  adult list the first time a parent opens the admin app on the hub. A Windows administrator can undo any of it
+  (policies, the extension's state); the service restores the policies silently. Not checked in the lab.

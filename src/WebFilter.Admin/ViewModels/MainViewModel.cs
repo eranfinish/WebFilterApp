@@ -4,6 +4,7 @@ using CommunityToolkit.Mvvm.Input;
 using WebFilter.Admin.Resources;
 using WebFilter.Admin.Services;
 using WebFilter.Contracts.Admin;
+using WebFilter.Contracts.Hub;
 
 namespace WebFilter.Admin.ViewModels;
 
@@ -26,6 +27,7 @@ public sealed partial class MainViewModel : ObservableObject, INavigator, IDispo
     private bool _setupOpened;
     private int _ticks;
     private bool _networkChecked;
+    private bool _baselineChecked;
     private string _publicNetworks = "";
 
     public MainViewModel(IAdminClient client, IUiTimer timer, IDialogService dialogs, IClipboardService clipboard, TimeProvider? time = null)
@@ -181,6 +183,32 @@ public sealed partial class MainViewModel : ObservableObject, INavigator, IDispo
         }
         UpdatePages();
         if (!_networkChecked) await CheckNetworkAsync();
+        if (!_baselineChecked) await EnsureBaselineListAsync();
+    }
+
+    /// <summary>
+    /// The baseline protection blocks adult sites for the parents by default (PROTECTION-SPEC §13), which needs the adult
+    /// list in the family's categories. A family set up before the baseline existed does not have it, so the hub's admin
+    /// app adds it once, without asking (the wizard adds it for a new family, and the settings page when the switch is
+    /// turned on). Nothing happens when the parents turned the block off, or before the family is set up.
+    /// </summary>
+    public async Task EnsureBaselineListAsync()
+    {
+        if (Context.Status is not { IsHub: true } || Context.Settings is not { Members.Count: > 0 } settings) return;
+        _baselineChecked = true;
+        if (!(settings.Baseline ?? new BaselineDto()).BlockAdult || BaselineEditor.HasAdultList(settings)) return;
+        if (StarterLists.Find(StarterLists.Adult) is not { } adult) return;
+        try
+        {
+            await Context.UpdateSettingsAsync(s => (s.Baseline ?? new BaselineDto()).BlockAdult && !BaselineEditor.HasAdultList(s)
+                ? s with { Categories = StarterLists.AddTo(s.Categories, [adult]) }
+                : s);
+        }
+        catch (AdminClientException)
+        {
+            // Connection problems have their own banner; the next refresh tries again.
+            _baselineChecked = false;
+        }
     }
 
     /// <summary>Reads the hub's network check (<see cref="GetDiagnostics"/>); agents and services without the check show nothing.</summary>
