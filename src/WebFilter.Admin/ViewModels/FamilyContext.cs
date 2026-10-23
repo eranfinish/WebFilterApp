@@ -37,9 +37,27 @@ public sealed partial class FamilyContext : ObservableObject
     [ObservableProperty]
     private int _pendingRequestCount;
 
-    /// <summary>Standard Windows accounts on any computer that no one linked to a family member yet (browsing there is blocked).</summary>
+    /// <summary>How many <see cref="NewAccounts"/> there are (the devices page's badge).</summary>
     [ObservableProperty]
     private int _unlinkedAccountCount;
+
+    /// <summary>
+    /// Standard Windows accounts nobody answered for yet — not linked to a family member and not kept as a guest
+    /// (<see cref="AccountLinks.IsNew"/>), so browsing there is blocked — on this computer and on the paired computers that
+    /// still get settings; this computer first, then by computer and account name. The dashboard and the devices page
+    /// show a card for each. Until the paired computers were read (<see cref="UsePairedDevices"/>) every computer in the
+    /// settings counts.
+    /// </summary>
+    public IReadOnlyList<NewAccount> NewAccounts { get; private set; } = [];
+
+    /// <summary>The paired computers as last read, for their names and whether they still get settings; null until read.</summary>
+    public IReadOnlyList<DeviceInfo>? PairedDevices { get; private set; }
+
+    /// <summary>Some computer in the settings has an account nobody answered for (the dashboard then reads the computers' names).</summary>
+    public bool MayHaveNewAccounts => Settings?.Devices.Any(d => d.Accounts.Any(AccountLinks.IsNew)) == true;
+
+    /// <summary>Creates ids for the members a new account's card adds.</summary>
+    internal Func<string> NewMemberId { get; set; } = MemberTemplate.NewId;
 
     /// <summary>The service answered as an agent computer, managed by a hub: there only the status and the local pause work.</summary>
     public bool IsAgent => Status is { IsHub: false };
@@ -60,7 +78,7 @@ public sealed partial class FamilyContext : ObservableObject
             // An agent answers "not_hub" for the settings; its status carries what the pages need there.
             Settings = null;
             TimeZone = FamilyTime.FindZone(status.TimeZone);
-            UnlinkedAccountCount = 0;
+            UpdateNewAccounts();
             return status;
         }
         if (Settings?.Version != status.SettingsVersion) await RefreshSettingsAsync(ct);
@@ -72,8 +90,19 @@ public sealed partial class FamilyContext : ObservableObject
         var result = await Client.RequestAsync<SettingsResult>(new GetSettings(), ct);
         Settings = result.Settings;
         TimeZone = FamilyTime.FindZone(result.Settings.TimeZone);
-        UnlinkedAccountCount = result.Settings.Devices.Sum(d => d.Accounts.Count(a => a.Member is null && !a.IsAdmin));
+        UpdateNewAccounts();
         return result.Settings;
+    }
+
+    /// <summary>Reads the paired computers (hub only) for <see cref="NewAccounts"/>.</summary>
+    public async Task RefreshDevicesAsync(CancellationToken ct = default) =>
+        UsePairedDevices((await Client.RequestAsync<DevicesResult>(new GetDevices(), ct)).Devices);
+
+    /// <summary>Takes the paired computers a page read (<see cref="GetDevices"/>).</summary>
+    public void UsePairedDevices(IReadOnlyList<DeviceInfo> devices)
+    {
+        PairedDevices = devices ?? throw new ArgumentNullException(nameof(devices));
+        UpdateNewAccounts();
     }
 
     /// <summary>
@@ -145,4 +174,27 @@ public sealed partial class FamilyContext : ObservableObject
         if (until == FamilyTime.EndOfDay(now, TimeZone)) return Strings.Until_EndOfDay;
         return ToLocal(until).Date == ToLocal(now).Date ? FormatTime(until) : FormatDateTime(until);
     }
+
+    /// <summary>A paired computer's name as the parent gave it at pairing; its id when it has none.</summary>
+    public static string DeviceName(DeviceInfo device)
+    {
+        ArgumentNullException.ThrowIfNull(device);
+        return string.IsNullOrWhiteSpace(device.Name) ? device.Id : device.Name.Trim();
+    }
+
+    private void UpdateNewAccounts()
+    {
+        var thisComputer = Status?.DeviceId;
+        var paired = PairedDevices?.Where(d => !d.Revoked).ToDictionary(d => d.Id, DeviceName, StringComparer.Ordinal);
+        var byName = StringComparer.Create(System.Globalization.CultureInfo.CurrentCulture, ignoreCase: true);
+        NewAccounts = Settings is not { } settings || IsAgent ? [] : [.. settings.Devices
+            .Where(d => d.Id == thisComputer || paired is null || paired.ContainsKey(d.Id))
+            .Select(d => (Device: d, Name: d.Id == thisComputer ? null : paired?.GetValueOrDefault(d.Id) ?? d.Id))
+            .OrderBy(d => d.Name is null ? 0 : 1).ThenBy(d => d.Name, byName)
+            .SelectMany(d => d.Device.Accounts.Where(AccountLinks.IsNew).OrderBy(a => a.Name, byName).Select(a => new NewAccount(d.Device.Id, d.Name, a)))];
+        UnlinkedAccountCount = NewAccounts.Count;
+    }
 }
+
+/// <summary>A standard Windows account nobody answered for yet, on <see cref="DeviceId"/>; <see cref="DeviceName"/> is null for this computer.</summary>
+public sealed record NewAccount(string DeviceId, string? DeviceName, AccountDto Account);

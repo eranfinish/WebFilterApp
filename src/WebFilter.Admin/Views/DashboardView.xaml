@@ -29,14 +29,15 @@
         <TextBlock Text="{Binding HubText}" TextWrapping="Wrap" FontWeight="SemiBold" />
       </Border>
 
-      <!-- Windows accounts no one linked yet -->
-      <Border Margin="0,0,12,16" Padding="16,10" CornerRadius="8" BorderThickness="1" Background="{StaticResource WarningSoftBrush}"
-              BorderBrush="{StaticResource WarningBrush}" Visibility="{Binding HasUnlinkedAccounts, Converter={StaticResource BoolToVisibility}}">
-        <DockPanel>
-          <Button DockPanel.Dock="Right" Margin="0" Content="{x:Static res:Strings.Dashboard_OpenDevices}" Command="{Binding OpenDevicesCommand}" />
-          <TextBlock Text="{Binding UnlinkedAccountsText}" VerticalAlignment="Center" TextWrapping="Wrap" Foreground="{StaticResource WarningBrush}" FontWeight="SemiBold" />
-        </DockPanel>
-      </Border>
+      <!-- New Windows accounts nobody answered for yet, each with its four answers -->
+      <ItemsControl ItemsSource="{Binding NewAccounts}" Focusable="False" Margin="0,0,12,4"
+                    Visibility="{Binding HasNewAccounts, Converter={StaticResource BoolToVisibility}}">
+        <ItemsControl.ItemTemplate>
+          <DataTemplate DataType="{x:Type vm:NewAccountViewModel}">
+            <ContentControl Content="{Binding}" ContentTemplate="{StaticResource NewAccountCard}" Focusable="False" Margin="0,0,0,12" />
+          </DataTemplate>
+        </ItemsControl.ItemTemplate>
+      </ItemsControl>
 
       <!-- Pending access requests -->
       <Border Margin="0,0,12,16" Padding="16,10" CornerRadius="8" BorderThickness="1"

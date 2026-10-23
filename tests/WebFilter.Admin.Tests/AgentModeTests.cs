@@ -41,7 +41,8 @@ public sealed class AgentModeTests
         Assert.False(vm.HubProblem);
         Assert.Equal("המחשב הזה מנוהל על ידי מחשב ההורים pc-parents. קשר אחרון: 15:59.", Bidi.Plain(vm.HubText));
         Assert.False(vm.ShowsRequests);
-        Assert.False(vm.HasUnlinkedAccounts);
+        Assert.False(vm.HasNewAccounts);
+        Assert.Empty(vm.NewAccounts);
         var noa = vm.Members.Single(m => m.MemberId == "noa");
         Assert.True(noa.IsFiltered);
         Assert.Equal((false, true, false), (noa.CanExtend, noa.CanPause, noa.CanStartHomework));

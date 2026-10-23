@@ -3692,33 +3692,6 @@ namespace WebFilter.Admin.Resources {
         }
 
         /// <summary>
-        ///   Looks up a localized string similar to חשבון Windows אחד עוד לא קושר לבן משפחה, והגלישה בו חסומה כמעט לגמרי..
-        /// </summary>
-        public static string Dashboard_UnlinkedAccounts_One {
-            get {
-                return ResourceManager.GetString("Dashboard_UnlinkedAccounts_One", resourceCulture);
-            }
-        }
-
-        /// <summary>
-        ///   Looks up a localized string similar to {0} חשבונות Windows עוד לא קושרו לבני משפחה, והגלישה בהם חסומה כמעט לגמרי..
-        /// </summary>
-        public static string Dashboard_UnlinkedAccounts_Many {
-            get {
-                return ResourceManager.GetString("Dashboard_UnlinkedAccounts_Many", resourceCulture);
-            }
-        }
-
-        /// <summary>
-        ///   Looks up a localized string similar to לקישור החשבונות.
-        /// </summary>
-        public static string Dashboard_OpenDevices {
-            get {
-                return ResourceManager.GetString("Dashboard_OpenDevices", resourceCulture);
-            }
-        }
-
-        /// <summary>
         ///   Looks up a localized string similar to מחשב ההורים.
         /// </summary>
         public static string Diagnostics_Hub {
@@ -3737,7 +3710,7 @@ namespace WebFilter.Admin.Resources {
         }
 
         /// <summary>
-        ///   Looks up a localized string similar to בחרו לכל חשבון למי הוא שייך. בחשבון רגיל שלא מקושר הגלישה חסומה כמעט לגמרי; מנהל....
+        ///   Looks up a localized string similar to חשבון Windows הוא מה שנכנסים איתו למחשב, ובן משפחה הוא מי שהגדרתם כאן ב-WebFi....
         /// </summary>
         public static string Devices_AccountsHint {
             get {
@@ -3805,15 +3778,6 @@ namespace WebFilter.Admin.Resources {
         public static string Devices_AccountUnlinked {
             get {
                 return ResourceManager.GetString("Devices_AccountUnlinked", resourceCulture);
-            }
-        }
-
-        /// <summary>
-        ///   Looks up a localized string similar to לא מקושר — הגלישה בחשבון הזה חסומה כמעט לגמרי..
-        /// </summary>
-        public static string Devices_UnlinkedWarning {
-            get {
-                return ResourceManager.GetString("Devices_UnlinkedWarning", resourceCulture);
             }
         }
 
@@ -4462,6 +4426,276 @@ namespace WebFilter.Admin.Resources {
         public static string Tamper_unclean_stop {
             get {
                 return ResourceManager.GetString("Tamper_unclean_stop", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to חשבונות Windows חדשים שעדיין לא שויכו לבן משפחה.
+        /// </summary>
+        public static string Devices_BadgeToolTip {
+            get {
+                return ResourceManager.GetString("Devices_BadgeToolTip", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to מנהל — לא מסונן.
+        /// </summary>
+        public static string Devices_AdminNotFiltered {
+            get {
+                return ResourceManager.GetString("Devices_AdminNotFiltered", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to חשבונות מנהל לא מסוננים אף פעם: מי שיש לו הרשאות מנהל יכול להסיר כל תוכנה, גם....
+        /// </summary>
+        public static string Devices_AdminToolTip {
+            get {
+                return ResourceManager.GetString("Devices_AdminToolTip", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to שייך ל:.
+        /// </summary>
+        public static string Devices_AdminOwner {
+            get {
+                return ResourceManager.GetString("Devices_AdminOwner", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to לא צוין.
+        /// </summary>
+        public static string Devices_AdminOwnerNone {
+            get {
+                return ResourceManager.GetString("Devices_AdminOwnerNone", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to רשות: לאיזה מבוגר במשפחה שייך חשבון המנהל. זה לא משנה שום סינון..
+        /// </summary>
+        public static string Devices_AdminOwnerHint {
+            get {
+                return ResourceManager.GetString("Devices_AdminOwnerHint", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to ביטול הקישור.
+        /// </summary>
+        public static string Devices_Unlink {
+            get {
+                return ResourceManager.GetString("Devices_Unlink", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to אורח — חסום, רק אתרים שמותרים תמיד.
+        /// </summary>
+        public static string Devices_GuestAccount {
+            get {
+                return ResourceManager.GetString("Devices_GuestAccount", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to בחרתם להשאיר את החשבון הזה בלי בן משפחה. הוא חסום כמו כל חשבון שלא שויך, ולא ....
+        /// </summary>
+        public static string Devices_GuestToolTip {
+            get {
+                return ResourceManager.GetString("Devices_GuestToolTip", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to שינוי….
+        /// </summary>
+        public static string Devices_ChangeGuest {
+            get {
+                return ResourceManager.GetString("Devices_ChangeGuest", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to נמצא חשבון Windows חדש: {0} (במחשב {1}).
+        /// </summary>
+        public static string NewAccount_Title {
+            get {
+                return ResourceManager.GetString("NewAccount_Title", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to נמצא חשבון Windows חדש: {0} (במחשב הזה).
+        /// </summary>
+        public static string NewAccount_TitleThisComputer {
+            get {
+                return ResourceManager.GetString("NewAccount_TitleThisComputer", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to כרגע הגלישה בחשבון הזה חסומה כמעט לגמרי, עד שתבחרו לאיזה בן משפחה הוא שייך..
+        /// </summary>
+        public static string NewAccount_Text {
+            get {
+                return ResourceManager.GetString("NewAccount_Text", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to בן משפחה קיים….
+        /// </summary>
+        public static string NewAccount_Existing {
+            get {
+                return ResourceManager.GetString("NewAccount_Existing", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to החשבון יקבל את ההגדרות של בן המשפחה שתבחרו: ילד, נער או מבוגר..
+        /// </summary>
+        public static string NewAccount_ExistingHint {
+            get {
+                return ResourceManager.GetString("NewAccount_ExistingHint", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to ילד חדש….
+        /// </summary>
+        public static string NewAccount_NewChild {
+            get {
+                return ResourceManager.GetString("NewAccount_NewChild", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to מוסיף בן משפחה חדש עם הגדרות ההתחלה של ילד/ה או נער/ה, כמו באשף ההגדרה, ומשיי....
+        /// </summary>
+        public static string NewAccount_NewChildHint {
+            get {
+                return ResourceManager.GetString("NewAccount_NewChildHint", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to מבוגר, בלי סינון.
+        /// </summary>
+        public static string NewAccount_Adult {
+            get {
+                return ResourceManager.GetString("NewAccount_Adult", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to לחשבון של מבוגר במשפחה: הגלישה בו לא תסונן..
+        /// </summary>
+        public static string NewAccount_AdultHint {
+            get {
+                return ResourceManager.GetString("NewAccount_AdultHint", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to להשאיר חסום (אורח).
+        /// </summary>
+        public static string NewAccount_Guest {
+            get {
+                return ResourceManager.GetString("NewAccount_Guest", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to החשבון יישאר חסום — רק אתרים שמותרים תמיד — ולא ייספר יותר כחשבון חדש. אפשר ל....
+        /// </summary>
+        public static string NewAccount_GuestHint {
+            get {
+                return ResourceManager.GetString("NewAccount_GuestHint", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to בן משפחה.
+        /// </summary>
+        public static string NewAccount_WhichMember {
+            get {
+                return ResourceManager.GetString("NewAccount_WhichMember", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to מבוגר/ת.
+        /// </summary>
+        public static string NewAccount_WhichAdult {
+            get {
+                return ResourceManager.GetString("NewAccount_WhichAdult", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to מבוגר/ת חדש/ה.
+        /// </summary>
+        public static string NewAccount_NewAdult {
+            get {
+                return ResourceManager.GetString("NewAccount_NewAdult", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to שיוך.
+        /// </summary>
+        public static string NewAccount_Link {
+            get {
+                return ResourceManager.GetString("NewAccount_Link", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to הוספה ושיוך.
+        /// </summary>
+        public static string NewAccount_AddAndLink {
+            get {
+                return ResourceManager.GetString("NewAccount_AddAndLink", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to אפשר לשנות את כל אלה אחר כך בדף בני המשפחה..
+        /// </summary>
+        public static string NewAccount_ChildLater {
+            get {
+                return ResourceManager.GetString("NewAccount_ChildLater", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to {0} נוסף/ה לבני המשפחה, והחשבון {1} ב-{2} שויך ל{0}..
+        /// </summary>
+        public static string NewAccount_MemberAdded {
+            get {
+                return ResourceManager.GetString("NewAccount_MemberAdded", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to החשבון {0} ב-{1} נשאר חסום, כחשבון אורח..
+        /// </summary>
+        public static string NewAccount_KeptAsGuest {
+            get {
+                return ResourceManager.GetString("NewAccount_KeptAsGuest", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to ביטול.
+        /// </summary>
+        public static string Common_Cancel {
+            get {
+                return ResourceManager.GetString("Common_Cancel", resourceCulture);
             }
         }
     }

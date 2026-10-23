@@ -267,6 +267,11 @@
                              Visibility="{Binding HasNoAccounts, Converter={StaticResource BoolToVisibility}}" />
                   <ItemsControl ItemsSource="{Binding Accounts}" Focusable="False">
                     <ItemsControl.ItemTemplate>
+                      <!--
+                        A linked standard account: the member, to change. Not linked yet: the new-account card. A guest: says so,
+                        with a way to give another answer. An administrator: never filtered, so no children to choose; optionally
+                        the adult it belongs to, or (linked to a filtered member) a warning and a way to unlink it.
+                      -->
                       <DataTemplate DataType="{x:Type vm:DeviceAccountItemViewModel}">
                         <StackPanel Margin="0,4">
                           <Grid>
@@ -276,14 +281,40 @@
                               <ColumnDefinition Width="*" />
                             </Grid.ColumnDefinitions>
                             <TextBlock Grid.Column="0" Text="{Binding Name}" VerticalAlignment="Center" FlowDirection="LeftToRight" HorizontalAlignment="Left" />
-                            <Border Grid.Column="1" Style="{StaticResource Badge}" Margin="8,0" Visibility="{Binding IsAdmin, Converter={StaticResource BoolToVisibility}}">
-                              <TextBlock Text="{x:Static res:Strings.Setup_AdminAccount}" FontSize="12" />
+                            <Border Grid.Column="1" Style="{StaticResource Badge}" Margin="8,0" ToolTip="{x:Static res:Strings.Devices_AdminToolTip}"
+                                    Visibility="{Binding IsAdmin, Converter={StaticResource BoolToVisibility}}">
+                              <TextBlock Text="{x:Static res:Strings.Devices_AdminNotFiltered}" FontSize="12" />
                             </Border>
-                            <ComboBox Grid.Column="2" ItemsSource="{Binding Options}" SelectedValuePath="Value" DisplayMemberPath="Label" SelectedValue="{Binding MemberId}"
-                                      MinWidth="200" HorizontalAlignment="Left" Margin="8,0" />
+                            <StackPanel Grid.Column="2" Orientation="Horizontal" Margin="8,0">
+                              <StackPanel Orientation="Horizontal" Visibility="{Binding ShowsChoice, Converter={StaticResource BoolToVisibility}}">
+                                <TextBlock Text="{x:Static res:Strings.Devices_AdminOwner}" Style="{StaticResource SubtleText}" VerticalAlignment="Center" Margin="0,0,8,0"
+                                           Visibility="{Binding IsAdmin, Converter={StaticResource BoolToVisibility}}" />
+                                <ComboBox ItemsSource="{Binding Choices}" SelectedValuePath="Value" DisplayMemberPath="Label" SelectedValue="{Binding MemberId}" MinWidth="200">
+                                  <ComboBox.Style>
+                                    <Style TargetType="ComboBox" BasedOn="{StaticResource {x:Type ComboBox}}">
+                                      <Style.Triggers>
+                                        <DataTrigger Binding="{Binding IsAdmin}" Value="True">
+                                          <Setter Property="ToolTip" Value="{x:Static res:Strings.Devices_AdminOwnerHint}" />
+                                        </DataTrigger>
+                                      </Style.Triggers>
+                                    </Style>
+                                  </ComboBox.Style>
+                                </ComboBox>
+                              </StackPanel>
+                              <StackPanel Orientation="Horizontal" Visibility="{Binding ShowsGuest, Converter={StaticResource BoolToVisibility}}">
+                                <Border Style="{StaticResource Badge}" Margin="0,0,8,0" ToolTip="{x:Static res:Strings.Devices_GuestToolTip}">
+                                  <TextBlock Text="{x:Static res:Strings.Devices_GuestAccount}" FontSize="12" />
+                                </Border>
+                                <Button Content="{x:Static res:Strings.Devices_ChangeGuest}" Command="{Binding ChangeGuestCommand}" Margin="0" Padding="10,3" />
+                              </StackPanel>
+                              <Button Content="{x:Static res:Strings.Devices_Unlink}" Command="{Binding UnlinkCommand}" Margin="0" Padding="10,3"
+                                      Visibility="{Binding Warning, Converter={StaticResource HasValueToVisibility}}" />
+                            </StackPanel>
                           </Grid>
                           <TextBlock Text="{Binding Warning}" Foreground="{StaticResource WarningBrush}" TextWrapping="Wrap" Margin="0,4,0,0" FontSize="12"
                                      Visibility="{Binding Warning, Converter={StaticResource HasValueToVisibility}}" />
+                          <ContentControl Content="{Binding Card}" ContentTemplate="{StaticResource NewAccountCard}" Focusable="False" Margin="0,6,0,4"
+                                          Visibility="{Binding ShowsCard, Converter={StaticResource BoolToVisibility}}" />
                         </StackPanel>
                       </DataTemplate>
                     </ItemsControl.ItemTemplate>

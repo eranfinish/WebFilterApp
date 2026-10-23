@@ -2,6 +2,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using WebFilter.Admin.Services;
 using WebFilter.Contracts.Admin;
+using WebFilter.Contracts.Hub;
 
 namespace WebFilter.Admin.ViewModels;
 
@@ -57,6 +58,9 @@ public abstract partial class PageViewModel : ObservableObject
     [ObservableProperty]
     private string? _badge;
 
+    /// <summary>What <see cref="Badge"/> counts, as its tooltip; null for none.</summary>
+    public virtual string? BadgeToolTip => null;
+
     /// <summary>
     /// Loads fresh data. A call while a load runs schedules one more load after it (so the latest filter wins) and
     /// returns the running load.
@@ -104,6 +108,29 @@ public abstract partial class PageViewModel : ObservableObject
     {
         StatusMessage = null;
         if (!await RunAsync(() => Client.ExecuteAsync(command))) return false;
+        StatusMessage = done;
+        await RefreshAsync();
+        return true;
+    }
+
+    /// <summary>
+    /// Changes part of the settings (<see cref="FamilyContext.UpdateSettingsAsync"/>); on success shows <paramref name="done"/>
+    /// and reloads the page. A refusal from the service goes to <paramref name="showError"/> when given (next to the form
+    /// the parent is looking at, which may be far from the page's header); connection problems stay with the window's banner.
+    /// </summary>
+    internal async Task<bool> SaveSettingsAsync(Func<FamilyBundle, FamilyBundle> change, string done, Action<string?>? showError = null)
+    {
+        StatusMessage = null;
+        showError?.Invoke(null);
+        if (!await RunAsync(() => Context.UpdateSettingsAsync(change)))
+        {
+            if (showError is not null && ErrorMessage is { } error)
+            {
+                showError(error);
+                ErrorMessage = null;
+            }
+            return false;
+        }
         StatusMessage = done;
         await RefreshAsync();
         return true;

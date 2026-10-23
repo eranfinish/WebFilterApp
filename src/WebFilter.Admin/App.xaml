@@ -3,6 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:conv="clr-namespace:WebFilter.Admin.Converters"
              xmlns:res="clr-namespace:WebFilter.Admin.Resources"
+             xmlns:vm="clr-namespace:WebFilter.Admin.ViewModels"
              ShutdownMode="OnMainWindowClose">
   <Application.Resources>
 
@@ -234,6 +235,102 @@
           <TextBlock Text="{Binding StatusMessage}" Foreground="{StaticResource SuccessBrush}" TextWrapping="Wrap" />
         </Border>
       </StackPanel>
+    </DataTemplate>
+
+    <!-- The form under one of a new account's answers. -->
+    <Style x:Key="AnswerPanel" TargetType="Border">
+      <Setter Property="Background" Value="{StaticResource CardBrush}" />
+      <Setter Property="BorderBrush" Value="{StaticResource BorderBrush}" />
+      <Setter Property="BorderThickness" Value="1" />
+      <Setter Property="CornerRadius" Value="6" />
+      <Setter Property="Padding" Value="12,10,12,4" />
+      <Setter Property="Margin" Value="0,4,0,0" />
+    </Style>
+
+    <!--
+      "A new Windows account was found" (dashboard and devices page; DataContext = NewAccountViewModel): what it means now,
+      and the four answers — an existing member, a new child, an adult without filtering, or keeping it blocked as a guest.
+    -->
+    <DataTemplate x:Key="NewAccountCard" DataType="{x:Type vm:NewAccountViewModel}">
+      <Border Background="{StaticResource WarningSoftBrush}" BorderBrush="{StaticResource WarningBrush}" BorderThickness="1" CornerRadius="8" Padding="16,12,16,8">
+        <StackPanel>
+          <DockPanel>
+            <Button DockPanel.Dock="Right" Content="{x:Static res:Strings.Common_Cancel}" Command="{Binding CloseCommand}" Margin="8,0,0,0" Padding="10,3" VerticalAlignment="Top"
+                    Visibility="{Binding CanClose, Converter={StaticResource BoolToVisibility}}" />
+            <TextBlock Text="{Binding Title}" FontSize="15" FontWeight="SemiBold" Foreground="{StaticResource WarningBrush}" TextWrapping="Wrap" />
+          </DockPanel>
+          <TextBlock Text="{x:Static res:Strings.NewAccount_Text}" TextWrapping="Wrap" Margin="0,4,0,10" />
+          <WrapPanel>
+            <Button Content="{x:Static res:Strings.NewAccount_Existing}" Command="{Binding ChooseExistingCommand}" ToolTip="{x:Static res:Strings.NewAccount_ExistingHint}" />
+            <Button Content="{x:Static res:Strings.NewAccount_NewChild}" Command="{Binding ChooseNewChildCommand}" ToolTip="{x:Static res:Strings.NewAccount_NewChildHint}" />
+            <Button Content="{x:Static res:Strings.NewAccount_Adult}" Command="{Binding ChooseAdultCommand}" ToolTip="{x:Static res:Strings.NewAccount_AdultHint}" />
+            <Button Content="{x:Static res:Strings.NewAccount_Guest}" Command="{Binding KeepAsGuestCommand}" ToolTip="{x:Static res:Strings.NewAccount_GuestHint}" />
+          </WrapPanel>
+
+          <!-- An existing member: children, teens and adults. -->
+          <Border Style="{StaticResource AnswerPanel}" Visibility="{Binding IsChoosingExisting, Converter={StaticResource BoolToVisibility}}">
+            <WrapPanel>
+              <TextBlock Text="{x:Static res:Strings.NewAccount_WhichMember}" VerticalAlignment="Center" Margin="0,0,8,8" />
+              <ComboBox ItemsSource="{Binding MemberOptions}" SelectedValuePath="Value" DisplayMemberPath="Label" SelectedValue="{Binding ExistingMemberId}"
+                        MinWidth="180" Margin="0,0,8,8" AutomationProperties.Name="{x:Static res:Strings.NewAccount_WhichMember}" />
+              <Button Content="{x:Static res:Strings.NewAccount_Link}" Command="{Binding LinkExistingCommand}" Style="{StaticResource PrimaryButton}" />
+              <Button Content="{x:Static res:Strings.Common_Cancel}" Command="{Binding CancelAnswerCommand}" />
+            </WrapPanel>
+          </Border>
+
+          <!-- A new child or teen, from the role's template as in the setup wizard. -->
+          <Border Style="{StaticResource AnswerPanel}" Visibility="{Binding IsAddingChild, Converter={StaticResource BoolToVisibility}}">
+            <StackPanel>
+              <WrapPanel>
+                <StackPanel Margin="0,0,12,8">
+                  <TextBlock Text="{x:Static res:Strings.Member_Name}" Style="{StaticResource LabelText}" />
+                  <TextBox Text="{Binding ChildName, UpdateSourceTrigger=PropertyChanged}" MinWidth="170" AutomationProperties.Name="{x:Static res:Strings.Member_Name}" />
+                </StackPanel>
+                <StackPanel Margin="0,0,12,8">
+                  <TextBlock Text="{x:Static res:Strings.Member_Role}" Style="{StaticResource LabelText}" />
+                  <ComboBox ItemsSource="{x:Static vm:NewAccountViewModel.ChildRoleOptions}" SelectedValuePath="Value" DisplayMemberPath="Label"
+                            SelectedValue="{Binding ChildRole}" MinWidth="120" AutomationProperties.Name="{x:Static res:Strings.Member_Role}" />
+                </StackPanel>
+                <StackPanel Margin="0,0,12,8">
+                  <TextBlock Text="{x:Static res:Strings.Member_Age}" Style="{StaticResource LabelText}" />
+                  <TextBox Text="{Binding ChildAgeText, UpdateSourceTrigger=PropertyChanged}" MinWidth="0" Width="56" AutomationProperties.Name="{x:Static res:Strings.Member_Age}" />
+                </StackPanel>
+              </WrapPanel>
+              <TextBlock Text="{Binding ChildTemplateText}" Style="{StaticResource SubtleText}" FontSize="12" />
+              <TextBlock Text="{x:Static res:Strings.NewAccount_ChildLater}" Style="{StaticResource SubtleText}" FontSize="12" Margin="0,2,0,8" />
+              <WrapPanel>
+                <Button Content="{x:Static res:Strings.NewAccount_AddAndLink}" Command="{Binding AddChildCommand}" Style="{StaticResource PrimaryButton}" />
+                <Button Content="{x:Static res:Strings.Common_Cancel}" Command="{Binding CancelAnswerCommand}" />
+              </WrapPanel>
+            </StackPanel>
+          </Border>
+
+          <!-- An adult without filtering: one of the family's, or a new one. -->
+          <Border Style="{StaticResource AnswerPanel}" Visibility="{Binding IsChoosingAdult, Converter={StaticResource BoolToVisibility}}">
+            <StackPanel>
+              <WrapPanel>
+                <StackPanel Margin="0,0,12,8" Visibility="{Binding HasAdults, Converter={StaticResource BoolToVisibility}}">
+                  <TextBlock Text="{x:Static res:Strings.NewAccount_WhichAdult}" Style="{StaticResource LabelText}" />
+                  <ComboBox ItemsSource="{Binding AdultOptions}" SelectedValuePath="Value" DisplayMemberPath="Label" SelectedValue="{Binding AdultChoice}"
+                            MinWidth="170" AutomationProperties.Name="{x:Static res:Strings.NewAccount_WhichAdult}" />
+                </StackPanel>
+                <StackPanel Margin="0,0,12,8" Visibility="{Binding IsNewAdult, Converter={StaticResource BoolToVisibility}}">
+                  <TextBlock Text="{x:Static res:Strings.Member_Name}" Style="{StaticResource LabelText}" />
+                  <TextBox Text="{Binding AdultName, UpdateSourceTrigger=PropertyChanged}" MinWidth="170" AutomationProperties.Name="{x:Static res:Strings.Member_Name}" />
+                </StackPanel>
+              </WrapPanel>
+              <TextBlock Text="{x:Static res:Strings.NewAccount_AdultHint}" Style="{StaticResource SubtleText}" FontSize="12" Margin="0,0,0,8" />
+              <WrapPanel>
+                <Button Content="{Binding AdultActionText}" Command="{Binding LinkAdultCommand}" Style="{StaticResource PrimaryButton}" />
+                <Button Content="{x:Static res:Strings.Common_Cancel}" Command="{Binding CancelAnswerCommand}" />
+              </WrapPanel>
+            </StackPanel>
+          </Border>
+
+          <TextBlock Text="{Binding Message}" Foreground="{StaticResource DangerBrush}" TextWrapping="Wrap" Margin="0,6,0,4"
+                     Visibility="{Binding Message, Converter={StaticResource HasValueToVisibility}}" />
+        </StackPanel>
+      </Border>
     </DataTemplate>
 
   </Application.Resources>

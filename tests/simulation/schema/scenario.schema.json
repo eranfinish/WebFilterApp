@@ -227,6 +227,10 @@
         },
         "isAdmin": {
           "type": "boolean"
+        },
+        "guest": {
+          "type": "boolean",
+          "description": "The parents confirmed this unlinked account stays unlinked (admin app: \"keep blocked (guest)\"). Decisions do not change: it is restricted like every unlinked account. Kept by reportAccounts, dropped when linked. Default false."
         }
       }
     },

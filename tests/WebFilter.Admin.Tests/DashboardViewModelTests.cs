@@ -101,7 +101,7 @@ public sealed class DashboardViewModelTests
 
         await command.ExecuteAsync(null);
 
-        var commands = _client.Sent.Where(m => m is not (GetStatus or GetSettings or GetRequests)).ToList();
+        var commands = _client.Sent.Where(m => m is not (GetStatus or GetSettings or GetRequests or GetDevices)).ToList();
         Assert.Equal(expected, Assert.Single(commands));
         Assert.Equal(2, _client.SentOf<GetStatus>().Count());
         Assert.Equal(done, vm.StatusMessage);

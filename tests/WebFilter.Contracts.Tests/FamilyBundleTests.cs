@@ -47,6 +47,26 @@ public class FamilyBundleTests
         Assert.Equal(new WindowsFeaturesDto(NotificationsAndSync: true, OneDrive: false, WebSearchInStart: false), partial.WindowsFeatures);
     }
 
+    /// <summary>An account the parents kept as a guest: <c>guest: true</c> on the wire, left out when false, false when missing.</summary>
+    [Fact]
+    public void The_guest_flag_round_trips_and_is_left_out_when_false()
+    {
+        var bundle = new FamilyBundle
+        {
+            TimeZone = "Asia/Jerusalem",
+            Devices = [new DeviceDto("pc-kids", "windows", "agent", [new AccountDto("S-1", "yinon", null, false, Guest: true), new AccountDto("S-2", "noa", "noa", false)])],
+        };
+        var json = FamilyBundleJson.Serialize(bundle);
+
+        Assert.Contains("""{"accountId":"S-1","name":"yinon","isAdmin":false,"guest":true}""", json);
+        Assert.Contains("""{"accountId":"S-2","name":"noa","member":"noa","isAdmin":false}""", json);
+        Assert.Equal(bundle.Devices[0].Accounts, FamilyBundleJson.Deserialize(json).Devices[0].Accounts);
+
+        var fixture = FamilyBundleJson.Deserialize(File.ReadAllText(Path.Combine(FixturesDir(), "family-base.json")));
+        Assert.All(fixture.Devices.SelectMany(d => d.Accounts), a => Assert.False(a.Guest));
+        Assert.DoesNotContain("guest", FamilyBundleJson.Serialize(fixture), StringComparison.Ordinal);
+    }
+
     [Fact]
     public void Protection_settings_use_the_spec_wire_names_and_round_trip()
     {

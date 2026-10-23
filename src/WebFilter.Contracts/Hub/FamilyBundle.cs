@@ -51,7 +51,14 @@ public sealed record WindowsFeaturesDto(bool NotificationsAndSync = true, bool O
 
 public sealed record DeviceDto(string Id, string Os, string Role, IReadOnlyList<AccountDto> Accounts);
 
-public sealed record AccountDto(string AccountId, string Name, string? Member, bool IsAdmin);
+/// <param name="Member">The family member the account is linked to; null until a parent links it.</param>
+/// <param name="Guest">
+/// A parent confirmed that this unlinked account stays unlinked (a guest): it is restricted like every unlinked account,
+/// and the admin app stops asking whom it belongs to. False when missing (and not written when false, so older bundles
+/// and agents' account reports look as before); dropped once the account is linked.
+/// </param>
+public sealed record AccountDto(string AccountId, string Name, string? Member, bool IsAdmin,
+    [property: JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)] bool Guest = false);
 
 /// <param name="Action">allow | block.</param>
 public sealed record MemberCategoryDto(string Member, string Category, string Action);

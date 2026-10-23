@@ -188,10 +188,10 @@ public sealed class HubCore(FamilyConfig config)
     }
 
     /// <summary>
-    /// Records the accounts a device reports (tests/simulation/README.md §8): new ones are added unlinked until a parent
-    /// links them; a known one keeps its link and takes the reported name and administrator flag — administrators are
-    /// never filtered, so a flag left from before a parent made a child's account a standard one would leave the child
-    /// unfiltered. Accounts missing from the report are kept.
+    /// Records the accounts a device reports (tests/simulation/README.md §8): new ones are added unlinked (and not guests)
+    /// until a parent answers for them; a known one keeps its link and the parents' guest answer, and takes the reported
+    /// name and administrator flag — administrators are never filtered, so a flag left from before a parent made a
+    /// child's account a standard one would leave the child unfiltered. Accounts missing from the report are kept.
     /// </summary>
     public void ReportAccounts(string deviceId, IEnumerable<DeviceAccount> seen, DateTimeOffset now)
     {
@@ -204,7 +204,8 @@ public sealed class HubCore(FamilyConfig config)
             var known = accounts.FindIndex(a => string.Equals(a.AccountId, account.AccountId, StringComparison.OrdinalIgnoreCase));
             if (known < 0)
             {
-                accounts.Add(account with { MemberId = null });
+                // Links and guest answers are the parents' to give, never the reporting computer's.
+                accounts.Add(account with { MemberId = null, Guest = false });
                 added = true;
             }
             else if (accounts[known].Name != account.Name || accounts[known].IsAdmin != account.IsAdmin)

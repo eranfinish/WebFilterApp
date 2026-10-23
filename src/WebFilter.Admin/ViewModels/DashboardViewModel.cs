@@ -9,8 +9,9 @@ using WebFilter.Contracts.Admin;
 namespace WebFilter.Admin.ViewModels;
 
 /// <summary>
-/// One card per family member (from <see cref="GetStatus"/>) with the parent's quick actions (MVP-PLAN §4.5, §8). On an
-/// agent computer: which hub manages it, and only the local emergency pause.
+/// One card per family member (from <see cref="GetStatus"/>) with the parent's quick actions (MVP-PLAN §4.5, §8), and
+/// above them a card for each new Windows account nobody answered for yet (<see cref="FamilyContext.NewAccounts"/>).
+/// On an agent computer: which hub manages it, and only the local emergency pause.
 /// </summary>
 public sealed partial class DashboardViewModel : PageViewModel
 {
@@ -50,12 +51,11 @@ public sealed partial class DashboardViewModel : PageViewModel
 
     public bool HasPendingRequests => Context.PendingRequestCount > 0;
 
-    /// <summary>Standard accounts no one linked yet: browsing there is blocked until a parent links them on the devices page.</summary>
-    public bool HasUnlinkedAccounts => Context.UnlinkedAccountCount > 0;
+    /// <summary>Standard Windows accounts nobody answered for (browsing there is blocked), each with its four answers.</summary>
+    public ObservableCollection<NewAccountViewModel> NewAccounts { get; } = [];
 
-    public string UnlinkedAccountsText => Context.UnlinkedAccountCount == 1
-        ? Strings.Dashboard_UnlinkedAccounts_One
-        : Texts.Format(Strings.Dashboard_UnlinkedAccounts_Many, Context.UnlinkedAccountCount);
+    [ObservableProperty]
+    private bool _hasNewAccounts;
 
     public string PendingRequestsText => Context.PendingRequestCount switch
     {
@@ -70,16 +70,19 @@ public sealed partial class DashboardViewModel : PageViewModel
     [RelayCommand]
     private void OpenSetup() => Navigator?.NavigateTo<SetupWizardViewModel>();
 
-    [RelayCommand]
-    private void OpenDevices() => Navigator?.NavigateTo<DevicesViewModel>();
-
     internal void OpenMember(MemberCardViewModel member) => Navigator?.ShowMember(member.MemberId);
 
     protected override async Task LoadAsync()
     {
         var status = await Context.RefreshStatusAsync();
         IsAgent = !status.IsHub;
-        if (!IsAgent) await Context.RefreshPendingRequestsAsync();
+        if (!IsAgent)
+        {
+            await Context.RefreshPendingRequestsAsync();
+            // The computers' names for the new accounts' cards, and which computers still get settings.
+            if (Context.MayHaveNewAccounts) await Context.RefreshDevicesAsync();
+        }
+        SyncNewAccounts();
         Sync(status);
         (HubText, HubProblem) = IsAgent ? Context.DescribeHub(status.Hub) : (null, false);
         ShowsRequests = !IsAgent;
@@ -124,18 +127,34 @@ public sealed partial class DashboardViewModel : PageViewModel
         HasNoMembers = Members.Count == 0;
     }
 
+    /// <summary>The new accounts' cards, kept in place (by computer and account) so a refresh keeps what the parent is typing.</summary>
+    private void SyncNewAccounts()
+    {
+        var members = Context.Settings?.Members ?? [];
+        var cards = new List<NewAccountViewModel>();
+        foreach (var account in Context.NewAccounts)
+        {
+            var card = NewAccounts.FirstOrDefault(c => c.DeviceId == account.DeviceId && string.Equals(c.AccountId, account.Account.AccountId, StringComparison.OrdinalIgnoreCase))
+                       ?? new NewAccountViewModel(this, account.DeviceId, account.Account.AccountId);
+            card.Update(account.Account, account.DeviceName, members);
+            cards.Add(card);
+        }
+        for (var i = 0; i < cards.Count; i++)
+        {
+            var at = NewAccounts.IndexOf(cards[i]);
+            if (at < 0) NewAccounts.Insert(i, cards[i]);
+            else if (at != i) NewAccounts.Move(at, i);
+        }
+        while (NewAccounts.Count > cards.Count) NewAccounts.RemoveAt(NewAccounts.Count - 1);
+        HasNewAccounts = NewAccounts.Count > 0;
+    }
+
     private void OnContextChanged(object? sender, PropertyChangedEventArgs e)
     {
-        switch (e.PropertyName)
+        if (e.PropertyName == nameof(FamilyContext.PendingRequestCount))
         {
-            case nameof(FamilyContext.PendingRequestCount):
-                OnPropertyChanged(nameof(HasPendingRequests));
-                OnPropertyChanged(nameof(PendingRequestsText));
-                break;
-            case nameof(FamilyContext.UnlinkedAccountCount):
-                OnPropertyChanged(nameof(HasUnlinkedAccounts));
-                OnPropertyChanged(nameof(UnlinkedAccountsText));
-                break;
+            OnPropertyChanged(nameof(HasPendingRequests));
+            OnPropertyChanged(nameof(PendingRequestsText));
         }
     }
 }

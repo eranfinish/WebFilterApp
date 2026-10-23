@@ -106,7 +106,7 @@
           <ListBox.ItemTemplate>
             <DataTemplate DataType="{x:Type vm:PageViewModel}">
               <DockPanel>
-                <Border DockPanel.Dock="Right" Background="#EF4444" CornerRadius="9" Padding="7,0" MinWidth="20"
+                <Border DockPanel.Dock="Right" Background="#EF4444" CornerRadius="9" Padding="7,0" MinWidth="20" ToolTip="{Binding BadgeToolTip}"
                         Visibility="{Binding Badge, Converter={StaticResource HasValueToVisibility}}">
                   <TextBlock Text="{Binding Badge}" Foreground="White" FontSize="12" HorizontalAlignment="Center" />
                 </Border>

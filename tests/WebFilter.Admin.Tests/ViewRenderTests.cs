@@ -130,6 +130,51 @@ public sealed class ViewRenderTests
     });
 
     [Fact]
+    public Task The_new_account_cards_render_with_each_answer_without_binding_errors() => UiThread.RunAsync(async () =>
+    {
+        var client = new FakeAdminClient();
+        client.Devices.AddRange(TestData.Devices());
+        // yinon, just made on the parents' computer; on KIDS-PC visitor, a guest, and an administrator still linked to a child.
+        client.Settings = client.Settings with
+        {
+            Devices = [.. client.Settings.Devices.Select(d => d.Id switch
+            {
+                "pc-parents" => d with { Accounts = [.. d.Accounts, new Contracts.Hub.AccountDto("S-1-5-21-1000-1005", "yinon", null, false)] },
+                "pc-kids" => d with
+                {
+                    Accounts = [.. d.Accounts.Select(a => a.Name == "dana" ? a with { Member = "noa" } : a), new Contracts.Hub.AccountDto("S-1-5-21-2000-1010", "cousin", null, false, Guest: true)],
+                },
+                _ => d,
+            })],
+        };
+        await using var shown = await ShownAsync(client);
+        var cards = shown.Main.Dashboard.NewAccounts;
+        Assert.Equal(["yinon", "visitor"], cards.Select(c => c.AccountName));
+        await shown.RenderAsync("NewAccount-dashboard");
+
+        cards[0].ChooseExistingCommand.Execute(null);
+        cards[1].ChooseNewChildCommand.Execute(null);
+        cards[1].ChildName = "נועה";
+        await cards[1].AddChildCommand.ExecuteAsync(null);
+        Assert.NotNull(cards[1].Message);
+        await shown.RenderAsync("NewAccount-dashboard-existing-and-child");
+
+        cards[0].ChooseAdultCommand.Execute(null);
+        await shown.RenderAsync("NewAccount-dashboard-adult");
+
+        shown.Main.SelectedPage = shown.Main.Devices;
+        await shown.Main.CurrentLoad;
+        await shown.RenderAsync("NewAccount-devices");
+
+        var cousin = shown.Main.Devices.AccountGroups.Single(g => g.DeviceId == "pc-kids").Accounts.Single(a => a.Name == "cousin");
+        cousin.ChangeGuestCommand.Execute(null);
+        cousin.Card!.ChooseNewChildCommand.Execute(null);
+        cousin.Card.ChildRole = "teen";
+        await shown.RenderAsync("NewAccount-devices-guest-changing");
+        Assert.Empty(client.SentOf<ReplaceSettings>());
+    });
+
+    [Fact]
     public Task Pages_render_on_an_agent_computer_without_binding_errors() => UiThread.RunAsync(async () =>
     {
         var client = new FakeAdminClient { IsHub = false };
