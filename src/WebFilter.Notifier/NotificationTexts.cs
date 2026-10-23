@@ -4,36 +4,40 @@ using WebFilter.Notifier.Resources;
 
 namespace WebFilter.Notifier;
 
-/// <summary>A balloon: its title, text and whether it warns (tamper) rather than informs.</summary>
-public sealed record Balloon(string Title, string Text, bool IsWarning);
+/// <summary>A notification's title and text, as a toast shows them.</summary>
+public sealed record NotificationText(string Title, string Text);
 
 /// <summary>
-/// The Hebrew wording of the balloons (PROTECTION-SPEC §10). Notifications carry member ids, not names, and the names are
-/// in the settings only the elevated admin pipe serves; the notifier never elevates, so a balloon names the computer (a
-/// readable device id such as the computer's name) and the request's target, never the child.
+/// The Hebrew wording of the toasts (PROTECTION-SPEC §10); <see cref="NotificationToasts"/> adds the buttons and how long
+/// each stays. Notifications carry member ids, not names, and the names are in the settings only the elevated admin pipe
+/// serves; the notifier never elevates, so a toast names the computer (a readable device id such as the computer's name)
+/// and the request's target, never the child.
 /// </summary>
 public static class NotificationTexts
 {
-    /// <summary>Windows cuts balloon titles at 63 characters and texts at 255.</summary>
+    /// <summary>
+    /// Kept to what the tray balloons allowed (63 and 255 characters): a toast shows about two lines of title and four of
+    /// text, and the notification center no more.
+    /// </summary>
     public const int MaxTitle = 63, MaxText = 255;
 
     private const char Lrm = '‎';
 
-    /// <summary>One balloon for what one poll brought: the notification itself, or a summary of several.</summary>
-    public static Balloon For(IReadOnlyList<NotificationDto> items, TimeZoneInfo? zone = null)
+    /// <summary>One toast's wording for what one poll brought: the notification itself, or a summary of several.</summary>
+    public static NotificationText For(IReadOnlyList<NotificationDto> items, TimeZoneInfo? zone = null)
     {
         ArgumentNullException.ThrowIfNull(items);
         if (items.Count == 0) throw new ArgumentException("No notifications to show.", nameof(items));
-        var balloon = items.Count == 1 ? One(items[0], zone ?? TimeZoneInfo.Local) : Summary(items);
-        return balloon with { Title = Cut(balloon.Title, MaxTitle), Text = Cut(balloon.Text, MaxText) };
+        var text = items.Count == 1 ? One(items[0], zone ?? TimeZoneInfo.Local) : Summary(items);
+        return text with { Title = Cut(text.Title, MaxTitle), Text = Cut(text.Text, MaxText) };
     }
 
-    private static Balloon One(NotificationDto item, TimeZoneInfo zone) => item.Kind switch
+    private static NotificationText One(NotificationDto item, TimeZoneInfo zone) => item.Kind switch
     {
-        NotificationKinds.Request => new(Strings.Request_Title, Join(Request(item), Strings.Open_Hint), false),
+        NotificationKinds.Request => new(Strings.Request_Title, Join(Request(item), Strings.Open_Hint)),
         NotificationKinds.Tamper => Tamper(item),
-        NotificationKinds.Device => new(Strings.Device_Title, Join(Device(item, zone), Strings.Open_Hint), true),
-        _ => new(Strings.Other_Title, Strings.Other_Text, false),
+        NotificationKinds.Device => new(Strings.Device_Title, Join(Device(item, zone), Strings.Open_Hint)),
+        _ => new(Strings.Other_Title, Strings.Other_Text),
     };
 
     /// <summary>"A request to open games.example (from kids-pc)."; detail is "kind:target", split at the first ':'; url targets are hosts.</summary>
@@ -53,7 +57,7 @@ public static class NotificationTexts
         return item.DeviceId is { Length: > 0 } device ? Format(Strings.Request_FromComputer, text, Ltr(device)) : Format(Strings.Request_Sentence, text);
     }
 
-    private static Balloon Tamper(NotificationDto item)
+    private static NotificationText Tamper(NotificationDto item)
     {
         var computer = Computer(item.DeviceId);
         var (title, text) = item.Detail switch
@@ -64,7 +68,7 @@ public static class NotificationTexts
             "unclean_stop" => (Strings.Tamper_UncleanStop_Title, Format(Strings.Tamper_UncleanStop_Text, computer)),
             _ => (Strings.Tamper_Other_Title, Format(Strings.Tamper_Other_Text, computer)),
         };
-        return new(title, Join(text, Strings.Open_Hint), true);
+        return new(title, Join(text, Strings.Open_Hint));
     }
 
     /// <summary>"kids-pc has not reported for over a day (last on 21.10 at 18:30)."; detail is when it last reported (ISO-8601), if ever.</summary>
@@ -77,7 +81,7 @@ public static class NotificationTexts
     }
 
     /// <summary>"3 new notifications": one line per kind, with how many.</summary>
-    private static Balloon Summary(IReadOnlyList<NotificationDto> items)
+    private static NotificationText Summary(IReadOnlyList<NotificationDto> items)
     {
         int Count(string kind) => items.Count(i => i.Kind == kind);
         var (requests, tamper, devices) = (Count(NotificationKinds.Request), Count(NotificationKinds.Tamper), Count(NotificationKinds.Device));
@@ -88,7 +92,7 @@ public static class NotificationTexts
             devices == 0 ? null : devices == 1 ? Strings.Summary_Device : Format(Strings.Summary_Devices, devices),
             Strings.Open_Hint,
         };
-        return new(Format(Strings.Summary_Title, items.Count), string.Join("\n", lines.Where(l => l is not null)), tamper + devices > 0);
+        return new(Format(Strings.Summary_Title, items.Count), string.Join("\n", lines.Where(l => l is not null)));
     }
 
     private static string Computer(string? deviceId) => deviceId is { Length: > 0 } ? Ltr(deviceId) : Strings.Computer_Unknown;

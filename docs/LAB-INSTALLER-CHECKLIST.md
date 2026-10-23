@@ -83,11 +83,32 @@ Get-NetConnectionProfile | Set-NetConnectionProfile -NetworkCategory Private
   ועצירה רגילה נשארת "נקייה": אחרי `Stop-Service WebFilter` השירות נשאר `Stopped` ואין אירוע 7031 חדש. אחר כך `Start-Service WebFilter`.
 
 - [ ] קיצור הדרך "WebFilter Admin" בתפריט התחל פותח את ממשק הניהול (UAC). מסך "מכשירים" → קוד צימוד.
-- [ ] ההתראות להורים (PROTECTION-SPEC §10): הערך `WebFilter Notifier` תחת `Run` מצביע על `"C:\Program Files\WebFilter\WebFilter.Notifier.exe"`. אחרי התחברות מחדש כ-`labadmin` — סמל המגן של WebFilter באזור ההתראות, ובתפריט שלו "פתח את ניהול המשפחה" ו"יציאה". אחרי שהסוכן מצומד: בקשת גישה מ-`noa` ב-`lab-kids` מציגה כאן תוך כ-30 שניות בלון "בקשה חדשה", ולחיצה עליו פותחת את ממשק הניהול (UAC). בהתחברות של חשבון רגיל ל-`lab-hub` אין תהליך `WebFilter.Notifier` (הוא יוצא מיד, ב-`%LOCALAPPDATA%\WebFilter\notifier.log` שלו: `not an administrator`).
+- [ ] ההתראות להורים (PROTECTION-SPEC §10): הערך `WebFilter Notifier` תחת `Run` מצביע על `"C:\Program Files\WebFilter\WebFilter.Notifier.exe"`. אחרי התחברות מחדש כ-`labadmin` — סמל המגן של WebFilter באזור ההתראות, ובתפריט שלו "פתח את ניהול המשפחה" ו"יציאה". בהתחברות של חשבון רגיל ל-`lab-hub` אין תהליך `WebFilter.Notifier` (הוא יוצא מיד, ב-`%LOCALAPPDATA%\WebFilter\notifier.log` שלו: `not an administrator`), והוא גם לא נרשם להודעות: בחשבון הרגיל השורה השנייה למטה מחזירה שגיאה.
 
   ```powershell
   reg query HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Run /v "WebFilter Notifier"; Get-Process WebFilter.Notifier -IncludeUserName -ErrorAction SilentlyContinue
+  reg query HKCU\Software\Classes\AppUserModelId\WebFilter.Notifier
   ```
+
+- [ ] הודעה על בקשה (אחרי שהסוכן מצומד, סעיף ב'): בקשת גישה מ-`noa` ב-`lab-kids` מציגה ב-`lab-hub` תוך כ-30 שניות הודעת Windows (toast) "בקשה חדשה" בשם **WebFilter** עם סמל המגן (לא שם כללי), הטקסט מימין לשמאל ושם האתר והמחשב שלמים, והכפתור "פתח את ניהול המשפחה". אחרי כמה שניות היא יורדת מהמסך ו**נשארת** במרכז ההודעות (Win+N) תחת WebFilter. לחיצה עליה שם, או על הכפתור, → UAC → ממשק הניהול נפתח, וההודעה יוצאת ממרכז ההודעות. הרישום נמצא ב-HKCU של `labadmin` בלבד: `DisplayName` הוא `WebFilter`, `IconUri` מצביע על `Icon.png` תחת `%LOCALAPPDATA%\ToastNotificationManagerCompat\Apps\WebFilter.Notifier`, `CustomActivator` הוא `{10ba0946-57a5-4d37-7c5f-89f39a01c46b}`, ושרת ה-COM שלו מפעיל את `WebFilter.Notifier.exe` עם `-ToastActivated`:
+
+  ```powershell
+  reg query HKCU\Software\Classes\AppUserModelId\WebFilter.Notifier; reg query "HKCU\Software\Classes\CLSID\{10ba0946-57a5-4d37-7c5f-89f39a01c46b}\LocalServer32"
+  ```
+
+- [ ] שינוי בסינון נשאר על המסך: ב-`lab-hub`, ב-PowerShell כמנהל, עוצרים את השירות בכוח. הוא עולה מחדש אחרי כ-10 שניות ומדווח שנעצר באופן לא נקי, ותוך כ-30 שניות נוספות מופיעה הודעה "שירות הסינון נעצר" עם "פתח את ניהול המשפחה" ו"סגור". היא **לא** יורדת מהמסך מעצמה (מחכים דקה). "סגור" מוריד אותה, גם ממרכז ההודעות, בלי לפתוח דבר. עוצרים שוב: הפעם "פתח את ניהול המשפחה" → UAC → ממשק הניהול.
+
+  ```powershell
+  Stop-Process -Name WebFilter.Service -Force
+  ```
+
+- [ ] לחיצה כשההתראות לא רצות: משאירים הודעה על בקשה במרכז ההודעות, בוחרים "יציאה" בתפריט של סמל המגן (אין תהליך `WebFilter.Notifier`), ולוחצים על ההודעה ב-Win+N. צפוי: UAC → ממשק הניהול, וסמל המגן חוזר: Windows הפעיל את ההתראות בשביל הלחיצה, והן ממשיכות לפעול — תהליך אחד, ובשורת הפקודה שלו `-ToastActivated`:
+
+  ```powershell
+  Get-CimInstance Win32_Process -Filter "Name='WebFilter.Notifier.exe'" | Select-Object ProcessId, CommandLine
+  ```
+
+- [ ] אותו דבר אחרי אתחול: משאירים הודעה במרכז ההודעות, מאתחלים את `lab-hub` ומתחברים כ-`labadmin`; ההודעה עדיין ב-Win+N. לוחצים עליה מיד בכניסה, לפני שסמל המגן מופיע (או אחרי `Stop-Process -Name WebFilter.Notifier` בחלון רגיל): UAC → ממשק הניהול, ובסוף רץ תהליך `WebFilter.Notifier` **אחד** בלבד (הפקודה הקודמת). ב-`notifier.log` אין שורות על הודעות (`toast`).
 
 ## ב. סוכן (`lab-kids`)
 
@@ -154,6 +175,12 @@ Get-NetConnectionProfile | Set-NetConnectionProfile -NetworkCategory Private
   Get-Service WebFilter -ErrorAction SilentlyContinue; Test-Path "C:\Program Files\WebFilter", C:\ProgramData\WebFilter, HKLM:\SOFTWARE\WebFilter; reg query HKLM\SOFTWARE\Policies\Microsoft\Edge; Get-NetFirewallRule -DisplayName "WebFilter Hub" -ErrorAction SilentlyContinue; reg query HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Run /v "WebFilter Notifier"; Get-Process WebFilter.Notifier -ErrorAction SilentlyContinue
   ```
 
+- [ ] ב-Hub, כשההסרה רצה כ-`labadmin`: ב-log מופיעה הפקודה `WebFilter.Notifier.exe" --unregister` וקוד היציאה שלה 0; ההודעות של WebFilter נעלמו ממרכז ההודעות של `labadmin`, ושני המפתחות שלו (סעיף א') ותיקיית `%LOCALAPPDATA%\ToastNotificationManagerCompat\Apps\WebFilter.Notifier` נמחקו — שתי הפקודות של `reg query` מחזירות שגיאה. חשבון מנהל אחר שהשתמש בהתראות שומר את המפתחות שלו: זה צפוי ולא מזיק (`installer/README.md`).
+
+  ```powershell
+  reg query HKCU\Software\Classes\AppUserModelId\WebFilter.Notifier; reg query "HKCU\Software\Classes\CLSID\{10ba0946-57a5-4d37-7c5f-89f39a01c46b}"; Test-Path "$env:LOCALAPPDATA\ToastNotificationManagerCompat\Apps\WebFilter.Notifier"
+  ```
+
 - [ ] המדיניות של `noa` (לא מחוברת) נמחקה, ואין מפתח `WebFilter.Cleanup.*` שנשאר טעון:
 
   ```powershell
@@ -170,6 +197,8 @@ Get-NetConnectionProfile | Set-NetConnectionProfile -NetworkCategory Private
   ```powershell
   dotnet build installer\WebFilter.Installer.wixproj -c Release -p:ProductVersion=0.7.1
   ```
+
+- [ ] אותו שדרוג ב-Hub, כש-`labadmin` מחובר ויש הודעה של WebFilter במרכז ההודעות: ההודעה נשארת, הרישום נשאר (`reg query HKCU\Software\Classes\AppUserModelId\WebFilter.Notifier`), וב-log **אין** `--unregister`. בכניסה הבאה ההתראות עולות, ולחיצה על ההודעה הישנה עדיין פותחת את ממשק הניהול.
 
 ## ה. מנוע ה-WFP (אוטומטי, מהמחשב שלך)
 

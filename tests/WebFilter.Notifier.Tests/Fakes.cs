@@ -3,6 +3,8 @@ using System.Globalization;
 using System.IO;
 using System.IO.Pipes;
 using System.Runtime.CompilerServices;
+using System.Xml.Linq;
+using Microsoft.Toolkit.Uwp.Notifications;
 using WebFilter.Contracts.Framing;
 using WebFilter.Contracts.Notify;
 using WebFilter.Notifier.Resources;
@@ -180,4 +182,53 @@ internal sealed class FakeNotifyServer : IAsyncDisposable
         catch (TimeoutException) { }
         _stop.Dispose();
     }
+}
+
+/// <summary>
+/// Plays Windows' toasts: records what is shown and who listens, and delivers clicks on demand. Tests never use the real
+/// one (WindowsToasts), which registers the app in the user's HKCU.
+/// </summary>
+internal sealed class FakeToastPlatform : IToastPlatform
+{
+    private Action<string>? _clicked;
+
+    public List<ToastContent> Shown { get; } = [];
+
+    public int Listens { get; private set; }
+
+    public int Unregisters { get; private set; }
+
+    public Exception? ListenFailure { get; set; }
+
+    public Exception? ShowFailure { get; set; }
+
+    public void Listen(Action<string> clicked)
+    {
+        Listens++;
+        if (ListenFailure is { } failure) throw failure;
+        _clicked = clicked;
+    }
+
+    public void Show(ToastContent toast)
+    {
+        if (ShowFailure is { } failure) throw failure;
+        Shown.Add(toast);
+    }
+
+    public void Unregister() => Unregisters++;
+
+    /// <summary>A click as Windows hands it over, with the toast's or the button's arguments, on the test's thread.</summary>
+    public void Click(string arguments) => (_clicked ?? throw new InvalidOperationException("No notifier listens for clicks.")).Invoke(arguments);
+}
+
+/// <summary>The XML Windows gets for a toast (ToastContent.GetContent: building it registers nothing).</summary>
+internal static class ToastXml
+{
+    public static XElement Of(ToastContent toast) => XDocument.Parse(toast.GetContent()).Root!;
+
+    public static string[] Texts(XElement toast) => [.. toast.Descendants("text").Select(t => t.Value)];
+
+    /// <summary>Each button: its label, arguments and activation type (null: foreground, the click comes to the notifier).</summary>
+    public static (string? Content, string? Arguments, string? Activation)[] Buttons(XElement toast) =>
+        [.. toast.Descendants("action").Select(a => ((string?)a.Attribute("content"), (string?)a.Attribute("arguments"), (string?)a.Attribute("activationType")))];
 }

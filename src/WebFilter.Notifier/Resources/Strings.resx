@@ -53,6 +53,12 @@
   <data name="Open_Hint" xml:space="preserve">
     <value>לחצו כאן כדי לפתוח את ניהול המשפחה.</value>
   </data>
+  <data name="Toast_Open" xml:space="preserve">
+    <value>פתח את ניהול המשפחה</value>
+  </data>
+  <data name="Toast_Close" xml:space="preserve">
+    <value>סגור</value>
+  </data>
   <data name="Request_Title" xml:space="preserve">
     <value>בקשה חדשה</value>
   </data>

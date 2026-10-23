@@ -5,7 +5,7 @@ using System.IO;
 namespace WebFilter.Notifier;
 
 /// <summary>
-/// Opens the parents' admin app from the balloon or the tray menu. The admin app's manifest requires administrator rights,
+/// Opens the parents' admin app from a toast or the tray menu. The admin app's manifest requires administrator rights,
 /// so starting it through the shell is what shows the UAC prompt; the notifier itself never elevates.
 /// </summary>
 public sealed class AdminLauncher(string adminPath, Func<ProcessStartInfo, Process?> start, INotifierLog log)
