@@ -364,7 +364,8 @@
 - **משך האישור** (`url`, `youtube`, `app`): מספר דקות, **עד סוף היום**, או **תמיד**. אישור מוגבל יוצר כלל עם `expiresAt`
 - **דחייה:** הילד רואה "הבקשה נדחתה" במסך החסימה. אותו מארח/ערוץ/אפליקציה לא ניתן לבקש שוב במשך 60 דקות (`cooldown`)
 - **מניעת הצפה:** בקשה פתוחה אחת לכל יעד — בקשה חוזרת מתמזגת (`merged`); לכל היותר 5 בקשות חדשות ב-60 דקות מתגלגלות לכל בן משפחה (`rate_limited`)
-- **Hub לא זמין:** הבקשה נשמרת בתור של הסוכן (`queued`) ונשלחת כשהחיבור חוזר
+- **Hub לא זמין:** הבקשה נשמרת בתור של הסוכן (`queued`) ונשלחת כשהחיבור חוזר. ב-Hub היא שומרת את המזהה שהסוכן נתן לה (`<מחשב>-q<n>`), כך שההחלטה חוזרת עם המזהה שמסך החסימה מכיר; בקשה נוספת לאותו יעד בזמן שהיא בתור מקבלת את אותו מזהה (`merged`)
+- **ההחלטה בכל המחשבים:** במחשב ה-Hub השירות מודיע לדפדפנים (`accessDecided`) ברגע שההורה מחליט. סוכן לומד על החלטות מה-snapshot: ה-snapshot שה-Hub שולח לסוכנים כולל את הבקשות שהוחלטו ב-48 השעות האחרונות (`decisions`, עד 100, החדשות קודם), והסוכן מודיע פעם אחת על כל החלטה חדשה של בן משפחה שיש לו חשבון במחשב הזה — גם על בקשה שנשלחה ממחשב אחר — אחרי `rulesChanged`, כך שהתוסף מתקין את הכלל החדש לפני שמסך החסימה חוזר לאתר. מה שכבר נראה נשמר במסד של הסוכן (`decisions_seen`), ולכן הפעלה מחדש לא מודיעה שוב; סוכן שהיה מנותק יותר מ-48 שעות לא מודיע על החלטות ישנות יותר (הכללים עצמם מגיעים ממילא). Hub ישן בלי `decisions` — הסוכן לא מודיע (כמו לפני כן). מגבלה: בקשה שה-Hub קיבל אבל התשובה שלו לא הגיעה לסוכן נשמרת גם בתור ומגיעה ל-Hub פעמיים; החלטה על העותק הראשון לא מחזירה את מסך החסימה, שמחכה לעותק מהתור. (נמצא במעבדה ב-2026-10-24: עד אז ההחלטה הגיעה לסוכן רק ככלל, בלי `accessDecided`.)
 - **שירות לא זמין:** אין כפתור בקשה (`unavailable`)
 - **התראה להורה:** ב-MVP — בלוח הבקרה, והתראת Windows במחשב ה-Hub כשממשק הניהול פתוח. התראה לטלפון — שלב 2
 - כל בקשה נרשמת כאירוע `access_request`, וכל החלטה כ-`admin_change`
@@ -428,6 +429,7 @@ policy_bundle(version PK, received_at, bundle_json)        -- החבילה הא�
 shared_usage(member_id, local_date, total_minutes, as_of)   -- הסכום האחרון מה-Hub
 local_usage(member_id, minute_utc, PK(member_id, minute_utc))
 outbox(id PK, kind CHECK(IN('usage','event','access_request')), payload_json, created_at, sent_at NULL)
+decisions_seen(request_id PK, decided_at)   -- ההחלטות שה-snapshot האחרון הביא (48 שעות): על כל אחת מודיעים פעם אחת (§8.1)
 hub_identity(hub_id, hub_ca_cert, client_cert, client_key_protected)   -- המפתח מוגן ב-DPAPI (machine)
 settings(key PK, value) · schema_version(version, applied_at)
 ```
@@ -451,7 +453,7 @@ Retention של `events`: 90 יום כברירת מחדל — מוחל ב-Hub ב�
 | `reportSearch` | → | `{engine, query, url}` ← `error {code: ok}` — נרשם (`search`) רק כש-`logSearches` |
 | `reportOverride` | → | `{url, reason: blocked_jump}` ← `error {code: ok}` — נרשם (`override`) |
 | `requestAccess` | → | `{kind, target, minutes?, note}` ← `{result: created\|merged\|rate_limited\|cooldown\|queued, requestId?}` |
-| `accessDecided` | ← push | `{requestId, status, until?}` — מסך החסימה נטען מחדש באישור |
+| `accessDecided` | ← push | `{requestId, status, until?}` — מסך החסימה נטען מחדש באישור. לכל חיבור של בן המשפחה, בכל מחשב שיש לו בו חשבון (בסוכן — מה-snapshot, §8.1) |
 | `resolveYouTube` | → | `{handle\|videoId}` ← `{channelId}` |
 | `rulesChanged` | ← push | `{version}` |
 | `timeState` | ← push | `{state: ok\|warn\|expired, remainingMinutes}` |
@@ -479,6 +481,7 @@ Retention של `events`: 90 יום כברירת מחדל — מוחל ב-Hub ב�
 | צימוד | ה-Hub מציג קוד חד-פעמי (12 תווים, ≈60 ביט, תקף 10 דקות). הסוכן יוצר זוג מפתחות, שולח CSR + HMAC(קוד, CSR + טביעת תעודת Hub); ה-Hub מאמת, מנפיק תעודת סוכן חתומה ע"י CA של ה-Hub, ומחזיר HMAC(קוד, תשובה). כך כל צד מוכיח שהוא מכיר את הקוד — אין Hub מזויף ואין סוכן מזויף |
 | תעבורה | Kestrel ב-Hub, TLS הדדי; הסוכן מצמיד את ה-CA של ה-Hub; מכשיר שבוטל → התעודה נדחית |
 | הגדרות | `GET /v1/bundle?since=<version>` + ערוץ push (SSE) ל-`bundleChanged` |
+| החלטות על בקשות | ה-snapshot (`GET /v1/snapshot?since=<version>`) כולל `decisions: [{id, member, device, kind, targetKey, status, decidedAt, until?}]` — הבקשות שהוחלטו ב-48 השעות האחרונות, עד 100; `status`: `approved`\|`denied`; `until` — תוקף הכלל שהאישור יצר. חסר אצל Hub ישן (אין מה להודיע), וסוכן ישן מתעלם ממנו (§8.1) |
 | שימוש ואירועים | `POST /v1/usage`, `POST /v1/events` — אצוות עם מזהי idempotency מה-outbox |
 | מכסה משותפת | בתשובה ל-usage: `{member, localDate, totalMinutes}` |
 | ביטול רישום | `POST /v1/unregister {reason: "uninstall"}` — המכשיר שמאחורי תעודת הלקוח (לא מזהה מגוף ההודעה) מבטל את עצמו בהסרה; ה-Hub מבטל אותו כמו ביטול של הורה ושומר את הסיבה (204; מכשיר שכבר בוטל מקבל 401) |
@@ -608,6 +611,8 @@ PolicyManager, WfpManager, ProcessGuard, TamperMonitor. **תנאי סיום:** �
 HubServer, צימוד, HubSync, מכסה משותפת, מסך מכשירים, השהיית חירום מקומית. **תנאי סיום:** תרחישי `multi-device` עוברים במעבדה של 3 VMs (Hub + 2 סוכנים), כולל Hub כבוי וחזרה.
 
 > **סטטוס (2026-10-19):** קיימים — HubServer (Kestrel, HTTPS עם mutual TLS, CA לכל Hub, מפתחות מוגנים ב-DPAPI), צימוד בקוד של 12 תווים ל-10 דקות עם הוכחה הדדית (HMAC שקושר את הקוד ל-CSR ולתעודת השרת), סנכרון snapshot, העלאת שימוש/אירועים, בקשות גישה ישירות או בתור כשה-Hub כבוי, דחיפת שינויים ב-SSE (פחות מ-5 שניות), ביטול מכשיר. נבדק בשני שירותים על loopback (8 בדיקות). מסך מכשירים בממשק הניהול; במחשב סוכן ממשק הניהול מציג סטטוס, את ה-Hub שמנהל אותו ומאפשר השהיית חירום מקומית. שינויי מנהל נשמרים מיד. כל מחשב מדווח על חשבונות ה-Windows שלו (כולל שינוי בהרשאות מנהל), וההורה מקשר אותם במסך המכשירים. אירועי `search`, `override` ו-`tamper` של סוכן מגיעים ל-Hub בהעלאה (נבדק על loopback); סיבה שה-Hub לא מכיר (סוכן חדש יותר) נשמטת ולא מכשילה את ההעלאה. חסר — מעבדת 3 VMs, גרסת התוכנה בכל מחשב.
+>
+> **החלטות על בקשות לסוכנים (2026-10-24):** במעבדה ילדה ב-`lab-kids` ביקשה אתר, ההורה אישר ב-Hub, והכלל הגיע לסוכן תוך שניות — אבל מסך החסימה לא חזר לאתר לבד והיא לא קיבלה הודעה: `accessDecided` נשלח רק מהתהליך של ה-Hub. עכשיו ה-snapshot לסוכנים מביא את ההחלטות של 48 השעות האחרונות, והסוכן מודיע פעם אחת על כל החלטה של בן משפחה שיש לו חשבון אצלו, גם אחרי הפעלה מחדש (§8.1, §10.3). נבדק: Core (רשימת ההחלטות, חלון 48 השעות והגבלה ל-100, פעם אחת, רק לבני משפחה במחשב, החלטה חוזרת, snapshot בלי הרשימה, שחזור), שירות (JSON, הפעלה מחדש עם SQLite, ה-Hub לא מודיע פעמיים), ושני שירותים על loopback עם ה-agent pipe האמיתי: אישור ב-Hub מגיע לחיבור של הילד בסוכן אחרי `rulesChanged`, פעם אחת, ובקשה מהתור חוזרת עם המזהה שלה; בתוסף — החלטה שמגיעה אחרי שהכלל כבר הותקן (`npm test`, ו-T22b ב-`npm run verify:edge`). לא נבדק במעבדה — סעיף ב' ב[רשימת הבדיקה](LAB-INSTALLER-CHECKLIST.md).
 
 ### M7 — מתקין ותיעוד
 
