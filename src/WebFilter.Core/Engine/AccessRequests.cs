@@ -38,9 +38,32 @@ public sealed class AccessRequest
     public AccessRequest Clone() => (AccessRequest)MemberwiseClone();
 }
 
+/// <summary>
+/// A parent's decision on a request, as the member's browsers hear of it (accessDecided): raised on the hub when the
+/// parent decides, and carried in the hub's snapshots (<see cref="HubSnapshot.Decisions"/>) so an agent can tell the
+/// browsers on its computer too (MVP-PLAN §8.1).
+/// </summary>
+/// <param name="DeviceId">The computer the request came from.</param>
+/// <param name="Until">When the approval ends: the expiry of the rule it created. Null for a denial and for an approval that does not end.</param>
+public sealed record RequestDecision(
+    string RequestId,
+    string MemberId,
+    string DeviceId,
+    RequestKind Kind,
+    string TargetKey,
+    RequestStatus Status,
+    DateTimeOffset DecidedAt,
+    DateTimeOffset? Until);
+
 public static class AccessRequestRules
 {
     public const int MaxNewPerWindow = 5;
     public static readonly TimeSpan RateWindow = TimeSpan.FromMinutes(60);
     public static readonly TimeSpan Cooldown = TimeSpan.FromMinutes(60);
+
+    /// <summary>How long a decision travels in the hub's snapshots, so an agent that was off or unreachable still hears of it.</summary>
+    public static readonly TimeSpan DecisionWindow = TimeSpan.FromHours(48);
+
+    /// <summary>At most this many (the newest) decisions travel in a snapshot.</summary>
+    public const int MaxDecisionsSent = 100;
 }

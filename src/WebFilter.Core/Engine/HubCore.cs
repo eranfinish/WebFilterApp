@@ -57,6 +57,41 @@ public sealed class HubCore(FamilyConfig config)
             ? s
             : _snapshot = new(Version, Config.Clone(), _runtime.ToDictionary(kv => kv.Key, kv => kv.Value.Clone()), Usage.Clone());
 
+    /// <summary>
+    /// The snapshot sent to other computers: <see cref="Snapshot"/> with the <see cref="RecentDecisions"/>, so each agent can
+    /// tell its members' browsers (MVP-PLAN §8.1). The hub's own agent takes <see cref="Snapshot"/>, without them: on the
+    /// hub the service announces a decision as the parent makes it.
+    /// </summary>
+    public HubSnapshot SnapshotForAgents(DateTimeOffset now) => Snapshot() with { Decisions = RecentDecisions(now) };
+
+    /// <summary>
+    /// The requests decided in the last <see cref="AccessRequestRules.DecisionWindow"/>, newest first, at most
+    /// <see cref="AccessRequestRules.MaxDecisionsSent"/>.
+    /// </summary>
+    public IReadOnlyList<RequestDecision> RecentDecisions(DateTimeOffset now)
+    {
+        var since = now - AccessRequestRules.DecisionWindow;
+        return Requests
+            .Where(r => r.Status != RequestStatus.Pending && r.DecidedAt >= since)
+            .OrderByDescending(r => r.DecidedAt)
+            .Take(AccessRequestRules.MaxDecisionsSent)
+            .Select(DecisionOf)
+            .ToList();
+    }
+
+    /// <summary>A decided request as the member's browsers hear of it, with the expiry of the rule the approval created.</summary>
+    public RequestDecision DecisionOf(AccessRequest request)
+    {
+        var until = request.CreatedRuleId is not { } ruleId ? null : request.Kind switch
+        {
+            RequestKind.Url => Config.Rules.Find(r => r.Id == ruleId)?.ExpiresAt,
+            RequestKind.App => Config.AppRules.Find(r => r.Id == ruleId)?.ExpiresAt,
+            _ => null,
+        };
+        return new RequestDecision(request.Id, request.MemberId, request.DeviceId, request.Kind, request.TargetKey, request.Status,
+            request.DecidedAt ?? throw new InvalidOperationException($"Request '{request.Id}' is not decided"), until);
+    }
+
     public PolicyView View()
     {
         if (_policies is null || _policiesVersion != Version) (_policies, _policiesVersion) = (new PolicyCache(Config), Version);

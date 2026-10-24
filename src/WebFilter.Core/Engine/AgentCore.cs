@@ -20,6 +20,7 @@ public sealed class AgentCore(string deviceId)
     private readonly List<FamilyEvent> _outbox = [];
     private readonly List<FamilyEvent> _log = [];
     private readonly List<AccessRequest> _queued = [];
+    private readonly Dictionary<string, DateTimeOffset> _decisionsSeen = [];
     private int _queuedCounter;
 
     public string DeviceId { get; } = deviceId;
@@ -30,11 +31,30 @@ public sealed class AgentCore(string deviceId)
     public IReadOnlyList<FamilyEvent> LocalEvents => _log;
     public IReadOnlyList<AccessRequest> QueuedRequests => _queued;
 
-    public void Apply(HubSnapshot snapshot)
+    /// <summary>The decisions in the last snapshot that carried them: request id → when it was decided.</summary>
+    public IReadOnlyDictionary<string, DateTimeOffset> DecisionsSeen => _decisionsSeen;
+
+    /// <summary>
+    /// Takes a snapshot from the hub, and returns the decisions in it (<see cref="HubSnapshot.Decisions"/>) this device has
+    /// not seen yet, of members with an account here: the host announces each to the member's browsers, once. A decision
+    /// is remembered by its request id and decision time while the hub keeps sending it, so a request decided again is
+    /// announced again. A snapshot without decisions (an older hub, the hub's own) announces nothing and forgets nothing.
+    /// </summary>
+    public IReadOnlyList<RequestDecision> Apply(HubSnapshot snapshot)
     {
-        if (ReferenceEquals(snapshot, _snapshot)) return;
+        if (ReferenceEquals(snapshot, _snapshot)) return [];
         _snapshot = snapshot;
         _policies = new PolicyCache(snapshot.Config);
+        if (snapshot.Decisions is not { } decisions) return [];
+
+        var members = snapshot.Config.Devices.Find(d => d.Id == DeviceId)?.Accounts.Select(a => a.MemberId).OfType<string>().ToHashSet() ?? [];
+        var fresh = decisions
+            .Where(d => members.Contains(d.MemberId) && !(_decisionsSeen.TryGetValue(d.RequestId, out var seen) && seen == d.DecidedAt))
+            .OrderBy(d => d.DecidedAt)
+            .ToList();
+        _decisionsSeen.Clear();
+        foreach (var d in decisions) _decisionsSeen[d.RequestId] = d.DecidedAt;
+        return fresh;
     }
 
     public Device Device => Snapshot.Config.Device(DeviceId);
@@ -180,19 +200,24 @@ public sealed class AgentCore(string deviceId)
         return RequestResult.Queued;
     }
 
-    /// <summary>Everything that must survive a restart. Outbox and queued requests are included so nothing is lost offline.</summary>
+    /// <summary>
+    /// Everything that must survive a restart. Outbox and queued requests are included so nothing is lost offline, and the
+    /// decisions seen so a restart does not announce them again.
+    /// </summary>
     public AgentState Export() => new(DeviceId, _snapshot, _localUsage.Clone(), new Dictionary<string, DateTimeOffset>(_localPauses),
-        [.. _outbox], _queued.Select(q => q.Clone()).ToList(), _queuedCounter);
+        [.. _outbox], _queued.Select(q => q.Clone()).ToList(), _queuedCounter, new Dictionary<string, DateTimeOffset>(_decisionsSeen));
 
     public static AgentCore Restore(AgentState state)
     {
         var agent = new AgentCore(state.DeviceId);
-        if (state.Snapshot is not null) agent.Apply(state.Snapshot);
+        // The decisions seen are restored as they were; the stored snapshot announces nothing.
+        if (state.Snapshot is not null) agent.Apply(state.Snapshot with { Decisions = null });
         agent._localUsage.MergeFrom(state.LocalUsage);
         foreach (var (member, until) in state.LocalPauses) agent._localPauses[member] = until;
         agent._outbox.AddRange(state.Outbox);
         agent._queued.AddRange(state.QueuedRequests.Select(q => q.Clone()));
         agent._queuedCounter = state.QueuedCounter;
+        foreach (var (request, decidedAt) in state.DecisionsSeen ?? new Dictionary<string, DateTimeOffset>()) agent._decisionsSeen[request] = decidedAt;
         return agent;
     }
 
@@ -228,6 +253,10 @@ public sealed class AgentCore(string deviceId)
 }
 
 /// <summary>An agent's persistent state.</summary>
+/// <param name="DecisionsSeen">
+/// Request id → decision time of the decisions in the last snapshot that carried them (<see cref="AgentCore.Apply"/>), so
+/// none is announced twice. Null: none seen yet.
+/// </param>
 public sealed record AgentState(
     string DeviceId,
     HubSnapshot? Snapshot,
@@ -235,7 +264,8 @@ public sealed record AgentState(
     IReadOnlyDictionary<string, DateTimeOffset> LocalPauses,
     IReadOnlyList<FamilyEvent> Outbox,
     IReadOnlyList<AccessRequest> QueuedRequests,
-    int QueuedCounter);
+    int QueuedCounter,
+    IReadOnlyDictionary<string, DateTimeOffset>? DecisionsSeen = null);
 
 /// <summary>A request as the child submits it, before the hub assigns an id.</summary>
 public sealed record AccessRequestDraft(
