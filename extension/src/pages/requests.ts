@@ -22,6 +22,14 @@ function rememberRequest(id: string): void {
   }
 }
 
+function forgetRequest(): void {
+  try {
+    sessionStorage.removeItem(pendingKey());
+  } catch {
+    // nothing kept
+  }
+}
+
 export function showResult(text: string, state: string): void {
   const el = byId("result");
   el.textContent = text;
@@ -66,6 +74,10 @@ export function wireRequestButtons(
 export function followDecision(onApproved: () => void): void {
   const handle = (status: DecisionReply["status"]): void => {
     if (status === "approved") {
+      // Forget it before going back: if the page is blocked again — for another reason, such as a time grant for a site
+      // that is still not allowed — that block page shows its own reason and request, instead of finding this decided
+      // request, announcing the approval again and going back until the loop guard stops it (the lab, 2026-10-25).
+      forgetRequest();
       showResult(t("decision_approved"), "approved");
       setTimeout(onApproved, 700);
     } else if (status === "denied") {

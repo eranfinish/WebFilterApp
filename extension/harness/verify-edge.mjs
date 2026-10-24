@@ -377,6 +377,26 @@ try {
       note: `${ni?.canRequest} ${!!newsAsked} ${!!newsInstalled} ${waiting} ${await page.title()}`,
     });
 
+    // An approval that does not unblock the page (the lab, 2026-10-25: extra time approved for a site that is still not in
+    // the allowlist): the page goes back, is blocked again, and that block page starts fresh — its own request button — not
+    // stuck announcing the old approval.
+    await b.sw.evaluate((s) => globalThis.wfTest.setScript(s), { ...approvedScript, requestAccess: { result: "created", requestId: "ar-9" } });
+    await visit(page, S("games.test", "/play"));
+    const gi = await waitFor(async () => {
+      const i = await pageInfo(page);
+      return i.ready ? i : null;
+    });
+    await page.click("#ask-url");
+    const gamesAsked = await waitFor(async () => (await pageInfo(page)).requestResult === "created");
+    await b.sw.evaluate(() => globalThis.wfTest.push({ type: "accessDecided", requestId: "ar-9", status: "approved" }));
+    const fresh = await waitFor(async () => {
+      const i = await pageInfo(page);
+      return i.ready && i.requestResult !== "approved" && i.requestResult !== "created" ? i : null;
+    }, 8000);
+    check("T22c an approval that leaves the page blocked: the block page comes back fresh, not stuck on the old approval", gi?.canRequest === "true" && !!gamesAsked && fresh?.canRequest === "true", {
+      note: JSON.stringify(fresh ?? (await pageInfo(page))),
+    });
+
     // ---- time up ---------------------------------------------------------------------------------------------
     const tab2 = await b.context.newPage();
     await visit(tab2, S("mashov.test", "/grades"));
