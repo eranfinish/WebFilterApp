@@ -169,6 +169,37 @@ Get-NetConnectionProfile | Set-NetConnectionProfile -NetworkCategory Private
 
   ובמחשב ה-Hub עצמו: אותה פקודה ליצירת `tom` ב-`lab-hub` מביאה את אותה הודעה עם `lab-hub`. ניקוי: עונים בכרטיסים (למשל "להשאיר חסום (אורח)") ומוחקים את החשבונות (`Remove-LocalUser tommy; Remove-LocalUser helper`, וב-`lab-hub` `Remove-LocalUser tom`). ה-Hub שומר במסך "מכשירים" גם חשבונות שנמחקו.
 
+### שומר התוסף (PROTECTION-SPEC §14)
+
+דפדפן שרץ אצל ילד בלי חיבור חי מהתוסף מקבל 3 דקות להורדת התוסף, ואחריהן הרשת שלו נחסמת בחשבון הזה עד שהתוסף מתחבר; ההורים מקבלים התראה. הכנה: ב-`lab-kids`, `noa` מקושרת לילד/ה ב-Hub ומחוברת; ב-Edge שלה התוסף 0.3.0 (`edge://extensions`), וב-Chrome עדיין 0.1.0 מהחנות (`chrome://extensions`), שלא מתחבר לשירות. ב-`lab-hub` `labadmin` מחובר וסמל המגן שם. הפקודות — ב-`lab-kids`, ב-PowerShell כמנהל (Switch user ל-`labadmin`, או PowerShell Direct מהמחשב שלך). שומרים שתי פקודות בדיקה:
+
+מסנני WFP של `noa` לכל דפדפן (2 = מותר, בשתי השכבות; 0 = חסום):
+
+```powershell
+netsh wfp show filters file=C:\Lab\filters.xml | Out-Null; $sid = (Get-LocalUser noa).SID.Value; foreach ($b in 'chrome.exe', 'msedge.exe') { "$b " + (Select-String -Path C:\Lab\filters.xml -Pattern "\$b for account $sid" -SimpleMatch).Count }
+```
+
+מה השומר רשם (ליומן של Windows מגיעות רק האזהרות — החסימה; ההחזרה לא):
+
+```powershell
+Get-WinEvent -FilterHashtable @{LogName='Application'; ProviderName='WebFilter.Service'} -MaxEvents 30 | Where-Object Message -like '*WebFilter extension*' | Format-List TimeCreated, Message
+```
+
+- [ ] **Chrome עם 0.1.0 נחסם אחרי 3 דקות, Edge עם 0.3.0 ממשיך.** ב-`noa` פותחים את Chrome ורושמים את השעה. צפוי: Chrome גולש (כלומר מגיע לרשת; התוסף הישן לא מסנן) עד כ-3:00–3:10 דקות מהפתיחה, ואז דף חדש ב-Chrome מקבל שגיאת רשת של הדפדפן (ייתכן `ERR_NETWORK_ACCESS_DENIED` או "אין חיבור לאינטרנט"); לילד אין הסבר מאיתנו — זו המגבלה המתועדת. Edge ממשיך לגלוש (ולסנן) כל הזמן. הפקודה הראשונה: לפני החסימה `chrome.exe 2`, `msedge.exe 2`; אחריה `chrome.exe 0`, `msedge.exe 2`. ביומן: `Chrome runs in S-1-5-21-… without a live connection from the WebFilter extension after the download window`. ומה קורה לדף שכבר היה פתוח בזמן החסימה (סרטון שמתנגן, הורדה)? לרשום אם הוא נקטע מיד או ממשיך (ALE re-authorization של WFP).
+- [ ] **ההורה מקבל התראה.** ב-`lab-hub`, תוך כדקה מהחסימה (סנכרון כל 10 שניות, וההתראות שואלות כל 30): הודעה "דפדפן נחסם: התוסף של WebFilter לא פעל" עם הטקסט "במחשב lab-kids הדפדפן Chrome פעל בחשבון מסונן בלי התוסף של WebFilter, ולכן החיבור שלו לרשת נחסם עד שהתוסף יתחבר." — מימין לשמאל, `lab-kids` ו-`Chrome` שלמים, בלי שם הילדה — והכפתורים "פתח את ניהול המשפחה" ו"סגור"; היא **נשארת** על המסך עד שלוחצים. בממשק הניהול, במסך "פעילות" (סוג "ניסיון עקיפה"): "Chrome פעל אצל נועה בלי התוסף של WebFilter, ולכן החיבור שלו לרשת נחסם עד שהתוסף יתחבר", מסומן כהתראה. בזמן חלון ההורדה עצמו **אין** הודעה.
+- [ ] **פתיחה מחדש נותנת חלון חדש, בלי הודעה נוספת.** סוגרים את כל החלונות של Chrome ב-`noa` ומוודאים שלא נשאר לה תהליך `chrome.exe` (למשל אם Chrome ממשיך לרוץ ברקע — "יציאה" מהסמל שלו ליד השעון):
+
+  ```powershell
+  Get-Process chrome, msedge -IncludeUserName -ErrorAction SilentlyContinue | Group-Object UserName, ProcessName | Select-Object Name, Count
+  ```
+
+  פותחים שוב: תוך כ-10 שניות `chrome.exe 2` בפקודה הראשונה, Chrome גולש עוד כ-3 דקות ונחסם שוב. ב-`lab-hub` **אין** הודעה שנייה באותה שעה (פעם בשעה לכל דפדפן וחשבון); ביומן של `lab-kids` יש שוב את האזהרה. אותו דבר כשסוגרים ופותחים מהר (פחות מ-10 שניות בין הסגירה לפתיחה).
+- [ ] **Edge אחרי סגירת החלונות.** סוגרים את כל החלונות של Edge ב-`noa` ובודקים בפקודה למעלה אם נשארים לה תהליכי `msedge.exe` (startup boost, "המשך להפעיל הרחבות ברקע"). לרשום: אם נשארים — פתיחה מחדש של Edge לא נחשבת הפעלה חדשה (רלוונטי רק כשהתוסף של Edge לא עובד; החלטה פתוחה: מדיניות `StartupBoostEnabled=0`/`BackgroundModeEnabled=0` לילדים).
+- [ ] **החיבור נשבר ל-90 שניות לכל היותר בלי חסימה.** בזמן ש-Edge של `noa` פתוח (אחרי יותר מ-3 דקות), כמנהל: `Stop-Process -Name WebFilter.NativeHost -Force`. צפוי: התוסף מתחבר מחדש תוך שניות, Edge ממשיך לגלוש, `msedge.exe 2` נשאר, ואין אזהרה ביומן ואין הודעה.
+- [ ] **החזרה כשהתוסף מתחבר.** כש-0.3.0 מאושר ב-Chrome Web Store: פותחים את Chrome ב-`noa` (חלון חדש) ובודקים ב-`chrome://extensions` מתי התוסף התעדכן. צפוי: בתוך חלון ההורדה התוסף מתעדכן ומתחבר, ו-Chrome לא נחסם; ואם נחסם קודם — תוך שנייה מהחיבור `chrome.exe 2` שוב (ה-hello מעיר את השומר). **למדוד** כמה זמן מהפתיחה עד שהגרסה החדשה מותקנת: אם יותר מ-3 דקות, Chrome של הילדים נשאר חסום גם אחרי האישור (כל פתיחה נחסמת לפני העדכון) — מאריכים את החלון ב-`appsettings.json` (`"ExtensionGrace": "00:10:00"` בסעיף `WebFilter`, ואז `Restart-Service WebFilter`) ומדווחים לי את הזמן שנמדד.
+- [ ] **לא חל על מנהלים, מבוגרים ובהשהיה.** `labadmin` פותח Chrome (עם 0.1.0) ב-`lab-kids` ומחכה 5 דקות: גולש, אין אזהרה, אין הודעה. השהיה של `noa` מה-Hub ל-15 דקות: Chrome שלה (גם אם היה חסום) גולש תוך כ-10 שניות; כשההשהיה נגמרת — חלון חדש של 3 דקות ואז חסימה.
+- [ ] **מתג חירום.** ב-`C:\Program Files\WebFilter\appsettings.json` מוסיפים בסעיף `WebFilter` את `"ExtensionGuard": false` ומריצים `Restart-Service WebFilter`: Chrome של `noa` כבר לא נחסם (`chrome.exe 2`). מחזירים (מוחקים את השורה, `Restart-Service WebFilter`). שימו לב: תיקון או שדרוג (`configure`) כותב את הקובץ מחדש ומוחק שינוי ידני.
+
 ## ג. הסרה (בשתי המכונות)
 
 הכנה: `noa` התחברה פעם אחת **והתנתקה** (ה-hive שלה לא טעון), ו-`yoav` **מחובר** (Switch user) בזמן ההסרה. **קודם הסוכן (`lab-kids`), כשה-Hub פועל**, ורק אחר כך ה-Hub — כדי לראות ב-Hub את ביטול הרישום.

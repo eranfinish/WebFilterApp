@@ -121,8 +121,9 @@ The admin app's activity page shows searches (filter "חיפושים").
 - The hub service exposes a read-only pipe `\\.\pipe\WebFilter.Notify` (DACL: Authenticated Users; the server accepts
   only clients whose token is an administrator's, elevated or not — `ClientIdentity.IsAdminAccount`). Messages:
   `getNotifications { since }` → `notificationsResult { items: [{ id, kind, at, memberId?, deviceId?, detail? }] }`.
-  Kinds: `request` (new access request), `tamper` (filters or policies repaired, extension silent while a browser runs
-  in a child's session, the service found it had stopped uncleanly), `device` (a paired computer stopped reporting for a
+  Kinds: `request` (new access request), `tamper` (filters or policies repaired, a browser cut off the network because it
+  ran in a filtered account without the extension — detail `extension_missing:chrome|edge`, §14 —, the service found it
+  had stopped uncleanly), `device` (a paired computer stopped reporting for a
   day), `account` (a new standard Windows account on the hub or a paired computer: browsing there is almost fully blocked
   until a parent answers the admin app's "נמצא חשבון Windows חדש" card; `deviceId` is the computer, `detail` the
   account's name, id `account:{deviceId}:{accountId}`, so one per account however often it is reported). No `account`
@@ -308,3 +309,92 @@ all. They now get a family-wide **baseline**, much lighter than a child's, and n
   are family-wide, not per parent. An existing family gets the jump guard, ad blocking and SafeSearch at once, and the
   adult list the first time a parent opens the admin app on the hub. A Windows administrator can undo any of it
   (policies, the extension's state); the service restores the policies silently. Not checked in the lab.
+
+## 14. Extension guard (`extension_missing`, 2026-10-24)
+
+Found in the lab on 2026-10-24: WFP lets the machine-wide Chrome and Edge reach the network for every restricted account
+(`WindowsPrograms.MachineBrowsers` in `NetworkPolicy`), and the filtering itself is the extension's. A browser whose
+extension is not working — not installed yet, a version still waiting for store approval (that day Chrome still had the
+0.1.0 stub, which never connects to the native host), or disabled by someone with administrator rights — browsed
+**unfiltered**. Decided with the user: tell the parents **and** block that browser's network until the extension connects,
+with a window for downloading the extension.
+
+- **Who:** exactly the accounts `NetworkPolicy.Desired` filters (`NetworkPolicy.FilteredAccounts`,
+  `ExtensionGuard.GuardedAccounts`): accounts linked to a restricted member who is not paused (the hub's pause or this
+  computer's own) and unlinked standard accounts (guests included). Never administrators or unrestricted members — their
+  baseline protection (§13) is not enforcement — and never a paused member: a member paused while blocked gets the browser
+  back at the next pass. Time up changes nothing: a browser with a live extension stays allowed for the time-up page as
+  before, and one without it is blocked at any hour.
+- **Which browsers:** Chrome and Edge (`BrowserKind`, wire names `chrome`/`edge` as in `hello`). A browser's paths
+  (`BrowserKinds.Paths`) are its machine-wide copies (`WindowsPrograms.MachineBrowsers`) and the family's
+  `supportedBrowsers` with the same file name (`chrome.exe`, `msedge.exe`). Other browsers are not allowed for children
+  at all.
+- **Processes:** every 10 seconds (`ExtensionGuardInterval`) the service lists the processes with those file names (the
+  system's process list) and reads, through a handle with `PROCESS_QUERY_LIMITED_INFORMATION`, each one's full image path
+  (only the guarded paths count: a `chrome.exe` elsewhere is not the machine-wide browser, and WFP blocks it anyway), its
+  start time and its token's user SID (`WindowsRunningPrograms`, read-only). Polling rather than process-start events:
+  a start matters only after the window, 10 seconds late costs nothing, and a poll also sees browsers that started while
+  the service was busy or stopped.
+- **Connections:** the agent pipe's sessions (`ExtensionConnections`). From a session's `hello`, the account comes from
+  the pipe client's token (never from the message), the browser from `HelloRequest.Browser` and the extension id from
+  `extensionId`; every message on the session (the heartbeat comes every 30 seconds) updates when it was last heard
+  from. **Live** means heard from within **90 seconds** and, when the service knows the store id for that browser
+  (`ChromeExtensionId`/`EdgeExtensionId`, written into `appsettings.json` by the installer), with that id. 90 seconds is
+  three missed heartbeats, so a slow or busy browser is not cut off; a closed session's last message keeps counting for
+  those 90 seconds, so an extension that reloads (an update, a restarted service worker or native host) reconnects
+  without a block. A session of another extension id does not count; a `hello` naming another browser counts for nothing.
+- **Download window:** a browser that starts running in a guarded account keeps its network for `ExtensionGrace`
+  (**3 minutes** by default; `"ExtensionGrace": "00:05:00"` in the `WebFilter` section of `appsettings.json`), so it can
+  install the force-installed extension or update it from the store. Nothing is reported for the window. A **new start**
+  — all the browser's processes had exited, then it runs again — opens a new window: processes are told apart by id and
+  start time, so a browser closed and reopened between two polls (none of the processes seen before is left) is a new
+  start too. Closing and reopening the browser is how a stuck download gets another chance.
+- **Block:** after the window, with the browser still running and still no live connection, the browser's paths leave
+  that account's WFP allowlist (`NetworkPolicy.Desired(..., blockedBrowsers)`; the guard hands them to `WfpService`
+  through `BrowserBlocks`, and the account's filters are replaced in one WFP transaction): that browser has no network
+  for that child, and the rest of the account's policy — the other browser, approved apps, the Windows features — is
+  unchanged. A connection that was live and goes silent after the window blocks 90 seconds after its last message (the
+  window counts from the browser's start, not from the connection's loss).
+- **Restore:** a live connection lifts the block at once — the `hello` wakes the guard, which wakes WFP (no wait for
+  the next poll). A browser that stops running is forgotten, and its block with it.
+- **Gaps:** after more than 90 seconds between two passes (sleep or hibernation, a busy service, a clock change) no
+  block starts for the next 90 seconds, so the extensions are heard from first (a browser runs its missed alarms when the
+  computer wakes).
+- **Service restart:** blocks are not stored. A restarted service starts with every browser allowed, and browsers
+  already running get a new window from its start. While the service is stopped the persistent WFP filters stay as they
+  were, so a blocked browser stays blocked (fail closed).
+- **Notification:** a block that starts is a `tamper` event (`TamperKinds.ExtensionMissing`) whose detail names the
+  browser after a ':' — `extension_missing:chrome` or `extension_missing:edge` (`TamperKinds.ExtensionMissingIn`), like a
+  request's `kind:target` — with the account's member and the computer; the hub turns it into a `tamper` notification
+  with the same detail (§10). `FamilyService.ReportTamper` keeps at most one per hour for the same detail and account,
+  that is per browser and account; repeats are only logged. The window, a restore and a stop are logged, not reported.
+  - Admin app, activity: "Chrome פעל אצל ‹member› בלי התוסף של WebFilter, ולכן החיבור שלו לרשת נחסם עד שהתוסף
+    יתחבר" ("… בחשבון Windows שלא שויך לבן משפחה …" for an unlinked account; "דפדפן" when the browser is missing), shown
+    as an alert; English alongside.
+  - Notifier: title "דפדפן נחסם: התוסף של WebFilter לא פעל", text "במחשב ‹computer› הדפדפן Chrome פעל בחשבון מסונן בלי
+    התוסף של WebFilter, ולכן החיבור שלו לרשת נחסם עד שהתוסף יתחבר." — the computer and the browser, never the child; a
+    tamper toast, so it stays on the screen. Older admin apps show the raw detail; older notifiers the generic tamper text.
+- **Switches** (`appsettings.json`, section `WebFilter`): the guard works through WFP, so only with `ManageNetwork`;
+  `ExtensionGuard` (default `true`) is the emergency off switch; `ExtensionGrace`; `ExtensionGuardInterval`. `configure`
+  (install, repair, upgrade) rewrites the file, so a hand-made change is lost then. No setting in the admin app yet.
+- **What the child sees:** while blocked, the browser shows its own network error for new pages (no connection, or
+  `ERR_NETWORK_ACCESS_DENIED` or similar). The service has no UI in the child's session, so nothing says why —
+  **limitation**. Reopening the browser gives a new window. Whether connections opened before the block (a video already
+  playing) are cut at once depends on WFP re-authorizing existing connections when the filters change — to be checked in
+  the lab.
+- **Store lag:** a new extension version waiting for approval in a store, or an installed version that never connects
+  (Chrome's 0.1.0 stub), keeps that browser blocked for children — a window at every start, then blocked — until the
+  approved version is installed; the parents are told (once an hour per browser and account), and the other browser keeps
+  working if its extension does. After approval the browser has to fetch the update within a window; how long Chrome and
+  Edge take to update a force-installed extension after a start is to be measured in the lab (the first install in Edge
+  took about 5 minutes on 2026-10-23), and `ExtensionGrace` set from it.
+- **Limits:** every new start gives a new window, so a child who keeps restarting a browser whose extension is broken
+  browses in short stretches (the parents are told once an hour; a shorter window or a cap per hour would narrow it).
+  A new start needs every process of the browser to exit: Edge's startup boost and "continue running background
+  extensions" can keep `msedge.exe` running after its windows close, and then only signing out gives a new window (the
+  policies `StartupBoostEnabled = 0` and `BackgroundModeEnabled = 0` for children would change that; not set). The
+  browser and the id in a `hello` are the extension's word: a child who could run the native host by hand and speak the
+  framed protocol with a forged `hello` could make a broken browser look connected (it needs the extension broken first;
+  checking that the host was started by the browser is a follow-up). One live session counts for every profile of that
+  browser in the account (profiles and guest mode are off for children by policy). Only computers with `ManageNetwork`
+  (the installed service). Not checked in the lab.
