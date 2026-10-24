@@ -63,7 +63,26 @@ public sealed class ServiceOptions
     /// </summary>
     public bool ManageNetwork { get; set; }
 
-    /// <summary>Store ids of the published extension (after spike S1). Without them no force-install policy is written.</summary>
+    /// <summary>
+    /// The extension guard (PROTECTION-SPEC §14): a browser that runs in a restricted account without a live connection from
+    /// the extension loses its network there after <see cref="ExtensionGrace"/>, and the parents are told. Works through the
+    /// network filters, so only together with <see cref="ManageNetwork"/>. On by default; off is an emergency switch.
+    /// </summary>
+    public bool ExtensionGuard { get; set; } = true;
+
+    /// <summary>
+    /// The download window: how long a browser that starts without a live connection from the extension keeps its network,
+    /// so it can install or update the extension from its store (PROTECTION-SPEC §14).
+    /// </summary>
+    public TimeSpan ExtensionGrace { get; set; } = Core.Engine.ExtensionGuardOptions.DefaultGrace;
+
+    /// <summary>How often the extension guard looks at the running browsers; a hello from the extension wakes it at once.</summary>
+    public TimeSpan ExtensionGuardInterval { get; set; } = TimeSpan.FromSeconds(10);
+
+    /// <summary>
+    /// Store ids of the published extension (after spike S1). Without them no force-install policy is written, and the
+    /// extension guard counts a session from that browser whatever extension id its hello gives.
+    /// </summary>
     public string? ChromeExtensionId { get; set; }
 
     public string? EdgeExtensionId { get; set; }

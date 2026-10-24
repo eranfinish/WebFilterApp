@@ -10,6 +10,7 @@ using WebFilter.Contracts.Notify;
 using WebFilter.Core.Engine;
 using WebFilter.Core.Model;
 using WebFilter.Service.Accounts;
+using WebFilter.Service.Guard;
 using WebFilter.Service.Pipes;
 
 namespace WebFilter.Service.Tests;
@@ -31,6 +32,7 @@ public sealed class PipeIntegrationTests : IAsyncLifetime
     private NotifyPipeServer _notifyServer = null!;
     private Func<ClientIdentity, bool>? _notifyPolicy;
     private readonly FakeLocalAccounts _accounts = new();
+    private readonly ExtensionConnections _connections = new();
 
     public async Task InitializeAsync()
     {
@@ -61,7 +63,7 @@ public sealed class PipeIntegrationTests : IAsyncLifetime
     {
         _family = new FamilyService(Options.Create(_options), _clock, NullLogger<FamilyService>.Instance);
         _family.Start();
-        _agentServer = new AgentPipeServer(_family, Options.Create(_options), NullLogger<AgentPipeServer>.Instance);
+        _agentServer = new AgentPipeServer(_family, Options.Create(_options), NullLogger<AgentPipeServer>.Instance, _connections);
         _adminServer = new AdminPipeServer(_family, Options.Create(_options), _clock, NullLogger<AdminPipeServer>.Instance, _accounts);
         _notifyServer = _notifyPolicy is null
             ? new NotifyPipeServer(_family, Options.Create(_options), NullLogger<NotifyPipeServer>.Instance)
@@ -94,6 +96,62 @@ public sealed class PipeIntegrationTests : IAsyncLifetime
         Assert.Equal("child", hello.User.Role);
         Assert.Equal("allowlist", hello.Mode);
         Assert.Equal("service", hello.Source);
+    }
+
+    /// <summary>
+    /// PROTECTION-SPEC §14: a hello tells the extension guard that this browser's extension is connected for the OS's user
+    /// (not one the message names), every message after it that it is alive, and a closed session ages out.
+    /// </summary>
+    [Fact]
+    public async Task A_hello_registers_the_extension_session_for_the_guard_and_its_messages_keep_it_alive()
+    {
+        const string ChromeId = "cccccccccccccccccccccccccccccccc";
+        var hellos = 0;
+        _connections.Connected += () => Interlocked.Increment(ref hellos);
+        var start = _clock.Now;
+        await using (var agent = await AgentClient.ConnectAsync(_options.AgentPipeName))
+        {
+            await agent.RequestAsync<TimeStateMessage>(new HeartbeatRequest(true, "active", true));
+            Assert.Empty(_connections.Snapshot(start)); // no hello yet: no browser to count it for
+
+            await agent.RequestAsync<HelloResponse>(new HelloRequest("0.3.0", "chrome", ChromeId));
+            _clock.Now = start.AddSeconds(30);
+            await agent.RequestAsync<TimeStateMessage>(new HeartbeatRequest(true, "active", true));
+
+            var session = Assert.Single(_connections.Snapshot(_clock.Now));
+            Assert.Equal((UserSid, BrowserKind.Chrome, ChromeId, start.AddSeconds(30)), (session.AccountId, session.Browser, session.ExtensionId, session.LastHeard));
+            Assert.Equal(1, Volatile.Read(ref hellos));
+
+            // A hello for a browser the guard does not know is answered, and counts for nothing.
+            await using var other = await AgentClient.ConnectAsync(_options.AgentPipeName);
+            await other.RequestAsync<HelloResponse>(new HelloRequest("0.3.0", "firefox", ChromeId));
+            Assert.Single(_connections.Snapshot(_clock.Now));
+        }
+
+        // Closed: the last message counts for a while (an extension reloading reconnects within it), then it is forgotten.
+        var gone = start.AddSeconds(30) + ExtensionConnections.ClosedKept + TimeSpan.FromSeconds(1);
+        Assert.NotNull(await Poll(() => _connections.Snapshot(gone).Count == 0 ? "closed" : null));
+        Assert.Equal(1, Volatile.Read(ref hellos));
+    }
+
+    /// <summary>PROTECTION-SPEC §14 and §10: a browser blocked for lack of the extension reaches the parents as a tamper notification naming the browser.</summary>
+    [Fact]
+    public async Task A_missing_extension_becomes_a_tamper_notification_naming_the_browser()
+    {
+        // Whoever runs the tests plays the parent (the identity check itself is tested above).
+        await StopAsync();
+        _notifyPolicy = _ => true;
+        await StartAsync();
+        await using var notify = await NotifyClient.ConnectAsync(_options.NotifyPipeName);
+
+        _family.ReportTamper(UserSid, TamperKinds.ExtensionMissingIn(BrowserKind.Chrome));
+        _family.ReportTamper(UserSid, TamperKinds.ExtensionMissingIn(BrowserKind.Chrome)); // within the hour: not again
+        _family.ReportTamper(UserSid, TamperKinds.ExtensionMissingIn(BrowserKind.Edge));
+        _family.Tick();
+
+        var items = Assert.IsType<NotificationsResult>(await notify.RequestAsync(new GetNotifications())).Items;
+        Assert.Equal([("tamper", "extension_missing:chrome"), ("tamper", "extension_missing:edge")], items.Select(i => (i.Kind, i.Detail)));
+        Assert.All(items, i => Assert.Equal(("noa", "pc-kids"), (i.MemberId, i.DeviceId)));
     }
 
     [Fact]

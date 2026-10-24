@@ -7,13 +7,19 @@ using WebFilter.Core.Engine;
 using WebFilter.Core.Model;
 using WebFilter.Core.Time;
 using WebFilter.Core.Urls;
+using WebFilter.Service.Guard;
 
 namespace WebFilter.Service.Pipes;
 
-/// <summary>One native host connection: answers agent-protocol requests and pushes settings and time changes.</summary>
-internal sealed class AgentSession(Stream pipe, ClientIdentity client, FamilyService family, ILogger log)
+/// <summary>
+/// One native host connection: answers agent-protocol requests and pushes settings and time changes. From its hello on, it
+/// tells <paramref name="connections"/> that the extension of that browser is connected for the client's account, and when
+/// it was last heard from (the extension guard, PROTECTION-SPEC §14).
+/// </summary>
+internal sealed class AgentSession(Stream pipe, ClientIdentity client, FamilyService family, ILogger log, ExtensionConnections? connections = null)
 {
     private readonly Channel<AgentMessage> _outgoing = Channel.CreateUnbounded<AgentMessage>(new UnboundedChannelOptions { SingleReader = true });
+    private ExtensionConnections.Session? _connection;
     private string? _extensionId;
     private string? _lastTimeState;
     // When the rules last sent stop being right on their own (a temporary rule expires), in UTC ticks.
@@ -38,6 +44,7 @@ internal sealed class AgentSession(Stream pipe, ClientIdentity client, FamilySer
         {
             while (await AgentProtocol.ReadLenientAsync(pipe, linked.Token) is { } message)
             {
+                _connection?.Heard(family.Now);
                 AgentMessage reply;
                 try
                 {
@@ -57,6 +64,7 @@ internal sealed class AgentSession(Stream pipe, ClientIdentity client, FamilySer
         }
         finally
         {
+            _connection?.Close();
             family.SettingsChanged -= OnSettings;
             family.Ticked -= OnTick;
             family.RequestDecided -= OnDecided;
@@ -104,6 +112,12 @@ internal sealed class AgentSession(Stream pipe, ClientIdentity client, FamilySer
     private AgentMessage Hello(HelloRequest hello)
     {
         _extensionId = hello.ExtensionId;
+        // The account is the OS's (the client's token); the browser and the extension id are what the hello says.
+        if (connections is not null && client.UserSid is { Length: > 0 } sid && BrowserKinds.TryParse(hello.Browser, out var browser))
+        {
+            _connection?.Close();
+            _connection = connections.Open(sid, browser, hello.ExtensionId, family.Now);
+        }
         return family.WithAgent<AgentMessage>((agent, now) =>
         {
             var account = Account(agent);
