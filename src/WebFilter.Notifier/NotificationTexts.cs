@@ -68,10 +68,19 @@ public static class NotificationTexts
             "network_repaired" => (Strings.Tamper_Network_Title, Format(Strings.Tamper_Network_Text, computer)),
             // Not an accusation: a power cut or a forced shutdown looks the same.
             "unclean_stop" => (Strings.Tamper_UncleanStop_Title, Format(Strings.Tamper_UncleanStop_Text, computer)),
+            "extension_missing" => (Strings.Tamper_ExtensionMissing_Title, Format(Strings.Tamper_ExtensionMissing_AnyText, computer)),
+            { } detail when detail.StartsWith("extension_missing:", StringComparison.Ordinal) =>
+                (Strings.Tamper_ExtensionMissing_Title, Format(Strings.Tamper_ExtensionMissing_Text, computer, Browser(detail["extension_missing:".Length..]))),
             _ => (Strings.Tamper_Other_Title, Format(Strings.Tamper_Other_Text, computer)),
         };
         return new(title, Join(text, Strings.Open_Hint));
     }
+
+    /// <summary>
+    /// The browser of an "extension_missing:‹browser›" detail (PROTECTION-SPEC §14), by its product name; one this notifier
+    /// does not know is shown as sent. Kept left to right inside the Hebrew sentence.
+    /// </summary>
+    private static string Browser(string wire) => Ltr(wire switch { "chrome" => "Chrome", "edge" => "Edge", _ => wire });
 
     /// <summary>"kids-pc has not reported for over a day (last on 21.10 at 18:30)."; detail is when it last reported (ISO-8601), if ever.</summary>
     private static string Device(NotificationDto item, TimeZoneInfo zone)

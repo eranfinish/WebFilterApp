@@ -59,6 +59,22 @@ public class ProtectionEventsTests
         Assert.Equal((null, "pc-kids", "unclean_stop"), (recorded[2].MemberId, recorded[2].DeviceId, recorded[2].Detail));
     }
 
+    /// <summary>PROTECTION-SPEC §14: a browser blocked for lack of its extension is a tamper event naming the browser and the member.</summary>
+    [Fact]
+    public void A_missing_extension_names_the_browser_after_the_kind()
+    {
+        Assert.Equal("extension_missing:chrome", TamperKinds.ExtensionMissingIn(BrowserKind.Chrome));
+        Assert.Equal("extension_missing:edge", TamperKinds.ExtensionMissingIn(BrowserKind.Edge));
+        Assert.StartsWith(TamperKinds.ExtensionMissing + ":", TamperKinds.ExtensionMissingIn(BrowserKind.Edge), StringComparison.Ordinal);
+
+        var hub = new HubCore(Fixture());
+        var agent = new AgentCore("pc-kids");
+        agent.Apply(hub.Snapshot());
+        agent.ReportTamper("S-1-5-21-2000-1001", TamperKinds.ExtensionMissingIn(BrowserKind.Chrome), Now); // noa's account
+        var e = Assert.Single(agent.TakeUpload().Events);
+        Assert.Equal((EventType.Tamper, "noa", "pc-kids", "extension_missing:chrome"), (e.Type, e.MemberId, e.DeviceId, e.Detail));
+    }
+
     [Fact]
     public void A_tamper_before_the_first_settings_still_names_the_computer()
     {

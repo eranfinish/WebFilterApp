@@ -1507,6 +1507,15 @@ Do this only for your home network. On a café, hotel or work network it is safe
   <data name="Tamper_unclean_stop" xml:space="preserve">
     <value>The filter service stopped unexpectedly and started again. This can be a power cut or the computer being switched off by force, not necessarily an attempt to get around the filter</value>
   </data>
+  <data name="Tamper_extension_missing" xml:space="preserve">
+    <value>{0} ran for {1} without the WebFilter extension, so its network connection is blocked until the extension connects</value>
+  </data>
+  <data name="Tamper_extension_missing_Unlinked" xml:space="preserve">
+    <value>{0} ran in a Windows account not linked to a family member without the WebFilter extension, so its network connection is blocked until the extension connects</value>
+  </data>
+  <data name="Tamper_AnyBrowser" xml:space="preserve">
+    <value>A browser</value>
+  </data>
   <data name="Devices_BadgeToolTip" xml:space="preserve">
     <value>New Windows accounts not yet assigned to a family member</value>
   </data>

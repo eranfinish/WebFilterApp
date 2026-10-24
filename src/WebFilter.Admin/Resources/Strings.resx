@@ -1511,6 +1511,15 @@
   <data name="Tamper_unclean_stop" xml:space="preserve">
     <value>שירות הסינון נעצר באופן לא צפוי והופעל מחדש. זו יכולה להיות הפסקת חשמל או כיבוי בכוח של המחשב, ולא בהכרח ניסיון לעקוף את הסינון</value>
   </data>
+  <data name="Tamper_extension_missing" xml:space="preserve">
+    <value>{0} פעל אצל {1} בלי התוסף של WebFilter, ולכן החיבור שלו לרשת נחסם עד שהתוסף יתחבר</value>
+  </data>
+  <data name="Tamper_extension_missing_Unlinked" xml:space="preserve">
+    <value>{0} פעל בחשבון Windows שלא שויך לבן משפחה בלי התוסף של WebFilter, ולכן החיבור שלו לרשת נחסם עד שהתוסף יתחבר</value>
+  </data>
+  <data name="Tamper_AnyBrowser" xml:space="preserve">
+    <value>דפדפן</value>
+  </data>
   <data name="Devices_BadgeToolTip" xml:space="preserve">
     <value>חשבונות Windows חדשים שעדיין לא שויכו לבן משפחה</value>
   </data>

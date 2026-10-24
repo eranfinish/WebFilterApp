@@ -52,6 +52,7 @@ public sealed class NotificationToastsTests
     [InlineData("network_repaired")]
     [InlineData("unclean_stop")]
     [InlineData("extension_silent")]
+    [InlineData("extension_missing:chrome")]
     public void Tamper_stays_on_the_screen_until_the_parent_opens_or_closes_it(string detail)
     {
         var item = TestData.Tamper(1, detail);

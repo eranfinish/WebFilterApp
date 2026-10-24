@@ -2,14 +2,17 @@ using System.IO.Pipes;
 using System.Security.AccessControl;
 using System.Security.Principal;
 using Microsoft.Extensions.Options;
+using WebFilter.Service.Guard;
 
 namespace WebFilter.Service.Pipes;
 
 /// <summary>
 /// <c>\\.\pipe\WebFilter.Agent</c>: any signed-in user may connect (the native host runs as the browser's user), but only
 /// clients whose executable is a trusted native host get a session; identity comes from the OS (<see cref="ClientIdentity"/>).
+/// Sessions are reported to <paramref name="connections"/> for the extension guard (PROTECTION-SPEC §14).
 /// </summary>
-public sealed class AgentPipeServer(FamilyService family, IOptions<ServiceOptions> options, ILogger<AgentPipeServer> log) : BackgroundService
+public sealed class AgentPipeServer(FamilyService family, IOptions<ServiceOptions> options, ILogger<AgentPipeServer> log,
+    ExtensionConnections? connections = null) : BackgroundService
 {
     private readonly ServiceOptions _options = options.Value;
 
@@ -75,7 +78,7 @@ public sealed class AgentPipeServer(FamilyService family, IOptions<ServiceOption
             log.LogDebug("Agent session for {Client}", client);
             try
             {
-                await new AgentSession(pipe, client, family, log).RunAsync(ct);
+                await new AgentSession(pipe, client, family, log, connections).RunAsync(ct);
             }
             catch (Exception ex) when (ex is IOException or OperationCanceledException or ObjectDisposedException)
             {

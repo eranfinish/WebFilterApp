@@ -1,5 +1,6 @@
 using WebFilter.Service;
 using WebFilter.Service.Accounts;
+using WebFilter.Service.Guard;
 using WebFilter.Service.Hub;
 using WebFilter.Service.Network;
 using WebFilter.Service.Pipes;
@@ -27,6 +28,10 @@ builder.Services.AddSingleton<FamilyService>();
 builder.Services.AddSingleton<ILocalAccounts, WindowsLocalAccounts>();
 builder.Services.AddSingleton<IMachineProbe, WindowsMachineProbe>();
 builder.Services.AddHostedService<TickService>();
+// The extension guard (PROTECTION-SPEC §14): the agent pipe reports the extension's sessions, the guard decides which
+// browsers to block, and WfpService leaves them out of the allowlists.
+builder.Services.AddSingleton<ExtensionConnections>();
+builder.Services.AddSingleton<BrowserBlocks>();
 builder.Services.AddHostedService<AgentPipeServer>();
 builder.Services.AddHostedService<AdminPipeServer>();
 builder.Services.AddHostedService<NotifyPipeServer>();
@@ -34,6 +39,7 @@ builder.Services.AddHostedService<NotifyPipeServer>();
 builder.Services.AddSessionEvents();
 builder.Services.AddHostedService<PolicyService>();
 builder.Services.AddHostedService<WfpService>();
+builder.Services.AddHostedService<ExtensionGuardService>();
 builder.Services.AddSingleton<HubServer>();
 builder.Services.AddHostedService(sp => sp.GetRequiredService<HubServer>());
 builder.Services.AddSingleton<HubSyncService>();

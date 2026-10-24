@@ -28,7 +28,8 @@ public sealed class ViewRenderTests
         client.Events.Add(new EventDto("search", TestData.Now.AddMinutes(-4), "yoav", "laptop-yoav", null, "https://www.google.com/search?q=lego", null, null, "google:lego"));
         client.Events.Add(new EventDto("override", TestData.Now.AddMinutes(-5), "yoav", "laptop-yoav", "blocked_jump", "https://news.example/", null, null, null));
         client.Events.Add(new EventDto("tamper", TestData.Now.AddMinutes(-6), null, "pc-kids", null, null, null, null, "unclean_stop"));
-        client.Settings = client.Settings with { Rules = [.. client.Settings.Rules, .. SchoolSignIn.Rules] };
+        client.Events.Add(new EventDto("tamper", TestData.Now.AddMinutes(-7), "noa", "pc-kids", null, null, null, null, "extension_missing:chrome"));
+        client.Settings =client.Settings with { Rules = [.. client.Settings.Rules, .. SchoolSignIn.Rules] };
         client.Checks.Add(new CheckResult("onedrive", "warn", "OneDriveSetup.exe /allusers"));
         await using var shown = await ShownAsync(client);
 

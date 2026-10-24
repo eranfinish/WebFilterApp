@@ -39,6 +39,14 @@ public sealed class NotificationTextsTests
     [InlineData("network_repaired", "מסנני הרשת הוסרו", "במחשב pc-kids הוסרו מסנני הרשת של חשבון, והסינון החזיר אותם.")]
     [InlineData("unclean_stop", "שירות הסינון נעצר", "במחשב pc-kids שירות הסינון נעצר באופן לא צפוי והופעל מחדש. ייתכן שהייתה הפסקת חשמל או כיבוי בכוח.")]
     [InlineData("extension_silent", "שינוי בסינון", "במחשב pc-kids קרה משהו שכדאי לבדוק ביומן הפעילות.")]
+    [InlineData("extension_missing:chrome", "דפדפן נחסם: התוסף של WebFilter לא פעל",
+        "במחשב pc-kids הדפדפן Chrome פעל בחשבון מסונן בלי התוסף של WebFilter, ולכן החיבור שלו לרשת נחסם עד שהתוסף יתחבר.")]
+    [InlineData("extension_missing:edge", "דפדפן נחסם: התוסף של WebFilter לא פעל",
+        "במחשב pc-kids הדפדפן Edge פעל בחשבון מסונן בלי התוסף של WebFilter, ולכן החיבור שלו לרשת נחסם עד שהתוסף יתחבר.")]
+    [InlineData("extension_missing:firefox", "דפדפן נחסם: התוסף של WebFilter לא פעל",
+        "במחשב pc-kids הדפדפן firefox פעל בחשבון מסונן בלי התוסף של WebFilter, ולכן החיבור שלו לרשת נחסם עד שהתוסף יתחבר.")]
+    [InlineData("extension_missing", "דפדפן נחסם: התוסף של WebFilter לא פעל",
+        "במחשב pc-kids דפדפן פעל בחשבון מסונן בלי התוסף של WebFilter, ולכן החיבור שלו לרשת נחסם עד שהתוסף יתחבר.")]
     public void Tamper_says_what_was_undone_and_where(string detail, string title, string text)
     {
         var shown = One(TestData.Tamper(1, detail));
@@ -55,6 +63,20 @@ public sealed class NotificationTextsTests
         Assert.StartsWith("במחשב לא ידוע", text, StringComparison.Ordinal);
         Assert.DoesNotContain("ניסיון", text, StringComparison.Ordinal);
         Assert.DoesNotContain("עקיפה", text, StringComparison.Ordinal);
+    }
+
+    /// <summary>PROTECTION-SPEC §14: the browser is named, in one piece and inside a Hebrew sentence; the child is not.</summary>
+    [Fact]
+    public void A_browser_blocked_without_the_extension_names_the_browser_and_the_computer_not_the_child()
+    {
+        var shown = new NotificationDto("tamper:1", NotificationKinds.Tamper, TestData.Now, "m-1a2b3c4d", "pc-kids", "extension_missing:chrome");
+
+        var text = One(shown).Text;
+
+        Assert.Contains("‎Chrome‎", text, StringComparison.Ordinal);
+        Assert.StartsWith("במחשב", text, StringComparison.Ordinal);
+        Assert.DoesNotContain("m-1a2b3c4d", text, StringComparison.Ordinal);
+        Assert.Contains("נחסם עד שהתוסף יתחבר", text, StringComparison.Ordinal);
     }
 
     [Fact]

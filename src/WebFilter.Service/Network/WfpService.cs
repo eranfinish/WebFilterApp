@@ -2,6 +2,7 @@ using System.ComponentModel;
 using System.Runtime.Versioning;
 using Microsoft.Extensions.Options;
 using WebFilter.Core.Engine;
+using WebFilter.Service.Guard;
 
 namespace WebFilter.Service.Network;
 
@@ -9,12 +10,15 @@ namespace WebFilter.Service.Network;
 /// Keeps the WFP filters equal to <see cref="NetworkPolicy.Desired"/> (MVP-PLAN §5.3): when the service starts, after
 /// every settings change, and on every tick (<see cref="ServiceOptions.TickInterval"/>) — a time window that opens or
 /// closes, or a daily limit that runs out, changes an account's allowed programs without any settings change, and the
-/// tick also puts back filters someone deleted. Does nothing unless <see cref="ServiceOptions.ManageNetwork"/> is set.
+/// tick also puts back filters someone deleted — and whenever the extension guard blocks or restores a browser
+/// (<see cref="BrowserBlocks"/>, PROTECTION-SPEC §14), whose paths then leave or rejoin that account's allowlist. Does nothing
+/// unless <see cref="ServiceOptions.ManageNetwork"/> is set.
 /// On an agent it waits for the first settings from the hub; the persistent filters from before keep applying meanwhile.
 /// A failure is logged and retried on the next tick; it never stops the service.
 /// </summary>
 [SupportedOSPlatform("windows")]
-public sealed class WfpService(FamilyService family, IOptions<ServiceOptions> options, ILogger<WfpService> log, IWfpEngine? engine = null) : BackgroundService
+public sealed class WfpService(FamilyService family, IOptions<ServiceOptions> options, ILogger<WfpService> log, IWfpEngine? engine = null,
+    BrowserBlocks? blocks = null) : BackgroundService
 {
     private readonly SemaphoreSlim _wake = new(0);
 
@@ -30,6 +34,7 @@ public sealed class WfpService(FamilyService family, IOptions<ServiceOptions> op
         void OnTick(DateTimeOffset _) => Wake();
         family.SettingsChanged += OnSettings;
         family.Ticked += OnTick;
+        if (blocks is not null) blocks.Changed += Wake;
         var waitingLogged = false;
         try
         {
@@ -42,7 +47,9 @@ public sealed class WfpService(FamilyService family, IOptions<ServiceOptions> op
                     // act on an empty family (which would lift every filter).
                     // Resolved on every pass: a machine-wide OneDrive installed meanwhile is picked up.
                     var programs = WindowsProgramPaths.Resolve();
-                    var desired = family.WithAgent((agent, now) => agent.SnapshotVersion is null ? null : NetworkPolicy.Desired(agent.View(), agent.DeviceId, now, programs));
+                    var blocked = blocks?.Current;
+                    var desired = family.WithAgent((agent, now) =>
+                        agent.SnapshotVersion is null ? null : NetworkPolicy.Desired(agent.View(), agent.DeviceId, now, programs, blocked));
                     if (desired is null)
                     {
                         if (!waitingLogged) log.LogInformation("Network filters wait for the first settings from the hub");
@@ -70,6 +77,7 @@ public sealed class WfpService(FamilyService family, IOptions<ServiceOptions> op
         {
             family.SettingsChanged -= OnSettings;
             family.Ticked -= OnTick;
+            if (blocks is not null) blocks.Changed -= Wake;
         }
     }
 

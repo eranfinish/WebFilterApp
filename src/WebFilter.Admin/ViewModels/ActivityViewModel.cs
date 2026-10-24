@@ -120,9 +120,30 @@ public sealed class EventItemViewModel
             "access_request" => Texts.Join(": ", Texts.Code("RequestKind_", item.Detail), Texts.Ltr(item.Url)),
             "search" => Texts.Join(" — ", Search(item.Detail), Texts.Ltr(item.Url)),
             "override" => Texts.Join(" — ", Texts.Format(Strings.Event_Override, Texts.Ltr(item.Url)), reason),
-            "tamper" => Texts.Join(" — ", Texts.Code("Tamper_", item.Detail), reason),
+            "tamper" => Tamper(item.Detail, MemberName) ?? Texts.Join(" — ", Texts.Code("Tamper_", item.Detail), reason),
             _ => Texts.Join(" — ", item.Detail, reason, Texts.Ltr(item.Url), Texts.Ltr(item.App)),
         };
+    }
+
+    /// <summary>
+    /// A tamper detail that names its subject after a ':' — "extension_missing:chrome" (PROTECTION-SPEC §14) — as "Chrome ran
+    /// for ‹member› without the WebFilter extension, …"; null for the other kinds, which are worded by their code alone.
+    /// </summary>
+    internal static string? Tamper(string? detail, string memberName)
+    {
+        var text = detail ?? "";
+        var colon = text.IndexOf(':', StringComparison.Ordinal);
+        if ((colon < 0 ? text : text[..colon]) != "extension_missing") return null;
+        var browser = (colon < 0 ? "" : text[(colon + 1)..]) switch
+        {
+            "chrome" => "Chrome",
+            "edge" => "Edge",
+            "" => Strings.Tamper_AnyBrowser,
+            var other => other,
+        };
+        return memberName.Length > 0
+            ? Texts.Format(Strings.Tamper_extension_missing, browser, memberName)
+            : Texts.Format(Strings.Tamper_extension_missing_Unlinked, browser);
     }
 
     /// <summary>

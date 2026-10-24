@@ -37,4 +37,15 @@ public static class TamperKinds
 
     /// <summary>At start, the service found that it had not stopped cleanly the previous time (killed, crashed, power cut).</summary>
     public const string UncleanStop = "unclean_stop";
+
+    /// <summary>
+    /// A browser ran in a restricted account past its download window without a live connection from the WebFilter
+    /// extension (not installed, an old version, disabled), so its network was cut off until the extension connects
+    /// (PROTECTION-SPEC §14). The detail names the browser after a ':' — "extension_missing:chrome" or
+    /// "extension_missing:edge" (<see cref="ExtensionMissingIn"/>), like a request's "kind:target".
+    /// </summary>
+    public const string ExtensionMissing = "extension_missing";
+
+    /// <summary>The detail of an <see cref="ExtensionMissing"/> event for <paramref name="browser"/>.</summary>
+    public static string ExtensionMissingIn(BrowserKind browser) => $"{ExtensionMissing}:{browser.ToWire()}";
 }

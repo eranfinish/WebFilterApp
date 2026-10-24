@@ -123,7 +123,8 @@ public sealed record EventsResult(IReadOnlyList<EventDto> Events) : AdminMessage
 /// a ':'), then everything after the first ':' is the query as typed; <c>url</c> is the results page.</item>
 /// <item><c>override</c>: a teen chose "open anyway" on a jump block. <c>url</c> is the site opened, <c>reason</c>
 /// <c>blocked_jump</c>.</item>
-/// <item><c>tamper</c>: <c>detail</c> is policy_repaired, network_repaired or unclean_stop.</item>
+/// <item><c>tamper</c>: <c>detail</c> is policy_repaired, network_repaired, unclean_stop, or extension_missing:chrome /
+/// extension_missing:edge (a browser cut off the network because it ran without the extension, PROTECTION-SPEC §14).</item>
 /// </list>
 /// </remarks>
 /// <param name="Admin">For admin changes: the Windows user who made it.</param>
