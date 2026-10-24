@@ -74,7 +74,7 @@ public sealed partial class ResourceTests
     [InlineData("AppMatch_", new[] { "path", "package" })]
     [InlineData("CategoryChoice_", new[] { "default", "allow", "block" })]
     [InlineData("Category_", new[] { "educational", "social", "gaming", "school-tools", "adult", "gambling", "proxies", "ai-chat", "unfiltered-search", "ads-popups" })]
-    [InlineData("Tamper_", new[] { TamperKinds.PolicyRepaired, TamperKinds.NetworkRepaired, TamperKinds.UncleanStop })]
+    [InlineData("Tamper_", new[] { TamperKinds.PolicyRepaired, TamperKinds.NetworkRepaired, TamperKinds.UncleanStop, TamperKinds.ExtensionMissing })]
     [InlineData("Setup_Step_", new[] { "Members", "Accounts", "Time", "Categories", "Review" })]
     [InlineData("DeviceOs_", new[] { "windows", "android" })]
     public void Every_wire_value_has_wording(string prefix, string[] codes)
@@ -91,7 +91,7 @@ public sealed partial class ResourceTests
     public void Every_tamper_kind_is_in_the_list_above()
     {
         var kinds = typeof(TamperKinds).GetFields(BindingFlags.Public | BindingFlags.Static).Select(f => (string)f.GetValue(null)!);
-        Assert.Equal(new[] { TamperKinds.PolicyRepaired, TamperKinds.NetworkRepaired, TamperKinds.UncleanStop }.Order(), kinds.Order());
+        Assert.Equal(new[] { TamperKinds.PolicyRepaired, TamperKinds.NetworkRepaired, TamperKinds.UncleanStop, TamperKinds.ExtensionMissing }.Order(), kinds.Order());
     }
 
     [Fact]

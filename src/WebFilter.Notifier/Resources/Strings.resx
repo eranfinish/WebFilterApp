@@ -101,6 +101,15 @@
   <data name="Tamper_UncleanStop_Text" xml:space="preserve">
     <value>במחשב {0} שירות הסינון נעצר באופן לא צפוי והופעל מחדש. ייתכן שהייתה הפסקת חשמל או כיבוי בכוח.</value>
   </data>
+  <data name="Tamper_ExtensionMissing_Title" xml:space="preserve">
+    <value>דפדפן נחסם: התוסף של WebFilter לא פעל</value>
+  </data>
+  <data name="Tamper_ExtensionMissing_Text" xml:space="preserve">
+    <value>במחשב {0} הדפדפן {1} פעל בחשבון מסונן בלי התוסף של WebFilter, ולכן החיבור שלו לרשת נחסם עד שהתוסף יתחבר.</value>
+  </data>
+  <data name="Tamper_ExtensionMissing_AnyText" xml:space="preserve">
+    <value>במחשב {0} דפדפן פעל בחשבון מסונן בלי התוסף של WebFilter, ולכן החיבור שלו לרשת נחסם עד שהתוסף יתחבר.</value>
+  </data>
   <data name="Tamper_Other_Title" xml:space="preserve">
     <value>שינוי בסינון</value>
   </data>

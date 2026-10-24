@@ -140,6 +140,39 @@ public sealed class ActivityViewModelTests
         Assert.Equal("https://www.google.com/search?q=cats&udm=2 — חיפוש תמונות חסום", Bidi.Plain(events[6].Details));
     }
 
+    /// <summary>PROTECTION-SPEC §14: a browser cut off for lack of the extension names the browser and the member.</summary>
+    [Fact]
+    public async Task A_browser_blocked_without_the_extension_names_the_browser_and_the_member()
+    {
+        _client.Events.AddRange(
+        [
+            new EventDto("tamper", TestData.Now.AddMinutes(-30), "noa", "pc-kids", null, null, null, null, "extension_missing:chrome"),
+            new EventDto("tamper", TestData.Now.AddMinutes(-20), null, "pc-kids", null, null, null, null, "extension_missing:edge"),
+        ]);
+        var vm = Create();
+        await vm.RefreshAsync();
+        var events = vm.Events.Reverse().ToList();
+
+        Assert.Equal("Chrome פעל אצל נועה בלי התוסף של WebFilter, ולכן החיבור שלו לרשת נחסם עד שהתוסף יתחבר", events[0].Details);
+        Assert.Equal("נועה", events[0].MemberName);
+        // An unlinked account has no member to name.
+        Assert.Equal("Edge פעל בחשבון Windows שלא שויך לבן משפחה בלי התוסף של WebFilter, ולכן החיבור שלו לרשת נחסם עד שהתוסף יתחבר", events[1].Details);
+        Assert.All(events, e => Assert.True(e.IsAlert));
+    }
+
+    [Theory]
+    [InlineData("extension_missing", "יואב", "דפדפן פעל אצל יואב בלי התוסף")]
+    [InlineData("extension_missing:firefox", "יואב", "firefox פעל אצל יואב בלי התוסף")]
+    [InlineData("extension_missing:edge", "", "Edge פעל בחשבון Windows שלא שויך")]
+    public void A_missing_extension_without_a_known_browser_still_reads_well(string detail, string member, string start) =>
+        Assert.StartsWith(start, EventItemViewModel.Tamper(detail, member), StringComparison.Ordinal);
+
+    [Theory]
+    [InlineData("policy_repaired")]
+    [InlineData("extension_missingx:chrome")]
+    [InlineData(null)]
+    public void Other_tamper_kinds_are_worded_by_their_code(string? detail) => Assert.Null(EventItemViewModel.Tamper(detail, "נועה"));
+
     [Theory]
     [InlineData("bing:weather", "חיפוש ב-Bing: weather")]
     [InlineData("duckduckgo:a:b", "חיפוש ב-DuckDuckGo: a:b")]

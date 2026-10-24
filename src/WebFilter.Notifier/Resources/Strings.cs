@@ -37,6 +37,9 @@ internal static class Strings
     public static string Tamper_Network_Text => Get();
     public static string Tamper_UncleanStop_Title => Get();
     public static string Tamper_UncleanStop_Text => Get();
+    public static string Tamper_ExtensionMissing_Title => Get();
+    public static string Tamper_ExtensionMissing_Text => Get();
+    public static string Tamper_ExtensionMissing_AnyText => Get();
     public static string Tamper_Other_Title => Get();
     public static string Tamper_Other_Text => Get();
     public static string Computer_Unknown => Get();

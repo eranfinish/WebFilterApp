@@ -4439,6 +4439,33 @@ namespace WebFilter.Admin.Resources {
         }
 
         /// <summary>
+        ///   Looks up a localized string similar to {0} פעל אצל {1} בלי התוסף של WebFilter, ולכן החיבור שלו לרשת נחסם עד שהתוסף יתחבר.
+        /// </summary>
+        public static string Tamper_extension_missing {
+            get {
+                return ResourceManager.GetString("Tamper_extension_missing", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to {0} פעל בחשבון Windows שלא שויך לבן משפחה בלי התוסף של WebFilter, ולכן החיבור שלו לרשת נחסם עד שהתוסף יתחבר.
+        /// </summary>
+        public static string Tamper_extension_missing_Unlinked {
+            get {
+                return ResourceManager.GetString("Tamper_extension_missing_Unlinked", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to דפדפן.
+        /// </summary>
+        public static string Tamper_AnyBrowser {
+            get {
+                return ResourceManager.GetString("Tamper_AnyBrowser", resourceCulture);
+            }
+        }
+
+        /// <summary>
         ///   Looks up a localized string similar to חשבונות Windows חדשים שעדיין לא שויכו לבן משפחה.
         /// </summary>
         public static string Devices_BadgeToolTip {

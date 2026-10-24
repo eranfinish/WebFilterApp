@@ -101,6 +101,15 @@
   <data name="Tamper_UncleanStop_Text" xml:space="preserve">
     <value>On {0}, the filter service stopped unexpectedly and started again. It may have been a power cut or a forced shutdown.</value>
   </data>
+  <data name="Tamper_ExtensionMissing_Title" xml:space="preserve">
+    <value>A browser was blocked: the WebFilter extension was not running</value>
+  </data>
+  <data name="Tamper_ExtensionMissing_Text" xml:space="preserve">
+    <value>On {0}, {1} ran in a filtered account without the WebFilter extension, so its network connection is blocked until the extension connects.</value>
+  </data>
+  <data name="Tamper_ExtensionMissing_AnyText" xml:space="preserve">
+    <value>On {0}, a browser ran in a filtered account without the WebFilter extension, so its network connection is blocked until the extension connects.</value>
+  </data>
   <data name="Tamper_Other_Title" xml:space="preserve">
     <value>A change to the filter</value>
   </data>
