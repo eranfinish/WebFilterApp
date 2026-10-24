@@ -9,5 +9,6 @@
   <ItemGroup>
     <ProjectReference Include="..\WebFilter.Contracts\WebFilter.Contracts.csproj" />
     <ProjectReference Include="..\WebFilter.Core\WebFilter.Core.csproj" />
+    <InternalsVisibleTo Include="WebFilter.Service.Tests" />
   </ItemGroup>
 </Project>

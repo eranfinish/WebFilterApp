@@ -23,7 +23,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <!-- The native host in Simulation configuration (accepts pipe/profile overrides) for process-level tests. -->
-    <ProjectReference Include="..\..\src\WebFilter.NativeHost\WebFilter.NativeHost.csproj" SetConfiguration="Configuration=Simulation" ReferenceOutputAssembly="false" />
+    <!-- The native host in Simulation configuration (accepts pipe/profile overrides) for process-level tests, and its internals (PipeServerCheck) for unit tests. -->
+    <ProjectReference Include="..\..\src\WebFilter.NativeHost\WebFilter.NativeHost.csproj" SetConfiguration="Configuration=Simulation" />
   </ItemGroup>
 </Project>

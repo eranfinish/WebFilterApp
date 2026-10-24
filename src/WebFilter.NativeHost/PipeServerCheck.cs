@@ -1,38 +1,49 @@
 using System.IO.Pipes;
 using System.Runtime.InteropServices;
 using System.Security.Principal;
-using Microsoft.Win32.SafeHandles;
 
 namespace WebFilter.NativeHost;
 
 /// <summary>
-/// Refuses to talk to a pipe that someone else created under the service's name: the server process must run as
-/// LocalSystem, which a child's program cannot.
+/// Refuses to talk to a pipe that someone else created under the service's name. The pipe's owner must be LocalSystem
+/// or BUILTIN\Administrators (the owner LocalSystem gives the objects it creates): a standard account can make neither
+/// the owner of a pipe it creates, so a child's program cannot pose as the service.
 /// </summary>
+/// <remarks>
+/// It used to open the server process's token and check its user, which a standard account may not do for a LocalSystem
+/// process: every child's host refused the real service and answered by itself (the lab, 2026-10-24). The owner is read
+/// from the pipe handle the client already holds (READ_CONTROL comes with read access), so it works for every account.
+/// </remarks>
 internal static class PipeServerCheck
 {
-    private const uint ProcessQueryLimitedInformation = 0x1000;
-    private const uint TokenQuery = 0x0008;
+    private const int SeKernelObject = 6;
+    private const uint OwnerSecurityInformation = 0x1;
 
-    public static bool IsTrusted(NamedPipeClientStream pipe, HostSettings settings)
+    public static bool IsTrusted(PipeStream pipe, HostSettings settings) =>
+        !settings.RequireSystemServer || IsTrustedOwner(OwnerOf(pipe));
+
+    internal static bool IsTrustedOwner(SecurityIdentifier? owner) =>
+        owner is not null && (owner.IsWellKnown(WellKnownSidType.LocalSystemSid) || owner.IsWellKnown(WellKnownSidType.BuiltinAdministratorsSid));
+
+    /// <summary>The owner of the pipe's security descriptor, or null when it cannot be read.</summary>
+    internal static SecurityIdentifier? OwnerOf(PipeStream pipe)
     {
-        if (!settings.RequireSystemServer) return true;
-        if (!GetNamedPipeServerProcessId(pipe.SafePipeHandle, out var pid)) return false;
-        using var process = OpenProcess(ProcessQueryLimitedInformation, false, pid);
-        if (process.IsInvalid || !OpenProcessToken(process, TokenQuery, out var token)) return false;
-        using (token)
+        if (GetSecurityInfo(pipe.SafePipeHandle, SeKernelObject, OwnerSecurityInformation, out var owner, IntPtr.Zero, IntPtr.Zero, IntPtr.Zero, out var descriptor) != 0)
+            return null;
+        try
         {
-            using var identity = new WindowsIdentity(token.DangerousGetHandle());
-            return identity.User?.IsWellKnown(WellKnownSidType.LocalSystemSid) == true;
+            return owner == IntPtr.Zero ? null : new SecurityIdentifier(owner);
+        }
+        finally
+        {
+            LocalFree(descriptor);
         }
     }
 
-    [DllImport("kernel32.dll", SetLastError = true)]
-    private static extern bool GetNamedPipeServerProcessId(SafePipeHandle pipe, out uint processId);
+    [DllImport("advapi32.dll")]
+    private static extern uint GetSecurityInfo(SafeHandle handle, int objectType, uint securityInfo, out IntPtr owner, IntPtr group,
+        IntPtr dacl, IntPtr sacl, out IntPtr securityDescriptor);
 
-    [DllImport("kernel32.dll", SetLastError = true)]
-    private static extern SafeProcessHandle OpenProcess(uint access, bool inheritHandle, uint processId);
-
-    [DllImport("advapi32.dll", SetLastError = true)]
-    private static extern bool OpenProcessToken(SafeProcessHandle process, uint desiredAccess, out SafeAccessTokenHandle token);
+    [DllImport("kernel32.dll")]
+    private static extern IntPtr LocalFree(IntPtr memory);
 }
