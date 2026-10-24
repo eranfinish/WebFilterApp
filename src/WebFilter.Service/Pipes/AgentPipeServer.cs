@@ -47,8 +47,11 @@ public sealed class AgentPipeServer(FamilyService family, IOptions<ServiceOption
             }
             _ = Task.Run(async () =>
             {
-                // A session must never fail silently: anything unexpected is logged (the pipe is closed by ServeAsync).
+                // A session must never fail silently: anything unexpected is logged (the pipe is closed by ServeAsync). A client
+                // that leaves first is ordinary — a browser closing, or a native host that answers by itself checking every
+                // 3 s whether the service is back (it connects and goes) — so a broken pipe is information, not an error.
                 try { await ServeAsync(pipe, stoppingToken); }
+                catch (IOException ex) when (!pipe.IsConnected) { log.LogInformation("Pipe client left: {Reason}", ex.Message); }
                 catch (Exception ex) when (ex is not OperationCanceledException) { log.LogError(ex, "Pipe session failed"); }
             }, stoppingToken);
         }
