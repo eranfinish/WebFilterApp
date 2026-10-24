@@ -48,7 +48,8 @@ public sealed record NotificationsResult(IReadOnlyList<NotificationDto> Items) :
 /// <param name="DeviceId">The computer it concerns, when there is one.</param>
 /// <param name="Detail">
 /// request: "kind:target" — url:host, youtube:channelId, app:path or time:minutes (split at the first ':').
-/// tamper: policy_repaired | network_repaired | unclean_stop (the tamper event's detail).
+/// tamper: policy_repaired | network_repaired | unclean_stop | extension_missing:chrome | extension_missing:edge (the tamper
+/// event's detail; the last two name the browser cut off for lack of the extension, PROTECTION-SPEC §14).
 /// device: when the computer last reported (ISO-8601), or absent if it never did.
 /// account: the Windows account's name.
 /// </param>
