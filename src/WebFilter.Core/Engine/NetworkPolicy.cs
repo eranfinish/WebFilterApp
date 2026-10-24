@@ -41,48 +41,69 @@ public sealed record WindowsPrograms(string Svchost, IReadOnlyList<string> Machi
 public static class NetworkPolicy
 {
     /// <summary>
-    /// One policy per restricted account on <paramref name="deviceId"/>: linked restricted members (unless paused) and
-    /// unlinked non-admin accounts. Admins, unrestricted members and paused members get none (no filters).
-    /// Each candidate program (supported browsers and the targets of app rules) is decided by <see cref="Decider.App"/>,
-    /// so WFP follows exactly the engine's order. Publisher rules have no WFP condition and are not included (the program
-    /// stays blocked — the safe side). The machine-wide Chrome and Edge are allowed for every one of these accounts like the
-    /// supported browsers, and the family-wide Windows features (<see cref="FamilyConfig.WindowsFeatures"/>) add svchost.exe
-    /// and the machine-wide OneDrive; all of them also when time is up.
+    /// One policy per restricted account on <paramref name="deviceId"/> (<see cref="FilteredAccounts"/>): linked restricted
+    /// members (unless paused) and unlinked non-admin accounts. Admins, unrestricted members and paused members get none (no
+    /// filters). Each candidate program (supported browsers and the targets of app rules) is decided by
+    /// <see cref="Decider.App"/>, so WFP follows exactly the engine's order. Publisher rules have no WFP condition and are not
+    /// included (the program stays blocked — the safe side). The machine-wide Chrome and Edge are allowed for every one of
+    /// these accounts like the supported browsers, and the family-wide Windows features
+    /// (<see cref="FamilyConfig.WindowsFeatures"/>) add svchost.exe and the machine-wide OneDrive; all of them also when time
+    /// is up — except a browser the extension guard blocks for that account (<paramref name="blockedBrowsers"/>,
+    /// PROTECTION-SPEC §14): its paths (<see cref="BrowserKinds.Paths"/>) are left out, and the rest of the policy is unchanged.
     /// </summary>
     /// <param name="programs">Where the browsers, svchost and OneDrive are; <see cref="WindowsPrograms.Default"/> when null.</param>
-    public static IReadOnlyList<UserNetworkPolicy> Desired(PolicyView view, string deviceId, DateTimeOffset now, WindowsPrograms? programs = null)
+    /// <param name="blockedBrowsers">The browsers <see cref="ExtensionGuard"/> blocks now, by account; none when null.</param>
+    public static IReadOnlyList<UserNetworkPolicy> Desired(PolicyView view, string deviceId, DateTimeOffset now, WindowsPrograms? programs = null,
+        IReadOnlyCollection<AccountBrowser>? blockedBrowsers = null)
     {
         var config = view.Config;
-        var device = config.Devices.FirstOrDefault(d => d.Id == deviceId);
         programs ??= WindowsPrograms.Default;
         var machine = programs.MachineBrowsers.Concat(WindowsFeaturePrograms(config.WindowsFeatures, programs)).ToList();
         var result = new List<UserNetworkPolicy>();
-        foreach (var account in device?.Accounts ?? [])
+        foreach (var account in FilteredAccounts(view, deviceId, now))
         {
-            if (account.IsAdmin) continue;
+            var blocked = (blockedBrowsers ?? [])
+                .Where(b => string.Equals(b.AccountId, account.AccountId, StringComparison.OrdinalIgnoreCase))
+                .SelectMany(b => b.Browser.Paths(config, programs))
+                .ToHashSet(StringComparer.OrdinalIgnoreCase);
             if (account.MemberId is null)
             {
                 // Unlinked: browsers and globally always-allowed programs only.
                 var always = config.AppRules.Where(r => r.MemberId is null && r.AlwaysAllowed && r.Action == RuleAction.Allow && r.IsActiveAt(now)).ToList();
                 result.Add(new UserNetworkPolicy(account.AccountId, TimeUp: true,
-                    Sorted(config.SupportedBrowsers.Concat(always.Where(r => r.Match == AppMatchType.Path).Select(r => r.Value)).Concat(machine)),
+                    Sorted(config.SupportedBrowsers.Concat(always.Where(r => r.Match == AppMatchType.Path).Select(r => r.Value)).Concat(machine), blocked),
                     Sorted(always.Where(r => r.Match == AppMatchType.Package).Select(r => r.Value))));
                 continue;
             }
 
             var member = config.Member(account.MemberId);
-            if (!member.IsRestricted || view.IsPaused(member.Id, now)) continue;
             var rules = config.AppRules.Where(r => (r.MemberId is null || r.MemberId == member.Id) && r.IsActiveAt(now)).ToList();
             var paths = config.SupportedBrowsers.Concat(rules.Where(r => r.Match == AppMatchType.Path).Select(r => r.Value))
                 .Where(p => Allowed(new AppIdentity(Path: p)));
             var packages = rules.Where(r => r.Match == AppMatchType.Package).Select(r => r.Value)
                 .Where(p => Allowed(new AppIdentity(Package: p)));
             var timeUp = Decider.Time(view, member.Id, now).State is Time.TimeState.OutsideWindow or Time.TimeState.Expired;
-            result.Add(new UserNetworkPolicy(account.AccountId, timeUp, Sorted(paths.Concat(machine)), Sorted(packages)));
+            result.Add(new UserNetworkPolicy(account.AccountId, timeUp, Sorted(paths.Concat(machine), blocked), Sorted(packages)));
 
             bool Allowed(AppIdentity app) => Decider.App(view, member.Id, app, now).Decision == Decision.Allow;
         }
         return result;
+    }
+
+    /// <summary>
+    /// The accounts on <paramref name="deviceId"/> that get network filters: linked to a restricted member who is not paused
+    /// (by the hub or on this computer), or linked to nobody and not an administrator. The extension guard watches the same
+    /// accounts (<see cref="ExtensionGuard.GuardedAccounts"/>).
+    /// </summary>
+    public static IEnumerable<DeviceAccount> FilteredAccounts(PolicyView view, string deviceId, DateTimeOffset now)
+    {
+        var device = view.Config.Devices.FirstOrDefault(d => d.Id == deviceId);
+        foreach (var account in device?.Accounts ?? [])
+        {
+            if (account.IsAdmin) continue;
+            if (account.MemberId is { } memberId && view.Config.Member(memberId) is var member && (!member.IsRestricted || view.IsPaused(member.Id, now))) continue;
+            yield return account;
+        }
     }
 
     /// <summary>The Windows programs the family's <see cref="WindowsFeatures"/> let restricted accounts use, whatever the time.</summary>
@@ -94,6 +115,6 @@ public static class NetworkPolicy
         return paths;
     }
 
-    private static List<string> Sorted(IEnumerable<string> values) =>
-        values.Distinct(StringComparer.OrdinalIgnoreCase).Order(StringComparer.OrdinalIgnoreCase).ToList();
+    private static List<string> Sorted(IEnumerable<string> values, IReadOnlySet<string>? without = null) =>
+        values.Where(v => without is null || !without.Contains(v)).Distinct(StringComparer.OrdinalIgnoreCase).Order(StringComparer.OrdinalIgnoreCase).ToList();
 }

@@ -126,6 +126,53 @@ public class NetworkPolicyTests
         Assert.Contains(Desired(hub, Morning.AddHours(2)), p => p.UserSid == Yoav);
     }
 
+    /// <summary>
+    /// PROTECTION-SPEC §14: a browser the extension guard blocks leaves that account's allowlist — every copy of it, from the
+    /// machine-wide paths and from the family's supported browsers — also when time is up, and the rest stays as it was.
+    /// </summary>
+    [Fact]
+    public void A_browser_the_extension_guard_blocks_leaves_that_accounts_allowlist_until_it_is_lifted()
+    {
+        var hub = new HubCore(Fixture());
+        const string ChromeX86 = @"C:\Program Files (x86)\Google\Chrome\Application\chrome.exe";
+        var programs = WindowsPrograms.Default with { MachineBrowsers = [Chrome, ChromeX86, Edge] };
+        AccountBrowser[] noaChrome = [new(Noa.ToLowerInvariant(), BrowserKind.Chrome)];
+
+        foreach (var now in new[] { InWindow, Morning })
+        {
+            var free = NetworkPolicy.Desired(hub.View(), "pc-kids", now, programs);
+            var guarded = NetworkPolicy.Desired(hub.View(), "pc-kids", now, programs, noaChrome);
+
+            var noa = guarded.Single(p => p.UserSid == Noa);
+            var before = free.Single(p => p.UserSid == Noa);
+            Assert.Contains(ChromeX86, before.AllowedPaths);
+            Assert.Equal(before.AllowedPaths.Where(p => p is not (Chrome or ChromeX86)), noa.AllowedPaths);
+            Assert.Contains(Edge, noa.AllowedPaths);
+            Assert.Equal(before.TimeUp, noa.TimeUp);
+            Assert.Equal(before.AllowedPackages, noa.AllowedPackages);
+            Assert.All(free.Where(p => p.UserSid != Noa), p => Assert.True(p.Equivalent(guarded.Single(g => g.UserSid == p.UserSid))));
+        }
+
+        // Lifted: the full allowlist again. An unlinked account's browser is blocked the same way; an administrator has no filters to change.
+        Assert.Contains(Chrome, NetworkPolicy.Desired(hub.View(), "pc-kids", InWindow, programs, []).Single(p => p.UserSid == Noa).AllowedPaths);
+        var visitor = NetworkPolicy.Desired(hub.View(), "pc-kids", InWindow, programs, [new AccountBrowser(Visitor, BrowserKind.Edge)]).Single(p => p.UserSid == Visitor);
+        Assert.DoesNotContain(Edge, visitor.AllowedPaths);
+        Assert.Contains(Chrome, visitor.AllowedPaths);
+        Assert.Equal(new[] { Noa, Yoav, Visitor }.Order(),
+            NetworkPolicy.Desired(hub.View(), "pc-kids", InWindow, programs, [new AccountBrowser("S-1-5-21-2000-1003", BrowserKind.Chrome)]).Select(p => p.UserSid).Order());
+    }
+
+    [Fact]
+    public void The_filtered_accounts_are_the_ones_that_get_a_policy()
+    {
+        var hub = new HubCore(Fixture());
+        hub.Pause("noa", Morning.AddHours(1), Morning);
+        foreach (var now in new[] { Morning, Morning.AddHours(2) })
+            Assert.Equal(Desired(hub, now).Select(p => p.UserSid), NetworkPolicy.FilteredAccounts(hub.View(), "pc-kids", now).Select(a => a.AccountId));
+        Assert.DoesNotContain(NetworkPolicy.FilteredAccounts(hub.View(), "pc-kids", Morning), a => a.AccountId == Noa);
+        Assert.Empty(NetworkPolicy.FilteredAccounts(hub.View(), "no-such-device", Morning));
+    }
+
     [Fact]
     public void Equivalent_ignores_case_and_detects_changes()
     {
