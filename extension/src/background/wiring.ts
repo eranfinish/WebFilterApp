@@ -119,6 +119,10 @@ function handleMessage(
       return isOwnContentScript(sender) && message.detection
         ? controller.decideYouTubeDetection(message.detection, sender.url)
         : undefined;
+    case "wf:ytRequestChannel":
+      // The bridge's "ask for approval" in YouTube's channel-only results (PROTECTION-SPEC §15): the browser's own word
+      // for the page and frame, never the message's.
+      return isOwnContentScript(sender) ? controller.requestChannelFromSearch(message, sender.url, sender.frameId) : undefined;
     default:
       return undefined;
   }

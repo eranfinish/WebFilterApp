@@ -23,6 +23,7 @@ const BLOCKED_TITLE = "WebFilter · חסום";
 const TIMEUP_TITLE = "WebFilter · הזמן נגמר";
 const KHAN = "UCkhanKids00000000000001";
 const GAMER = "UCgamerX0000000000000003";
+const NATGEO = "UCnatgeoKids000000000004";
 
 // ---- results --------------------------------------------------------------------------------------------------------
 const checks = [];
@@ -63,6 +64,52 @@ const AD_PAGE = `<h1>news</h1><img id="own" src="/own.png" width="20" height="20
     fetch("${A(AD_HOST, "/xhr")}", { mode: "no-cors" }).then(() => "loaded", () => "blocked").then((r) => { document.documentElement.dataset.xhr = r; });
     navigator.sendBeacon("${A(AD_HOST, "/beacon")}", "x");
   </script>`;
+// YouTube channel search (PROTECTION-SPEC §15): a results page in the shape of youtube.com's (ytd-search → section list →
+// item sections), with channel results whose own data names the channel (as Polymer's element.data does), and every kind
+// of result the bridge must hide: a video with its thumbnail, a Shorts shelf, a playlist, a video shelf, the side watch
+// card and the filter bar. go(handle) plays YouTube's in-site navigation to a channel page (ytd-browse data for it).
+const CHANNELS = {
+  "@khankids-sim": { id: KHAN, title: "Khan Kids (sim)", url: "http://www.youtube.com/@KhanKids-Sim" },
+  "@natgeokids-sim": { id: NATGEO, title: "NatGeo Kids (sim)", url: "http://www.youtube.com/@NatGeoKids-Sim" },
+};
+const BROWSE_SCRIPT = `<script>
+  const channels = ${JSON.stringify(CHANNELS)};
+  function browse(handle) {
+    const c = channels[handle];
+    const el = document.getElementById("browse");
+    el.data = c ? { metadata: { channelMetadataRenderer: { externalId: c.id, vanityChannelUrl: c.url, title: c.title } } } : {};
+    el.removeAttribute("hidden");
+  }
+  window.go = (handle) => { history.pushState({}, "", "/" + handle); browse(handle); };
+  const here = decodeURIComponent(location.pathname.slice(1)).toLowerCase();
+  if (here.startsWith("@")) browse(here);
+</script>`;
+const RESULTS_PAGE = `<ytd-app><ytd-search><div id="container">
+  <ytd-search-header-renderer id="filters">Filters: Videos · Shorts · Channels</ytd-search-header-renderer>
+  <div id="primary"><ytd-section-list-renderer><div id="contents">
+    <ytd-item-section-renderer><div id="contents">
+      <ytd-channel-renderer id="ch-khan"><a href="/@khankids-sim"><img id="avatar" src="/avatar/khan.jpg" width="40" height="40"> Khan Kids (sim)</a></ytd-channel-renderer>
+      <ytd-video-renderer id="video"><img id="thumb" src="/vi/v1/hq.jpg" width="160" height="90"> a video</ytd-video-renderer>
+      <ytd-channel-renderer id="ch-natgeo"><a href="/@natgeokids-sim">NatGeo Kids (sim)</a></ytd-channel-renderer>
+      <ytd-reel-shelf-renderer id="shorts">Shorts</ytd-reel-shelf-renderer>
+      <ytd-playlist-renderer id="playlist">a playlist</ytd-playlist-renderer>
+    </div></ytd-item-section-renderer>
+    <ytd-shelf-renderer id="shelf">latest videos</ytd-shelf-renderer>
+    <ytd-continuation-item-renderer id="more">more results</ytd-continuation-item-renderer>
+  </div></ytd-section-list-renderer></div>
+  <div id="secondary"><ytd-universal-watch-card-renderer id="watchcard">watch card</ytd-universal-watch-card-renderer></div>
+</div></ytd-search><ytd-browse id="browse" hidden></ytd-browse></ytd-app>
+<script>
+  for (const [id, handle] of [["ch-khan", "@khankids-sim"], ["ch-natgeo", "@natgeokids-sim"]]) {
+    const c = ${JSON.stringify(CHANNELS)}[handle];
+    document.getElementById(id).data = {
+      channelId: c.id,
+      title: { simpleText: c.title },
+      navigationEndpoint: { browseEndpoint: { canonicalBaseUrl: "/" + c.url.split("/").pop() } },
+    };
+  }
+</script>${BROWSE_SCRIPT}`;
+
 function handler(req, res) {
   const url = new URL(req.url, `http://${req.headers.host}`);
   const host = url.hostname;
@@ -90,6 +137,8 @@ function handler(req, res) {
         </script>`,
       );
     }
+    if (url.pathname === "/results") return send("YT results", RESULTS_PAGE);
+    if (url.pathname.startsWith("/@")) return send("YT channel", `<ytd-app><ytd-browse id="browse" hidden></ytd-browse></ytd-app>${BROWSE_SCRIPT}`);
     return send(`YT ${url.pathname}`, "<h1>yt</h1>");
   }
   const jump = host === "site-a.test" ? JUMP_PAGES[url.pathname] : undefined;
@@ -483,7 +532,7 @@ try {
     await b.sw.evaluate(() => globalThis.wfTest.simulatePolicyInstall());
     const { rules, timeUp } = compiledRules(b.id, { allowed: ["site-a.test", "site-b.test", "site-c.test", "google.com"], blocked: ["ads.test"] });
     const youTube = { mode: "allowlist", allowed: [{ channelId: KHAN, handle: "@khankids-sim", title: "Khan Kids (sim)" }], blocked: [] };
-    const child = { jumpGuard: true, blockYouTubeShorts: true, logSearches: true, canOverrideJump: false, blockAds: false };
+    const child = { jumpGuard: true, blockYouTubeShorts: true, logSearches: true, canOverrideJump: false, blockAds: false, youTubeChannelSearch: false };
     const script = { rules: { rulesVersion: 7, dynamicRules: rules, timeUpSessionRules: timeUp, youTube, time: { state: "ok", remainingMinutes: 60, windowEndsAt: null }, features: child } };
     await b.sw.evaluate((s) => globalThis.wfTest.useFakeHost(s), script);
     const ready = await b.sw.evaluate(() => globalThis.wfTest.whenReady(5000));
@@ -719,6 +768,110 @@ try {
     const hidden = await waitFor(() => page.evaluate(() => (document.documentElement.dataset.adBlocking === "false" ? true : null)));
     check("B9 popup: no ad blocking line when it is off", !!hidden);
     await b.close();
+  }
+
+  // ===== Test build: YouTube channel search and channel names (PROTECTION-SPEC §15) ================================
+  if (https) {
+    const b = await launch(DIST_TEST);
+    await b.sw.evaluate(() => globalThis.wfTest.simulatePolicyInstall());
+    const { rules, timeUp } = compiledRules(b.id, { allowed: ["site-a.test"] });
+    const youTube = { mode: "allowlist", allowed: [{ channelId: KHAN, handle: "@khankids-sim", title: "Khan Kids (sim)" }], blocked: [] };
+    const features = (search) => ({ jumpGuard: false, blockYouTubeShorts: false, logSearches: true, canOverrideJump: false, blockAds: false, youTubeChannelSearch: search });
+    const withSearch = (search, version) => ({
+      rules: { rulesVersion: version, dynamicRules: rules, timeUpSessionRules: timeUp, youTube, time: { state: "ok", remainingMinutes: 60, windowEndsAt: null }, features: features(search) },
+    });
+    await b.sw.evaluate((s) => globalThis.wfTest.useFakeHost(s), withSearch(false, 31));
+    await b.sw.evaluate(() => globalThis.wfTest.whenReady(5000));
+    const received = () => b.sw.evaluate(() => globalThis.wfTest.received());
+    const page = await b.context.newPage();
+    const searchBox = () => page.evaluate(() => {
+      const form = document.getElementById("search");
+      return { ready: document.documentElement.dataset.ready ?? null, shown: !!form && !form.hidden && getComputedStyle(form).display !== "none", intro: document.getElementById("intro")?.textContent ?? "" };
+    });
+
+    // "My channels" offers the search only with the feature.
+    await visit(page, Y("/"));
+    const without = await waitFor(async () => (page.url().startsWith(b.page("my-channels.html")) && (await searchBox()).ready === "true" ? searchBox() : null));
+    check("C1 without channel search: my channels has no search box", without?.shown === false, { note: JSON.stringify(without) });
+    await b.sw.evaluate((s) => {
+      globalThis.wfTest.setScript(s);
+      globalThis.wfTest.push({ type: "rulesChanged", rulesVersion: 32 });
+    }, withSearch(true, 32));
+    const withBox = await waitFor(async () => ((await searchBox()).shown ? searchBox() : null));
+    check("C2 with channel search: the box 'חפש ערוץ' shows, and the introduction says a found channel needs approval",
+      !!withBox && /לבקש מההורים לאשר/.test(withBox.intro) && (await page.textContent("label[for=query]")) === "חפש ערוץ", { note: JSON.stringify(withBox) });
+
+    // A search from the box: YouTube's results restricted to channels, on the origin the child came from.
+    await page.fill("#query", "space kids");
+    await page.click("#search-button");
+    const results = await waitFor(async () => (page.url().startsWith(Y("/results")) ? page.url() : null));
+    check("C3 the box opens YouTube's channel-only results for the terms", results === Y("/results?search_query=space%20kids&sp=EgIQAg%253D%253D"), { note: results });
+    const shown = await waitFor(() => page.evaluate(() => {
+      if (document.title !== "YT results" || getComputedStyle(document.documentElement).visibility !== "visible") return null;
+      // Hidden itself or by an ancestor (a hidden column hides its watch card).
+      const seen = (id) => document.getElementById(id).checkVisibility();
+      const hidden = ["video", "shorts", "playlist", "shelf", "watchcard", "filters"].filter((id) => !seen(id));
+      const thumb = document.getElementById("thumb").getBoundingClientRect();
+      return { hidden, channels: ["ch-khan", "ch-natgeo"].filter(seen), more: seen("more"), thumb: thumb.width * thumb.height, avatar: document.getElementById("avatar").getBoundingClientRect().width };
+    }), 15000);
+    check("C4 the results page is allowed and shows channels only: videos, Shorts, playlists, shelves, the watch card, the filters and the video thumbnail are hidden; channel avatars show",
+      shown?.hidden.length === 6 && shown.channels.length === 2 && shown.more && shown.thumb === 0 && shown.avatar > 0, { note: JSON.stringify(shown) });
+    const marks = await waitFor(() => page.evaluate(() => {
+      const mark = (id) => document.querySelector(`#${id} > .wf-channel-action`);
+      const khan = mark("ch-khan");
+      const natgeo = mark("ch-natgeo");
+      return khan && natgeo?.querySelector("button") ? { khan: khan.textContent, natgeo: natgeo.textContent } : null;
+    }));
+    check("C5 the approved channel is marked 'מאושר', the other has 'בקש אישור'", marks?.khan === "מאושר" && marks.natgeo === "בקש אישור", { note: JSON.stringify(marks) });
+
+    await page.click("#ch-natgeo > .wf-channel-action button");
+    const asked = await waitFor(async () => (await received()).find((m) => m.type === "requestAccess") ?? null);
+    const after = await waitFor(() => page.evaluate(() => document.querySelector("#ch-natgeo > .wf-channel-action [data-wf-result]")?.textContent ?? null));
+    check("C6 'בקש אישור' sends a channel request with the channel's title and handle and the search, and says it was sent",
+      asked?.kind === "youtube" && asked.target === NATGEO && asked.title === "NatGeo Kids (sim)" && asked.handle === "@natgeokids-sim" && asked.searchQuery === "space kids" && after === "נשלחה בקשה להורים",
+      { note: JSON.stringify({ asked, after }) });
+    const searches = (await received()).filter((m) => m.type === "reportSearch");
+    check("C7 with the search log on, the channel search is reported once like any YouTube search", searches.length === 1 && searches[0].engine === "youtube" && searches[0].query === "space kids",
+      { note: JSON.stringify(searches) });
+
+    // From the results to a channel that is not approved (YouTube's in-site navigation): its block page names it and the
+    // search, and its request carries them.
+    await page.evaluate(() => window.go("@natgeokids-sim"));
+    const blocked = await waitFor(async () => {
+      const i = await pageInfo(page);
+      return i.ready && i.title === BLOCKED_TITLE ? { ...i, href: page.url(), channel: await page.evaluate(() => (document.getElementById("channel-row").hidden ? null : document.getElementById("channel").textContent)) } : null;
+    }, 15000);
+    const info = blocked ? new URL(blocked.href) : null;
+    check("C8 a channel opened from the results lands on its block page, which names it 'NatGeo Kids (sim) (@natgeokids-sim)'",
+      blocked?.reason === "blocked_youtube_channel" && info?.searchParams.get("channel") === NATGEO && info.searchParams.get("q") === "space kids" && blocked.channel === "NatGeo Kids (sim) (@natgeokids-sim)",
+      { note: JSON.stringify(blocked) });
+    await page.click("#ask-channel");
+    const fromBlock = await waitFor(async () => (await received()).filter((m) => m.type === "requestAccess")[1] ?? null);
+    check("C9 the block page's request carries the channel's title and handle and the search",
+      fromBlock?.target === NATGEO && fromBlock.title === "NatGeo Kids (sim)" && fromBlock.handle === "@natgeokids-sim" && fromBlock.searchQuery === "space kids", { note: JSON.stringify(fromBlock) });
+
+    // YouTube's own search box (no filter): the same terms, restricted to channels — a full load and an in-site one.
+    await visit(page, Y("/results?search_query=moon"));
+    const rewritten = await waitFor(async () => (page.url().includes("sp=") ? page.url() : null), 15000);
+    check("C10 a search without the channel filter is sent to the same search restricted to channels", rewritten === Y("/results?search_query=moon&sp=EgIQAg%253D%253D"), { note: rewritten });
+    await waitFor(() => page.evaluate(() => getComputedStyle(document.documentElement).visibility === "visible"), 10000);
+    await page.evaluate(() => history.pushState({}, "", "/results?search_query=mars&sp=EgIQAQ%253D%253D"));
+    const spa = await waitFor(async () => (page.url().includes("search_query=mars") && page.url().includes("EgIQAg") ? page.url() : null), 15000);
+    check("C11 … also in the page (the 'Videos' filter chosen in place)", spa === Y("/results?search_query=mars&sp=EgIQAg%253D%253D"), { note: page.url() });
+
+    // Switched off: the channel-only results go to my channels like any search.
+    await b.sw.evaluate((s) => {
+      globalThis.wfTest.setScript(s);
+      globalThis.wfTest.push({ type: "rulesChanged", rulesVersion: 33 });
+    }, withSearch(false, 33));
+    await waitFor(() => b.sw.evaluate(() => globalThis.wfTest.status().features.youTubeChannelSearch === false));
+    await visit(page, Y("/results?search_query=space&sp=EgIQAg%253D%253D"));
+    const off = await waitFor(async () => (page.url().startsWith(b.page("my-channels.html")) ? page.url() : null), 15000);
+    check("C12 without channel search the channel-only results go to my channels", !!off, { note: page.url() });
+    await page.close();
+    await b.close();
+  } else {
+    check("C1–C12 channel search fixtures skipped (openssl not available)", true, { note: "skipped" });
   }
 
   // ===== Test build: the parents' baseline protection (PROTECTION-SPEC §13) =========================================

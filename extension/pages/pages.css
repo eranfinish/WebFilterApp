@@ -219,6 +219,32 @@ ul.channels a:focus-visible {
   color: var(--muted);
 }
 
+/* my-channels.html: the channel search (PROTECTION-SPEC §15). */
+form.channel-search {
+  margin: 4px 0 16px;
+}
+
+.search-row {
+  display: flex;
+  gap: 8px;
+}
+
+.search-row input {
+  flex: 1;
+  min-width: 0;
+  font: inherit;
+  color: inherit;
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 8px 10px;
+}
+
+.search-row input:focus-visible {
+  outline: 2px solid var(--brand);
+  outline-offset: 1px;
+}
+
 [hidden] {
   display: none !important;
 }

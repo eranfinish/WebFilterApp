@@ -107,6 +107,9 @@
   "labelCategory": {
     "message": "קטגוריה:"
   },
+  "labelChannel": {
+    "message": "ערוץ:"
+  },
   "allowedNowHeading": {
     "message": "הדף הזה מותר עכשיו"
   },
@@ -202,6 +205,27 @@
   },
   "myChannelsEmpty": {
     "message": "עדיין לא אושרו ערוצים. אפשר לבקש מההורים להוסיף."
+  },
+  "myChannelsIntroSearch": {
+    "message": "אלה הערוצים שההורים אישרו. אפשר לחפש ערוץ אחר ולבקש מההורים לאשר אותו."
+  },
+  "myChannelsSearchLabel": {
+    "message": "חפש ערוץ"
+  },
+  "myChannelsSearchPlaceholder": {
+    "message": "שם של ערוץ או נושא, למשל: מדע לילדים"
+  },
+  "myChannelsSearchButton": {
+    "message": "חיפוש"
+  },
+  "channelApproved": {
+    "message": "מאושר"
+  },
+  "channelAskApproval": {
+    "message": "בקש אישור"
+  },
+  "channelAsked": {
+    "message": "נשלחה בקשה להורים"
   },
   "statusLoading": {
     "message": "בבדיקה…"

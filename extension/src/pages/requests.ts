@@ -38,14 +38,22 @@ export function showResult(text: string, state: string): void {
   document.documentElement.dataset.requestResult = state;
 }
 
+/** A button's request: its kind and target, and for a YouTube channel the names the page knew (PROTECTION-SPEC §15). */
+export interface RequestButton {
+  element: HTMLButtonElement;
+  kind: RequestKind;
+  target?: string | null;
+  minutes?: number;
+  title?: string | null;
+  handle?: string | null;
+  searchQuery?: string | null;
+}
+
 /**
- * Wires the request buttons of a page. Each button sends requestAccess with its kind/target/minutes and the note,
- * then shows the result in plain language. Buttons are disabled after a request was accepted.
+ * Wires the request buttons of a page. Each button sends requestAccess with its kind/target/minutes (and a channel's
+ * names) and the note, then shows the result in plain language. Buttons are disabled after a request was accepted.
  */
-export function wireRequestButtons(
-  buttons: { element: HTMLButtonElement; kind: RequestKind; target?: string | null; minutes?: number }[],
-  note: HTMLTextAreaElement | null,
-): void {
+export function wireRequestButtons(buttons: RequestButton[], note: HTMLTextAreaElement | null): void {
   const all = buttons.map((b) => b.element);
   for (const button of buttons) {
     button.element.addEventListener("click", async () => {
@@ -57,6 +65,9 @@ export function wireRequestButtons(
         target: button.target ?? null,
         minutes: button.minutes ?? null,
         note: note?.value ?? null,
+        title: button.title ?? null,
+        handle: button.handle ?? null,
+        searchQuery: button.searchQuery ?? null,
       });
       const result = reply?.result ?? "error";
       showResult(t(requestResultMessageKey(result)), result);

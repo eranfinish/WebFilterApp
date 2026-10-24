@@ -1,6 +1,7 @@
 import type { OriginalUrlReply, OverrideJumpReply, ReportBlockReply, StatusSnapshot } from "../shared/messages";
 import { displayUrl, parseBlockPageUrl, safeReturnUrl } from "../shared/pages";
 import { FAILCLOSED, reasonMessageKey, requestActionFor } from "../shared/reasons";
+import { channelLabel } from "../shared/request-names";
 import { ask, byId, getStatus, localizePage, onBroadcast, t } from "./common";
 import { followDecision, pendingRequestId, returnTo, showResult, wireRequestButtons } from "./requests";
 
@@ -102,6 +103,12 @@ async function main(): Promise<void> {
     byId("category").textContent = reply.category;
     byId("category-row").hidden = false;
   }
+  // The channel by its name, as YouTube's page showed it (PROTECTION-SPEC §15); the request carries the names too.
+  const channel = info.channelId ? channelLabel(info.title, info.handle) : undefined;
+  if (channel) {
+    byId("channel").textContent = channel;
+    byId("channel-row").hidden = false;
+  }
 
   if (allowedNow && back) {
     byId("retry-row").hidden = false;
@@ -121,7 +128,10 @@ async function main(): Promise<void> {
   } else if (canAsk && kind === "youtube" && info.channelId) {
     byId("request").hidden = false;
     byId("ask-channel").hidden = false;
-    wireRequestButtons([{ element: byId<HTMLButtonElement>("ask-channel"), kind: "youtube", target: info.channelId }], note);
+    wireRequestButtons(
+      [{ element: byId<HTMLButtonElement>("ask-channel"), kind: "youtube", target: info.channelId, title: info.title, handle: info.handle, searchQuery: info.searchQuery }],
+      note,
+    );
   } else if (canAsk && kind === "time") {
     byId("request").hidden = false;
     byId("ask-time").hidden = false;

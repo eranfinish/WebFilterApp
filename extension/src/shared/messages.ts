@@ -27,6 +27,10 @@ export interface RequestAccessPageMessage {
   target?: string | null;
   minutes?: number | null;
   note?: string | null;
+  /** youtube: the channel's title and handle as the page showed them, and the channel search it came from (§15). */
+  title?: string | null;
+  handle?: string | null;
+  searchQuery?: string | null;
 }
 
 export interface GetDecisionMessage {
@@ -54,11 +58,28 @@ export interface YouTubeDetection {
   trigger: string;
   timedOut: boolean;
   ms: number;
+  /** The detected channel's title and handle, from the same trusted source as its id (for the block page and a request). */
+  channelTitle?: string | null;
+  channelHandle?: string | null;
+  /** Set by the bridge: the channel search this page was opened from (PROTECTION-SPEC §15). */
+  searchQuery?: string | null;
 }
 
 export interface YouTubeDetectMessage {
   type: "wf:ytDetect";
   detection: YouTubeDetection;
+}
+
+/**
+ * "Ask for approval" next to a channel in YouTube's channel-only results (PROTECTION-SPEC §15), from the bridge. The
+ * background checks that the sender is its own content script in a top-level channel-search page and takes the search
+ * from that page's address.
+ */
+export interface YouTubeRequestChannelMessage {
+  type: "wf:ytRequestChannel";
+  channelId: string;
+  title?: string | null;
+  handle?: string | null;
 }
 
 /**
@@ -78,7 +99,8 @@ export type BackgroundRequest =
   | GetDecisionMessage
   | GetMyChannelsMessage
   | GetOriginalUrlMessage
-  | YouTubeDetectMessage;
+  | YouTubeDetectMessage
+  | YouTubeRequestChannelMessage;
 
 // ---- replies ------------------------------------------------------------------------------------------------------
 
@@ -142,10 +164,21 @@ export interface MyChannelsReply {
   ready: boolean;
   mode: YouTubeMode | null;
   channels: ChannelRef[];
+  /** The page offers a channel search (features.youTubeChannelSearch in the allowlist mode, PROTECTION-SPEC §15). */
+  channelSearch: boolean;
+}
+
+/**
+ * On an allowed channel-search results page (PROTECTION-SPEC §15): which channels are approved (marked "approved") and
+ * whether the others can be asked for (an "ask for approval" button).
+ */
+export interface ChannelSearchState {
+  approved: string[];
+  canRequest: boolean;
 }
 
 /** The decision plus where the frame should go (block page or "my channels"), or "stale" for an outdated URL. */
-export type YouTubeDetectReply = (YouTubeDecision & { navigateTo?: string }) | { decision: "stale" };
+export type YouTubeDetectReply = (YouTubeDecision & { navigateTo?: string; channelSearch?: ChannelSearchState }) | { decision: "stale" };
 
 // ---- broadcasts from the background to extension pages --------------------------------------------------------------
 
@@ -177,4 +210,6 @@ export interface YouTubeStoredState {
   version?: number | null;
   /** features.blockYouTubeShorts: the bridge hides the Shorts shelf and menu entry. */
   blockShorts?: boolean;
+  /** features.youTubeChannelSearch in the allowlist mode: the bridge hides every search result that is not a channel. */
+  channelSearch?: boolean;
 }

@@ -7,7 +7,8 @@ import { isWebUrl } from "./protocol";
  *   ?reason=failclosed                          static `failclosed` ruleset (extensionPath)
  *   #<original URL>                             compiled rule with regexSubstitution `…/blocked.html#\0` (spike S3)
  *   ?reason=<code>[&rule=<ruleId>]#<original>   compiled rule that also names its reason (preferred)
- *   ?reason=<code>&channel=<UC…>#<original>     YouTube content script
+ *   ?reason=<code>&channel=<UC…>[&title=…][&handle=@…][&q=…]#<original>   YouTube content script: the channel, its
+ *                                               names and the channel search it was found with (PROTECTION-SPEC §15)
  * The original URL is everything after the first '#', unencoded (DNR substitutes it verbatim).
  *
  * timeup.html#<original URL> — a tab that was open when time ran out.
@@ -21,6 +22,10 @@ export interface BlockPageInfo {
   reason: string | null;
   ruleId: string | null;
   channelId: string | null;
+  /** The channel's title and handle and the search it came from, as the YouTube content script saw them (any page can set them). */
+  title: string | null;
+  handle: string | null;
+  searchQuery: string | null;
   /** The original URL, or "" when none was passed. */
   url: string;
 }
@@ -39,17 +44,31 @@ export function parseBlockPageUrl(href: string): BlockPageInfo {
     reason: nonEmpty(params.get("reason")),
     ruleId: nonEmpty(params.get("rule")),
     channelId: nonEmpty(params.get("channel")),
+    title: nonEmpty(params.get("title")),
+    handle: nonEmpty(params.get("handle")),
+    searchQuery: nonEmpty(params.get("q")),
     url: hash,
   };
 }
 
 export function buildBlockPageUrl(
   pageUrl: string,
-  info: { reason: string; url: string; channelId?: string | null; ruleId?: string | null },
+  info: {
+    reason: string;
+    url: string;
+    channelId?: string | null;
+    ruleId?: string | null;
+    title?: string | null;
+    handle?: string | null;
+    searchQuery?: string | null;
+  },
 ): string {
   const params = new URLSearchParams({ reason: info.reason });
   if (info.ruleId) params.set("rule", info.ruleId);
   if (info.channelId) params.set("channel", info.channelId);
+  if (info.title) params.set("title", info.title);
+  if (info.handle) params.set("handle", info.handle);
+  if (info.searchQuery) params.set("q", info.searchQuery);
   return `${pageUrl}?${params.toString()}#${info.url}`;
 }
 

@@ -112,6 +112,10 @@
   "labelCategory": {
     "message": "Category:"
   },
+  "labelChannel": {
+    "message": "Channel:",
+    "description": "Block page of a YouTube channel: its name as the page showed it (PROTECTION-SPEC §15)."
+  },
   "allowedNowHeading": {
     "message": "This page is allowed now"
   },
@@ -209,6 +213,31 @@
   },
   "myChannelsEmpty": {
     "message": "No channels have been approved yet. You can ask your parents to add some."
+  },
+  "myChannelsIntroSearch": {
+    "message": "These are the channels your parents approved. You can search for another channel and ask your parents to approve it.",
+    "description": "My channels, with channel search on."
+  },
+  "myChannelsSearchLabel": {
+    "message": "Search for a channel"
+  },
+  "myChannelsSearchPlaceholder": {
+    "message": "A channel's name or a subject, e.g. science for kids"
+  },
+  "myChannelsSearchButton": {
+    "message": "Search"
+  },
+  "channelApproved": {
+    "message": "Approved",
+    "description": "Next to an approved channel in YouTube's channel-only search results."
+  },
+  "channelAskApproval": {
+    "message": "Ask for approval",
+    "description": "Button next to a channel not approved yet, in YouTube's channel-only search results."
+  },
+  "channelAsked": {
+    "message": "Request sent to your parents",
+    "description": "Shown instead of the button once the request was sent."
   },
   "statusLoading": {
     "message": "Checking…"

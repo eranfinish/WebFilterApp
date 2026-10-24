@@ -7,6 +7,10 @@
  *   embed                 ytcfg PLAYER_VARS.embedded_player_response (video_id must match), else the player's channel link
  *   handle / custom / user  ytd-browse:not([hidden]).data (handle must match); ytInitialData only on a full load
  * meta, og:url, canonical and ytInitialData are never trusted after an SPA navigation: they keep the previous page.
+ * The channel's title and handle come from the same source as its id, when it has them (PROTECTION-SPEC §15: the parents
+ * see the channel by its name). On YouTube's channel-only results (§15) each channel result is marked with its channel id,
+ * title and handle (data-wf-channel, data-wf-title, data-wf-handle) from the result's own data, for the bridge's
+ * "approved" mark and "ask for approval" button.
  */
 import type { YouTubeDetection } from "../shared/messages";
 import { KINDS_NEEDING_CHANNEL, isChannelId, normalizeHandle, parseYouTubeUrl } from "../shared/youtube-url";
@@ -37,11 +41,18 @@ import { KINDS_NEEDING_CHANNEL, isChannelId, normalizeHandle, parseYouTubeUrl } 
   interface VideoDetails {
     videoId?: string;
     channelId?: string;
+    /** The channel's title (videoDetails.author). */
+    author?: string;
+    /** The channel's handle, from the same player response (microformat's ownerProfileUrl). */
+    handle?: string | null;
   }
   interface ChannelMeta {
     channelId?: string;
     handle?: string | null;
+    title?: string | null;
   }
+  type TextData = { simpleText?: string; runs?: { text?: string }[] } | undefined;
+  const textOf = (t: TextData): string | null => t?.simpleText ?? (t?.runs?.map((r) => r.text ?? "").join("") || null);
 
   const channelFromHref = (href: string | null | undefined): string | null =>
     href?.match(/\/channel\/(UC[A-Za-z0-9_-]{22})/)?.[1] ?? null;
@@ -50,9 +61,18 @@ import { KINDS_NEEDING_CHANNEL, isChannelId, normalizeHandle, parseYouTubeUrl } 
     return raw ? normalizeHandle(safe(() => decodeURIComponent(raw)) ?? raw) : null;
   };
 
+  interface PlayerResponse {
+    videoDetails?: VideoDetails;
+    microformat?: { playerMicroformatRenderer?: { ownerProfileUrl?: string } };
+  }
+
   function playerDetails(id: string): VideoDetails | undefined {
-    const el = document.getElementById(id) as (HTMLElement & { getPlayerResponse?: () => { videoDetails?: VideoDetails } }) | null;
-    return safe(() => el?.getPlayerResponse?.()?.videoDetails);
+    const el = document.getElementById(id) as (HTMLElement & { getPlayerResponse?: () => PlayerResponse }) | null;
+    return safe(() => {
+      const response = el?.getPlayerResponse?.();
+      const details = response?.videoDetails;
+      return details ? { ...details, handle: handleFromHref(response?.microformat?.playerMicroformatRenderer?.ownerProfileUrl) } : undefined;
+    });
   }
 
   function embedPlayerVars(): VideoDetails | undefined {
@@ -69,18 +89,32 @@ import { KINDS_NEEDING_CHANNEL, isChannelId, normalizeHandle, parseYouTubeUrl } 
   }
 
   function channelMeta(data: unknown): ChannelMeta | undefined {
-    const meta = safe(() => (data as { metadata?: { channelMetadataRenderer?: { externalId?: string; vanityChannelUrl?: string } } })?.metadata?.channelMetadataRenderer);
-    return meta ? { channelId: meta.externalId, handle: handleFromHref(meta.vanityChannelUrl) } : undefined;
+    const meta = safe(
+      () => (data as { metadata?: { channelMetadataRenderer?: { externalId?: string; vanityChannelUrl?: string; title?: string } } })?.metadata?.channelMetadataRenderer,
+    );
+    return meta ? { channelId: meta.externalId, handle: handleFromHref(meta.vanityChannelUrl), title: meta.title ?? null } : undefined;
   }
+
+  const browseData = (): unknown => safe(() => (document.querySelector("ytd-browse:not([hidden])") as unknown as { data?: unknown } | null)?.data);
 
   interface Pick {
     channelId: string;
     via: string;
+    title?: string | null;
+    handle?: string | null;
+  }
+
+  /** The names of a channel known by its address only (/channel/UC…): from the page data, when it is about that channel. */
+  function namesOf(channelId: string, trigger: string): Pick {
+    const sources = [channelMeta(browseData())];
+    if (trigger === "load" || trigger === "yt-navigate-finish:first") sources.push(channelMeta((window as unknown as { ytInitialData?: unknown }).ytInitialData));
+    const meta = sources.find((m) => m?.channelId === channelId);
+    return { channelId, via: "url", title: meta?.title ?? null, handle: meta?.handle ?? null };
   }
 
   function find(url: string, trigger: string): Pick | null {
     const page = parseYouTubeUrl(url);
-    if (page.kind === "channel" && isChannelId(page.channelId)) return { channelId: page.channelId, via: "url" };
+    if (page.kind === "channel" && isChannelId(page.channelId)) return namesOf(page.channelId, trigger);
 
     if (page.kind === "video" || page.kind === "shorts" || page.kind === "embed") {
       if (!page.videoId) return null;
@@ -90,7 +124,7 @@ import { KINDS_NEEDING_CHANNEL, isChannelId, normalizeHandle, parseYouTubeUrl } 
       ];
       if (page.kind === "embed") candidates.push(["embedPlayerVars", embedPlayerVars()]);
       for (const [via, d] of candidates) {
-        if (d && d.videoId === page.videoId && isChannelId(d.channelId)) return { channelId: d.channelId, via };
+        if (d && d.videoId === page.videoId && isChannelId(d.channelId)) return { channelId: d.channelId, via, title: d.author ?? null, handle: d.handle ?? null };
       }
       // An embed shows one video and never navigates in place, so its channel link is current.
       if (page.kind === "embed") {
@@ -104,11 +138,11 @@ import { KINDS_NEEDING_CHANNEL, isChannelId, normalizeHandle, parseYouTubeUrl } 
       const wanted = page.kind === "handle" ? (page.handle ?? null) : null;
       const matches = (m: ChannelMeta | undefined): m is ChannelMeta & { channelId: string } =>
         !!m && isChannelId(m.channelId) && (wanted === null || m.handle === wanted);
-      const browse = channelMeta(safe(() => (document.querySelector("ytd-browse:not([hidden])") as unknown as { data?: unknown } | null)?.data));
-      if (matches(browse)) return { channelId: browse.channelId, via: "ytdBrowseData" };
+      const browse = channelMeta(browseData());
+      if (matches(browse)) return { channelId: browse.channelId, via: "ytdBrowseData", title: browse.title ?? null, handle: browse.handle ?? null };
       if (trigger === "load" || trigger === "yt-navigate-finish:first") {
         const initial = channelMeta((window as unknown as { ytInitialData?: unknown }).ytInitialData);
-        if (matches(initial)) return { channelId: initial.channelId, via: "ytInitialData" };
+        if (matches(initial)) return { channelId: initial.channelId, via: "ytInitialData", title: initial.title ?? null, handle: initial.handle ?? null };
         if (wanted === null) {
           const canonical = channelFromHref((document.querySelector('link[rel="canonical"]') as HTMLLinkElement | null)?.href);
           if (isChannelId(canonical)) return { channelId: canonical, via: "canonical" };
@@ -124,6 +158,7 @@ import { KINDS_NEEDING_CHANNEL, isChannelId, normalizeHandle, parseYouTubeUrl } 
     const started = performance.now();
     const url = location.href;
     const page = parseYouTubeUrl(url);
+    if (page.kind === "search") scheduleMark(); // the results of this search, once their data is in
     const needsChannel = KINDS_NEEDING_CHANNEL.has(page.kind);
     const tick = (): void => {
       if (id !== runId) return; // a newer navigation took over
@@ -141,6 +176,8 @@ import { KINDS_NEEDING_CHANNEL, isChannelId, normalizeHandle, parseYouTubeUrl } 
           trigger,
           timedOut: needsChannel && !pick,
           ms,
+          channelTitle: pick?.title ?? null,
+          channelHandle: pick?.handle ?? null,
         };
         post({ __wf: "yt-detect", frame: inFrame ? "sub" : "main", detection }, origin);
         return;
@@ -150,12 +187,61 @@ import { KINDS_NEEDING_CHANNEL, isChannelId, normalizeHandle, parseYouTubeUrl } 
     tick();
   }
 
+  // ---- channel search results (PROTECTION-SPEC §15) ----------------------------------------------------------------
+  interface ChannelRendererData {
+    channelId?: string;
+    title?: TextData;
+    navigationEndpoint?: { browseEndpoint?: { canonicalBaseUrl?: string } };
+    subscriberCountText?: TextData;
+  }
+  const rendererData = (el: Element): ChannelRendererData | undefined =>
+    safe(() => {
+      const e = el as unknown as { data?: ChannelRendererData; polymerController?: { data?: ChannelRendererData }; __data?: { data?: ChannelRendererData } };
+      return e.data ?? e.polymerController?.data ?? e.__data?.data;
+    });
+  const setData = (el: HTMLElement, name: string, value: string | null): void => {
+    if (value === null) {
+      if (name in el.dataset) delete el.dataset[name];
+    } else if (el.dataset[name] !== value) {
+      el.dataset[name] = value;
+    }
+  };
+
+  /** Marks each channel result with its own data's channel id, title and handle (a recycled element is marked again). */
+  function markChannelResults(): void {
+    if (inFrame || parseYouTubeUrl(location.href).kind !== "search") return;
+    for (const el of document.querySelectorAll<HTMLElement>("ytd-channel-renderer")) {
+      const data = rendererData(el);
+      const channelId = isChannelId(data?.channelId) ? data.channelId : null;
+      const subscribers = textOf(data?.subscriberCountText);
+      const handle = handleFromHref(data?.navigationEndpoint?.browseEndpoint?.canonicalBaseUrl) ?? (subscribers?.startsWith("@") ? normalizeHandle(subscribers) : null);
+      setData(el, "wfChannel", channelId);
+      setData(el, "wfTitle", channelId ? textOf(data?.title) : null);
+      setData(el, "wfHandle", channelId ? handle : null);
+    }
+  }
+  let markTimer: number | null = null;
+  const scheduleMark = (): void => {
+    if (markTimer !== null) return;
+    markTimer = setTimer(() => {
+      markTimer = null;
+      markChannelResults();
+    }, 100);
+  };
+  // Results load in pieces (infinite scroll) and YouTube re-renders them in place: look again after DOM changes.
+  if (!inFrame) {
+    new MutationObserver(() => {
+      if (location.pathname === "/results" || location.pathname === "/search") scheduleMark();
+    }).observe(document, { childList: true, subtree: true, characterData: true });
+  }
+
   let lastHref = location.href;
   let navigateFinishSeen = false;
   document.addEventListener("yt-navigate-finish", () => {
     lastHref = location.href;
     run(navigateFinishSeen ? "yt-navigate-finish" : "yt-navigate-finish:first");
     navigateFinishSeen = true;
+    scheduleMark();
   });
   // URL changes sometimes arrive before yt-navigate-finish; both are needed (S4).
   setRepeat(() => {

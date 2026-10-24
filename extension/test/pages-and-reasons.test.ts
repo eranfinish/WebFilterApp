@@ -25,11 +25,11 @@ describe("block page URLs", () => {
 
   it("reads the compiled-rule form: #<original URL>, unencoded, including its own query and Hebrew", () => {
     const original = "https://www.example.com/search?q=%D7%A9%D7%9C%D7%95%D7%9D&x=1#frag";
-    expect(parseBlockPageUrl(`${page}#${original}`)).toEqual({ reason: null, ruleId: null, channelId: null, url: original });
+    expect(parseBlockPageUrl(`${page}#${original}`)).toEqual({ reason: null, ruleId: null, channelId: null, title: null, handle: null, searchQuery: null, url: original });
   });
 
   it("reads the static fail-closed form", () => {
-    expect(parseBlockPageUrl(`${page}?reason=failclosed`)).toEqual({ reason: "failclosed", ruleId: null, channelId: null, url: "" });
+    expect(parseBlockPageUrl(`${page}?reason=failclosed`)).toEqual({ reason: "failclosed", ruleId: null, channelId: null, title: null, handle: null, searchQuery: null, url: "" });
   });
 
   it("round-trips the YouTube form", () => {
@@ -39,7 +39,31 @@ describe("block page URLs", () => {
       reason: "blocked_youtube_channel",
       ruleId: null,
       channelId: "UCgamerX0000000000000003",
+      title: null,
+      handle: null,
+      searchQuery: null,
       url: "https://www.youtube.com/watch?v=a&t=1",
+    });
+  });
+
+  it("round-trips a channel's names and the search it came from (PROTECTION-SPEC §15)", () => {
+    const original = "https://www.youtube.com/@nasa";
+    const href = buildBlockPageUrl(page, {
+      reason: "blocked_youtube_channel",
+      url: original,
+      channelId: "UCLA_DiQTUM8_Bp7gWl1D0RQ",
+      title: "NASA & friends #1",
+      handle: "@nasa",
+      searchQuery: "חלל",
+    });
+    expect(parseBlockPageUrl(href)).toEqual({
+      reason: "blocked_youtube_channel",
+      ruleId: null,
+      channelId: "UCLA_DiQTUM8_Bp7gWl1D0RQ",
+      title: "NASA & friends #1",
+      handle: "@nasa",
+      searchQuery: "חלל",
+      url: original,
     });
   });
 

@@ -50,6 +50,7 @@ const messages = [
   ["blockedHeading", "This page is blocked", "הדף הזה חסום"],
   ["labelAddress", "Address:", "כתובת:"],
   ["labelCategory", "Category:", "קטגוריה:"],
+  ["labelChannel", "Channel:", "ערוץ:", "Block page of a YouTube channel: its name as the page showed it (PROTECTION-SPEC §15)."],
   ["allowedNowHeading", "This page is allowed now", "הדף הזה מותר עכשיו"],
   ["tryAgain", "Try again", "לנסות שוב"],
   ["overrideButton", "Open anyway", "פתח בכל זאת", "Jump block page, teens and parents: opens the site once; for a teen, the parents see that it was opened."],
@@ -88,6 +89,14 @@ const messages = [
   ["myChannelsHeading", "My YouTube channels", "הערוצים שלי ב-YouTube"],
   ["myChannelsIntro", "These are the channels your parents approved. YouTube's home page and search aren't available.", "אלה הערוצים שההורים אישרו. דף הבית והחיפוש של YouTube לא זמינים."],
   ["myChannelsEmpty", "No channels have been approved yet. You can ask your parents to add some.", "עדיין לא אושרו ערוצים. אפשר לבקש מההורים להוסיף."],
+  // YouTube channel search (PROTECTION-SPEC §15).
+  ["myChannelsIntroSearch", "These are the channels your parents approved. You can search for another channel and ask your parents to approve it.", "אלה הערוצים שההורים אישרו. אפשר לחפש ערוץ אחר ולבקש מההורים לאשר אותו.", "My channels, with channel search on."],
+  ["myChannelsSearchLabel", "Search for a channel", "חפש ערוץ"],
+  ["myChannelsSearchPlaceholder", "A channel's name or a subject, e.g. science for kids", "שם של ערוץ או נושא, למשל: מדע לילדים"],
+  ["myChannelsSearchButton", "Search", "חיפוש"],
+  ["channelApproved", "Approved", "מאושר", "Next to an approved channel in YouTube's channel-only search results."],
+  ["channelAskApproval", "Ask for approval", "בקש אישור", "Button next to a channel not approved yet, in YouTube's channel-only search results."],
+  ["channelAsked", "Request sent to your parents", "נשלחה בקשה להורים", "Shown instead of the button once the request was sent."],
 
   // Popup.
   ["statusLoading", "Checking…", "בבדיקה…"],

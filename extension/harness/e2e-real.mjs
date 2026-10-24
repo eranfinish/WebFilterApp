@@ -657,6 +657,36 @@ try {
       { note: `returned after ${Date.now() - t0} ms; now ${page.url()}` });
   }
 
+  // ===== 5d. YouTube channel search and channel names (PROTECTION-SPEC §15) =========================================
+  {
+    // The parent allows noa to search for channels (a one-flag setMember, as the member page sends it).
+    await adminOk({ type: "setMember", memberId: "noa", youTubeChannelSearch: true });
+    const searchOn = await waitFor(async () => ((await status()).features?.youTubeChannelSearch === true ? true : null), 8000, 100);
+    // A channel's block page as the YouTube bridge opens it from a channel search (every host is local here).
+    const natGeo = "UCnatgeoKids000000000004";
+    const channelPage = U("www.youtube.com", "/@natgeokids-sim");
+    await visit(page, `${extPage("blocked.html")}?reason=blocked_youtube_channel&channel=${natGeo}&title=NatGeo+Kids+%28sim%29&handle=%40natgeokids-sim&q=space#${channelPage}`);
+    const info = await readyInfo(page);
+    const button = info ? await page.isVisible("#ask-channel") : false;
+    await page.click("#ask-channel");
+    const created = await waitFor(async () => ((await pageInfo(page)).requestResult === "created" ? true : null), 8000);
+    const asked = (await adminOk({ type: "getRequests", status: "pending", memberId: "noa" })).requests.find((r) => r.targetKey === natGeo);
+    check("5d channel search on from the service; a channel request carries its title, handle and search to the parent",
+      !!searchOn && info?.canRequest === "true" && button && !!created && asked?.title === "NatGeo Kids (sim)" && asked.handle === "@natgeokids-sim" && asked.searchQuery === "space",
+      { note: JSON.stringify(asked ?? info) });
+    if (asked) await adminOk({ type: "decideRequest", requestId: asked.id, decision: "approve", duration: "always" });
+    const stored = (await adminOk({ type: "getSettings" })).settings.youTubeChannels.find((c) => c.channelId === natGeo && c.member === "noa");
+    const mine = await context.newPage();
+    await visit(mine, extPage("my-channels.html"));
+    const named = await waitFor(() => mine.evaluate(() => [...document.querySelectorAll("#channels .channel-title")].map((e) => e.textContent).find((t) => t === "NatGeo Kids (sim)") ?? null), 8000);
+    const box = await mine.evaluate(() => document.getElementById("search")?.hidden === false);
+    check("5e the approval stores the channel with its names; my channels lists it by name and offers the channel search",
+      stored?.title === "NatGeo Kids (sim)" && stored.handle === "@natgeokids-sim" && stored.action === "allow" && !!named && box,
+      { note: JSON.stringify({ stored, named, box }) });
+    await mine.close();
+    await adminOk({ type: "setMember", memberId: "noa", youTubeChannelSearch: false });
+  }
+
   // ===== 6. Time up ==================================================================================================
   {
     const lessonUrl = U("www.khanacademy.org", "/lesson");
