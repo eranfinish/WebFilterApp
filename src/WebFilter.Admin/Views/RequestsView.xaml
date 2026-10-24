@@ -31,7 +31,15 @@
                 </DockPanel>
 
                 <TextBlock Text="{Binding TargetText}" FontWeight="SemiBold" Margin="0,8,0,0" TextWrapping="Wrap"
-                           FlowDirection="LeftToRight" HorizontalAlignment="Left" />
+                           FlowDirection="LeftToRight" HorizontalAlignment="Left"
+                           Visibility="{Binding IsYouTube, Converter={StaticResource InverseBoolToVisibility}}" />
+                <!-- A channel by its name (PROTECTION-SPEC §15), in the name's own direction; its id below when the name is known -->
+                <TextBlock Text="{Binding ChannelText}" FontWeight="SemiBold" Margin="0,8,0,0" TextWrapping="Wrap"
+                           Visibility="{Binding IsYouTube, Converter={StaticResource BoolToVisibility}}" />
+                <TextBlock Text="{Binding ChannelIdText}" Style="{StaticResource SubtleText}" FontSize="12" Margin="0,2,0,0"
+                           Visibility="{Binding ChannelIdText, Converter={StaticResource HasValueToVisibility}}" />
+                <TextBlock Text="{Binding FoundInSearchText}" Style="{StaticResource SubtleText}" Margin="0,4,0,0" TextWrapping="Wrap"
+                           Visibility="{Binding FoundInSearchText, Converter={StaticResource HasValueToVisibility}}" />
                 <TextBlock Text="{Binding MessageText}" FontStyle="Italic" Style="{StaticResource SubtleText}" Margin="0,6,0,0"
                            Visibility="{Binding MessageText, Converter={StaticResource HasValueToVisibility}}" />
 
@@ -55,6 +63,10 @@
                     </ItemsControl.ItemTemplate>
                   </ItemsControl>
                   <Button Content="{x:Static res:Strings.Request_Deny}" Command="{Binding DenyCommand}" Style="{StaticResource DangerButton}" />
+                  <!-- Opens the channel or site in the parent's own, unelevated browser (ShellBrowserLauncher) -->
+                  <Button Content="{x:Static res:Strings.Request_OpenForReview}" ToolTip="{x:Static res:Strings.Request_OpenForReviewTip}"
+                          Command="{Binding OpenForReviewCommand}"
+                          Visibility="{Binding CanOpenForReview, Converter={StaticResource BoolToVisibility}}" />
                 </WrapPanel>
               </StackPanel>
             </Border>

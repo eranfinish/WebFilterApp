@@ -98,6 +98,11 @@
               <TextBlock Text="{x:Static res:Strings.Member_BlockAdsHint}" Style="{StaticResource SubtleText}" FontSize="12" Margin="22,2,0,10" />
               <CheckBox Content="{x:Static res:Strings.Member_LogSearches}" IsChecked="{Binding LogSearches}" />
               <TextBlock Text="{x:Static res:Strings.Member_LogSearchesNote}" Style="{StaticResource SubtleText}" FontSize="12" Margin="22,2,0,0" />
+              <!-- PROTECTION-SPEC §15: only for YouTube's "approved channels only" mode -->
+              <StackPanel Margin="0,10,0,0" Visibility="{Binding ShowsChannelSearch, Converter={StaticResource BoolToVisibility}}">
+                <CheckBox Content="{x:Static res:Strings.Member_YouTubeChannelSearch}" IsChecked="{Binding YouTubeChannelSearch}" />
+                <TextBlock Text="{x:Static res:Strings.Member_YouTubeChannelSearchHint}" Style="{StaticResource SubtleText}" FontSize="12" Margin="22,2,0,0" TextWrapping="Wrap" />
+              </StackPanel>
               <Border Style="{StaticResource ErrorBanner}" Visibility="{Binding Message, Converter={StaticResource HasValueToVisibility}}">
                 <TextBlock Text="{Binding Message}" Foreground="{StaticResource DangerBrush}" TextWrapping="Wrap" />
               </Border>

@@ -221,6 +221,22 @@ internal sealed class FakeDialogs : IDialogService
     }
 }
 
+/// <summary>Records the addresses "open for review" hands to the browser; opens nothing.</summary>
+internal sealed class FakeBrowser : IBrowserLauncher
+{
+    public List<Uri> Opened { get; } = [];
+
+    /// <summary>False: the browser could not be started.</summary>
+    public bool Succeeds { get; set; } = true;
+
+    public bool TryOpen(Uri address)
+    {
+        if (!Succeeds) return false;
+        Opened.Add(address);
+        return true;
+    }
+}
+
 internal sealed class FakeClipboard : IClipboardService
 {
     /// <summary>False while "another program" holds the clipboard.</summary>

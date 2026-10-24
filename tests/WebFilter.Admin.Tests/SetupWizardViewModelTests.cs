@@ -127,7 +127,7 @@ public sealed class SetupWizardViewModelTests
         // (§12); searches not logged.
         Assert.Equal(
             [new MemberDto(noa, "נועה", "child", 8, "allowlist", "allowlist", BlockImageSearch: true, JumpGuard: true, BlockYouTubeShorts: true, LogSearches: false, BlockAds: true),
-             new MemberDto(yoav, "יואב", "teen", 14, "blocklist", "restricted", BlockImageSearch: false, JumpGuard: true, BlockYouTubeShorts: false, LogSearches: false, BlockAds: true),
+             new MemberDto(yoav, "יואב", "teen", 14, "blocklist", "restricted", BlockImageSearch: false, JumpGuard: true, BlockYouTubeShorts: false, LogSearches: false, BlockAds: true, YouTubeChannelSearch: true),
              new MemberDto(dad, "אבא", "adult", null, "unrestricted", "unrestricted")],
             replace.Settings.Members);
         Assert.Equal(new Dictionary<string, string?> { ["noa"] = noa, ["yoav"] = yoav, ["Dad"] = dad },

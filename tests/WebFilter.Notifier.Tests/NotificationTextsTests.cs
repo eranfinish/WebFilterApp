@@ -14,6 +14,11 @@ public sealed class NotificationTextsTests
     [InlineData("time:30", "pc-kids", "בקשה לעוד 30 דקות גלישה (מהמחשב pc-kids). לחצו כאן כדי לפתוח את ניהול המשפחה.")]
     [InlineData(@"app:C:\Games\Roblox\roblox.exe", "laptop-yoav", "בקשה להשתמש בתוכנה roblox.exe (מהמחשב laptop-yoav). לחצו כאן כדי לפתוח את ניהול המשפחה.")]
     [InlineData("youtube:UCkhanKids00000000000001", null, "בקשה לצפות בערוץ YouTube. לחצו כאן כדי לפתוח את ניהול המשפחה.")]
+    // PROTECTION-SPEC §15: the channel by its name when the request knew it; a name may hold a ':' of its own.
+    [InlineData("youtube:UCkhanKids00000000000001:Khan Kids (@khankids)", "pc-kids", "בקשה לצפות בערוץ YouTube Khan Kids (@khankids) (מהמחשב pc-kids). לחצו כאן כדי לפתוח את ניהול המשפחה.")]
+    [InlineData("youtube:UCkhanKids00000000000001:Science: live (@sci)", null, "בקשה לצפות בערוץ YouTube Science: live (@sci). לחצו כאן כדי לפתוח את ניהול המשפחה.")]
+    [InlineData("youtube:UCkhanKids00000000000001:ערוץ הילדים", null, "בקשה לצפות בערוץ YouTube ערוץ הילדים. לחצו כאן כדי לפתוח את ניהול המשפחה.")]
+    [InlineData("youtube:UCkhanKids00000000000001: ", null, "בקשה לצפות בערוץ YouTube. לחצו כאן כדי לפתוח את ניהול המשפחה.")]
     [InlineData("time:soon", null, "בקשה חדשה מאחד הילדים. לחצו כאן כדי לפתוח את ניהול המשפחה.")]
     [InlineData(null, null, "בקשה חדשה מאחד הילדים. לחצו כאן כדי לפתוח את ניהול המשפחה.")]
     public void A_request_says_what_was_asked_for_and_from_which_computer(string? detail, string? device, string text)
@@ -24,6 +29,14 @@ public sealed class NotificationTextsTests
         Assert.Equal(text, Bidi.Plain(shown.Text));
         // Member ids are not names; the notifier cannot read the names without elevating, so it never shows an id.
         Assert.DoesNotContain("m-1a2b3c4d", shown.Text, StringComparison.Ordinal);
+    }
+
+    /// <summary>A Latin channel name keeps its parentheses in the Hebrew sentence; a Hebrew one needs no marks.</summary>
+    [Fact]
+    public void A_channel_name_keeps_its_own_direction()
+    {
+        Assert.Contains("‎Khan Kids (@khankids)‎", One(TestData.Request(1, "youtube:UCkhanKids00000000000001:Khan Kids (@khankids)")).Text, StringComparison.Ordinal);
+        Assert.Contains("YouTube ערוץ הילדים (", One(TestData.Request(2, "youtube:UCkhanKids00000000000001:ערוץ הילדים")).Text, StringComparison.Ordinal);
     }
 
     [Fact]

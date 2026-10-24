@@ -413,10 +413,10 @@ internal sealed record MemberTemplate(string FilterMode, string YouTubeMode, boo
     {
         "child" => new("allowlist", "allowlist", true, "15:00", "19:00", 120,
             new Dictionary<string, string> { ["educational"] = "allow", [StarterLists.SchoolTools] = "allow" },
-            new MemberProtection(BlockImageSearch: true, JumpGuard: true, BlockYouTubeShorts: true, LogSearches: false, BlockAds: true)),
+            new MemberProtection(BlockImageSearch: true, JumpGuard: true, BlockYouTubeShorts: true, LogSearches: false, BlockAds: true, YouTubeChannelSearch: false)),
         "teen" => new("blocklist", "restricted", true, "14:00", "21:30", 240,
             new Dictionary<string, string> { ["adult"] = "block", ["gambling"] = "block", ["proxies"] = "block", ["unfiltered-search"] = "block", ["ads-popups"] = "block" },
-            new MemberProtection(BlockImageSearch: false, JumpGuard: true, BlockYouTubeShorts: false, LogSearches: false, BlockAds: true)),
+            new MemberProtection(BlockImageSearch: false, JumpGuard: true, BlockYouTubeShorts: false, LogSearches: false, BlockAds: true, YouTubeChannelSearch: true)),
         _ => new("unrestricted", "unrestricted", false, "08:00", "22:00", 180, new Dictionary<string, string>(), MemberProtection.None),
     };
 
@@ -470,24 +470,32 @@ internal sealed record MemberTemplate(string FilterMode, string YouTubeMode, boo
             Texts.Code("FilterMode_", FilterMode),
             Texts.Format(Strings.Setup_Summary_YouTube, Texts.Code("YouTubeMode_", YouTubeMode)),
             LimitTime ? Texts.Format(Strings.Setup_Summary_Time, hours, Texts.Minutes(LimitMinutes)) : Strings.Setup_Summary_NoTimeLimit,
-            Protection.Text(),
+            Protection.Text(YouTubeMode),
             string.Join(", ", Categories.Select(c => Texts.Format(Strings.Setup_Summary_Category, Texts.Code("Category_", c.Key), Texts.Code("CategoryChoice_", c.Value)))));
     }
 }
 
-/// <summary>The five protection flags of a member (PROTECTION-SPEC §1); filtered members only.</summary>
-internal sealed record MemberProtection(bool BlockImageSearch, bool JumpGuard, bool BlockYouTubeShorts, bool LogSearches, bool BlockAds)
+/// <summary>
+/// The protection flags of a member (PROTECTION-SPEC §1) and the YouTube channel search (§15: on for teens, off for
+/// children); filtered members only.
+/// </summary>
+internal sealed record MemberProtection(bool BlockImageSearch, bool JumpGuard, bool BlockYouTubeShorts, bool LogSearches, bool BlockAds,
+    bool YouTubeChannelSearch = false)
 {
     public static readonly MemberProtection None = new(false, false, false, false, false);
 
-    /// <summary><paramref name="member"/> with these five flags.</summary>
+    /// <summary><paramref name="member"/> with these flags.</summary>
     public MemberDto ApplyTo(MemberDto member) => member with
     {
         BlockImageSearch = BlockImageSearch, JumpGuard = JumpGuard, BlockYouTubeShorts = BlockYouTubeShorts, LogSearches = LogSearches, BlockAds = BlockAds,
+        YouTubeChannelSearch = YouTubeChannelSearch,
     };
 
-    /// <summary>"Block image search, Block jumps to other sites", or null when none is on.</summary>
-    public string? Text()
+    /// <summary>
+    /// "Block image search, Block jumps to other sites", or null when none is on. The channel search is named only for
+    /// the "approved channels only" YouTube mode, the one it is for.
+    /// </summary>
+    public string? Text(string youTubeMode)
     {
         var on = new[]
         {
@@ -496,6 +504,7 @@ internal sealed record MemberProtection(bool BlockImageSearch, bool JumpGuard, b
             BlockYouTubeShorts ? Strings.Member_BlockYouTubeShorts : null,
             BlockAds ? Strings.Member_BlockAds : null,
             LogSearches ? Strings.Member_LogSearches : null,
+            YouTubeChannelSearch && youTubeMode == "allowlist" ? Strings.Member_YouTubeChannelSearch : null,
         };
         return Texts.NullIfEmpty(Texts.Join(", ", on));
     }
@@ -612,7 +621,7 @@ public sealed partial class WizardMemberViewModel : ObservableObject
             Texts.Code("FilterMode_", FilterMode),
             Texts.Format(Strings.Setup_Summary_YouTube, Texts.Code("YouTubeMode_", YouTubeMode)),
             time,
-            Applied.Text(),
+            Applied.Text(YouTubeMode),
             CategoriesText(),
             linked.Count == 0 ? Strings.Setup_Summary_NoAccount : Texts.Format(Strings.Setup_Summary_Accounts, string.Join(", ", linked)));
     }

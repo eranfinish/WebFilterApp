@@ -24,6 +24,8 @@ public sealed class ViewRenderTests
         var client = new FakeAdminClient();
         client.Devices.AddRange(TestData.Devices());
         client.Requests.Add(TestData.Request("ar-1", "url", "https://games.example/", "games.example"));
+        // A channel request with its names and search (PROTECTION-SPEC §15).
+        client.Requests.Add(TestData.Request("ar-2", "youtube", "UCLA_DiQTUM8_Bp7gWl1D0RQ", "UCLA_DiQTUM8_Bp7gWl1D0RQ") with { Title = "NASA", Handle = "@nasa", SearchQuery = "space" });
         client.Events.Add(new EventDto("blocked", TestData.Now.AddMinutes(-3), "noa", "pc-kids", "blocked_not_in_allowlist", "https://games.example/", null, null, null));
         client.Events.Add(new EventDto("search", TestData.Now.AddMinutes(-4), "yoav", "laptop-yoav", null, "https://www.google.com/search?q=lego", null, null, "google:lego"));
         client.Events.Add(new EventDto("override", TestData.Now.AddMinutes(-5), "yoav", "laptop-yoav", "blocked_jump", "https://news.example/", null, null, null));
@@ -220,7 +222,7 @@ public sealed class ViewRenderTests
 
     private static async Task<ShownWindow> ShownAsync(FakeAdminClient client)
     {
-        var main = new MainViewModel(client, new ManualTimer(), new FakeDialogs(), new FakeClipboard(), new ManualTime(TestData.Now));
+        var main = new MainViewModel(client, new ManualTimer(), new FakeDialogs(), new FakeClipboard(), new ManualTime(TestData.Now), new FakeBrowser());
         var full = UiThread.RenderDirectory is not null;
         var window = new MainWindow
         {

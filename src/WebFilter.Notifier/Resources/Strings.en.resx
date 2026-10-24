@@ -68,6 +68,9 @@
   <data name="Request_YouTube" xml:space="preserve">
     <value>A request to watch a YouTube channel</value>
   </data>
+  <data name="Request_YouTubeNamed" xml:space="preserve">
+    <value>A request to watch the YouTube channel {0}</value>
+  </data>
   <data name="Request_App" xml:space="preserve">
     <value>A request to use the program {0}</value>
   </data>

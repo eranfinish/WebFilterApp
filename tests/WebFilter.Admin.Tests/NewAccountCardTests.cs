@@ -153,7 +153,7 @@ public sealed class NewAccountCardTests
         await card.AddChildCommand.ExecuteAsync(null);
 
         var saved = Saved;
-        Assert.Equal(new MemberDto("m-new", "visitor", "teen", null, "blocklist", "restricted", BlockImageSearch: false, JumpGuard: true, BlockYouTubeShorts: false, LogSearches: false, BlockAds: true),
+        Assert.Equal(new MemberDto("m-new", "visitor", "teen", null, "blocklist", "restricted", BlockImageSearch: false, JumpGuard: true, BlockYouTubeShorts: false, LogSearches: false, BlockAds: true, YouTubeChannelSearch: true),
             saved.Members[^1]);
         Assert.Equal(["14:00-21:30"], saved.Schedules.Where(s => s.Member == "m-new").Select(s => $"{s.Start}-{s.End}"));
         Assert.Equal([240], saved.DailyLimits.Where(l => l.Member == "m-new").Select(l => l.Minutes));

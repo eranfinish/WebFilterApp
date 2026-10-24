@@ -821,6 +821,24 @@ namespace WebFilter.Admin.Resources {
         }
 
         /// <summary>
+        ///   Looks up a localized string similar to מזהה הערוץ: {0}.
+        /// </summary>
+        public static string Request_ChannelId {
+            get {
+                return ResourceManager.GetString("Request_ChannelId", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to נמצא בחיפוש '{0}'.
+        /// </summary>
+        public static string Request_FoundInSearch {
+            get {
+                return ResourceManager.GetString("Request_FoundInSearch", resourceCulture);
+            }
+        }
+
+        /// <summary>
         ///   Looks up a localized string similar to נשלחה ב-{0}.
         /// </summary>
         public static string Request_SentAt {
@@ -916,6 +934,42 @@ namespace WebFilter.Admin.Resources {
         public static string Request_Deny {
             get {
                 return ResourceManager.GetString("Request_Deny", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to פתח לבדיקה.
+        /// </summary>
+        public static string Request_OpenForReview {
+            get {
+                return ResourceManager.GetString("Request_OpenForReview", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to פותח את הערוץ או האתר בדפדפן שלך, כדי לראות מה הילד מבקש לפני שמחליטים..
+        /// </summary>
+        public static string Request_OpenForReviewTip {
+            get {
+                return ResourceManager.GetString("Request_OpenForReviewTip", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to נפתח בדפדפן שלך..
+        /// </summary>
+        public static string Request_Opened {
+            get {
+                return ResourceManager.GetString("Request_Opened", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to לא הצלחנו לפתוח את הדפדפן..
+        /// </summary>
+        public static string Request_OpenFailed {
+            get {
+                return ResourceManager.GetString("Request_OpenFailed", resourceCulture);
             }
         }
 
@@ -4255,6 +4309,24 @@ namespace WebFilter.Admin.Resources {
         public static string Member_LogSearchesNote {
             get {
                 return ResourceManager.GetString("Member_LogSearchesNote", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to מותר לחפש ערוצים ב-YouTube.
+        /// </summary>
+        public static string Member_YouTubeChannelSearch {
+            get {
+                return ResourceManager.GetString("Member_YouTubeChannelSearch", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to בדף "הערוצים שלי" יופיע חיפוש ערוצים. YouTube יציג רק ערוצים — בלי סרטונים ובלי Shorts — וליד כל ערוץ שעוד לא אושר יופיע כפתור "בקש אישור". ערוץ שנמצא בחיפוש נשאר חסום עד שתאשרו אותו..
+        /// </summary>
+        public static string Member_YouTubeChannelSearchHint {
+            get {
+                return ResourceManager.GetString("Member_YouTubeChannelSearchHint", resourceCulture);
             }
         }
 

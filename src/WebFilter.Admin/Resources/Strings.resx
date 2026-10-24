@@ -298,6 +298,12 @@
   <data name="Request_Message" xml:space="preserve">
     <value>הודעה: "{0}"</value>
   </data>
+  <data name="Request_ChannelId" xml:space="preserve">
+    <value>מזהה הערוץ: {0}</value>
+  </data>
+  <data name="Request_FoundInSearch" xml:space="preserve">
+    <value>נמצא בחיפוש '{0}'</value>
+  </data>
   <data name="Request_SentAt" xml:space="preserve">
     <value>נשלחה ב-{0}</value>
   </data>
@@ -330,6 +336,18 @@
   </data>
   <data name="Request_Deny" xml:space="preserve">
     <value>דחייה</value>
+  </data>
+  <data name="Request_OpenForReview" xml:space="preserve">
+    <value>פתח לבדיקה</value>
+  </data>
+  <data name="Request_OpenForReviewTip" xml:space="preserve">
+    <value>פותח את הערוץ או האתר בדפדפן שלך, כדי לראות מה הילד מבקש לפני שמחליטים.</value>
+  </data>
+  <data name="Request_Opened" xml:space="preserve">
+    <value>נפתח בדפדפן שלך.</value>
+  </data>
+  <data name="Request_OpenFailed" xml:space="preserve">
+    <value>לא הצלחנו לפתוח את הדפדפן.</value>
   </data>
   <data name="Done_Approved" xml:space="preserve">
     <value>הבקשה של {0} אושרה.</value>
@@ -1449,6 +1467,12 @@
   </data>
   <data name="Member_LogSearchesNote" xml:space="preserve">
     <value>מה שמחפשים ב-Google, ב-Bing, ב-YouTube וב-DuckDuckGo מופיע ביומן הפעילות. בן המשפחה רואה בדפדפן הודעה שהחיפושים שלו גלויים להורים.</value>
+  </data>
+  <data name="Member_YouTubeChannelSearch" xml:space="preserve">
+    <value>מותר לחפש ערוצים ב-YouTube</value>
+  </data>
+  <data name="Member_YouTubeChannelSearchHint" xml:space="preserve">
+    <value>בדף "הערוצים שלי" יופיע חיפוש ערוצים. YouTube יציג רק ערוצים — בלי סרטונים ובלי Shorts — וליד כל ערוץ שעוד לא אושר יופיע כפתור "בקש אישור". ערוץ שנמצא בחיפוש נשאר חסום עד שתאשרו אותו.</value>
   </data>
   <data name="Rule_SchoolSignIn" xml:space="preserve">
     <value>לכניסה לחשבון בית ספר</value>

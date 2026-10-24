@@ -42,7 +42,11 @@ public static class NotificationTexts
         _ => new(Strings.Other_Title, Strings.Other_Text),
     };
 
-    /// <summary>"A request to open games.example (from kids-pc)."; detail is "kind:target", split at the first ':'; url targets are hosts.</summary>
+    /// <summary>
+    /// "A request to open games.example (from kids-pc)."; detail is "kind:target", split at the first ':'; url targets are
+    /// hosts. A YouTube target is "channelId" or "channelId:name" (PROTECTION-SPEC §15): the channel by its name, "NASA
+    /// (@nasa)", when the request knew it.
+    /// </summary>
     private static string Request(NotificationDto item)
     {
         var detail = item.Detail ?? "";
@@ -51,6 +55,7 @@ public static class NotificationTexts
         var text = (kind, target.Length > 0) switch
         {
             ("url", true) => Format(Strings.Request_Url, Ltr(target)),
+            ("youtube", true) when ChannelName(target) is { } name => Format(Strings.Request_YouTubeNamed, Natural(name)),
             ("youtube", _) => Strings.Request_YouTube,
             ("app", true) => Format(Strings.Request_App, Ltr(FileName(target))),
             ("time", true) when int.TryParse(target, NumberStyles.None, CultureInfo.InvariantCulture, out var minutes) => Format(Strings.Request_Time, minutes),
@@ -122,10 +127,31 @@ public static class NotificationTexts
 
     private static string Computer(string? deviceId) => deviceId is { Length: > 0 } ? Ltr(deviceId) : Strings.Computer_Unknown;
 
+    /// <summary>The name after the channel id in a YouTube target ("UC…:NASA (@nasa)"), or null when there is none.</summary>
+    private static string? ChannelName(string target)
+    {
+        var colon = target.IndexOf(':', StringComparison.Ordinal);
+        return colon < 0 || colon == target.Length - 1 ? null : target[(colon + 1)..].Trim() is { Length: > 0 } name ? name : null;
+    }
+
     private static string FileName(string path) => System.IO.Path.GetFileName(path.TrimEnd('\\', '/')) is { Length: > 0 } file ? file : path;
 
     /// <summary>A left-to-right value (host, file, computer name) kept in one piece inside a Hebrew sentence.</summary>
     private static string Ltr(string value) => $"{Lrm}{value}{Lrm}";
+
+    /// <summary>
+    /// A name that may be Hebrew or Latin (a YouTube channel's) in its own direction: a Latin one, by its first letter,
+    /// is kept in one piece like <see cref="Ltr"/>, so "NASA (@nasa)" keeps its parentheses; a Hebrew one is left as it is.
+    /// </summary>
+    private static string Natural(string value)
+    {
+        foreach (var c in value)
+        {
+            if (c is >= '֐' and <= 'ࣿ') return value;
+            if (char.IsLetter(c)) return Ltr(value);
+        }
+        return value;
+    }
 
     private static string Join(string first, string second) => $"{first} {second}";
 
