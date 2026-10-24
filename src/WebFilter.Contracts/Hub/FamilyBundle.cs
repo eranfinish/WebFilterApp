@@ -46,9 +46,13 @@ public sealed record FamilyBundle
 /// <param name="BlockYouTubeShorts">YouTube /shorts/ is blocked (§8). False when missing.</param>
 /// <param name="LogSearches">Search terms are recorded for the parents; the member is told (§9). False when missing.</param>
 /// <param name="BlockAds">Requests to EasyList's ad servers are blocked in the browser (§12). False when missing.</param>
-/// <remarks>The five flags apply to restricted members only; unrestricted members (adults) ignore them.</remarks>
+/// <param name="YouTubeChannelSearch">
+/// In YouTube's "approved channels only" mode the member may search YouTube for channels (§15). False when missing.
+/// </param>
+/// <remarks>The flags apply to restricted members only; unrestricted members (adults) ignore them.</remarks>
 public sealed record MemberDto(string Id, string DisplayName, string Role, int? Age, string FilterMode, string YouTubeMode,
-    bool BlockImageSearch = false, bool JumpGuard = false, bool BlockYouTubeShorts = false, bool LogSearches = false, bool BlockAds = false);
+    bool BlockImageSearch = false, bool JumpGuard = false, bool BlockYouTubeShorts = false, bool LogSearches = false, bool BlockAds = false,
+    [property: JsonPropertyName("youTubeChannelSearch")] bool YouTubeChannelSearch = false);
 
 /// <summary>Wire: <c>windowsFeatures: { notificationsAndSync, oneDrive, webSearchInStart }</c>; a missing field takes its default.</summary>
 /// <param name="NotificationsAndSync">Per-user Windows services (push notifications, settings sync) may use the network — svchost.exe is allowed, also when time is up.</param>
@@ -92,6 +96,30 @@ public sealed record ScheduleDto(string Member, IReadOnlyList<int> Days, string 
 public sealed record DailyLimitDto(string Member, IReadOnlyList<int> Days, int Minutes);
 
 public sealed record YouTubeChannelDto(string ChannelId, string? Handle, string? Title, string? Member, string Action);
+
+/// <summary>
+/// How a YouTube channel is named to the parents (admin app, notifier) and on the child's "my channels" page
+/// (PROTECTION-SPEC §15): "NASA (@nasa)", the title or the handle alone, or the channel id when no name is known.
+/// </summary>
+public static class YouTubeChannelLabel
+{
+    /// <summary>The channel's name from its title and handle, or null when neither is known.</summary>
+    public static string? Name(string? title, string? handle)
+    {
+        title = string.IsNullOrWhiteSpace(title) ? null : title.Trim();
+        handle = string.IsNullOrWhiteSpace(handle) ? null : handle.Trim();
+        return (title, handle) switch
+        {
+            ({ } t, { } h) => $"{t} ({h})",
+            ({ } t, null) => t,
+            (null, { } h) => h,
+            _ => null,
+        };
+    }
+
+    /// <summary><see cref="Name"/>, or the channel id when no name is known.</summary>
+    public static string Of(string channelId, string? title, string? handle) => Name(title, handle) ?? channelId;
+}
 
 /// <param name="Match">path | package | publisher.</param>
 public sealed record AppRuleDto(string Id, string? Member, string Match, string Value, string Action, bool AlwaysAllowed = false, DateTimeOffset? ExpiresAt = null);

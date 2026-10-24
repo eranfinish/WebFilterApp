@@ -98,6 +98,48 @@
           ]
         }
       ]
+    },
+    {
+      "id": "YT-008",
+      "title": "Channel search (allowlist mode): YouTube's results restricted to channels are shown; any other search goes there; channels found are still not approved",
+      "start": "2026-11-01T16:00",
+      "setup": { "members": [ { "id": "noa", "youTubeChannelSearch": true } ] },
+      "steps": [
+        { "do": "youtube", "member": "noa", "page": { "url": "https://www.youtube.com/results?search_query=dinosaurs&sp=EgIQAg%253D%253D" }, "expect": { "decision": "allow", "reason": "allowed_default" }, "note": "as YouTube's own 'Channels' filter writes it; the extension hides every result that is not a channel" },
+        { "do": "youtube", "member": "noa", "page": { "url": "https://www.youtube.com/results?search_query=dinosaurs&sp=EgIQAg%3D%3D" }, "expect": { "decision": "allow", "reason": "allowed_default" } },
+        { "do": "youtube", "member": "noa", "page": { "url": "https://www.youtube.com/results?search_query=dinosaurs" }, "expect": { "decision": "redirect", "reason": "redirect_youtube_channel_search" }, "note": "YouTube's own search box: the same terms, restricted to channels" },
+        { "do": "youtube", "member": "noa", "page": { "url": "https://www.youtube.com/results?search_query=dinosaurs&sp=EgIQAQ%253D%253D" }, "expect": { "decision": "redirect", "reason": "redirect_youtube_channel_search" }, "note": "Type: Videos" },
+        { "do": "youtube", "member": "noa", "page": { "url": "https://www.youtube.com/results?search_query=dinosaurs&sp=EgIQCQ%253D%253D" }, "expect": { "decision": "redirect", "reason": "redirect_youtube_channel_search" }, "note": "Type: Shorts" },
+        { "do": "youtube", "member": "noa", "page": { "url": "https://www.youtube.com/results?search_query=dinosaurs&sp=EgIQAg%253D%253D&sp=CAI%253D" }, "expect": { "decision": "redirect", "reason": "redirect_youtube_channel_search" }, "note": "a second filter" },
+        { "do": "youtube", "member": "noa", "page": { "url": "https://m.youtube.com/results?search_query=dinosaurs&sp=EgIQAg%253D%253D" }, "expect": { "decision": "redirect", "reason": "redirect_youtube_channel_search" }, "note": "only on youtube.com, where the extension knows the page" },
+        { "do": "youtube", "member": "noa", "page": { "url": "https://music.youtube.com/search?q=dinosaurs" }, "expect": { "decision": "redirect", "reason": "redirect_youtube_channel_search" } },
+        { "do": "youtube", "member": "noa", "page": { "url": "https://www.youtube.com/results?sp=EgIQAg%253D%253D" }, "expect": { "decision": "redirect", "reason": "redirect_youtube_home" }, "note": "nothing searched for" },
+        { "do": "youtube", "member": "noa", "page": { "url": "https://www.youtube.com/results?search_query=+++" }, "expect": { "decision": "redirect", "reason": "redirect_youtube_home" } },
+        { "do": "youtube", "member": "noa", "page": { "url": "https://www.youtube.com/" }, "expect": { "decision": "redirect", "reason": "redirect_youtube_home" } },
+        { "do": "youtube", "member": "noa", "page": { "url": "https://www.youtube.com/@natgeokids-sim", "channelId": "UCnatgeoKids000000000004" }, "expect": { "decision": "block", "reason": "blocked_youtube_channel" }, "note": "a channel from the results: a request away" },
+        { "do": "youtube", "member": "noa", "page": { "url": "https://www.youtube.com/watch?v=vidKhan0001", "channelId": "UCkhanKids00000000000001" }, "expect": { "decision": "allow", "reason": "allowed_youtube_channel" } }
+      ]
+    },
+    {
+      "id": "YT-009",
+      "title": "Without channel search a channel-only search goes to 'my channels'; in the restricted mode the switch changes nothing",
+      "start": "2026-11-01T16:00",
+      "setup": { "members": [ { "id": "yoav", "youTubeChannelSearch": true } ] },
+      "steps": [
+        { "do": "youtube", "member": "noa", "page": { "url": "https://www.youtube.com/results?search_query=dinosaurs&sp=EgIQAg%253D%253D" }, "expect": { "decision": "redirect", "reason": "redirect_youtube_home" } },
+        { "do": "youtube", "member": "yoav", "page": { "url": "https://www.youtube.com/results?search_query=dinosaurs" }, "expect": { "decision": "allow", "reason": "allowed_default" } },
+        { "do": "youtube", "member": "yoav", "page": { "url": "https://www.youtube.com/results?search_query=dinosaurs&sp=EgIQAg%253D%253D" }, "expect": { "decision": "allow", "reason": "allowed_default" } }
+      ]
+    },
+    {
+      "id": "YT-010",
+      "title": "Channel search follows time like every YouTube page",
+      "start": "2026-11-01T15:00",
+      "setup": { "members": [ { "id": "noa", "youTubeChannelSearch": true } ] },
+      "steps": [
+        { "do": "browse", "sessions": [ { "member": "noa", "from": "15:00", "to": "17:00" } ] },
+        { "do": "youtube", "member": "noa", "page": { "url": "https://www.youtube.com/results?search_query=dinosaurs&sp=EgIQAg%253D%253D" }, "expect": { "decision": "block", "reason": "blocked_daily_limit" } }
+      ]
     }
   ]
 }

@@ -94,9 +94,13 @@ public sealed record AddRule(RuleDto Rule) : AdminMessage;
 
 public sealed record RemoveRule(string RuleId) : AdminMessage;
 
-/// <summary>Changes only the given fields of a family member (null = unchanged), including the protection flags of PROTECTION-SPEC §1.</summary>
+/// <summary>
+/// Changes only the given fields of a family member (null = unchanged), including the protection flags of PROTECTION-SPEC §1
+/// and the YouTube channel search of §15.
+/// </summary>
 public sealed record SetMember(string MemberId, string? DisplayName = null, string? Role = null, int? Age = null, string? FilterMode = null, string? YouTubeMode = null,
-    bool? BlockImageSearch = null, bool? JumpGuard = null, bool? BlockYouTubeShorts = null, bool? LogSearches = null, bool? BlockAds = null) : AdminMessage;
+    bool? BlockImageSearch = null, bool? JumpGuard = null, bool? BlockYouTubeShorts = null, bool? LogSearches = null, bool? BlockAds = null,
+    [property: JsonPropertyName("youTubeChannelSearch")] bool? YouTubeChannelSearch = null) : AdminMessage;
 
 public sealed record ExtendTime(string MemberId, int Minutes) : AdminMessage;
 
@@ -135,9 +139,13 @@ public sealed record GetRequests(string? Status = null, string? MemberId = null)
 
 public sealed record RequestsResult(IReadOnlyList<RequestDto> Requests) : AdminMessage;
 
+/// <summary>An access request (admin protocol, and the hub API's requests from agents).</summary>
+/// <param name="Title">youtube: the channel's title, when the child's browser knew it (PROTECTION-SPEC §15). Absent from older services and agents.</param>
+/// <param name="Handle">youtube: the channel's handle ("@name").</param>
+/// <param name="SearchQuery">youtube: the channel search the child found the channel with.</param>
 public sealed record RequestDto(
     string Id, string MemberId, string DeviceId, string Kind, string Target, string TargetKey, int? Minutes, string? Message,
-    DateTimeOffset CreatedAt, string Status, DateTimeOffset? DecidedAt);
+    DateTimeOffset CreatedAt, string Status, DateTimeOffset? DecidedAt, string? Title = null, string? Handle = null, string? SearchQuery = null);
 
 /// <param name="Decision">approve | deny.</param>
 /// <param name="Scope">url requests: host (default) | page.</param>

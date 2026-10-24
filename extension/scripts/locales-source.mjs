@@ -41,6 +41,8 @@ const messages = [
   ["reason_blocked_youtube_shorts", "YouTube Shorts are turned off for you.", "סרטוני Shorts ב-YouTube כבויים בשבילך."],
   // The parents' baseline protection (PROTECTION-SPEC §13).
   ["reason_blocked_baseline_adult", "Adult site — blocked by the family's baseline protection.", "אתר למבוגרים — חסום בהגנה הבסיסית של המשפחה."],
+  // YouTube channel search (PROTECTION-SPEC §15).
+  ["reason_redirect_youtube_channel_search", "On YouTube you can search for channels only. Here are the channels for your search.", "ב-YouTube אפשר לחפש רק ערוצים. אלה הערוצים שנמצאו בחיפוש שלך."],
   ["reason_failclosed", "WebFilter isn't connected to the filtering service yet, so browsing is blocked. This page will open by itself as soon as it connects.", "WebFilter עוד לא מחובר לשירות הסינון, ולכן הגלישה חסומה. הדף ייפתח לבד ברגע שהחיבור יחזור.", "Static fail-closed ruleset: no profile from the service yet."],
   ["reason_unknown", "This page is blocked.", "הדף הזה חסום."],
 

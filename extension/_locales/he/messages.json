@@ -89,6 +89,9 @@
   "reason_blocked_baseline_adult": {
     "message": "אתר למבוגרים — חסום בהגנה הבסיסית של המשפחה."
   },
+  "reason_redirect_youtube_channel_search": {
+    "message": "ב-YouTube אפשר לחפש רק ערוצים. אלה הערוצים שנמצאו בחיפוש שלך."
+  },
   "reason_failclosed": {
     "message": "WebFilter עוד לא מחובר לשירות הסינון, ולכן הגלישה חסומה. הדף ייפתח לבד ברגע שהחיבור יחזור."
   },

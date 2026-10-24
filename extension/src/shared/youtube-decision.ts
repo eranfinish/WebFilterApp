@@ -1,6 +1,6 @@
 import type { ChannelRef, FilterMode, TimeState, YouTubePolicy } from "./protocol";
 import type { ReasonCode } from "./reasons";
-import { isShortsUrl, isYouTubeSignInHost, normalizeHandle, parseYouTubeUrl } from "./youtube-url";
+import { channelSearchUrl, isShortsUrl, isYouTubeSignInHost, normalizeHandle, parseYouTubeUrl, youTubeSiteOf } from "./youtube-url";
 
 /** What the content script reports (spike S4: channel id only from sources tied to the current URL). */
 export interface YouTubePageReport {
@@ -21,6 +21,8 @@ export interface YouTubeContext {
   time: TimeState | null;
   /** features.blockYouTubeShorts (PROTECTION-SPEC §8). */
   blockShorts?: boolean;
+  /** features.youTubeChannelSearch (PROTECTION-SPEC §15): YouTube's channel-only results are allowed in allowlist mode. */
+  channelSearch?: boolean;
 }
 
 export type YouTubeDecisionKind = "allow" | "block" | "redirect";
@@ -30,6 +32,8 @@ export interface YouTubeDecision {
   reason: ReasonCode;
   /** The channel the decision was about, when known (used for a "youtube" access request). */
   channelId?: string;
+  /** redirect_youtube_channel_search: the search terms, for the channel-only results (channelSearchUrl). */
+  searchQuery?: string;
 }
 
 interface ChannelRecord {
@@ -54,7 +58,9 @@ function channelByHandle(policy: YouTubePolicy, handle: string): ChannelRef | un
 /**
  * The YouTube decision of Decider.YouTube() (src/WebFilter.Core/Engine/Decider.cs; scenarios youtube-decisions.json,
  * README §5) computed from the last rules: unrestricted member → time → mode → channel. With blockShorts, a Shorts
- * page is blocked right after "YouTube off" and before any channel or mode allows it (PROTECTION-SPEC §8).
+ * page is blocked right after "YouTube off" and before any channel or mode allows it (PROTECTION-SPEC §8). With
+ * channelSearch, allowlist mode shows YouTube's results restricted to channels and sends any other search with terms there
+ * (PROTECTION-SPEC §15).
  * Pause and homework are not visible to the extension; the service reflects them in `mode`, `youTube.mode` and `time`.
  */
 export function decideYouTube(ctx: YouTubeContext, page: YouTubePageReport): YouTubeDecision {
@@ -86,7 +92,13 @@ export function decideYouTube(ctx: YouTubeContext, page: YouTubePageReport): You
       : withChannel({ decision: "allow", reason: "allowed_default" });
   }
 
-  // Allowlist mode.
+  // Allowlist mode. Channel search: the channel-only results on youtube.com (whose other results the bridge hides) are
+  // allowed; any other search with terms goes there.
+  if (parsed.kind === "search" && ctx.channelSearch === true && parsed.searchQuery) {
+    return parsed.channelsOnly === true && parsed.site === "www"
+      ? { decision: "allow", reason: "allowed_default" }
+      : { decision: "redirect", reason: "redirect_youtube_channel_search", searchQuery: parsed.searchQuery };
+  }
   if (parsed.kind === "home" || parsed.kind === "search") return { decision: "redirect", reason: "redirect_youtube_home" };
   if (parsed.kind === "other" || parsed.kind === "playlist" || parsed.kind === "not_youtube") {
     return { decision: "allow", reason: "allowed_default" };
@@ -111,4 +123,20 @@ export function approvedChannels(policy: YouTubePolicy | null): ChannelRef[] {
   const blocked = new Set(policy.blocked.map((c) => c.channelId));
   const seen = new Set<string>();
   return policy.allowed.filter((c) => !blocked.has(c.channelId) && !seen.has(c.channelId) && seen.add(c.channelId));
+}
+
+/**
+ * Where a redirect_youtube_channel_search decision sends the frame: the channel-only results for the same terms, on the
+ * page's own youtube.com origin (www and youtube.com keep theirs; m. and music. go to www.youtube.com).
+ */
+export function channelSearchTarget(decision: YouTubeDecision, pageUrl: string): string | null {
+  if (decision.reason !== "redirect_youtube_channel_search" || !decision.searchQuery) return null;
+  let origin = "https://www.youtube.com";
+  try {
+    const page = new URL(pageUrl);
+    if (page.protocol === "https:" && youTubeSiteOf(page.hostname) === "www") origin = page.origin;
+  } catch {
+    // the default origin
+  }
+  return channelSearchUrl(decision.searchQuery, origin);
 }

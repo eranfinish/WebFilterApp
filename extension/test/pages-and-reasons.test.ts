@@ -61,9 +61,9 @@ describe("block page URLs", () => {
 });
 
 describe("reasons", () => {
-  it("the closed list matches MVP-PLAN §6 plus PROTECTION-SPEC §6 and §13 (26 codes)", () => {
-    expect(REASON_CODES).toHaveLength(26);
-    expect(REASON_CODES.at(-1)).toBe("blocked_baseline_adult");
+  it("the closed list matches MVP-PLAN §6 plus PROTECTION-SPEC §6, §13 and §15 (27 codes)", () => {
+    expect(REASON_CODES).toHaveLength(27);
+    expect(REASON_CODES.at(-1)).toBe("redirect_youtube_channel_search");
     const plan = readFileSync(join(ROOT, "..", "docs", "MVP-PLAN.md"), "utf8");
     const line = plan.split("\n").find((l) => l.startsWith("**קודי סיבה**"))!;
     const fromPlan = [...line.matchAll(/`([a-z_]+)`/g)].map((m) => m[1]!);

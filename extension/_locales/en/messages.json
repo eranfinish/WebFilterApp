@@ -93,6 +93,9 @@
   "reason_blocked_baseline_adult": {
     "message": "Adult site — blocked by the family's baseline protection."
   },
+  "reason_redirect_youtube_channel_search": {
+    "message": "On YouTube you can search for channels only. Here are the channels for your search."
+  },
   "reason_failclosed": {
     "message": "WebFilter isn't connected to the filtering service yet, so browsing is blocked. This page will open by itself as soon as it connects.",
     "description": "Static fail-closed ruleset: no profile from the service yet."

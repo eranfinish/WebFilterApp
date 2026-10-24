@@ -36,6 +36,11 @@ public enum ReasonCode
     BlockedYouTubeShorts,
     /// <summary>An adult site, blocked for a parent by the family's baseline protection (PROTECTION-SPEC §13, blockAdult).</summary>
     BlockedBaselineAdult,
+    /// <summary>
+    /// A YouTube search that is not restricted to channels, for a member who may search for channels (PROTECTION-SPEC §15):
+    /// it is sent to the same search restricted to channels.
+    /// </summary>
+    RedirectYouTubeChannelSearch,
 }
 
 public readonly record struct DecisionResult(Decision Decision, ReasonCode Reason, string? RuleId = null)
@@ -81,6 +86,7 @@ public static class ReasonCodes
         [ReasonCode.BlockedJump] = "blocked_jump",
         [ReasonCode.BlockedYouTubeShorts] = "blocked_youtube_shorts",
         [ReasonCode.BlockedBaselineAdult] = "blocked_baseline_adult",
+        [ReasonCode.RedirectYouTubeChannelSearch] = "redirect_youtube_channel_search",
     };
 
     private static readonly Dictionary<string, ReasonCode> FromWireMap = ToWireMap.ToDictionary(kv => kv.Value, kv => kv.Key);

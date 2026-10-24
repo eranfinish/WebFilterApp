@@ -62,7 +62,8 @@ public static class YouTubeUrlParser
                 return new YouTubeUrl(YouTubeUrlKind.Playlist, site, PlaylistId: playlistId);
 
             case "results" or "search":
-                return new YouTubeUrl(YouTubeUrlKind.Search, site);
+                var terms = (QueryValue(query, "search_query") ?? QueryValue(query, "q"))?.Trim();
+                return new YouTubeUrl(YouTubeUrlKind.Search, site, SearchQuery: string.IsNullOrEmpty(terms) ? null : terms, ChannelsOnly: IsChannelFilter(query));
 
             case "channel" when second is not null:
                 return new YouTubeUrl(YouTubeUrlKind.Channel, site, ChannelId: second);
@@ -76,6 +77,27 @@ public static class YouTubeUrlParser
             default:
                 return new YouTubeUrl(YouTubeUrlKind.Other, site);
         }
+    }
+
+    /// <summary>
+    /// YouTube's search filter "Type: Channels" (the <c>sp</c> parameter, base64 of the filter message: filters { type:
+    /// channel }). Checked on youtube.com on 2026-10-25: the filter's own link is <c>sp=EgIQAg%253D%253D</c>.
+    /// </summary>
+    public const string ChannelFilter = "EgIQAg==";
+
+    /// <summary><see cref="ChannelFilter"/> as YouTube's own "Channels" link writes it in a URL (encoded twice).</summary>
+    public const string ChannelFilterParameter = "EgIQAg%253D%253D";
+
+    public const string DefaultOrigin = "https://www.youtube.com";
+
+    /// <summary>
+    /// YouTube's results for <paramref name="query"/> restricted to channels (PROTECTION-SPEC §15), on
+    /// <paramref name="origin"/> (scheme, host and port of a youtube.com page).
+    /// </summary>
+    public static string ChannelSearchUrl(string query, string origin = DefaultOrigin)
+    {
+        ArgumentNullException.ThrowIfNull(query);
+        return $"{origin}/results?search_query={Uri.EscapeDataString(query.Trim())}&sp={ChannelFilterParameter}";
     }
 
     /// <summary>True for every host whose access is governed by the member's YouTube mode rather than URL rules.</summary>
@@ -138,6 +160,29 @@ public static class YouTubeUrlParser
                 return value;
         }
         return null;
+    }
+
+    /// <summary>
+    /// Whether the only <c>sp</c> parameter is <see cref="ChannelFilter"/>: encoded once or twice (YouTube's own links), with
+    /// or without the padding. Another filter, a sort order, or a second <c>sp</c> is not channels only.
+    /// </summary>
+    private static bool IsChannelFilter(string query)
+    {
+        var values = query.Split('&', StringSplitOptions.RemoveEmptyEntries)
+            .Select(pair => pair.Split('=', 2))
+            .Where(kv => FormDecode(kv[0]) == "sp")
+            .Select(kv => kv.Length > 1 ? FormDecode(kv[1]) : "")
+            .ToList();
+        if (values.Count != 1) return false;
+        var value = values[0];
+        for (var i = 0; i < 2; i++)
+        {
+            if (value is ChannelFilter or "EgIQAg") return true;
+            var decoded = Unescape(value);
+            if (decoded == value) return false;
+            value = decoded;
+        }
+        return false;
     }
 
     private static string FormDecode(string s) => Unescape(s.Replace('+', ' '));

@@ -75,6 +75,7 @@ internal static class FixtureLoader
         BlockYouTubeShorts = patch["blockYouTubeShorts"]?.GetValue<bool>() ?? member.BlockYouTubeShorts,
         LogSearches = patch["logSearches"]?.GetValue<bool>() ?? member.LogSearches,
         BlockAds = patch["blockAds"]?.GetValue<bool>() ?? member.BlockAds,
+        YouTubeChannelSearch = patch["youTubeChannelSearch"]?.GetValue<bool>() ?? member.YouTubeChannelSearch,
     };
 
     private static FamilyMember ParseMember(JsonNode? n) => PatchMember(new(

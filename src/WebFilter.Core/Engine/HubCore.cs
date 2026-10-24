@@ -130,7 +130,11 @@ public sealed class HubCore(FamilyConfig config)
     public RequestResult CreateRequest(AccessRequestDraft draft, out AccessRequest? request)
     {
         request = Requests.FirstOrDefault(r => r.MemberId == draft.MemberId && r.TargetKey == draft.TargetKey && r.Status == RequestStatus.Pending);
-        if (request is not null) return RequestResult.Merged;
+        if (request is not null)
+        {
+            AddMissingNames(request, draft);
+            return RequestResult.Merged;
+        }
 
         var lastDenial = Requests
             .Where(r => r.MemberId == draft.MemberId && r.TargetKey == draft.TargetKey && r.Status == RequestStatus.Denied)
@@ -165,7 +169,12 @@ public sealed class HubCore(FamilyConfig config)
                 request.CreatedRuleId = rule.Id;
                 break;
             case RequestKind.YouTube:
-                Config.YouTubeChannels.Add(new YouTubeChannel(request.Target, null, null, request.MemberId, RuleAction.Allow));
+                // The member's own record of the channel becomes "allowed" (one the parents blocked for the member included),
+                // with the names the request brought (PROTECTION-SPEC §15), else the ones it had.
+                var known = Config.YouTubeChannels.Find(c => c.MemberId == request.MemberId && c.ChannelId == request.Target);
+                Config.YouTubeChannels.RemoveAll(c => c.MemberId == request.MemberId && c.ChannelId == request.Target);
+                Config.YouTubeChannels.Add(new YouTubeChannel(request.Target, request.Handle ?? known?.Handle, request.Title ?? known?.Title,
+                    request.MemberId, RuleAction.Allow));
                 break;
             case RequestKind.App:
                 var isPath = request.Target.Contains('\\') || request.Target.Contains('/');
@@ -181,6 +190,19 @@ public sealed class HubCore(FamilyConfig config)
     }
 
     public void Deny(string requestId, DateTimeOffset now) => Decide(Request(requestId), RequestStatus.Denied, now, "deny_request");
+
+    /// <summary>
+    /// A request merged into an open one may know the channel's names that one lacked (it came from a newer extension, or
+    /// from a page that had them): the open request takes them, so the parents see them.
+    /// </summary>
+    public static void AddMissingNames(AccessRequest open, AccessRequestDraft draft)
+    {
+        ArgumentNullException.ThrowIfNull(open);
+        ArgumentNullException.ThrowIfNull(draft);
+        open.Title ??= draft.Title;
+        open.Handle ??= draft.Handle;
+        open.SearchQuery ??= draft.SearchQuery;
+    }
 
     public static string TargetKeyFor(RequestKind kind, string target, DateOnly localDate) => kind switch
     {

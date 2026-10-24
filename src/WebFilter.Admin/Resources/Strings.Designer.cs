@@ -1712,6 +1712,15 @@ namespace WebFilter.Admin.Resources {
         }
 
         /// <summary>
+        ///   Looks up a localized string similar to הופנה לחיפוש ערוצים בלבד.
+        /// </summary>
+        public static string Reason_redirect_youtube_channel_search {
+            get {
+                return ResourceManager.GetString("Reason_redirect_youtube_channel_search", resourceCulture);
+            }
+        }
+
+        /// <summary>
         ///   Looks up a localized string similar to חיפוש תמונות חסום.
         /// </summary>
         public static string Reason_blocked_image_search {

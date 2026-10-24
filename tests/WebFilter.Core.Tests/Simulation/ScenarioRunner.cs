@@ -237,8 +237,12 @@ internal sealed class ScenarioRunner
         var agent = AgentFor(memberId, OptStr(step, "device"));
         var kind = Str(step, "kind") switch { "url" => RequestKind.Url, "youtube" => RequestKind.YouTube, "app" => RequestKind.App, _ => RequestKind.Time };
         var target = OptStr(step, "target") ?? "";
+        // A YouTube request names its channel; the service cleans the names as they arrive (RequestNames).
+        var youtube = kind == RequestKind.YouTube;
         var draft = new AccessRequestDraft(memberId, agent.DeviceId, kind, target,
-            HubCore.TargetKeyFor(kind, target, TimeCalculator.LocalDate(_now, Zone)), step["minutes"]?.GetValue<int>(), OptStr(step, "message"), _now);
+            HubCore.TargetKeyFor(kind, target, TimeCalculator.LocalDate(_now, Zone)), step["minutes"]?.GetValue<int>(), OptStr(step, "message"), _now,
+            youtube ? RequestNames.Title(OptStr(step, "title")) : null, youtube ? RequestNames.Handle(OptStr(step, "handle")) : null,
+            youtube ? RequestNames.SearchQuery(OptStr(step, "searchQuery")) : null);
         AccessRequest? hubRequest = null;
         var result = agent.RequestAccess(draft, d => _hub.CreateRequest(d, out hubRequest));
         var expect = step["expect"]!;
@@ -265,6 +269,9 @@ internal sealed class ScenarioRunner
             if (OptStr(item, "kind") is { } kind) Compare(label, alias, "kind", kind, request.Kind.ToString().ToLowerInvariant());
             if (OptStr(item, "targetKey") is { } key) Compare(label, alias, "targetKey", key, request.TargetKey);
             if (OptStr(item, "message") is { } message) Compare(label, alias, "message", message, request.Message);
+            if (OptStr(item, "title") is { } title) Compare(label, alias, "title", title, request.Title);
+            if (OptStr(item, "handle") is { } handle) Compare(label, alias, "handle", handle, request.Handle);
+            if (OptStr(item, "searchQuery") is { } searchQuery) Compare(label, alias, "searchQuery", searchQuery, request.SearchQuery);
         }
     }
 
@@ -305,9 +312,10 @@ internal sealed class ScenarioRunner
         foreach (var (field, value) in new (string, string?)[]
                  {
                      ("channelId", actual.ChannelId), ("handle", actual.Handle), ("customName", actual.CustomName),
-                     ("userName", actual.UserName), ("videoId", actual.VideoId), ("playlistId", actual.PlaylistId),
+                     ("userName", actual.UserName), ("videoId", actual.VideoId), ("playlistId", actual.PlaylistId), ("searchQuery", actual.SearchQuery),
                  })
             if (OptStr(expect, field) is { } expected) Compare(label, url, field, expected, value);
+        if (expect["channelsOnly"] is { } channelsOnly) Compare(label, url, "channelsOnly", channelsOnly.GetValue<bool>(), actual.ChannelsOnly);
     }
 
     private bool EventMatches(FamilyEvent e, JsonNode item) =>

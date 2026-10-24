@@ -142,7 +142,12 @@ public static class Decider
                 ? DecisionResult.Block(ReasonCode.BlockedYouTubeChannel)
                 : DecisionResult.Allow(ReasonCode.AllowedDefault);
 
-        // Allowlist mode.
+        // Allowlist mode. A member who may search for channels (PROTECTION-SPEC §15) sees YouTube's results restricted to
+        // channels on youtube.com (whose other results the extension hides); any other search with terms goes there.
+        if (parsed.Kind is YouTubeUrlKind.Search && member.YouTubeChannelSearch && parsed.SearchQuery is not null)
+            return parsed.ChannelsOnly && parsed.Site == YouTubeSite.Www
+                ? DecisionResult.Allow(ReasonCode.AllowedDefault)
+                : DecisionResult.Redirect(ReasonCode.RedirectYouTubeChannelSearch);
         if (parsed.Kind is YouTubeUrlKind.Home or YouTubeUrlKind.Search) return DecisionResult.Redirect(ReasonCode.RedirectYouTubeHome);
         if (parsed.Kind is YouTubeUrlKind.Other or YouTubeUrlKind.Playlist or YouTubeUrlKind.NotYouTube) return DecisionResult.Allow(ReasonCode.AllowedDefault);
         if (channelId is null) return DecisionResult.Block(ReasonCode.BlockedYouTubeUnknown);

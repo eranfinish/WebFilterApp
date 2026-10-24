@@ -17,9 +17,15 @@ public enum AppMatchType { Path, Package, Publisher }
 /// <param name="BlockYouTubeShorts">YouTube /shorts/ is blocked (extension, §8).</param>
 /// <param name="LogSearches">Search terms are recorded for the parents, and the member is told so (§9).</param>
 /// <param name="BlockAds">Requests to EasyList's ad servers are blocked (extension, §12).</param>
-/// <remarks>The five protection flags apply only to restricted members; unrestricted members ignore them (§1).</remarks>
+/// <param name="YouTubeChannelSearch">
+/// In YouTube's "approved channels only" mode the member may search YouTube for channels: YouTube's results restricted to
+/// channels are allowed, and any other search is sent to them (§15). A permission rather than a protection; it changes
+/// nothing in the other YouTube modes.
+/// </param>
+/// <remarks>The flags apply only to restricted members; unrestricted members ignore them (§1).</remarks>
 public sealed record FamilyMember(string Id, string DisplayName, Role Role, int? Age, FilterMode FilterMode, YouTubeMode YouTubeMode,
-    bool BlockImageSearch = false, bool JumpGuard = false, bool BlockYouTubeShorts = false, bool LogSearches = false, bool BlockAds = false)
+    bool BlockImageSearch = false, bool JumpGuard = false, bool BlockYouTubeShorts = false, bool LogSearches = false, bool BlockAds = false,
+    bool YouTubeChannelSearch = false)
 {
     public bool IsRestricted => FilterMode != FilterMode.Unrestricted;
 }

@@ -195,7 +195,11 @@ public sealed class AgentCore(string deviceId)
             if (sent != RequestResult.Queued) return sent;
             // The hub turned out to be unreachable: keep the request until it is.
         }
-        if (_queued.Any(q => q.MemberId == draft.MemberId && q.TargetKey == draft.TargetKey)) return RequestResult.Merged;
+        if (_queued.Find(q => q.MemberId == draft.MemberId && q.TargetKey == draft.TargetKey) is { } queued)
+        {
+            HubCore.AddMissingNames(queued, draft);
+            return RequestResult.Merged;
+        }
         _queued.Add(draft.ToRequest($"{DeviceId}-q{++_queuedCounter}"));
         return RequestResult.Queued;
     }
@@ -268,6 +272,9 @@ public sealed record AgentState(
     IReadOnlyDictionary<string, DateTimeOffset>? DecisionsSeen = null);
 
 /// <summary>A request as the child submits it, before the hub assigns an id.</summary>
+/// <param name="Title">youtube: the channel's title (<see cref="RequestNames"/>).</param>
+/// <param name="Handle">youtube: the channel's handle.</param>
+/// <param name="SearchQuery">youtube: the channel search the channel was found with.</param>
 public sealed record AccessRequestDraft(
     string MemberId,
     string DeviceId,
@@ -276,11 +283,14 @@ public sealed record AccessRequestDraft(
     string TargetKey,
     int? Minutes,
     string? Message,
-    DateTimeOffset CreatedAt)
+    DateTimeOffset CreatedAt,
+    string? Title = null,
+    string? Handle = null,
+    string? SearchQuery = null)
 {
     public AccessRequest ToRequest(string id) => new()
     {
         Id = id, MemberId = MemberId, DeviceId = DeviceId, Kind = Kind, Target = Target, TargetKey = TargetKey,
-        Minutes = Minutes, Message = Message, CreatedAt = CreatedAt,
+        Minutes = Minutes, Message = Message, CreatedAt = CreatedAt, Title = Title, Handle = Handle, SearchQuery = SearchQuery,
     };
 }

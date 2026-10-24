@@ -53,12 +53,19 @@ export interface ReportBlockRequest {
   ruleId?: string;
 }
 
+/**
+ * `title`, `handle` and `searchQuery` name a YouTube channel for the parents (PROTECTION-SPEC §15): its title and handle as
+ * the page showed them, and the channel search it was found with. Optional; older services ignore them.
+ */
 export interface RequestAccessRequest {
   type: "requestAccess";
   kind: RequestKind;
   target?: string;
   minutes?: number;
   note?: string;
+  title?: string;
+  handle?: string;
+  searchQuery?: string;
 }
 
 /** Asks why a URL is blocked without recording anything (v2: AgentMessages.DecideUrlRequest). */
@@ -169,6 +176,8 @@ export interface TimeState {
  * `canOverrideJump` is true for teens and for parents in the baseline (false for children and unlinked accounts).
  * `blockAds` enables the static ad-server ruleset (§12); the service sends it false while the member is paused. In the
  * baseline mode (§13) `jumpGuard` and `blockAds` are the family's switches and the other two are false.
+ * `youTubeChannelSearch` (§15): in YouTube's allowlist mode "my channels" offers a channel search and YouTube's
+ * channel-only results are shown; false in the baseline.
  */
 export interface ProtectionFeatures {
   jumpGuard: boolean;
@@ -176,6 +185,7 @@ export interface ProtectionFeatures {
   logSearches: boolean;
   canOverrideJump: boolean;
   blockAds: boolean;
+  youTubeChannelSearch: boolean;
 }
 
 export const NO_FEATURES: Readonly<ProtectionFeatures> = Object.freeze({
@@ -184,6 +194,7 @@ export const NO_FEATURES: Readonly<ProtectionFeatures> = Object.freeze({
   logSearches: false,
   canOverrideJump: false,
   blockAds: false,
+  youTubeChannelSearch: false,
 });
 
 export interface RulesMessage extends Envelope {
@@ -373,6 +384,7 @@ export function normalizeFeatures(value: unknown): ProtectionFeatures {
     logSearches: value.logSearches === true,
     canOverrideJump: value.canOverrideJump === true,
     blockAds: value.blockAds === true,
+    youTubeChannelSearch: value.youTubeChannelSearch === true,
   };
 }
 

@@ -597,6 +597,9 @@
   <data name="Reason_redirect_youtube_home" xml:space="preserve">
     <value>הופנה לדף הערוצים המאושרים</value>
   </data>
+  <data name="Reason_redirect_youtube_channel_search" xml:space="preserve">
+    <value>הופנה לחיפוש ערוצים בלבד</value>
+  </data>
   <data name="Reason_blocked_image_search" xml:space="preserve">
     <value>חיפוש תמונות חסום</value>
   </data>

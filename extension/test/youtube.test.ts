@@ -2,9 +2,9 @@ import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import { describe, expect, it } from "vitest";
 import type { FilterMode, TimeState, YouTubePolicy } from "../src/shared/protocol";
-import { type YouTubeContext, approvedChannels, decideYouTube } from "../src/shared/youtube-decision";
+import { type YouTubeContext, approvedChannels, channelSearchTarget, decideYouTube } from "../src/shared/youtube-decision";
 import { SHORTS_HIDE_CSS, SHORTS_HIDE_SELECTORS, SHORTS_REGEX, SHORTS_RULE_PRIORITY, shortsRule } from "../src/shared/shorts";
-import { isShortsUrl, isYouTubeHost, normalizeHandle, parseYouTubeUrl } from "../src/shared/youtube-url";
+import { channelSearchUrl, isShortsUrl, isYouTubeHost, normalizeHandle, parseYouTubeUrl } from "../src/shared/youtube-url";
 
 // The scenario files are the specification (CLAUDE.md): load them instead of copying their cases.
 const SIM = join(__dirname, "..", "..", "tests", "simulation");
@@ -17,7 +17,7 @@ interface ParseCase {
 interface Scenario {
   id: string;
   title: string;
-  setup?: { members?: { id: string; youtubeMode?: string }[] };
+  setup?: { members?: { id: string; youtubeMode?: string; youTubeChannelSearch?: boolean }[] };
   steps: Record<string, unknown>[];
 }
 
@@ -60,7 +60,7 @@ interface Fixture {
 }
 const fixture = load<Fixture>("fixtures/family-base.json");
 
-function contextFor(memberId: string, overrides: { youtubeMode?: string } = {}, time: TimeState | null = null): YouTubeContext {
+function contextFor(memberId: string, overrides: { youtubeMode?: string; youTubeChannelSearch?: boolean } = {}, time: TimeState | null = null): YouTubeContext {
   const member = fixture.members.find((m) => m.id === memberId)!;
   const channels = fixture.youtubeChannels.filter((c) => !c.member || c.member === memberId);
   const ref = (c: Fixture["youtubeChannels"][number]) => ({ channelId: c.channelId, handle: c.handle ?? null, title: c.title ?? null });
@@ -74,6 +74,8 @@ function contextFor(memberId: string, overrides: { youtubeMode?: string } = {}, 
       blocked: channels.filter((c) => c.action === "block").map(ref),
     },
     time: time ?? { state: "ok", remainingMinutes: 120, windowEndsAt: "19:00" },
+    // features.youTubeChannelSearch is the member's switch (PROTECTION-SPEC §15).
+    channelSearch: overrides.youTubeChannelSearch === true,
   };
 }
 
@@ -83,7 +85,9 @@ describe("decideYouTube (youtube-decisions.json)", () => {
     // YT-003 browses until the daily limit is used up: the service then reports time "expired".
     const browsedOut = scenario.steps.some((s) => s.do === "browse");
     const time: TimeState | null = browsedOut ? { state: "expired", remainingMinutes: 0, windowEndsAt: "19:00" } : null;
-    const overrides = Object.fromEntries((scenario.setup?.members ?? []).map((m) => [m.id, { youtubeMode: m.youtubeMode }]));
+    const overrides = Object.fromEntries(
+      (scenario.setup?.members ?? []).map((m) => [m.id, { youtubeMode: m.youtubeMode, youTubeChannelSearch: m.youTubeChannelSearch }]),
+    );
     for (const step of scenario.steps) {
       if (step.do === "youtube") {
         const page = step.page as { url: string; channelId?: string; handle?: string };
@@ -209,5 +213,38 @@ describe("YouTube Shorts (PROTECTION-SPEC §8)", () => {
     expect(SHORTS_HIDE_SELECTORS).toContain("ytd-reel-shelf-renderer");
     expect(SHORTS_HIDE_SELECTORS.some((s) => s.startsWith("ytd-guide-entry-renderer"))).toBe(true);
     expect(SHORTS_HIDE_SELECTORS.some((s) => s.startsWith("ytd-mini-guide-entry-renderer"))).toBe(true);
+  });
+});
+
+describe("YouTube channel search (PROTECTION-SPEC §15)", () => {
+  it("builds YouTube's own channels filter, as the C# parser does", () => {
+    const url = channelSearchUrl(" space cats ");
+    expect(url).toBe("https://www.youtube.com/results?search_query=space%20cats&sp=EgIQAg%253D%253D");
+    expect(parseYouTubeUrl(url)).toEqual({ kind: "search", site: "www", searchQuery: "space cats", channelsOnly: true });
+    const hebrew = channelSearchUrl("דינוזאורים & חברים", "https://www.youtube.com:18443");
+    expect(hebrew.startsWith("https://www.youtube.com:18443/results?search_query=")).toBe(true);
+    expect(parseYouTubeUrl(hebrew).searchQuery).toBe("דינוזאורים & חברים");
+  });
+
+  it("only the channels filter alone, encoded at most twice, is channels only; no terms means no query", () => {
+    const filter = (sp: string) => parseYouTubeUrl(`https://www.youtube.com/results?search_query=x&${sp}`).channelsOnly;
+    expect(filter("sp=EgIQAg")).toBe(true);
+    expect(filter("sp=EgIQAg%25253D%25253D")).toBe(false);
+    expect(filter("sp=")).toBe(false);
+    expect(filter("SP=EgIQAg%253D%253D")).toBe(false);
+    for (const url of ["https://www.youtube.com/results?search_query=+", "https://www.youtube.com/results?search_query=", "https://www.youtube.com/results?sp=EgIQAg%253D%253D"]) {
+      expect(parseYouTubeUrl(url).searchQuery).toBeUndefined();
+    }
+  });
+
+  it("redirects to the channel-only results on the page's own origin, www for m. and music.", () => {
+    const ctx = { ...contextFor("noa"), channelSearch: true };
+    const at = (url: string) => channelSearchTarget(decideYouTube(ctx, { url }), url);
+    expect(at("https://www.youtube.com:18443/results?search_query=dinosaurs")).toBe("https://www.youtube.com:18443/results?search_query=dinosaurs&sp=EgIQAg%253D%253D");
+    expect(at("https://m.youtube.com/results?search_query=dinosaurs")).toBe("https://www.youtube.com/results?search_query=dinosaurs&sp=EgIQAg%253D%253D");
+    expect(at("https://music.youtube.com/search?q=lullaby")).toBe("https://www.youtube.com/results?search_query=lullaby&sp=EgIQAg%253D%253D");
+    expect(at("https://www.youtube.com/")).toBeNull(); // home: my channels
+    // Without the feature, a channel-only search goes to my channels like any other.
+    expect(decideYouTube(contextFor("noa"), { url: channelSearchUrl("dinosaurs") })).toEqual({ decision: "redirect", reason: "redirect_youtube_home" });
   });
 });

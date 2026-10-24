@@ -593,6 +593,9 @@
   <data name="Reason_redirect_youtube_home" xml:space="preserve">
     <value>Sent to the approved channels page</value>
   </data>
+  <data name="Reason_redirect_youtube_channel_search" xml:space="preserve">
+    <value>Sent to a search for channels only</value>
+  </data>
   <data name="Reason_blocked_image_search" xml:space="preserve">
     <value>Image search is blocked</value>
   </data>
