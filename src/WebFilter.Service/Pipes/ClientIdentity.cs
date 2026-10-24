@@ -31,6 +31,14 @@ public sealed class ClientIdentity : IDisposable
         (ProcessId, SessionId, ImagePath, UserSid, UserName, Elevation) = (pid, session, image, sid, name, elevation);
     }
 
+    /// <summary>
+    /// The access the client's token is opened with: TOKEN_QUERY for the user and the elevation type, and TOKEN_DUPLICATE
+    /// because <see cref="WindowsPrincipal.IsInRole(WindowsBuiltInRole)"/> duplicates the token to check a group. With
+    /// TOKEN_QUERY alone it throws "Access is denied" for every account without a split token — every standard account,
+    /// so no child's extension could reach the service (the lab, 2026-10-24). LocalSystem may open users' tokens this way.
+    /// </summary>
+    internal const uint TokenAccess = Native.TokenQuery | Native.TokenDuplicate;
+
     public static ClientIdentity Of(NamedPipeServerStream pipe)
     {
         if (!Native.GetNamedPipeClientProcessId(pipe.SafePipeHandle, out var pid)) throw new IOException("Cannot read the pipe client's process id");
@@ -40,7 +48,7 @@ public sealed class ClientIdentity : IDisposable
 
         string? sid = null, name = null;
         var elevation = "unknown";
-        if (Native.OpenProcessToken(process, Native.TokenQuery, out var token))
+        if (Native.OpenProcessToken(process, TokenAccess, out var token))
         {
             using (token)
             {
@@ -49,11 +57,18 @@ public sealed class ClientIdentity : IDisposable
                 name = identity.Name;
                 if (Native.GetTokenInformation(token, Native.TokenElevationTypeClass, out var type, sizeof(int), out _))
                     elevation = type switch { 1 => "default", 2 => "full", 3 => "limited", _ => "unknown" };
-                if (elevation == "default" && new WindowsPrincipal(identity).IsInRole(WindowsBuiltInRole.Administrator)) elevation = "full";
+                // No split token: a standard account, or an administrator with UAC off (then the full token is the only one).
+                if (elevation == "default" && IsAdministrator(identity)) elevation = "full";
             }
         }
         return new ClientIdentity(process, (int)pid, (int)session, Native.ImagePath(process), sid, name, elevation);
     }
+
+    /// <summary>The token of <paramref name="process"/> with <see cref="TokenAccess"/>, or null (for tests and <see cref="Of"/>).</summary>
+    internal static SafeAccessTokenHandle? OpenToken(SafeProcessHandle process) =>
+        Native.OpenProcessToken(process, TokenAccess, out var token) ? token : null;
+
+    internal static bool IsAdministrator(WindowsIdentity identity) => new WindowsPrincipal(identity).IsInRole(WindowsBuiltInRole.Administrator);
 
     public void Dispose() => _process.Dispose();
 
@@ -63,6 +78,7 @@ public sealed class ClientIdentity : IDisposable
     {
         public const uint ProcessQueryLimitedInformation = 0x1000;
         public const uint TokenQuery = 0x0008;
+        public const uint TokenDuplicate = 0x0002;
         public const int TokenElevationTypeClass = 18;
 
         [DllImport("kernel32.dll", SetLastError = true)]
