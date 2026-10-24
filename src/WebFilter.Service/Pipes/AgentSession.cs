@@ -155,7 +155,8 @@ internal sealed class AgentSession(Stream pipe, ClientIdentity client, FamilySer
             rules.DynamicRules.Select(r => JsonSerializer.SerializeToElement(r)).ToList(),
             rules.TimeUpSessionRules.Select(r => JsonSerializer.SerializeToElement(r)).ToList(),
             youtube, TimeStateOf(agent, account, now),
-            new AgentFeatures(features.JumpGuard, features.BlockYouTubeShorts, features.LogSearches, features.CanOverrideJump, features.BlockAds),
+            new AgentFeatures(features.JumpGuard, features.BlockYouTubeShorts, features.LogSearches, features.CanOverrideJump, features.BlockAds,
+                features.YouTubeChannelSearch),
             Mode(account, member, effective));
     });
 
@@ -255,8 +256,12 @@ internal sealed class AgentSession(Stream pipe, ClientIdentity client, FamilySer
         if (account.MemberId is null || agent.IsParent(account)) return new RequestAccessResponse("unavailable", null);
         var kind = request.Kind switch { "youtube" => RequestKind.YouTube, "app" => RequestKind.App, "time" => RequestKind.Time, _ => RequestKind.Url };
         var target = request.Target ?? "";
+        // A YouTube request names its channel as the page showed it (PROTECTION-SPEC §15): cleaned, for the parents' eyes only.
+        var youtube = kind == RequestKind.YouTube;
         var draft = new AccessRequestDraft(account.MemberId, agent.DeviceId, kind, target,
-            HubCore.TargetKeyFor(kind, target, TimeCalculator.LocalDate(now, agent.View().Config.TimeZone)), request.Minutes, request.Note, now);
+            HubCore.TargetKeyFor(kind, target, TimeCalculator.LocalDate(now, agent.View().Config.TimeZone)), request.Minutes, request.Note, now,
+            youtube ? RequestNames.Title(request.Title) : null, youtube ? RequestNames.Handle(request.Handle) : null,
+            youtube ? RequestNames.SearchQuery(request.SearchQuery) : null);
         AccessRequest? created = null;
         var result = agent.RequestAccess(draft, d => family.SendRequestToHub(d, out created));
         // A queued request keeps this id at the hub, so the decision comes back with it; one merged into a request queued

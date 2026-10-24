@@ -331,6 +331,40 @@ public sealed class PipeIntegrationTests : IAsyncLifetime
         Assert.Equal(1, agent.CountOf<AccessDecidedMessage>());
     }
 
+    /// <summary>
+    /// PROTECTION-SPEC §15 on the hub: the channel search switch reaches the rules reply, and a YouTube request's channel
+    /// names — cleaned — reach the admin app, the approved channel and the rules; a site request's names are dropped.
+    /// </summary>
+    [Fact]
+    public async Task A_youtube_request_names_its_channel_to_the_parent_and_the_approval_keeps_the_names()
+    {
+        await using var agent = await AgentClient.ConnectAsync(_options.AgentPipeName);
+        await agent.RequestAsync<HelloResponse>(new HelloRequest("0.3.1", "edge"));
+        await using var admin = await AdminClient.ConnectAsync(_options.AdminPipeName);
+        Assert.False((await agent.RequestAsync<RulesResponse>(new GetRulesRequest())).Features!.YouTubeChannelSearch);
+        Assert.IsType<AdminOk>(await admin.RequestAsync(new SetMember("noa", YouTubeChannelSearch: true)));
+        Assert.True((await agent.RequestAsync<RulesResponse>(new GetRulesRequest())).Features!.YouTubeChannelSearch);
+        Assert.True(Assert.IsType<SettingsResult>(await admin.RequestAsync(new GetSettings())).Settings.Members.Single(m => m.Id == "noa").YouTubeChannelSearch);
+
+        const string channel = "UCnatgeoKids000000000004";
+        var asked = await agent.RequestAsync<RequestAccessResponse>(new RequestAccessRequest("youtube", channel, null, null, "NatGeo‮ Kids ", "@NatGeoKids", "animals"));
+        Assert.Equal("created", asked.Result);
+        Assert.Equal("created", (await agent.RequestAsync<RequestAccessResponse>(new RequestAccessRequest("url", "https://pbskids.org/", null, null, "PBS", "@pbs", "x"))).Result);
+
+        var pending = Assert.IsType<RequestsResult>(await admin.RequestAsync(new GetRequests("pending"))).Requests;
+        var youtube = pending.Single(r => r.Kind == "youtube");
+        Assert.Equal(("NatGeo Kids", "@natgeokids", "animals"), (youtube.Title, youtube.Handle, youtube.SearchQuery));
+        var site = pending.Single(r => r.Kind == "url");
+        Assert.Equal(((string?)null, (string?)null, (string?)null), (site.Title, site.Handle, site.SearchQuery));
+
+        Assert.IsType<AdminOk>(await admin.RequestAsync(new DecideRequest(youtube.Id, "approve", Duration: "always")));
+        var stored = Assert.IsType<SettingsResult>(await admin.RequestAsync(new GetSettings())).Settings.YouTubeChannels.Single(c => c.ChannelId == channel);
+        Assert.Equal(new Contracts.Hub.YouTubeChannelDto(channel, "@natgeokids", "NatGeo Kids", "noa", "allow"), stored);
+        var rules = await agent.RequestAsync<RulesResponse>(new GetRulesRequest());
+        Assert.Contains(new YouTubeChannelRef(channel, "@natgeokids", "NatGeo Kids"), rules.YouTube.Allowed);
+        Assert.Equal("youtube:" + channel + ":NatGeo Kids (@natgeokids)", _family.NotificationsSince(null).Single(n => n.Detail?.StartsWith("youtube:", StringComparison.Ordinal) == true).Detail);
+    }
+
     [Fact]
     public async Task Settings_survive_a_service_restart()
     {

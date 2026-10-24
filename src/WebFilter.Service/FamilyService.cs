@@ -276,7 +276,8 @@ public sealed class FamilyService : IDisposable
     public CreateRequestResult CreateRequestFromAgent(string deviceId, RequestDto dto) => WithHub((hub, _) =>
     {
         var request = SyncMapper.FromDto(dto, deviceId);
-        var draft = new AccessRequestDraft(request.MemberId, deviceId, request.Kind, request.Target, request.TargetKey, request.Minutes, request.Message, request.CreatedAt);
+        var draft = new AccessRequestDraft(request.MemberId, deviceId, request.Kind, request.Target, request.TargetKey, request.Minutes, request.Message, request.CreatedAt,
+            request.Title, request.Handle, request.SearchQuery);
         var result = hub.CreateRequest(draft, out var created);
         return new CreateRequestResult(result switch
         {
@@ -352,13 +353,17 @@ public sealed class FamilyService : IDisposable
         Notify($"tamper:{SyncMapper.EventId(e)}", Contracts.Notify.NotificationKinds.Tamper, e.MemberId, e.DeviceId, e.Detail);
     }
 
-    /// <summary>A new access request becomes a "request" notification, detail "kind:target". Under the gate.</summary>
+    /// <summary>
+    /// A new access request becomes a "request" notification, detail "kind:target" — for a YouTube channel whose name is
+    /// known "youtube:channelId:name" (PROTECTION-SPEC §15). Under the gate.
+    /// </summary>
     private void OnHubRequest(AccessRequest request)
     {
         var target = request.Kind switch
         {
             RequestKind.Url => request.TargetKey,
             RequestKind.Time => request.Minutes?.ToString(System.Globalization.CultureInfo.InvariantCulture) ?? "",
+            RequestKind.YouTube when YouTubeChannelLabel.Name(request.Title, request.Handle) is { } name => $"{request.Target}:{name}",
             _ => request.Target,
         };
         Notify($"request:{request.Id}:{request.CreatedAt.UtcTicks}", Contracts.Notify.NotificationKinds.Request, request.MemberId, request.DeviceId,

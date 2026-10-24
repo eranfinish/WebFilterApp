@@ -138,8 +138,7 @@ public sealed class AdminPipeServer(FamilyService family, IOptions<ServiceOption
                 e.Url, e.App, e.RemainingMinutes, e.Detail, e.Admin)).ToList())),
         GetRequests query => family.WithHub<AdminMessage>((hub, _) => new RequestsResult(hub.Requests
             .Where(r => (query.Status is null || r.Status.ToString().Equals(query.Status, StringComparison.OrdinalIgnoreCase)) && (query.MemberId is null || r.MemberId == query.MemberId))
-            .Select(r => new RequestDto(r.Id, r.MemberId, r.DeviceId, r.Kind.ToString().ToLowerInvariant(), r.Target, r.TargetKey, r.Minutes, r.Message,
-                r.CreatedAt, r.Status.ToString().ToLowerInvariant(), r.DecidedAt)).ToList())),
+            .Select(r => SyncMapper.ToDto(r)).ToList())),
         DecideRequest decide => DecideRequest(decide, adminName),
         SetClock set => SetClock(set),
         CreatePairingCode => new PairingCodeResult(family.Pairing.Create(family.Now), family.Now + Hub.HubPairing.Lifetime, family.Options.HubPort, LocalAddresses()),
@@ -280,6 +279,7 @@ public sealed class AdminPipeServer(FamilyService family, IOptions<ServiceOption
         BlockYouTubeShorts = set.BlockYouTubeShorts ?? member.BlockYouTubeShorts,
         LogSearches = set.LogSearches ?? member.LogSearches,
         BlockAds = set.BlockAds ?? member.BlockAds,
+        YouTubeChannelSearch = set.YouTubeChannelSearch ?? member.YouTubeChannelSearch,
     };
 
     private static string Wire(EventType type) => SyncMapper.EventWire(type);
