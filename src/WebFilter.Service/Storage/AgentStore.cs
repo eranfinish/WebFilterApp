@@ -6,12 +6,16 @@ using WebFilter.Service.Mapping;
 
 namespace WebFilter.Service.Storage;
 
-/// <summary>Persists <see cref="AgentState"/>: the last hub snapshot, local usage, and what still has to reach the hub.</summary>
+/// <summary>
+/// Persists <see cref="AgentState"/>: the last hub snapshot, local usage, what still has to reach the hub, and the
+/// request decisions already seen (each announced once).
+/// </summary>
 public sealed class AgentStore(SqliteDatabase database)
 {
     private int? _savedSnapshotVersion;
     private readonly HashSet<(string, string, long)> _savedShared = [];
     private readonly HashSet<(string, long)> _savedLocal = [];
+    private Dictionary<string, DateTimeOffset> _savedDecisions = [];
 
     public AgentState? Load(string deviceId)
     {
@@ -42,9 +46,11 @@ public sealed class AgentStore(SqliteDatabase database)
         var pauses = db.Query<(string Member, string Until)>("SELECT member_id, until FROM local_pauses").ToDictionary(p => p.Member, p => StateJson.Instant(p.Until));
         var outbox = db.Query<string>("SELECT event_json FROM outbox ORDER BY seq").Select(StateJson.Event).ToList();
         var queued = db.Query<string>("SELECT request_json FROM queued_requests ORDER BY id").Select(StateJson.Request).ToList();
+        _savedDecisions = db.Query<(string Request, string DecidedAt)>("SELECT request_id, decided_at FROM decisions_seen")
+            .ToDictionary(d => d.Request, d => StateJson.Instant(d.DecidedAt));
 
         if (snapshot is null && local.Entries().Any() is false && outbox.Count == 0 && queued.Count == 0) return null;
-        return new AgentState(deviceId, snapshot, local, pauses, outbox, queued, counters.GetValueOrDefault("queued"));
+        return new AgentState(deviceId, snapshot, local, pauses, outbox, queued, counters.GetValueOrDefault("queued"), new Dictionary<string, DateTimeOffset>(_savedDecisions));
     }
 
     public void Save(AgentState state)
@@ -87,6 +93,18 @@ public sealed class AgentStore(SqliteDatabase database)
         foreach (var r in state.QueuedRequests) db.Execute("INSERT INTO queued_requests (id, request_json) VALUES (@id, @json)", new { id = r.Id, json = StateJson.Request(r) }, tx);
 
         db.Execute("INSERT OR REPLACE INTO counters (name, value) VALUES ('queued', @value)", new { value = state.QueuedCounter }, tx);
+
+        // At most the hub's last 100, replaced whole when a snapshot brought a different list.
+        var decisions = state.DecisionsSeen ?? new Dictionary<string, DateTimeOffset>();
+        var decisionsChanged = decisions.Count != _savedDecisions.Count
+            || decisions.Any(d => !_savedDecisions.TryGetValue(d.Key, out var at) || at != d.Value);
+        if (decisionsChanged)
+        {
+            db.Execute("DELETE FROM decisions_seen", transaction: tx);
+            foreach (var (request, decidedAt) in decisions)
+                db.Execute("INSERT INTO decisions_seen (request_id, decided_at) VALUES (@request, @at)", new { request, at = StateJson.Instant(decidedAt) }, tx);
+        }
         tx.Commit();
+        if (decisionsChanged) _savedDecisions = new Dictionary<string, DateTimeOffset>(decisions);
     }
 }

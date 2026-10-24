@@ -23,6 +23,7 @@ public sealed class HubSyncTests : IAsyncLifetime
     private HubServer _server = null!;
     private FamilyService _agent = null!;
     private HubSyncService _sync = null!;
+    private Pipes.AgentPipeServer? _agentPipe;
     private string _agentData = null!;
 
     public async Task InitializeAsync()
@@ -46,6 +47,7 @@ public sealed class HubSyncTests : IAsyncLifetime
 
     public async Task DisposeAsync()
     {
+        if (_agentPipe is not null) await _agentPipe.StopAsync(CancellationToken.None);
         if (_sync is not null) await _sync.StopAsync(CancellationToken.None);
         await _server.StopAsync(CancellationToken.None);
         _agent.Dispose();
@@ -120,6 +122,96 @@ public sealed class HubSyncTests : IAsyncLifetime
         await StartServerAsync();
         _sync.Wake();
         await Eventually(() => _hub.WithHub((hub, _) => hub.Requests.Count) == 2, "queued request delivered after the hub returned");
+    }
+
+    /// <summary>
+    /// The lab case of 2026-10-24 (MVP-PLAN §8.1): the child asks from the agent computer's block page, a parent approves on
+    /// the hub, and the agent's pipe tells the child's browser — after the rules changed, so the extension installs the
+    /// allow rule before its block page reloads — once, though every later snapshot still carries the decision.
+    /// </summary>
+    [Fact]
+    public async Task An_approval_on_the_hub_reaches_the_childs_browser_on_the_agent_once()
+    {
+        LinkYoavsLaptopAccountToThisUser();
+        await PairAndSyncAsync();
+        await using var browser = await ConnectBrowserAsync();
+        Assert.Equal(Core.Decisions.Decision.Block, _agent.WithAgent((agent, now) => agent.DecideUrl(agent.AccountOf("yoav"), "https://www.instagram.com/", now)).Decision);
+
+        var asked = await browser.RequestAsync<Contracts.Agent.RequestAccessResponse>(new Contracts.Agent.RequestAccessRequest("url", "https://www.instagram.com/", null, "for a school project"));
+        Assert.Equal("created", asked.Result);
+        Assert.Equal(_hub.WithHub((hub, _) => hub.Requests.Single().Id), asked.RequestId);
+
+        _hub.Decide(asked.RequestId!, approve: true, ApproveScope.Host, ApprovalDuration.Always, null, "parent");
+        var decidedVersion = HubVersion;
+
+        var decided = await browser.WaitForAsync<Contracts.Agent.AccessDecidedMessage>(timeoutMs: 10000);
+        Assert.NotNull(decided);
+        Assert.Equal((asked.RequestId, "approved", (DateTimeOffset?)null), (decided.RequestId, decided.Status, decided.Until));
+        var received = browser.Received.ToList();
+        var rulesChanged = received.FindIndex(m => m is Contracts.Agent.RulesChangedMessage changed && changed.RulesVersion >= decidedVersion);
+        Assert.InRange(rulesChanged, 0, received.IndexOf(decided) - 1);
+        var rules = await browser.RequestAsync<Contracts.Agent.RulesResponse>(new Contracts.Agent.GetRulesRequest());
+        Assert.Contains(rules.DynamicRules, r => r.GetProperty("action").GetProperty("type").GetString() == "allow" && r.ToString().Contains("\"instagram.com\"", StringComparison.Ordinal));
+        Assert.Equal(Core.Decisions.ReasonCode.AllowedRule, _agent.WithAgent((agent, now) => agent.DecideUrl(agent.AccountOf("yoav"), "https://www.instagram.com/", now)).Reason);
+
+        // Later snapshots carry the decision for 48 hours: the browser does not hear of it again.
+        _hub.WithHub((hub, now) => { hub.AddRule(new Rule("r-later", "yoav", "chess.example", PatternType.Domain, RuleAction.Block), now); return 0; });
+        await Eventually(() => _agent.AgentSnapshotVersion == HubVersion, "a later snapshot");
+        await Task.Delay(300);
+        Assert.Equal(1, browser.CountOf<Contracts.Agent.AccessDecidedMessage>());
+    }
+
+    /// <summary>
+    /// A request queued while the hub was off keeps the agent's id at the hub, so the decision comes back under the id the
+    /// browser was given — also to a second ask for the same site, merged into it.
+    /// </summary>
+    [Fact]
+    public async Task A_decision_on_a_request_queued_while_the_hub_was_off_reaches_the_browser_under_the_queued_id()
+    {
+        LinkYoavsLaptopAccountToThisUser();
+        await PairAndSyncAsync();
+        await using var browser = await ConnectBrowserAsync();
+        // No sync while the hub is off, so the queue is never on its way when the second ask comes; the last one failed.
+        await _sync.StopAsync(CancellationToken.None);
+        await _server.StopAsync(CancellationToken.None);
+        _agent.SetHubReachable(false);
+
+        var queued = await browser.RequestAsync<Contracts.Agent.RequestAccessResponse>(new Contracts.Agent.RequestAccessRequest("url", "https://www.instagram.com/", null, null));
+        var merged = await browser.RequestAsync<Contracts.Agent.RequestAccessResponse>(new Contracts.Agent.RequestAccessRequest("url", "https://www.instagram.com/reels/", null, null));
+        Assert.Equal(("queued", "laptop-yoav-q1"), (queued.Result, queued.RequestId));
+        Assert.Equal(("merged", "laptop-yoav-q1"), (merged.Result, merged.RequestId));
+
+        await StartServerAsync();
+        _sync = new HubSyncService(_agent, NullLogger<HubSyncService>.Instance);
+        await _sync.StartAsync(CancellationToken.None);
+        await Eventually(() => _hub.WithHub((hub, _) => hub.Requests.Count) == 1, "the queued request reached the hub");
+        Assert.Equal("laptop-yoav-q1", _hub.WithHub((hub, _) => hub.Requests.Single().Id));
+
+        _hub.Decide("laptop-yoav-q1", approve: false, ApproveScope.Host, ApprovalDuration.Always, null, "parent");
+
+        var decided = await browser.WaitForAsync<Contracts.Agent.AccessDecidedMessage>(timeoutMs: 10000);
+        Assert.Equal(("laptop-yoav-q1", "denied"), (decided?.RequestId, decided?.Status));
+    }
+
+    /// <summary>The settings give yoav's account on laptop-yoav the SID of whoever runs the tests, who then plays the child's browser.</summary>
+    private void LinkYoavsLaptopAccountToThisUser() => _hub.WithHub((hub, now) =>
+    {
+        var config = hub.Config.Clone();
+        var index = config.Devices.FindIndex(d => d.Id == "laptop-yoav");
+        config.Devices[index] = config.Devices[index] with { Accounts = [new DeviceAccount(System.Security.Principal.WindowsIdentity.GetCurrent().User!.Value, "yoav", "yoav", IsAdmin: false)] };
+        hub.ReplaceSettings(config, now);
+        return 0;
+    }, "parent");
+
+    /// <summary>The agent's pipe, with the test process as the trusted native host, and a browser that said hello.</summary>
+    private async Task<AgentClient> ConnectBrowserAsync()
+    {
+        var options = new ServiceOptions { AgentPipeName = $"WebFilter.Test.Agent.{Guid.NewGuid().ToString("N")[..8]}", TrustedClientPaths = [Environment.ProcessPath!] };
+        _agentPipe = new Pipes.AgentPipeServer(_agent, Options.Create(options), NullLogger<Pipes.AgentPipeServer>.Instance);
+        await _agentPipe.StartAsync(CancellationToken.None);
+        var browser = await AgentClient.ConnectAsync(options.AgentPipeName);
+        await browser.RequestAsync<Contracts.Agent.HelloResponse>(new Contracts.Agent.HelloRequest("0.3.0", "edge", "abcdefghijklmnopabcdefghijklmnop"));
+        return browser;
     }
 
     [Fact]

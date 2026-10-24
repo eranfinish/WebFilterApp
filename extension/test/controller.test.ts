@@ -352,6 +352,31 @@ describe("pushes", () => {
     expect(state.dynamicRules.has(5000)).toBe(true);
   });
 
+  it("accessDecided after the new rules are already in (an agent computer: the hub's snapshot brings both): the pages and the child still hear it", async () => {
+    const host = new FakeHost(script());
+    const c = start(host);
+    await settle();
+    await (async () => {
+      const p = c.requestAccess({ type: "wf:requestAccess", kind: "url", target: "https://www.ynet.co.il/" });
+      await settle();
+      return p;
+    })();
+    const approved: DnrRule = { id: 5000, priority: 131080, action: { type: "allow" }, condition: { resourceTypes: FRAMES, requestDomains: ["ynet.co.il"] } };
+    host.script = script({ rules: { ...script().rules!, rulesVersion: 6, dynamicRules: [...DYNAMIC, approved] } });
+    host.push({ type: "rulesChanged", rulesVersion: 6 });
+    await settle();
+    expect(state.dynamicRules.has(5000)).toBe(true);
+    state.broadcasts = [];
+
+    host.push({ type: "accessDecided", requestId: "ar-1", status: "approved" });
+    await settle();
+
+    expect(state.broadcasts).toContainEqual({ type: "wf:accessDecided", requestId: "ar-1", status: "approved" });
+    expect(state.dynamicRules.has(5000)).toBe(true);
+    expect(c.decisionOf("ar-1")).toEqual({ status: "approved" });
+    expect(state.notifications.map((n) => n.message)).toEqual(["notifyApproved"]);
+  });
+
   it("port closed: failclosed on, rules cleared, reconnects after 1 s", async () => {
     state.tabs = [{ id: 1, url: "https://www.khanacademy.org/", active: true }];
     const host = new FakeHost(script());

@@ -36,7 +36,7 @@ internal sealed class AgentSession(Stream pipe, ClientIdentity client, FamilySer
             if (now.UtcTicks >= Interlocked.Read(ref _rulesValidUntil) && Interlocked.Exchange(ref _rulesValidUntil, long.MaxValue) != long.MaxValue)
                 _outgoing.Writer.TryWrite(new RulesChangedMessage(family.WithAgent((agent, _) => agent.SnapshotVersion ?? 0)));
         }
-        void OnDecided(AccessRequest request) => PushDecision(request);
+        void OnDecided(RequestDecision decision) => PushDecision(decision);
         family.SettingsChanged += OnSettings;
         family.Ticked += OnTick;
         family.RequestDecided += OnDecided;
@@ -259,7 +259,14 @@ internal sealed class AgentSession(Stream pipe, ClientIdentity client, FamilySer
             HubCore.TargetKeyFor(kind, target, TimeCalculator.LocalDate(now, agent.View().Config.TimeZone)), request.Minutes, request.Note, now);
         AccessRequest? created = null;
         var result = agent.RequestAccess(draft, d => family.SendRequestToHub(d, out created));
-        var id = created?.Id ?? (result == RequestResult.Queued ? agent.QueuedRequests[^1].Id : null);
+        // A queued request keeps this id at the hub, so the decision comes back with it; one merged into a request queued
+        // earlier gets that request's id, so its page follows the decision too.
+        var id = created?.Id ?? result switch
+        {
+            RequestResult.Queued => agent.QueuedRequests[^1].Id,
+            RequestResult.Merged => agent.QueuedRequests.FirstOrDefault(q => q.MemberId == draft.MemberId && q.TargetKey == draft.TargetKey)?.Id,
+            _ => null,
+        };
         return new RequestAccessResponse(result switch
         {
             RequestResult.Created => "created", RequestResult.Merged => "merged", RequestResult.RateLimited => "rate_limited",
@@ -267,13 +274,23 @@ internal sealed class AgentSession(Stream pipe, ClientIdentity client, FamilySer
         }, id);
     });
 
-    private void PushDecision(AccessRequest request)
+    /// <summary>
+    /// Tells this session's extension of a decision on a request of its member — whichever computer it came from — so a
+    /// block page waiting for it reloads (MVP-PLAN §8.1). Raised by whatever made or brought the decision, so a failure
+    /// here is logged and goes no further.
+    /// </summary>
+    private void PushDecision(RequestDecision decision)
     {
-        var (mine, until) = family.WithAgent((agent, _) => (Account(agent).MemberId == request.MemberId,
-            request.CreatedRuleId is { } ruleId ? agent.View().Config.Rules.FirstOrDefault(r => r.Id == ruleId)?.ExpiresAt : null));
-        if (!mine) return;
-        _outgoing.Writer.TryWrite(new AccessDecidedMessage(request.Id, request.Status.ToString().ToLowerInvariant(), until));
-        if (request.Kind == RequestKind.Time) PushTimeIfChanged();
+        try
+        {
+            if (!family.WithAgent((agent, _) => Account(agent).MemberId == decision.MemberId)) return;
+            _outgoing.Writer.TryWrite(new AccessDecidedMessage(decision.RequestId, decision.Status.ToString().ToLowerInvariant(), decision.Until));
+            if (decision.Kind == RequestKind.Time) PushTimeIfChanged();
+        }
+        catch (Exception ex)
+        {
+            log.LogWarning(ex, "Could not tell {Client} of the decision on {Request}", client, decision.RequestId);
+        }
     }
 
     private void PushTimeIfChanged()

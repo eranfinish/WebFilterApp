@@ -1,4 +1,3 @@
-using System.Collections.Concurrent;
 using System.IO.Pipes;
 using System.Security.Principal;
 using System.Text.Json.Nodes;
@@ -324,6 +323,12 @@ public sealed class PipeIntegrationTests : IAsyncLifetime
         var decided = await agent.WaitForAsync<AccessDecidedMessage>();
         Assert.Equal(request.Id, decided!.RequestId);
         Assert.Equal("approved", decided.Status);
+        Assert.Equal(_clock.Now.AddMinutes(15), decided.Until);
+
+        // On the hub the decision is told as the parent makes it, and the hub's own sync adds nothing.
+        _family.Tick();
+        await Task.Delay(300);
+        Assert.Equal(1, agent.CountOf<AccessDecidedMessage>());
     }
 
     [Fact]
@@ -755,53 +760,6 @@ public sealed class PipeIntegrationTests : IAsyncLifetime
     {
         public DateTimeOffset Now { get; set; } = now;
         public override DateTimeOffset GetUtcNow() => Now;
-    }
-
-    /// <summary>Plays the native host: sends requests and collects replies and pushes.</summary>
-    private sealed class AgentClient : IAsyncDisposable
-    {
-        private readonly NamedPipeClientStream _pipe;
-        private readonly ConcurrentQueue<AgentMessage> _received = new();
-        private readonly Task _reader;
-        private int _next;
-
-        private AgentClient(NamedPipeClientStream pipe)
-        {
-            _pipe = pipe;
-            _reader = Task.Run(async () =>
-            {
-                try { while (await AgentProtocol.ReadAsync(_pipe) is { } m) _received.Enqueue(m); }
-                catch (Exception ex) when (ex is IOException or ObjectDisposedException or EndOfStreamException) { }
-            });
-        }
-
-        public static async Task<AgentClient> ConnectAsync(string name)
-        {
-            var pipe = new NamedPipeClientStream(".", name, PipeDirection.InOut, PipeOptions.Asynchronous);
-            await pipe.ConnectAsync(5000);
-            return new AgentClient(pipe);
-        }
-
-        public async Task<T> RequestAsync<T>(AgentMessage message) where T : AgentMessage
-        {
-            var id = $"t{Interlocked.Increment(ref _next)}";
-            await AgentProtocol.WriteAsync(_pipe, message with { Id = id });
-            var reply = await WaitForAsync<AgentMessage>(m => m.Id == id);
-            return reply as T ?? throw new Xunit.Sdk.XunitException($"Expected {typeof(T).Name}, got {reply?.GetType().Name}: {(reply as ErrorMessage)?.Message}");
-        }
-
-        public int CountOf<T>() where T : AgentMessage => _received.OfType<T>().Count();
-
-        public Task SendRawAsync(string json) => Contracts.Framing.MessageFraming.WriteAsync(_pipe, System.Text.Encoding.UTF8.GetBytes(json));
-
-        public Task<T?> WaitForAsync<T>(Func<T, bool>? match = null) where T : AgentMessage => Poll(() =>
-            _received.OfType<T>().FirstOrDefault(m => match?.Invoke(m) ?? true));
-
-        public async ValueTask DisposeAsync()
-        {
-            await _pipe.DisposeAsync();
-            await _reader;
-        }
     }
 
     private sealed class AdminClient : IAsyncDisposable

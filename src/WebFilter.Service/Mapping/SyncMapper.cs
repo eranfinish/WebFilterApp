@@ -20,8 +20,11 @@ public static class SyncMapper
         BundleMapper.ToBundle(snapshot.Config, snapshot.Version),
         snapshot.Runtime.ToDictionary(kv => kv.Key, kv => new RuntimeDto(kv.Value.PausedUntil, kv.Value.HomeworkUntil,
             kv.Value.Grants.Select(g => new GrantDto(g.LocalDate.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture), g.ExtraMinutes, g.TempWindowStart, g.TempWindowEnd)).ToList())),
-        Usage(snapshot.Usage, now));
+        Usage(snapshot.Usage, now),
+        snapshot.Decisions?.Select(d => new DecisionDto(d.RequestId, d.MemberId, d.DeviceId, d.Kind.ToString().ToLowerInvariant(), d.TargetKey,
+            d.Status.ToString().ToLowerInvariant(), d.DecidedAt, d.Until)).ToList());
 
+    /// <summary>A snapshot as an agent applies it. A decision this version cannot read (a newer hub's kind or status) is left out.</summary>
     public static HubSnapshot FromDto(SnapshotDto dto) => new(
         dto.Version,
         BundleMapper.ToConfig(dto.Settings),
@@ -31,7 +34,15 @@ public static class SyncMapper
             HomeworkUntil = kv.Value.HomeworkUntil,
             Grants = kv.Value.Grants.Select(g => new TimeGrant(DateOnly.ParseExact(g.LocalDate, "yyyy-MM-dd", CultureInfo.InvariantCulture), g.ExtraMinutes, g.TempWindowStart, g.TempWindowEnd)).ToList(),
         }),
-        Ledger(dto.Usage));
+        Ledger(dto.Usage),
+        dto.Decisions?.Select(FromDto).OfType<RequestDecision>().ToList());
+
+    private static RequestDecision? FromDto(DecisionDto d)
+    {
+        RequestKind? kind = d.Kind switch { "url" => RequestKind.Url, "youtube" => RequestKind.YouTube, "app" => RequestKind.App, "time" => RequestKind.Time, _ => null };
+        RequestStatus? status = d.Status switch { "approved" => RequestStatus.Approved, "denied" => RequestStatus.Denied, _ => null };
+        return kind is { } k && status is { } s ? new RequestDecision(d.Id, d.Member, d.Device, k, d.TargetKey, s, d.DecidedAt, d.Until) : null;
+    }
 
     public static UploadDto ToDto(AgentUpload upload, DateTimeOffset now) => new(
         upload.DeviceId,

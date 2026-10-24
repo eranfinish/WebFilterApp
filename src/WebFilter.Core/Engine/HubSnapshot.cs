@@ -4,7 +4,13 @@ using WebFilter.Core.Time;
 namespace WebFilter.Core.Engine;
 
 /// <summary>What an agent receives from the hub: the settings bundle, parent-set runtime state and the shared usage.</summary>
-public sealed record HubSnapshot(int Version, FamilyConfig Config, IReadOnlyDictionary<string, MemberRuntime> Runtime, UsageLedger Usage);
+/// <param name="Decisions">
+/// The requests the parents decided recently (<see cref="HubCore.SnapshotForAgents"/>), for the agent to announce to the
+/// member's browsers. Null when not carried: an older hub, or the hub's own snapshot for its in-process agent (the hub
+/// announces its decisions as it makes them).
+/// </param>
+public sealed record HubSnapshot(int Version, FamilyConfig Config, IReadOnlyDictionary<string, MemberRuntime> Runtime, UsageLedger Usage,
+    IReadOnlyList<RequestDecision>? Decisions = null);
 
 public static class ConfigCloning
 {

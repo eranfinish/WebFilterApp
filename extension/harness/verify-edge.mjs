@@ -352,6 +352,31 @@ try {
     const returned = await waitFor(async () => (await page.title()) === "SITE blocked.test/x", 8000);
     check("T22 approval refreshes rules and the block page reloads the site", !!returned, { note: await page.title() });
 
+    // On an agent computer (lab, 2026-10-24) the hub's snapshot brings the allow rule (rulesChanged) and then the decision,
+    // so the rule is already installed when accessDecided comes: the block page must still go back to the site. Here the
+    // request was queued while the hub was off, so the decision comes under the agent's own id.
+    const approvedScript = { ...script, rules: { ...script.rules, rulesVersion: 4, dynamicRules: approvedRules.rules }, requestAccess: { result: "queued", requestId: "lab-kids-q1" } };
+    await b.sw.evaluate((s) => globalThis.wfTest.setScript(s), approvedScript);
+    await visit(page, S("news.test", "/today"));
+    const ni = await waitFor(async () => {
+      const i = await pageInfo(page);
+      return i.ready ? i : null;
+    });
+    await page.click("#ask-url");
+    const newsAsked = await waitFor(async () => (await pageInfo(page)).requestResult === "queued");
+    const newsRules = compiledRules(b.id, { allowed: ["allowed.test", "mashov.test", "blocked.test", "news.test"] });
+    await b.sw.evaluate((s) => {
+      globalThis.wfTest.setScript(s);
+      globalThis.wfTest.push({ type: "rulesChanged", rulesVersion: 5 });
+    }, { ...approvedScript, rules: { ...approvedScript.rules, rulesVersion: 5, dynamicRules: newsRules.rules } });
+    const newsInstalled = await waitFor(async () => (await dynamicRules(b)).some((r) => r.condition.requestDomains?.includes("news.test")));
+    const waiting = (await page.title()) === BLOCKED_TITLE;
+    await b.sw.evaluate(() => globalThis.wfTest.push({ type: "accessDecided", requestId: "lab-kids-q1", status: "approved" }));
+    const newsBack = await waitFor(async () => (await page.title()) === "SITE news.test/today", 8000);
+    check("T22b rules first, then the decision (agent order): the block page still reloads the site", ni?.canRequest === "true" && !!newsAsked && !!newsInstalled && waiting && !!newsBack, {
+      note: `${ni?.canRequest} ${!!newsAsked} ${!!newsInstalled} ${waiting} ${await page.title()}`,
+    });
+
     // ---- time up ---------------------------------------------------------------------------------------------
     const tab2 = await b.context.newPage();
     await visit(tab2, S("mashov.test", "/grades"));

@@ -19,7 +19,12 @@ public sealed record PairRequest(string DeviceId, string DeviceName, string Os, 
 public sealed record PairResponse(string HubId, string ClientCertificateBase64, string HubCaCertificateBase64, string Proof);
 
 /// <summary>GET /v1/snapshot?since={version} → 204 when unchanged.</summary>
-public sealed record SnapshotDto(int Version, FamilyBundle Settings, IReadOnlyDictionary<string, RuntimeDto> Runtime, IReadOnlyList<UsageDto> Usage);
+/// <param name="Decisions">
+/// The requests the parents decided in the last 48 hours, newest first (at most 100), so the agent tells the member's
+/// browsers on its computer (accessDecided) as the hub does on its own. Absent from an older hub: nothing to announce.
+/// </param>
+public sealed record SnapshotDto(int Version, FamilyBundle Settings, IReadOnlyDictionary<string, RuntimeDto> Runtime, IReadOnlyList<UsageDto> Usage,
+    IReadOnlyList<DecisionDto>? Decisions = null);
 
 public sealed record RuntimeDto(DateTimeOffset? PausedUntil, DateTimeOffset? HomeworkUntil, IReadOnlyList<GrantDto> Grants);
 
@@ -28,6 +33,15 @@ public sealed record GrantDto(string LocalDate, int ExtraMinutes, int? TempWindo
 
 /// <param name="Minutes">Whole minutes since the Unix epoch (UTC), sorted.</param>
 public sealed record UsageDto(string Member, string Device, IReadOnlyList<long> Minutes);
+
+/// <summary>A decided access request in a snapshot (<see cref="SnapshotDto.Decisions"/>).</summary>
+/// <param name="Id">The request id the hub knows; for a request an agent queued, the id the agent gave it.</param>
+/// <param name="Device">The computer the request came from.</param>
+/// <param name="Kind">url | youtube | app | time.</param>
+/// <param name="TargetKey">What merging compares: host without "www." · channel id · lowercase app path · "time:{date}".</param>
+/// <param name="Status">approved | denied.</param>
+/// <param name="Until">When the approval ends (the expiry of the rule it created); absent when it does not, and for a denial.</param>
+public sealed record DecisionDto(string Id, string Member, string Device, string Kind, string TargetKey, string Status, DateTimeOffset DecidedAt, DateTimeOffset? Until = null);
 
 /// <summary>POST /v1/upload: what the agent has not delivered yet. Idempotent: usage minutes merge; events and requests carry ids.</summary>
 /// <param name="Accounts">Accounts seen on the device, so the hub can offer to link them to family members.</param>
