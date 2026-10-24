@@ -135,6 +135,10 @@ public sealed class PolicyTests : IDisposable
             Assert.Equal(3, _store.User(sid, Edge, "TrackingPrevention"));
             Assert.Null(_store.User(sid, Chrome, "TrackingPrevention"));
             Assert.Equal(0, _store.User(sid, Edge, "NewTabPageContentEnabled"));
+            // PROTECTION-SPEC §14: closing the windows ends the browser, so reopening it is a new start for the guard.
+            Assert.Equal(0, _store.User(sid, Chrome, "BackgroundModeEnabled"));
+            Assert.Equal(0, _store.User(sid, Edge, "BackgroundModeEnabled"));
+            Assert.Equal(0, _store.User(sid, Edge, "StartupBoostEnabled"));
         }
         AssertOnlyBaseline(Dana);
         AssertOnlyBaseline(Savta);

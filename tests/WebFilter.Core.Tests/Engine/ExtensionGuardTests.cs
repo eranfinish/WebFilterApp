@@ -321,6 +321,66 @@ public class ExtensionGuardTests
         Assert.False(BrowserKinds.TryParse("firefox", out _));
     }
 
+    [Fact]
+    public void After_two_unfiltered_windows_in_an_hour_a_new_start_gets_only_the_short_window_until_the_hour_passes()
+    {
+        var run = new Run();
+        var noaChrome = new AccountBrowser(Noa, BrowserKind.Chrome);
+        var t = T0;
+        for (var start = 0; start < 2; start++)
+        {
+            // A full window, unfiltered: the extension never connects.
+            run.At(t, [Chrome(Noa, 101 + start)]);
+            Assert.Empty(run.At(t + Grace - TimeSpan.FromSeconds(1), [Chrome(Noa, 101 + start)]).Blocked);
+            Assert.Equal([noaChrome], run.At(t + Grace, [Chrome(Noa, 101 + start)]).Blocked);
+            run.At(t + Grace + TimeSpan.FromSeconds(10), []); // closed
+            t += Grace + TimeSpan.FromSeconds(20);
+        }
+
+        // The third start in the hour: only the short window.
+        var third = t;
+        Assert.Empty(run.At(third, [Chrome(Noa, 103)]).Blocked);
+        Assert.Empty(run.At(third + ExtensionGuardOptions.ShortGrace - TimeSpan.FromSeconds(1), [Chrome(Noa, 103)]).Blocked);
+        var blocked = run.At(third + ExtensionGuardOptions.ShortGrace, [Chrome(Noa, 103)]);
+        Assert.Equal([noaChrome], blocked.Blocked);
+        Assert.Equal([noaChrome], blocked.Started);
+        run.At(third + ExtensionGuardOptions.ShortGrace + TimeSpan.FromSeconds(10), []);
+
+        // Edge in the same account still has its own full window.
+        var edge = third + TimeSpan.FromMinutes(1);
+        run.At(edge - TimeSpan.FromSeconds(1), []);
+        run.At(edge, [Edge(Noa)]);
+        Assert.Empty(run.At(edge + Grace - TimeSpan.FromSeconds(1), [Edge(Noa)]).Blocked);
+        run.At(edge + Grace + TimeSpan.FromSeconds(10), []);
+
+        // An hour after those windows began, the full window is back.
+        var later = third + ExtensionGuardOptions.WindowPeriod + TimeSpan.FromSeconds(10);
+        run.At(later - TimeSpan.FromSeconds(1), []);
+        Assert.Empty(run.At(later, [Chrome(Noa, 104)]).Blocked);
+        Assert.Empty(run.At(later + Grace - TimeSpan.FromSeconds(1), [Chrome(Noa, 104)]).Blocked);
+        Assert.Equal([noaChrome], run.At(later + Grace, [Chrome(Noa, 104)]).Blocked);
+    }
+
+    [Fact]
+    public void A_healthy_browser_opened_and_closed_often_keeps_the_full_window_and_is_never_blocked()
+    {
+        var run = new Run();
+        var t = T0;
+        for (var start = 0; start < 5; start++)
+        {
+            // The extension connects a few seconds after each start, as a working one does.
+            run.At(t, [Chrome(Noa, 110 + start)]);
+            var connected = run.At(t + TimeSpan.FromSeconds(10), [Chrome(Noa, 110 + start)], Connection(Noa, BrowserKind.Chrome, t + TimeSpan.FromSeconds(5)));
+            Assert.Empty(connected.Blocked);
+            run.At(t + TimeSpan.FromSeconds(20), []); // closed
+            t += TimeSpan.FromSeconds(30);
+        }
+
+        // A start whose extension is slow this time still has the full window, not the short one.
+        Assert.Empty(run.At(t + ExtensionGuardOptions.ShortGrace + TimeSpan.FromSeconds(10), [Chrome(Noa, 120)]).Blocked);
+        Assert.Empty(run.At(t + Grace - TimeSpan.FromSeconds(1), [Chrome(Noa, 120)]).Blocked);
+    }
+
     internal static FamilyConfig Fixture() =>
         FixtureLoader.Load(JsonNode.Parse(File.ReadAllText(Path.Combine(EngineScenarioTests.SimulationDir, "fixtures", "family-base.json")))!.AsObject(), null);
 }

@@ -67,10 +67,24 @@ public sealed record ExtensionConnection(string AccountId, BrowserKind Browser, 
 /// </param>
 /// <param name="ChromeExtensionId">The extension's Chrome Web Store id; a Chrome session with another id does not count. Null: not checked.</param>
 /// <param name="EdgeExtensionId">The extension's Edge Add-ons id, likewise.</param>
-public sealed record ExtensionGuardOptions(TimeSpan Grace, TimeSpan Staleness, string? ChromeExtensionId = null, string? EdgeExtensionId = null)
+/// <param name="WindowsPerHour">
+/// How many download windows in an hour a browser may spend in one account without its extension connecting — windows in
+/// which it browsed unfiltered. Past that, each new start gets only <see cref="ShortGrace"/>: enough for a working
+/// extension to connect, so a child who opens and closes a healthy browser is never cut off, while reopening a browser
+/// whose extension does not work no longer buys three unfiltered minutes each time (decided with the parents, 2026-10-24).
+/// </param>
+public sealed record ExtensionGuardOptions(TimeSpan Grace, TimeSpan Staleness, string? ChromeExtensionId = null, string? EdgeExtensionId = null,
+    int WindowsPerHour = ExtensionGuardOptions.DefaultWindowsPerHour)
 {
     public static readonly TimeSpan DefaultGrace = TimeSpan.FromMinutes(3);
     public static readonly TimeSpan DefaultStaleness = TimeSpan.FromSeconds(90);
+    public const int DefaultWindowsPerHour = 2;
+
+    /// <summary>The window a start gets once <see cref="WindowsPerHour"/> is used up: a working extension connects within seconds.</summary>
+    public static readonly TimeSpan ShortGrace = TimeSpan.FromSeconds(30);
+
+    /// <summary>The period <see cref="WindowsPerHour"/> counts over.</summary>
+    public static readonly TimeSpan WindowPeriod = TimeSpan.FromHours(1);
 
     public static ExtensionGuardOptions Default { get; } = new(DefaultGrace, DefaultStaleness);
 
@@ -97,7 +111,9 @@ public sealed record ExtensionGuardResult(
 /// <see cref="NetworkPolicy.Desired"/> filters, and each browser:
 /// <list type="bullet">
 /// <item>a browser that starts running there without a live connection from its extension keeps its network for
-/// <see cref="ExtensionGuardOptions.Grace"/> (the download window); a new start — all its processes had exited — opens a new one;</item>
+/// <see cref="ExtensionGuardOptions.Grace"/> (the download window); a new start — all its processes had exited — opens a new one,
+/// but after <see cref="ExtensionGuardOptions.WindowsPerHour"/> windows in an hour in which the extension never connected,
+/// a new start gets only <see cref="ExtensionGuardOptions.ShortGrace"/>;</item>
 /// <item>after that, still running and still without a live connection, it is blocked (taken out of the account's
 /// allowlist) and the block is reported once, when it starts;</item>
 /// <item>a live connection lifts the block at once; a browser that stops running is forgotten.</item>
@@ -108,6 +124,8 @@ public sealed record ExtensionGuardResult(
 public sealed class ExtensionGuard(ExtensionGuardOptions? options = null)
 {
     private readonly Dictionary<AccountBrowser, Watch> _watches = [];
+    /// <summary>When each browser's recent download windows began, for those in which its extension never connected.</summary>
+    private readonly Dictionary<AccountBrowser, List<DateTimeOffset>> _unconnectedWindows = [];
     private DateTimeOffset? _lastPass;
     private DateTimeOffset _holdUntil = DateTimeOffset.MinValue;
 
@@ -149,7 +167,7 @@ public sealed class ExtensionGuard(ExtensionGuardOptions? options = null)
         foreach (var key in _watches.Keys.Where(k => !runningNow.ContainsKey(k)).ToList())
         {
             if (_watches[key].Blocked) ended.Add(key);
-            _watches.Remove(key);
+            Forget(key, _watches[key]);
         }
         foreach (var (key, processes) in runningNow)
         {
@@ -157,9 +175,14 @@ public sealed class ExtensionGuard(ExtensionGuardOptions? options = null)
             {
                 // Every process seen last time has exited and the browser runs again: a new start, with a new download window.
                 if (watch.Blocked) ended.Add(key);
+                Forget(key, watch);
                 watch = null;
             }
-            watch ??= _watches[key] = new Watch(now);
+            if (watch is null)
+            {
+                var spent = UnconnectedWindows(key, now) >= Options.WindowsPerHour;
+                watch = _watches[key] = new Watch(now, spent ? ExtensionGuardOptions.ShortGrace : Options.Grace);
+            }
             watch.Processes = processes;
             if (watch.RunningSince > now) watch.RunningSince = now; // the clock went back
 
@@ -167,8 +190,9 @@ public sealed class ExtensionGuard(ExtensionGuardOptions? options = null)
             {
                 if (watch.Blocked) restored.Add(key);
                 watch.Blocked = false;
+                watch.Connected = true;
             }
-            else if (!watch.Blocked && now - watch.RunningSince >= Options.Grace && now >= _holdUntil)
+            else if (!watch.Blocked && now - watch.RunningSince >= watch.Grace && now >= _holdUntil)
             {
                 watch.Blocked = true;
                 started.Add(key);
@@ -191,10 +215,32 @@ public sealed class ExtensionGuard(ExtensionGuardOptions? options = null)
     /// <summary>SIDs are compared without case (WFP, the registry and the token may spell them differently).</summary>
     private static AccountBrowser Key(string accountId, BrowserKind browser) => new(accountId.ToUpperInvariant(), browser);
 
-    private sealed class Watch(DateTimeOffset runningSince)
+    /// <summary>Drops a watch; a window in which the extension never connected counts toward <see cref="ExtensionGuardOptions.WindowsPerHour"/>.</summary>
+    private void Forget(AccountBrowser key, Watch watch)
+    {
+        _watches.Remove(key);
+        if (watch.Connected) return;
+        if (!_unconnectedWindows.TryGetValue(key, out var windows)) _unconnectedWindows[key] = windows = [];
+        windows.Add(watch.RunningSince);
+    }
+
+    /// <summary>The finished windows of the last hour in which <paramref name="key"/>'s extension never connected.</summary>
+    private int UnconnectedWindows(AccountBrowser key, DateTimeOffset now)
+    {
+        if (!_unconnectedWindows.TryGetValue(key, out var windows)) return 0;
+        windows.RemoveAll(start => now - start >= ExtensionGuardOptions.WindowPeriod || start > now);
+        if (windows.Count == 0) _unconnectedWindows.Remove(key);
+        return windows.Count;
+    }
+
+    private sealed class Watch(DateTimeOffset runningSince, TimeSpan grace)
     {
         public DateTimeOffset RunningSince { get; set; } = runningSince;
+        /// <summary>This start's download window: the full one, or the short one once the hour's windows are spent.</summary>
+        public TimeSpan Grace { get; } = grace;
         public HashSet<(int ProcessId, DateTimeOffset StartedAt)> Processes { get; set; } = [];
         public bool Blocked { get; set; }
+        /// <summary>The extension was live at some point of this start, so its window does not count as an unfiltered one.</summary>
+        public bool Connected { get; set; }
     }
 }

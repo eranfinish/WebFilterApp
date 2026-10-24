@@ -349,6 +349,14 @@ with a window for downloading the extension.
   — all the browser's processes had exited, then it runs again — opens a new window: processes are told apart by id and
   start time, so a browser closed and reopened between two polls (none of the processes seen before is left) is a new
   start too. Closing and reopening the browser is how a stuck download gets another chance.
+- **At most two unfiltered windows an hour** (decided with the parents, 2026-10-24): a window in which the extension
+  never connected counts; once a browser has had **2** of them in the last hour in an account
+  (`ExtensionGuardOptions.WindowsPerHour`), a new start gets only **30 seconds** (`ShortGrace`), enough for a working
+  extension to connect. A child who keeps reopening a browser whose extension does not work no longer gets three
+  unfiltered minutes each time, and one who opens and closes a healthy browser often is never affected (its windows end
+  connected and do not count). Per browser and account; the count lives in the service's memory (a restart forgets it).
+- **No browser left running in the background:** children's accounts get `BackgroundModeEnabled = 0` (Chrome and Edge)
+  and `StartupBoostEnabled = 0` (Edge), so closing the windows ends the browser and reopening it is a new start.
 - **Block:** after the window, with the browser still running and still no live connection, the browser's paths leave
   that account's WFP allowlist (`NetworkPolicy.Desired(..., blockedBrowsers)`; the guard hands them to `WfpService`
   through `BrowserBlocks`, and the account's filters are replaced in one WFP transaction): that browser has no network

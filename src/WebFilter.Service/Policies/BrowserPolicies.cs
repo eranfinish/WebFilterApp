@@ -93,6 +93,11 @@ public static class BrowserPolicies
             User(Edge, "TrackingPrevention", 3);
             // No Microsoft News feed (celebrities, politics, ads) on Edge's new tab page; the search box and quick links stay.
             User(Edge, "NewTabPageContentEnabled", 0);
+            // PROTECTION-SPEC §14: no browser process stays behind after the windows close (Chrome's and Edge's background
+            // mode, Edge's startup boost), so closing and reopening a browser is a new start for the extension guard.
+            User(Chrome, "BackgroundModeEnabled", 0);
+            User(Edge, "BackgroundModeEnabled", 0);
+            User(Edge, "StartupBoostEnabled", 0);
             // PROTECTION-SPEC §11: when the member's categories block ai-chat (unlinked accounts: nothing is allowed), the
             // browsers' own AI goes too. Copilot lives in Edge's sidebar (EdgeCopilotEnabled is for Edge on mobile only, and
             // Microsoft365CopilotChatIconEnabled for work profiles only), so the sidebar is hidden; Chrome has a Gemini switch.
