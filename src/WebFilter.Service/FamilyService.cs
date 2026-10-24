@@ -47,8 +47,12 @@ public sealed class FamilyService : IDisposable
     /// <summary>Raised (outside the gate) when the settings snapshot used for decisions changes.</summary>
     public event Action<int>? SettingsChanged;
 
-    /// <summary>Raised (outside the gate) when a parent approves or denies an access request.</summary>
-    public event Action<AccessRequest>? RequestDecided;
+    /// <summary>
+    /// Raised (outside the gate, after <see cref="SettingsChanged"/>) when a parent approves or denies an access request:
+    /// on the hub as the parent decides (<see cref="Decide"/>), on an agent once per decision the hub's snapshot brings
+    /// (<see cref="ApplyRemoteSnapshot"/>), for a member with an account on this computer.
+    /// </summary>
+    public event Action<RequestDecision>? RequestDecided;
 
     /// <summary>Raised (outside the gate) after each time tick.</summary>
     public event Action<DateTimeOffset>? Ticked;
@@ -172,16 +176,19 @@ public sealed class FamilyService : IDisposable
         return result;
     }
 
-    /// <summary>Approves or denies a request on the hub and notifies the requesting member's sessions.</summary>
+    /// <summary>
+    /// Approves or denies a request on the hub and notifies the requesting member's sessions on this computer; agents
+    /// learn of it from the next snapshot (<see cref="SnapshotSince"/>), which the change pushes to them.
+    /// </summary>
     public void Decide(string requestId, bool approve, ApproveScope scope, ApprovalDuration duration, int? minutes, string? actor = null)
     {
-        var request = WithHub((hub, now) =>
+        var decision = WithHub((hub, now) =>
         {
             if (approve) hub.Approve(requestId, scope, duration, minutes, now);
             else hub.Deny(requestId, now);
-            return hub.Requests.First(r => r.Id == requestId).Clone();
+            return hub.DecisionOf(hub.Requests.First(r => r.Id == requestId));
         }, actor);
-        RequestDecided?.Invoke(request);
+        RequestDecided?.Invoke(decision);
     }
 
     /// <summary>Hands a request to the hub: in-process on the hub, over the network on an agent (Queued when unreachable).</summary>
@@ -201,7 +208,25 @@ public sealed class FamilyService : IDisposable
 
     public int? AgentSnapshotVersion { get { lock (_gate) return _agent.SnapshotVersion; } }
 
-    public void ApplyRemoteSnapshot(HubSnapshot snapshot) => WithAgent((agent, _) => { agent.Apply(snapshot); return 0; });
+    /// <summary>
+    /// Applies a snapshot from the hub. Each decision in it this computer has not announced yet (a request of a member with
+    /// an account here, decided in the last 48 hours) raises <see cref="RequestDecided"/> once, after
+    /// <see cref="SettingsChanged"/> as on the hub, so the browser installs the new rules before its block page reloads.
+    /// What was announced is stored right after, so a restart does not announce it again.
+    /// </summary>
+    public void ApplyRemoteSnapshot(HubSnapshot snapshot)
+    {
+        var decided = WithAgent((agent, _) => agent.Apply(snapshot));
+        if (decided.Count == 0) return;
+        foreach (var decision in decided)
+        {
+            _log.LogInformation("Request {Request} of {Member} was {Status} on the hub; telling the browsers here", decision.RequestId, decision.MemberId,
+                decision.Status.ToString().ToLowerInvariant());
+            RequestDecided?.Invoke(decision);
+        }
+        try { Flush(); }
+        catch (Exception ex) when (ex is Microsoft.Data.Sqlite.SqliteException or IOException) { _log.LogWarning(ex, "Could not store the announced decisions; the next tick will"); }
+    }
 
     public AgentUpload TakeUploadForHub()
     {
@@ -236,8 +261,8 @@ public sealed class FamilyService : IDisposable
 
     // ---- hub role: the hub API calls these (M6) -------------------------------------------------------------------
 
-    /// <summary>Null when the agent already has <paramref name="since"/>.</summary>
-    public SnapshotDto? SnapshotSince(int since) => WithHub<SnapshotDto?>((hub, now) => hub.Version == since ? null : SyncMapper.ToDto(hub.Snapshot(), now));
+    /// <summary>Null when the agent already has <paramref name="since"/>. Carries the recent decisions (<see cref="HubCore.SnapshotForAgents"/>).</summary>
+    public SnapshotDto? SnapshotSince(int since) => WithHub<SnapshotDto?>((hub, now) => hub.Version == since ? null : SyncMapper.ToDto(hub.SnapshotForAgents(now), now));
 
     public int IngestUpload(string deviceId, UploadDto dto) => WithHub((hub, now) =>
     {

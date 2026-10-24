@@ -32,7 +32,7 @@ public sealed class StorageTests : IDisposable
     {
         Assert.Equal(5, Db("hub.db", "hub").SchemaVersion);
         Assert.Equal(5, Db("hub.db", "hub").SchemaVersion);
-        Assert.Equal(1, Db("agent.db", "agent").SchemaVersion);
+        Assert.Equal(2, Db("agent.db", "agent").SchemaVersion);
     }
 
     [Fact]
@@ -256,5 +256,27 @@ public sealed class StorageTests : IDisposable
         Assert.Empty(again.Outbox);
         Assert.Empty(again.QueuedRequests);
         Assert.Equal(Now.AddMinutes(20), again.LocalPauses["yoav"]);
+    }
+
+    /// <summary>The decisions an agent announced stay announced after a restart, and go once the hub stops sending them.</summary>
+    [Fact]
+    public void The_decisions_an_agent_saw_survive_a_restart()
+    {
+        var hub = new HubCore(Fixture());
+        var draft = new AccessRequestDraft("yoav", "laptop-yoav", RequestKind.Url, "https://www.instagram.com/", "instagram.com", null, null, Now);
+        hub.CreateRequest(draft, out var request);
+        hub.Approve(request!.Id, ApproveScope.Host, ApprovalDuration.For(30), null, Now);
+        var agent = new AgentCore("laptop-yoav");
+        Assert.Single(agent.Apply(hub.SnapshotForAgents(Now)));
+        var store = new AgentStore(Db("agent.db", "agent"));
+        store.Save(agent.Export());
+
+        var restored = AgentCore.Restore(new AgentStore(Db("agent.db", "agent")).Load("laptop-yoav")!);
+
+        Assert.Equal(Now, restored.DecisionsSeen[request.Id]);
+        Assert.Empty(restored.Apply(hub.SnapshotForAgents(Now.AddMinutes(1))));
+        Assert.Empty(restored.Apply(hub.SnapshotForAgents(Now.AddHours(49))));
+        store.Save(restored.Export());
+        Assert.Empty(new AgentStore(Db("agent.db", "agent")).Load("laptop-yoav")!.DecisionsSeen!);
     }
 }
