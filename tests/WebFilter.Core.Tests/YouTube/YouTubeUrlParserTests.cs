@@ -36,9 +36,14 @@ public class YouTubeUrlParserTests
             ScenarioData.OptString(e, "customName"),
             ScenarioData.OptString(e, "userName"),
             ScenarioData.OptString(e, "videoId"),
-            ScenarioData.OptString(e, "playlistId"));
+            ScenarioData.OptString(e, "playlistId"),
+            ScenarioData.OptString(e, "searchQuery"),
+            e.TryGetProperty("channelsOnly", out var channelsOnly) && channelsOnly.GetBoolean());
 
         var actual = YouTubeUrlParser.Parse(url);
+        // A search case that does not name its terms or filter (YTP-003) checks the kind and site only.
+        if (!e.TryGetProperty("searchQuery", out _)) expected = expected with { SearchQuery = actual.SearchQuery };
+        if (!e.TryGetProperty("channelsOnly", out _)) expected = expected with { ChannelsOnly = actual.ChannelsOnly };
 
         Assert.True(expected == actual, $"{scenarioId} {url}: expected {expected}, got {actual}");
     }

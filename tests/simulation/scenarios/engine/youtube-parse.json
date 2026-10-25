@@ -64,6 +64,31 @@
           ]
         }
       ]
+    },
+    {
+      "id": "YTP-004",
+      "title": "Search pages: the terms, and whether the results are restricted to channels (YouTube's 'Type: Channels' filter alone)",
+      "start": "2026-11-01T12:00",
+      "steps": [
+        {
+          "do": "parseYouTube",
+          "note": "PROTECTION-SPEC §15. YouTube's own 'Channels' link writes the filter encoded twice (sp=EgIQAg%253D%253D, checked 2026-10-25); once and unencoded mean the same.",
+          "cases": [
+            { "url": "https://www.youtube.com/results?search_query=dinosaurs",                          "expect": { "kind": "search", "site": "www", "searchQuery": "dinosaurs", "channelsOnly": false } },
+            { "url": "https://www.youtube.com/results?search_query=space+cats&sp=EgIQAg%253D%253D",     "expect": { "kind": "search", "site": "www", "searchQuery": "space cats", "channelsOnly": true } },
+            { "url": "https://www.youtube.com/results?sp=EgIQAg%3D%3D&search_query=space%20cats",       "expect": { "kind": "search", "site": "www", "searchQuery": "space cats", "channelsOnly": true } },
+            { "url": "https://youtube.com/results?search_query=space&sp=EgIQAg==",                      "expect": { "kind": "search", "site": "www", "searchQuery": "space", "channelsOnly": true } },
+            { "url": "https://www.youtube.com/results?search_query=%D7%93%D7%99%D7%A0%D7%95%D7%96%D7%90%D7%95%D7%A8%D7%99%D7%9D&sp=EgIQAg%253D%253D", "expect": { "kind": "search", "site": "www", "searchQuery": "דינוזאורים", "channelsOnly": true } },
+            { "url": "https://www.youtube.com/results?search_query=space&sp=EgIQAQ%253D%253D",          "expect": { "kind": "search", "site": "www", "searchQuery": "space", "channelsOnly": false }, "note": "Type: Videos" },
+            { "url": "https://www.youtube.com/results?search_query=space&sp=EgIQCQ%253D%253D",          "expect": { "kind": "search", "site": "www", "searchQuery": "space", "channelsOnly": false }, "note": "Type: Shorts" },
+            { "url": "https://www.youtube.com/results?search_query=space&sp=CAISAhAC",                  "expect": { "kind": "search", "site": "www", "searchQuery": "space", "channelsOnly": false }, "note": "channels sorted by date: another filter message" },
+            { "url": "https://www.youtube.com/results?search_query=space&sp=EgIQAg%253D%253D&sp=CAI%253D", "expect": { "kind": "search", "site": "www", "searchQuery": "space", "channelsOnly": false }, "note": "a second sp" },
+            { "url": "https://www.youtube.com/results?search_query=+&sp=EgIQAg%253D%253D",               "expect": { "kind": "search", "site": "www", "channelsOnly": true }, "note": "no terms: no searchQuery" },
+            { "url": "https://m.youtube.com/results?search_query=space&sp=EgIQAg%253D%253D",            "expect": { "kind": "search", "site": "m", "searchQuery": "space", "channelsOnly": true } },
+            { "url": "https://music.youtube.com/search?q=lullaby",                                      "expect": { "kind": "search", "site": "music", "searchQuery": "lullaby", "channelsOnly": false } }
+          ]
+        }
+      ]
     }
   ]
 }

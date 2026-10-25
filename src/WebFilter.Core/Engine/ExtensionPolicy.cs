@@ -76,7 +76,7 @@ public sealed record ExtensionPolicy(EffectiveUrlPolicy? UrlPolicy, YouTubeMode 
     {
         var baseline = view.Config.Baseline;
         if (!baseline.IsOn) return new(null, YouTubeMode.Unrestricted, false, DateTimeOffset.MaxValue);
-        var features = new ExtensionFeatures(baseline.JumpGuard, BlockYouTubeShorts: false, LogSearches: false, CanOverrideJump: true, baseline.BlockAds);
+        var features = new ExtensionFeatures(baseline.JumpGuard, BlockYouTubeShorts: false, LogSearches: false, CanOverrideJump: true, baseline.BlockAds, YouTubeChannelSearch: false);
         return baseline.BlockAdult
             ? new(view.BaselinePolicy(memberId, now), YouTubeMode.Unrestricted, false, EffectiveUrlPolicy.NextExpiry(view.Config, memberId, now)) { Features = features, Baseline = true }
             : new(null, YouTubeMode.Unrestricted, false, DateTimeOffset.MaxValue) { Features = features, Baseline = true };
@@ -87,7 +87,7 @@ public sealed record ExtensionPolicy(EffectiveUrlPolicy? UrlPolicy, YouTubeMode 
 }
 
 /// <summary>
-/// The protections the extension enforces by itself (PROTECTION-SPEC §6–§9, §12). All false for unlinked accounts; for
+/// The protections the extension enforces by itself (PROTECTION-SPEC §6–§9, §12, §15). All false for unlinked accounts; for
 /// administrators and unrestricted members, the family's baseline protection's (§13) instead of a member's flags.
 /// </summary>
 /// <param name="JumpGuard">Block a site opening another site in a new tab or window or by an automatic redirect (§7).</param>
@@ -95,11 +95,18 @@ public sealed record ExtensionPolicy(EffectiveUrlPolicy? UrlPolicy, YouTubeMode 
 /// <param name="LogSearches">Report searches (<c>reportSearch</c>) and tell the member so (§9).</param>
 /// <param name="CanOverrideJump">The jump block page offers "open anyway" (teens, and parents in the baseline).</param>
 /// <param name="BlockAds">Enable the extension's static ad-server ruleset (§12).</param>
-public sealed record ExtensionFeatures(bool JumpGuard, bool BlockYouTubeShorts, bool LogSearches, bool CanOverrideJump, bool BlockAds)
+/// <param name="YouTubeChannelSearch">
+/// In YouTube's "approved channels only" mode: "my channels" offers a channel search, YouTube's channel-only results are
+/// shown, and other searches go there (§15).
+/// </param>
+public sealed record ExtensionFeatures(bool JumpGuard, bool BlockYouTubeShorts, bool LogSearches, bool CanOverrideJump, bool BlockAds,
+    bool YouTubeChannelSearch = false)
 {
     public static readonly ExtensionFeatures None = new(false, false, false, false, false);
 
     /// <summary>A restricted member's flags; <see cref="None"/> for an unrestricted one (§1: adults ignore all of them).</summary>
     public static ExtensionFeatures Of(FamilyMember member) =>
-        member.IsRestricted ? new(member.JumpGuard, member.BlockYouTubeShorts, member.LogSearches, member.Role == Role.Teen, member.BlockAds) : None;
+        member.IsRestricted
+            ? new(member.JumpGuard, member.BlockYouTubeShorts, member.LogSearches, member.Role == Role.Teen, member.BlockAds, member.YouTubeChannelSearch)
+            : None;
 }

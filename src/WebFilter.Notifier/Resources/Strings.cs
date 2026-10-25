@@ -25,6 +25,7 @@ internal static class Strings
     public static string Request_Title => Get();
     public static string Request_Url => Get();
     public static string Request_YouTube => Get();
+    public static string Request_YouTubeNamed => Get();
     public static string Request_App => Get();
     public static string Request_Time => Get();
     public static string Request_Other => Get();

@@ -296,6 +296,12 @@
   <data name="Request_Message" xml:space="preserve">
     <value>Message: "{0}"</value>
   </data>
+  <data name="Request_ChannelId" xml:space="preserve">
+    <value>Channel id: {0}</value>
+  </data>
+  <data name="Request_FoundInSearch" xml:space="preserve">
+    <value>Found by searching '{0}'</value>
+  </data>
   <data name="Request_SentAt" xml:space="preserve">
     <value>Sent {0}</value>
   </data>
@@ -328,6 +334,18 @@
   </data>
   <data name="Request_Deny" xml:space="preserve">
     <value>Deny</value>
+  </data>
+  <data name="Request_OpenForReview" xml:space="preserve">
+    <value>Open to check</value>
+  </data>
+  <data name="Request_OpenForReviewTip" xml:space="preserve">
+    <value>Opens the channel or site in your own browser, so you can see what is asked for before you decide.</value>
+  </data>
+  <data name="Request_Opened" xml:space="preserve">
+    <value>Opened in your browser.</value>
+  </data>
+  <data name="Request_OpenFailed" xml:space="preserve">
+    <value>The browser could not be opened.</value>
   </data>
   <data name="Done_Approved" xml:space="preserve">
     <value>The request from {0} was approved.</value>
@@ -592,6 +610,9 @@
   </data>
   <data name="Reason_redirect_youtube_home" xml:space="preserve">
     <value>Sent to the approved channels page</value>
+  </data>
+  <data name="Reason_redirect_youtube_channel_search" xml:space="preserve">
+    <value>Sent to a search for channels only</value>
   </data>
   <data name="Reason_blocked_image_search" xml:space="preserve">
     <value>Image search is blocked</value>
@@ -1442,6 +1463,12 @@ Do this only for your home network. On a café, hotel or work network it is safe
   </data>
   <data name="Member_LogSearchesNote" xml:space="preserve">
     <value>What is searched on Google, Bing, YouTube and DuckDuckGo appears in the activity log. The member sees a message in the browser saying their searches are visible to the parents.</value>
+  </data>
+  <data name="Member_YouTubeChannelSearch" xml:space="preserve">
+    <value>May search YouTube for channels</value>
+  </data>
+  <data name="Member_YouTubeChannelSearchHint" xml:space="preserve">
+    <value>The "my channels" page offers a channel search. YouTube shows channels only — no videos and no Shorts — with an "ask for approval" button next to each channel not approved yet. A channel found this way stays blocked until you approve it.</value>
   </data>
   <data name="Rule_SchoolSignIn" xml:space="preserve">
     <value>For school sign-in</value>

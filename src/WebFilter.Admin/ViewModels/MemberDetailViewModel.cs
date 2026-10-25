@@ -540,7 +540,8 @@ public sealed partial class MemberProfileEditor : ObservableObject
 
 /// <summary>
 /// The protection switches of a filtered member (PROTECTION-SPEC §1): image search, jumps to other sites, YouTube Shorts,
-/// ads (§12) and the search-term log. Each switch saves at once and alone (<see cref="SetMember"/> with only that flag).
+/// ads (§12) and the search-term log; and, in YouTube's "approved channels only" mode, the channel search (§15). Each switch
+/// saves at once and alone (<see cref="SetMember"/> with only that flag).
 /// </summary>
 public sealed partial class ProtectionEditor : ObservableObject
 {
@@ -564,6 +565,10 @@ public sealed partial class ProtectionEditor : ObservableObject
     [ObservableProperty] private bool _blockYouTubeShorts;
     [ObservableProperty] private bool _blockAds;
     [ObservableProperty] private bool _logSearches;
+    [ObservableProperty] private bool _youTubeChannelSearch;
+
+    /// <summary>The channel search is offered only while the member's YouTube mode (as stored) is "approved channels only".</summary>
+    public bool ShowsChannelSearch => Member.YouTubeMode == "allowlist";
 
     /// <summary>The service's refusal of the last switch.</summary>
     [ObservableProperty]
@@ -581,6 +586,8 @@ public sealed partial class ProtectionEditor : ObservableObject
             BlockYouTubeShorts = member.BlockYouTubeShorts;
             BlockAds = member.BlockAds;
             LogSearches = member.LogSearches;
+            YouTubeChannelSearch = member.YouTubeChannelSearch;
+            OnPropertyChanged(nameof(ShowsChannelSearch));
         }
         finally
         {
@@ -597,6 +604,9 @@ public sealed partial class ProtectionEditor : ObservableObject
     partial void OnBlockAdsChanged(bool value) => Save(value == Member.BlockAds ? null : new SetMember(MemberId, BlockAds: value));
 
     partial void OnLogSearchesChanged(bool value) => Save(value == Member.LogSearches ? null : new SetMember(MemberId, LogSearches: value));
+
+    partial void OnYouTubeChannelSearchChanged(bool value) =>
+        Save(value == Member.YouTubeChannelSearch ? null : new SetMember(MemberId, YouTubeChannelSearch: value));
 
     private void Save(SetMember? change)
     {
@@ -962,8 +972,9 @@ public sealed class ChannelItemViewModel
     public ChannelItemViewModel(YouTubeChannelDto channel)
     {
         Channel = channel ?? throw new ArgumentNullException(nameof(channel));
-        Name = channel.Title ?? channel.Handle ?? channel.ChannelId;
-        DetailText = Texts.Join(" · ", channel.Title is null ? null : channel.Handle, channel.ChannelId);
+        // "NASA (@nasa)", or the id when no name is known (PROTECTION-SPEC §15); the id itself only next to a name.
+        Name = YouTubeChannelLabel.Of(channel.ChannelId, channel.Title, channel.Handle);
+        DetailText = Name == channel.ChannelId ? null : channel.ChannelId;
         ActionText = Texts.Code("RuleAction_", channel.Action);
     }
 
@@ -976,7 +987,8 @@ public sealed class ChannelItemViewModel
     /// <summary><see cref="Name"/> as shown: a Latin name ("Khan Kids (sim)") keeps its parentheses in the right-to-left page.</summary>
     public string NameText => Texts.Natural(Name);
 
-    public string DetailText { get; }
+    /// <summary>The channel id next to a name; null when the name is the id.</summary>
+    public string? DetailText { get; }
 
     public string ActionText { get; }
 

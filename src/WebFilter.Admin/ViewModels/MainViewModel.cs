@@ -30,7 +30,9 @@ public sealed partial class MainViewModel : ObservableObject, INavigator, IDispo
     private bool _baselineChecked;
     private string _publicNetworks = "";
 
-    public MainViewModel(IAdminClient client, IUiTimer timer, IDialogService dialogs, IClipboardService clipboard, TimeProvider? time = null)
+    /// <param name="browser">Opens a request's site or channel in the parent's own browser ("open for review"); none in tests.</param>
+    public MainViewModel(IAdminClient client, IUiTimer timer, IDialogService dialogs, IClipboardService clipboard, TimeProvider? time = null,
+        IBrowserLauncher? browser = null)
     {
         ArgumentNullException.ThrowIfNull(client);
         _timer = timer ?? throw new ArgumentNullException(nameof(timer));
@@ -38,7 +40,7 @@ public sealed partial class MainViewModel : ObservableObject, INavigator, IDispo
         _ui = SynchronizationContext.Current;
         Context = new FamilyContext(client, time);
         Dashboard = new DashboardViewModel(Context);
-        Requests = new RequestsViewModel(Context);
+        Requests = new RequestsViewModel(Context, browser);
         MemberDetail = new MemberDetailViewModel(Context, dialogs);
         Rules = new RulesViewModel(Context, dialogs);
         Activity = new ActivityViewModel(Context);

@@ -48,13 +48,15 @@ public sealed class HubStore(SqliteDatabase database)
             .ToList();
         _lastSavedEvent = events.LastOrDefault();
 
-        var requests = db.Query<(string Id, string Member, string Device, string Kind, string Target, string Key, long? Minutes, string? Message, string Created, string Status, string? Decided, string? Rule)>(
-                "SELECT id, member_id, device_id, kind, target, target_key, minutes, message, created_at, status, decided_at, created_rule_id FROM access_requests ORDER BY created_at")
+        var requests = db.Query<(string Id, string Member, string Device, string Kind, string Target, string Key, long? Minutes, string? Message, string Created, string Status, string? Decided, string? Rule,
+                string? Title, string? Handle, string? SearchQuery)>(
+                "SELECT id, member_id, device_id, kind, target, target_key, minutes, message, created_at, status, decided_at, created_rule_id, title, handle, search_query FROM access_requests ORDER BY created_at")
             .Select(r => new AccessRequest
             {
                 Id = r.Id, MemberId = r.Member, DeviceId = r.Device, Kind = Enum.Parse<RequestKind>(r.Kind), Target = r.Target, TargetKey = r.Key,
                 Minutes = (int?)r.Minutes, Message = r.Message, CreatedAt = StateJson.Instant(r.Created), Status = Enum.Parse<RequestStatus>(r.Status),
                 DecidedAt = r.Decided is null ? null : StateJson.Instant(r.Decided), CreatedRuleId = r.Rule,
+                Title = r.Title, Handle = r.Handle, SearchQuery = r.SearchQuery,
             }).ToList();
 
         var counters = db.Query<(string Name, long Value)>("SELECT name, value FROM counters").ToDictionary(c => c.Name, c => (int)c.Value);
@@ -109,14 +111,14 @@ public sealed class HubStore(SqliteDatabase database)
 
         foreach (var r in state.Requests)
             db.Execute("""
-                INSERT OR REPLACE INTO access_requests (id, member_id, device_id, kind, target, target_key, minutes, message, created_at, status, decided_at, created_rule_id)
-                VALUES (@Id, @MemberId, @DeviceId, @kind, @Target, @TargetKey, @Minutes, @Message, @created, @status, @decided, @CreatedRuleId)
+                INSERT OR REPLACE INTO access_requests (id, member_id, device_id, kind, target, target_key, minutes, message, created_at, status, decided_at, created_rule_id, title, handle, search_query)
+                VALUES (@Id, @MemberId, @DeviceId, @kind, @Target, @TargetKey, @Minutes, @Message, @created, @status, @decided, @CreatedRuleId, @Title, @Handle, @SearchQuery)
                 """,
                 new
                 {
                     r.Id, r.MemberId, r.DeviceId, kind = r.Kind.ToString(), r.Target, r.TargetKey, r.Minutes, r.Message,
                     created = StateJson.Instant(r.CreatedAt), status = r.Status.ToString(),
-                    decided = r.DecidedAt is { } d ? StateJson.Instant(d) : null, r.CreatedRuleId,
+                    decided = r.DecidedAt is { } d ? StateJson.Instant(d) : null, r.CreatedRuleId, r.Title, r.Handle, r.SearchQuery,
                 }, tx);
 
         foreach (var (name, value) in new[] { ("version", state.Version), ("requests", state.RequestCounter), ("rules", state.RuleCounter) })

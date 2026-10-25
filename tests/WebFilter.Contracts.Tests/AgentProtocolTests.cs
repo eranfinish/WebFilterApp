@@ -62,7 +62,7 @@ public class AgentProtocolTests
     {
         var rules = Encoding.UTF8.GetString(AgentProtocol.Serialize(new RulesResponse(1, [], [], new YouTubePolicy("off", [], []),
             new TimeStateMessage("ok", null, null), new AgentFeatures(JumpGuard: true, BlockYouTubeShorts: true, LogSearches: true, CanOverrideJump: true, BlockAds: true))));
-        Assert.Contains("\"features\":{\"jumpGuard\":true,\"blockYouTubeShorts\":true,\"logSearches\":true,\"canOverrideJump\":true,\"blockAds\":true}", rules);
+        Assert.Contains("\"features\":{\"jumpGuard\":true,\"blockYouTubeShorts\":true,\"logSearches\":true,\"canOverrideJump\":true,\"blockAds\":true,\"youTubeChannelSearch\":false}", rules);
 
         var search = Assert.IsType<ReportSearchRequest>(AgentProtocol.Deserialize(
             """{"type":"reportSearch","v":1,"id":"s1","engine":"youtube","query":"lego","url":"https://www.youtube.com/results?search_query=lego"}"""u8));
@@ -81,7 +81,7 @@ public class AgentProtocolTests
     {
         var baseline = Encoding.UTF8.GetString(AgentProtocol.Serialize(new RulesResponse(4, [], [], new YouTubePolicy("unrestricted", [], []),
             new TimeStateMessage("unlimited", null, null), new AgentFeatures(JumpGuard: true, CanOverrideJump: true, BlockAds: true), "baseline")));
-        Assert.Contains("\"features\":{\"jumpGuard\":true,\"blockYouTubeShorts\":false,\"logSearches\":false,\"canOverrideJump\":true,\"blockAds\":true},\"mode\":\"baseline\"", baseline);
+        Assert.Contains("\"features\":{\"jumpGuard\":true,\"blockYouTubeShorts\":false,\"logSearches\":false,\"canOverrideJump\":true,\"blockAds\":true,\"youTubeChannelSearch\":false},\"mode\":\"baseline\"", baseline);
         Assert.Equal("baseline", Assert.IsType<RulesResponse>(AgentProtocol.Deserialize(Encoding.UTF8.GetBytes(baseline))).Mode);
 
         var older = Assert.IsType<RulesResponse>(AgentProtocol.Deserialize(

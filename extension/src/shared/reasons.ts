@@ -2,7 +2,8 @@ import type { FilterMode, RequestResult, TimeState } from "./protocol";
 
 /**
  * The closed list of reason codes (MVP-PLAN §6, CLAUDE.md rule 8). Order matches ReasonCode in Decision.cs; then the
- * protection features' codes (PROTECTION-SPEC §6) and the parents' baseline protection's (§13).
+ * protection features' codes (PROTECTION-SPEC §6), the parents' baseline protection's (§13) and YouTube channel search's
+ * (§15).
  */
 export const REASON_CODES = [
   "allowed_unrestricted",
@@ -31,6 +32,7 @@ export const REASON_CODES = [
   "blocked_jump",
   "blocked_youtube_shorts",
   "blocked_baseline_adult",
+  "redirect_youtube_channel_search",
 ] as const;
 
 export type ReasonCode = (typeof REASON_CODES)[number];

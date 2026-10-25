@@ -193,6 +193,46 @@ public sealed class HubSyncTests : IAsyncLifetime
         Assert.Equal(("laptop-yoav-q1", "denied"), (decided?.RequestId, decided?.Status));
     }
 
+    /// <summary>
+    /// PROTECTION-SPEC §15 across computers: a YouTube request from the agent's browser brings the channel's names and the
+    /// search to the hub (the parent's notification names the channel), and the approved channel comes back to the agent
+    /// with them — also for a request queued while the hub was off.
+    /// </summary>
+    [Fact]
+    public async Task A_youtube_request_from_an_agent_names_its_channel_at_the_hub_and_the_approval_brings_the_names_back()
+    {
+        LinkYoavsLaptopAccountToThisUser();
+        await PairAndSyncAsync();
+        await using var browser = await ConnectBrowserAsync();
+        const string natGeo = "UCnatgeoKids000000000004", sesame = "UCsesame0000000000000002";
+
+        var asked = await browser.RequestAsync<Contracts.Agent.RequestAccessResponse>(
+            new Contracts.Agent.RequestAccessRequest("youtube", natGeo, null, null, "NatGeo Kids", "@NatGeoKids", "animals"));
+        Assert.Equal("created", asked.Result);
+        var atHub = _hub.WithHub((hub, _) => hub.Requests.Single());
+        Assert.Equal(("NatGeo Kids", "@natgeokids", "animals"), (atHub.Title, atHub.Handle, atHub.SearchQuery));
+        Assert.Contains(_hub.NotificationsSince(null), n => n.Detail == $"youtube:{natGeo}:NatGeo Kids (@natgeokids)");
+
+        _hub.Decide(asked.RequestId!, approve: true, ApproveScope.Host, ApprovalDuration.Always, null, "parent");
+        await Eventually(() => _agent.AgentSnapshotVersion == HubVersion, "the approval's snapshot");
+        Assert.Equal(new YouTubeChannel(natGeo, "@natgeokids", "NatGeo Kids", "yoav", RuleAction.Allow),
+            _agent.WithAgent((agent, _) => agent.View().Config.YouTubeChannels.Single(c => c.ChannelId == natGeo)));
+
+        // Queued while the hub is off: the names travel in the upload.
+        await _sync.StopAsync(CancellationToken.None);
+        await _server.StopAsync(CancellationToken.None);
+        _agent.SetHubReachable(false);
+        var queued = await browser.RequestAsync<Contracts.Agent.RequestAccessResponse>(
+            new Contracts.Agent.RequestAccessRequest("youtube", sesame, null, null, "Sesame", "@sesame", null));
+        Assert.Equal("queued", queued.Result);
+        await StartServerAsync();
+        _sync = new HubSyncService(_agent, NullLogger<HubSyncService>.Instance);
+        await _sync.StartAsync(CancellationToken.None);
+        await Eventually(() => _hub.WithHub((hub, _) => hub.Requests.Count) == 2, "the queued request reached the hub");
+        var delivered = _hub.WithHub((hub, _) => hub.Requests.Single(r => r.Target == sesame));
+        Assert.Equal(("Sesame", "@sesame", (string?)null), (delivered.Title, delivered.Handle, delivered.SearchQuery));
+    }
+
     /// <summary>The settings give yoav's account on laptop-yoav the SID of whoever runs the tests, who then plays the child's browser.</summary>
     private void LinkYoavsLaptopAccountToThisUser() => _hub.WithHub((hub, now) =>
     {

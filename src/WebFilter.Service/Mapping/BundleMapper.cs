@@ -12,7 +12,7 @@ public static class BundleMapper
         Version = version,
         TimeZone = ZoneId(config.TimeZone),
         Members = config.Members.Select(m => new MemberDto(m.Id, m.DisplayName, Lower(m.Role), m.Age, Lower(m.FilterMode), Lower(m.YouTubeMode),
-            m.BlockImageSearch, m.JumpGuard, m.BlockYouTubeShorts, m.LogSearches, m.BlockAds)).ToList(),
+            m.BlockImageSearch, m.JumpGuard, m.BlockYouTubeShorts, m.LogSearches, m.BlockAds, m.YouTubeChannelSearch)).ToList(),
         Devices = config.Devices.Select(d => new DeviceDto(d.Id, d.Os, d.Role, d.Accounts.Select(a => new AccountDto(a.AccountId, a.Name, a.MemberId, a.IsAdmin, a.Guest)).ToList())).ToList(),
         Categories = config.Categories.ToDictionary(kv => kv.Key, kv => kv.Value),
         MemberCategories = config.MemberCategories.Select(c => new MemberCategoryDto(c.MemberId, c.Category, Lower(c.Action))).ToList(),
@@ -40,7 +40,7 @@ public static class BundleMapper
         {
             TimeZone = TimeZoneInfo.FindSystemTimeZoneById(bundle.TimeZone),
             Members = (bundle.Members ?? []).Select(m => new FamilyMember(m.Id, m.DisplayName, Parse<Role>(m.Role), m.Age, Parse<FilterMode>(m.FilterMode), Parse<YouTubeMode>(m.YouTubeMode),
-                m.BlockImageSearch, m.JumpGuard, m.BlockYouTubeShorts, m.LogSearches, m.BlockAds)).ToList(),
+                m.BlockImageSearch, m.JumpGuard, m.BlockYouTubeShorts, m.LogSearches, m.BlockAds, m.YouTubeChannelSearch)).ToList(),
             Devices = (bundle.Devices ?? []).Select(d => new Device(d.Id, d.Os, d.Role, (d.Accounts ?? [])
                 .Select(a => new DeviceAccount(a.AccountId, a.Name, a.Member, a.IsAdmin, a.Guest && a.Member is null)).ToList())).ToList(),
             MemberCategories = (bundle.MemberCategories ?? []).Select(c => new MemberCategory(c.Member, c.Category, Parse<RuleAction>(c.Action))).ToList(),

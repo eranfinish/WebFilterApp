@@ -143,6 +143,20 @@
         { "do": "service", "device": "pc-kids", "state": "down" },
         { "do": "requestAccess", "member": "noa", "device": "pc-kids", "kind": "url", "target": "https://pbskids.org/", "expect": { "result": "unavailable" } }
       ]
+    },
+    {
+      "id": "AR-011",
+      "title": "A YouTube request carries the channel’s title and handle (and the channel search it came from); the approval stores the names with the channel",
+      "platforms": ["windows"],
+      "start": "2026-11-01T16:00",
+      "setup": { "members": [ { "id": "noa", "youTubeChannelSearch": true } ] },
+      "steps": [
+        { "do": "requestAccess", "member": "noa", "kind": "youtube", "target": "UCnatgeoKids000000000004", "title": "NatGeo Kids (sim)", "handle": "@NatGeoKids-Sim", "searchQuery": "animals", "as": "r1", "expect": { "result": "created" } },
+        { "do": "requestAccess", "at": "16:01", "member": "noa", "kind": "youtube", "target": "UCnatgeoKids000000000004", "expect": { "result": "merged", "sameAs": "r1" }, "note": "a request without names (an older extension) keeps the names already known" },
+        { "do": "expectRequests", "status": "pending", "expect": { "count": 1, "items": [ { "request": "r1", "kind": "youtube", "targetKey": "UCnatgeoKids000000000004", "title": "NatGeo Kids (sim)", "handle": "@natgeokids-sim", "searchQuery": "animals" } ] }, "note": "handles are stored in lower case" },
+        { "do": "admin", "action": "approveRequest", "request": "r1", "duration": "always" },
+        { "do": "youtube", "member": "noa", "page": { "url": "https://www.youtube.com/@NatGeoKids-Sim", "handle": "@natgeokids-sim" }, "expect": { "decision": "allow", "reason": "allowed_youtube_channel" }, "note": "the approved channel was stored with its handle, so its handle page matches without page data" }
+      ]
     }
   ]
 }

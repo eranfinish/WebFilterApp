@@ -29,6 +29,44 @@ export interface YouTubeUrl {
   userName?: string;
   videoId?: string;
   playlistId?: string;
+  /** Search pages: the terms (search_query, or q on YouTube Music), trimmed; absent when there are none. */
+  searchQuery?: string;
+  /** Search pages: YouTube's "Type: Channels" filter is the only filter (PROTECTION-SPEC §15). */
+  channelsOnly?: boolean;
+}
+
+/**
+ * YouTube's search filter "Type: Channels" (`sp`, base64 of the filter message: filters { type: channel }), as in
+ * YouTubeUrlParser.ChannelFilter. Checked on youtube.com on 2026-10-25: the filter's own link is `sp=EgIQAg%253D%253D`.
+ */
+export const CHANNEL_FILTER = "EgIQAg==";
+/** CHANNEL_FILTER as YouTube's own "Channels" link writes it in a URL (encoded twice). */
+export const CHANNEL_FILTER_PARAMETER = "EgIQAg%253D%253D";
+export const YOUTUBE_ORIGIN = "https://www.youtube.com";
+
+/**
+ * YouTube's results for `query` restricted to channels (PROTECTION-SPEC §15), on `origin` (a youtube.com page's
+ * scheme, host and port). The same URL as YouTubeUrlParser.ChannelSearchUrl.
+ */
+export function channelSearchUrl(query: string, origin: string = YOUTUBE_ORIGIN): string {
+  return `${origin}/results?search_query=${encodeURIComponent(query.trim())}&sp=${CHANNEL_FILTER_PARAMETER}`;
+}
+
+/**
+ * Whether the only `sp` parameter is CHANNEL_FILTER: encoded once or twice (YouTube's own links), with or without the
+ * padding. Another filter, a sort order or a second `sp` is not channels only. `search` is the raw query string.
+ */
+function isChannelFilter(search: string): boolean {
+  const values = new URLSearchParams(search).getAll("sp");
+  if (values.length !== 1) return false;
+  let value = values[0]!;
+  for (let i = 0; i < 2; i++) {
+    if (value === CHANNEL_FILTER || value === "EgIQAg") return true;
+    const decoded = unescape(value);
+    if (decoded === value) return false;
+    value = decoded;
+  }
+  return false;
 }
 
 const NOT_YOUTUBE: YouTubeUrl = Object.freeze({ kind: "not_youtube" });
@@ -131,8 +169,12 @@ export function parseYouTubeUrl(url: string): YouTubeUrl {
       if (playlistId !== undefined) return { kind: "playlist", site, playlistId };
       break;
     case "results":
-    case "search":
-      return { kind: "search", site };
+    case "search": {
+      const terms = (queryValue(parsed.search, "search_query") ?? queryValue(parsed.search, "q"))?.trim();
+      const result: YouTubeUrl = { kind: "search", site, channelsOnly: isChannelFilter(parsed.search) };
+      if (terms) result.searchQuery = terms;
+      return result;
+    }
     case "channel":
       if (second !== undefined) return { kind: "channel", site, channelId: second };
       break;

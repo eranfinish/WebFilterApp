@@ -10,7 +10,14 @@
   <main>
     <div class="brand"><img src="icons/icon-32.png" width="20" height="20" alt=""><span>WebFilter</span></div>
     <h1 data-i18n="myChannelsHeading">הערוצים שלי ב-YouTube</h1>
-    <p class="muted" data-i18n="myChannelsIntro">אלה הערוצים שההורים אישרו לך.</p>
+    <p id="intro" class="muted" data-i18n="myChannelsIntro">אלה הערוצים שההורים אישרו לך.</p>
+    <form id="search" class="channel-search" role="search" hidden>
+      <label for="query" data-i18n="myChannelsSearchLabel">חפש ערוץ</label>
+      <div class="search-row">
+        <input id="query" type="search" maxlength="200" autocomplete="off" required data-i18n-placeholder="myChannelsSearchPlaceholder">
+        <button id="search-button" type="submit" data-i18n="myChannelsSearchButton">חיפוש</button>
+      </div>
+    </form>
     <ul id="channels" class="channels"></ul>
     <p id="empty" class="result" data-i18n="myChannelsEmpty" hidden>עדיין לא אושרו ערוצים. אפשר לבקש מההורים להוסיף.</p>
   </main>

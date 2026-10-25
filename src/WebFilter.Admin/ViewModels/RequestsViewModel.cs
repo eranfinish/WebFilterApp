@@ -7,15 +7,29 @@ using CommunityToolkit.Mvvm.Input;
 using WebFilter.Admin.Resources;
 using WebFilter.Admin.Services;
 using WebFilter.Contracts.Admin;
+using WebFilter.Contracts.Hub;
 
 namespace WebFilter.Admin.ViewModels;
 
-/// <summary>Pending access requests with approve/deny (MVP-PLAN §8.1), and the most recent decisions.</summary>
+/// <summary>
+/// Pending access requests with approve/deny (MVP-PLAN §8.1), and the most recent decisions. A pending site or YouTube
+/// request can be opened in the parent's own browser first ("open for review", <see cref="IBrowserLauncher"/>).
+/// </summary>
 public sealed partial class RequestsViewModel : PageViewModel
 {
     public const int RecentCount = 20;
 
-    public RequestsViewModel(FamilyContext context) : base(context) => Context.PropertyChanged += OnContextChanged;
+    private readonly IBrowserLauncher? _browser;
+
+    /// <param name="browser">Opens a request's site or channel for review; without one the page offers no such button.</param>
+    public RequestsViewModel(FamilyContext context, IBrowserLauncher? browser = null) : base(context)
+    {
+        _browser = browser;
+        Context.PropertyChanged += OnContextChanged;
+    }
+
+    /// <summary>Requests can be opened in the parent's browser before deciding.</summary>
+    public bool CanOpenForReview => _browser is not null;
 
     public override string Title => Strings.Nav_Requests;
 
@@ -58,6 +72,15 @@ public sealed partial class RequestsViewModel : PageViewModel
     internal Task DenyAsync(RequestItemViewModel item) =>
         ActAsync(item.BuildDenial(), Texts.Format(Strings.Done_Denied, item.MemberName));
 
+    /// <summary>Opens what <paramref name="item"/> asks for — the channel's page or the site — in the parent's own browser.</summary>
+    internal void OpenForReview(RequestItemViewModel item)
+    {
+        if (_browser is null || item.ReviewAddress is not { } address) return;
+        var opened = _browser.TryOpen(address);
+        StatusMessage = opened ? Strings.Request_Opened : null;
+        ErrorMessage = opened ? null : Strings.Request_OpenFailed;
+    }
+
     private void OnContextChanged(object? sender, PropertyChangedEventArgs e)
     {
         if (e.PropertyName == nameof(FamilyContext.PendingRequestCount))
@@ -82,9 +105,21 @@ public sealed partial class RequestItemViewModel : ObservableObject
         Request = request;
         MemberName = context.MemberName(request.MemberId);
         KindText = Texts.Code("RequestKind_", request.Kind);
-        TargetText = request.Kind == "time"
-            ? Texts.Format(Strings.Request_TimeTarget, Texts.Minutes(request.Minutes ?? 15))
-            : request.Target;
+        // A channel by its name, "NASA (@nasa)", when the child's browser knew it (PROTECTION-SPEC §15); else its id.
+        TargetText = request.Kind switch
+        {
+            "time" => Texts.Format(Strings.Request_TimeTarget, Texts.Minutes(request.Minutes ?? 15)),
+            "youtube" => YouTubeChannelLabel.Of(request.Target, request.Title, request.Handle),
+            _ => request.Target,
+        };
+        ChannelText = IsYouTube ? Texts.Natural(TargetText) : null;
+        ChannelIdText = IsYouTube && TargetText != request.Target ? Texts.Format(Strings.Request_ChannelId, Texts.Ltr(request.Target)) : null;
+        FoundInSearchText = IsYouTube && !string.IsNullOrWhiteSpace(request.SearchQuery)
+            ? Texts.Format(Strings.Request_FoundInSearch, Texts.Natural(request.SearchQuery.Trim()))
+            : null;
+        ReviewAddress = ReviewAddressOf(request);
+        CanOpenForReview = owner?.CanOpenForReview == true && ReviewAddress is not null;
+        OpenForReviewCommand = new RelayCommand(() => owner?.OpenForReview(this));
         MessageText = string.IsNullOrWhiteSpace(request.Message) ? null : Texts.Format(Strings.Request_Message, request.Message.Trim());
         SentText = Texts.Format(Strings.Request_SentAt, context.FormatDateTime(request.CreatedAt));
         StatusText = request.DecidedAt is { } decided
@@ -105,6 +140,24 @@ public sealed partial class RequestItemViewModel : ObservableObject
     public string Kind => Request.Kind;
 
     public bool IsUrl => Request.Kind == "url";
+
+    public bool IsYouTube => Request.Kind == "youtube";
+
+    /// <summary>youtube: the channel's name (or id) in its own direction, for the pending card.</summary>
+    public string? ChannelText { get; }
+
+    /// <summary>youtube: "channel id: UC…" under a channel shown by its name; null when only the id is known.</summary>
+    public string? ChannelIdText { get; }
+
+    /// <summary>youtube: "found in the search '…'" when the child found the channel with the channel search.</summary>
+    public string? FoundInSearchText { get; }
+
+    /// <summary>What "open for review" opens: the channel's page, or the requested site's address; null for other kinds.</summary>
+    public Uri? ReviewAddress { get; }
+
+    public bool CanOpenForReview { get; }
+
+    public ICommand OpenForReviewCommand { get; }
 
     public string MemberName { get; }
 
@@ -153,6 +206,20 @@ public sealed partial class RequestItemViewModel : ObservableObject
     }
 
     public DecideRequest BuildDenial() => new(Id, "deny");
+
+    /// <summary>
+    /// youtube: https://www.youtube.com/channel/‹id› (a channel id only, never another address); url: the requested address
+    /// when it is http or https. Anything else has none.
+    /// </summary>
+    internal static Uri? ReviewAddressOf(RequestDto request) => request.Kind switch
+    {
+        "youtube" when ChannelId().IsMatch(request.Target) => new Uri($"https://www.youtube.com/channel/{request.Target}"),
+        "url" when Uri.TryCreate(request.Target, UriKind.Absolute, out var site) && (site.Scheme == Uri.UriSchemeHttps || site.Scheme == Uri.UriSchemeHttp) => site,
+        _ => null,
+    };
+
+    [System.Text.RegularExpressions.GeneratedRegex("^UC[A-Za-z0-9_-]{22}$")]
+    private static partial System.Text.RegularExpressions.Regex ChannelId();
 
     private static IEnumerable<(string Label, string Value)> ChoicesFor(RequestDto request)
     {

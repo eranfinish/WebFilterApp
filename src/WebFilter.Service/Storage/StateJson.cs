@@ -16,7 +16,7 @@ internal static class StateJson
     private sealed record EventDto(string Type, DateTimeOffset At, string? MemberId, string? DeviceId, string? Reason, string? Url, string? App, int? RemainingMinutes, string? Detail);
 
     private sealed record RequestDto(string Id, string MemberId, string DeviceId, string Kind, string Target, string TargetKey, int? Minutes, string? Message,
-        DateTimeOffset CreatedAt, string Status, DateTimeOffset? DecidedAt, string? CreatedRuleId);
+        DateTimeOffset CreatedAt, string Status, DateTimeOffset? DecidedAt, string? CreatedRuleId, string? Title = null, string? Handle = null, string? SearchQuery = null);
 
     private sealed record RuntimeDto(DateTimeOffset? PausedUntil, DateTimeOffset? HomeworkUntil, List<GrantDto> Grants);
 
@@ -49,7 +49,8 @@ internal static class StateJson
     }
 
     public static string Request(AccessRequest r) =>
-        JsonSerializer.Serialize(new RequestDto(r.Id, r.MemberId, r.DeviceId, r.Kind.ToString(), r.Target, r.TargetKey, r.Minutes, r.Message, r.CreatedAt, r.Status.ToString(), r.DecidedAt, r.CreatedRuleId), Options);
+        JsonSerializer.Serialize(new RequestDto(r.Id, r.MemberId, r.DeviceId, r.Kind.ToString(), r.Target, r.TargetKey, r.Minutes, r.Message, r.CreatedAt, r.Status.ToString(), r.DecidedAt, r.CreatedRuleId,
+            r.Title, r.Handle, r.SearchQuery), Options);
 
     public static AccessRequest Request(string json)
     {
@@ -58,6 +59,7 @@ internal static class StateJson
         {
             Id = d.Id, MemberId = d.MemberId, DeviceId = d.DeviceId, Kind = Enum.Parse<RequestKind>(d.Kind), Target = d.Target, TargetKey = d.TargetKey,
             Minutes = d.Minutes, Message = d.Message, CreatedAt = d.CreatedAt, Status = Enum.Parse<RequestStatus>(d.Status), DecidedAt = d.DecidedAt, CreatedRuleId = d.CreatedRuleId,
+            Title = d.Title, Handle = d.Handle, SearchQuery = d.SearchQuery,
         };
     }
 

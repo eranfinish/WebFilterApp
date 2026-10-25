@@ -46,7 +46,7 @@ cd tests/simulation/tools && npm install && npm run validate
 
 | שדה | כלל מיזוג |
 |-----|-----------|
-| `members` | מיזוג שדות לפי `id` (כולל דגלי ההגנה `blockImageSearch`, `jumpGuard`, `blockYouTubeShorts`, `logSearches`, `blockAds` — ברירת מחדל `false`) |
+| `members` | מיזוג שדות לפי `id` (כולל דגלי ההגנה `blockImageSearch`, `jumpGuard`, `blockYouTubeShorts`, `logSearches`, `blockAds` וההרשאה `youTubeChannelSearch` — ברירת מחדל `false`) |
 | `schedules` | אם מופיע בן משפחה — **מחליף את כל** חלונות הזמן שלו מה-fixture |
 | `dailyLimits` | מחליף את המכסה של אותו בן משפחה באותם ימים |
 | `categories` | מתווספת (קטגוריה באותו שם מוחלפת) |
@@ -80,6 +80,7 @@ cd tests/simulation/tools && npm install && npm run validate
 | סכמה לא http/https | `not_applicable` |
 | YouTube | הדומיינים של YouTube נקבעים לפי `youtubeMode` **בלבד**, בלי קשר ל-`filterMode`. חריג: `accounts.youtube.com` (שדרכו עובר הכניסה לחשבון Google, בלי תוכן) מותר (`allowed_default`) בכל מצב YouTube — גם `off` וגם בשיעורי בית; כשהזמן נגמר הוא חסום כמו כל השאר |
 | ערוץ YouTube | התאמה לפי `channelId`, או לפי `handle` אם הוא שמור ברשומת הערוץ (לא רגיש לאותיות). במצב "רק מאושרים": בלי זהות ערוץ → `blocked_youtube_unknown`; דף הבית והחיפוש → `redirect_youtube_home` |
+| חיפוש ערוצים (`youTubeChannelSearch`, PROTECTION-SPEC §15) | רק במצב "רק מאושרים", לבן משפחה עם הדגל: דף תוצאות ב-`youtube.com` (www או בלי) שיש בו מונחי חיפוש (`search_query`; ב-YouTube Music ‏`q`) ושהמסנן היחיד שלו הוא "סוג: ערוצים" (`sp=EgIQAg==`, מקודד פעם או פעמיים — `EgIQAg%253D%253D` הוא איך ש-YouTube עצמו כותב אותו) → `allowed_default`. כל חיפוש אחר עם מונחים — בלי מסנן, מסנן אחר, שני `sp`, `m.youtube.com`, YouTube Music → `redirect_youtube_channel_search` (אותם מונחים, מסונן לערוצים). חיפוש בלי מונחים ודף הבית → `redirect_youtube_home` כמו קודם. ערוץ שנמצא בחיפוש עדיין חסום עד שמאשרים אותו. בלי הדגל, ובמצבי YouTube האחרים — אין שינוי. זמן ושיעורי בית קודמים לכל זה |
 | חשבון לא מקושר | חשבון Windows לא-מנהל שעדיין לא קושר לבן משפחה מקבל "רק מאושרים" בלי שום היתר מלבד "מותר תמיד", עד שההורה מקשר אותו |
 | חיפוש תמונות (`blockImageSearch`) | לבן משפחה מסונן עם הדגל — כללים מובנים (`builtin-image-search-*`) → `blocked_image_search`: Google ‏`/search` עם `udm=2` או `tbm=isch` (פרמטר בכל מקום ב-query, לא ב-fragment ולא בתוך ערך של פרמטר אחר) ו-`/imghp`, `images.google.*`, `lens.google.com`, `bing.com/images`, DuckDuckGo עם `ia=images`/`iax=images`, Yandex ‏`/images`. גוברים על **כל** כלל, גם "מותר תמיד" וחינוכי, ובכל מצב שבו בן המשפחה מסונן — בתוך החלון, כשהזמן נגמר ובשיעורי בית; השהיה מבטלת אותם. בלי הדגל, או לבן משפחה ללא הגבלה — אין כללים כאלה. חיפוש רגיל ותמונות בתוך דף תוצאות רגיל לא נחסמים |
 | AI Mode של Google | כשהקטגוריות של בן משפחה מסונן חוסמות את `ai-chat` — היא חסומה לו, או שהוא במצב "רק מאושרים" וההורה לא התיר אותה — כלל מובנה `builtin-ai-mode-google` חוסם את `google.*/search` עם `udm=50` (בכל סדר פרמטרים) → `blocked_rule`, וגובר על כל כלל כמו חיפוש התמונות. חיפוש רגיל לא נחסם |
@@ -155,7 +156,8 @@ cd tests/simulation/tools && npm install && npm run validate
 | `cooldown` | 60 דקות אחרי דחייה, לאותו יעד |
 | `as` | שם מקומי לבקשה בתוך התרחיש, כדי לאשר/לדחות אותה בהמשך |
 | אישור `url` | `approveAs: host` (ברירת מחדל) → כלל `domain` אישי על ה-`target_key`; `approveAs: page` → כלל `prefix` על מארח + נתיב (בלי query). סיבה בהמשך: `allowed_rule` |
-| אישור `youtube` / `app` | ערוץ מאושר (`allowed_youtube_channel`) / כלל אפליקציה (`allowed_rule`) לבן המשפחה |
+| אישור `youtube` / `app` | ערוץ מאושר (`allowed_youtube_channel`) / כלל אפליקציה (`allowed_rule`) לבן המשפחה. רשומה קודמת של בן המשפחה לאותו ערוץ (גם חסימה) מוחלפת ברשומת ההיתר |
+| שמות ערוץ (`title`, `handle`, `searchQuery`, PROTECTION-SPEC §15) | בקשת `youtube` יכולה לשאת את שם הערוץ, ה-handle שלו ואת חיפוש הערוצים שבו נמצא — לתצוגה להורים בלבד, לא להחלטות. הם מנוקים בכניסה: רווחים מצומצמים, בלי תווי בקרה ותווי כיוון, אורך מוגבל (שם 100, חיפוש 200), handle באותיות קטנות עם `@` (אחרת נשמט). בקשה שמתמזגת משלימה שמות חסרים בבקשה הפתוחה. אישור שומר את השם וה-handle ברשומת הערוץ (או משאיר את מה שהיה בה), ולכן דף ה-handle של הערוץ מתאים אחר כך גם בלי נתוני דף. בבקשות מסוג אחר — נשמטים |
 | משך | `minutes: N` → פג אחרי N דקות · `duration: today` → פג בחצות המקומית · `duration: always` → בלי תפוגה |
 | אישור `time` | כמו `extendTime`, עם `minutes` מהבקשה או ממה שההורה בחר |
 | `expectRequests` | בודק את רשימת הבקשות ב-Hub (או בסוכן, עם `device`) |

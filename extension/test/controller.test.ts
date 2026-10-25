@@ -561,13 +561,13 @@ describe("YouTube detections", () => {
     expect(await c.decideYouTubeDetection({ ...detection("https://www.youtube.com/"), kind: "home" }, "https://www.youtube.com/")).toEqual({
       decision: "redirect",
       reason: "redirect_youtube_home",
-      navigateTo: "chrome-extension://testextensionid/my-channels.html",
+      navigateTo: "chrome-extension://testextensionid/my-channels.html#https://www.youtube.com",
     });
     // SPA: the detector's path wins when the origin matches the frame's.
     expect(await c.decideYouTubeDetection(detection("https://www.youtube.com/watch?v=v2", "UCkhanKids00000000000001"), url)).toMatchObject({ decision: "allow" });
     // A frame that is not YouTube is ignored.
     expect(await c.decideYouTubeDetection(detection(url), "https://evil.example/")).toEqual({ decision: "stale" });
-    expect(c.myChannels()).toEqual({ ready: true, mode: "allowlist", channels: YOUTUBE.allowed });
+    expect(c.myChannels()).toEqual({ ready: true, mode: "allowlist", channels: YOUTUBE.allowed, channelSearch: false });
   });
 
   it("disconnected → blocked (service unavailable); inert → allowed", async () => {

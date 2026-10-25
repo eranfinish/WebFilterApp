@@ -30,8 +30,8 @@ public sealed class StorageTests : IDisposable
     [Fact]
     public void Migrations_are_applied_once()
     {
-        Assert.Equal(5, Db("hub.db", "hub").SchemaVersion);
-        Assert.Equal(5, Db("hub.db", "hub").SchemaVersion);
+        Assert.Equal(6, Db("hub.db", "hub").SchemaVersion);
+        Assert.Equal(6, Db("hub.db", "hub").SchemaVersion);
         Assert.Equal(2, Db("agent.db", "agent").SchemaVersion);
     }
 
@@ -73,7 +73,7 @@ public sealed class StorageTests : IDisposable
     public void Member_flags_and_windows_features_round_trip_and_default_when_missing()
     {
         var config = PolicyTests.WithFeatures(Fixture(), new WindowsFeatures(NotificationsAndSync: false, OneDrive: true, WebSearchInStart: true));
-        config.Members[0] = config.Members[0] with { BlockImageSearch = true, JumpGuard = true, BlockYouTubeShorts = true, LogSearches = true, BlockAds = true };
+        config.Members[0] = config.Members[0] with { BlockImageSearch = true, JumpGuard = true, BlockYouTubeShorts = true, LogSearches = true, BlockAds = true, YouTubeChannelSearch = true };
         config.Members[1] = config.Members[1] with { JumpGuard = true };
         config.Members[2] = config.Members[2] with { BlockAds = true };
 
@@ -84,7 +84,7 @@ public sealed class StorageTests : IDisposable
         var older = Fixture();
         Assert.Equal(WindowsFeatures.Default, older.WindowsFeatures);
         Assert.Equal((true, true, false), (older.WindowsFeatures.NotificationsAndSync, older.WindowsFeatures.OneDrive, older.WindowsFeatures.WebSearchInStart));
-        Assert.All(older.Members, m => Assert.False(m.BlockImageSearch || m.JumpGuard || m.BlockYouTubeShorts || m.LogSearches || m.BlockAds));
+        Assert.All(older.Members, m => Assert.False(m.BlockImageSearch || m.JumpGuard || m.BlockYouTubeShorts || m.LogSearches || m.BlockAds || m.YouTubeChannelSearch));
     }
 
     /// <summary>PROTECTION-SPEC §13 through the bundle: the baseline switches round-trip; an older bundle has them all on.</summary>
@@ -209,6 +209,32 @@ public sealed class StorageTests : IDisposable
         // Counters continue: the next request gets a fresh id.
         restored.CreateRequest(new AccessRequestDraft("yoav", "pc-kids", RequestKind.YouTube, "UCgamerX0000000000000003", "UCgamerX0000000000000003", null, null, Now), out var next);
         Assert.NotEqual(request.Id, next!.Id);
+    }
+
+    /// <summary>
+    /// PROTECTION-SPEC §15: a YouTube request's channel names and search survive a restart on the hub (access_requests, 006)
+    /// and in an agent's queue (its JSON); a request without them has none.
+    /// </summary>
+    [Fact]
+    public void A_youtube_requests_names_survive_a_restart_on_the_hub_and_in_the_agent_queue()
+    {
+        const string channel = "UCnatgeoKids000000000004";
+        var hub = new HubCore(Fixture());
+        hub.CreateRequest(new AccessRequestDraft("noa", "pc-kids", RequestKind.YouTube, channel, channel, null, null, Now, "NatGeo Kids", "@natgeokids", "animals"), out _);
+        hub.CreateRequest(new AccessRequestDraft("noa", "pc-kids", RequestKind.Url, "https://pbskids.org/", "pbskids.org", null, null, Now), out _);
+        new HubStore(Db("hub.db", "hub")).Save(hub.Export(), Now);
+
+        var requests = HubCore.Restore(new HubStore(Db("hub.db", "hub")).Load()!).Requests;
+        Assert.Equal(("NatGeo Kids", "@natgeokids", "animals"), (requests[0].Title, requests[0].Handle, requests[0].SearchQuery));
+        Assert.Equal(((string?)null, (string?)null, (string?)null), (requests[1].Title, requests[1].Handle, requests[1].SearchQuery));
+
+        var agent = new AgentCore("pc-kids") { HubReachable = false };
+        agent.Apply(hub.Snapshot());
+        agent.RequestAccess(new AccessRequestDraft("noa", "pc-kids", RequestKind.YouTube, channel, channel, null, null, Now, "NatGeo Kids", "@natgeokids", "animals"),
+            _ => RequestResult.Queued);
+        new AgentStore(Db("agent.db", "agent")).Save(agent.Export());
+        var queued = Assert.Single(AgentCore.Restore(new AgentStore(Db("agent.db", "agent")).Load("pc-kids")!).QueuedRequests);
+        Assert.Equal(("NatGeo Kids", "@natgeokids", "animals"), (queued.Title, queued.Handle, queued.SearchQuery));
     }
 
     [Fact]

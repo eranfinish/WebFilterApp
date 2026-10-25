@@ -35,7 +35,58 @@ public sealed class AccessRequest
     public DateTimeOffset? DecidedAt { get; set; }
     public string? CreatedRuleId { get; set; }
 
+    /// <summary>youtube: the channel's title as the child's browser saw it (PROTECTION-SPEC §15); null when unknown.</summary>
+    public string? Title { get; set; }
+
+    /// <summary>youtube: the channel's handle ("@name", lower case); null when unknown.</summary>
+    public string? Handle { get; set; }
+
+    /// <summary>youtube: the channel search the child found the channel with, when it came from one.</summary>
+    public string? SearchQuery { get; set; }
+
     public AccessRequest Clone() => (AccessRequest)MemberwiseClone();
+}
+
+/// <summary>
+/// The names a YouTube request carries (PROTECTION-SPEC §15). They come from the child's browser, which read them from
+/// YouTube's page, so they are only shown to the parents and stored with an approved channel — never matched or trusted
+/// otherwise — and are cleaned on the way in: trimmed, no control characters, of bounded length, a handle in the form
+/// "@name" in lower case. Anything that does not fit is dropped (null).
+/// </summary>
+public static class RequestNames
+{
+    public const int MaxTitle = 100, MaxHandle = 101, MaxSearchQuery = 200;
+
+    public static string? Title(string? value) => Clean(value, MaxTitle);
+
+    public static string? SearchQuery(string? value) => Clean(value, MaxSearchQuery);
+
+    /// <summary>"@name" in lower case: letters and digits of any script, '.', '_', '-' and '·'; anything else is not a handle.</summary>
+    public static string? Handle(string? value)
+    {
+        var text = value?.Trim();
+        if (string.IsNullOrEmpty(text)) return null;
+        if (text[0] != '@') text = "@" + text;
+        if (text.Length is < 2 or > MaxHandle) return null;
+        foreach (var c in text.AsSpan(1))
+            if (!char.IsLetterOrDigit(c) && c is not ('.' or '_' or '-' or '·')) return null;
+        return text.ToLowerInvariant();
+    }
+
+    /// <summary>
+    /// Whitespace and control characters become single spaces; direction marks and overrides (format characters, except
+    /// the joiners emoji need) are dropped, so a name cannot turn the text around it in the parents' screens.
+    /// </summary>
+    private static string? Clean(string? value, int max)
+    {
+        if (value is null) return null;
+        var text = new string(value
+            .Where(c => char.GetUnicodeCategory(c) != System.Globalization.UnicodeCategory.Format || c is '‌' or '‍')
+            .Select(c => char.IsControl(c) || char.IsWhiteSpace(c) ? ' ' : c).ToArray());
+        text = string.Join(' ', text.Split(' ', StringSplitOptions.RemoveEmptyEntries));
+        if (text.Length == 0) return null;
+        return text.Length <= max ? text : text[..max].TrimEnd();
+    }
 }
 
 /// <summary>

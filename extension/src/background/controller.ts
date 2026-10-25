@@ -4,6 +4,7 @@ import { classifyNavigation, wouldBlock } from "../shared/dnr-match";
 import { explainBlock } from "../shared/explain";
 import { JUMP_REASON } from "../shared/jump";
 import type {
+  ChannelSearchState,
   DecisionReply,
   MyChannelsReply,
   OverrideJumpReply,
@@ -13,6 +14,7 @@ import type {
   StatusSnapshot,
   YouTubeDetectReply,
   YouTubeDetection,
+  YouTubeRequestChannelMessage,
   YouTubeStoredState,
 } from "../shared/messages";
 import { YOUTUBE_STATE_KEY } from "../shared/messages";
@@ -40,6 +42,7 @@ import {
   reportableReason,
   requestActionFor,
 } from "../shared/reasons";
+import { cleanHandle, cleanSearchQuery, cleanTitle } from "../shared/request-names";
 import { MAX_SEARCH_URL_LENGTH, SearchDeduper, extractSearch } from "../shared/search";
 import { SHORTS_REASON, shortsRule } from "../shared/shorts";
 import {
@@ -51,8 +54,8 @@ import {
   nextWarning,
   timeTransition,
 } from "../shared/time-actions";
-import { type YouTubeContext, approvedChannels, decideYouTube } from "../shared/youtube-decision";
-import { isChannelId, isShortsUrl, isYouTubeHost } from "../shared/youtube-url";
+import { type YouTubeContext, approvedChannels, channelSearchTarget, decideYouTube } from "../shared/youtube-decision";
+import { isChannelId, isShortsUrl, isYouTubeHost, parseYouTubeUrl, youTubeSiteOf } from "../shared/youtube-url";
 import {
   SHORTS_RULE_ID,
   clearOwnSessionRules,
@@ -567,9 +570,16 @@ export class Controller {
 
   private async storeYouTubeState(mode: YouTubeStoredState["mode"]): Promise<void> {
     try {
-      const blockShorts =
-        mode !== "inert" && mode !== "failclosed" && this.mode !== "unrestricted" && this.rules?.features.blockYouTubeShorts === true;
-      const state: YouTubeStoredState = { mode, version: this.rules?.rulesVersion ?? null, ...(blockShorts ? { blockShorts } : {}) };
+      const filtered = mode !== "inert" && mode !== "failclosed" && this.mode !== "unrestricted";
+      const blockShorts = filtered && this.rules?.features.blockYouTubeShorts === true;
+      // Channel search (PROTECTION-SPEC §15): the bridge hides every search result that is not a channel.
+      const channelSearch = filtered && mode === "allowlist" && this.rules?.features.youTubeChannelSearch === true;
+      const state: YouTubeStoredState = {
+        mode,
+        version: this.rules?.rulesVersion ?? null,
+        ...(blockShorts ? { blockShorts } : {}),
+        ...(channelSearch ? { channelSearch } : {}),
+      };
       await chrome.storage.local.set({ [YOUTUBE_STATE_KEY]: state });
     } catch {
       // best effort: the bridge hides the page by default and asks the background anyway
@@ -773,12 +783,16 @@ export class Controller {
     const note = typeof message.note === "string" && message.note.trim() ? message.note.trim().slice(0, MAX_NOTE) : undefined;
     let target: string | undefined;
     let minutes: number | undefined;
+    let names: { title?: string; handle?: string; searchQuery?: string } = {};
     if (message.kind === "url") {
       if (!isWebUrl(message.target)) return { result: "error", requestId: null };
       target = message.target!;
     } else if (message.kind === "youtube") {
       if (!isChannelId(message.target)) return { result: "error", requestId: null };
       target = message.target;
+      // The channel by its names, for the parents (PROTECTION-SPEC §15); an older service ignores them.
+      const found = { title: cleanTitle(message.title), handle: cleanHandle(message.handle), searchQuery: cleanSearchQuery(message.searchQuery) };
+      names = Object.fromEntries(Object.entries(found).filter(([, value]) => value !== undefined));
     } else if (message.kind === "time") {
       minutes = message.minutes === 30 ? 30 : 15;
     } else if (typeof message.target === "string") {
@@ -791,6 +805,7 @@ export class Controller {
         ...(target !== undefined ? { target } : {}),
         ...(minutes !== undefined ? { minutes } : {}),
         ...(note !== undefined ? { note } : {}),
+        ...names,
       });
       if (reply.type !== "requestAccessResult") return { result: "error", requestId: null };
       if (reply.requestId) this.requested.add(reply.requestId);
@@ -810,7 +825,12 @@ export class Controller {
 
   myChannels(): MyChannelsReply {
     const policy = this.ready ? (this.rules?.youTube ?? null) : null;
-    return { ready: this.ready, mode: policy?.mode ?? null, channels: approvedChannels(policy) };
+    return { ready: this.ready, mode: policy?.mode ?? null, channels: approvedChannels(policy), channelSearch: this.channelSearch };
+  }
+
+  /** Channel search is offered (PROTECTION-SPEC §15): the feature, in YouTube's allowlist mode, while ready and filtered. */
+  private get channelSearch(): boolean {
+    return this.features.youTubeChannelSearch && this.rules?.youTube.mode === "allowlist";
   }
 
   youTubeContext(): YouTubeContext {
@@ -821,6 +841,7 @@ export class Controller {
       policy: this.rules?.youTube ?? null,
       time: this.time,
       blockShorts: this.features.blockYouTubeShorts,
+      channelSearch: this.features.youTubeChannelSearch,
     };
   }
 
@@ -830,12 +851,58 @@ export class Controller {
     const url = pageUrlFor(detection.url, senderUrl);
     if (!url) return { decision: "stale" };
     const decision = decideYouTube(this.youTubeContext(), { url, channelId: detection.channelId, handle: detection.handle });
-    if (decision.decision === "allow") return decision;
-    if (decision.decision === "redirect") return { ...decision, navigateTo: chrome.runtime.getURL(MY_CHANNELS_PAGE) };
+    if (decision.decision === "allow") {
+      // YouTube's channel-only results (PROTECTION-SPEC §15): the bridge marks the approved channels and offers the rest.
+      return parseYouTubeUrl(url).kind === "search" && this.channelSearch ? { ...decision, channelSearch: this.channelSearchState() } : decision;
+    }
+    if (decision.decision === "redirect") {
+      // Another search: the same terms, restricted to channels. Home: my channels, told the page's YouTube origin.
+      const target = channelSearchTarget(decision, url);
+      return { ...decision, navigateTo: target ?? `${chrome.runtime.getURL(MY_CHANNELS_PAGE)}#${youTubeOrigin(url)}` };
+    }
+    // The names belong to the channel the page data named, the one the decision is about.
+    const named = !!decision.channelId && detection.channelId === decision.channelId;
     return {
       ...decision,
-      navigateTo: buildBlockPageUrl(chrome.runtime.getURL(BLOCK_PAGE), { reason: decision.reason, url, channelId: decision.channelId ?? null }),
+      navigateTo: buildBlockPageUrl(chrome.runtime.getURL(BLOCK_PAGE), {
+        reason: decision.reason,
+        url,
+        channelId: decision.channelId ?? null,
+        title: named ? (cleanTitle(detection.channelTitle) ?? null) : null,
+        handle: named ? (cleanHandle(detection.channelHandle) ?? null) : null,
+        searchQuery: decision.channelId ? (cleanSearchQuery(detection.searchQuery) ?? null) : null,
+      }),
     };
+  }
+
+  private channelSearchState(): ChannelSearchState {
+    return {
+      approved: approvedChannels(this.rules?.youTube ?? null).map((c) => c.channelId),
+      canRequest: this.connection === "service" && !this.baseline,
+    };
+  }
+
+  /**
+   * "Ask for approval" next to a channel in YouTube's channel-only results (PROTECTION-SPEC §15). Only from this
+   * extension's content script in a top-level frame showing those results while channel search is on; the search is
+   * taken from that page's address, never from the message.
+   */
+  async requestChannelFromSearch(
+    message: YouTubeRequestChannelMessage,
+    senderUrl: string | undefined,
+    frameId: number | undefined,
+  ): Promise<RequestAccessReply> {
+    const page = parseYouTubeUrl(senderUrl ?? "");
+    const onResults = page.kind === "search" && page.channelsOnly === true && page.site === "www" && frameId === 0;
+    if (!onResults || !this.channelSearch || !isChannelId(message.channelId)) return { result: "error", requestId: null };
+    return this.requestAccess({
+      type: "wf:requestAccess",
+      kind: "youtube",
+      target: message.channelId,
+      title: message.title ?? null,
+      handle: message.handle ?? null,
+      searchQuery: page.searchQuery ?? null,
+    });
   }
 
   /**
@@ -1009,6 +1076,17 @@ export function pageUrlFor(detectionUrl: string, senderUrl: string | undefined):
     // fall through to the sender URL
   }
   return sender ? sender.href : null;
+}
+
+/** The page's own YouTube origin when it is youtube.com (www), else https://www.youtube.com: where "my channels" searches. */
+export function youTubeOrigin(pageUrl: string): string {
+  try {
+    const page = new URL(pageUrl);
+    if (page.protocol === "https:" && youTubeSiteOf(page.hostname) === "www") return page.origin;
+  } catch {
+    // the default
+  }
+  return "https://www.youtube.com";
 }
 
 /** The heartbeat payload: a browser window focused, idle state, and whether the active tab is a web page. */

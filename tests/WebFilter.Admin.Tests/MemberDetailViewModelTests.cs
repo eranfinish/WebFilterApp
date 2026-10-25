@@ -56,8 +56,8 @@ public sealed class MemberDetailViewModelTests
         Assert.False(week.IsDirty);
         Assert.All(week.Days, d => Assert.False(d.IsClosed));
 
-        Assert.Equal(["Khan Kids (sim)", "Sesame (sim)"], vm.Channels.Select(c => c.Name));
-        Assert.Equal("@khankids-sim · UCkhanKids00000000000001", vm.Channels[0].DetailText);
+        Assert.Equal(["Khan Kids (sim) (@khankids-sim)", "Sesame (sim) (@sesame-sim)"], vm.Channels.Select(c => c.Name));
+        Assert.Equal("UCkhanKids00000000000001", vm.Channels[0].DetailText);
         Assert.True(vm.Channels[0].IsAllow);
         Assert.True(vm.HasNoApps);
         Assert.True(vm.HasNoRules);
@@ -80,7 +80,7 @@ public sealed class MemberDetailViewModelTests
         Assert.Equal("יואב", vm.Profile!.DisplayName);
         Assert.Equal(["Microsoft.MinecraftUWP", "minecraft.exe"], vm.Apps.Select(a => a.Name));
         Assert.Equal(["אפליקציה מהחנות", "תוכנה (נתיב)"], vm.Apps.Select(a => a.MatchText));
-        Assert.Equal(["GamerX (sim)"], vm.Channels.Select(c => c.Name));
+        Assert.Equal(["GamerX (sim) (@gamerx-sim)"], vm.Channels.Select(c => c.Name));
         Assert.False(vm.Channels[0].IsAllow);
         Assert.Equal(["block", "block"], vm.Categories!.Items.Where(c => c.Name is "social" or "gaming").Select(c => c.Choice));
         Assert.Single(_client.SentOf<GetSettings>());
@@ -342,6 +342,7 @@ public sealed class MemberDetailViewModelTests
                     BlockYouTubeShorts = set.BlockYouTubeShorts ?? x.BlockYouTubeShorts,
                     LogSearches = set.LogSearches ?? x.LogSearches,
                     BlockAds = set.BlockAds ?? x.BlockAds,
+                    YouTubeChannelSearch = set.YouTubeChannelSearch ?? x.YouTubeChannelSearch,
                 })],
             });
         }
@@ -403,6 +404,29 @@ public sealed class MemberDetailViewModelTests
         Assert.Equal((stored.BlockImageSearch, stored.JumpGuard, stored.BlockYouTubeShorts, stored.BlockAds, stored.LogSearches),
             (vm.Protection!.BlockImageSearch, vm.Protection.JumpGuard, vm.Protection.BlockYouTubeShorts, vm.Protection.BlockAds, vm.Protection.LogSearches));
         Assert.Equal(1, new[] { stored.BlockImageSearch, stored.JumpGuard, stored.BlockYouTubeShorts, stored.BlockAds, stored.LogSearches }.Count(f => f));
+    }
+
+    /// <summary>
+    /// PROTECTION-SPEC §15: the channel search switch shows for a member whose YouTube is "approved channels only" (noa), not
+    /// for one in another mode (yoav, restricted), and saves alone.
+    /// </summary>
+    [Fact]
+    public async Task The_channel_search_switch_shows_in_the_approved_channels_mode_only_and_saves_alone()
+    {
+        StoreSetMember();
+        var vm = await LoadedAsync();
+        Assert.True(vm.Protection!.ShowsChannelSearch);
+        Assert.False(vm.Protection.YouTubeChannelSearch);
+
+        vm.Protection.YouTubeChannelSearch = true;
+
+        Assert.Equal(new SetMember("noa", YouTubeChannelSearch: true), _client.Single<SetMember>());
+        Assert.True(_client.Settings.Members.Single(m => m.Id == "noa").YouTubeChannelSearch);
+        Assert.True(vm.Protection!.YouTubeChannelSearch);
+        Assert.Equal("מותר לחפש ערוצים ב-YouTube", Strings.Member_YouTubeChannelSearch);
+
+        vm.Show("yoav");
+        Assert.False(vm.Protection!.ShowsChannelSearch);
     }
 
     /// <summary>PROTECTION-SPEC §12: the parent's escape hatch when a site refuses to work with the blocker.</summary>
@@ -577,7 +601,7 @@ public sealed class MemberDetailViewModelTests
 
         _dialogs.Answer = true;
         await vm.RemoveChannelCommand.ExecuteAsync(sesame);
-        Assert.Equal("להסיר את הערוץ Sesame (sim)?", Bidi.Plain(_dialogs.Asked[^1]));
+        Assert.Equal("להסיר את הערוץ Sesame (sim) (@sesame-sim)?", Bidi.Plain(_dialogs.Asked[^1]));
         Assert.DoesNotContain(LastReplace.Settings.YouTubeChannels, c => c.ChannelId == "UCsesame0000000000000002");
         Assert.Equal(2, LastReplace.Settings.YouTubeChannels.Count);
     }

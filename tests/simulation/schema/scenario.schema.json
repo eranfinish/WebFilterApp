@@ -125,7 +125,8 @@
         "blocked_image_search",
         "blocked_jump",
         "blocked_youtube_shorts",
-        "blocked_baseline_adult"
+        "blocked_baseline_adult",
+        "redirect_youtube_channel_search"
       ]
     },
     "expectDecision": {
@@ -205,6 +206,10 @@
         "blockAds": {
           "type": "boolean",
           "description": "PROTECTION-SPEC §12 (extension: the static ad-server ruleset; URL decisions do not change). Default false."
+        },
+        "youTubeChannelSearch": {
+          "type": "boolean",
+          "description": "PROTECTION-SPEC §15: in the YouTube allowlist mode, YouTube's results restricted to channels are allowed and other searches with terms redirect there (redirect_youtube_channel_search). Default false."
         }
       }
     },
@@ -984,6 +989,14 @@
                   },
                   "playlistId": {
                     "type": "string"
+                  },
+                  "searchQuery": {
+                    "type": "string",
+                    "description": "Search pages: the terms (search_query, or q on YouTube Music), trimmed."
+                  },
+                  "channelsOnly": {
+                    "type": "boolean",
+                    "description": "Search pages: YouTube's 'Type: Channels' filter is the only filter (sp=EgIQAg==, encoded once or twice)."
                   }
                 }
               }
@@ -1780,6 +1793,18 @@
           "type": "string",
           "description": "The child's note to the parent."
         },
+        "title": {
+          "type": "string",
+          "description": "youtube requests: the channel's title as the page showed it (PROTECTION-SPEC §15)."
+        },
+        "handle": {
+          "type": "string",
+          "description": "youtube requests: the channel's handle."
+        },
+        "searchQuery": {
+          "type": "string",
+          "description": "youtube requests: the channel search the child found the channel with."
+        },
         "as": {
           "$ref": "#/$defs/alias"
         },
@@ -1866,6 +1891,15 @@
                     "type": "string"
                   },
                   "message": {
+                    "type": "string"
+                  },
+                  "title": {
+                    "type": "string"
+                  },
+                  "handle": {
+                    "type": "string"
+                  },
+                  "searchQuery": {
                     "type": "string"
                   }
                 }

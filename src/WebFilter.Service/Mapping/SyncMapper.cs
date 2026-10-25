@@ -58,14 +58,25 @@ public static class SyncMapper
         dto.QueuedRequests.Select(r => FromDto(r, dto.DeviceId)).ToList());
 
     public static RequestDto ToDto(AccessRequest r) => new(r.Id, r.MemberId, r.DeviceId, r.Kind.ToString().ToLowerInvariant(), r.Target, r.TargetKey,
-        r.Minutes, r.Message, r.CreatedAt, r.Status.ToString().ToLowerInvariant(), r.DecidedAt);
+        r.Minutes, r.Message, r.CreatedAt, r.Status.ToString().ToLowerInvariant(), r.DecidedAt, r.Title, r.Handle, r.SearchQuery);
 
-    /// <summary>A request as received from an agent; the device id always comes from the authenticated certificate.</summary>
-    public static AccessRequest FromDto(RequestDto r, string deviceId) => new()
+    /// <summary>
+    /// A request as received from an agent; the device id always comes from the authenticated certificate. A YouTube
+    /// request's channel names are cleaned again (<see cref="RequestNames"/>); other kinds carry none.
+    /// </summary>
+    public static AccessRequest FromDto(RequestDto r, string deviceId)
     {
-        Id = r.Id, MemberId = r.MemberId, DeviceId = deviceId, Kind = Enum.Parse<RequestKind>(r.Kind, true), Target = r.Target, TargetKey = r.TargetKey,
-        Minutes = r.Minutes, Message = r.Message, CreatedAt = r.CreatedAt,
-    };
+        var kind = Enum.Parse<RequestKind>(r.Kind, true);
+        var youtube = kind == RequestKind.YouTube;
+        return new()
+        {
+            Id = r.Id, MemberId = r.MemberId, DeviceId = deviceId, Kind = kind, Target = r.Target, TargetKey = r.TargetKey,
+            Minutes = r.Minutes, Message = r.Message, CreatedAt = r.CreatedAt,
+            Title = youtube ? RequestNames.Title(r.Title) : null,
+            Handle = youtube ? RequestNames.Handle(r.Handle) : null,
+            SearchQuery = youtube ? RequestNames.SearchQuery(r.SearchQuery) : null,
+        };
+    }
 
     public static EventDto ToDto(FamilyEvent e) => new(EventWire(e.Type), e.At, e.MemberId, e.DeviceId,
         e.Reason == ReasonCode.None ? null : e.Reason.ToWire(), e.Url, e.App, e.RemainingMinutes, e.Detail);

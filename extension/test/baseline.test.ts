@@ -19,7 +19,7 @@ const BASELINE_RULES: DnrRule[] = [
   { id: 2001, priority: 65545, action: REDIRECT, condition: { resourceTypes: FRAMES, requestDomains: ["adult.test", "nsfw.test"], regexFilter: "^(.*)$" } },
   { id: 2002, priority: 131080, action: { type: "allow" }, condition: { resourceTypes: FRAMES, requestDomains: ["ok.nsfw.test"] } },
 ];
-const PARENT: ProtectionFeatures = { jumpGuard: true, blockYouTubeShorts: false, logSearches: false, canOverrideJump: true, blockAds: true };
+const PARENT: ProtectionFeatures = { jumpGuard: true, blockYouTubeShorts: false, logSearches: false, canOverrideJump: true, blockAds: true, youTubeChannelSearch: false };
 const UNLIMITED = { state: "unlimited", remainingMinutes: null, windowEndsAt: null } as const;
 
 /** A parent's account: hello mode baseline, the rules reply's mode too (unless `mode` says otherwise). */

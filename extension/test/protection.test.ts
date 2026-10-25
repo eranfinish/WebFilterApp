@@ -20,7 +20,7 @@ const DYNAMIC: DnrRule[] = [
   { id: 4321, priority: 65544, action: { type: "allow" }, condition: { resourceTypes: FRAMES, requestDomains: ["site-a.test", "site-b.test", "google.com"] } },
 ];
 const TIME_UP: DnrRule[] = [{ id: 10, priority: 262144, action: REDIRECT, condition: { resourceTypes: FRAMES, regexFilter: "^(https?://.*)$" } }];
-const ALL_ON: ProtectionFeatures = { jumpGuard: true, blockYouTubeShorts: true, logSearches: true, canOverrideJump: true, blockAds: true };
+const ALL_ON: ProtectionFeatures = { jumpGuard: true, blockYouTubeShorts: true, logSearches: true, canOverrideJump: true, blockAds: true, youTubeChannelSearch: true };
 
 function script(features: Partial<ProtectionFeatures> | null, extra: FakeHostScript = {}): FakeHostScript {
   return {

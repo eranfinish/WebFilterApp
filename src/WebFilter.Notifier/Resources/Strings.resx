@@ -68,6 +68,9 @@
   <data name="Request_YouTube" xml:space="preserve">
     <value>בקשה לצפות בערוץ YouTube</value>
   </data>
+  <data name="Request_YouTubeNamed" xml:space="preserve">
+    <value>בקשה לצפות בערוץ YouTube {0}</value>
+  </data>
   <data name="Request_App" xml:space="preserve">
     <value>בקשה להשתמש בתוכנה {0}</value>
   </data>

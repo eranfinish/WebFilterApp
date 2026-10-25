@@ -17,8 +17,9 @@ role defaults below.
 | `blockYouTubeShorts` | YouTube `/shorts/` is blocked (§8) | true | false | — |
 | `logSearches` | Search terms are recorded for the parents (§9). The member is told it is on | false | false | — |
 | `blockAds` | Requests to EasyList's ad servers are blocked in the browser (§12) | true | true | — |
+| `youTubeChannelSearch` | In YouTube's "approved channels only" mode, the member may search YouTube for channels (§15) | false | true | — |
 
-Adults (unrestricted) ignore all five; administrators and adults get the family's baseline protection instead (§13).
+Adults (unrestricted) ignore all of them; administrators and adults get the family's baseline protection instead (§13).
 
 ## 2. Family-wide Windows features for children
 
@@ -90,8 +91,9 @@ Added to `BrowserPolicies`: `DefaultPopupsSetting = 2`, `AbusiveExperienceInterv
 - `reportBlock` with `blocked_jump`, `blocked_youtube_shorts` keeps the extension's reason (the service cannot judge
   them from the URL alone), like the YouTube channel reasons.
 - `RulesResponse` gains `features: { "jumpGuard": bool, "blockYouTubeShorts": bool, "logSearches": bool,
-  "canOverrideJump": bool, "blockAds": bool }` (`canOverrideJump` = teen; false for children and unlinked accounts;
-  `blockAds` from §12; for administrators and adults the baseline's switches, §13). Absent → all false.
+  "canOverrideJump": bool, "blockAds": bool, "youTubeChannelSearch": bool }` (`canOverrideJump` = teen; false for
+  children and unlinked accounts; `blockAds` from §12; `youTubeChannelSearch` from §15, false in the baseline; for
+  administrators and adults the baseline's switches, §13). Absent → all false.
 
 ## 7. Jump guard (extension, `features.jumpGuard`)
 
@@ -406,3 +408,104 @@ with a window for downloading the extension.
   checking that the host was started by the browser is a follow-up). One live session counts for every profile of that
   browser in the account (profiles and guest mode are off for children by policy). Only computers with `ManageNetwork`
   (the installed service). Not checked in the lab.
+
+## 15. YouTube channel search and channel names (`youTubeChannelSearch`, 2026-10-25)
+
+Decided with the parent (from an approved mockup). In YouTube's "approved channels only" mode (`youTubeMode: allowlist`)
+YouTube's home page and every search went to the extension's "my channels" page, so a child could not find a new channel;
+and a YouTube request carried only the channel id (`UC…`), so the parent saw an id in the requests list, the notifier and
+the member's channel list, and "my channels" had no names either (in the lab two approved channels were stored as bare
+ids).
+
+**Channel search (per member):**
+
+- **Switch** `youTubeChannelSearch` ("מותר לחפש ערוצים ב-YouTube"), end to end like `blockAds`: optional on `MemberDto`
+  (false when missing), `FamilyMember`, `SetMember(youTubeChannelSearch)`, `RulesResponse.features.youTubeChannelSearch`.
+  On by default for **teens**, off for **children** (setup wizard, the new-account card, `MemberTemplate`); adults are
+  stored without it. A permission, not a protection: it means something only in the allowlist YouTube mode, so the member
+  page shows it only while the member's YouTube mode is allowlist, and summaries name it only then. False in the baseline
+  (§13) and for unlinked accounts; a pause makes YouTube unrestricted anyway.
+- **"My channels"** gets a search box "חפש ערוץ" while the feature is on (and the introduction says a found channel needs
+  the parents' approval). A search opens YouTube's results for the terms restricted to **channels**:
+  `https://www.youtube.com/results?search_query=<terms>&sp=EgIQAg%253D%253D`, on the YouTube origin the child was sent
+  from. `sp` is YouTube's filter message, base64 of filters { type: channel } = `EgIQAg==`; checked on youtube.com on
+  2026-10-25, YouTube's own "Channels" filter link writes it encoded twice (`EgIQAg%253D%253D`), so the extension uses the
+  same form.
+- **Decision** (Core `Decider.YouTube` and the extension's `decideYouTube`, the same scenarios — `YTP-004`, `YT-008` to
+  `YT-010`): in the allowlist mode, with the switch, a search page **with terms** (`search_query`, or `q` on YouTube
+  Music) is
+  - allowed (`allowed_default`) when it is on `youtube.com` (www, or a subdomain counted as www) and its only `sp` is the
+    channel filter — encoded once or twice, with or without the padding;
+  - otherwise — no filter (YouTube's own search box), another filter (Videos, Shorts, a sort order), two `sp`,
+    `m.youtube.com`, YouTube Music — **redirected** to the same terms restricted to channels: new reason code
+    **`redirect_youtube_channel_search`** (Core `ReasonCode.RedirectYouTubeChannelSearch`, wire, schema, MVP-PLAN §6,
+    admin and extension wording). The target is on the page's own origin for youtube.com, else www.youtube.com.
+
+  A search without terms and the home page still go to "my channels" (`redirect_youtube_home`); without the switch and in
+  the other YouTube modes nothing changes. Time and homework come first, as for every YouTube page. A channel found in the
+  results is **still blocked** until a parent approves it (`blocked_youtube_channel`).
+- **What shows on the results page:** the bridge hides every result that is not a channel — an allowlist of what may
+  show, not a list of what to hide: in the result list only sections of results and the "more results" loader, in a
+  section only `ytd-channel-renderer` (and the loader); the side column (a watch card with videos) and the filter bar
+  are hidden too. Videos, Shorts, playlists, mixes, shelves and their thumbnails therefore never show; channel avatars do.
+  A result type YouTube adds later is hidden as well, and a renamed channel result hides everything rather than showing
+  videos. The CSS is in place from `document_start` (the stored YouTube state says `channelSearch`), before the page is
+  revealed. The masthead's search box stays: a search there comes back to the channel-only results.
+- **Marks and requests on the results:** the MAIN-world detector marks each channel result with its own data's channel
+  id, title and handle (`data-wf-channel`, `-title`, `-handle`, from the element's Polymer data, read again as results
+  load or are re-used). The bridge adds one mark inside each: **"מאושר"** for an approved channel; an inline **"בקש
+  אישור"** button for the others while requests can be sent (connected to the service, not a parent); after a request,
+  the result ("נשלחה בקשה להורים", or the usual sentence for merged, rate-limited, cooldown or queued). Only a trusted
+  click counts; the button sends `wf:ytRequestChannel {channelId, title, handle}`, which the background accepts only from
+  its own content script in a top-level frame whose address is the channel-only results while the feature is on, and the
+  search terms are taken from that address, never from the message. Clicking the channel itself still opens its page,
+  blocked, whose block page offers the request too (with the names and the search, below).
+- **Search log:** with `logSearches` these searches are reported like any YouTube search (`reportSearch {engine:
+  "youtube"}`, once per search); a search from YouTube's own box and its channel-only redirect are the same search.
+
+**Channel names everywhere:**
+
+- **Request:** `requestAccess` gains optional `title`, `handle` and `searchQuery` (for `youtube` requests; ignored for
+  other kinds and by older services). They come from the extension: the detector reads the channel's title and handle
+  from the same trusted source as its id (the player response's `videoDetails.author` and microformat `ownerProfileUrl`,
+  the channel page's browse data), the block page carries them (`?…&title=&handle=&q=`) and shows "ערוץ: NASA (@nasa)",
+  and a channel opened from the channel-only results carries the search it was found with.
+- **Cleaning** (`RequestNames` in Core, `request-names.ts` in the extension, and again on the hub for agents' requests):
+  whitespace and control characters become single spaces, direction marks and overrides are dropped (format characters
+  other than the emoji joiners), a title is at most 100 characters and a search 200, a handle is "@name" in lower case
+  (letters and digits of any script, `.`, `_`, `-`, `·`) or nothing. The names are for the parents' eyes only: nothing is
+  matched or decided by them, and any page can open a block page with made-up names — the parent's "open for review"
+  (below) opens the channel by its id.
+- **Path:** `AccessRequestDraft`/`AccessRequest` `Title`, `Handle`, `SearchQuery`; the agent → hub request
+  (`RequestDto`, direct or queued — the agent's queue keeps them), the hub's `access_requests` (migration 006), the admin
+  protocol's `RequestDto`. A request merged into an open one fills in names that one lacked.
+- **Approval:** `HubCore.Approve` for a YouTube request stores `YouTubeChannelDto` **with the title and handle** (or the
+  names the member's record already had); the member's own record of the channel is replaced by the allow record — a
+  channel the parents had blocked for the member included, which before stayed blocked after an approval. The stored
+  handle also matches the channel's handle pages without page data (scenario `AR-011`).
+- **Shown as** "NASA (@nasa)" (`YouTubeChannelLabel`; the title or the handle alone, else the id): the admin app's
+  requests list (with the id below it and "נמצא בחיפוש '…'"), the member page's channel list (the id next to it), the
+  notifier's request toast — the notification detail becomes `youtube:<channelId>:<name>` (older notifiers show their
+  generic YouTube sentence) — and "my channels". Channels approved before this change keep their bare ids until a parent
+  removes them and adds them again with a title, or they are approved again from a request with names.
+
+**"פתח לבדיקה" for the parent:** each pending site or YouTube request in the admin app's requests screen has a button
+that opens what is asked for — the channel's page `https://www.youtube.com/channel/<id>` (a channel id only) or the
+requested http(s) address — in the parent's **own, unelevated** default browser. The admin app runs elevated, and a
+browser it started would inherit that token (every page with administrator rights); so `ShellBrowserLauncher` hands the
+address to `explorer.exe` (by its full path in the Windows folder, the address as one argument with commas escaped),
+which passes it to the desktop's running, unelevated shell and exits; the shell opens it with the default browser.
+Behind `IBrowserLauncher` (tests use a fake). The parent's browsing is not YouTube-filtered (baseline, §13), so the
+channel shows as the child would see it once approved. If no desktop shell runs (a replaced shell), explorer.exe would
+become a new shell itself — not covered.
+
+**Store:** no new permission (the content scripts, messages and storage already existed); the extension part reaches the
+children with the next store update (0.3.1). An older extension with a newer service: no search box, requests without
+names (shown by id). A newer extension with an older service: the feature is off (no `features.youTubeChannelSearch`),
+and the names are ignored.
+
+**Limits:** the hiding and the marks follow youtube.com's desktop markup as of 2026 (`ytd-search`,
+`ytd-section-list-renderer`, `ytd-item-section-renderer`, `ytd-channel-renderer` and its Polymer `data`); a redesign can
+hide all results (fail safe) or drop the marks (the channel page's block page still offers the request). The mobile site
+is sent to www.youtube.com. Checked in Edge on local fixtures (`npm run verify:edge`, C1–C12) and through the real host
+and service (`npm run e2e:real`, 5d–5e); not yet against today's youtube.com or in the lab.

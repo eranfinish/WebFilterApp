@@ -76,7 +76,7 @@ public sealed record RulesResponse(
     string? Mode = null) : AgentMessage;
 
 /// <summary>
-/// Wire: <c>features: { jumpGuard, blockYouTubeShorts, logSearches, canOverrideJump, blockAds }</c>. All false for
+/// Wire: <c>features: { jumpGuard, blockYouTubeShorts, logSearches, canOverrideJump, blockAds, youTubeChannelSearch }</c>. All false for
 /// unlinked accounts, and for administrators and unrestricted members when the family's baseline protection is all off;
 /// in the baseline (mode <c>baseline</c>, PROTECTION-SPEC §13) jumpGuard and blockAds are the family's switches,
 /// canOverrideJump is true and the other two are false. jumpGuard, blockYouTubeShorts and blockAds are also false while a
@@ -87,12 +87,17 @@ public sealed record RulesResponse(
 /// <param name="LogSearches">Send <see cref="ReportSearchRequest"/> for searches, and tell the member their searches are visible (§9).</param>
 /// <param name="CanOverrideJump">The jump block page offers "open anyway" (teens and parents; false for children and unlinked accounts).</param>
 /// <param name="BlockAds">Enable the extension's static ad-server ruleset (§12).</param>
+/// <param name="YouTubeChannelSearch">
+/// In YouTube's "approved channels only" mode: "my channels" offers a channel search, YouTube's results restricted to
+/// channels are shown (other results hidden), and other searches go there (§15). False in the baseline.
+/// </param>
 public sealed record AgentFeatures(
     bool JumpGuard = false,
     [property: JsonPropertyName("blockYouTubeShorts")] bool BlockYouTubeShorts = false,
     bool LogSearches = false,
     bool CanOverrideJump = false,
-    bool BlockAds = false);
+    bool BlockAds = false,
+    [property: JsonPropertyName("youTubeChannelSearch")] bool YouTubeChannelSearch = false);
 
 /// <param name="Mode">off | restricted | allowlist | unrestricted.</param>
 public sealed record YouTubePolicy(string Mode, IReadOnlyList<YouTubeChannelRef> Allowed, IReadOnlyList<YouTubeChannelRef> Blocked);
@@ -146,7 +151,12 @@ public sealed record DecideUrlRequest(string Url) : AgentMessage;
 public sealed record DecideUrlResponse(string Decision, string Reason, string? RuleId, string? Category, bool CanRequest, string RequestKind) : AgentMessage;
 
 /// <param name="Kind">url | youtube | app | time.</param>
-public sealed record RequestAccessRequest(string Kind, string? Target, int? Minutes, string? Note) : AgentMessage;
+/// <param name="Title">youtube: the channel's title as the page showed it (PROTECTION-SPEC §15). Optional; ignored for other kinds.</param>
+/// <param name="Handle">youtube: the channel's handle ("@name"). Optional.</param>
+/// <param name="SearchQuery">youtube: the channel search the child found the channel with. Optional.</param>
+/// <remarks>The three names are only shown to the parents and stored with an approved channel; older services ignore them.</remarks>
+public sealed record RequestAccessRequest(string Kind, string? Target, int? Minutes, string? Note,
+    string? Title = null, string? Handle = null, string? SearchQuery = null) : AgentMessage;
 
 /// <param name="Result">created | merged | rate_limited | cooldown | queued | unavailable.</param>
 public sealed record RequestAccessResponse(string Result, string? RequestId) : AgentMessage;
