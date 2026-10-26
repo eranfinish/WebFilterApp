@@ -201,18 +201,20 @@
     <CustomAction Id="UnregisterNotifier" BinaryRef="Wix4UtilCA_X64" DllEntry="WixQuietExec" Execute="deferred" Impersonate="yes" Return="ignore" />
 
     <!--
-      Upgrade, repair and uninstall: a notifier running in a signed-in session holds its files, and Restart Manager cannot
-      close a tray app in another session, so the files would be left for a reboot (a silent upgrade then restarts the
-      computer, seen in the lab on 2026-10-23). It is ended first: before InstallValidate checks for files in use, and so
-      before the old version is removed (RemoveExistingProducts follows InstallValidate). Immediate, because Windows Installer
-      allows no deferred action before RemoveExistingProducts (error 2613); it runs with the installer's rights (elevated),
-      so it reaches every session, and at the least the parent's own. WixQuietExec in immediate mode reads its command line
-      from WixQuietExecCmdLine. It holds nothing that matters: its cursor is saved after every notification. Not found =
-      nothing to do.
+      Upgrade, repair and uninstall: a notifier or an admin app running in a signed-in session holds its files, and Restart
+      Manager cannot close an app in another session, so the files would be left for a reboot (a silent upgrade then
+      restarts the computer, seen in the lab on 2026-10-23 with the notifier; an open admin app kept its files in use too,
+      2026-10-26). Both are ended first: before InstallValidate checks for files in
+      use, and so before the old version is removed (RemoveExistingProducts follows InstallValidate). Immediate, because
+      Windows Installer allows no deferred action before RemoveExistingProducts (error 2613); it runs with the installer's
+      rights (elevated), so it reaches every session, and at the least the parent's own. WixQuietExec in immediate mode reads
+      its command line from WixQuietExecCmdLine. The notifier holds nothing that matters: its cursor is saved after every
+      notification. The admin app keeps nothing of its own (the rules are in the service), so only an edit not yet saved in
+      it is lost. Not found = nothing to do.
     -->
-    <SetProperty Id="WixQuietExecCmdLine" Sequence="execute" Before="CloseNotifiers"
-                 Value="&quot;[System64Folder]taskkill.exe&quot; /F /IM WebFilter.Notifier.exe" />
-    <CustomAction Id="CloseNotifiers" BinaryRef="Wix4UtilCA_X64" DllEntry="WixQuietExec" Execute="immediate" Return="ignore" />
+    <SetProperty Id="WixQuietExecCmdLine" Sequence="execute" Before="CloseApps"
+                 Value="&quot;[System64Folder]taskkill.exe&quot; /F /IM WebFilter.Notifier.exe /IM WebFilter.Admin.exe" />
+    <CustomAction Id="CloseApps" BinaryRef="Wix4UtilCA_X64" DllEntry="WixQuietExec" Execute="immediate" Return="ignore" />
 
     <!--
       After an install or upgrade a parent ran with the full UI on the hub, the notifier starts again at once in their
@@ -223,7 +225,7 @@
     <CustomAction Id="StartNotifier" BinaryRef="Wix4UtilCA_X64" DllEntry="WixShellExec" Execute="immediate" Return="ignore" />
 
     <InstallExecuteSequence>
-      <Custom Action="CloseNotifiers" Before="InstallValidate" Condition="Installed OR WIX_UPGRADE_DETECTED" />
+      <Custom Action="CloseApps" Before="InstallValidate" Condition="Installed OR WIX_UPGRADE_DETECTED" />
       <Custom Action="ConfigureService" After="InstallFiles" Condition="NOT REMOVE~=&quot;ALL&quot;" />
       <Custom Action="PairWithHub" After="ConfigureService" Condition="NOT REMOVE~=&quot;ALL&quot; AND ROLE~=&quot;agent&quot; AND HUB AND PAIRCODE" />
       <Custom Action="CleanupMachine" Before="RemoveFiles" Condition="REMOVE~=&quot;ALL&quot; AND NOT UPGRADINGPRODUCTCODE" />

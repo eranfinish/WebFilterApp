@@ -124,6 +124,26 @@ public sealed class HubSyncTests : IAsyncLifetime
         await Eventually(() => _hub.WithHub((hub, _) => hub.Requests.Count) == 2, "queued request delivered after the hub returned");
     }
 
+    [Fact]
+    public async Task The_hub_stops_at_once_while_an_agent_holds_its_change_stream_open()
+    {
+        // The lab hub (2026-10-26) took 25 s to stop: Kestrel waited for the agent's open change stream until the host's
+        // 30 s shutdown timeout ran out, and the service crashed. Error reporting then held a file of the old version, so
+        // the upgrade ended with 3010 (restart needed).
+        await HubLink.PairAsync(_agentData, $"127.0.0.1:{_port}", _hub.Pairing.Create(_clock.GetUtcNow()), "laptop-yoav", "Yoav's laptop");
+        using var client = HubLink.Load(_agentData)!.CreateClient(Timeout.InfiniteTimeSpan);
+        using var response = await client.GetAsync(Contracts.Hub.HubApi.ChangesPath, HttpCompletionOption.ResponseHeadersRead);
+        response.EnsureSuccessStatusCode();
+        using var reader = new StreamReader(await response.Content.ReadAsStreamAsync());
+        Assert.Equal(": connected", await reader.ReadLineAsync());
+
+        var watch = Stopwatch.StartNew();
+        await _server.StopAsync(CancellationToken.None);
+        Assert.True(watch.Elapsed < TimeSpan.FromSeconds(5), $"took {watch.Elapsed}");
+        // The stream ends with the hub, so the agent reconnects to the hub that comes back.
+        Assert.Equal("", (await reader.ReadToEndAsync().WaitAsync(TimeSpan.FromSeconds(5))).Trim());
+    }
+
     /// <summary>
     /// The lab case of 2026-10-24 (MVP-PLAN §8.1): the child asks from the agent computer's block page, a parent approves on
     /// the hub, and the agent's pipe tells the child's browser — after the rules changed, so the extension installs the

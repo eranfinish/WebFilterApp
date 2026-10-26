@@ -277,7 +277,7 @@ Get-WinEvent -FilterHashtable @{LogName='Application'; ProviderName='WebFilter.S
   dotnet build installer\WebFilter.Installer.wixproj -c Release -p:ProductVersion=0.7.1
   ```
 
-- [ ] שדרוג ב-Hub כשהורה מחובר ואפליקציית ההתראות רצה אצלו: שדרוג שקט (`/qn REBOOT=ReallySuppress`) מסתיים בקוד **0**, לא 3010 או 1641; ב-log פעולת `CloseNotifiers` רצה לפני `InstallValidate` ו-`RemoveExistingProducts`; אין `PendingFileRenameOperations` שמזכיר את `C:\Program Files\WebFilter`. ושדרוג בלחיצה כפולה (ממשק מלא) מעלה את אפליקציית ההתראות מחדש מיד בסופו, בחשבון של ההורה, בלי הרשאות מנהל.
+- [ ] שדרוג ב-Hub כשהורה מחובר ואפליקציית ההתראות רצה אצלו, וגם כשממשק הניהול פתוח אצלו: שדרוג שקט (`/qn REBOOT=ReallySuppress`) מסתיים בקוד **0**, לא 3010 או 1641, וממשק הניהול נסגר (פותחים אותו מחדש אחרי השדרוג); ב-log פעולת `CloseApps` רצה לפני `InstallValidate` ו-`RemoveExistingProducts`; אין `PendingFileRenameOperations` שמזכיר את `C:\Program Files\WebFilter`; השירות נעצר תוך שניות גם כש-Agent מחובר אליו, ואין ביומן Application אירוע `.NET Runtime` 1026 של `WebFilter.Service.exe` (קריסה בעצירה, שהשאירה קבצים בשימוש וגרמה ל-3010 עד 2026-10-26). ושדרוג בלחיצה כפולה (ממשק מלא) מעלה את אפליקציית ההתראות מחדש מיד בסופו, בחשבון של ההורה, בלי הרשאות מנהל.
 - [ ] אותו שדרוג ב-Hub, כש-`labadmin` מחובר ויש הודעה של WebFilter במרכז ההודעות: ההודעה נשארת, הרישום נשאר (`reg query HKCU\Software\Classes\AppUserModelId\WebFilter.Notifier`), וב-log **אין** `--unregister`. בכניסה הבאה ההתראות עולות, ולחיצה על ההודעה הישנה עדיין פותחת את ממשק הניהול.
 
 ## ה. מנוע ה-WFP (אוטומטי, מהמחשב שלך)

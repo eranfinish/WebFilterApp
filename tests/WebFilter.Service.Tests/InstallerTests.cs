@@ -232,21 +232,22 @@ public sealed class InstallerTests
     }
 
     [Fact]
-    public void Running_notifiers_are_ended_in_every_session_before_the_old_version_or_any_file_is_removed()
+    public void Running_notifiers_and_admin_apps_are_ended_in_every_session_before_the_old_version_or_any_file_is_removed()
     {
-        // A silent upgrade with a parent signed in restarted the lab hub: the old version's files were in use. CloseNotifiers
+        // A silent upgrade with a parent signed in restarted the lab hub: the old version's files were in use. CloseApps
         // now runs before InstallValidate (which checks for files in use) and so before RemoveExistingProducts, which keeps
-        // its standard place: a deferred action before it fails the install with error 2613 (seen in the lab).
+        // its standard place: a deferred action before it fails the install with error 2613 (seen in the lab). An open admin
+        // app kept its files in use too, so it is ended with the notifier; the service is not.
         Assert.Null(Attr(Package.Descendants(Wix + "MajorUpgrade").Single(), "Schedule"));
-        var scheduled = Scheduled("CloseNotifiers");
+        var scheduled = Scheduled("CloseApps");
         Assert.Equal(("InstallValidate", "Installed OR WIX_UPGRADE_DETECTED"), (Attr(scheduled, "Before"), Attr(scheduled, "Condition")));
         Assert.Equal("InstallExecuteSequence", scheduled.Parent!.Name.LocalName);
-        var action = Single("CustomAction", "CloseNotifiers");
+        var action = Single("CustomAction", "CloseApps");
         Assert.Equal(("WixQuietExec", "immediate", "ignore"), (Attr(action, "DllEntry"), Attr(action, "Execute"), Attr(action, "Return")));
         // In immediate mode WixQuietExec reads its command line from WixQuietExecCmdLine, set just before.
         var command = Single("SetProperty", "WixQuietExecCmdLine");
-        Assert.Equal(("execute", "CloseNotifiers"), (Attr(command, "Sequence"), Attr(command, "Before")));
-        Assert.Equal([@"C:\Windows\system32\taskkill.exe", "/F", "/IM", "WebFilter.Notifier.exe"],
+        Assert.Equal(("execute", "CloseApps"), (Attr(command, "Sequence"), Attr(command, "Before")));
+        Assert.Equal([@"C:\Windows\system32\taskkill.exe", "/F", "/IM", "WebFilter.Notifier.exe", "/IM", "WebFilter.Admin.exe"],
             CommandLine("WixQuietExecCmdLine", new() { ["System64Folder"] = @"C:\Windows\system32\" }));
         Assert.Empty(Package.Descendants(Util + "CloseApplication"));
     }

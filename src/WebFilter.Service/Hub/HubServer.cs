@@ -104,13 +104,16 @@ public sealed class HubServer(FamilyService family, ILogger<HubServer> log) : Ba
             var changes = Channel.CreateBounded<int>(new BoundedChannelOptions(16) { FullMode = BoundedChannelFullMode.DropOldest });
             void OnChanged(int version) => changes.Writer.TryWrite(version);
             family.SettingsChanged += OnChanged;
+            // Ends with the service as well: Kestrel waits for open requests when it stops, and agents keep this one open.
+            using var open = CancellationTokenSource.CreateLinkedTokenSource(context.RequestAborted, stoppingToken);
+            var ended = open.Token;
             try
             {
-                await context.Response.WriteAsync(": connected\n\n", context.RequestAborted);
-                await context.Response.Body.FlushAsync(context.RequestAborted);
-                while (!context.RequestAborted.IsCancellationRequested)
+                await context.Response.WriteAsync(": connected\n\n", ended);
+                await context.Response.Body.FlushAsync(ended);
+                while (!ended.IsCancellationRequested)
                 {
-                    using var keepAlive = CancellationTokenSource.CreateLinkedTokenSource(context.RequestAborted);
+                    using var keepAlive = CancellationTokenSource.CreateLinkedTokenSource(ended);
                     keepAlive.CancelAfter(TimeSpan.FromSeconds(25));
                     string line;
                     try
@@ -118,12 +121,12 @@ public sealed class HubServer(FamilyService family, ILogger<HubServer> log) : Ba
                         var version = await changes.Reader.ReadAsync(keepAlive.Token);
                         line = $"event: version\ndata: {JsonSerializer.Serialize(new ChangeEvent(version), HubApiJsonContext.Default.ChangeEvent)}\n\n";
                     }
-                    catch (OperationCanceledException) when (!context.RequestAborted.IsCancellationRequested)
+                    catch (OperationCanceledException) when (!ended.IsCancellationRequested)
                     {
                         line = ": keep-alive\n\n";
                     }
-                    await context.Response.WriteAsync(line, context.RequestAborted);
-                    await context.Response.Body.FlushAsync(context.RequestAborted);
+                    await context.Response.WriteAsync(line, ended);
+                    await context.Response.Body.FlushAsync(ended);
                 }
             }
             catch (OperationCanceledException) { }
@@ -142,7 +145,11 @@ public sealed class HubServer(FamilyService family, ILogger<HubServer> log) : Ba
         catch (OperationCanceledException) { }
         finally
         {
-            await app.StopAsync(CancellationToken.None);
+            // Bounded, so the service's stop stays well inside the host's shutdown timeout: past it the service crashed
+            // (lab hub, 2026-10-26), Windows Error Reporting held one of its files, and an upgrade then needed a restart.
+            // Requests still open after this are aborted.
+            using var timeout = new CancellationTokenSource(TimeSpan.FromSeconds(5));
+            await app.StopAsync(timeout.Token);
             await app.DisposeAsync();
         }
     }
