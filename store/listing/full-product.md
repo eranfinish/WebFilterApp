@@ -1,4 +1,4 @@
-# The full extension (0.3.0): texts for the store update
+# The full extension (0.3.0, then 0.3.1): texts for the store updates
 
 > For the update of the **existing** items (Chrome `lkbhmgdhaalikcmpmefffohinafbjfgh`, Edge `labgagpndiahmbeohjikogfdigebeidl`), not a new item.
 > The step-by-step guide is in [../README.md](../README.md), "עדכון לגרסה המלאה". This file holds what to paste, field by field.
@@ -11,13 +11,13 @@ Privacy policy URL (both stores, now required): <https://gilded-zabaione-076cae.
 
 ## 1. Store listing: description
 
-**English** (Chrome: Store listing → Description; Edge: Store listings → English → Description; 1,297 characters, Edge needs at least 250)
+**English** (Chrome: Store listing → Description; Edge: Store listings → English → Description; 1,369 characters, Edge needs at least 250)
 
 ```text
 WebFilter is the browser part of WebFilter, a family web filter for Windows home computers. Parents set the rules in the WebFilter app on the family's computer, and the extension applies them in Microsoft Edge and Google Chrome in each child's Windows account:
 
 • Websites: only approved sites for young children, or blocked categories (adult content, gambling, proxies and more) for older children
-• YouTube: Restricted Mode, approved channels only, and no Shorts if the parents choose
+• YouTube: Restricted Mode, approved channels only, and no Shorts if the parents choose; older children can search for channels and ask a parent to approve one
 • Browsing time: a daily limit and allowed hours, with a warning before the time ends
 • Jumps: a site cannot open another site in a new tab or send the child there by an automatic redirect
 • Ads: requests to known ad servers are blocked (EasyList)
@@ -28,13 +28,13 @@ Parents get a baseline protection in their own accounts too: adult sites, jumps 
 The extension works only together with the WebFilter program for Windows, which installs it through browser policy on the family's computers. Installed by hand, it stays inactive. All decisions are made on the computer; nothing is sent to the developer or to third parties.
 ```
 
-**Hebrew** (Chrome: the Hebrew listing → Description; Edge: Store listings → Hebrew → Description; 1,043 characters)
+**Hebrew** (Chrome: the Hebrew listing → Description; Edge: Store listings → Hebrew → Description; 1,104 characters)
 
 ```text
 WebFilter הוא החלק של WebFilter בדפדפן. WebFilter הוא מסנן גלישה משפחתי למחשבי Windows ביתיים: ההורים קובעים את הכללים בתוכנת WebFilter במחשב של המשפחה, והתוסף מחיל אותם ב-Microsoft Edge וב-Google Chrome, בחשבון ה-Windows של כל ילד:
 
 • אתרים: רק אתרים מאושרים לילדים צעירים, או קטגוריות חסומות (תוכן למבוגרים, הימורים, פרוקסי ועוד) לילדים גדולים יותר
-• YouTube: מצב מוגבל, רק ערוצים מאושרים, ובלי Shorts אם ההורים בוחרים
+• YouTube: מצב מוגבל, רק ערוצים מאושרים, ובלי Shorts אם ההורים בוחרים; ילדים גדולים יותר יכולים לחפש ערוצים ולבקש מההורה לאשר אותם
 • זמן גלישה: מכסה יומית ושעות מותרות, עם אזהרה לפני שהזמן נגמר
 • קפיצות: אתר לא יכול לפתוח אתר אחר בלשונית חדשה או להעביר את הילד אליו בהפניה אוטומטית
 • פרסומות: בקשות לשרתי פרסום מוכרים נחסמות (EasyList)
@@ -174,7 +174,7 @@ WebFilter is the browser part of a parental-control product for Windows. The Web
 
 Installed by hand from the store, the extension checks chrome.management.getSelf(): because installType is not "admin", it stays inactive. It blocks nothing, connects to nothing, and its popup says that it was not installed by policy. This is deliberate, so that a manual install can never break anyone's browsing.
 
-When installed by policy on a child's account, it blocks sites according to the parents' rules and shows its own block page (blocked.html) with a "request access" button, blocks YouTube by channel on youtube.com, counts active browsing time, blocks a site from opening another site in a new tab or by an automatic redirect, and, when the parents turn it on, blocks requests to ad servers with a static ruleset generated from EasyList (rulesets/ads.json, notice in rulesets/ads-notice.txt). Nothing is sent over the network by the extension: all messages go to the local program through native messaging.
+When installed by policy on a child's account, it blocks sites according to the parents' rules and shows its own block page (blocked.html) with a "request access" button, blocks YouTube by channel on youtube.com (and, when the parents allow it, lets the child search for channels: YouTube's results page is restricted to its Channels filter and every video, Shorts and playlist result is hidden, so a child can find a channel and ask a parent to approve it), counts active browsing time, blocks a site from opening another site in a new tab or by an automatic redirect, and, when the parents turn it on, blocks requests to ad servers with a static ruleset generated from EasyList (rulesets/ads.json, notice in rulesets/ads-notice.txt). Nothing is sent over the network by the extension: all messages go to the local program through native messaging.
 
 The code is not minified. We can provide a screen recording of the extension working with the Windows program on request.
 ```

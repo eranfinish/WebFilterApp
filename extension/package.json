@@ -1,6 +1,6 @@
 {
   "name": "webfilter-extension",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "private": true,
   "description": "WebFilter browser extension (Manifest V3) for Edge and Chrome.",
   "type": "module",
