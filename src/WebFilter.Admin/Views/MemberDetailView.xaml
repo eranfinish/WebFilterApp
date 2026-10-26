@@ -98,11 +98,6 @@
               <TextBlock Text="{x:Static res:Strings.Member_BlockAdsHint}" Style="{StaticResource SubtleText}" FontSize="12" Margin="22,2,0,10" />
               <CheckBox Content="{x:Static res:Strings.Member_LogSearches}" IsChecked="{Binding LogSearches}" />
               <TextBlock Text="{x:Static res:Strings.Member_LogSearchesNote}" Style="{StaticResource SubtleText}" FontSize="12" Margin="22,2,0,0" />
-              <!-- PROTECTION-SPEC §15: only for YouTube's "approved channels only" mode -->
-              <StackPanel Margin="0,10,0,0" Visibility="{Binding ShowsChannelSearch, Converter={StaticResource BoolToVisibility}}">
-                <CheckBox Content="{x:Static res:Strings.Member_YouTubeChannelSearch}" IsChecked="{Binding YouTubeChannelSearch}" />
-                <TextBlock Text="{x:Static res:Strings.Member_YouTubeChannelSearchHint}" Style="{StaticResource SubtleText}" FontSize="12" Margin="22,2,0,0" TextWrapping="Wrap" />
-              </StackPanel>
               <Border Style="{StaticResource ErrorBanner}" Visibility="{Binding Message, Converter={StaticResource HasValueToVisibility}}">
                 <TextBlock Text="{Binding Message}" Foreground="{StaticResource DangerBrush}" TextWrapping="Wrap" />
               </Border>
@@ -264,6 +259,15 @@
         <TextBlock Text="{x:Static res:Strings.Member_ChannelsHint}" Style="{StaticResource SubtleText}" Margin="0,0,0,8" />
         <Border Style="{StaticResource Card}" Margin="0,0,0,16">
           <StackPanel>
+            <!-- PROTECTION-SPEC §15: the channel search sits beside the channels it lets the child ask for, where parents look for
+                 it (the lab, 2026-10-26), not among the protections: it allows rather than blocks. Only in "approved channels only". -->
+            <StackPanel Margin="0,0,0,12" DataContext="{Binding Protection}" Visibility="{Binding ShowsChannelSearch, Converter={StaticResource BoolToVisibility}, FallbackValue=Collapsed}">
+              <CheckBox Content="{x:Static res:Strings.Member_YouTubeChannelSearch}" IsChecked="{Binding YouTubeChannelSearch}" />
+              <TextBlock Text="{x:Static res:Strings.Member_YouTubeChannelSearchHint}" Style="{StaticResource SubtleText}" FontSize="12" Margin="22,2,0,0" TextWrapping="Wrap" />
+              <Border Style="{StaticResource ErrorBanner}" Visibility="{Binding ChannelSearchMessage, Converter={StaticResource HasValueToVisibility}}">
+                <TextBlock Text="{Binding ChannelSearchMessage}" Foreground="{StaticResource DangerBrush}" TextWrapping="Wrap" />
+              </Border>
+            </StackPanel>
             <WrapPanel>
               <StackPanel Style="{StaticResource FormField}">
                 <TextBlock Text="{x:Static res:Strings.Member_ChannelId}" Style="{StaticResource LabelText}" />

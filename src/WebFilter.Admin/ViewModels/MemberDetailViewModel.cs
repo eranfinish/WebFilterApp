@@ -311,7 +311,7 @@ public sealed partial class MemberDetailViewModel : PageViewModel
     /// <summary>One protection switch, alone (<paramref name="change"/> sets only that flag); refused, the switch goes back.</summary>
     internal async Task SaveProtectionAsync(ProtectionEditor editor, SetMember change)
     {
-        if (!await SaveAsync(() => Client.ExecuteAsync(change), Texts.Format(Strings.Done_MemberSaved, Context.MemberName(editor.MemberId)), m => editor.Message = m))
+        if (!await SaveAsync(() => Client.ExecuteAsync(change), Texts.Format(Strings.Done_MemberSaved, Context.MemberName(editor.MemberId)), m => editor.ShowRefusal(change, m)))
             editor.Load(editor.Member);
     }
 
@@ -574,6 +574,20 @@ public sealed partial class ProtectionEditor : ObservableObject
     [ObservableProperty]
     private string? _message;
 
+    /// <summary>
+    /// The service's refusal of the channel search switch, shown next to it: the switch sits in the YouTube channels section,
+    /// beside the channels it lets the child ask for, not among the protections (it allows rather than blocks).
+    /// </summary>
+    [ObservableProperty]
+    private string? _channelSearchMessage;
+
+    /// <summary>Shows a refusal next to the switch that was refused.</summary>
+    internal void ShowRefusal(SetMember change, string? message)
+    {
+        if (change.YouTubeChannelSearch is not null) ChannelSearchMessage = message;
+        else Message = message;
+    }
+
     /// <summary>Shows <paramref name="member"/>'s flags as stored, without saving anything.</summary>
     internal void Load(MemberDto member)
     {
@@ -612,6 +626,7 @@ public sealed partial class ProtectionEditor : ObservableObject
     {
         if (_loading || change is null || _owner is null) return;
         Message = null;
+        ChannelSearchMessage = null;
         _ = _owner.SaveProtectionAsync(this, change);
     }
 }

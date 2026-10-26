@@ -475,6 +475,19 @@ public sealed class MemberDetailViewModelTests
         Assert.Single(_client.SentOf<SetMember>());
     }
 
+    [Fact]
+    public async Task A_refused_channel_search_switch_says_why_next_to_it_in_the_YouTube_section()
+    {
+        _client.Reply = m => m is SetMember ? new AdminError("bad_request", "Unknown member.") : null;
+        var vm = await LoadedAsync();
+
+        vm.Protection!.YouTubeChannelSearch = true;
+
+        Assert.False(vm.Protection.YouTubeChannelSearch);
+        Assert.Equal("שירות הסינון לא ביצע את הפעולה: Unknown member.", vm.Protection.ChannelSearchMessage);
+        Assert.Null(vm.Protection.Message); // not among the protections, where the switch no longer is
+    }
+
     // ---- site rules ---------------------------------------------------------------------------------------------
 
     [Fact]
