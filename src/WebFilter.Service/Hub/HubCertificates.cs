@@ -1,6 +1,7 @@
 using System.Net;
 using System.Security.Cryptography;
 using System.Security.Cryptography.X509Certificates;
+using WebFilter.Service.Storage;
 
 namespace WebFilter.Service.Hub;
 
@@ -93,7 +94,7 @@ public sealed class HubCertificates
         X509CertificateLoader.LoadPkcs12(certificate.Export(X509ContentType.Pkcs12), null, X509KeyStorageFlags.Exportable);
 
     private static void Save(string path, X509Certificate2 certificate) =>
-        File.WriteAllBytes(path, ProtectedData.Protect(certificate.Export(X509ContentType.Pkcs12), null, DataProtectionScope.LocalMachine));
+        DurableFile.Write(path, ProtectedData.Protect(certificate.Export(X509ContentType.Pkcs12), null, DataProtectionScope.LocalMachine));
 
     private static X509Certificate2 Load(string path) =>
         X509CertificateLoader.LoadPkcs12(ProtectedData.Unprotect(File.ReadAllBytes(path), null, DataProtectionScope.LocalMachine), null, X509KeyStorageFlags.Exportable);

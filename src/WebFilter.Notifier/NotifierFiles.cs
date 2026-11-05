@@ -54,7 +54,12 @@ public sealed class FileCursorStore(string path) : ICursorStore
         {
             Directory.CreateDirectory(System.IO.Path.GetDirectoryName(Path)!);
             var temporary = Path + ".tmp";
-            File.WriteAllText(temporary, at.ToString("O", CultureInfo.InvariantCulture), Encoding.UTF8);
+            // Flushed before the rename: after a power cut an unflushed file can come back as zeros (lab, 2026-11-05).
+            using (var stream = new FileStream(temporary, FileMode.Create, FileAccess.Write, FileShare.None))
+            {
+                stream.Write(Encoding.UTF8.GetBytes(at.ToString("O", CultureInfo.InvariantCulture)));
+                stream.Flush(flushToDisk: true);
+            }
             File.Move(temporary, Path, overwrite: true);
         }
         catch (UnauthorizedAccessException ex)

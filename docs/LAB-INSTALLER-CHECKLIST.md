@@ -25,6 +25,8 @@ Get-NetConnectionProfile | Set-NetConnectionProfile -NetworkCategory Private
 
 (רוצים לבדוק במכוון "Hub לא זמין"? מתקינים את הסוכן לפני השינוי: ההתקנה מצליחה, ב-log מופיע `Pairing failed`, והשירות ממשיך לרוץ.)
 
+**מצב המעבדה:** `tests\simulation\lab\Get-LabStatus.ps1` מדליק את המכונות אם הן כבויות ורושם ב-`C:\Lab\status.txt` מה מותקן ורץ בכל אחת (גרסה, שירות, הגדרות, גרסת התוסף לכל משתמש, שגיאות אחרונות, קובצי מצב פגומים) ומה ה-Hub רואה. דורש חברות ב-Hyper-V Administrators (או PowerShell כמנהל).
+
 **אוטומציה מהמחשב שלך:** `tests\simulation\lab\Save-LabCredential.ps1` שומר את סיסמת `labadmin` (אחרי בדיקה מול המכונה), ו-`Invoke-LabAdmin.ps1` שולח הודעות ל-admin pipe בתוך מכונה — למשל קוד צימוד:
 
 ```powershell

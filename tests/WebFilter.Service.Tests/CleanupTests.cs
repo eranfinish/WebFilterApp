@@ -68,6 +68,23 @@ public sealed class CleanupTests : IDisposable
         Assert.Empty(_hives.Loaded); // everyone was logged on
     }
 
+    /// <summary>Lab, 2026-11-05: a hard shutdown left the state file as zeros. With the backup the uninstall is complete.</summary>
+    [Fact]
+    public void A_zeroed_state_file_is_read_from_its_backup()
+    {
+        ServiceWrotePolicies();
+        var ids = new ExtensionIds("chromeidchromeidchromeidchromeid", "edgeidedgeidedgeidedgeidedgeided");
+        new PolicyManager(_store, StatePath).Apply(BrowserPolicies.Desired(PolicyTests.Fixture(), "pc-kids", ids, @"C:\Program Files\WebFilter\com.webfilter.host.json")
+            .Where(v => v.Name != "IncognitoModeAvailability").ToList());
+        File.WriteAllBytes(StatePath, new byte[new FileInfo(StatePath).Length]);
+
+        var result = Cleanup();
+
+        Assert.True(result.Complete);
+        Assert.Empty(_store.All);
+        Assert.Contains("backup", _log.ToString(), StringComparison.Ordinal);
+    }
+
     [Fact]
     public void Users_who_are_not_logged_on_have_their_hive_loaded_and_cleaned()
     {
@@ -159,7 +176,9 @@ public sealed class CleanupTests : IDisposable
 
         var result = Cleanup();
 
-        Assert.Equal([StatePath], result.PoliciesLeft);
+        Assert.False(result.Complete);
+        Assert.Equal([$"{StatePath} (unreadable: the policies written are unknown)"], result.PoliciesLeft);
+        Assert.Contains("could not be read", _log.ToString(), StringComparison.Ordinal);
         Assert.True(result.DataDeleted);
     }
 

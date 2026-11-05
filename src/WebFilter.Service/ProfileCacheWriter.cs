@@ -4,6 +4,7 @@ using WebFilter.Contracts.Agent;
 using WebFilter.Contracts.Hub;
 using WebFilter.Core.Engine;
 using WebFilter.Core.Model;
+using WebFilter.Service.Storage;
 
 namespace WebFilter.Service;
 
@@ -26,8 +27,8 @@ public sealed class ProfileCacheWriter(string directory, ILogger log)
             var path = Path.Combine(directory, ProfileCacheJson.FileName(account.AccountId));
             try
             {
-                File.WriteAllText(path, ProfileCacheJson.Serialize(cache));
-                Protect(path, account.AccountId);
+                // Restricted before it takes the place of the old file, so the account never reads a half-written one.
+                DurableFile.Write(path, ProfileCacheJson.Serialize(cache), prepare: temp => Protect(temp, account.AccountId));
             }
             catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
             {

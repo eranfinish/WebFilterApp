@@ -46,8 +46,10 @@ public sealed class MachineCleanup(IPolicyStore store, IUserHives hives, IWfpEng
     {
         try
         {
-            var manager = new PolicyManager(new HiveLoadingPolicyStore(store, hives), statePath);
+            var manager = new PolicyManager(new HiveLoadingPolicyStore(store, hives), statePath, message => log.WriteLine($"Browser policies: {message}"));
             var removed = manager.RemoveAll();
+            // Without a readable record nothing is known to remove; say so rather than report a clean uninstall.
+            if (manager.StartedOver) return (removed, [$"{statePath} (unreadable: the policies written are unknown)"]);
             var left = manager.Remaining();
             log.WriteLine($"Browser policies: {removed} values removed, {left.Count} left.");
             foreach (var value in left) log.WriteLine($"  left: {value}");

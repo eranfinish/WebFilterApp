@@ -1,6 +1,7 @@
 using System.Text.Json;
 using System.Text.Json.Nodes;
 using WebFilter.Service.Policies;
+using WebFilter.Service.Storage;
 
 namespace WebFilter.Service.Setup;
 
@@ -67,10 +68,5 @@ public static class InstallConfig
         WriteAtomically(Path.Combine(directory, HostManifestFileName), HostManifest(Path.Combine(directory, HostExeFileName), ids));
     }
 
-    private static void WriteAtomically(string path, string content)
-    {
-        var temp = path + ".tmp";
-        File.WriteAllText(temp, content);
-        File.Move(temp, path, overwrite: true);
-    }
+    private static void WriteAtomically(string path, string content) => DurableFile.Write(path, content);
 }

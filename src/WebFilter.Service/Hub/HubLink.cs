@@ -5,6 +5,7 @@ using System.Security.Cryptography;
 using System.Security.Cryptography.X509Certificates;
 using System.Text.Json;
 using WebFilter.Contracts.Hub;
+using WebFilter.Service.Storage;
 
 namespace WebFilter.Service.Hub;
 
@@ -75,9 +76,9 @@ public sealed class HubLink
         using var issued = X509CertificateLoader.LoadCertificate(clientDer);
         var client = X509CertificateLoader.LoadPkcs12(issued.CopyWithPrivateKey(key).Export(X509ContentType.Pkcs12), null, X509KeyStorageFlags.Exportable);
 
-        Directory.CreateDirectory(dataDirectory);
-        File.WriteAllText(LinkPath(dataDirectory), JsonSerializer.Serialize(new LinkFile(paired.HubId, address, Convert.ToBase64String(caDer))));
-        File.WriteAllBytes(KeyPath(dataDirectory), ProtectedData.Protect(client.Export(X509ContentType.Pkcs12), null, DataProtectionScope.LocalMachine));
+        // The key first: a link file without its key is worse than no link at all.
+        DurableFile.Write(KeyPath(dataDirectory), ProtectedData.Protect(client.Export(X509ContentType.Pkcs12), null, DataProtectionScope.LocalMachine));
+        DurableFile.Write(LinkPath(dataDirectory), JsonSerializer.Serialize(new LinkFile(paired.HubId, address, Convert.ToBase64String(caDer))));
         return new HubLink { HubId = paired.HubId, Address = address, HubCa = ca, ClientCertificate = client };
     }
 

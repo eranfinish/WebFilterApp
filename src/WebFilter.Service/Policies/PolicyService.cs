@@ -34,7 +34,8 @@ public sealed class PolicyService(FamilyService family, SessionEvents sessions, 
     {
         var settings = options.Value;
         if (!settings.ManageBrowserPolicies) return;
-        var manager = new PolicyManager(store ?? new RegistryPolicyStore(), Path.Combine(settings.DataDirectory, StateFileName));
+        var manager = new PolicyManager(store ?? new RegistryPolicyStore(), Path.Combine(settings.DataDirectory, StateFileName),
+            message => log.LogWarning("Browser policies: {Message}", message));
         var ids = new ExtensionIds(settings.ChromeExtensionId, settings.EdgeExtensionId);
         void OnSettings(int _) => _wake.Release();
         void OnLogon(int session)

@@ -1,4 +1,5 @@
 using System.Text.Json;
+using WebFilter.Service.Storage;
 
 namespace WebFilter.Service.Policies;
 
@@ -18,9 +19,24 @@ public interface IPolicyStore
 /// Software\Policies, so either is worth reporting), and deletes values it wrote earlier that are no longer wanted. It never
 /// deletes values it neither wrote nor overwrote. What it wrote is remembered in a JSON file so removals survive restarts.
 /// Users whose hive is not loaded are skipped and handled on a later pass.
+/// <para>
+/// The file is written only when the set changes, through <see cref="DurableFile"/>, with the previous version kept as a
+/// backup. A file that cannot be read (zeros after a power cut — lab, 2026-11-05) does not stop the manager: it falls back
+/// to the backup, or else starts from nothing and adopts the wanted values it finds, and reports either through
+/// <paramref name="warn"/>. Starting from nothing forgets values it wrote that are no longer wanted.
+/// </para>
 /// </summary>
-public sealed class PolicyManager(IPolicyStore store, string statePath)
+public sealed class PolicyManager(IPolicyStore store, string statePath, Action<string>? warn = null)
 {
+    /// <summary>The state file could not be read on the last load, so the next save must not back it up over a good backup.</summary>
+    private bool _stateDamaged;
+
+    /// <summary>
+    /// The last load found neither the state file nor its backup readable, so values written earlier and no longer wanted
+    /// are unknown (and an uninstall cannot remove them).
+    /// </summary>
+    public bool StartedOver { get; private set; }
+
     private sealed record Managed(PolicyHive Hive, string? UserSid, string KeyPath, string Name);
 
     /// <param name="Repaired">The values it had written that were found changed or deleted, and restored (registry paths).</param>
@@ -33,6 +49,7 @@ public sealed class PolicyManager(IPolicyStore store, string statePath)
     public ApplyResult Apply(IReadOnlyList<PolicyValue> desired)
     {
         var managed = Load();
+        var before = managed.ToHashSet();
         var wanted = new HashSet<Managed>();
         int written = 0, deleted = 0, skipped = 0;
         var repaired = new List<string>();
@@ -63,7 +80,7 @@ public sealed class PolicyManager(IPolicyStore store, string statePath)
             deleted++;
         }
 
-        Save(managed);
+        if (_stateDamaged || !managed.SetEquals(before)) Save(managed);
         return new ApplyResult(written, deleted, skipped, repaired) { RepairedUsers = repairedUsers };
     }
 
@@ -77,15 +94,41 @@ public sealed class PolicyManager(IPolicyStore store, string statePath)
 
     private HashSet<Managed> Load()
     {
+        _stateDamaged = false;
+        StartedOver = false;
         if (!File.Exists(statePath)) return [];
-        return JsonSerializer.Deserialize<List<Managed>>(File.ReadAllText(statePath))?.ToHashSet() ?? [];
+        if (TryRead(statePath) is { } current) return current;
+
+        _stateDamaged = true;
+        var backup = DurableFile.BackupPath(statePath);
+        if (File.Exists(backup) && TryRead(backup) is { } previous)
+        {
+            warn?.Invoke($"{statePath} could not be read; using its backup from {File.GetLastWriteTime(backup):yyyy-MM-dd HH:mm}.");
+            return previous;
+        }
+        warn?.Invoke($"{statePath} and its backup could not be read; starting again from the policies wanted now. " +
+            "Values written earlier and no longer wanted may stay in the registry.");
+        StartedOver = true;
+        return [];
+    }
+
+    private static HashSet<Managed>? TryRead(string path)
+    {
+        try
+        {
+            return JsonSerializer.Deserialize<List<Managed>>(File.ReadAllText(path))?.ToHashSet() ?? [];
+        }
+        catch (JsonException)
+        {
+            return null;
+        }
     }
 
     private void Save(HashSet<Managed> managed)
     {
-        Directory.CreateDirectory(Path.GetDirectoryName(statePath)!);
-        var temp = statePath + ".tmp";
-        File.WriteAllText(temp, JsonSerializer.Serialize(managed.OrderBy(m => m.Hive).ThenBy(m => m.UserSid).ThenBy(m => m.KeyPath).ThenBy(m => m.Name).ToList()));
-        File.Move(temp, statePath, overwrite: true);
+        var json = JsonSerializer.Serialize(managed.OrderBy(m => m.Hive).ThenBy(m => m.UserSid).ThenBy(m => m.KeyPath).ThenBy(m => m.Name).ToList());
+        // A damaged file is replaced without becoming the backup, so a good backup survives.
+        DurableFile.Write(statePath, json, keepBackup: !_stateDamaged);
+        _stateDamaged = false;
     }
 }

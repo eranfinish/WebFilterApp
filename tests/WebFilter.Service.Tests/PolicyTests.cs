@@ -215,6 +215,75 @@ public sealed class PolicyTests : IDisposable
         Assert.Equal(new[] { "SomeoneElsesPolicy" }, _store.All.Select(v => v.Name));
     }
 
+    private string StatePath => Path.Combine(_dir, "managed.json");
+
+    /// <summary>What a hard shutdown left in the lab (2026-11-05): the file at its full length, all zeros.</summary>
+    private static void Zero(string path) => File.WriteAllBytes(path, new byte[new FileInfo(path).Length]);
+
+    [Fact]
+    public void A_pass_that_changes_nothing_does_not_rewrite_the_state_file()
+    {
+        _manager.Apply(Desired());
+        var written = DateTime.UtcNow.AddHours(-1);
+        File.SetLastWriteTimeUtc(StatePath, written);
+
+        _manager.Apply(Desired());
+
+        Assert.Equal(written, File.GetLastWriteTimeUtc(StatePath));
+        Assert.False(File.Exists(StatePath + ".tmp"));
+    }
+
+    [Fact]
+    public void A_zeroed_state_file_falls_back_to_the_backup_and_uninstall_still_removes_everything()
+    {
+        _store.Set(PolicyHive.Machine, null, Chrome, "SomeoneElsesPolicy", 1);
+        _manager.Apply(Desired());
+        _manager.Apply(Desired().Where(v => v.Name != "IncognitoModeAvailability").ToList()); // a second version: the first becomes the backup
+        Zero(StatePath);
+        var warnings = new List<string>();
+
+        var removed = new PolicyManager(_store, StatePath, warnings.Add).RemoveAll();
+
+        Assert.True(removed > 20);
+        Assert.Equal(new[] { "SomeoneElsesPolicy" }, _store.All.Select(v => v.Name));
+        Assert.Contains(warnings, w => w.Contains("backup", StringComparison.Ordinal));
+    }
+
+    [Fact]
+    public void Without_a_readable_backup_it_starts_again_instead_of_failing_every_pass()
+    {
+        _manager.Apply(Desired());
+        Zero(StatePath);
+        _store.Delete(PolicyHive.User, Noa, Edge, "InPrivateModeAvailability");
+        var warnings = new List<string>();
+        var restarted = new PolicyManager(_store, StatePath, warnings.Add);
+
+        var result = restarted.Apply(Desired());
+
+        Assert.Equal(1, result.Written);
+        Assert.Equal(1, _store.User(Noa, Edge, "InPrivateModeAvailability"));
+        Assert.Single(warnings);
+        // The values it found were adopted, so the next manager reads a good file and can remove them.
+        var again = new List<string>();
+        Assert.True(new PolicyManager(_store, StatePath, again.Add).RemoveAll() > 20);
+        Assert.Empty(again);
+        Assert.Empty(_store.All);
+    }
+
+    [Fact]
+    public void A_damaged_state_file_does_not_replace_a_good_backup()
+    {
+        _manager.Apply(Desired());
+        _manager.Apply(Desired().Where(v => v.Name != "IncognitoModeAvailability").ToList());
+        var backup = File.ReadAllText(StatePath + ".bak");
+        Zero(StatePath);
+
+        new PolicyManager(_store, StatePath).Apply(Desired());
+
+        Assert.Equal(backup, File.ReadAllText(StatePath + ".bak"));
+        Assert.StartsWith("[", File.ReadAllText(StatePath), StringComparison.Ordinal);
+    }
+
     /// <summary>
     /// PROTECTION-SPEC §13: the parents' accounts — administrators linked to an adult, to nobody or even to a filtered
     /// member, and unrestricted members — get the baseline's SafeSearch and nothing else; the children keep theirs.
