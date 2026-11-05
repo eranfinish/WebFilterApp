@@ -1,11 +1,11 @@
 // Renders the extension icons and the store images from the HTML sources in ./html, at exact pixel sizes.
 //
-//   cd store/tools && npm install && npm run render
+//   cd store/tools && npm install && npm run capture && npm run render
 //
+// The screenshots frame the real extension pages that capture.mjs takes (tools/captures/; needs extension/dist-test).
 // Uses the installed Edge (Playwright's bundled Chromium does not start on this Windows build).
 // Pages are served from store/ under a fake origin through request interception; every other request is
 // aborted, so the sources cannot depend on anything outside the repo and nothing goes to the network.
-// WF_EXT_ID=<32 letters a-p> renders the screenshots with a real extension ID instead of the sample one.
 
 import { chromium } from "playwright";
 import { readFile, writeFile, mkdir } from "node:fs/promises";
@@ -14,14 +14,7 @@ import { fileURLToPath } from "node:url";
 
 const here = path.dirname(fileURLToPath(import.meta.url));
 const storeDir = path.resolve(here, "..");
-const extensionDir = path.join(storeDir, "extension-s1");
 const ORIGIN = "http://render.test";
-
-const SAMPLE_ID = "kpmlhjacgbnefoidkmhcalpbjgfndoie"; // shape of a real ID (32 letters a-p); not a real item
-const extensionId = process.env.WF_EXT_ID ?? SAMPLE_ID;
-if (!/^[a-p]{32}$/.test(extensionId)) throw new Error(`WF_EXT_ID must be 32 letters a-p, got "${extensionId}"`);
-
-const manifest = JSON.parse(await readFile(path.join(extensionDir, "manifest.json"), "utf8"));
 
 const icon = (size, art, out) => ({ out, page: `tools/html/icon.html?size=${size}&art=${art}`, width: size, height: size, transparent: true });
 
@@ -37,8 +30,15 @@ const targets = [
   icon(300, 264, "assets/edge-logo-300x300.png"),
   { out: "assets/promo-small-440x280-en.png", page: "tools/html/promo-small.html?lang=en", width: 440, height: 280 },
   { out: "assets/promo-small-440x280-he.png", page: "tools/html/promo-small.html?lang=he", width: 440, height: 280 },
-  { out: "assets/screenshot-1280x800-en.png", page: "tools/html/screenshot.html?lang=en", width: 1280, height: 800, popupLocale: "en" },
-  { out: "assets/screenshot-1280x800-he.png", page: "tools/html/screenshot.html?lang=he", width: 1280, height: 800, popupLocale: "he" },
+  ...["en", "he"].flatMap((lang) =>
+    ["blocked", "channels", "popup"].map((shot, i) => ({
+      out: `assets/screenshot-${i + 1}-${shot}-1280x800-${lang}.png`,
+      page: `tools/html/screenshot.html?lang=${lang}&shot=${shot}`,
+      width: 1280,
+      height: 800,
+      lang,
+    })),
+  ),
 ];
 
 const contentTypes = {
@@ -63,16 +63,6 @@ async function serveStore(route) {
   }
 }
 
-// Runs inside every frame before page scripts: the minimum of chrome.* that popup.js uses,
-// answering as a force-installed ("admin") extension with the given locale's messages.
-function chromeStub({ messages, self }) {
-  const getMessage = (key) => (messages[key] ? messages[key].message : "");
-  const chromeObject = window.chrome || (window.chrome = {});
-  chromeObject.i18n = { getMessage, getUILanguage: () => getMessage("langCode") };
-  chromeObject.runtime = { id: self.id, lastError: undefined, getManifest: () => ({ version: self.version }) };
-  chromeObject.management = { getSelf: (callback) => callback({ ...self }) };
-}
-
 function pngSize(buffer) {
   const signature = "89504e470d0a1a0a";
   if (buffer.subarray(0, 8).toString("hex") !== signature) throw new Error("not a PNG");
@@ -86,14 +76,9 @@ try {
       viewport: { width: target.width, height: target.height },
       deviceScaleFactor: 1,
       colorScheme: "light",
-      locale: target.popupLocale === "he" ? "he-IL" : "en-US",
+      locale: target.lang === "he" ? "he-IL" : "en-US",
     });
     await context.route("**/*", serveStore);
-    if (target.popupLocale) {
-      const messages = JSON.parse(await readFile(path.join(extensionDir, "_locales", target.popupLocale, "messages.json"), "utf8"));
-      const self = { id: extensionId, version: manifest.version, installType: "admin", mayDisable: false, enabled: true };
-      await context.addInitScript(chromeStub, { messages, self });
-    }
     const page = await context.newPage();
     const errors = [];
     page.on("pageerror", (error) => errors.push(error.message));

@@ -2,8 +2,9 @@
   "name": "webfilter-store-tools",
   "private": true,
   "type": "module",
-  "description": "Renders the store images and extension icons from HTML, and checks the S1 popup in the installed Edge.",
+  "description": "Captures the extension's pages and renders the store images and icons from HTML in the installed Edge, and checks the S1 popup.",
   "scripts": {
+    "capture": "node capture.mjs",
     "render": "node render.mjs",
     "check": "node check-popup.mjs"
   },

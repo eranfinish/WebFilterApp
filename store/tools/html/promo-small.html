@@ -1,5 +1,5 @@
 <!doctype html>
-<!-- Small promo tile, 440x280. Query: lang=en|he. The tagline describes only what version 0.1.0 does. -->
+<!-- Small promo tile, 440x280. Query: lang=en|he. The tagline describes the full extension (0.3.x). -->
 <html>
 <head>
   <meta charset="utf-8">
@@ -52,9 +52,9 @@
   <script src="shield.js"></script>
   <script>
     const text = {
-      en: { dir: "ltr", tagline: "Shows whether it was installed by your PC's browser policy" },
-      // \u00a0 keeps the two words of the Hebrew 'by' on one line.
-      he: { dir: "rtl", tagline: "מציג אם התוסף הותקן על\u00a0ידי מדיניות הדפדפן במחשב" },
+      en: { dir: "ltr", tagline: "A family web filter for every child's computer at home" },
+      // \u00a0 keeps the last two words together; no Latin word, so the line breaks stay right to left.
+      he: { dir: "rtl", tagline: "מסנן גלישה משפחתי לילדים, בכל מחשב\u00a0בבית" },
     };
     const lang = new URLSearchParams(location.search).get("lang") === "he" ? "he" : "en";
     document.documentElement.lang = lang;

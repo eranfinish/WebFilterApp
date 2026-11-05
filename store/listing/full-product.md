@@ -183,4 +183,14 @@ The code is not minified. We can provide a screen recording of the extension wor
 
 ## 8. Images (optional)
 
-The screenshots and tiles in `store/assets` show the 0.1.0 popup. They can stay for this update; new ones of the block page and the popup can be made later with `store/tools`.
+Replace the 0.1.0 images (their text, "No permissions. No data collected.", contradicts the full extension) with the ones in
+`store/assets`, in both stores and both listings:
+
+| Field | English listing | Hebrew listing |
+|---|---|---|
+| Screenshots (1280x800), in this order | `screenshot-1-blocked-1280x800-en.png`, `screenshot-2-channels-1280x800-en.png`, `screenshot-3-popup-1280x800-en.png` | the same three ending in `-he.png` |
+| Small promo tile (440x280) | `promo-small-440x280-en.png` | `promo-small-440x280-he.png` |
+
+The icon and the Edge logo do not change. The pictures are the extension's real pages (0.3.1) with made-up names and
+channels, captured from the test build with a simulated service: `cd extension && npm run build:test`, then
+`cd store/tools && npm run capture && npm run render`.

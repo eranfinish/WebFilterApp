@@ -1,6 +1,6 @@
 # חומרי חנות — WebFilter
 
-> **עכשיו:** Edge אישר את הגרסה המלאה (0.3.0), ו-0.3.1 הוגש לו ב-2026-10-26. Chrome עדיין בודק את 0.3.0; אחרי האישור מגישים לו את 0.3.1 — ראו [העדכון הבא של התוסף](#העדכון-הבא-של-התוסף-031). ההדרכה שלב אחר שלב נמצאת בסעיף [עדכון לגרסה המלאה](#עדכון-לגרסה-המלאה-030--שלב-אחר-שלב), והטקסטים להדבקה ב-[listing/full-product.md](listing/full-product.md).
+> **עכשיו (2026-11-06):** Edge אישר את 0.3.1, ו-Chrome אישר את 0.3.0 — שתיהן הגיעו לחשבון ילד ב-`lab-kids`. הצעד הבא: להגיש ל-Chrome את 0.3.1 — ראו [העדכון הבא של התוסף](#העדכון-הבא-של-התוסף-031). ההדרכה שלב אחר שלב נמצאת בסעיף [עדכון לגרסה המלאה](#עדכון-לגרסה-המלאה-030--שלב-אחר-שלב), והטקסטים להדבקה ב-[listing/full-product.md](listing/full-product.md).
 > **קודם:** הגרסה המינימלית 0.1.0 (ספייק S1) פורסמה בשתי החנויות כדי לקבל מזהים קבועים, ו-S1 עבר במעבדה. ההוראות שלה נשארו בסוף הקובץ לתיעוד.
 > כל ההתחברויות, ההעלאות והפרסום — שלך. לא העליתי ולא התחברתי לשום מקום.
 
@@ -8,8 +8,8 @@
 
 | חנות | מזהה | מצב |
 |------|------|-----|
-| Chrome Web Store | `lkbhmgdhaalikcmpmefffohinafbjfgh` | 0.1.0 פורסם (Unlisted); S1 ב-Chrome עבר במעבדה — ראו MVP-PLAN, S1. **0.3.0 (הגרסה המלאה) הוגש 2026-10-23, בבדיקה מעמיקה (Broad Host Permissions)** |
-| Edge Add-ons | `labgagpndiahmbeohjikogfdigebeidl` (CRX ID — זה המזהה במדיניות) | 0.1.0 פורסם (Hidden); S1 ב-Edge עבר במעבדה — ראו MVP-PLAN, S1. 0.3.0 (הגרסה המלאה) הוגש 2026-10-23 ואושר. **0.3.1 (חיפוש ערוצים ושמות ערוצים) הוגש 2026-10-26, In certification** |
+| Chrome Web Store | `lkbhmgdhaalikcmpmefffohinafbjfgh` | 0.1.0 פורסם (Unlisted); S1 ב-Chrome עבר במעבדה — ראו MVP-PLAN, S1. 0.3.0 (הגרסה המלאה) הוגש 2026-10-23 ואושר: שרת העדכונים מחלק אותו (נבדק 2026-11-06), והוא הותקן ב-`lab-kids`. **0.3.1 — עוד לא הוגש** |
+| Edge Add-ons | `labgagpndiahmbeohjikogfdigebeidl` (CRX ID — זה המזהה במדיניות) | 0.1.0 פורסם (Hidden); S1 ב-Edge עבר במעבדה — ראו MVP-PLAN, S1. 0.3.0 (הגרסה המלאה) הוגש 2026-10-23 ואושר. 0.3.1 (חיפוש ערוצים ושמות ערוצים) הוגש 2026-10-26 ואושר: הותקן ב-`lab-kids` (נבדק 2026-11-05) |
 
 Edge: ‏Store ID `0RDCKC8CFL4G`, ‏Product ID `9c932b95-94d3-4114-b66a-4c27e152feec`. החשבון בשתי החנויות: `finish.software@gmail.com` (Chrome: non-trader; Edge: Individual).
 להתקנה במעבדה מעבירים את המזהים ל-MSI: ‏`CHROME_EXTENSION_ID=lkbhmgdhaalikcmpmefffohinafbjfgh EDGE_EXTENSION_ID=labgagpndiahmbeohjikogfdigebeidl`.
@@ -24,8 +24,8 @@ Edge: ‏Store ID `0RDCKC8CFL4G`, ‏Product ID `9c932b95-94d3-4114-b66a-4c27e15
 | `dist/webfilter-0.3.0.zip` | **הגרסה המלאה:** הקובץ להעלאה (נוצר ע"י הסקריפט; לא נשמר ב-git) |
 | `listing/full-product.md` | **הגרסה המלאה:** כל הטקסטים להדבקה — תיאור, מטרה יחידה, הסבר לכל הרשאה, שימוש במידע, הערות לבודקים |
 | `privacy-policy/index.html` | מדיניות פרטיות דו-לשונית, מעודכנת לגרסה המלאה. קובץ אחד בלי תלות חיצונית — מפרסמים כמו שהוא |
-| `assets/` | התמונות לחנויות (אייקון, לוגו, צילומי מסך, אריח קידום) |
-| `tools/` | המקור של התמונות (HTML) והסקריפטים שמייצרים אותן ובודקים את החלון הקופץ |
+| `assets/` | התמונות לחנויות (אייקון, לוגו, שלושה צילומי מסך בכל שפה, אריח קידום). הצילומים הם הדפים האמיתיים של 0.3.1 — מה מעלים לאן: סעיף 8 ב-`full-product.md` |
+| `tools/` | המקור של התמונות (HTML) והסקריפטים: `capture.mjs` מצלם את דפי התוסף ב-Edge, `render.mjs` מייצר מהם את התמונות |
 | `extension-s1/`, `build-s1.ps1` | **0.1.0 (S1), לתיעוד:** התוסף המינימלי וסקריפט האריזה שלו |
 | `listing/chrome-web-store.md`, `listing/edge-add-ons.md` | **0.1.0 (S1), לתיעוד:** הטקסטים של ההגשה הראשונה |
 
@@ -101,7 +101,7 @@ powershell -NoProfile -ExecutionPolicy Bypass -File store\build-full.ps1
 
 ## העדכון הבא של התוסף (0.3.1)
 
-תיקונים בקוד התוסף שנכנסו ל-v2 אחרי ש-0.3.0 הוגש. הם מגיעים לילדים רק בהעלאה חדשה, באותם שלבים. **Edge:** 0.3.1 הוגש ב-2026-10-26 (`store\dist\webfilter-0.3.1.zip`, ‏23 קבצים, SHA256 `C17CDD12…EFEBA`), עם שורת ה-YouTube החדשה בתיאור (אנגלית ועברית) וה-Notes for certification מסעיף 7 ב-`full-product.md`. Edge כבר אישר את 0.3.0, והגשה שם לא משפיעה על Chrome. **Chrome:** מגישים אחרי שהוא מאשר את 0.3.0, כדי לא להתחיל מחדש את הבדיקה המעמיקה שכבר רצה שם; ב-Chrome מעתיקים גם את ההסברים שהשתנו (ה-content scripts של YouTube ושורת "Website content"). לפני ההגשה: להעלות את הגרסה ב-`extension/package.json`, ולעדכן את `store/listing/full-product.md` אם השתנו הרשאות (הסקריפט יעצור אם כן).
+תיקונים בקוד התוסף שנכנסו ל-v2 אחרי ש-0.3.0 הוגש. הם מגיעים לילדים רק בהעלאה חדשה, באותם שלבים. **Edge:** 0.3.1 הוגש ב-2026-10-26 (`store\dist\webfilter-0.3.1.zip`, ‏23 קבצים, SHA256 `C17CDD12…EFEBA`), עם שורת ה-YouTube החדשה בתיאור (אנגלית ועברית) וה-Notes for certification מסעיף 7 ב-`full-product.md`. Edge אישר אותו. **Chrome:** אישר את 0.3.0, אז אפשר להגיש עכשיו את אותו `webfilter-0.3.1.zip` (שלב 3 למעלה, עם `webfilter-0.3.1.zip` במקום 0.3.0); ב-Chrome מעתיקים גם את ההסברים שהשתנו (ה-content scripts של YouTube ושורת "Website content"). **בשתי החנויות:** מחליפים את התמונות של 0.1.0 בצילומים החדשים (סעיף 8 ב-`full-product.md`) — הטקסט הישן "No permissions. No data collected." סותר את הגרסה המלאה. לפני ההגשה: להעלות את הגרסה ב-`extension/package.json`, ולעדכן את `store/listing/full-product.md` אם השתנו הרשאות (הסקריפט יעצור אם כן).
 
 | מה | למה | commit |
 |----|-----|--------|
