@@ -237,7 +237,8 @@ public sealed class InstallerTests
         // A silent upgrade with a parent signed in restarted the lab hub: the old version's files were in use. CloseApps
         // now runs before InstallValidate (which checks for files in use) and so before RemoveExistingProducts, which keeps
         // its standard place: a deferred action before it fails the install with error 2613 (seen in the lab). An open admin
-        // app kept its files in use too, so it is ended with the notifier; the service is not.
+        // app kept its files in use too, so it is ended with the notifier, and so is a native host a child's browser started
+        // (an uninstall left the install folder, 2026-11-06); the service is not.
         Assert.Null(Attr(Package.Descendants(Wix + "MajorUpgrade").Single(), "Schedule"));
         var scheduled = Scheduled("CloseApps");
         Assert.Equal(("InstallValidate", "Installed OR WIX_UPGRADE_DETECTED"), (Attr(scheduled, "Before"), Attr(scheduled, "Condition")));
@@ -247,9 +248,27 @@ public sealed class InstallerTests
         // In immediate mode WixQuietExec reads its command line from WixQuietExecCmdLine, set just before.
         var command = Single("SetProperty", "WixQuietExecCmdLine");
         Assert.Equal(("execute", "CloseApps"), (Attr(command, "Sequence"), Attr(command, "Before")));
-        Assert.Equal([@"C:\Windows\system32\taskkill.exe", "/F", "/IM", "WebFilter.Notifier.exe", "/IM", "WebFilter.Admin.exe"],
+        Assert.Equal([@"C:\Windows\system32\taskkill.exe", "/F", "/IM", "WebFilter.Notifier.exe", "/IM", "WebFilter.Admin.exe", "/IM", "WebFilter.NativeHost.exe"],
             CommandLine("WixQuietExecCmdLine", new() { ["System64Folder"] = @"C:\Windows\system32\" }));
         Assert.Empty(Package.Descendants(Util + "CloseApplication"));
+    }
+
+    [Fact]
+    public void Native_hosts_are_ended_again_after_their_registration_is_gone_and_before_the_files_are()
+    {
+        // Lab, 2026-11-06: the browser restarted the host within seconds of CloseApps (the extension reconnects while the host
+        // is registered), so the uninstall still left its exe for a reboot and the install folder behind. Whenever the files
+        // go (uninstall, and the old version's removal in an upgrade), the hosts are ended once more after
+        // RemoveRegistryValues (the standard sequence runs it before RemoveFiles), as LocalSystem.
+        var scheduled = Scheduled("CloseNativeHosts");
+        Assert.Equal(("RemoveRegistryValues", "REMOVE~=\"ALL\""), (Attr(scheduled, "After"), Attr(scheduled, "Condition")));
+        Assert.Equal("InstallExecuteSequence", scheduled.Parent!.Name.LocalName);
+        var action = Single("CustomAction", "CloseNativeHosts");
+        Assert.Equal(("WixQuietExec", "deferred", "no", "ignore"), (Attr(action, "DllEntry"), Attr(action, "Execute"), Attr(action, "Impersonate"), Attr(action, "Return")));
+        Assert.Equal([@"C:\Windows\system32\taskkill.exe", "/F", "/IM", "WebFilter.NativeHost.exe"],
+            CommandLine("CloseNativeHosts", new() { ["System64Folder"] = @"C:\Windows\system32\" }));
+        // The registration it relies on is removed by the MSI itself (RemoveRegistryValues), not by the cleanup command.
+        Assert.All(Single("Component", "NativeHostRegistration").Elements(Wix + "RegistryKey"), key => Assert.Equal("yes", Attr(key, "ForceDeleteOnUninstall")));
     }
 
     [Fact]
