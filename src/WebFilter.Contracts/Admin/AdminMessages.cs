@@ -39,6 +39,9 @@ namespace WebFilter.Contracts.Admin;
 [JsonDerivedType(typeof(GetDiagnostics), "getDiagnostics")]
 [JsonDerivedType(typeof(DiagnosticsResult), "diagnosticsResult")]
 [JsonDerivedType(typeof(SetNetworksPrivate), "setNetworksPrivate")]
+[JsonDerivedType(typeof(GetAutoBackup), "getAutoBackup")]
+[JsonDerivedType(typeof(AutoBackupResult), "autoBackupResult")]
+[JsonDerivedType(typeof(SetAutoBackup), "setAutoBackup")]
 [JsonDerivedType(typeof(AdminOk), "ok")]
 [JsonDerivedType(typeof(AdminError), "error")]
 public abstract record AdminMessage
@@ -194,6 +197,35 @@ public sealed record DiagnosticsResult(IReadOnlyList<CheckResult> Checks) : Admi
 /// for Private networks only). Answered with <see cref="AdminOk"/> whose detail lists the networks changed (comma-separated).
 /// </summary>
 public sealed record SetNetworksPrivate : AdminMessage;
+
+/// <summary>Hub only: where the hub saves the family's settings by itself, and how the last attempt went.</summary>
+public sealed record GetAutoBackup : AdminMessage;
+
+/// <param name="Folder">The folder on this computer; null when automatic backups are off.</param>
+/// <param name="LastBackupAt">When a backup was last written there.</param>
+/// <param name="LastError">Why the last attempt failed (the folder was removed, the disk is full…); null after a success.</param>
+public sealed record AutoBackupResult(string? Folder, DateTimeOffset? LastBackupAt, string? LastError) : AdminMessage;
+
+/// <summary>
+/// Hub only: saves the family's settings to <paramref name="Folder"/> by itself after every change (a full local path on
+/// this computer, e.g. inside the parent's OneDrive folder), or stops when it is null. The folder is accepted only after a
+/// backup was written there; otherwise the reply is an <see cref="AdminError"/> with one of the <c>Backup…</c> codes and
+/// nothing changes.
+/// </summary>
+public sealed record SetAutoBackup(string? Folder) : AdminMessage
+{
+    /// <summary>Not a full local path (a relative one).</summary>
+    public const string InvalidCode = "backup_folder_invalid";
+
+    /// <summary>A network folder: the service runs as the computer, which has no access to the parent's shares.</summary>
+    public const string NetworkCode = "backup_folder_network";
+
+    /// <summary>The folder does not exist.</summary>
+    public const string MissingCode = "backup_folder_missing";
+
+    /// <summary>The backup could not be written there (no access, the disk is full…); the message says why.</summary>
+    public const string WriteFailedCode = "backup_write_failed";
+}
 
 /// <param name="Id">
 /// service | browsers | browser_policies | extension | onedrive | network (hub) | hub_port (hub). onedrive: ok = installed

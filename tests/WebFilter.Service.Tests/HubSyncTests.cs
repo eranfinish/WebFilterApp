@@ -83,6 +83,61 @@ public sealed class HubSyncTests : IAsyncLifetime
         Assert.Equal("yoav", member);
     }
 
+    /// <summary>
+    /// A replaced parents' computer: the family is restored there from a backup and the agent is paired with it again. The
+    /// running service restarts (the pair command does that), and its first sync takes the whole snapshot — even when the
+    /// new hub's settings version happens to equal the old one's, which made the hub answer "nothing new" before.
+    /// </summary>
+    [Fact]
+    public async Task An_agent_paired_again_with_a_restored_hub_takes_its_settings_even_at_the_same_version()
+    {
+        await PairAndSyncAsync();
+        // An old hub that has seen some changes (the new one starts lower and is brought up to it below).
+        for (var i = 0; i < 10; i++)
+            _hub.WithHub((hub, now) => { hub.ReplaceSettings(Mapping.BundleMapper.ToConfig(Mapping.BundleMapper.ToBundle(hub.Config, hub.Version)), now); return 0; });
+        _sync.Wake();
+        await Eventually(() => _agent.AgentSnapshotVersion == HubVersion, "the agent synced the old hub's last version");
+        var oldVersion = _agent.AgentSnapshotVersion!.Value;
+        var restored = _hub.WithHub((hub, _) => Mapping.BundleMapper.ToBundle(hub.Config, hub.Version));
+        var marker = restored with { Members = [.. restored.Members.Select(m => m.Id == "yoav" ? m with { DisplayName = "Yoav on the new hub" } : m)] };
+
+        var newPort = FreePort();
+        using var newHub = new FamilyService(Options.Create(new ServiceOptions
+        {
+            Role = "hub", DeviceId = "pc-new", DataDirectory = Path.Combine(_dir, "new-hub"), ProfileDirectory = Path.Combine(_dir, "new-hub-profiles"),
+            HubBindAddress = "127.0.0.1", HubPort = newPort,
+        }), _clock, NullLogger<FamilyService>.Instance);
+        newHub.Start();
+        var newServer = new HubServer(newHub, NullLogger<HubServer>.Instance);
+        await newServer.StartAsync(CancellationToken.None);
+        try
+        {
+            await newServer.Port.WaitAsync(TimeSpan.FromSeconds(15));
+            // Restore the family and pair again (the pair command; pairing is a change on the hub too), then bring the new hub
+            // to exactly the agent's stored version.
+            newHub.WithHub((hub, now) => { hub.ReplaceSettings(Mapping.BundleMapper.ToConfig(marker), now); return 0; });
+            await _sync.StopAsync(CancellationToken.None);
+            await HubLink.PairAsync(_agentData, $"127.0.0.1:{newPort}", newHub.Pairing.Create(_clock.GetUtcNow()), "laptop-yoav", "Yoav's laptop");
+            while (newHub.WithHub((hub, _) => hub.Version) < oldVersion)
+                newHub.WithHub((hub, now) => { hub.ReplaceSettings(Mapping.BundleMapper.ToConfig(Mapping.BundleMapper.ToBundle(hub.Config, hub.Version)), now); return 0; });
+            Assert.Equal(oldVersion, newHub.WithHub((hub, _) => hub.Version));
+
+            // The service restarts: a new sync service on the same data.
+            _sync = new HubSyncService(_agent, NullLogger<HubSyncService>.Instance) { AccountsInterval = TimeSpan.Zero };
+            await _sync.StartAsync(CancellationToken.None);
+            await _sync.FirstSync.Task.WaitAsync(TimeSpan.FromSeconds(20));
+
+            Assert.Equal("Yoav on the new hub", _agent.WithAgent((agent, _) => agent.View().Config.Member("yoav").DisplayName));
+            Assert.Equal("yoav", _agent.WithAgent((agent, _) => agent.AccountOf("yoav").MemberId)); // the account link came with the backup
+            Assert.Contains(newHub.Devices!.All(), d => d.Id == "laptop-yoav" && d.RevokedAt is null);
+        }
+        finally
+        {
+            await _sync.StopAsync(CancellationToken.None);
+            await newServer.StopAsync(CancellationToken.None);
+        }
+    }
+
     [Fact]
     public async Task A_wrong_code_is_refused_and_nothing_is_registered()
     {

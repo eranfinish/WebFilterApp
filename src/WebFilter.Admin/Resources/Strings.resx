@@ -1679,4 +1679,103 @@
   <data name="Setup_Summary_BaselineOff" xml:space="preserve">
     <value>הגנה בסיסית להורים ולמבוגרים: כבויה. אפשר להפעיל בהגדרות.</value>
   </data>
+  <data name="Settings_Backup" xml:space="preserve">
+    <value>גיבוי ושחזור</value>
+  </data>
+  <data name="Settings_BackupHint" xml:space="preserve">
+    <value>שמירה של כל הגדרות המשפחה בקובץ: בני המשפחה, שעות ומכסות, כללים, ערוצים, אפליקציות, קטגוריות, והשיוך של חשבונות Windows בכל מחשב. שמרו את הקובץ מחוץ למחשב הזה — בדיסק-און-קי או בענן — ושמרו שוב אחרי שינויים גדולים. יומן הפעילות, הבקשות והצימודים לא נשמרים.</value>
+  </data>
+  <data name="Settings_RestoreHint" xml:space="preserve">
+    <value>שחזור מחליף את כל ההגדרות במחשב הזה בהגדרות מהגיבוי, והמחשב הזה נשאר מחשב ההורים — גם כשמשחזרים במחשב אחר מזה שהגיבוי נוצר בו. מחשבי ילדים שעוד לא מצומדים למחשב הזה מצמדים מחדש במסך &quot;מכשירים&quot;, והשיוך של החשבונות שלהם חוזר מהגיבוי.</value>
+  </data>
+  <data name="Action_SaveBackup" xml:space="preserve">
+    <value>שמירת גיבוי…</value>
+  </data>
+  <data name="Action_RestoreBackup" xml:space="preserve">
+    <value>שחזור מגיבוי…</value>
+  </data>
+  <data name="Backup_SaveTitle" xml:space="preserve">
+    <value>שמירת גיבוי של הגדרות המשפחה</value>
+  </data>
+  <data name="Backup_OpenTitle" xml:space="preserve">
+    <value>בחירת קובץ גיבוי לשחזור</value>
+  </data>
+  <data name="Done_BackupSaved" xml:space="preserve">
+    <value>הגיבוי נשמר ב-{0}</value>
+  </data>
+  <data name="Done_BackupRestored" xml:space="preserve">
+    <value>הגדרות המשפחה שוחזרו מהגיבוי של {0}.</value>
+  </data>
+  <data name="Backup_ConfirmTitle" xml:space="preserve">
+    <value>שחזור מגיבוי</value>
+  </data>
+  <data name="Backup_Confirm" xml:space="preserve">
+    <value>השחזור יחליף את כל הגדרות המשפחה במחשב הזה בהגדרות מהגיבוי של {0}: {1} בני משפחה, {2} כללים ו-{3} מחשבים. אפשר לחזור אחורה רק בשחזור של גיבוי אחר. להמשיך?</value>
+  </data>
+  <data name="Backup_WriteFailed" xml:space="preserve">
+    <value>לא הצלחנו לשמור את הגיבוי: {0}</value>
+  </data>
+  <data name="Backup_ReadFailed" xml:space="preserve">
+    <value>לא הצלחנו לקרוא את הקובץ: {0}</value>
+  </data>
+  <data name="Backup_NotABackup" xml:space="preserve">
+    <value>הקובץ הזה אינו גיבוי של WebFilter. לא שוחזר דבר.</value>
+  </data>
+  <data name="Backup_TooNew" xml:space="preserve">
+    <value>הגיבוי נוצר בגרסה חדשה יותר של WebFilter. עדכנו קודם את WebFilter במחשב הזה. לא שוחזר דבר.</value>
+  </data>
+  <data name="Backup_Damaged" xml:space="preserve">
+    <value>קובץ הגיבוי חסר או פגום. לא שוחזר דבר.</value>
+  </data>
+  <data name="Setup_RestoreHint" xml:space="preserve">
+    <value>יש לכם גיבוי של הגדרות המשפחה, למשל ממחשב הורים קודם? אפשר לשחזר אותו במקום לעבור על האשף.</value>
+  </data>
+  <data name="Action_GoToRestore" xml:space="preserve">
+    <value>שחזור מגיבוי</value>
+  </data>
+  <data name="Settings_AutoBackup" xml:space="preserve">
+    <value>גיבוי אוטומטי</value>
+  </data>
+  <data name="Settings_AutoBackupHint" xml:space="preserve">
+    <value>מחשב ההורים שומר בעצמו גיבוי בכל פעם שהגדרות המשפחה משתנות — גם כשממשק הניהול סגור: הקובץ WebFilter-backup-latest.json, ועותק אחד לכל יום שנשמר 30 יום. בחרו תיקייה שמסתנכרנת לענן, למשל בתוך OneDrive או Google Drive, כך שהגיבוי יוצא מהמחשב לבד.</value>
+  </data>
+  <data name="AutoBackup_Off" xml:space="preserve">
+    <value>הגיבוי האוטומטי כבוי.</value>
+  </data>
+  <data name="AutoBackup_On" xml:space="preserve">
+    <value>נשמר אוטומטית בתיקייה {0}.</value>
+  </data>
+  <data name="AutoBackup_Last" xml:space="preserve">
+    <value>גיבוי אחרון: {0}.</value>
+  </data>
+  <data name="AutoBackup_Failed" xml:space="preserve">
+    <value>הגיבוי האחרון נכשל: {0} ננסה שוב בעוד כמה דקות.</value>
+  </data>
+  <data name="Action_ChooseBackupFolder" xml:space="preserve">
+    <value>בחירת תיקייה…</value>
+  </data>
+  <data name="Action_TurnOffAutoBackup" xml:space="preserve">
+    <value>כיבוי</value>
+  </data>
+  <data name="AutoBackup_FolderTitle" xml:space="preserve">
+    <value>תיקייה לגיבוי האוטומטי</value>
+  </data>
+  <data name="Done_AutoBackupOn" xml:space="preserve">
+    <value>הגיבוי האוטומטי פועל, וגיבוי ראשון כבר נשמר ב-{0}.</value>
+  </data>
+  <data name="Done_AutoBackupOff" xml:space="preserve">
+    <value>הגיבוי האוטומטי כובה. קבצים שכבר נשמרו נשארים בתיקייה.</value>
+  </data>
+  <data name="AutoBackup_Error_Invalid" xml:space="preserve">
+    <value>צריך לבחור תיקייה במחשב הזה.</value>
+  </data>
+  <data name="AutoBackup_Error_Network" xml:space="preserve">
+    <value>אי אפשר לגבות לתיקייה ברשת. בחרו תיקייה במחשב הזה — למשל בתוך OneDrive.</value>
+  </data>
+  <data name="AutoBackup_Error_Missing" xml:space="preserve">
+    <value>התיקייה הזו כבר לא קיימת.</value>
+  </data>
+  <data name="AutoBackup_Error_Write" xml:space="preserve">
+    <value>לא הצלחנו לשמור בתיקייה הזו: {0}</value>
+  </data>
 </root>

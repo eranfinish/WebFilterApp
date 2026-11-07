@@ -21,6 +21,7 @@ public sealed class HubSyncService(FamilyService family, ILogger<HubSyncService>
     public static readonly TimeSpan PollInterval = TimeSpan.FromSeconds(10);
     private readonly SemaphoreSlim _wake = new(0);
     private HubLink? _link;
+    private bool _fullSnapshotTaken;
     private HttpClient? _http;
     private IReadOnlyList<DeviceAccount>? _seen;
     private IReadOnlyList<DeviceAccount>? _reported;
@@ -95,12 +96,21 @@ public sealed class HubSyncService(FamilyService family, ILogger<HubSyncService>
             throw;
         }
 
-        using var snapshotResponse = await _http!.GetAsync($"{HubApi.SnapshotPath}?since={family.AgentSnapshotVersion ?? -1}", ct);
+        // The first sync after the service starts takes the whole snapshot. After pairing with another hub (a restored or
+        // replaced parents' computer) the stored version is the old hub's, and the new hub's could happen to equal it — the
+        // hub would then answer "nothing new" and this computer would keep the old family's settings.
+        var since = _fullSnapshotTaken ? family.AgentSnapshotVersion ?? -1 : -1;
+        using var snapshotResponse = await _http!.GetAsync($"{HubApi.SnapshotPath}?since={since}", ct);
         if (snapshotResponse.StatusCode == HttpStatusCode.Unauthorized) throw new UnauthorizedAccessException("This device is no longer paired with the hub.");
         snapshotResponse.EnsureSuccessStatusCode();
-        if (snapshotResponse.StatusCode == HttpStatusCode.NoContent) return;
+        if (snapshotResponse.StatusCode == HttpStatusCode.NoContent)
+        {
+            _fullSnapshotTaken = true;
+            return;
+        }
         var snapshot = await snapshotResponse.Content.ReadFromJsonAsync(HubApiJsonContext.Default.SnapshotDto, ct);
         if (snapshot is not null) family.ApplyRemoteSnapshot(SyncMapper.FromDto(snapshot));
+        _fullSnapshotTaken = true;
     }
 
     /// <summary>The hub computer's accounts go straight into its own settings, whenever they change.</summary>

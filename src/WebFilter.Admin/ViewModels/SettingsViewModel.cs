@@ -21,7 +21,210 @@ public sealed partial class SettingsViewModel : PageViewModel
 
     public static readonly IReadOnlyList<Option> YouTubeModes = Texts.Options("YouTubeMode_", "off", "restricted", "allowlist", "unrestricted");
 
-    public SettingsViewModel(FamilyContext context) : base(context) => PipeName = Client.PipeName;
+    private readonly IDialogService? _dialogs;
+    private readonly IFileDialogService? _files;
+    private readonly IFileStore _store;
+
+    /// <param name="dialogs">Confirms a restore; without it (and <paramref name="files"/>) the backup section cannot act.</param>
+    /// <param name="files">Asks where to save a backup and which one to restore.</param>
+    /// <param name="store">Reads and writes the chosen file; the disk by default.</param>
+    public SettingsViewModel(FamilyContext context, IDialogService? dialogs = null, IFileDialogService? files = null, IFileStore? store = null) : base(context)
+    {
+        PipeName = Client.PipeName;
+        _dialogs = dialogs;
+        _files = files;
+        _store = store ?? new DiskFileStore();
+    }
+
+    /// <summary>The app version a backup records.</summary>
+    internal static string? AppVersion =>
+        typeof(SettingsViewModel).Assembly.GetCustomAttributes(typeof(System.Reflection.AssemblyInformationalVersionAttribute), false)
+            .OfType<System.Reflection.AssemblyInformationalVersionAttribute>().FirstOrDefault()?.InformationalVersion;
+
+    private bool CanUseBackups => _files is not null && _dialogs is not null && !IsAgent;
+
+    /// <summary>
+    /// Saves the family's settings to a file the parent chooses (<see cref="FamilyBackup"/>), read fresh from the service so
+    /// the file has the latest change.
+    /// </summary>
+    [RelayCommand(CanExecute = nameof(CanUseBackups))]
+    private async Task SaveBackup()
+    {
+        StatusMessage = null;
+        FamilyBundle? settings = null;
+        StatusResult? status = null;
+        if (!await RunAsync(async () =>
+            {
+                status = await Context.RefreshStatusAsync();
+                settings = await Context.RefreshSettingsAsync();
+            }))
+            return;
+        var path = _files!.ChooseSaveFile(FamilyBackup.SuggestedFileName(Context.ToLocal(Context.ServiceNow)), Strings.Backup_SaveTitle);
+        if (path is null) return;
+        try
+        {
+            _store.WriteAllText(path, FamilyBackup.Serialize(new FamilyBackupFile(Context.ServiceNow, status!.DeviceId, AppVersion, settings!)));
+        }
+        catch (System.IO.IOException ex)
+        {
+            ErrorMessage = Texts.Format(Strings.Backup_WriteFailed, ex.Message);
+            return;
+        }
+        ErrorMessage = null;
+        StatusMessage = Texts.Format(Strings.Done_BackupSaved, Texts.Ltr(path));
+    }
+
+    /// <summary>
+    /// Replaces the family's settings with a backup's, after the parent confirms what it holds. This computer stays the hub
+    /// (<see cref="FamilyBackup.ForThisHub"/>); the service validates the settings as for any other change.
+    /// </summary>
+    [RelayCommand(CanExecute = nameof(CanUseBackups))]
+    private async Task RestoreBackup()
+    {
+        StatusMessage = null;
+        var path = _files!.ChooseOpenFile(Strings.Backup_OpenTitle);
+        if (path is null) return;
+        FamilyBackupFile backup;
+        try
+        {
+            backup = FamilyBackup.Read(_store.ReadAllText(path));
+        }
+        catch (FamilyBackupException ex)
+        {
+            ErrorMessage = ex.Problem switch
+            {
+                BackupProblem.TooNew => Strings.Backup_TooNew,
+                BackupProblem.Damaged => Strings.Backup_Damaged,
+                _ => Strings.Backup_NotABackup,
+            };
+            return;
+        }
+        catch (System.IO.IOException ex)
+        {
+            ErrorMessage = Texts.Format(Strings.Backup_ReadFailed, ex.Message);
+            return;
+        }
+        var settings = backup.Settings;
+        var question = Texts.Format(Strings.Backup_Confirm, Context.FormatDateTime(backup.CreatedAt),
+            settings.Members.Count.ToString(CultureInfo.CurrentCulture), settings.Rules.Count.ToString(CultureInfo.CurrentCulture),
+            settings.Devices.Count.ToString(CultureInfo.CurrentCulture));
+        if (!_dialogs!.Confirm(question, Strings.Backup_ConfirmTitle)) return;
+        var thisComputer = Context.Status?.DeviceId ?? (await Context.RefreshStatusAsync()).DeviceId;
+        await SaveSettingsAsync(current => FamilyBackup.ForThisHub(backup, current, thisComputer),
+            Texts.Format(Strings.Done_BackupRestored, Context.FormatDateTime(backup.CreatedAt)));
+    }
+
+    partial void OnIsAgentChanged(bool value)
+    {
+        SaveBackupCommand.NotifyCanExecuteChanged();
+        RestoreBackupCommand.NotifyCanExecuteChanged();
+        ChooseAutoBackupFolderCommand.NotifyCanExecuteChanged();
+    }
+
+    // ---- automatic backups (the hub saves by itself into a folder a parent chose) ---------------------------------
+
+    /// <summary>The service answers for automatic backups (false on an agent, or with an older service).</summary>
+    [ObservableProperty]
+    [NotifyCanExecuteChangedFor(nameof(ChooseAutoBackupFolderCommand))]
+    private bool _autoBackupAvailable;
+
+    /// <summary>The folder automatic backups go to; null while they are off.</summary>
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(AutoBackupOn))]
+    [NotifyCanExecuteChangedFor(nameof(TurnOffAutoBackupCommand))]
+    private string? _autoBackupFolder;
+
+    public bool AutoBackupOn => AutoBackupFolder is not null;
+
+    /// <summary>Where and when, or that it is off.</summary>
+    [ObservableProperty] private string _autoBackupText = "";
+
+    /// <summary>Why the last automatic backup failed; null after a success.</summary>
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(HasAutoBackupProblem))]
+    private string? _autoBackupProblem;
+
+    public bool HasAutoBackupProblem => AutoBackupProblem is not null;
+
+    private bool CanChooseAutoBackupFolder => _files is not null && AutoBackupAvailable && !IsAgent;
+
+    private async Task LoadAutoBackupAsync()
+    {
+        try
+        {
+            ShowAutoBackup(await Client.RequestAsync<AutoBackupResult>(new GetAutoBackup()));
+            AutoBackupAvailable = true;
+        }
+        catch (AdminServerException ex) when (ex.Code is "unsupported" or FamilyContext.NotHub)
+        {
+            AutoBackupAvailable = false;
+        }
+    }
+
+    private void ShowAutoBackup(AutoBackupResult status)
+    {
+        AutoBackupFolder = status.Folder;
+        AutoBackupText = status.Folder is null
+            ? Strings.AutoBackup_Off
+            : Texts.Join(" ", Texts.Format(Strings.AutoBackup_On, Texts.Ltr(status.Folder)),
+                status.LastBackupAt is { } at ? Texts.Format(Strings.AutoBackup_Last, Context.FormatDateTime(at)) : null);
+        AutoBackupProblem = status.Folder is not null && status.LastError is { } error ? Texts.Format(Strings.AutoBackup_Failed, error) : null;
+    }
+
+    /// <summary>
+    /// Turns automatic backups on into a folder the parent picks (their OneDrive folder is offered first). The service
+    /// writes a backup there before it accepts the folder.
+    /// </summary>
+    [RelayCommand(CanExecute = nameof(CanChooseAutoBackupFolder))]
+    private async Task ChooseAutoBackupFolder()
+    {
+        StatusMessage = null;
+        var folder = _files!.ChooseFolder(Strings.AutoBackup_FolderTitle, AutoBackupFolder ?? SuggestedBackupFolder());
+        if (folder is null) return;
+        if (!await SetAutoBackupAsync(folder)) return;
+        StatusMessage = Texts.Format(Strings.Done_AutoBackupOn, Texts.Ltr(folder));
+    }
+
+    [RelayCommand(CanExecute = nameof(AutoBackupOn))]
+    private async Task TurnOffAutoBackup()
+    {
+        StatusMessage = null;
+        if (!await SetAutoBackupAsync(null)) return;
+        StatusMessage = Strings.Done_AutoBackupOff;
+    }
+
+    private async Task<bool> SetAutoBackupAsync(string? folder)
+    {
+        try
+        {
+            await Client.ExecuteAsync(new SetAutoBackup(folder));
+        }
+        catch (AdminServerException ex) when (ex.Code.StartsWith("backup_", StringComparison.Ordinal))
+        {
+            ErrorMessage = ex.Code switch
+            {
+                SetAutoBackup.NetworkCode => Strings.AutoBackup_Error_Network,
+                SetAutoBackup.MissingCode => Strings.AutoBackup_Error_Missing,
+                SetAutoBackup.WriteFailedCode => Texts.Format(Strings.AutoBackup_Error_Write, ex.Message),
+                _ => Strings.AutoBackup_Error_Invalid,
+            };
+            return false;
+        }
+        catch (AdminClientException ex)
+        {
+            ErrorMessage = Texts.Error(ex);
+            return false;
+        }
+        ErrorMessage = null;
+        await LoadAutoBackupAsync();
+        return true;
+    }
+
+    /// <summary>The parent's OneDrive folder when there is one (so the backup leaves the computer by itself), else Documents.</summary>
+    internal static string SuggestedBackupFolder() =>
+        Environment.GetEnvironmentVariable("OneDrive") is { Length: > 0 } oneDrive && System.IO.Directory.Exists(oneDrive)
+            ? oneDrive
+            : Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
 
     public override string Title => Strings.Nav_Settings;
 
@@ -76,6 +279,7 @@ public sealed partial class SettingsViewModel : PageViewModel
                 HubText = Context.DescribeHub(status.Hub).Text;
                 WindowsFeatures = null;
                 Baseline = null;
+                AutoBackupAvailable = false;
                 return;
             }
             var settings = Context.Settings ?? await Context.RefreshSettingsAsync();
@@ -91,6 +295,7 @@ public sealed partial class SettingsViewModel : PageViewModel
             var hasAdultList = BaselineEditor.HasAdultList(settings);
             if (Baseline is { IsChanged: true } changing) changing.Rebase(baseline, hasAdultList);
             else Baseline = new BaselineEditor(this, baseline, hasAdultList);
+            await LoadAutoBackupAsync();
         }
         finally
         {

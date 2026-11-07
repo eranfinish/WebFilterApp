@@ -4941,5 +4941,271 @@ namespace WebFilter.Admin.Resources {
                 return ResourceManager.GetString("Setup_Summary_BaselineOff", resourceCulture);
             }
         }
+
+        /// <summary>
+        ///   Looks up a localized string similar to גיבוי ושחזור.
+        /// </summary>
+        public static string Settings_Backup {
+            get {
+                return ResourceManager.GetString("Settings_Backup", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to שמירה של כל הגדרות המשפחה בקובץ: בני המשפחה, שעות ומכסות, כללים, ערוצים, אפליקציות, קטגוריות, והשיוך....
+        /// </summary>
+        public static string Settings_BackupHint {
+            get {
+                return ResourceManager.GetString("Settings_BackupHint", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to שחזור מחליף את כל ההגדרות במחשב הזה בהגדרות מהגיבוי, והמחשב הזה נשאר מחשב ההורים — גם כשמשחזרים במחש....
+        /// </summary>
+        public static string Settings_RestoreHint {
+            get {
+                return ResourceManager.GetString("Settings_RestoreHint", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to שמירת גיבוי….
+        /// </summary>
+        public static string Action_SaveBackup {
+            get {
+                return ResourceManager.GetString("Action_SaveBackup", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to שחזור מגיבוי….
+        /// </summary>
+        public static string Action_RestoreBackup {
+            get {
+                return ResourceManager.GetString("Action_RestoreBackup", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to שמירת גיבוי של הגדרות המשפחה.
+        /// </summary>
+        public static string Backup_SaveTitle {
+            get {
+                return ResourceManager.GetString("Backup_SaveTitle", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to בחירת קובץ גיבוי לשחזור.
+        /// </summary>
+        public static string Backup_OpenTitle {
+            get {
+                return ResourceManager.GetString("Backup_OpenTitle", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to הגיבוי נשמר ב-{0}.
+        /// </summary>
+        public static string Done_BackupSaved {
+            get {
+                return ResourceManager.GetString("Done_BackupSaved", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to הגדרות המשפחה שוחזרו מהגיבוי של {0}..
+        /// </summary>
+        public static string Done_BackupRestored {
+            get {
+                return ResourceManager.GetString("Done_BackupRestored", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to שחזור מגיבוי.
+        /// </summary>
+        public static string Backup_ConfirmTitle {
+            get {
+                return ResourceManager.GetString("Backup_ConfirmTitle", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to השחזור יחליף את כל הגדרות המשפחה במחשב הזה בהגדרות מהגיבוי של {0}: {1} בני משפחה, {2} כללים ו-{3} מח....
+        /// </summary>
+        public static string Backup_Confirm {
+            get {
+                return ResourceManager.GetString("Backup_Confirm", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to לא הצלחנו לשמור את הגיבוי: {0}.
+        /// </summary>
+        public static string Backup_WriteFailed {
+            get {
+                return ResourceManager.GetString("Backup_WriteFailed", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to לא הצלחנו לקרוא את הקובץ: {0}.
+        /// </summary>
+        public static string Backup_ReadFailed {
+            get {
+                return ResourceManager.GetString("Backup_ReadFailed", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to הקובץ הזה אינו גיבוי של WebFilter. לא שוחזר דבר..
+        /// </summary>
+        public static string Backup_NotABackup {
+            get {
+                return ResourceManager.GetString("Backup_NotABackup", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to הגיבוי נוצר בגרסה חדשה יותר של WebFilter. עדכנו קודם את WebFilter במחשב הזה. לא שוחזר דבר..
+        /// </summary>
+        public static string Backup_TooNew {
+            get {
+                return ResourceManager.GetString("Backup_TooNew", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to קובץ הגיבוי חסר או פגום. לא שוחזר דבר..
+        /// </summary>
+        public static string Backup_Damaged {
+            get {
+                return ResourceManager.GetString("Backup_Damaged", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to יש לכם גיבוי של הגדרות המשפחה, למשל ממחשב הורים קודם? אפשר לשחזר אותו במקום לעבור על האשף..
+        /// </summary>
+        public static string Setup_RestoreHint {
+            get {
+                return ResourceManager.GetString("Setup_RestoreHint", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to שחזור מגיבוי.
+        /// </summary>
+        public static string Action_GoToRestore {
+            get {
+                return ResourceManager.GetString("Action_GoToRestore", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to גיבוי אוטומטי.
+        /// </summary>
+        public static string Settings_AutoBackup {
+            get {
+                return ResourceManager.GetString("Settings_AutoBackup", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to מחשב ההורים שומר בעצמו גיבוי בכל פעם שהגדרות המשפחה משתנות — גם כשממשק הניהול סגור: הקובץ WebFilter-....
+        /// </summary>
+        public static string Settings_AutoBackupHint {
+            get {
+                return ResourceManager.GetString("Settings_AutoBackupHint", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to הגיבוי האוטומטי כבוי..
+        /// </summary>
+        public static string AutoBackup_Off {
+            get {
+                return ResourceManager.GetString("AutoBackup_Off", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to נשמר אוטומטית בתיקייה {0}..
+        /// </summary>
+        public static string AutoBackup_On {
+            get {
+                return ResourceManager.GetString("AutoBackup_On", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to גיבוי אחרון: {0}..
+        /// </summary>
+        public static string AutoBackup_Last {
+            get {
+                return ResourceManager.GetString("AutoBackup_Last", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to הגיבוי האחרון נכשל: {0} ננסה שוב בעוד כמה דקות..
+        /// </summary>
+        public static string AutoBackup_Failed {
+            get {
+                return ResourceManager.GetString("AutoBackup_Failed", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to בחירת תיקייה….
+        /// </summary>
+        public static string Action_ChooseBackupFolder {
+            get {
+                return ResourceManager.GetString("Action_ChooseBackupFolder", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to כיבוי.
+        /// </summary>
+        public static string Action_TurnOffAutoBackup {
+            get {
+                return ResourceManager.GetString("Action_TurnOffAutoBackup", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to תיקייה לגיבוי האוטומטי.
+        /// </summary>
+        public static string AutoBackup_FolderTitle {
+            get {
+                return ResourceManager.GetString("AutoBackup_FolderTitle", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to הגיבוי האוטומטי פועל, וגיבוי ראשון כבר נשמר ב-{0}..
+        /// </summary>
+        public static string Done_AutoBackupOn {
+            get {
+                return ResourceManager.GetString("Done_AutoBackupOn", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to הגיבוי האוטומטי כובה. קבצים שכבר נשמרו נשארים בתיקייה..
+        /// </summary>
+        public static string Done_AutoBackupOff {
+            get {
+                return ResourceManager.GetString("Done_AutoBackupOff", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to צריך לבחור תיקייה במחשב הזה..
+        /// </summary>
+        public static string AutoBackup_Error_Invalid {
+            get {
+                return ResourceManager.GetString("AutoBackup_Error_Invalid", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to אי אפשר לגבות לתיקייה ברשת. בחרו תיקייה במחשב הזה — למשל בתוך OneDrive..
+        /// </summary>
+        public static string AutoBackup_Error_Network {
+            get {
+                return ResourceManager.GetString("AutoBackup_Error_Network", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to התיקייה הזו כבר לא קיימת..
+        /// </summary>
+        public static string AutoBackup_Error_Missing {
+            get {
+                return ResourceManager.GetString("AutoBackup_Error_Missing", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to לא הצלחנו לשמור בתיקייה הזו: {0}.
+        /// </summary>
+        public static string AutoBackup_Error_Write {
+            get {
+                return ResourceManager.GetString("AutoBackup_Error_Write", resourceCulture);
+            }
+        }
     }
 }

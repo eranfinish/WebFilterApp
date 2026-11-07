@@ -106,11 +106,27 @@ internal sealed class FakeAdminClient : IAdminClient
             ScanAccounts => Scan(),
             GetDiagnostics => new DiagnosticsResult([.. Checks]),
             SetNetworksPrivate => MakeNetworksPrivate(),
+            GetAutoBackup => AutoBackup,
+            SetAutoBackup set => SetBackupFolder(set.Folder),
             _ => (AdminMessage)new AdminOk(),
         };
         return Task.FromResult(reply);
     }
 
+
+    /// <summary>The hub's automatic backups: off by default.</summary>
+    public AutoBackupResult AutoBackup { get; set; } = new(null, null, null);
+
+    /// <summary>When set, <see cref="SetAutoBackup"/> is refused with it (code, message).</summary>
+    public AdminError? AutoBackupRefusal { get; set; }
+
+    /// <summary>Like the service: a folder is taken with a first backup "now"; null turns them off.</summary>
+    private AdminMessage SetBackupFolder(string? folder)
+    {
+        if (folder is not null && AutoBackupRefusal is { } refused) return refused;
+        AutoBackup = folder is null ? AutoBackup with { Folder = null, LastError = null } : new AutoBackupResult(folder, Status.Now, null);
+        return new AdminOk();
+    }
 
     /// <summary>Like the service: every Public network (the "network" check's detail) becomes Private.</summary>
     private AdminOk MakeNetworksPrivate()
@@ -235,6 +251,47 @@ internal sealed class FakeBrowser : IBrowserLauncher
         Opened.Add(address);
         return true;
     }
+}
+
+/// <summary>The parent's answers to the save and open dialogs, and the files, in memory.</summary>
+internal sealed class FakeFiles : IFileDialogService, IFileStore
+{
+    /// <summary>What the dialogs answer; null = the parent cancelled.</summary>
+    public string? Chosen { get; set; } = @"D:\backups\family.json";
+
+    public string? SuggestedName { get; private set; }
+
+    public Dictionary<string, string> Files { get; } = [];
+
+    /// <summary>When set, reading or writing throws it.</summary>
+    public IOException? Failure { get; set; }
+
+    public string? ChooseSaveFile(string suggestedName, string title)
+    {
+        SuggestedName = suggestedName;
+        return Chosen;
+    }
+
+    public string? ChooseOpenFile(string title) => Chosen;
+
+    /// <summary>The folder the folder dialog answers; null = cancelled.</summary>
+    public string? ChosenFolder { get; set; } = @"C:\Users\dad\OneDrive\WebFilter";
+
+    public string? OfferedFolder { get; private set; }
+
+    public string? ChooseFolder(string title, string? initialFolder)
+    {
+        OfferedFolder = initialFolder;
+        return ChosenFolder;
+    }
+
+    public void WriteAllText(string path, string text)
+    {
+        if (Failure is not null) throw Failure;
+        Files[path] = text;
+    }
+
+    public string ReadAllText(string path) => Failure is not null ? throw Failure : Files.TryGetValue(path, out var text) ? text : throw new FileNotFoundException(path);
 }
 
 internal sealed class FakeClipboard : IClipboardService

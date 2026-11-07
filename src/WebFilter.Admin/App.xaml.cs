@@ -16,7 +16,8 @@ public partial class App : Application
         UiCulture.Apply(UiCulture.Hebrew);
         var options = AdminAppOptions.Parse(e.Args);
         _client = new AdminClient(new AdminClientOptions { PipeName = options.PipeName });
-        _main = new MainViewModel(_client, new DispatcherUiTimer(), new MessageBoxDialogService(), new WpfClipboardService(), browser: new ShellBrowserLauncher());
+        _main = new MainViewModel(_client, new DispatcherUiTimer(), new MessageBoxDialogService(), new WpfClipboardService(), browser: new ShellBrowserLauncher(),
+            files: new WpfFileDialogService());
         MainWindow = new MainWindow { DataContext = _main };
         MainWindow.Show();
         _main.Start(options.StartPage);

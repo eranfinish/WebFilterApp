@@ -44,6 +44,9 @@ builder.Services.AddSingleton<HubServer>();
 builder.Services.AddHostedService(sp => sp.GetRequiredService<HubServer>());
 builder.Services.AddSingleton<HubSyncService>();
 builder.Services.AddHostedService(sp => sp.GetRequiredService<HubSyncService>());
+// The hub saves the family's settings by itself into a folder a parent chose (the admin pipe sets it).
+builder.Services.AddSingleton<AutoBackup>();
+builder.Services.AddHostedService<AutoBackupService>();
 
 var host = builder.Build();
 var family = host.Services.GetRequiredService<FamilyService>();

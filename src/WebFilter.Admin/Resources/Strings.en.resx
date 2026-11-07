@@ -1675,4 +1675,103 @@ Do this only for your home network. On a café, hotel or work network it is safe
   <data name="Setup_Summary_BaselineOff" xml:space="preserve">
     <value>Baseline protection for parents and adults: off. You can turn it on in Settings.</value>
   </data>
+  <data name="Settings_Backup" xml:space="preserve">
+    <value>Backup and restore</value>
+  </data>
+  <data name="Settings_BackupHint" xml:space="preserve">
+    <value>Saves all the family&apos;s settings to a file: the family members, hours and limits, rules, channels, apps, categories, and which Windows account on each computer belongs to whom. Keep the file off this computer — on a USB drive or in the cloud — and save again after big changes. The activity log, requests and pairings are not saved.</value>
+  </data>
+  <data name="Settings_RestoreHint" xml:space="preserve">
+    <value>Restoring replaces all the settings on this computer with the backup&apos;s, and this computer stays the parents&apos; computer — also when you restore on a different computer from the one the backup was made on. Children&apos;s computers not yet paired with this computer are paired again on the Devices screen, and their accounts&apos; links come back from the backup.</value>
+  </data>
+  <data name="Action_SaveBackup" xml:space="preserve">
+    <value>Save a backup…</value>
+  </data>
+  <data name="Action_RestoreBackup" xml:space="preserve">
+    <value>Restore from a backup…</value>
+  </data>
+  <data name="Backup_SaveTitle" xml:space="preserve">
+    <value>Save a backup of the family&apos;s settings</value>
+  </data>
+  <data name="Backup_OpenTitle" xml:space="preserve">
+    <value>Choose a backup to restore</value>
+  </data>
+  <data name="Done_BackupSaved" xml:space="preserve">
+    <value>The backup was saved to {0}</value>
+  </data>
+  <data name="Done_BackupRestored" xml:space="preserve">
+    <value>The family&apos;s settings were restored from the backup of {0}.</value>
+  </data>
+  <data name="Backup_ConfirmTitle" xml:space="preserve">
+    <value>Restore from a backup</value>
+  </data>
+  <data name="Backup_Confirm" xml:space="preserve">
+    <value>Restoring replaces all the family&apos;s settings on this computer with the backup of {0}: {1} family members, {2} rules and {3} computers. It can be undone only by restoring another backup. Continue?</value>
+  </data>
+  <data name="Backup_WriteFailed" xml:space="preserve">
+    <value>The backup could not be saved: {0}</value>
+  </data>
+  <data name="Backup_ReadFailed" xml:space="preserve">
+    <value>The file could not be read: {0}</value>
+  </data>
+  <data name="Backup_NotABackup" xml:space="preserve">
+    <value>This file is not a WebFilter backup. Nothing was restored.</value>
+  </data>
+  <data name="Backup_TooNew" xml:space="preserve">
+    <value>The backup was made by a newer version of WebFilter. Update WebFilter on this computer first. Nothing was restored.</value>
+  </data>
+  <data name="Backup_Damaged" xml:space="preserve">
+    <value>The backup is incomplete or damaged. Nothing was restored.</value>
+  </data>
+  <data name="Setup_RestoreHint" xml:space="preserve">
+    <value>Do you have a backup of the family&apos;s settings, for example from a previous parents&apos; computer? You can restore it instead of going through the wizard.</value>
+  </data>
+  <data name="Action_GoToRestore" xml:space="preserve">
+    <value>Restore from a backup</value>
+  </data>
+  <data name="Settings_AutoBackup" xml:space="preserve">
+    <value>Automatic backup</value>
+  </data>
+  <data name="Settings_AutoBackupHint" xml:space="preserve">
+    <value>The parents&apos; computer saves a backup by itself whenever the family&apos;s settings change — also while the admin app is closed: the file WebFilter-backup-latest.json, and one copy a day kept for 30 days. Choose a folder that syncs to the cloud, for example inside OneDrive or Google Drive, so the backup leaves the computer by itself.</value>
+  </data>
+  <data name="AutoBackup_Off" xml:space="preserve">
+    <value>Automatic backup is off.</value>
+  </data>
+  <data name="AutoBackup_On" xml:space="preserve">
+    <value>Saved automatically to {0}.</value>
+  </data>
+  <data name="AutoBackup_Last" xml:space="preserve">
+    <value>Last backup: {0}.</value>
+  </data>
+  <data name="AutoBackup_Failed" xml:space="preserve">
+    <value>The last backup failed: {0} It will be tried again in a few minutes.</value>
+  </data>
+  <data name="Action_ChooseBackupFolder" xml:space="preserve">
+    <value>Choose a folder…</value>
+  </data>
+  <data name="Action_TurnOffAutoBackup" xml:space="preserve">
+    <value>Turn off</value>
+  </data>
+  <data name="AutoBackup_FolderTitle" xml:space="preserve">
+    <value>Folder for the automatic backup</value>
+  </data>
+  <data name="Done_AutoBackupOn" xml:space="preserve">
+    <value>Automatic backup is on, and a first backup was saved to {0}.</value>
+  </data>
+  <data name="Done_AutoBackupOff" xml:space="preserve">
+    <value>Automatic backup was turned off. Files already saved stay in the folder.</value>
+  </data>
+  <data name="AutoBackup_Error_Invalid" xml:space="preserve">
+    <value>Choose a folder on this computer.</value>
+  </data>
+  <data name="AutoBackup_Error_Network" xml:space="preserve">
+    <value>A network folder cannot be used. Choose a folder on this computer — for example inside OneDrive.</value>
+  </data>
+  <data name="AutoBackup_Error_Missing" xml:space="preserve">
+    <value>That folder no longer exists.</value>
+  </data>
+  <data name="AutoBackup_Error_Write" xml:space="preserve">
+    <value>A backup could not be saved in that folder: {0}</value>
+  </data>
 </root>

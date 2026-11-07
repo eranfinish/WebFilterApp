@@ -17,6 +17,29 @@ public interface IDialogService
     bool Confirm(string message, string title);
 }
 
+/// <summary>Asks the parent where to save or which file to open (view models stay testable without the Windows dialogs).</summary>
+public interface IFileDialogService
+{
+    /// <summary>The path chosen to save to, or null when the parent cancelled.</summary>
+    string? ChooseSaveFile(string suggestedName, string title);
+
+    /// <summary>The path of the file chosen to open, or null when the parent cancelled.</summary>
+    string? ChooseOpenFile(string title);
+
+    /// <summary>The folder chosen (the dialog can create one), or null when the parent cancelled.</summary>
+    string? ChooseFolder(string title, string? initialFolder);
+}
+
+/// <summary>Reads and writes the files the parent chose (in memory in tests).</summary>
+public interface IFileStore
+{
+    /// <exception cref="IOException">The file could not be written.</exception>
+    void WriteAllText(string path, string text);
+
+    /// <exception cref="IOException">The file could not be read.</exception>
+    string ReadAllText(string path);
+}
+
 /// <summary>Puts text on the Windows clipboard (view models stay testable without one).</summary>
 public interface IClipboardService
 {
@@ -64,6 +87,64 @@ public sealed class MessageBoxDialogService : IDialogService
             ? MessageBox.Show(message, title, MessageBoxButton.YesNo, MessageBoxImage.Question, MessageBoxResult.No, rtl)
             : MessageBox.Show(owner, message, title, MessageBoxButton.YesNo, MessageBoxImage.Question, MessageBoxResult.No, rtl);
         return answer == MessageBoxResult.Yes;
+    }
+}
+
+public sealed class WpfFileDialogService : IFileDialogService
+{
+    private const string Filter = "WebFilter backup (*.json)|*.json";
+
+    public string? ChooseSaveFile(string suggestedName, string title)
+    {
+        var dialog = new Microsoft.Win32.SaveFileDialog
+        {
+            Title = title,
+            FileName = suggestedName,
+            DefaultExt = ".json",
+            Filter = Filter,
+            InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
+        };
+        return dialog.ShowDialog(Application.Current?.MainWindow) == true ? dialog.FileName : null;
+    }
+
+    public string? ChooseOpenFile(string title)
+    {
+        var dialog = new Microsoft.Win32.OpenFileDialog { Title = title, Filter = Filter, CheckFileExists = true };
+        return dialog.ShowDialog(Application.Current?.MainWindow) == true ? dialog.FileName : null;
+    }
+
+    public string? ChooseFolder(string title, string? initialFolder)
+    {
+        var dialog = new Microsoft.Win32.OpenFolderDialog { Title = title };
+        if (initialFolder is not null && System.IO.Directory.Exists(initialFolder)) dialog.InitialDirectory = initialFolder;
+        return dialog.ShowDialog(Application.Current?.MainWindow) == true ? dialog.FolderName : null;
+    }
+}
+
+public sealed class DiskFileStore : IFileStore
+{
+    public void WriteAllText(string path, string text)
+    {
+        try
+        {
+            System.IO.File.WriteAllText(path, text, new System.Text.UTF8Encoding(encoderShouldEmitUTF8Identifier: false));
+        }
+        catch (UnauthorizedAccessException ex)
+        {
+            throw new System.IO.IOException(ex.Message, ex);
+        }
+    }
+
+    public string ReadAllText(string path)
+    {
+        try
+        {
+            return System.IO.File.ReadAllText(path);
+        }
+        catch (UnauthorizedAccessException ex)
+        {
+            throw new System.IO.IOException(ex.Message, ex);
+        }
     }
 }
 

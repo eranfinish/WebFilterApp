@@ -108,6 +108,39 @@
             </StackPanel>
           </StackPanel>
         </Border>
+
+        <!-- Backup and restore of the family's settings (a broken or replaced parents' computer) -->
+        <TextBlock Text="{x:Static res:Strings.Settings_Backup}" Style="{StaticResource SectionText}" />
+        <TextBlock Text="{x:Static res:Strings.Settings_BackupHint}" Style="{StaticResource SubtleText}" Margin="0,0,0,8" TextWrapping="Wrap" />
+        <Border Style="{StaticResource Card}" Margin="0,0,0,16">
+          <StackPanel>
+            <StackPanel Orientation="Horizontal">
+              <Button Content="{x:Static res:Strings.Action_SaveBackup}" Command="{Binding SaveBackupCommand}" Style="{StaticResource PrimaryButton}" />
+              <Button Content="{x:Static res:Strings.Action_RestoreBackup}" Command="{Binding RestoreBackupCommand}" />
+            </StackPanel>
+            <TextBlock Text="{x:Static res:Strings.Settings_RestoreHint}" Style="{StaticResource SubtleText}" FontSize="12" Margin="0,10,0,0" TextWrapping="Wrap" />
+          </StackPanel>
+        </Border>
+
+        <!-- Automatic backups by the hub into a folder the parent chose -->
+        <StackPanel Visibility="{Binding AutoBackupAvailable, Converter={StaticResource BoolToVisibility}}">
+          <TextBlock Text="{x:Static res:Strings.Settings_AutoBackup}" Style="{StaticResource SectionText}" />
+          <TextBlock Text="{x:Static res:Strings.Settings_AutoBackupHint}" Style="{StaticResource SubtleText}" Margin="0,0,0,8" TextWrapping="Wrap" />
+          <Border Style="{StaticResource Card}" Margin="0,0,0,16">
+            <StackPanel>
+              <TextBlock Text="{Binding AutoBackupText}" TextWrapping="Wrap" Margin="0,0,0,10" />
+              <Border Background="{StaticResource WarningSoftBrush}" CornerRadius="6" Padding="10,6" Margin="0,0,0,10"
+                      Visibility="{Binding HasAutoBackupProblem, Converter={StaticResource BoolToVisibility}}">
+                <TextBlock Text="{Binding AutoBackupProblem}" Foreground="{StaticResource WarningBrush}" TextWrapping="Wrap" />
+              </Border>
+              <StackPanel Orientation="Horizontal">
+                <Button Content="{x:Static res:Strings.Action_ChooseBackupFolder}" Command="{Binding ChooseAutoBackupFolderCommand}" Style="{StaticResource PrimaryButton}" />
+                <Button Content="{x:Static res:Strings.Action_TurnOffAutoBackup}" Command="{Binding TurnOffAutoBackupCommand}"
+                        Visibility="{Binding AutoBackupOn, Converter={StaticResource BoolToVisibility}}" />
+              </StackPanel>
+            </StackPanel>
+          </Border>
+        </StackPanel>
       </StackPanel>
 
       <!-- What this computer has and lacks -->

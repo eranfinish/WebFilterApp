@@ -31,8 +31,10 @@ public sealed partial class MainViewModel : ObservableObject, INavigator, IDispo
     private string _publicNetworks = "";
 
     /// <param name="browser">Opens a request's site or channel in the parent's own browser ("open for review"); none in tests.</param>
+    /// <param name="files">Chooses where a backup of the family's settings goes and which one to restore; none in tests.</param>
+    /// <param name="store">Reads and writes those files; the disk by default.</param>
     public MainViewModel(IAdminClient client, IUiTimer timer, IDialogService dialogs, IClipboardService clipboard, TimeProvider? time = null,
-        IBrowserLauncher? browser = null)
+        IBrowserLauncher? browser = null, IFileDialogService? files = null, IFileStore? store = null)
     {
         ArgumentNullException.ThrowIfNull(client);
         _timer = timer ?? throw new ArgumentNullException(nameof(timer));
@@ -45,7 +47,7 @@ public sealed partial class MainViewModel : ObservableObject, INavigator, IDispo
         Rules = new RulesViewModel(Context, dialogs);
         Activity = new ActivityViewModel(Context);
         Devices = new DevicesViewModel(Context, dialogs, clipboard, timer);
-        Settings = new SettingsViewModel(Context);
+        Settings = new SettingsViewModel(Context, dialogs, files, store);
         Setup = new SetupWizardViewModel(Context);
         _hubPages = [Dashboard, Requests, MemberDetail, Rules, Activity, Devices, Settings];
         Pages = [.. _hubPages];

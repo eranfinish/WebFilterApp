@@ -143,6 +143,10 @@ public sealed partial class SetupWizardViewModel : PageViewModel
         if (Step == WizardStep.Accounts) SyncAccounts(settings);
     }
 
+    /// <summary>A family that has a backup restores it on the settings page instead of going through the wizard.</summary>
+    [RelayCommand]
+    private void GoToRestore() => Navigator?.NavigateTo<SettingsViewModel>();
+
     [RelayCommand]
     private void AddMember()
     {

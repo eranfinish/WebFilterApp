@@ -20,7 +20,7 @@ namespace WebFilter.Service.Pipes;
 /// unelevated token cannot even open it; each client is also checked to be elevated (or the service account).
 /// </summary>
 public sealed class AdminPipeServer(FamilyService family, IOptions<ServiceOptions> options, TimeProvider time, ILogger<AdminPipeServer> log,
-    ILocalAccounts? accounts = null, IMachineProbe? machine = null, INetworkProfiles? networks = null) : BackgroundService
+    ILocalAccounts? accounts = null, IMachineProbe? machine = null, INetworkProfiles? networks = null, Hub.AutoBackup? backup = null) : BackgroundService
 {
     private readonly ServiceOptions _options = options.Value;
     private readonly ILocalAccounts _accounts = accounts ?? new WindowsLocalAccounts();
@@ -149,8 +149,19 @@ public sealed class AdminPipeServer(FamilyService family, IOptions<ServiceOption
         ScanAccounts => ScanLocalAccounts(adminName),
         SetNetworksPrivate => MakeNetworksPrivate(adminName),
         GetDiagnostics => new DiagnosticsResult(MachineChecks.Run(_options, isHub: true, _machine)),
+        GetAutoBackup => backup?.Status() ?? (AdminMessage)new AdminError("unsupported", "Automatic backups are not available in this build."),
+        SetAutoBackup set => SetAutoBackup(set, adminName),
         _ => new AdminError("unsupported", $"Unsupported message type {request.GetType().Name}."),
     };
+
+    /// <summary>A machine setting, not a family one: logged with the admin's name; the settings version does not change.</summary>
+    private AdminMessage SetAutoBackup(SetAutoBackup set, string adminName)
+    {
+        if (backup is null) return new AdminError("unsupported", "Automatic backups are not available in this build.");
+        if (backup.Configure(set.Folder) is { } refused) return refused;
+        log.LogInformation("{Admin} set the automatic backup folder to {Folder}", adminName, set.Folder ?? "(off)");
+        return new AdminOk();
+    }
 
     /// <summary>
     /// The members as this agent sees them (none before its first settings arrive) and the hub that manages it, for the
