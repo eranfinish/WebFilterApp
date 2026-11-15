@@ -106,6 +106,24 @@ public sealed class InstallerTests
     }
 
     [Fact]
+    public void A_plain_build_carries_the_published_store_ids_so_a_double_click_install_force_installs_the_extension()
+    {
+        // Found on 2026-11-15: an MSI built without ids and installed by double-click wrote no force-install policy, so a
+        // child's browser never got the extension (the lab always passed the ids on msiexec's command line).
+        var wixproj = XDocument.Load(Path.Combine(RepoRoot(), "installer", "WebFilter.Installer.wixproj"));
+        string Default(string name) => wixproj.Descendants(name).Single(e => Attr(e, "Condition") == $"'$({name})' == ''").Value;
+
+        Assert.Equal("lkbhmgdhaalikcmpmefffohinafbjfgh", Default("ChromeExtensionId"));
+        Assert.Equal("labgagpndiahmbeohjikogfdigebeidl", Default("EdgeExtensionId"));
+        Assert.True(InstallConfig.IsExtensionId(Default("ChromeExtensionId")) && InstallConfig.IsExtensionId(Default("EdgeExtensionId")));
+        // The build's ids reach the MSI and win over the (possibly empty) remembered ones on an upgrade.
+        Assert.Contains("ChromeExtensionId=$(ChromeExtensionId)", wixproj.Descendants("DefineConstants").Single().Value, StringComparison.Ordinal);
+        XElement Action(string name) => Package.Descendants(Wix + "SetProperty").Single(s => Attr(s, "Action") == name);
+        Assert.Equal(("CHROME_EXTENSION_ID", "$(var.ChromeExtensionId)", "AppSearch"), (Attr(Action("BuildChromeId"), "Id"), Attr(Action("BuildChromeId"), "Value"), Attr(Action("BuildChromeId"), "After")));
+        Assert.Equal(("EDGE_EXTENSION_ID", "$(var.EdgeExtensionId)", "AppSearch"), (Attr(Action("BuildEdgeId"), "Id"), Attr(Action("BuildEdgeId"), "Value"), Attr(Action("BuildEdgeId"), "After")));
+    }
+
+    [Fact]
     public void Chrome_and_Edge_find_the_native_host_through_the_same_HKLM_values_the_service_maintains()
     {
         var keys = Single("Component", "NativeHostRegistration").Elements(Wix + "RegistryKey").ToList();

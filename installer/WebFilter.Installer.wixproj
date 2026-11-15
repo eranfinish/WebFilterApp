@@ -17,9 +17,14 @@
     <InstallerPlatform>x64</InstallerPlatform>
     <Cultures>he-IL;en-US</Cultures>
     <ProductVersion Condition="'$(ProductVersion)' == ''">0.7.0</ProductVersion>
-    <!-- Store ids of the extension (spike S1). Empty until published; can also be given at install time. -->
-    <ChromeExtensionId Condition="'$(ChromeExtensionId)' == ''"></ChromeExtensionId>
-    <EdgeExtensionId Condition="'$(EdgeExtensionId)' == ''"></EdgeExtensionId>
+    <!--
+      Store ids of the published extension (store/README.md). Built into the MSI so that a plain double-click install
+      force-installs the extension: an install without them writes no force-install policy, the native host admits no
+      extension, and a child's browser loses the network after the extension guard's grace. Another build can pass
+      -p:ChromeExtensionId=… -p:EdgeExtensionId=…, and an install can still override them on the command line.
+    -->
+    <ChromeExtensionId Condition="'$(ChromeExtensionId)' == ''">lkbhmgdhaalikcmpmefffohinafbjfgh</ChromeExtensionId>
+    <EdgeExtensionId Condition="'$(EdgeExtensionId)' == ''">labgagpndiahmbeohjikogfdigebeidl</EdgeExtensionId>
     <!-- NativeAOT for the host needs Visual Studio's C++ workload; until it is installed the host is self-contained like the rest. -->
     <NativeHostAot Condition="'$(NativeHostAot)' == ''">false</NativeHostAot>
     <PayloadDir>$(MSBuildProjectDirectory)\obj\payload\</PayloadDir>

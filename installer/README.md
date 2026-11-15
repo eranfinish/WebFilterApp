@@ -27,7 +27,7 @@ Never run the MSI, or `WebFilter.Service.exe cleanup`, on the development PC: bo
 |---|---|---|
 | `ROLE` | `hub` (default) or `agent` | Chosen in the setup dialog. Remembered in `HKLM\SOFTWARE\WebFilter`; a repair or upgrade keeps it. Changing it means uninstalling (which deletes the data) and installing again. |
 | `HUB`, `PAIRCODE` | `host[:port]`, `XXXX-XXXX-XXXX` | Agent only, optional. Both set → `WebFilter.Service.exe pair` runs. A failed pairing does not fail the install (see the MSI log); pair later from an elevated prompt with the command the hub's Devices screen shows. |
-| `CHROME_EXTENSION_ID`, `EDGE_EXTENSION_ID` | 32 letters `a`–`p` | Store ids. Precedence: command line, then the build's (`-p:ChromeExtensionId=… -p:EdgeExtensionId=…`), then the remembered ones. Without them no force-install policy is written and the native host admits no extension. |
+| `CHROME_EXTENSION_ID`, `EDGE_EXTENSION_ID` | 32 letters `a`–`p` | Store ids. Precedence: command line, then the build's, then the remembered ones. Since 0.7.22 the build carries the published ids by default (`WebFilter.Installer.wixproj`; another build passes `-p:ChromeExtensionId=… -p:EdgeExtensionId=…`), so a double-click install needs nothing. Without ids no force-install policy is written and the native host admits no extension — that is what a double-click install of 0.7.21 or earlier did (found on 2026-11-15); an upgrade to 0.7.22 fills them in. |
 
 ```powershell
 msiexec /i WebFilter.msi /qn REBOOT=ReallySuppress ROLE=hub /l*v hub-install.log

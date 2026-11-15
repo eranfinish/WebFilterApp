@@ -329,9 +329,15 @@ public sealed partial class PairingViewModel : ObservableObject, IDisposable
     /// <summary>The command to run on the other computer for the selected address; null when the hub reported no address.</summary>
     public string? PairCommandText => SelectedAddress is { } address ? BuildCommand(address, Port, Code) : null;
 
-    /// <summary>The agent's pair command (<c>WebFilter.Service pair --hub host:port --code XXXX-XXXX-XXXX</c>).</summary>
+    /// <summary>
+    /// The agent's pair command for an elevated PowerShell, with the installed exe's full path: an elevated prompt opens in
+    /// system32, where a bare <c>WebFilter.Service.exe</c> is not found (a parent hit this on 2026-11-15).
+    /// </summary>
     public static string BuildCommand(string address, int port, string code) =>
-        string.Create(CultureInfo.InvariantCulture, $"WebFilter.Service.exe pair --hub {address}:{port} --code {code}");
+        string.Create(CultureInfo.InvariantCulture, $"& \"{InstalledServiceExe}\" pair --hub {address}:{port} --code {code}");
+
+    /// <summary>Where the MSI installs the service (installer/Package.wxs: ProgramFiles64Folder\WebFilter).</summary>
+    public const string InstalledServiceExe = @"C:\Program Files\WebFilter\WebFilter.Service.exe";
 
     [RelayCommand(CanExecute = nameof(CanCopy))]
     private void Copy()

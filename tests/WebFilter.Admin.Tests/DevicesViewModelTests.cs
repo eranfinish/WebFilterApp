@@ -7,7 +7,9 @@ namespace WebFilter.Admin.Tests;
 
 public sealed class DevicesViewModelTests
 {
-    private const string FirstCommand = "WebFilter.Service.exe pair --hub 192.168.1.20:47800 --code K7QM-2RXD-9HBA";
+    // The command a parent pastes into an elevated PowerShell on the other computer (full path: it opens in system32).
+    private const string Pair = "& \"C:\\Program Files\\WebFilter\\WebFilter.Service.exe\" pair";
+    private const string FirstCommand = Pair + " --hub 192.168.1.20:47800 --code K7QM-2RXD-9HBA";
 
     private readonly FakeAdminClient _client = new();
     private readonly FakeDialogs _dialogs = new();
@@ -313,8 +315,8 @@ public sealed class DevicesViewModelTests
     }
 
     [Theory]
-    [InlineData("10.0.0.5", 47800, "ABCD-EFGH-JKMN", "WebFilter.Service.exe pair --hub 10.0.0.5:47800 --code ABCD-EFGH-JKMN")]
-    [InlineData("192.168.1.20", 8443, "K7QM-2RXD-9HBA", "WebFilter.Service.exe pair --hub 192.168.1.20:8443 --code K7QM-2RXD-9HBA")]
+    [InlineData("10.0.0.5", 47800, "ABCD-EFGH-JKMN", Pair + " --hub 10.0.0.5:47800 --code ABCD-EFGH-JKMN")]
+    [InlineData("192.168.1.20", 8443, "K7QM-2RXD-9HBA", Pair + " --hub 192.168.1.20:8443 --code K7QM-2RXD-9HBA")]
     public void The_command_is_the_agents_pair_command(string address, int port, string code, string expected) =>
         Assert.Equal(expected, PairingViewModel.BuildCommand(address, port, code));
 
@@ -327,7 +329,7 @@ public sealed class DevicesViewModelTests
 
         pairing.SelectedAddress = "172.24.48.1";
 
-        Assert.Equal("WebFilter.Service.exe pair --hub 172.24.48.1:47800 --code K7QM-2RXD-9HBA", pairing.PairCommandText);
+        Assert.Equal(Pair + " --hub 172.24.48.1:47800 --code K7QM-2RXD-9HBA", pairing.PairCommandText);
         Assert.Null(pairing.CopyMessage);
     }
 
@@ -418,7 +420,7 @@ public sealed class DevicesViewModelTests
         Assert.Equal("WXYZ-2345-6789", pairing.Code);
         Assert.Equal("הקוד בתוקף עוד 10:00", pairing.CountdownText);
         // The address the parent picked stays picked.
-        Assert.Equal("WebFilter.Service.exe pair --hub 172.24.48.1:47800 --code WXYZ-2345-6789", pairing.PairCommandText);
+        Assert.Equal(Pair + " --hub 172.24.48.1:47800 --code WXYZ-2345-6789", pairing.PairCommandText);
         Assert.True(pairing.CopyCommand.CanExecute(null));
         Assert.Equal([PairingViewModel.CountdownInterval], _countdown.Running);
     }

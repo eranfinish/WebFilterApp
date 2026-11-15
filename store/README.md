@@ -12,7 +12,7 @@
 | Edge Add-ons | `labgagpndiahmbeohjikogfdigebeidl` (CRX ID — זה המזהה במדיניות) | 0.1.0 פורסם (Hidden); S1 ב-Edge עבר במעבדה — ראו MVP-PLAN, S1. 0.3.0 (הגרסה המלאה) הוגש 2026-10-23 ואושר. 0.3.1 (חיפוש ערוצים ושמות ערוצים) הוגש 2026-10-26 ואושר: הותקן ב-`lab-kids` (נבדק 2026-11-05) |
 
 Edge: ‏Store ID `0RDCKC8CFL4G`, ‏Product ID `9c932b95-94d3-4114-b66a-4c27e152feec`. החשבון בשתי החנויות: `finish.software@gmail.com` (Chrome: non-trader; Edge: Individual).
-להתקנה במעבדה מעבירים את המזהים ל-MSI: ‏`CHROME_EXTENSION_ID=lkbhmgdhaalikcmpmefffohinafbjfgh EDGE_EXTENSION_ID=labgagpndiahmbeohjikogfdigebeidl`.
+המזהים האלה בנויים בתוך ה-MSI מגרסה 0.7.22 (`installer/WebFilter.Installer.wixproj`), כך שהתקנה בלחיצה כפולה מתקינה את התוסף. עד 0.7.22 העברנו אותם בשורת הפקודה (`CHROME_EXTENSION_ID=… EDGE_EXTENSION_ID=…`), והתקנה בלחיצה כפולה של 0.7.21 נשארה בלי תוסף. אם המזהים משתנים, מעדכנים אותם גם שם.
 
 מדיניות הפרטיות: <https://gilded-zabaione-076cae.netlify.app/> (Netlify, חשבון `finish.software@gmail.com`; לרישום באנגלית: `/#en`).
 
