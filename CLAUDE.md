@@ -6,6 +6,7 @@ Family web filter for Windows home PCs: a local agent on every PC (forced browse
 
 | Question | Document |
 |---|---|
+| Where are we now, what was done, open work, hand-off between sessions (read first, update at the end of a session) | [docs/SESSION-BRIEF.md](docs/SESSION-BRIEF.md) |
 | Scope, architecture, milestones, decisions | [docs/MVP-PLAN.md](docs/MVP-PLAN.md) |
 | Exact filtering / time / sync semantics | [tests/simulation/README.md](tests/simulation/README.md) + the scenario files |
 | How behavior is verified at each layer | [docs/SIMULATION-PLAN.md](docs/SIMULATION-PLAN.md) |
