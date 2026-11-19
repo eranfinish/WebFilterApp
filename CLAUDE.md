@@ -8,6 +8,7 @@ Family web filter for Windows home PCs: a local agent on every PC (forced browse
 |---|---|
 | Where are we now, what was done, open work, hand-off between sessions (read first, update at the end of a session) | [docs/SESSION-BRIEF.md](docs/SESSION-BRIEF.md) |
 | Scope, architecture, milestones, decisions | [docs/MVP-PLAN.md](docs/MVP-PLAN.md) |
+| Android agent (tablet and phones): plan, spikes, milestones A0–A8, P0–P3, R | [docs/ANDROID-PLAN.md](docs/ANDROID-PLAN.md) (approved for the tablet; the phones section and the cloud relay are drafts awaiting approval) |
 | Exact filtering / time / sync semantics | [tests/simulation/README.md](tests/simulation/README.md) + the scenario files |
 | How behavior is verified at each layer | [docs/SIMULATION-PLAN.md](docs/SIMULATION-PLAN.md) |
 | Why the legacy version failed | [docs/legacy/](docs/legacy/) — history only |
@@ -52,6 +53,8 @@ dotnet build installer/WebFilter.Installer.wixproj -c Release   # MSI (he-IL + e
 - The repo folder is owned by another Windows account; it is registered in git's global `safe.directory`.
 
 ## Status
+
+- Android: planned, no code yet (`docs/ANDROID-PLAN.md`). The agent will be Kotlin under `src/android/` (Gradle, modules `:core`, `:hub-client`, `:agent`, `:scenario-runner`) and must pass the same scenarios marked `platforms: android`. The `/android/` folder at the repo root is a legacy leftover; do not use it. Start with the A0 spikes (they need the user to install Android Studio); the hub protocol stays platform-neutral (rule 6).
 
 - M0: legacy tag, v2 skeleton, plan, simulation catalog, spikes S2a/S3/S4 done (`spikes/*/REPORT.md`). S1, S2b, S5, S6 need the user's store accounts and a Hyper-V VM (`docs/LAB-AND-ACCOUNTS.md`).
 - M1: done. Core engine, Contracts, level-1 runner — 71/71 engine scenarios pass; decision p99 ≈ 57 µs (`tests/WebFilter.Benchmarks`). DNR compiler checked against Edge 156 and, by a differential test, against the Core evaluator. Rules are validated on entry (`RuleValidator`).
