@@ -1,0 +1,6 @@
+# Build output of the spike (Gradle and .NET). Wrapper files and the corpus stay tracked.
+kotlin/build/
+kotlin/.gradle/
+kotlin/.kotlin/
+corpus-gen/bin/
+corpus-gen/obj/

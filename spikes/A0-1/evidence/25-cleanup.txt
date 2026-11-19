@@ -1,0 +1,16 @@
+﻿===== cleanup: unhide chrome
+Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a01/.CmdReceiver (has extras) }
+Broadcast completed: result=0, data="setApplicationHidden(com.android.chrome,false)=true isHidden=false"
+===== cleanup: ishidden
+Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a01/.CmdReceiver (has extras) }
+Broadcast completed: result=0, data="isHidden(com.android.chrome)=false"
+===== pm list packages chrome
+package:com.android.chrome
+===== remove-active-admin (testOnly app)
+Success: Admin removed ComponentInfo{com.webfilter.spike.a01/com.webfilter.spike.a01.AdminReceiver}
+===== uninstall
+Success
+===== final: owner, users, chrome
+Users:
+	UserInfo{0:Owner:c13} running
+package:com.android.chrome

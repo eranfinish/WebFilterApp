@@ -1,0 +1,45 @@
+﻿== adb devices
+List of devices attached
+emulator-5554          device product:sdk_gphone64_x86_64 model:sdk_gphone64_x86_64 device:emulator64_x86_64_arm64 transport_id:2
+
+== pm list users
+Users:
+	UserInfo{0:Owner:c13} running
+== max users
+Maximum supported users: 4
+== accounts
+
+  Accounts: 0
+
+
+== device_provisioned / user_setup_complete
+1
+1
+== user restrictions (user 0)
+
+  UserInfo{0:null:c13} serialNo=0 isPrimary=true
+    Restrictions:
+    Device policy global restrictions:
+    Device policy local restrictions:
+    Effective restrictions:
+  Guest restrictions:
+  restrictions: 8
+        mDefaultUserInfoFlags: GUEST
+        mDefaultRestrictions: 
+        mDefaultUserInfoFlags: MANAGED_PROFILE
+        mDefaultRestrictions: 
+        mDefaultUserInfoFlags: 0
+        config_defaultFirstUserRestrictions: 
+        mDefaultUserInfoFlags: 0
+        config_defaultFirstUserRestrictions: 
+        mDefaultUserInfoFlags: 0
+        mDefaultRestrictions: 
+        mDefaultUserInfoFlags: RESTRICTED
+        mDefaultRestrictions: 
+        mDefaultUserInfoFlags: DEMO
+        mDefaultRestrictions: 
+        mDefaultUserInfoFlags: 0
+        mDefaultRestrictions: 
+
+
+== device_policy owner

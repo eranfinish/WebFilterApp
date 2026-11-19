@@ -1,0 +1,9 @@
+﻿== 30 install -t
+Performing Streamed Install
+Success
+== 30 set-device-owner (2nd attempt)
+Success: Device owner set to package com.webfilter.spike.a01/.AdminReceiver
+Active admin set to component com.webfilter.spike.a01/.AdminReceiver
+== 30 status op
+Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a01/.CmdReceiver (has extras) }
+Broadcast completed: result=0, data="owner=true admin=true myUser=0 profiles=[0] created=[]"

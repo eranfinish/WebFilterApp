@@ -1,0 +1,6 @@
+# Build output and local SDK path of the spike. Sources, wrapper and evidence stay tracked.
+kotlin/build/
+kotlin/app/build/
+kotlin/.gradle/
+kotlin/.kotlin/
+kotlin/local.properties

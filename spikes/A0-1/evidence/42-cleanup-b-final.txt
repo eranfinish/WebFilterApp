@@ -1,0 +1,18 @@
+﻿== 42 remove-active-admin
+Success: Admin removed ComponentInfo{com.webfilter.spike.a01/com.webfilter.spike.a01.AdminReceiver}
+== 42 uninstall
+Success
+== 42 dpm list-owners (expect no owners)
+no owners
+== 42 accounts
+
+  Accounts: 0
+== 42 pm list users
+Users:
+	UserInfo{0:Owner:c13} running
+== 42 chrome visible
+package:com.android.chrome
+== 42 device_provisioned
+1
+
+

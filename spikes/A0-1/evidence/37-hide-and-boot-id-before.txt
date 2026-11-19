@@ -1,0 +1,13 @@
+﻿== 37 hide chrome (DPC)
+Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a01/.CmdReceiver (has extras) }
+Broadcast completed: result=0, data="setApplicationHidden(com.android.chrome,true)=true isHidden=true"
+== 37 pm list packages chrome (user 0, before reboot)
+== 37 dumpsys package chrome hidden (user 0)
+
+    User 0: ceDataInode=123182 installed=true hidden=true suspended=false distractionFlags=0 stopped=false 
+notLaunched=false enabled=0 instant=false virtual=false
+== 37 boot_id and uptime BEFORE reboot
+ca12e4b5-0177-4710-b6f0-1fe559e9af15
+252.48 847.00
+
+

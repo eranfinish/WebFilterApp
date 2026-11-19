@@ -1,0 +1,13 @@
+﻿== boot events (logcat -b events)
+
+11-19 22:54:33.188   537   555 I sysui_multi_action: 
+[757,1144,758,8,806,com.android.settings,871,com.android.settings.sim.SimDialogActivity]
+11-19 22:54:33.199   537   555 I sysui_multi_action: [757,803,799,window_time_0,802,0]
+11-19 22:54:33.253   537   555 I sysui_multi_action: [757,803,799,window_time_0,802,0]
+11-19 22:54:42.666   537   562 I sysui_multi_action: [757,1717,758,1,759,0]
+11-19 22:54:42.666   537   562 I sysui_multi_action: [757,1717,758,2,759,3]
+11-19 22:54:42.666   537   562 I sysui_multi_action: [757,1717,758,3,759,0]
+== current time on device
+Thu Nov 19 22:54:46 GMT 2026
+
+

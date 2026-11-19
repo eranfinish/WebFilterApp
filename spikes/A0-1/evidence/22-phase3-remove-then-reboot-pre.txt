@@ -1,0 +1,13 @@
+﻿===== op=remove
+Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a01/.CmdReceiver (has extras) }
+Broadcast completed: result=0, data="id=10 removeUser=true; id=11 removeUser=true"
+===== pm list users (after remove)
+Users:
+	UserInfo{0:Owner:c13} running
+===== pm list packages chrome (pre-reboot, user 0)
+===== dumpsys device_policy owner lines (pre-reboot)
+
+  Device Owner: 
+  Profile Owner (User 11): 
+
+

@@ -1,0 +1,9 @@
+﻿== 40 unrestrict
+Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a01/.CmdReceiver (has extras) }
+Broadcast completed: result=0, data="DISALLOW_ADD_USER=false userRestrictions=Bundle[mParcelledData.dataSize=64]"
+== 40 unhide chrome
+Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a01/.CmdReceiver (has extras) }
+Broadcast completed: result=0, data="setApplicationHidden(com.android.chrome,false)=true isHidden=false"
+== 40 pm list packages chrome
+package:com.android.chrome
+== 40 no_add_user after unrestrict (expect none)

@@ -1,0 +1,7 @@
+﻿== install -t -r
+Performing Streamed Install
+Success
+== set-device-owner (attempt 1, device already provisioned)
+Success: Device owner set to package com.webfilter.spike.a01/.AdminReceiver
+Active admin set to component com.webfilter.spike.a01/.AdminReceiver
+exit=0

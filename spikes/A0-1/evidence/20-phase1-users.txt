@@ -1,0 +1,74 @@
+﻿
+===== op=status
+Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a01/.CmdReceiver (has extras) }
+Broadcast completed: result=0, data="owner=true admin=true myUser=0 profiles=[0] created=[]"
+-- logcat A01:
+
+11-20 00:53:17.639  9264  9264 I A01     : op=status pkg=com.android.chrome -> owner=true admin=true myUser=0 
+profiles=[0] created=[]
+
+===== op=create
+Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a01/.CmdReceiver (has extras) }
+Broadcast completed: result=0, data="OK created name=spike-kid-1795128797784 id=10 handle=UserHandle{10}"
+-- logcat A01:
+11-20 00:53:18.520  9264  9264 I A01     : op=create pkg=com.android.chrome -> OK created name=spike-kid-1795128797784 
+id=10 handle=UserHandle{10}
+
+===== op=list
+Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a01/.CmdReceiver (has extras) }
+Broadcast completed: result=0, data="profiles=[0] created=[10] userRestrictions=Bundle[mParcelledData.dataSize=108]"
+-- logcat A01:
+11-20 00:53:18.709  9264  9264 I A01     : op=list pkg=com.android.chrome -> profiles=[0] created=[10] 
+userRestrictions=Bundle[mParcelledData.dataSize=108]
+
+===== pm list users
+Users:
+	UserInfo{0:Owner:c13} running
+	UserInfo{10:spike-kid-1795128797784:400}
+
+===== op=restrict
+Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a01/.CmdReceiver (has extras) }
+Broadcast completed: result=0, data="DISALLOW_ADD_USER=true userRestrictions=Bundle[mParcelledData.dataSize=144]"
+-- logcat A01:
+11-20 00:53:18.961  9264  9264 I A01     : op=restrict pkg=com.android.chrome -> DISALLOW_ADD_USER=true 
+userRestrictions=Bundle[mParcelledData.dataSize=144]
+
+===== op=restrictions
+Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a01/.CmdReceiver (has extras) }
+Broadcast completed: result=0, data="userRestrictions=Bundle[mParcelledData.dataSize=144]"
+-- logcat A01:
+11-20 00:53:19.149  9264  9264 I A01     : op=restrictions pkg=com.android.chrome -> 
+userRestrictions=Bundle[mParcelledData.dataSize=144]
+
+===== op=create
+Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a01/.CmdReceiver (has extras) }
+Broadcast completed: result=0, data="OK created name=spike-kid-1795128799337 id=11 handle=UserHandle{11}"
+-- logcat A01:
+11-20 00:53:20.096  9264  9264 I A01     : op=create pkg=com.android.chrome -> OK created name=spike-kid-1795128799337 
+id=11 handle=UserHandle{11}
+
+===== shell: pm create-user while DISALLOW_ADD_USER is set
+adb.exe : Error: android.os.ServiceSpecificException: Cannot add user: no_add_user is enabled. (code 1)
+At line:19 char:11
++ $lines += & $adb -s $s shell pm create-user shellcheck 2>&1
++           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (Error: android....abled. (code 1):String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+Error: couldn't create User.
+
+===== op=unrestrict
+Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a01/.CmdReceiver (has extras) }
+Broadcast completed: result=0, data="DISALLOW_ADD_USER=false userRestrictions=Bundle[mParcelledData.dataSize=108]"
+-- logcat A01:
+11-20 00:53:20.354  9264  9264 I A01     : op=unrestrict pkg=com.android.chrome -> DISALLOW_ADD_USER=false 
+userRestrictions=Bundle[mParcelledData.dataSize=108]
+
+===== op=restrictions
+Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a01/.CmdReceiver (has extras) }
+Broadcast completed: result=0, data="userRestrictions=Bundle[mParcelledData.dataSize=108]"
+-- logcat A01:
+11-20 00:53:20.519  9264  9264 I A01     : op=restrictions pkg=com.android.chrome -> 
+userRestrictions=Bundle[mParcelledData.dataSize=108]
+
+

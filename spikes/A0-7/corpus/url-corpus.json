@@ -1,0 +1,4581 @@
+[
+  {
+    "input": "",
+    "webUrl": false,
+    "url": null,
+    "hostOnly": null
+  },
+  {
+    "input": "   ",
+    "webUrl": false,
+    "url": null,
+    "hostOnly": null
+  },
+  {
+    "input": "  http://example.com",
+    "webUrl": true,
+    "url": {
+      "scheme": "http",
+      "host": "example.com",
+      "kind": "Domain",
+      "port": null,
+      "path": "/",
+      "query": "",
+      "href": "http://example.com/"
+    },
+    "hostOnly": null
+  },
+  {
+    "input": "  https://example.com/\t ",
+    "webUrl": true,
+    "url": {
+      "scheme": "https",
+      "host": "example.com",
+      "kind": "Domain",
+      "port": null,
+      "path": "/",
+      "query": "",
+      "href": "https://example.com/"
+    },
+    "hostOnly": null
+  },
+  {
+    "input": " EXAMPLE.com. ",
+    "webUrl": false,
+    "url": null,
+    "hostOnly": {
+      "host": "example.com",
+      "kind": "Domain"
+    }
+  },
+  {
+    "input": "+https://example.com/",
+    "webUrl": false,
+    "url": null,
+    "hostOnly": null
+  },
+  {
+    "input": ".",
+    "webUrl": false,
+    "url": null,
+    "hostOnly": null
+  },
+  {
+    "input": "..",
+    "webUrl": false,
+    "url": null,
+    "hostOnly": {
+      "host": ".",
+      "kind": "Domain"
+    }
+  },
+  {
+    "input": "0.0.0.0",
+    "webUrl": false,
+    "url": null,
+    "hostOnly": {
+      "host": "0.0.0.0",
+      "kind": "IPv4"
+    }
+  },
+  {
+    "input": "1.2.3.4.5",
+    "webUrl": false,
+    "url": null,
+    "hostOnly": null
+  },
+  {
+    "input": "127.0.0.1",
+    "webUrl": false,
+    "url": null,
+    "hostOnly": {
+      "host": "127.0.0.1",
+      "kind": "IPv4"
+    }
+  },
+  {
+    "input": "192.168.1.1",
+    "webUrl": false,
+    "url": null,
+    "hostOnly": {
+      "host": "192.168.1.1",
+      "kind": "IPv4"
+    }
+  },
+  {
+    "input": "192.168.1.50",
+    "webUrl": false,
+    "url": null,
+    "hostOnly": {
+      "host": "192.168.1.50",
+      "kind": "IPv4"
+    }
+  },
+  {
+    "input": "1:0:0:2::3",
+    "webUrl": false,
+    "url": null,
+    "hostOnly": {
+      "host": "1:0:0:2::3",
+      "kind": "IPv6"
+    }
+  },
+  {
+    "input": "1:ab::",
+    "webUrl": false,
+    "url": null,
+    "hostOnly": {
+      "host": "1:ab::",
+      "kind": "IPv6"
+    }
+  },
+  {
+    "input": "1http://example.com/",
+    "webUrl": false,
+    "url": null,
+    "hostOnly": null
+  },
+  {
+    "input": "2001:db8:1:1:1:1:0:1",
+    "webUrl": false,
+    "url": null,
+    "hostOnly": {
+      "host": "2001:db8:1:1:1:1:0:1",
+      "kind": "IPv6"
+    }
+  },
+  {
+    "input": "2001:db8::1",
+    "webUrl": false,
+    "url": null,
+    "hostOnly": {
+      "host": "2001:db8::1",
+      "kind": "IPv6"
+    }
+  },
+  {
+    "input": "2001:db8::1:0:0:1",
+    "webUrl": false,
+    "url": null,
+    "hostOnly": {
+      "host": "2001:db8::1:0:0:1",
+      "kind": "IPv6"
+    }
+  },
+  {
+    "input": "3232235826",
+    "webUrl": false,
+    "url": null,
+    "hostOnly": {
+      "host": "192.168.1.50",
+      "kind": "IPv4"
+    }
+  },
+  {
+    "input": "::",
+    "webUrl": false,
+    "url": null,
+    "hostOnly": {
+      "host": "::",
+      "kind": "IPv6"
+    }
+  },
+  {
+    "input": "::1",
+    "webUrl": false,
+    "url": null,
+    "hostOnly": {
+      "host": "::1",
+      "kind": "IPv6"
+    }
+  },
+  {
+    "input": "::ffff:1.2.3.4",
+    "webUrl": false,
+    "url": null,
+    "hostOnly": {
+      "host": "::ffff:102:304",
+      "kind": "IPv6"
+    }
+  },
+  {
+    "input": "::ffff:c0a8:101",
+    "webUrl": false,
+    "url": null,
+    "hostOnly": {
+      "host": "::ffff:c0a8:101",
+      "kind": "IPv6"
+    }
+  },
+  {
+    "input": "Ab.。CD",
+    "webUrl": false,
+    "url": null,
+    "hostOnly": null
+  },
+  {
+    "input": "Bücher.Example",
+    "webUrl": false,
+    "url": null,
+    "hostOnly": {
+      "host": "xn--bcher-kva.example",
+      "kind": "Domain"
+    }
+  },
+  {
+    "input": "HTTP://example.com/",
+    "webUrl": true,
+    "url": {
+      "scheme": "http",
+      "host": "example.com",
+      "kind": "Domain",
+      "port": null,
+      "path": "/",
+      "query": "",
+      "href": "http://example.com/"
+    },
+    "hostOnly": null
+  },
+  {
+    "input": "HTTPS://example.com/",
+    "webUrl": true,
+    "url": {
+      "scheme": "https",
+      "host": "example.com",
+      "kind": "Domain",
+      "port": null,
+      "path": "/",
+      "query": "",
+      "href": "https://example.com/"
+    },
+    "hostOnly": null
+  },
+  {
+    "input": "HTTPS://İ.example/",
+    "webUrl": true,
+    "url": {
+      "scheme": "https",
+      "host": "xn--i-9bb.example",
+      "kind": "Domain",
+      "port": null,
+      "path": "/",
+      "query": "",
+      "href": "https://xn--i-9bb.example/"
+    },
+    "hostOnly": null
+  },
+  {
+    "input": "[2001:DB8::0:1]",
+    "webUrl": false,
+    "url": null,
+    "hostOnly": {
+      "host": "2001:db8::1",
+      "kind": "IPv6"
+    }
+  },
+  {
+    "input": "[::1",
+    "webUrl": false,
+    "url": null,
+    "hostOnly": null
+  },
+  {
+    "input": "[::1]",
+    "webUrl": false,
+    "url": null,
+    "hostOnly": {
+      "host": "::1",
+      "kind": "IPv6"
+    }
+  },
+  {
+    "input": "[::1]:80",
+    "webUrl": false,
+    "url": null,
+    "hostOnly": null
+  },
+  {
+    "input": "[::1]x",
+    "webUrl": false,
+    "url": null,
+    "hostOnly": null
+  },
+  {
+    "input": "a..b",
+    "webUrl": false,
+    "url": null,
+    "hostOnly": {
+      "host": "a..b",
+      "kind": "Domain"
+    }
+  },
+  {
+    "input": "a.b.c.d.e.f.g.h",
+    "webUrl": false,
+    "url": null,
+    "hostOnly": {
+      "host": "a.b.c.d.e.f.g.h",
+      "kind": "Domain"
+    }
+  },
+  {
+    "input": "about:blank",
+    "webUrl": false,
+    "url": null,
+    "hostOnly": null
+  },
+  {
+    "input": "blob:https://example.com/123",
+    "webUrl": false,
+    "url": null,
+    "hostOnly": null
+  },
+  {
+    "input": "chrome://settings/",
+    "webUrl": false,
+    "url": null,
+    "hostOnly": null
+  },
+  {
+    "input": "data:text/html,hi",
+    "webUrl": false,
+    "url": null,
+    "hostOnly": null
+  },
+  {
+    "input": "edge://extensions/",
+    "webUrl": false,
+    "url": null,
+    "hostOnly": null
+  },
+  {
+    "input": "exa mple.com",
+    "webUrl": false,
+    "url": null,
+    "hostOnly": null
+  },
+  {
+    "input": "example.com",
+    "webUrl": false,
+    "url": null,
+    "hostOnly": {
+      "host": "example.com",
+      "kind": "Domain"
+    }
+  },
+  {
+    "input": "example.com/path",
+    "webUrl": false,
+    "url": null,
+    "hostOnly": null
+  },
+  {
+    "input": "example.com:80",
+    "webUrl": false,
+    "url": null,
+    "hostOnly": null
+  },
+  {
+    "input": "file:///C:/Users/noa/Desktop/a.html",
+    "webUrl": false,
+    "url": null,
+    "hostOnly": null
+  },
+  {
+    "input": "file:///C:/Users/noa/a.html",
+    "webUrl": false,
+    "url": null,
+    "hostOnly": null
+  },
+  {
+    "input": "file:///C:/a.html",
+    "webUrl": false,
+    "url": null,
+    "hostOnly": null
+  },
+  {
+    "input": "ftp://example.com/",
+    "webUrl": false,
+    "url": null,
+    "hostOnly": null
+  },
+  {
+    "input": "http:",
+    "webUrl": true,
+    "url": null,
+    "hostOnly": null
+  },
+  {
+    "input": "http://%31%39%32.168.1.1/",
+    "webUrl": true,
+    "url": {
+      "scheme": "http",
+      "host": "192.168.1.1",
+      "kind": "IPv4",
+      "port": null,
+      "path": "/",
+      "query": "",
+      "href": "http://192.168.1.1/"
+    },
+    "hostOnly": null
+  },
+  {
+    "input": "http://0.0.0.0/",
+    "webUrl": true,
+    "url": {
+      "scheme": "http",
+      "host": "0.0.0.0",
+      "kind": "IPv4",
+      "port": null,
+      "path": "/",
+      "query": "",
+      "href": "http://0.0.0.0/"
+    },
+    "hostOnly": null
+  },
+  {
+    "input": "http://01.02.03.04/",
+    "webUrl": true,
+    "url": {
+      "scheme": "http",
+      "host": "1.2.3.4",
+      "kind": "IPv4",
+      "port": null,
+      "path": "/",
+      "query": "",
+      "href": "http://1.2.3.4/"
+    },
+    "hostOnly": null
+  },
+  {
+    "input": "http://0300.0250.01.01/",
+    "webUrl": true,
+    "url": {
+      "scheme": "http",
+      "host": "192.168.1.1",
+      "kind": "IPv4",
+      "port": null,
+      "path": "/",
+      "query": "",
+      "href": "http://192.168.1.1/"
+    },
+    "hostOnly": null
+  },
+  {
+    "input": "http://0777777777777/",
+    "webUrl": true,
+    "url": null,
+    "hostOnly": null
+  },
+  {
+    "input": "http://0x/",
+    "webUrl": true,
+    "url": {
+      "scheme": "http",
+      "host": "0.0.0.0",
+      "kind": "IPv4",
+      "port": null,
+      "path": "/",
+      "query": "",
+      "href": "http://0.0.0.0/"
+    },
+    "hostOnly": null
+  },
+  {
+    "input": "http://0x100.1/",
+    "webUrl": true,
+    "url": null,
+    "hostOnly": null
+  },
+  {
+    "input": "http://0x7f.1/",
+    "webUrl": true,
+    "url": {
+      "scheme": "http",
+      "host": "127.0.0.1",
+      "kind": "IPv4",
+      "port": null,
+      "path": "/",
+      "query": "",
+      "href": "http://127.0.0.1/"
+    },
+    "hostOnly": null
+  },
+  {
+    "input": "http://0x7f000001/",
+    "webUrl": true,
+    "url": {
+      "scheme": "http",
+      "host": "127.0.0.1",
+      "kind": "IPv4",
+      "port": null,
+      "path": "/",
+      "query": "",
+      "href": "http://127.0.0.1/"
+    },
+    "hostOnly": null
+  },
+  {
+    "input": "http://0xC0A80101/",
+    "webUrl": true,
+    "url": {
+      "scheme": "http",
+      "host": "192.168.1.1",
+      "kind": "IPv4",
+      "port": null,
+      "path": "/",
+      "query": "",
+      "href": "http://192.168.1.1/"
+    },
+    "hostOnly": null
+  },
+  {
+    "input": "http://0xc0.0xa8.1.1/",
+    "webUrl": true,
+    "url": {
+      "scheme": "http",
+      "host": "192.168.1.1",
+      "kind": "IPv4",
+      "port": null,
+      "path": "/",
+      "query": "",
+      "href": "http://192.168.1.1/"
+    },
+    "hostOnly": null
+  },
+  {
+    "input": "http://0xffffffffff/",
+    "webUrl": true,
+    "url": null,
+    "hostOnly": null
+  },
+  {
+    "input": "http://1..2/",
+    "webUrl": true,
+    "url": null,
+    "hostOnly": null
+  },
+  {
+    "input": "http://1.2.3.4.",
+    "webUrl": true,
+    "url": {
+      "scheme": "http",
+      "host": "1.2.3.4",
+      "kind": "IPv4",
+      "port": null,
+      "path": "/",
+      "query": "",
+      "href": "http://1.2.3.4/"
+    },
+    "hostOnly": null
+  },
+  {
+    "input": "http://1.2.3/",
+    "webUrl": true,
+    "url": {
+      "scheme": "http",
+      "host": "1.2.0.3",
+      "kind": "IPv4",
+      "port": null,
+      "path": "/",
+      "query": "",
+      "href": "http://1.2.0.3/"
+    },
+    "hostOnly": null
+  },
+  {
+    "input": "http://127.1/",
+    "webUrl": true,
+    "url": {
+      "scheme": "http",
+      "host": "127.0.0.1",
+      "kind": "IPv4",
+      "port": null,
+      "path": "/",
+      "query": "",
+      "href": "http://127.0.0.1/"
+    },
+    "hostOnly": null
+  },
+  {
+    "input": "http://192.11010305/",
+    "webUrl": true,
+    "url": {
+      "scheme": "http",
+      "host": "192.168.1.1",
+      "kind": "IPv4",
+      "port": null,
+      "path": "/",
+      "query": "",
+      "href": "http://192.168.1.1/"
+    },
+    "hostOnly": null
+  },
+  {
+    "input": "http://192.168.1.1./",
+    "webUrl": true,
+    "url": {
+      "scheme": "http",
+      "host": "192.168.1.1",
+      "kind": "IPv4",
+      "port": null,
+      "path": "/",
+      "query": "",
+      "href": "http://192.168.1.1/"
+    },
+    "hostOnly": null
+  },
+  {
+    "input": "http://192.168.1.1/",
+    "webUrl": true,
+    "url": {
+      "scheme": "http",
+      "host": "192.168.1.1",
+      "kind": "IPv4",
+      "port": null,
+      "path": "/",
+      "query": "",
+      "href": "http://192.168.1.1/"
+    },
+    "hostOnly": null
+  },
+  {
+    "input": "http://192.168.1.50/",
+    "webUrl": true,
+    "url": {
+      "scheme": "http",
+      "host": "192.168.1.50",
+      "kind": "IPv4",
+      "port": null,
+      "path": "/",
+      "query": "",
+      "href": "http://192.168.1.50/"
+    },
+    "hostOnly": null
+  },
+  {
+    "input": "http://192.168.257/",
+    "webUrl": true,
+    "url": {
+      "scheme": "http",
+      "host": "192.168.1.1",
+      "kind": "IPv4",
+      "port": null,
+      "path": "/",
+      "query": "",
+      "href": "http://192.168.1.1/"
+    },
+    "hostOnly": null
+  },
+  {
+    "input": "http://256/",
+    "webUrl": true,
+    "url": {
+      "scheme": "http",
+      "host": "0.0.1.0",
+      "kind": "IPv4",
+      "port": null,
+      "path": "/",
+      "query": "",
+      "href": "http://0.0.1.0/"
+    },
+    "hostOnly": null
+  },
+  {
+    "input": "http://3232235777/",
+    "webUrl": true,
+    "url": {
+      "scheme": "http",
+      "host": "192.168.1.1",
+      "kind": "IPv4",
+      "port": null,
+      "path": "/",
+      "query": "",
+      "href": "http://192.168.1.1/"
+    },
+    "hostOnly": null
+  },
+  {
+    "input": "http://3232235826/",
+    "webUrl": true,
+    "url": {
+      "scheme": "http",
+      "host": "192.168.1.50",
+      "kind": "IPv4",
+      "port": null,
+      "path": "/",
+      "query": "",
+      "href": "http://192.168.1.50/"
+    },
+    "hostOnly": null
+  },
+  {
+    "input": "http://4294967295/",
+    "webUrl": true,
+    "url": {
+      "scheme": "http",
+      "host": "255.255.255.255",
+      "kind": "IPv4",
+      "port": null,
+      "path": "/",
+      "query": "",
+      "href": "http://255.255.255.255/"
+    },
+    "hostOnly": null
+  },
+  {
+    "input": "http://4294967296/",
+    "webUrl": true,
+    "url": null,
+    "hostOnly": null
+  },
+  {
+    "input": "http://[0001:00ab::]/",
+    "webUrl": true,
+    "url": {
+      "scheme": "http",
+      "host": "1:ab::",
+      "kind": "IPv6",
+      "port": null,
+      "path": "/",
+      "query": "",
+      "href": "http://[1:ab::]/"
+    },
+    "hostOnly": null
+  },
+  {
+    "input": "http://[0:0:0:0:0:0:0:0]/",
+    "webUrl": true,
+    "url": {
+      "scheme": "http",
+      "host": "::",
+      "kind": "IPv6",
+      "port": null,
+      "path": "/",
+      "query": "",
+      "href": "http://[::]/"
+    },
+    "hostOnly": null
+  },
+  {
+    "input": "http://[0:0:0:0:0:0:0:1]/",
+    "webUrl": true,
+    "url": {
+      "scheme": "http",
+      "host": "::1",
+      "kind": "IPv6",
+      "port": null,
+      "path": "/",
+      "query": "",
+      "href": "http://[::1]/"
+    },
+    "hostOnly": null
+  },
+  {
+    "input": "http://[1:0:0:2:0:0:0:3]/",
+    "webUrl": true,
+    "url": {
+      "scheme": "http",
+      "host": "1:0:0:2::3",
+      "kind": "IPv6",
+      "port": null,
+      "path": "/",
+      "query": "",
+      "href": "http://[1:0:0:2::3]/"
+    },
+    "hostOnly": null
+  },
+  {
+    "input": "http://[1:2:3:4:5:6:1.2.3.4]/",
+    "webUrl": true,
+    "url": {
+      "scheme": "http",
+      "host": "1:2:3:4:5:6:102:304",
+      "kind": "IPv6",
+      "port": null,
+      "path": "/",
+      "query": "",
+      "href": "http://[1:2:3:4:5:6:102:304]/"
+    },
+    "hostOnly": null
+  },
+  {
+    "input": "http://[1::2.3.4.5]/",
+    "webUrl": true,
+    "url": {
+      "scheme": "http",
+      "host": "1::203:405",
+      "kind": "IPv6",
+      "port": null,
+      "path": "/",
+      "query": "",
+      "href": "http://[1::203:405]/"
+    },
+    "hostOnly": null
+  },
+  {
+    "input": "http://[2001:DB8:0:0:0:0:0:1]/",
+    "webUrl": true,
+    "url": {
+      "scheme": "http",
+      "host": "2001:db8::1",
+      "kind": "IPv6",
+      "port": null,
+      "path": "/",
+      "query": "",
+      "href": "http://[2001:db8::1]/"
+    },
+    "hostOnly": null
+  },
+  {
+    "input": "http://[2001:db8:0:0:1:0:0:1]/",
+    "webUrl": true,
+    "url": {
+      "scheme": "http",
+      "host": "2001:db8::1:0:0:1",
+      "kind": "IPv6",
+      "port": null,
+      "path": "/",
+      "query": "",
+      "href": "http://[2001:db8::1:0:0:1]/"
+    },
+    "hostOnly": null
+  },
+  {
+    "input": "http://[2001:db8:1:1:1:1:0:1]/",
+    "webUrl": true,
+    "url": {
+      "scheme": "http",
+      "host": "2001:db8:1:1:1:1:0:1",
+      "kind": "IPv6",
+      "port": null,
+      "path": "/",
+      "query": "",
+      "href": "http://[2001:db8:1:1:1:1:0:1]/"
+    },
+    "hostOnly": null
+  },
+  {
+    "input": "http://[::1%25eth0]/",
+    "webUrl": true,
+    "url": null,
+    "hostOnly": null
+  },
+  {
+    "input": "http://[::1]%25eth0/",
+    "webUrl": true,
+    "url": null,
+    "hostOnly": null
+  },
+  {
+    "input": "http://[::1]/",
+    "webUrl": true,
+    "url": {
+      "scheme": "http",
+      "host": "::1",
+      "kind": "IPv6",
+      "port": null,
+      "path": "/",
+      "query": "",
+      "href": "http://[::1]/"
+    },
+    "hostOnly": null
+  },
+  {
+    "input": "http://[::1]:8080/",
+    "webUrl": true,
+    "url": {
+      "scheme": "http",
+      "host": "::1",
+      "kind": "IPv6",
+      "port": 8080,
+      "path": "/",
+      "query": "",
+      "href": "http://[::1]:8080/"
+    },
+    "hostOnly": null
+  },
+  {
+    "input": "http://[::ffff:1.2.3.4]/",
+    "webUrl": true,
+    "url": {
+      "scheme": "http",
+      "host": "::ffff:102:304",
+      "kind": "IPv6",
+      "port": null,
+      "path": "/",
+      "query": "",
+      "href": "http://[::ffff:102:304]/"
+    },
+    "hostOnly": null
+  },
+  {
+    "input": "http://[::ffff:192.168.1.1]/",
+    "webUrl": true,
+    "url": {
+      "scheme": "http",
+      "host": "::ffff:c0a8:101",
+      "kind": "IPv6",
+      "port": null,
+      "path": "/",
+      "query": "",
+      "href": "http://[::ffff:c0a8:101]/"
+    },
+    "hostOnly": null
+  },
+  {
+    "input": "http://[ffff::]/",
+    "webUrl": true,
+    "url": {
+      "scheme": "http",
+      "host": "ffff::",
+      "kind": "IPv6",
+      "port": null,
+      "path": "/",
+      "query": "",
+      "href": "http://[ffff::]/"
+    },
+    "hostOnly": null
+  },
+  {
+    "input": "http://blocked.example:80/",
+    "webUrl": true,
+    "url": {
+      "scheme": "http",
+      "host": "blocked.example",
+      "kind": "Domain",
+      "port": null,
+      "path": "/",
+      "query": "",
+      "href": "http://blocked.example/"
+    },
+    "hostOnly": null
+  },
+  {
+    "input": "http://example.com",
+    "webUrl": true,
+    "url": {
+      "scheme": "http",
+      "host": "example.com",
+      "kind": "Domain",
+      "port": null,
+      "path": "/",
+      "query": "",
+      "href": "http://example.com/"
+    },
+    "hostOnly": null
+  },
+  {
+    "input": "http://example.com/",
+    "webUrl": true,
+    "url": {
+      "scheme": "http",
+      "host": "example.com",
+      "kind": "Domain",
+      "port": null,
+      "path": "/",
+      "query": "",
+      "href": "http://example.com/"
+    },
+    "hostOnly": null
+  },
+  {
+    "input": "http://example.com:443/",
+    "webUrl": true,
+    "url": {
+      "scheme": "http",
+      "host": "example.com",
+      "kind": "Domain",
+      "port": 443,
+      "path": "/",
+      "query": "",
+      "href": "http://example.com:443/"
+    },
+    "hostOnly": null
+  },
+  {
+    "input": "http://example.com:80/",
+    "webUrl": true,
+    "url": {
+      "scheme": "http",
+      "host": "example.com",
+      "kind": "Domain",
+      "port": null,
+      "path": "/",
+      "query": "",
+      "href": "http://example.com/"
+    },
+    "hostOnly": null
+  },
+  {
+    "input": "http://user@3232235826:8080/x",
+    "webUrl": true,
+    "url": {
+      "scheme": "http",
+      "host": "192.168.1.50",
+      "kind": "IPv4",
+      "port": 8080,
+      "path": "/x",
+      "query": "",
+      "href": "http://192.168.1.50:8080/x"
+    },
+    "hostOnly": null
+  },
+  {
+    "input": "http://１９２.168.1.1/",
+    "webUrl": true,
+    "url": {
+      "scheme": "http",
+      "host": "192.168.1.1",
+      "kind": "IPv4",
+      "port": null,
+      "path": "/",
+      "query": "",
+      "href": "http://192.168.1.1/"
+    },
+    "hostOnly": null
+  },
+  {
+    "input": "https:",
+    "webUrl": true,
+    "url": null,
+    "hostOnly": null
+  },
+  {
+    "input": "https:/",
+    "webUrl": true,
+    "url": null,
+    "hostOnly": null
+  },
+  {
+    "input": "https://",
+    "webUrl": true,
+    "url": null,
+    "hostOnly": null
+  },
+  {
+    "input": "https://%C3.example/",
+    "webUrl": true,
+    "url": null,
+    "hostOnly": null
+  },
+  {
+    "input": "https://%FF.example/",
+    "webUrl": true,
+    "url": null,
+    "hostOnly": null
+  },
+  {
+    "input": "https://-ü.example/",
+    "webUrl": true,
+    "url": null,
+    "hostOnly": null
+  },
+  {
+    "input": "https:///",
+    "webUrl": true,
+    "url": null,
+    "hostOnly": null
+  },
+  {
+    "input": "https:////example.com/x",
+    "webUrl": true,
+    "url": {
+      "scheme": "https",
+      "host": "example.com",
+      "kind": "Domain",
+      "port": null,
+      "path": "/x",
+      "query": "",
+      "href": "https://example.com/x"
+    },
+    "hostOnly": null
+  },
+  {
+    "input": "https://0x100000000/",
+    "webUrl": true,
+    "url": null,
+    "hostOnly": null
+  },
+  {
+    "input": "https://1.2.3.08/",
+    "webUrl": true,
+    "url": null,
+    "hostOnly": null
+  },
+  {
+    "input": "https://1.2.3.4.5/",
+    "webUrl": true,
+    "url": null,
+    "hostOnly": null
+  },
+  {
+    "input": "https://256.256.256.256/",
+    "webUrl": true,
+    "url": null,
+    "hostOnly": null
+  },
+  {
+    "input": "https://4294967296/",
+    "webUrl": true,
+    "url": null,
+    "hostOnly": null
+  },
+  {
+    "input": "https://BLOCKED.EXAMPLE/",
+    "webUrl": true,
+    "url": {
+      "scheme": "https",
+      "host": "blocked.example",
+      "kind": "Domain",
+      "port": null,
+      "path": "/",
+      "query": "",
+      "href": "https://blocked.example/"
+    },
+    "hostOnly": null
+  },
+  {
+    "input": "https://Blocked.Example./page",
+    "webUrl": true,
+    "url": {
+      "scheme": "https",
+      "host": "blocked.example",
+      "kind": "Domain",
+      "port": null,
+      "path": "/page",
+      "query": "",
+      "href": "https://blocked.example/page"
+    },
+    "hostOnly": null
+  },
+  {
+    "input": "https://BÜCHER.example/",
+    "webUrl": true,
+    "url": {
+      "scheme": "https",
+      "host": "xn--bcher-kva.example",
+      "kind": "Domain",
+      "port": null,
+      "path": "/",
+      "query": "",
+      "href": "https://xn--bcher-kva.example/"
+    },
+    "hostOnly": null
+  },
+  {
+    "input": "https://EXAMPLE.com。/",
+    "webUrl": true,
+    "url": {
+      "scheme": "https",
+      "host": "example.com",
+      "kind": "Domain",
+      "port": null,
+      "path": "/",
+      "query": "",
+      "href": "https://example.com/"
+    },
+    "hostOnly": null
+  },
+  {
+    "input": "https://Example.COM/",
+    "webUrl": true,
+    "url": {
+      "scheme": "https",
+      "host": "example.com",
+      "kind": "Domain",
+      "port": null,
+      "path": "/",
+      "query": "",
+      "href": "https://example.com/"
+    },
+    "hostOnly": null
+  },
+  {
+    "input": "https://XN--BCHER-KVA.example/",
+    "webUrl": true,
+    "url": {
+      "scheme": "https",
+      "host": "xn--bcher-kva.example",
+      "kind": "Domain",
+      "port": null,
+      "path": "/",
+      "query": "",
+      "href": "https://xn--bcher-kva.example/"
+    },
+    "hostOnly": null
+  },
+  {
+    "input": "https://[1:2:3:4:5:6:7:8:9]/",
+    "webUrl": true,
+    "url": null,
+    "hostOnly": null
+  },
+  {
+    "input": "https://[1:2:3:4:5:6:7]/",
+    "webUrl": true,
+    "url": null,
+    "hostOnly": null
+  },
+  {
+    "input": "https://[::1.2.3]/",
+    "webUrl": true,
+    "url": null,
+    "hostOnly": null
+  },
+  {
+    "input": "https://[::1/",
+    "webUrl": true,
+    "url": null,
+    "hostOnly": null
+  },
+  {
+    "input": "https://[::1::2]/",
+    "webUrl": true,
+    "url": null,
+    "hostOnly": null
+  },
+  {
+    "input": "https://[example.com]/",
+    "webUrl": true,
+    "url": null,
+    "hostOnly": null
+  },
+  {
+    "input": "https://a%2Fb.example/",
+    "webUrl": true,
+    "url": null,
+    "hostOnly": null
+  },
+  {
+    "input": "https://a.docs.google.com/",
+    "webUrl": true,
+    "url": {
+      "scheme": "https",
+      "host": "a.docs.google.com",
+      "kind": "Domain",
+      "port": null,
+      "path": "/",
+      "query": "",
+      "href": "https://a.docs.google.com/"
+    },
+    "hostOnly": null
+  },
+  {
+    "input": "https://a.\uD83D\uDE00.example/",
+    "webUrl": true,
+    "url": {
+      "scheme": "https",
+      "host": "a.xn--e28h.example",
+      "kind": "Domain",
+      "port": null,
+      "path": "/",
+      "query": "",
+      "href": "https://a.xn--e28h.example/"
+    },
+    "hostOnly": null
+  },
+  {
+    "input": "https://a@b@example.com/",
+    "webUrl": true,
+    "url": {
+      "scheme": "https",
+      "host": "example.com",
+      "kind": "Domain",
+      "port": null,
+      "path": "/",
+      "query": "",
+      "href": "https://example.com/"
+    },
+    "hostOnly": null
+  },
+  {
+    "input": "https://ab--ü.example/",
+    "webUrl": true,
+    "url": {
+      "scheme": "https",
+      "host": "xn--ab---3ra.example",
+      "kind": "Domain",
+      "port": null,
+      "path": "/",
+      "query": "",
+      "href": "https://xn--ab---3ra.example/"
+    },
+    "hostOnly": null
+  },
+  {
+    "input": "https://ab.example/%E2%82%AC/€",
+    "webUrl": true,
+    "url": {
+      "scheme": "https",
+      "host": "ab.example",
+      "kind": "Domain",
+      "port": null,
+      "path": "/%E2%82%AC/%E2%82%AC",
+      "query": "",
+      "href": "https://ab.example/%E2%82%AC/%E2%82%AC"
+    },
+    "hostOnly": null
+  },
+  {
+    "input": "https://accounts.youtube.com/accounts/SetSID?ssdc=1",
+    "webUrl": true,
+    "url": {
+      "scheme": "https",
+      "host": "accounts.youtube.com",
+      "kind": "Domain",
+      "port": null,
+      "path": "/accounts/SetSID",
+      "query": "ssdc=1",
+      "href": "https://accounts.youtube.com/accounts/SetSID?ssdc=1"
+    },
+    "hostOnly": null
+  },
+  {
+    "input": "https://ads.example/frame",
+    "webUrl": true,
+    "url": {
+      "scheme": "https",
+      "host": "ads.example",
+      "kind": "Domain",
+      "port": null,
+      "path": "/frame",
+      "query": "",
+      "href": "https://ads.example/frame"
+    },
+    "hostOnly": null
+  },
+  {
+    "input": "https://adult-site.example/",
+    "webUrl": true,
+    "url": {
+      "scheme": "https",
+      "host": "adult-site.example",
+      "kind": "Domain",
+      "port": null,
+      "path": "/",
+      "query": "",
+      "href": "https://adult-site.example/"
+    },
+    "hostOnly": null
+  },
+  {
+    "input": "https://adult-site.example/health/clinic",
+    "webUrl": true,
+    "url": {
+      "scheme": "https",
+      "host": "adult-site.example",
+      "kind": "Domain",
+      "port": null,
+      "path": "/health/clinic",
+      "query": "",
+      "href": "https://adult-site.example/health/clinic"
+    },
+    "hostOnly": null
+  },
+  {
+    "input": "https://adult-site.example/x",
+    "webUrl": true,
+    "url": {
+      "scheme": "https",
+      "host": "adult-site.example",
+      "kind": "Domain",
+      "port": null,
+      "path": "/x",
+      "query": "",
+      "href": "https://adult-site.example/x"
+    },
+    "hostOnly": null
+  },
+  {
+    "input": "https://allowed.example@blocked.example/",
+    "webUrl": true,
+    "url": {
+      "scheme": "https",
+      "host": "blocked.example",
+      "kind": "Domain",
+      "port": null,
+      "path": "/",
+      "query": "",
+      "href": "https://blocked.example/"
+    },
+    "hostOnly": null
+  },
+  {
+    "input": "https://aש.example/",
+    "webUrl": true,
+    "url": {
+      "scheme": "https",
+      "host": "xn--a-gjc.example",
+      "kind": "Domain",
+      "port": null,
+      "path": "/",
+      "query": "",
+      "href": "https://xn--a-gjc.example/"
+    },
+    "hostOnly": null
+  },
+  {
+    "input": "https://a‌b.example/",
+    "webUrl": true,
+    "url": null,
+    "hostOnly": null
+  },
+  {
+    "input": "https://a‍b.example/",
+    "webUrl": true,
+    "url": null,
+    "hostOnly": null
+  },
+  {
+    "input": "https://b%C3%BCcher.example/",
+    "webUrl": true,
+    "url": {
+      "scheme": "https",
+      "host": "xn--bcher-kva.example",
+      "kind": "Domain",
+      "port": null,
+      "path": "/",
+      "query": "",
+      "href": "https://xn--bcher-kva.example/"
+    },
+    "hostOnly": null
+  },
+  {
+    "input": "https://bestcasino.example/",
+    "webUrl": true,
+    "url": {
+      "scheme": "https",
+      "host": "bestcasino.example",
+      "kind": "Domain",
+      "port": null,
+      "path": "/",
+      "query": "",
+      "href": "https://bestcasino.example/"
+    },
+    "hostOnly": null
+  },
+  {
+    "input": "https://blocked%2Eexample/",
+    "webUrl": true,
+    "url": {
+      "scheme": "https",
+      "host": "blocked.example",
+      "kind": "Domain",
+      "port": null,
+      "path": "/",
+      "query": "",
+      "href": "https://blocked.example/"
+    },
+    "hostOnly": null
+  },
+  {
+    "input": "https://blocked.example%2eother.example/",
+    "webUrl": true,
+    "url": {
+      "scheme": "https",
+      "host": "blocked.example.other.example",
+      "kind": "Domain",
+      "port": null,
+      "path": "/",
+      "query": "",
+      "href": "https://blocked.example.other.example/"
+    },
+    "hostOnly": null
+  },
+  {
+    "input": "https://blocked.example/../other.example/",
+    "webUrl": true,
+    "url": {
+      "scheme": "https",
+      "host": "blocked.example",
+      "kind": "Domain",
+      "port": null,
+      "path": "/other.example/",
+      "query": "",
+      "href": "https://blocked.example/other.example/"
+    },
+    "hostOnly": null
+  },
+  {
+    "input": "https://blocked.example:8443/",
+    "webUrl": true,
+    "url": {
+      "scheme": "https",
+      "host": "blocked.example",
+      "kind": "Domain",
+      "port": 8443,
+      "path": "/",
+      "query": "",
+      "href": "https://blocked.example:8443/"
+    },
+    "hostOnly": null
+  },
+  {
+    "input": "https://blocked.example@allowed.example/",
+    "webUrl": true,
+    "url": {
+      "scheme": "https",
+      "host": "allowed.example",
+      "kind": "Domain",
+      "port": null,
+      "path": "/",
+      "query": "",
+      "href": "https://allowed.example/"
+    },
+    "hostOnly": null
+  },
+  {
+    "input": "https://bücher.example/",
+    "webUrl": true,
+    "url": {
+      "scheme": "https",
+      "host": "xn--bcher-kva.example",
+      "kind": "Domain",
+      "port": null,
+      "path": "/",
+      "query": "",
+      "href": "https://xn--bcher-kva.example/"
+    },
+    "hostOnly": null
+  },
+  {
+    "input": "https://cards.example/casino",
+    "webUrl": true,
+    "url": {
+      "scheme": "https",
+      "host": "cards.example",
+      "kind": "Domain",
+      "port": null,
+      "path": "/casino",
+      "query": "",
+      "href": "https://cards.example/casino"
+    },
+    "hostOnly": null
+  },
+  {
+    "input": "https://casino-history.example/",
+    "webUrl": true,
+    "url": {
+      "scheme": "https",
+      "host": "casino-history.example",
+      "kind": "Domain",
+      "port": null,
+      "path": "/",
+      "query": "",
+      "href": "https://casino-history.example/"
+    },
+    "hostOnly": null
+  },
+  {
+    "input": "https://chat.example/",
+    "webUrl": true,
+    "url": {
+      "scheme": "https",
+      "host": "chat.example",
+      "kind": "Domain",
+      "port": null,
+      "path": "/",
+      "query": "",
+      "href": "https://chat.example/"
+    },
+    "hostOnly": null
+  },
+  {
+    "input": "https://chatgpt.com/",
+    "webUrl": true,
+    "url": {
+      "scheme": "https",
+      "host": "chatgpt.com",
+      "kind": "Domain",
+      "port": null,
+      "path": "/",
+      "query": "",
+      "href": "https://chatgpt.com/"
+    },
+    "hostOnly": null
+  },
+  {
+    "input": "https://chess.example/",
+    "webUrl": true,
+    "url": {
+      "scheme": "https",
+      "host": "chess.example",
+      "kind": "Domain",
+      "port": null,
+      "path": "/",
+      "query": "",
+      "href": "https://chess.example/"
+    },
+    "hostOnly": null
+  },
+  {
+    "input": "https://docs.google.com/",
+    "webUrl": true,
+    "url": {
+      "scheme": "https",
+      "host": "docs.google.com",
+      "kind": "Domain",
+      "port": null,
+      "path": "/",
+      "query": "",
+      "href": "https://docs.google.com/"
+    },
+    "hostOnly": null
+  },
+  {
+    "input": "https://docs.google.com/document/d/abc",
+    "webUrl": true,
+    "url": {
+      "scheme": "https",
+      "host": "docs.google.com",
+      "kind": "Domain",
+      "port": null,
+      "path": "/document/d/abc",
+      "query": "",
+      "href": "https://docs.google.com/document/d/abc"
+    },
+    "hostOnly": null
+  },
+  {
+    "input": "https://duckduckgo.com/?q=cats&ia=web",
+    "webUrl": true,
+    "url": {
+      "scheme": "https",
+      "host": "duckduckgo.com",
+      "kind": "Domain",
+      "port": null,
+      "path": "/",
+      "query": "q=cats&ia=web",
+      "href": "https://duckduckgo.com/?q=cats&ia=web"
+    },
+    "hostOnly": null
+  },
+  {
+    "input": "https://duckduckgo.com/?q=cats&iax=images&ia=images",
+    "webUrl": true,
+    "url": {
+      "scheme": "https",
+      "host": "duckduckgo.com",
+      "kind": "Domain",
+      "port": null,
+      "path": "/",
+      "query": "q=cats&iax=images&ia=images",
+      "href": "https://duckduckgo.com/?q=cats&iax=images&ia=images"
+    },
+    "hostOnly": null
+  },
+  {
+    "input": "https://en.wikipedia.org/wiki/Photosynthesis",
+    "webUrl": true,
+    "url": {
+      "scheme": "https",
+      "host": "en.wikipedia.org",
+      "kind": "Domain",
+      "port": null,
+      "path": "/wiki/Photosynthesis",
+      "query": "",
+      "href": "https://en.wikipedia.org/wiki/Photosynthesis"
+    },
+    "hostOnly": null
+  },
+  {
+    "input": "https://ex%41mple.com/",
+    "webUrl": true,
+    "url": {
+      "scheme": "https",
+      "host": "example.com",
+      "kind": "Domain",
+      "port": null,
+      "path": "/",
+      "query": "",
+      "href": "https://example.com/"
+    },
+    "hostOnly": null
+  },
+  {
+    "input": "https://ex%61mple.com/",
+    "webUrl": true,
+    "url": {
+      "scheme": "https",
+      "host": "example.com",
+      "kind": "Domain",
+      "port": null,
+      "path": "/",
+      "query": "",
+      "href": "https://example.com/"
+    },
+    "hostOnly": null
+  },
+  {
+    "input": "https://ex%zzample.com/",
+    "webUrl": true,
+    "url": null,
+    "hostOnly": null
+  },
+  {
+    "input": "https://exa\nmple.com/p\tq",
+    "webUrl": true,
+    "url": {
+      "scheme": "https",
+      "host": "example.com",
+      "kind": "Domain",
+      "port": null,
+      "path": "/pq",
+      "query": "",
+      "href": "https://example.com/pq"
+    },
+    "hostOnly": null
+  },
+  {
+    "input": "https://exa mple.com/",
+    "webUrl": true,
+    "url": null,
+    "hostOnly": null
+  },
+  {
+    "input": "https://exa%20mple.com/",
+    "webUrl": true,
+    "url": null,
+    "hostOnly": null
+  },
+  {
+    "input": "https://exa<mple.com/",
+    "webUrl": true,
+    "url": null,
+    "hostOnly": null
+  },
+  {
+    "input": "https://example.1/",
+    "webUrl": true,
+    "url": null,
+    "hostOnly": null
+  },
+  {
+    "input": "https://example.com",
+    "webUrl": true,
+    "url": {
+      "scheme": "https",
+      "host": "example.com",
+      "kind": "Domain",
+      "port": null,
+      "path": "/",
+      "query": "",
+      "href": "https://example.com/"
+    },
+    "hostOnly": null
+  },
+  {
+    "input": "https://example.com./a",
+    "webUrl": true,
+    "url": {
+      "scheme": "https",
+      "host": "example.com",
+      "kind": "Domain",
+      "port": null,
+      "path": "/a",
+      "query": "",
+      "href": "https://example.com/a"
+    },
+    "hostOnly": null
+  },
+  {
+    "input": "https://example.com/",
+    "webUrl": true,
+    "url": {
+      "scheme": "https",
+      "host": "example.com",
+      "kind": "Domain",
+      "port": null,
+      "path": "/",
+      "query": "",
+      "href": "https://example.com/"
+    },
+    "hostOnly": null
+  },
+  {
+    "input": "https://example.com/\u0000x",
+    "webUrl": true,
+    "url": {
+      "scheme": "https",
+      "host": "example.com",
+      "kind": "Domain",
+      "port": null,
+      "path": "/%00x",
+      "query": "",
+      "href": "https://example.com/%00x"
+    },
+    "hostOnly": null
+  },
+  {
+    "input": "https://example.com/ /x",
+    "webUrl": true,
+    "url": {
+      "scheme": "https",
+      "host": "example.com",
+      "kind": "Domain",
+      "port": null,
+      "path": "/%20/x",
+      "query": "",
+      "href": "https://example.com/%20/x"
+    },
+    "hostOnly": null
+  },
+  {
+    "input": "https://example.com/%FF",
+    "webUrl": true,
+    "url": {
+      "scheme": "https",
+      "host": "example.com",
+      "kind": "Domain",
+      "port": null,
+      "path": "/%FF",
+      "query": "",
+      "href": "https://example.com/%FF"
+    },
+    "hostOnly": null
+  },
+  {
+    "input": "https://example.com/%zz",
+    "webUrl": true,
+    "url": {
+      "scheme": "https",
+      "host": "example.com",
+      "kind": "Domain",
+      "port": null,
+      "path": "/%zz",
+      "query": "",
+      "href": "https://example.com/%zz"
+    },
+    "hostOnly": null
+  },
+  {
+    "input": "https://example.com/../../x",
+    "webUrl": true,
+    "url": {
+      "scheme": "https",
+      "host": "example.com",
+      "kind": "Domain",
+      "port": null,
+      "path": "/x",
+      "query": "",
+      "href": "https://example.com/x"
+    },
+    "hostOnly": null
+  },
+  {
+    "input": "https://example.com/?q",
+    "webUrl": true,
+    "url": {
+      "scheme": "https",
+      "host": "example.com",
+      "kind": "Domain",
+      "port": null,
+      "path": "/",
+      "query": "q",
+      "href": "https://example.com/?q"
+    },
+    "hostOnly": null
+  },
+  {
+    "input": "https://example.com/?q=%FF",
+    "webUrl": true,
+    "url": {
+      "scheme": "https",
+      "host": "example.com",
+      "kind": "Domain",
+      "port": null,
+      "path": "/",
+      "query": "q=%FF",
+      "href": "https://example.com/?q=%FF"
+    },
+    "hostOnly": null
+  },
+  {
+    "input": "https://example.com/?q=a b&x='",
+    "webUrl": true,
+    "url": {
+      "scheme": "https",
+      "host": "example.com",
+      "kind": "Domain",
+      "port": null,
+      "path": "/",
+      "query": "q=a%20b&x=%27",
+      "href": "https://example.com/?q=a%20b&x=%27"
+    },
+    "hostOnly": null
+  },
+  {
+    "input": "https://example.com/?q=a%20b&x=%27",
+    "webUrl": true,
+    "url": {
+      "scheme": "https",
+      "host": "example.com",
+      "kind": "Domain",
+      "port": null,
+      "path": "/",
+      "query": "q=a%20b&x=%27",
+      "href": "https://example.com/?q=a%20b&x=%27"
+    },
+    "hostOnly": null
+  },
+  {
+    "input": "https://example.com/a",
+    "webUrl": true,
+    "url": {
+      "scheme": "https",
+      "host": "example.com",
+      "kind": "Domain",
+      "port": null,
+      "path": "/a",
+      "query": "",
+      "href": "https://example.com/a"
+    },
+    "hostOnly": null
+  },
+  {
+    "input": "https://example.com/a b/ש",
+    "webUrl": true,
+    "url": {
+      "scheme": "https",
+      "host": "example.com",
+      "kind": "Domain",
+      "port": null,
+      "path": "/a%20b/%D7%A9",
+      "query": "",
+      "href": "https://example.com/a%20b/%D7%A9"
+    },
+    "hostOnly": null
+  },
+  {
+    "input": "https://example.com/a#frag",
+    "webUrl": true,
+    "url": {
+      "scheme": "https",
+      "host": "example.com",
+      "kind": "Domain",
+      "port": null,
+      "path": "/a",
+      "query": "",
+      "href": "https://example.com/a"
+    },
+    "hostOnly": null
+  },
+  {
+    "input": "https://example.com/a#x?q=1",
+    "webUrl": true,
+    "url": {
+      "scheme": "https",
+      "host": "example.com",
+      "kind": "Domain",
+      "port": null,
+      "path": "/a",
+      "query": "",
+      "href": "https://example.com/a"
+    },
+    "hostOnly": null
+  },
+  {
+    "input": "https://example.com/a%20b/%D7%A9",
+    "webUrl": true,
+    "url": {
+      "scheme": "https",
+      "host": "example.com",
+      "kind": "Domain",
+      "port": null,
+      "path": "/a%20b/%D7%A9",
+      "query": "",
+      "href": "https://example.com/a%20b/%D7%A9"
+    },
+    "hostOnly": null
+  },
+  {
+    "input": "https://example.com/a%2Fb/%41",
+    "webUrl": true,
+    "url": {
+      "scheme": "https",
+      "host": "example.com",
+      "kind": "Domain",
+      "port": null,
+      "path": "/a%2Fb/%41",
+      "query": "",
+      "href": "https://example.com/a%2Fb/%41"
+    },
+    "hostOnly": null
+  },
+  {
+    "input": "https://example.com/a/",
+    "webUrl": true,
+    "url": {
+      "scheme": "https",
+      "host": "example.com",
+      "kind": "Domain",
+      "port": null,
+      "path": "/a/",
+      "query": "",
+      "href": "https://example.com/a/"
+    },
+    "hostOnly": null
+  },
+  {
+    "input": "https://example.com/a/%2E/b",
+    "webUrl": true,
+    "url": {
+      "scheme": "https",
+      "host": "example.com",
+      "kind": "Domain",
+      "port": null,
+      "path": "/a/b",
+      "query": "",
+      "href": "https://example.com/a/b"
+    },
+    "hostOnly": null
+  },
+  {
+    "input": "https://example.com/a/%2e%2E/b",
+    "webUrl": true,
+    "url": {
+      "scheme": "https",
+      "host": "example.com",
+      "kind": "Domain",
+      "port": null,
+      "path": "/b",
+      "query": "",
+      "href": "https://example.com/b"
+    },
+    "hostOnly": null
+  },
+  {
+    "input": "https://example.com/a/%2e%2e",
+    "webUrl": true,
+    "url": {
+      "scheme": "https",
+      "host": "example.com",
+      "kind": "Domain",
+      "port": null,
+      "path": "/",
+      "query": "",
+      "href": "https://example.com/"
+    },
+    "hostOnly": null
+  },
+  {
+    "input": "https://example.com/a/.",
+    "webUrl": true,
+    "url": {
+      "scheme": "https",
+      "host": "example.com",
+      "kind": "Domain",
+      "port": null,
+      "path": "/a/",
+      "query": "",
+      "href": "https://example.com/a/"
+    },
+    "hostOnly": null
+  },
+  {
+    "input": "https://example.com/a/.%2e",
+    "webUrl": true,
+    "url": {
+      "scheme": "https",
+      "host": "example.com",
+      "kind": "Domain",
+      "port": null,
+      "path": "/",
+      "query": "",
+      "href": "https://example.com/"
+    },
+    "hostOnly": null
+  },
+  {
+    "input": "https://example.com/a/./b/../c",
+    "webUrl": true,
+    "url": {
+      "scheme": "https",
+      "host": "example.com",
+      "kind": "Domain",
+      "port": null,
+      "path": "/a/c",
+      "query": "",
+      "href": "https://example.com/a/c"
+    },
+    "hostOnly": null
+  },
+  {
+    "input": "https://example.com/a//b",
+    "webUrl": true,
+    "url": {
+      "scheme": "https",
+      "host": "example.com",
+      "kind": "Domain",
+      "port": null,
+      "path": "/a//b",
+      "query": "",
+      "href": "https://example.com/a//b"
+    },
+    "hostOnly": null
+  },
+  {
+    "input": "https://example.com/a/b",
+    "webUrl": true,
+    "url": {
+      "scheme": "https",
+      "host": "example.com",
+      "kind": "Domain",
+      "port": null,
+      "path": "/a/b",
+      "query": "",
+      "href": "https://example.com/a/b"
+    },
+    "hostOnly": null
+  },
+  {
+    "input": "https://example.com/a/b/..",
+    "webUrl": true,
+    "url": {
+      "scheme": "https",
+      "host": "example.com",
+      "kind": "Domain",
+      "port": null,
+      "path": "/a/",
+      "query": "",
+      "href": "https://example.com/a/"
+    },
+    "hostOnly": null
+  },
+  {
+    "input": "https://example.com/a/c",
+    "webUrl": true,
+    "url": {
+      "scheme": "https",
+      "host": "example.com",
+      "kind": "Domain",
+      "port": null,
+      "path": "/a/c",
+      "query": "",
+      "href": "https://example.com/a/c"
+    },
+    "hostOnly": null
+  },
+  {
+    "input": "https://example.com/a?b#c d",
+    "webUrl": true,
+    "url": {
+      "scheme": "https",
+      "host": "example.com",
+      "kind": "Domain",
+      "port": null,
+      "path": "/a",
+      "query": "b",
+      "href": "https://example.com/a?b"
+    },
+    "hostOnly": null
+  },
+  {
+    "input": "https://example.com/a?q=1",
+    "webUrl": true,
+    "url": {
+      "scheme": "https",
+      "host": "example.com",
+      "kind": "Domain",
+      "port": null,
+      "path": "/a",
+      "query": "q=1",
+      "href": "https://example.com/a?q=1"
+    },
+    "hostOnly": null
+  },
+  {
+    "input": "https://example.com/a?q=1#frag?x",
+    "webUrl": true,
+    "url": {
+      "scheme": "https",
+      "host": "example.com",
+      "kind": "Domain",
+      "port": null,
+      "path": "/a",
+      "query": "q=1",
+      "href": "https://example.com/a?q=1"
+    },
+    "hostOnly": null
+  },
+  {
+    "input": "https://example.com/a\\..\\b",
+    "webUrl": true,
+    "url": {
+      "scheme": "https",
+      "host": "example.com",
+      "kind": "Domain",
+      "port": null,
+      "path": "/b",
+      "query": "",
+      "href": "https://example.com/b"
+    },
+    "hostOnly": null
+  },
+  {
+    "input": "https://example.com/b",
+    "webUrl": true,
+    "url": {
+      "scheme": "https",
+      "host": "example.com",
+      "kind": "Domain",
+      "port": null,
+      "path": "/b",
+      "query": "",
+      "href": "https://example.com/b"
+    },
+    "hostOnly": null
+  },
+  {
+    "input": "https://example.com/pq",
+    "webUrl": true,
+    "url": {
+      "scheme": "https",
+      "host": "example.com",
+      "kind": "Domain",
+      "port": null,
+      "path": "/pq",
+      "query": "",
+      "href": "https://example.com/pq"
+    },
+    "hostOnly": null
+  },
+  {
+    "input": "https://example.com/watch?v=vidKhan0001",
+    "webUrl": true,
+    "url": {
+      "scheme": "https",
+      "host": "example.com",
+      "kind": "Domain",
+      "port": null,
+      "path": "/watch",
+      "query": "v=vidKhan0001",
+      "href": "https://example.com/watch?v=vidKhan0001"
+    },
+    "hostOnly": null
+  },
+  {
+    "input": "https://example.com/x",
+    "webUrl": true,
+    "url": {
+      "scheme": "https",
+      "host": "example.com",
+      "kind": "Domain",
+      "port": null,
+      "path": "/x",
+      "query": "",
+      "href": "https://example.com/x"
+    },
+    "hostOnly": null
+  },
+  {
+    "input": "https://example.com/\u007F",
+    "webUrl": true,
+    "url": {
+      "scheme": "https",
+      "host": "example.com",
+      "kind": "Domain",
+      "port": null,
+      "path": "/%7F",
+      "query": "",
+      "href": "https://example.com/%7F"
+    },
+    "hostOnly": null
+  },
+  {
+    "input": "https://example.com/\u00A0x",
+    "webUrl": true,
+    "url": {
+      "scheme": "https",
+      "host": "example.com",
+      "kind": "Domain",
+      "port": null,
+      "path": "/%C2%A0x",
+      "query": "",
+      "href": "https://example.com/%C2%A0x"
+    },
+    "hostOnly": null
+  },
+  {
+    "input": "https://example.com:/",
+    "webUrl": true,
+    "url": {
+      "scheme": "https",
+      "host": "example.com",
+      "kind": "Domain",
+      "port": null,
+      "path": "/",
+      "query": "",
+      "href": "https://example.com/"
+    },
+    "hostOnly": null
+  },
+  {
+    "input": "https://example.com:0/",
+    "webUrl": true,
+    "url": {
+      "scheme": "https",
+      "host": "example.com",
+      "kind": "Domain",
+      "port": 0,
+      "path": "/",
+      "query": "",
+      "href": "https://example.com:0/"
+    },
+    "hostOnly": null
+  },
+  {
+    "input": "https://example.com:0080/",
+    "webUrl": true,
+    "url": {
+      "scheme": "https",
+      "host": "example.com",
+      "kind": "Domain",
+      "port": 80,
+      "path": "/",
+      "query": "",
+      "href": "https://example.com:80/"
+    },
+    "hostOnly": null
+  },
+  {
+    "input": "https://example.com:443./",
+    "webUrl": true,
+    "url": null,
+    "hostOnly": null
+  },
+  {
+    "input": "https://example.com:443/",
+    "webUrl": true,
+    "url": {
+      "scheme": "https",
+      "host": "example.com",
+      "kind": "Domain",
+      "port": null,
+      "path": "/",
+      "query": "",
+      "href": "https://example.com/"
+    },
+    "hostOnly": null
+  },
+  {
+    "input": "https://example.com:65535/",
+    "webUrl": true,
+    "url": {
+      "scheme": "https",
+      "host": "example.com",
+      "kind": "Domain",
+      "port": 65535,
+      "path": "/",
+      "query": "",
+      "href": "https://example.com:65535/"
+    },
+    "hostOnly": null
+  },
+  {
+    "input": "https://example.com:65536/",
+    "webUrl": true,
+    "url": null,
+    "hostOnly": null
+  },
+  {
+    "input": "https://example.com:80/",
+    "webUrl": true,
+    "url": {
+      "scheme": "https",
+      "host": "example.com",
+      "kind": "Domain",
+      "port": 80,
+      "path": "/",
+      "query": "",
+      "href": "https://example.com:80/"
+    },
+    "hostOnly": null
+  },
+  {
+    "input": "https://example.com:80:80/",
+    "webUrl": true,
+    "url": null,
+    "hostOnly": null
+  },
+  {
+    "input": "https://example.com:8a/",
+    "webUrl": true,
+    "url": null,
+    "hostOnly": null
+  },
+  {
+    "input": "https://example.com:99999/",
+    "webUrl": true,
+    "url": null,
+    "hostOnly": null
+  },
+  {
+    "input": "https://example.com?q",
+    "webUrl": true,
+    "url": {
+      "scheme": "https",
+      "host": "example.com",
+      "kind": "Domain",
+      "port": null,
+      "path": "/",
+      "query": "q",
+      "href": "https://example.com/?q"
+    },
+    "hostOnly": null
+  },
+  {
+    "input": "https://example.com\\a\\b",
+    "webUrl": true,
+    "url": {
+      "scheme": "https",
+      "host": "example.com",
+      "kind": "Domain",
+      "port": null,
+      "path": "/a/b",
+      "query": "",
+      "href": "https://example.com/a/b"
+    },
+    "hostOnly": null
+  },
+  {
+    "input": "https://example。com/",
+    "webUrl": true,
+    "url": {
+      "scheme": "https",
+      "host": "example.com",
+      "kind": "Domain",
+      "port": null,
+      "path": "/",
+      "query": "",
+      "href": "https://example.com/"
+    },
+    "hostOnly": null
+  },
+  {
+    "input": "https://forum.example/",
+    "webUrl": true,
+    "url": {
+      "scheme": "https",
+      "host": "forum.example",
+      "kind": "Domain",
+      "port": null,
+      "path": "/",
+      "query": "",
+      "href": "https://forum.example/"
+    },
+    "hostOnly": null
+  },
+  {
+    "input": "https://google.com/",
+    "webUrl": true,
+    "url": {
+      "scheme": "https",
+      "host": "google.com",
+      "kind": "Domain",
+      "port": null,
+      "path": "/",
+      "query": "",
+      "href": "https://google.com/"
+    },
+    "hostOnly": null
+  },
+  {
+    "input": "https://he.wikipedia.org/wiki/Dinosaur",
+    "webUrl": true,
+    "url": {
+      "scheme": "https",
+      "host": "he.wikipedia.org",
+      "kind": "Domain",
+      "port": null,
+      "path": "/wiki/Dinosaur",
+      "query": "",
+      "href": "https://he.wikipedia.org/wiki/Dinosaur"
+    },
+    "hostOnly": null
+  },
+  {
+    "input": "https://images.google.com/",
+    "webUrl": true,
+    "url": {
+      "scheme": "https",
+      "host": "images.google.com",
+      "kind": "Domain",
+      "port": null,
+      "path": "/",
+      "query": "",
+      "href": "https://images.google.com/"
+    },
+    "hostOnly": null
+  },
+  {
+    "input": "https://lens.google.com/uploadbyurl?url=x",
+    "webUrl": true,
+    "url": {
+      "scheme": "https",
+      "host": "lens.google.com",
+      "kind": "Domain",
+      "port": null,
+      "path": "/uploadbyurl",
+      "query": "url=x",
+      "href": "https://lens.google.com/uploadbyurl?url=x"
+    },
+    "hostOnly": null
+  },
+  {
+    "input": "https://m.videosite.example/",
+    "webUrl": true,
+    "url": {
+      "scheme": "https",
+      "host": "m.videosite.example",
+      "kind": "Domain",
+      "port": null,
+      "path": "/",
+      "query": "",
+      "href": "https://m.videosite.example/"
+    },
+    "hostOnly": null
+  },
+  {
+    "input": "https://m.youtube.com/",
+    "webUrl": true,
+    "url": {
+      "scheme": "https",
+      "host": "m.youtube.com",
+      "kind": "Domain",
+      "port": null,
+      "path": "/",
+      "query": "",
+      "href": "https://m.youtube.com/"
+    },
+    "hostOnly": null
+  },
+  {
+    "input": "https://m.youtube.com/channel/UCkhanKids00000000000001",
+    "webUrl": true,
+    "url": {
+      "scheme": "https",
+      "host": "m.youtube.com",
+      "kind": "Domain",
+      "port": null,
+      "path": "/channel/UCkhanKids00000000000001",
+      "query": "",
+      "href": "https://m.youtube.com/channel/UCkhanKids00000000000001"
+    },
+    "hostOnly": null
+  },
+  {
+    "input": "https://m.youtube.com/results?search_query=dinosaurs&sp=EgIQAg%253D%253D",
+    "webUrl": true,
+    "url": {
+      "scheme": "https",
+      "host": "m.youtube.com",
+      "kind": "Domain",
+      "port": null,
+      "path": "/results",
+      "query": "search_query=dinosaurs&sp=EgIQAg%253D%253D",
+      "href": "https://m.youtube.com/results?search_query=dinosaurs&sp=EgIQAg%253D%253D"
+    },
+    "hostOnly": null
+  },
+  {
+    "input": "https://m.youtube.com/results?search_query=space&sp=EgIQAg%253D%253D",
+    "webUrl": true,
+    "url": {
+      "scheme": "https",
+      "host": "m.youtube.com",
+      "kind": "Domain",
+      "port": null,
+      "path": "/results",
+      "query": "search_query=space&sp=EgIQAg%253D%253D",
+      "href": "https://m.youtube.com/results?search_query=space&sp=EgIQAg%253D%253D"
+    },
+    "hostOnly": null
+  },
+  {
+    "input": "https://m.youtube.com/watch?v=vidKhan0001",
+    "webUrl": true,
+    "url": {
+      "scheme": "https",
+      "host": "m.youtube.com",
+      "kind": "Domain",
+      "port": null,
+      "path": "/watch",
+      "query": "v=vidKhan0001",
+      "href": "https://m.youtube.com/watch?v=vidKhan0001"
+    },
+    "hostOnly": null
+  },
+  {
+    "input": "https://mail.google.com/",
+    "webUrl": true,
+    "url": {
+      "scheme": "https",
+      "host": "mail.google.com",
+      "kind": "Domain",
+      "port": null,
+      "path": "/",
+      "query": "",
+      "href": "https://mail.google.com/"
+    },
+    "hostOnly": null
+  },
+  {
+    "input": "https://mashov.info/",
+    "webUrl": true,
+    "url": {
+      "scheme": "https",
+      "host": "mashov.info",
+      "kind": "Domain",
+      "port": null,
+      "path": "/",
+      "query": "",
+      "href": "https://mashov.info/"
+    },
+    "hostOnly": null
+  },
+  {
+    "input": "https://mashov.info/grades",
+    "webUrl": true,
+    "url": {
+      "scheme": "https",
+      "host": "mashov.info",
+      "kind": "Domain",
+      "port": null,
+      "path": "/grades",
+      "query": "",
+      "href": "https://mashov.info/grades"
+    },
+    "hostOnly": null
+  },
+  {
+    "input": "https://mashov.info/login",
+    "webUrl": true,
+    "url": {
+      "scheme": "https",
+      "host": "mashov.info",
+      "kind": "Domain",
+      "port": null,
+      "path": "/login",
+      "query": "",
+      "href": "https://mashov.info/login"
+    },
+    "hostOnly": null
+  },
+  {
+    "input": "https://music.youtube.com/search?q=dinosaurs",
+    "webUrl": true,
+    "url": {
+      "scheme": "https",
+      "host": "music.youtube.com",
+      "kind": "Domain",
+      "port": null,
+      "path": "/search",
+      "query": "q=dinosaurs",
+      "href": "https://music.youtube.com/search?q=dinosaurs"
+    },
+    "hostOnly": null
+  },
+  {
+    "input": "https://music.youtube.com/search?q=lullaby",
+    "webUrl": true,
+    "url": {
+      "scheme": "https",
+      "host": "music.youtube.com",
+      "kind": "Domain",
+      "port": null,
+      "path": "/search",
+      "query": "q=lullaby",
+      "href": "https://music.youtube.com/search?q=lullaby"
+    },
+    "hostOnly": null
+  },
+  {
+    "input": "https://music.youtube.com/watch?v=vidMusc0001",
+    "webUrl": true,
+    "url": {
+      "scheme": "https",
+      "host": "music.youtube.com",
+      "kind": "Domain",
+      "port": null,
+      "path": "/watch",
+      "query": "v=vidMusc0001",
+      "href": "https://music.youtube.com/watch?v=vidMusc0001"
+    },
+    "hostOnly": null
+  },
+  {
+    "input": "https://news.example/",
+    "webUrl": true,
+    "url": {
+      "scheme": "https",
+      "host": "news.example",
+      "kind": "Domain",
+      "port": null,
+      "path": "/",
+      "query": "",
+      "href": "https://news.example/"
+    },
+    "hostOnly": null
+  },
+  {
+    "input": "https://notadult-site.example/",
+    "webUrl": true,
+    "url": {
+      "scheme": "https",
+      "host": "notadult-site.example",
+      "kind": "Domain",
+      "port": null,
+      "path": "/",
+      "query": "",
+      "href": "https://notadult-site.example/"
+    },
+    "hostOnly": null
+  },
+  {
+    "input": "https://notvideosite.example/",
+    "webUrl": true,
+    "url": {
+      "scheme": "https",
+      "host": "notvideosite.example",
+      "kind": "Domain",
+      "port": null,
+      "path": "/",
+      "query": "",
+      "href": "https://notvideosite.example/"
+    },
+    "hostOnly": null
+  },
+  {
+    "input": "https://notyoutube.com/watch?v=vidKhan0001",
+    "webUrl": true,
+    "url": {
+      "scheme": "https",
+      "host": "notyoutube.com",
+      "kind": "Domain",
+      "port": null,
+      "path": "/watch",
+      "query": "v=vidKhan0001",
+      "href": "https://notyoutube.com/watch?v=vidKhan0001"
+    },
+    "hostOnly": null
+  },
+  {
+    "input": "https://nsfw.example/",
+    "webUrl": true,
+    "url": {
+      "scheme": "https",
+      "host": "nsfw.example",
+      "kind": "Domain",
+      "port": null,
+      "path": "/",
+      "query": "",
+      "href": "https://nsfw.example/"
+    },
+    "hostOnly": null
+  },
+  {
+    "input": "https://pbskids.org/",
+    "webUrl": true,
+    "url": {
+      "scheme": "https",
+      "host": "pbskids.org",
+      "kind": "Domain",
+      "port": null,
+      "path": "/",
+      "query": "",
+      "href": "https://pbskids.org/"
+    },
+    "hostOnly": null
+  },
+  {
+    "input": "https://pbskids.org/games",
+    "webUrl": true,
+    "url": {
+      "scheme": "https",
+      "host": "pbskids.org",
+      "kind": "Domain",
+      "port": null,
+      "path": "/games",
+      "query": "",
+      "href": "https://pbskids.org/games"
+    },
+    "hostOnly": null
+  },
+  {
+    "input": "https://r3---sn-abc.googlevideo.com/videoplayback",
+    "webUrl": true,
+    "url": {
+      "scheme": "https",
+      "host": "r3---sn-abc.googlevideo.com",
+      "kind": "Domain",
+      "port": null,
+      "path": "/videoplayback",
+      "query": "",
+      "href": "https://r3---sn-abc.googlevideo.com/videoplayback"
+    },
+    "hostOnly": null
+  },
+  {
+    "input": "https://scratch.mit.edu/",
+    "webUrl": true,
+    "url": {
+      "scheme": "https",
+      "host": "scratch.mit.edu",
+      "kind": "Domain",
+      "port": null,
+      "path": "/",
+      "query": "",
+      "href": "https://scratch.mit.edu/"
+    },
+    "hostOnly": null
+  },
+  {
+    "input": "https://straße.example/",
+    "webUrl": true,
+    "url": {
+      "scheme": "https",
+      "host": "xn--strae-oqa.example",
+      "kind": "Domain",
+      "port": null,
+      "path": "/",
+      "query": "",
+      "href": "https://xn--strae-oqa.example/"
+    },
+    "hostOnly": null
+  },
+  {
+    "input": "https://studio.youtube.com/",
+    "webUrl": true,
+    "url": {
+      "scheme": "https",
+      "host": "studio.youtube.com",
+      "kind": "Domain",
+      "port": null,
+      "path": "/",
+      "query": "",
+      "href": "https://studio.youtube.com/"
+    },
+    "hostOnly": null
+  },
+  {
+    "input": "https://under_score.example/",
+    "webUrl": true,
+    "url": {
+      "scheme": "https",
+      "host": "under_score.example",
+      "kind": "Domain",
+      "port": null,
+      "path": "/",
+      "query": "",
+      "href": "https://under_score.example/"
+    },
+    "hostOnly": null
+  },
+  {
+    "input": "https://user:pa:ss@example.com/",
+    "webUrl": true,
+    "url": {
+      "scheme": "https",
+      "host": "example.com",
+      "kind": "Domain",
+      "port": null,
+      "path": "/",
+      "query": "",
+      "href": "https://example.com/"
+    },
+    "hostOnly": null
+  },
+  {
+    "input": "https://user:secret@blocked.example/",
+    "webUrl": true,
+    "url": {
+      "scheme": "https",
+      "host": "blocked.example",
+      "kind": "Domain",
+      "port": null,
+      "path": "/",
+      "query": "",
+      "href": "https://blocked.example/"
+    },
+    "hostOnly": null
+  },
+  {
+    "input": "https://user@/",
+    "webUrl": true,
+    "url": null,
+    "hostOnly": null
+  },
+  {
+    "input": "https://videosite.example.other.net/",
+    "webUrl": true,
+    "url": {
+      "scheme": "https",
+      "host": "videosite.example.other.net",
+      "kind": "Domain",
+      "port": null,
+      "path": "/",
+      "query": "",
+      "href": "https://videosite.example.other.net/"
+    },
+    "hostOnly": null
+  },
+  {
+    "input": "https://videosite.example/",
+    "webUrl": true,
+    "url": {
+      "scheme": "https",
+      "host": "videosite.example",
+      "kind": "Domain",
+      "port": null,
+      "path": "/",
+      "query": "",
+      "href": "https://videosite.example/"
+    },
+    "hostOnly": null
+  },
+  {
+    "input": "https://worksheets.example/games",
+    "webUrl": true,
+    "url": {
+      "scheme": "https",
+      "host": "worksheets.example",
+      "kind": "Domain",
+      "port": null,
+      "path": "/games",
+      "query": "",
+      "href": "https://worksheets.example/games"
+    },
+    "hostOnly": null
+  },
+  {
+    "input": "https://worksheets.example/math/grade2",
+    "webUrl": true,
+    "url": {
+      "scheme": "https",
+      "host": "worksheets.example",
+      "kind": "Domain",
+      "port": null,
+      "path": "/math/grade2",
+      "query": "",
+      "href": "https://worksheets.example/math/grade2"
+    },
+    "hostOnly": null
+  },
+  {
+    "input": "https://worksheets.example/math/grade2/page2",
+    "webUrl": true,
+    "url": {
+      "scheme": "https",
+      "host": "worksheets.example",
+      "kind": "Domain",
+      "port": null,
+      "path": "/math/grade2/page2",
+      "query": "",
+      "href": "https://worksheets.example/math/grade2/page2"
+    },
+    "hostOnly": null
+  },
+  {
+    "input": "https://worksheets.example/math/grade2?id=9",
+    "webUrl": true,
+    "url": {
+      "scheme": "https",
+      "host": "worksheets.example",
+      "kind": "Domain",
+      "port": null,
+      "path": "/math/grade2",
+      "query": "id=9",
+      "href": "https://worksheets.example/math/grade2?id=9"
+    },
+    "hostOnly": null
+  },
+  {
+    "input": "https://worksheets.example/math/grade2b",
+    "webUrl": true,
+    "url": {
+      "scheme": "https",
+      "host": "worksheets.example",
+      "kind": "Domain",
+      "port": null,
+      "path": "/math/grade2b",
+      "query": "",
+      "href": "https://worksheets.example/math/grade2b"
+    },
+    "hostOnly": null
+  },
+  {
+    "input": "https://www.adult-site.example/",
+    "webUrl": true,
+    "url": {
+      "scheme": "https",
+      "host": "www.adult-site.example",
+      "kind": "Domain",
+      "port": null,
+      "path": "/",
+      "query": "",
+      "href": "https://www.adult-site.example/"
+    },
+    "hostOnly": null
+  },
+  {
+    "input": "https://www.adult-site.example/video?id=1",
+    "webUrl": true,
+    "url": {
+      "scheme": "https",
+      "host": "www.adult-site.example",
+      "kind": "Domain",
+      "port": null,
+      "path": "/video",
+      "query": "id=1",
+      "href": "https://www.adult-site.example/video?id=1"
+    },
+    "hostOnly": null
+  },
+  {
+    "input": "https://www.bing.com/images/search?q=cats",
+    "webUrl": true,
+    "url": {
+      "scheme": "https",
+      "host": "www.bing.com",
+      "kind": "Domain",
+      "port": null,
+      "path": "/images/search",
+      "query": "q=cats",
+      "href": "https://www.bing.com/images/search?q=cats"
+    },
+    "hostOnly": null
+  },
+  {
+    "input": "https://www.bing.com/search?q=cats",
+    "webUrl": true,
+    "url": {
+      "scheme": "https",
+      "host": "www.bing.com",
+      "kind": "Domain",
+      "port": null,
+      "path": "/search",
+      "query": "q=cats",
+      "href": "https://www.bing.com/search?q=cats"
+    },
+    "hostOnly": null
+  },
+  {
+    "input": "https://www.blocked.example/a%2Fb",
+    "webUrl": true,
+    "url": {
+      "scheme": "https",
+      "host": "www.blocked.example",
+      "kind": "Domain",
+      "port": null,
+      "path": "/a%2Fb",
+      "query": "",
+      "href": "https://www.blocked.example/a%2Fb"
+    },
+    "hostOnly": null
+  },
+  {
+    "input": "https://www.casino-online.example/play",
+    "webUrl": true,
+    "url": {
+      "scheme": "https",
+      "host": "www.casino-online.example",
+      "kind": "Domain",
+      "port": null,
+      "path": "/play",
+      "query": "",
+      "href": "https://www.casino-online.example/play"
+    },
+    "hostOnly": null
+  },
+  {
+    "input": "https://www.google.co.il/search?udm=2&q=cats",
+    "webUrl": true,
+    "url": {
+      "scheme": "https",
+      "host": "www.google.co.il",
+      "kind": "Domain",
+      "port": null,
+      "path": "/search",
+      "query": "udm=2&q=cats",
+      "href": "https://www.google.co.il/search?udm=2&q=cats"
+    },
+    "hostOnly": null
+  },
+  {
+    "input": "https://www.google.co.il/search?udm=50&q=x&aep=1",
+    "webUrl": true,
+    "url": {
+      "scheme": "https",
+      "host": "www.google.co.il",
+      "kind": "Domain",
+      "port": null,
+      "path": "/search",
+      "query": "udm=50&q=x&aep=1",
+      "href": "https://www.google.co.il/search?udm=50&q=x&aep=1"
+    },
+    "hostOnly": null
+  },
+  {
+    "input": "https://www.google.com/",
+    "webUrl": true,
+    "url": {
+      "scheme": "https",
+      "host": "www.google.com",
+      "kind": "Domain",
+      "port": null,
+      "path": "/",
+      "query": "",
+      "href": "https://www.google.com/"
+    },
+    "hostOnly": null
+  },
+  {
+    "input": "https://www.google.com/search?q=cats",
+    "webUrl": true,
+    "url": {
+      "scheme": "https",
+      "host": "www.google.com",
+      "kind": "Domain",
+      "port": null,
+      "path": "/search",
+      "query": "q=cats",
+      "href": "https://www.google.com/search?q=cats"
+    },
+    "hostOnly": null
+  },
+  {
+    "input": "https://www.google.com/search?q=cats#udm=2",
+    "webUrl": true,
+    "url": {
+      "scheme": "https",
+      "host": "www.google.com",
+      "kind": "Domain",
+      "port": null,
+      "path": "/search",
+      "query": "q=cats",
+      "href": "https://www.google.com/search?q=cats"
+    },
+    "hostOnly": null
+  },
+  {
+    "input": "https://www.google.com/search?q=cats&udm=14",
+    "webUrl": true,
+    "url": {
+      "scheme": "https",
+      "host": "www.google.com",
+      "kind": "Domain",
+      "port": null,
+      "path": "/search",
+      "query": "q=cats&udm=14",
+      "href": "https://www.google.com/search?q=cats&udm=14"
+    },
+    "hostOnly": null
+  },
+  {
+    "input": "https://www.google.com/search?q=cats&udm=2",
+    "webUrl": true,
+    "url": {
+      "scheme": "https",
+      "host": "www.google.com",
+      "kind": "Domain",
+      "port": null,
+      "path": "/search",
+      "query": "q=cats&udm=2",
+      "href": "https://www.google.com/search?q=cats&udm=2"
+    },
+    "hostOnly": null
+  },
+  {
+    "input": "https://www.google.com/search?q=homework+help",
+    "webUrl": true,
+    "url": {
+      "scheme": "https",
+      "host": "www.google.com",
+      "kind": "Domain",
+      "port": null,
+      "path": "/search",
+      "query": "q=homework+help",
+      "href": "https://www.google.com/search?q=homework+help"
+    },
+    "hostOnly": null
+  },
+  {
+    "input": "https://www.google.com/search?q=homework+help&udm=50",
+    "webUrl": true,
+    "url": {
+      "scheme": "https",
+      "host": "www.google.com",
+      "kind": "Domain",
+      "port": null,
+      "path": "/search",
+      "query": "q=homework+help&udm=50",
+      "href": "https://www.google.com/search?q=homework+help&udm=50"
+    },
+    "hostOnly": null
+  },
+  {
+    "input": "https://www.google.com/search?q=udm%3D2",
+    "webUrl": true,
+    "url": {
+      "scheme": "https",
+      "host": "www.google.com",
+      "kind": "Domain",
+      "port": null,
+      "path": "/search",
+      "query": "q=udm%3D2",
+      "href": "https://www.google.com/search?q=udm%3D2"
+    },
+    "hostOnly": null
+  },
+  {
+    "input": "https://www.google.com/search?q=udm%3D50",
+    "webUrl": true,
+    "url": {
+      "scheme": "https",
+      "host": "www.google.com",
+      "kind": "Domain",
+      "port": null,
+      "path": "/search",
+      "query": "q=udm%3D50",
+      "href": "https://www.google.com/search?q=udm%3D50"
+    },
+    "hostOnly": null
+  },
+  {
+    "input": "https://www.google.com/search?q=volcano",
+    "webUrl": true,
+    "url": {
+      "scheme": "https",
+      "host": "www.google.com",
+      "kind": "Domain",
+      "port": null,
+      "path": "/search",
+      "query": "q=volcano",
+      "href": "https://www.google.com/search?q=volcano"
+    },
+    "hostOnly": null
+  },
+  {
+    "input": "https://www.google.com/search?q=volcano&udm=50",
+    "webUrl": true,
+    "url": {
+      "scheme": "https",
+      "host": "www.google.com",
+      "kind": "Domain",
+      "port": null,
+      "path": "/search",
+      "query": "q=volcano&udm=50",
+      "href": "https://www.google.com/search?q=volcano&udm=50"
+    },
+    "hostOnly": null
+  },
+  {
+    "input": "https://www.google.com/search?q=x",
+    "webUrl": true,
+    "url": {
+      "scheme": "https",
+      "host": "www.google.com",
+      "kind": "Domain",
+      "port": null,
+      "path": "/search",
+      "query": "q=x",
+      "href": "https://www.google.com/search?q=x"
+    },
+    "hostOnly": null
+  },
+  {
+    "input": "https://www.google.com/search?q=x&udm=500",
+    "webUrl": true,
+    "url": {
+      "scheme": "https",
+      "host": "www.google.com",
+      "kind": "Domain",
+      "port": null,
+      "path": "/search",
+      "query": "q=x&udm=500",
+      "href": "https://www.google.com/search?q=x&udm=500"
+    },
+    "hostOnly": null
+  },
+  {
+    "input": "https://www.google.com/search?tbm=isch&q=cats&hl=he",
+    "webUrl": true,
+    "url": {
+      "scheme": "https",
+      "host": "www.google.com",
+      "kind": "Domain",
+      "port": null,
+      "path": "/search",
+      "query": "tbm=isch&q=cats&hl=he",
+      "href": "https://www.google.com/search?tbm=isch&q=cats&hl=he"
+    },
+    "hostOnly": null
+  },
+  {
+    "input": "https://www.instagram.com/",
+    "webUrl": true,
+    "url": {
+      "scheme": "https",
+      "host": "www.instagram.com",
+      "kind": "Domain",
+      "port": null,
+      "path": "/",
+      "query": "",
+      "href": "https://www.instagram.com/"
+    },
+    "hostOnly": null
+  },
+  {
+    "input": "https://www.khanacademy.org/",
+    "webUrl": true,
+    "url": {
+      "scheme": "https",
+      "host": "www.khanacademy.org",
+      "kind": "Domain",
+      "port": null,
+      "path": "/",
+      "query": "",
+      "href": "https://www.khanacademy.org/"
+    },
+    "hostOnly": null
+  },
+  {
+    "input": "https://www.khanacademy.org/math",
+    "webUrl": true,
+    "url": {
+      "scheme": "https",
+      "host": "www.khanacademy.org",
+      "kind": "Domain",
+      "port": null,
+      "path": "/math",
+      "query": "",
+      "href": "https://www.khanacademy.org/math"
+    },
+    "hostOnly": null
+  },
+  {
+    "input": "https://www.miniclip.com/",
+    "webUrl": true,
+    "url": {
+      "scheme": "https",
+      "host": "www.miniclip.com",
+      "kind": "Domain",
+      "port": null,
+      "path": "/",
+      "query": "",
+      "href": "https://www.miniclip.com/"
+    },
+    "hostOnly": null
+  },
+  {
+    "input": "https://www.news.example/today",
+    "webUrl": true,
+    "url": {
+      "scheme": "https",
+      "host": "www.news.example",
+      "kind": "Domain",
+      "port": null,
+      "path": "/today",
+      "query": "",
+      "href": "https://www.news.example/today"
+    },
+    "hostOnly": null
+  },
+  {
+    "input": "https://www.nsfw.example/",
+    "webUrl": true,
+    "url": {
+      "scheme": "https",
+      "host": "www.nsfw.example",
+      "kind": "Domain",
+      "port": null,
+      "path": "/",
+      "query": "",
+      "href": "https://www.nsfw.example/"
+    },
+    "hostOnly": null
+  },
+  {
+    "input": "https://www.nsfw.example/page",
+    "webUrl": true,
+    "url": {
+      "scheme": "https",
+      "host": "www.nsfw.example",
+      "kind": "Domain",
+      "port": null,
+      "path": "/page",
+      "query": "",
+      "href": "https://www.nsfw.example/page"
+    },
+    "hostOnly": null
+  },
+  {
+    "input": "https://www.pbskids.org/videos",
+    "webUrl": true,
+    "url": {
+      "scheme": "https",
+      "host": "www.pbskids.org",
+      "kind": "Domain",
+      "port": null,
+      "path": "/videos",
+      "query": "",
+      "href": "https://www.pbskids.org/videos"
+    },
+    "hostOnly": null
+  },
+  {
+    "input": "https://www.reddit.com/",
+    "webUrl": true,
+    "url": {
+      "scheme": "https",
+      "host": "www.reddit.com",
+      "kind": "Domain",
+      "port": null,
+      "path": "/",
+      "query": "",
+      "href": "https://www.reddit.com/"
+    },
+    "hostOnly": null
+  },
+  {
+    "input": "https://www.reddit.com/R/funny",
+    "webUrl": true,
+    "url": {
+      "scheme": "https",
+      "host": "www.reddit.com",
+      "kind": "Domain",
+      "port": null,
+      "path": "/R/funny",
+      "query": "",
+      "href": "https://www.reddit.com/R/funny"
+    },
+    "hostOnly": null
+  },
+  {
+    "input": "https://www.reddit.com/r/funny/",
+    "webUrl": true,
+    "url": {
+      "scheme": "https",
+      "host": "www.reddit.com",
+      "kind": "Domain",
+      "port": null,
+      "path": "/r/funny/",
+      "query": "",
+      "href": "https://www.reddit.com/r/funny/"
+    },
+    "hostOnly": null
+  },
+  {
+    "input": "https://www.reddit.com/r/learnprogramming",
+    "webUrl": true,
+    "url": {
+      "scheme": "https",
+      "host": "www.reddit.com",
+      "kind": "Domain",
+      "port": null,
+      "path": "/r/learnprogramming",
+      "query": "",
+      "href": "https://www.reddit.com/r/learnprogramming"
+    },
+    "hostOnly": null
+  },
+  {
+    "input": "https://www.reddit.com/r/learnprogramming/comments/1",
+    "webUrl": true,
+    "url": {
+      "scheme": "https",
+      "host": "www.reddit.com",
+      "kind": "Domain",
+      "port": null,
+      "path": "/r/learnprogramming/comments/1",
+      "query": "",
+      "href": "https://www.reddit.com/r/learnprogramming/comments/1"
+    },
+    "hostOnly": null
+  },
+  {
+    "input": "https://www.reddit.com/r/learnprogramming?sort=new",
+    "webUrl": true,
+    "url": {
+      "scheme": "https",
+      "host": "www.reddit.com",
+      "kind": "Domain",
+      "port": null,
+      "path": "/r/learnprogramming",
+      "query": "sort=new",
+      "href": "https://www.reddit.com/r/learnprogramming?sort=new"
+    },
+    "hostOnly": null
+  },
+  {
+    "input": "https://www.reddit.com/r/learnprogrammingmemes",
+    "webUrl": true,
+    "url": {
+      "scheme": "https",
+      "host": "www.reddit.com",
+      "kind": "Domain",
+      "port": null,
+      "path": "/r/learnprogrammingmemes",
+      "query": "",
+      "href": "https://www.reddit.com/r/learnprogrammingmemes"
+    },
+    "hostOnly": null
+  },
+  {
+    "input": "https://www.roblox.com/",
+    "webUrl": true,
+    "url": {
+      "scheme": "https",
+      "host": "www.roblox.com",
+      "kind": "Domain",
+      "port": null,
+      "path": "/",
+      "query": "",
+      "href": "https://www.roblox.com/"
+    },
+    "hostOnly": null
+  },
+  {
+    "input": "https://www.roblox.com/games",
+    "webUrl": true,
+    "url": {
+      "scheme": "https",
+      "host": "www.roblox.com",
+      "kind": "Domain",
+      "port": null,
+      "path": "/games",
+      "query": "",
+      "href": "https://www.roblox.com/games"
+    },
+    "hostOnly": null
+  },
+  {
+    "input": "https://www.tiktok.com/@someone",
+    "webUrl": true,
+    "url": {
+      "scheme": "https",
+      "host": "www.tiktok.com",
+      "kind": "Domain",
+      "port": null,
+      "path": "/@someone",
+      "query": "",
+      "href": "https://www.tiktok.com/@someone"
+    },
+    "hostOnly": null
+  },
+  {
+    "input": "https://www.videosite.example/watch/1",
+    "webUrl": true,
+    "url": {
+      "scheme": "https",
+      "host": "www.videosite.example",
+      "kind": "Domain",
+      "port": null,
+      "path": "/watch/1",
+      "query": "",
+      "href": "https://www.videosite.example/watch/1"
+    },
+    "hostOnly": null
+  },
+  {
+    "input": "https://www.wikipedia.org/",
+    "webUrl": true,
+    "url": {
+      "scheme": "https",
+      "host": "www.wikipedia.org",
+      "kind": "Domain",
+      "port": null,
+      "path": "/",
+      "query": "",
+      "href": "https://www.wikipedia.org/"
+    },
+    "hostOnly": null
+  },
+  {
+    "input": "https://www.xn--bcher-kva.example/",
+    "webUrl": true,
+    "url": {
+      "scheme": "https",
+      "host": "www.xn--bcher-kva.example",
+      "kind": "Domain",
+      "port": null,
+      "path": "/",
+      "query": "",
+      "href": "https://www.xn--bcher-kva.example/"
+    },
+    "hostOnly": null
+  },
+  {
+    "input": "https://www.youtube-nocookie.com/embed/vidKhan0001",
+    "webUrl": true,
+    "url": {
+      "scheme": "https",
+      "host": "www.youtube-nocookie.com",
+      "kind": "Domain",
+      "port": null,
+      "path": "/embed/vidKhan0001",
+      "query": "",
+      "href": "https://www.youtube-nocookie.com/embed/vidKhan0001"
+    },
+    "hostOnly": null
+  },
+  {
+    "input": "https://www.youtube-nocookie.com/embed/vidKhan0001?rel=0",
+    "webUrl": true,
+    "url": {
+      "scheme": "https",
+      "host": "www.youtube-nocookie.com",
+      "kind": "Domain",
+      "port": null,
+      "path": "/embed/vidKhan0001",
+      "query": "rel=0",
+      "href": "https://www.youtube-nocookie.com/embed/vidKhan0001?rel=0"
+    },
+    "hostOnly": null
+  },
+  {
+    "input": "https://www.youtube-nocookie.com/embed/vidOthr0001",
+    "webUrl": true,
+    "url": {
+      "scheme": "https",
+      "host": "www.youtube-nocookie.com",
+      "kind": "Domain",
+      "port": null,
+      "path": "/embed/vidOthr0001",
+      "query": "",
+      "href": "https://www.youtube-nocookie.com/embed/vidOthr0001"
+    },
+    "hostOnly": null
+  },
+  {
+    "input": "https://www.youtube.com/",
+    "webUrl": true,
+    "url": {
+      "scheme": "https",
+      "host": "www.youtube.com",
+      "kind": "Domain",
+      "port": null,
+      "path": "/",
+      "query": "",
+      "href": "https://www.youtube.com/"
+    },
+    "hostOnly": null
+  },
+  {
+    "input": "https://www.youtube.com/@KhanKids-Sim",
+    "webUrl": true,
+    "url": {
+      "scheme": "https",
+      "host": "www.youtube.com",
+      "kind": "Domain",
+      "port": null,
+      "path": "/@KhanKids-Sim",
+      "query": "",
+      "href": "https://www.youtube.com/@KhanKids-Sim"
+    },
+    "hostOnly": null
+  },
+  {
+    "input": "https://www.youtube.com/@NatGeoKids-Sim",
+    "webUrl": true,
+    "url": {
+      "scheme": "https",
+      "host": "www.youtube.com",
+      "kind": "Domain",
+      "port": null,
+      "path": "/@NatGeoKids-Sim",
+      "query": "",
+      "href": "https://www.youtube.com/@NatGeoKids-Sim"
+    },
+    "hostOnly": null
+  },
+  {
+    "input": "https://www.youtube.com/@Sesame-Sim",
+    "webUrl": true,
+    "url": {
+      "scheme": "https",
+      "host": "www.youtube.com",
+      "kind": "Domain",
+      "port": null,
+      "path": "/@Sesame-Sim",
+      "query": "",
+      "href": "https://www.youtube.com/@Sesame-Sim"
+    },
+    "hostOnly": null
+  },
+  {
+    "input": "https://www.youtube.com/@gamerx-sim",
+    "webUrl": true,
+    "url": {
+      "scheme": "https",
+      "host": "www.youtube.com",
+      "kind": "Domain",
+      "port": null,
+      "path": "/@gamerx-sim",
+      "query": "",
+      "href": "https://www.youtube.com/@gamerx-sim"
+    },
+    "hostOnly": null
+  },
+  {
+    "input": "https://www.youtube.com/@khankids-sim/shorts",
+    "webUrl": true,
+    "url": {
+      "scheme": "https",
+      "host": "www.youtube.com",
+      "kind": "Domain",
+      "port": null,
+      "path": "/@khankids-sim/shorts",
+      "query": "",
+      "href": "https://www.youtube.com/@khankids-sim/shorts"
+    },
+    "hostOnly": null
+  },
+  {
+    "input": "https://www.youtube.com/@natgeokids-sim",
+    "webUrl": true,
+    "url": {
+      "scheme": "https",
+      "host": "www.youtube.com",
+      "kind": "Domain",
+      "port": null,
+      "path": "/@natgeokids-sim",
+      "query": "",
+      "href": "https://www.youtube.com/@natgeokids-sim"
+    },
+    "hostOnly": null
+  },
+  {
+    "input": "https://www.youtube.com/@sesame-sim",
+    "webUrl": true,
+    "url": {
+      "scheme": "https",
+      "host": "www.youtube.com",
+      "kind": "Domain",
+      "port": null,
+      "path": "/@sesame-sim",
+      "query": "",
+      "href": "https://www.youtube.com/@sesame-sim"
+    },
+    "hostOnly": null
+  },
+  {
+    "input": "https://www.youtube.com/c/SesameSim",
+    "webUrl": true,
+    "url": {
+      "scheme": "https",
+      "host": "www.youtube.com",
+      "kind": "Domain",
+      "port": null,
+      "path": "/c/SesameSim",
+      "query": "",
+      "href": "https://www.youtube.com/c/SesameSim"
+    },
+    "hostOnly": null
+  },
+  {
+    "input": "https://www.youtube.com/channel/UCkhanKids00000000000001",
+    "webUrl": true,
+    "url": {
+      "scheme": "https",
+      "host": "www.youtube.com",
+      "kind": "Domain",
+      "port": null,
+      "path": "/channel/UCkhanKids00000000000001",
+      "query": "",
+      "href": "https://www.youtube.com/channel/UCkhanKids00000000000001"
+    },
+    "hostOnly": null
+  },
+  {
+    "input": "https://www.youtube.com/channel/UCkhanKids00000000000001/videos",
+    "webUrl": true,
+    "url": {
+      "scheme": "https",
+      "host": "www.youtube.com",
+      "kind": "Domain",
+      "port": null,
+      "path": "/channel/UCkhanKids00000000000001/videos",
+      "query": "",
+      "href": "https://www.youtube.com/channel/UCkhanKids00000000000001/videos"
+    },
+    "hostOnly": null
+  },
+  {
+    "input": "https://www.youtube.com/channel/UCsesame0000000000000002",
+    "webUrl": true,
+    "url": {
+      "scheme": "https",
+      "host": "www.youtube.com",
+      "kind": "Domain",
+      "port": null,
+      "path": "/channel/UCsesame0000000000000002",
+      "query": "",
+      "href": "https://www.youtube.com/channel/UCsesame0000000000000002"
+    },
+    "hostOnly": null
+  },
+  {
+    "input": "https://www.youtube.com/embed/vidKhan0001",
+    "webUrl": true,
+    "url": {
+      "scheme": "https",
+      "host": "www.youtube.com",
+      "kind": "Domain",
+      "port": null,
+      "path": "/embed/vidKhan0001",
+      "query": "",
+      "href": "https://www.youtube.com/embed/vidKhan0001"
+    },
+    "hostOnly": null
+  },
+  {
+    "input": "https://www.youtube.com/feed/trending",
+    "webUrl": true,
+    "url": {
+      "scheme": "https",
+      "host": "www.youtube.com",
+      "kind": "Domain",
+      "port": null,
+      "path": "/feed/trending",
+      "query": "",
+      "href": "https://www.youtube.com/feed/trending"
+    },
+    "hostOnly": null
+  },
+  {
+    "input": "https://www.youtube.com/playlist?list=PLsim0001",
+    "webUrl": true,
+    "url": {
+      "scheme": "https",
+      "host": "www.youtube.com",
+      "kind": "Domain",
+      "port": null,
+      "path": "/playlist",
+      "query": "list=PLsim0001",
+      "href": "https://www.youtube.com/playlist?list=PLsim0001"
+    },
+    "hostOnly": null
+  },
+  {
+    "input": "https://www.youtube.com/results?search_query=%D7%93%D7%99%D7%A0%D7%95%D7%96%D7%90%D7%95%D7%A8%D7%99%D7%9D&sp=EgIQAg%253D%253D",
+    "webUrl": true,
+    "url": {
+      "scheme": "https",
+      "host": "www.youtube.com",
+      "kind": "Domain",
+      "port": null,
+      "path": "/results",
+      "query": "search_query=%D7%93%D7%99%D7%A0%D7%95%D7%96%D7%90%D7%95%D7%A8%D7%99%D7%9D&sp=EgIQAg%253D%253D",
+      "href": "https://www.youtube.com/results?search_query=%D7%93%D7%99%D7%A0%D7%95%D7%96%D7%90%D7%95%D7%A8%D7%99%D7%9D&sp=EgIQAg%253D%253D"
+    },
+    "hostOnly": null
+  },
+  {
+    "input": "https://www.youtube.com/results?search_query=+&sp=EgIQAg%253D%253D",
+    "webUrl": true,
+    "url": {
+      "scheme": "https",
+      "host": "www.youtube.com",
+      "kind": "Domain",
+      "port": null,
+      "path": "/results",
+      "query": "search_query=+&sp=EgIQAg%253D%253D",
+      "href": "https://www.youtube.com/results?search_query=+&sp=EgIQAg%253D%253D"
+    },
+    "hostOnly": null
+  },
+  {
+    "input": "https://www.youtube.com/results?search_query=+++",
+    "webUrl": true,
+    "url": {
+      "scheme": "https",
+      "host": "www.youtube.com",
+      "kind": "Domain",
+      "port": null,
+      "path": "/results",
+      "query": "search_query=+++",
+      "href": "https://www.youtube.com/results?search_query=+++"
+    },
+    "hostOnly": null
+  },
+  {
+    "input": "https://www.youtube.com/results?search_query=dinosaurs",
+    "webUrl": true,
+    "url": {
+      "scheme": "https",
+      "host": "www.youtube.com",
+      "kind": "Domain",
+      "port": null,
+      "path": "/results",
+      "query": "search_query=dinosaurs",
+      "href": "https://www.youtube.com/results?search_query=dinosaurs"
+    },
+    "hostOnly": null
+  },
+  {
+    "input": "https://www.youtube.com/results?search_query=dinosaurs&sp=EgIQAQ%253D%253D",
+    "webUrl": true,
+    "url": {
+      "scheme": "https",
+      "host": "www.youtube.com",
+      "kind": "Domain",
+      "port": null,
+      "path": "/results",
+      "query": "search_query=dinosaurs&sp=EgIQAQ%253D%253D",
+      "href": "https://www.youtube.com/results?search_query=dinosaurs&sp=EgIQAQ%253D%253D"
+    },
+    "hostOnly": null
+  },
+  {
+    "input": "https://www.youtube.com/results?search_query=dinosaurs&sp=EgIQAg%253D%253D",
+    "webUrl": true,
+    "url": {
+      "scheme": "https",
+      "host": "www.youtube.com",
+      "kind": "Domain",
+      "port": null,
+      "path": "/results",
+      "query": "search_query=dinosaurs&sp=EgIQAg%253D%253D",
+      "href": "https://www.youtube.com/results?search_query=dinosaurs&sp=EgIQAg%253D%253D"
+    },
+    "hostOnly": null
+  },
+  {
+    "input": "https://www.youtube.com/results?search_query=dinosaurs&sp=EgIQAg%253D%253D&sp=CAI%253D",
+    "webUrl": true,
+    "url": {
+      "scheme": "https",
+      "host": "www.youtube.com",
+      "kind": "Domain",
+      "port": null,
+      "path": "/results",
+      "query": "search_query=dinosaurs&sp=EgIQAg%253D%253D&sp=CAI%253D",
+      "href": "https://www.youtube.com/results?search_query=dinosaurs&sp=EgIQAg%253D%253D&sp=CAI%253D"
+    },
+    "hostOnly": null
+  },
+  {
+    "input": "https://www.youtube.com/results?search_query=dinosaurs&sp=EgIQAg%3D%3D",
+    "webUrl": true,
+    "url": {
+      "scheme": "https",
+      "host": "www.youtube.com",
+      "kind": "Domain",
+      "port": null,
+      "path": "/results",
+      "query": "search_query=dinosaurs&sp=EgIQAg%3D%3D",
+      "href": "https://www.youtube.com/results?search_query=dinosaurs&sp=EgIQAg%3D%3D"
+    },
+    "hostOnly": null
+  },
+  {
+    "input": "https://www.youtube.com/results?search_query=dinosaurs&sp=EgIQCQ%253D%253D",
+    "webUrl": true,
+    "url": {
+      "scheme": "https",
+      "host": "www.youtube.com",
+      "kind": "Domain",
+      "port": null,
+      "path": "/results",
+      "query": "search_query=dinosaurs&sp=EgIQCQ%253D%253D",
+      "href": "https://www.youtube.com/results?search_query=dinosaurs&sp=EgIQCQ%253D%253D"
+    },
+    "hostOnly": null
+  },
+  {
+    "input": "https://www.youtube.com/results?search_query=space&sp=CAISAhAC",
+    "webUrl": true,
+    "url": {
+      "scheme": "https",
+      "host": "www.youtube.com",
+      "kind": "Domain",
+      "port": null,
+      "path": "/results",
+      "query": "search_query=space&sp=CAISAhAC",
+      "href": "https://www.youtube.com/results?search_query=space&sp=CAISAhAC"
+    },
+    "hostOnly": null
+  },
+  {
+    "input": "https://www.youtube.com/results?search_query=space&sp=EgIQAQ%253D%253D",
+    "webUrl": true,
+    "url": {
+      "scheme": "https",
+      "host": "www.youtube.com",
+      "kind": "Domain",
+      "port": null,
+      "path": "/results",
+      "query": "search_query=space&sp=EgIQAQ%253D%253D",
+      "href": "https://www.youtube.com/results?search_query=space&sp=EgIQAQ%253D%253D"
+    },
+    "hostOnly": null
+  },
+  {
+    "input": "https://www.youtube.com/results?search_query=space&sp=EgIQAg%253D%253D&sp=CAI%253D",
+    "webUrl": true,
+    "url": {
+      "scheme": "https",
+      "host": "www.youtube.com",
+      "kind": "Domain",
+      "port": null,
+      "path": "/results",
+      "query": "search_query=space&sp=EgIQAg%253D%253D&sp=CAI%253D",
+      "href": "https://www.youtube.com/results?search_query=space&sp=EgIQAg%253D%253D&sp=CAI%253D"
+    },
+    "hostOnly": null
+  },
+  {
+    "input": "https://www.youtube.com/results?search_query=space&sp=EgIQCQ%253D%253D",
+    "webUrl": true,
+    "url": {
+      "scheme": "https",
+      "host": "www.youtube.com",
+      "kind": "Domain",
+      "port": null,
+      "path": "/results",
+      "query": "search_query=space&sp=EgIQCQ%253D%253D",
+      "href": "https://www.youtube.com/results?search_query=space&sp=EgIQCQ%253D%253D"
+    },
+    "hostOnly": null
+  },
+  {
+    "input": "https://www.youtube.com/results?search_query=space+cats&sp=EgIQAg%253D%253D",
+    "webUrl": true,
+    "url": {
+      "scheme": "https",
+      "host": "www.youtube.com",
+      "kind": "Domain",
+      "port": null,
+      "path": "/results",
+      "query": "search_query=space+cats&sp=EgIQAg%253D%253D",
+      "href": "https://www.youtube.com/results?search_query=space+cats&sp=EgIQAg%253D%253D"
+    },
+    "hostOnly": null
+  },
+  {
+    "input": "https://www.youtube.com/results?sp=EgIQAg%253D%253D",
+    "webUrl": true,
+    "url": {
+      "scheme": "https",
+      "host": "www.youtube.com",
+      "kind": "Domain",
+      "port": null,
+      "path": "/results",
+      "query": "sp=EgIQAg%253D%253D",
+      "href": "https://www.youtube.com/results?sp=EgIQAg%253D%253D"
+    },
+    "hostOnly": null
+  },
+  {
+    "input": "https://www.youtube.com/results?sp=EgIQAg%3D%3D&search_query=space%20cats",
+    "webUrl": true,
+    "url": {
+      "scheme": "https",
+      "host": "www.youtube.com",
+      "kind": "Domain",
+      "port": null,
+      "path": "/results",
+      "query": "sp=EgIQAg%3D%3D&search_query=space%20cats",
+      "href": "https://www.youtube.com/results?sp=EgIQAg%3D%3D&search_query=space%20cats"
+    },
+    "hostOnly": null
+  },
+  {
+    "input": "https://www.youtube.com/shorts/vidShrt0001",
+    "webUrl": true,
+    "url": {
+      "scheme": "https",
+      "host": "www.youtube.com",
+      "kind": "Domain",
+      "port": null,
+      "path": "/shorts/vidShrt0001",
+      "query": "",
+      "href": "https://www.youtube.com/shorts/vidShrt0001"
+    },
+    "hostOnly": null
+  },
+  {
+    "input": "https://www.youtube.com/user/sesameuser",
+    "webUrl": true,
+    "url": {
+      "scheme": "https",
+      "host": "www.youtube.com",
+      "kind": "Domain",
+      "port": null,
+      "path": "/user/sesameuser",
+      "query": "",
+      "href": "https://www.youtube.com/user/sesameuser"
+    },
+    "hostOnly": null
+  },
+  {
+    "input": "https://www.youtube.com/watch?feature=share&v=vidKhan0001&t=30",
+    "webUrl": true,
+    "url": {
+      "scheme": "https",
+      "host": "www.youtube.com",
+      "kind": "Domain",
+      "port": null,
+      "path": "/watch",
+      "query": "feature=share&v=vidKhan0001&t=30",
+      "href": "https://www.youtube.com/watch?feature=share&v=vidKhan0001&t=30"
+    },
+    "hostOnly": null
+  },
+  {
+    "input": "https://www.youtube.com/watch?v=vidGamr0001",
+    "webUrl": true,
+    "url": {
+      "scheme": "https",
+      "host": "www.youtube.com",
+      "kind": "Domain",
+      "port": null,
+      "path": "/watch",
+      "query": "v=vidGamr0001",
+      "href": "https://www.youtube.com/watch?v=vidGamr0001"
+    },
+    "hostOnly": null
+  },
+  {
+    "input": "https://www.youtube.com/watch?v=vidKhan0001",
+    "webUrl": true,
+    "url": {
+      "scheme": "https",
+      "host": "www.youtube.com",
+      "kind": "Domain",
+      "port": null,
+      "path": "/watch",
+      "query": "v=vidKhan0001",
+      "href": "https://www.youtube.com/watch?v=vidKhan0001"
+    },
+    "hostOnly": null
+  },
+  {
+    "input": "https://www.youtube.com/watch?v=vidKhan0001&list=PLsim0001",
+    "webUrl": true,
+    "url": {
+      "scheme": "https",
+      "host": "www.youtube.com",
+      "kind": "Domain",
+      "port": null,
+      "path": "/watch",
+      "query": "v=vidKhan0001&list=PLsim0001",
+      "href": "https://www.youtube.com/watch?v=vidKhan0001&list=PLsim0001"
+    },
+    "hostOnly": null
+  },
+  {
+    "input": "https://www.youtube.com/watch?v=vidNatg0001",
+    "webUrl": true,
+    "url": {
+      "scheme": "https",
+      "host": "www.youtube.com",
+      "kind": "Domain",
+      "port": null,
+      "path": "/watch",
+      "query": "v=vidNatg0001",
+      "href": "https://www.youtube.com/watch?v=vidNatg0001"
+    },
+    "hostOnly": null
+  },
+  {
+    "input": "https://www.youtube.com/watch?v=vidNone0001",
+    "webUrl": true,
+    "url": {
+      "scheme": "https",
+      "host": "www.youtube.com",
+      "kind": "Domain",
+      "port": null,
+      "path": "/watch",
+      "query": "v=vidNone0001",
+      "href": "https://www.youtube.com/watch?v=vidNone0001"
+    },
+    "hostOnly": null
+  },
+  {
+    "input": "https://xn--bcher-kva.example/",
+    "webUrl": true,
+    "url": {
+      "scheme": "https",
+      "host": "xn--bcher-kva.example",
+      "kind": "Domain",
+      "port": null,
+      "path": "/",
+      "query": "",
+      "href": "https://xn--bcher-kva.example/"
+    },
+    "hostOnly": null
+  },
+  {
+    "input": "https://yandex.ru/images/search?text=cats",
+    "webUrl": true,
+    "url": {
+      "scheme": "https",
+      "host": "yandex.ru",
+      "kind": "Domain",
+      "port": null,
+      "path": "/images/search",
+      "query": "text=cats",
+      "href": "https://yandex.ru/images/search?text=cats"
+    },
+    "hostOnly": null
+  },
+  {
+    "input": "https://youtu.be/vidKhan0001",
+    "webUrl": true,
+    "url": {
+      "scheme": "https",
+      "host": "youtu.be",
+      "kind": "Domain",
+      "port": null,
+      "path": "/vidKhan0001",
+      "query": "",
+      "href": "https://youtu.be/vidKhan0001"
+    },
+    "hostOnly": null
+  },
+  {
+    "input": "https://youtu.be/vidKhan0001?t=10",
+    "webUrl": true,
+    "url": {
+      "scheme": "https",
+      "host": "youtu.be",
+      "kind": "Domain",
+      "port": null,
+      "path": "/vidKhan0001",
+      "query": "t=10",
+      "href": "https://youtu.be/vidKhan0001?t=10"
+    },
+    "hostOnly": null
+  },
+  {
+    "input": "https://youtube.com.example.net/watch?v=vidKhan0001",
+    "webUrl": true,
+    "url": {
+      "scheme": "https",
+      "host": "youtube.com.example.net",
+      "kind": "Domain",
+      "port": null,
+      "path": "/watch",
+      "query": "v=vidKhan0001",
+      "href": "https://youtube.com.example.net/watch?v=vidKhan0001"
+    },
+    "hostOnly": null
+  },
+  {
+    "input": "https://youtube.com/channel/UCkhanKids00000000000001",
+    "webUrl": true,
+    "url": {
+      "scheme": "https",
+      "host": "youtube.com",
+      "kind": "Domain",
+      "port": null,
+      "path": "/channel/UCkhanKids00000000000001",
+      "query": "",
+      "href": "https://youtube.com/channel/UCkhanKids00000000000001"
+    },
+    "hostOnly": null
+  },
+  {
+    "input": "https://youtube.com/results?search_query=space&sp=EgIQAg==",
+    "webUrl": true,
+    "url": {
+      "scheme": "https",
+      "host": "youtube.com",
+      "kind": "Domain",
+      "port": null,
+      "path": "/results",
+      "query": "search_query=space&sp=EgIQAg==",
+      "href": "https://youtube.com/results?search_query=space&sp=EgIQAg=="
+    },
+    "hostOnly": null
+  },
+  {
+    "input": "https://ü-.example/",
+    "webUrl": true,
+    "url": null,
+    "hostOnly": null
+  },
+  {
+    "input": "https://ü..example/",
+    "webUrl": true,
+    "url": null,
+    "hostOnly": null
+  },
+  {
+    "input": "https://üüü.ü/",
+    "webUrl": true,
+    "url": {
+      "scheme": "https",
+      "host": "xn--tdaaa.xn--tda",
+      "kind": "Domain",
+      "port": null,
+      "path": "/",
+      "query": "",
+      "href": "https://xn--tdaaa.xn--tda/"
+    },
+    "hostOnly": null
+  },
+  {
+    "input": "https://üüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüü.example/",
+    "webUrl": true,
+    "url": null,
+    "hostOnly": null
+  },
+  {
+    "input": "https://İstanbul.example/",
+    "webUrl": true,
+    "url": {
+      "scheme": "https",
+      "host": "xn--istanbul-o0e.example",
+      "kind": "Domain",
+      "port": null,
+      "path": "/",
+      "query": "",
+      "href": "https://xn--istanbul-o0e.example/"
+    },
+    "hostOnly": null
+  },
+  {
+    "input": "https://ΓΑΣ.example/",
+    "webUrl": true,
+    "url": {
+      "scheme": "https",
+      "host": "xn--mxad3c.example",
+      "kind": "Domain",
+      "port": null,
+      "path": "/",
+      "query": "",
+      "href": "https://xn--mxad3c.example/"
+    },
+    "hostOnly": null
+  },
+  {
+    "input": "https://ς.example/",
+    "webUrl": true,
+    "url": {
+      "scheme": "https",
+      "host": "xn--3xa.example",
+      "kind": "Domain",
+      "port": null,
+      "path": "/",
+      "query": "",
+      "href": "https://xn--3xa.example/"
+    },
+    "hostOnly": null
+  },
+  {
+    "input": "https://שלום.example/",
+    "webUrl": true,
+    "url": {
+      "scheme": "https",
+      "host": "xn--9dbne9b.example",
+      "kind": "Domain",
+      "port": null,
+      "path": "/",
+      "query": "",
+      "href": "https://xn--9dbne9b.example/"
+    },
+    "hostOnly": null
+  },
+  {
+    "input": "https://Ⅰ.example/",
+    "webUrl": true,
+    "url": {
+      "scheme": "https",
+      "host": "i.example",
+      "kind": "Domain",
+      "port": null,
+      "path": "/",
+      "query": "",
+      "href": "https://i.example/"
+    },
+    "hostOnly": null
+  },
+  {
+    "input": "https://\uD83D\uDE00.example/",
+    "webUrl": true,
+    "url": {
+      "scheme": "https",
+      "host": "xn--e28h.example",
+      "kind": "Domain",
+      "port": null,
+      "path": "/",
+      "query": "",
+      "href": "https://xn--e28h.example/"
+    },
+    "hostOnly": null
+  },
+  {
+    "input": "https://ﬁle.example/",
+    "webUrl": true,
+    "url": {
+      "scheme": "https",
+      "host": "file.example",
+      "kind": "Domain",
+      "port": null,
+      "path": "/",
+      "query": "",
+      "href": "https://file.example/"
+    },
+    "hostOnly": null
+  },
+  {
+    "input": "https://ＥＸＡＭＰＬＥ．com/",
+    "webUrl": true,
+    "url": {
+      "scheme": "https",
+      "host": "example.com",
+      "kind": "Domain",
+      "port": null,
+      "path": "/",
+      "query": "",
+      "href": "https://example.com/"
+    },
+    "hostOnly": null
+  },
+  {
+    "input": "https://ｅｘａｍｐｌｅ。com/",
+    "webUrl": true,
+    "url": {
+      "scheme": "https",
+      "host": "example.com",
+      "kind": "Domain",
+      "port": null,
+      "path": "/",
+      "query": "",
+      "href": "https://example.com/"
+    },
+    "hostOnly": null
+  },
+  {
+    "input": "https:\\\\example.com/",
+    "webUrl": true,
+    "url": {
+      "scheme": "https",
+      "host": "example.com",
+      "kind": "Domain",
+      "port": null,
+      "path": "/",
+      "query": "",
+      "href": "https://example.com/"
+    },
+    "hostOnly": null
+  },
+  {
+    "input": "https:example.com/x",
+    "webUrl": true,
+    "url": {
+      "scheme": "https",
+      "host": "example.com",
+      "kind": "Domain",
+      "port": null,
+      "path": "/x",
+      "query": "",
+      "href": "https://example.com/x"
+    },
+    "hostOnly": null
+  },
+  {
+    "input": "httpx://example.com/",
+    "webUrl": false,
+    "url": null,
+    "hostOnly": null
+  },
+  {
+    "input": "javascript:alert(1)",
+    "webUrl": false,
+    "url": null,
+    "hostOnly": null
+  },
+  {
+    "input": "user@example.com",
+    "webUrl": false,
+    "url": null,
+    "hostOnly": null
+  },
+  {
+    "input": "xn--",
+    "webUrl": false,
+    "url": null,
+    "hostOnly": {
+      "host": "xn--",
+      "kind": "Domain"
+    }
+  },
+  {
+    "input": "xn--bcher-kva.example",
+    "webUrl": false,
+    "url": null,
+    "hostOnly": {
+      "host": "xn--bcher-kva.example",
+      "kind": "Domain"
+    }
+  },
+  {
+    "input": "xn--ls8h.example",
+    "webUrl": false,
+    "url": null,
+    "hostOnly": {
+      "host": "xn--ls8h.example",
+      "kind": "Domain"
+    }
+  },
+  {
+    "input": "ß.example",
+    "webUrl": false,
+    "url": null,
+    "hostOnly": {
+      "host": "xn--zca.example",
+      "kind": "Domain"
+    }
+  },
+  {
+    "input": "İ",
+    "webUrl": false,
+    "url": null,
+    "hostOnly": {
+      "host": "xn--i-9bb",
+      "kind": "Domain"
+    }
+  },
+  {
+    "input": "ς",
+    "webUrl": false,
+    "url": null,
+    "hostOnly": {
+      "host": "xn--3xa",
+      "kind": "Domain"
+    }
+  },
+  {
+    "input": "Ⅰ",
+    "webUrl": false,
+    "url": null,
+    "hostOnly": {
+      "host": "i",
+      "kind": "Domain"
+    }
+  },
+  {
+    "input": "ﬁ",
+    "webUrl": false,
+    "url": null,
+    "hostOnly": {
+      "host": "fi",
+      "kind": "Domain"
+    }
+  },
+  {
+    "input": "ＡＢ.Ｃ",
+    "webUrl": false,
+    "url": null,
+    "hostOnly": {
+      "host": "ab.c",
+      "kind": "Domain"
+    }
+  }
+]

@@ -1,0 +1,120 @@
+﻿
+===== op=stop
+Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a01/.CmdReceiver (has extras) }
+Broadcast completed: result=0, data="id=10 stopUser=0; id=11 stopUser=0"
+
+11-20 00:53:34.399  9264  9264 I A01     : op=stop pkg=com.android.chrome -> id=10 stopUser=0; id=11 stopUser=0
+
+===== state after stop (dumpsys user, user lines)
+  UserInfo{0:null:c13} serialNo=0 isPrimary=true
+    State: RUNNING_UNLOCKED
+  UserInfo{10:spike-kid-1795128797784:400} serialNo=10 isPrimary=false
+    State: -1
+  UserInfo{11:spike-kid-1795128799337:400} serialNo=11 isPrimary=false
+    State: -1
+  Started users state: [0=RUNNING_UNLOCKED]
+
+===== op=restrict
+Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a01/.CmdReceiver (has extras) }
+Broadcast completed: result=0, data="DISALLOW_ADD_USER=true userRestrictions=Bundle[mParcelledData.dataSize=144]"
+11-20 00:53:34.619  9264  9264 I A01     : op=restrict pkg=com.android.chrome -> DISALLOW_ADD_USER=true 
+userRestrictions=Bundle[mParcelledData.dataSize=144]
+
+===== dumpsys user restriction lines (DISALLOW_ADD_USER on)
+    Device policy global restrictions:
+      no_add_user
+    Device policy local restrictions:
+      no_add_user
+    Device policy global restrictions:
+    Device policy local restrictions:
+    Device policy global restrictions:
+    Device policy local restrictions:
+
+===== shell pm create-user (restricted, 2nd attempt)
+adb.exe : Error: android.os.ServiceSpecificException: Cannot add user: no_add_user is enabled. (code 1)
+At line:16 char:11
++ $lines += & $adb -s $s shell pm create-user shellcheck2 2>&1
++           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (Error: android....abled. (code 1):String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+Error: couldn't create User.
+
+===== op=unrestrict
+Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a01/.CmdReceiver (has extras) }
+Broadcast completed: result=0, data="DISALLOW_ADD_USER=false userRestrictions=Bundle[mParcelledData.dataSize=108]"
+11-20 00:53:34.881  9264  9264 I A01     : op=unrestrict pkg=com.android.chrome -> DISALLOW_ADD_USER=false 
+userRestrictions=Bundle[mParcelledData.dataSize=108]
+
+===== dumpsys user restriction lines (after unrestrict)
+    Device policy global restrictions:
+    Device policy local restrictions:
+    Device policy global restrictions:
+    Device policy local restrictions:
+    Device policy global restrictions:
+    Device policy local restrictions:
+
+===== op=ishidden
+Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a01/.CmdReceiver (has extras) }
+Broadcast completed: result=0, data="isHidden(com.android.chrome)=false"
+11-20 00:53:35.069  9264  9264 I A01     : op=ishidden pkg=com.android.chrome -> isHidden(com.android.chrome)=false
+
+===== pm list packages chrome (before hide)
+package:com.android.chrome
+
+===== op=hide
+Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a01/.CmdReceiver (has extras) }
+Broadcast completed: result=0, data="setApplicationHidden(com.android.chrome,true)=true isHidden=true"
+11-20 00:53:35.299  9264  9264 I A01     : op=hide pkg=com.android.chrome -> 
+setApplicationHidden(com.android.chrome,true)=true isHidden=true
+
+===== pm list packages chrome (after hide, user 0)
+
+===== pm list packages -u chrome (after hide)
+package:com.android.chrome
+
+===== dumpsys package chrome (hidden lines)
+    User 0: ceDataInode=123182 installed=true hidden=true suspended=false distractionFlags=0 stopped=false 
+notLaunched=false enabled=0 instant=false virtual=false
+    User 10: ceDataInode=0 installed=false hidden=false suspended=false distractionFlags=0 stopped=false 
+notLaunched=false enabled=0 instant=false virtual=false
+    User 11: ceDataInode=0 installed=false hidden=false suspended=false distractionFlags=0 stopped=false 
+notLaunched=false enabled=0 instant=false virtual=false
+Hidden system packages:
+    User 0: ceDataInode=0 installed=true hidden=false suspended=false distractionFlags=0 stopped=false 
+notLaunched=false enabled=0 instant=false virtual=false
+    User 10: ceDataInode=0 installed=true hidden=false suspended=false distractionFlags=0 stopped=false 
+notLaunched=false enabled=0 instant=false virtual=false
+    User 11: ceDataInode=0 installed=true hidden=false suspended=false distractionFlags=0 stopped=false 
+notLaunched=false enabled=0 instant=false virtual=false
+
+===== monkey launch while hidden
+  bash arg: -p
+  bash arg: com.android.chrome
+  bash arg: -c
+  bash arg: android.intent.category.LAUNCHER
+  bash arg: 1
+adb.exe : args: [-p, com.android.chrome, -c, android.intent.category.LAUNCHER, 1]
+At line:31 char:11
++ $lines += & $adb -s $s shell monkey -p $pkg -c android.intent.categor ...
++           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (args: [-p, com....ry.LAUNCHER, 1]:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+ arg: "-p"
+ arg: "com.android.chrome"
+ arg: "-c"
+ arg: "android.intent.category.LAUNCHER"
+ arg: "1"
+data="com.android.chrome"
+data="android.intent.category.LAUNCHER"
+** No activities found to run, monkey aborted.
+
+===== op=ishidden
+Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a01/.CmdReceiver (has extras) }
+Broadcast completed: result=0, data="isHidden(com.android.chrome)=true"
+11-20 00:53:36.984  9264  9264 I A01     : op=ishidden pkg=com.android.chrome -> isHidden(com.android.chrome)=true
+
+===== pm list packages -u chrome (user 10)
+
+
