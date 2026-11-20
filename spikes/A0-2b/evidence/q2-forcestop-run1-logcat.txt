@@ -1,0 +1,455 @@
+﻿--------- beginning of main
+11-20 10:06:37.014 14481 14481 I A02S    : PRE1
+11-20 10:06:37.132   714   793 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+--------- beginning of system
+11-20 10:06:37.133   714   793 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }: 0
+11-20 10:06:37.164   714   738 I ActivityManager: Broadcast completed: result=0
+11-20 10:06:37.302   714  1033 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+11-20 10:06:37.304   714  1033 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }: 0
+11-20 10:06:37.328   714   738 I ActivityManager: Broadcast completed: result=0
+11-20 10:06:37.388 10133 14494 I A02P    : op=dns -> OK 104.20.26.136, 172.66.157.237, 2606:4700:10::ac42:9ded, 2606:4700:10::6814:1a88
+11-20 10:06:38.298 10133 14488 I A02P    : op=raw -> CONNECTED in 1156 ms
+11-20 10:06:38.316 14506 14506 I A02S    : PRE2
+11-20 10:06:38.525   714  1912 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+11-20 10:06:38.538   714  1912 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }: 0
+11-20 10:06:38.592   714   738 I ActivityManager: Broadcast completed: result=0
+11-20 10:06:38.665 10133 14515 I A02P    : op=raw -> CONNECTED in 106 ms
+11-20 10:06:38.764   714   793 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+11-20 10:06:38.766   714   793 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }: 0
+11-20 10:06:38.789 10133 14524 I A02P    : op=dns -> OK 104.20.26.136, 172.66.157.237, 2606:4700:10::ac42:9ded, 2606:4700:10::6814:1a88
+11-20 10:06:38.795   714   738 I ActivityManager: Broadcast completed: result=0
+11-20 10:06:39.732 14525 14525 I A02S    : PRE3
+11-20 10:06:39.828   714  1033 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+11-20 10:06:39.842   714  1033 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }: 0
+11-20 10:06:39.871   714   738 I ActivityManager: Broadcast completed: result=0
+11-20 10:06:39.919 10133 14532 I A02P    : op=raw -> CONNECTED in 74 ms
+11-20 10:06:40.039   714  1912 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+11-20 10:06:40.040   714  1912 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }: 0
+11-20 10:06:40.060   714   738 I ActivityManager: Broadcast completed: result=0
+11-20 10:06:40.087 10133 14541 I A02P    : op=dns -> OK 104.20.26.136, 172.66.157.237, 2606:4700:10::ac42:9ded, 2606:4700:10::6814:1a88
+11-20 10:06:41.010 14545 14545 I A02S    : PRE4
+11-20 10:06:41.119   714  1033 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+11-20 10:06:41.121   714  1033 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }: 0
+11-20 10:06:41.138   714   738 I ActivityManager: Broadcast completed: result=0
+11-20 10:06:41.224 10133 14552 I A02P    : op=raw -> CONNECTED in 91 ms
+11-20 10:06:41.310   714  2182 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+11-20 10:06:41.313   714  2182 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }: 0
+11-20 10:06:41.356 10133 14561 I A02P    : op=dns -> OK 104.20.26.136, 172.66.157.237, 2606:4700:10::ac42:9ded, 2606:4700:10::6814:1a88
+11-20 10:06:41.359   714   738 I ActivityManager: Broadcast completed: result=0
+11-20 10:06:42.287 14562 14562 I A02S    : PRE5
+11-20 10:06:42.413   714   793 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+11-20 10:06:42.426   714   793 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }: 0
+11-20 10:06:42.458   714   738 I ActivityManager: Broadcast completed: result=0
+11-20 10:06:42.559 10133 14569 I A02P    : op=raw -> CONNECTED in 107 ms
+11-20 10:06:42.615   714   793 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+11-20 10:06:42.616   714   793 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }: 0
+11-20 10:06:42.634 10133 14578 I A02P    : op=dns -> OK 104.20.26.136, 172.66.157.237, 2606:4700:10::ac42:9ded, 2606:4700:10::6814:1a88
+11-20 10:06:42.637   714   738 I ActivityManager: Broadcast completed: result=0
+11-20 10:06:43.571 14584 14584 I A02S    : KILL mode=forcestop pid=14404
+11-20 10:06:43.682   714   793 W ActivityManager: Ignoring request to force stop protected package com.webfilter.spike.a02b u0
+11-20 10:06:43.780 14592 14592 I A02S    : POST t=0
+11-20 10:06:43.890   714   793 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+11-20 10:06:43.892   714   793 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }: 0
+11-20 10:06:43.924   714   738 I ActivityManager: Broadcast completed: result=0
+11-20 10:06:44.004 10133 14598 I A02P    : op=raw -> CONNECTED in 98 ms
+11-20 10:06:44.119   714  2182 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+11-20 10:06:44.121   714  2182 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }: 0
+11-20 10:06:44.137 10133 14607 I A02P    : op=dns -> OK 104.20.26.136, 172.66.157.237, 2606:4700:10::ac42:9ded, 2606:4700:10::6814:1a88
+11-20 10:06:44.162   714   738 I ActivityManager: Broadcast completed: result=0
+11-20 10:06:45.810 14611 14611 I A02S    : POST t=2
+11-20 10:06:45.917   714  1033 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+11-20 10:06:45.918   714  1033 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }: 0
+11-20 10:06:45.954   714   738 I ActivityManager: Broadcast completed: result=0
+11-20 10:06:45.985 10133 14617 I A02P    : op=raw -> CONNECTED in 52 ms
+11-20 10:06:46.127   714   793 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+11-20 10:06:46.132   714   793 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }: 0
+11-20 10:06:46.154   714   738 I ActivityManager: Broadcast completed: result=0
+11-20 10:06:46.176 10133 14626 I A02P    : op=dns -> OK 104.20.26.136, 172.66.157.237, 2606:4700:10::ac42:9ded, 2606:4700:10::6814:1a88
+11-20 10:06:47.825 14637 14637 I A02S    : POST t=4
+11-20 10:06:48.059   714  4235 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+11-20 10:06:48.062   714  4235 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }: 0
+11-20 10:06:48.127   714   738 I ActivityManager: Broadcast completed: result=0
+11-20 10:06:48.180 10133 14643 I A02P    : op=raw -> CONNECTED in 79 ms
+11-20 10:06:48.377   714  1912 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+11-20 10:06:48.383   714  1912 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }: 0
+11-20 10:06:48.435 10133 14652 I A02P    : op=dns -> OK 104.20.26.136, 172.66.157.237, 2606:4700:10::ac42:9ded, 2606:4700:10::6814:1a88
+11-20 10:06:48.447   714   738 I ActivityManager: Broadcast completed: result=0
+11-20 10:06:50.077 14658 14658 I A02S    : POST t=6
+11-20 10:06:50.163   714  1912 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+11-20 10:06:50.172   714  1912 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }: 0
+11-20 10:06:50.203   714   738 I ActivityManager: Broadcast completed: result=0
+11-20 10:06:50.282 10133 14664 I A02P    : op=raw -> CONNECTED in 92 ms
+11-20 10:06:50.374   714  2033 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+11-20 10:06:50.376   714  2033 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }: 0
+11-20 10:06:50.394 10133 14673 I A02P    : op=dns -> OK 104.20.26.136, 172.66.157.237, 2606:4700:10::ac42:9ded, 2606:4700:10::6814:1a88
+11-20 10:06:50.401   714   738 I ActivityManager: Broadcast completed: result=0
+11-20 10:06:52.062 14676 14676 I A02S    : POST t=8
+11-20 10:06:52.177   714  2033 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+11-20 10:06:52.181   714  2033 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }: 0
+11-20 10:06:52.202   714   738 I ActivityManager: Broadcast completed: result=0
+11-20 10:06:52.275 10133 14682 I A02P    : op=raw -> CONNECTED in 74 ms
+11-20 10:06:52.361   714  4235 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+11-20 10:06:52.364   714  4235 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }: 0
+11-20 10:06:52.382 10133 14691 I A02P    : op=dns -> OK 104.20.26.136, 172.66.157.237, 2606:4700:10::ac42:9ded, 2606:4700:10::6814:1a88
+11-20 10:06:52.383   714   738 I ActivityManager: Broadcast completed: result=0
+11-20 10:06:53.993 14697 14697 I A02S    : POST t=10
+11-20 10:06:54.105   714  4235 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+11-20 10:06:54.109   714  4235 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }: 0
+11-20 10:06:54.165   714   738 I ActivityManager: Broadcast completed: result=0
+11-20 10:06:54.254 10133 14703 I A02P    : op=raw -> CONNECTED in 135 ms
+11-20 10:06:54.334   714  2033 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+11-20 10:06:54.335   714  2033 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }: 0
+11-20 10:06:54.344 10133 14712 I A02P    : op=dns -> OK 104.20.26.136, 172.66.157.237, 2606:4700:10::ac42:9ded, 2606:4700:10::6814:1a88
+11-20 10:06:54.352   714   738 I ActivityManager: Broadcast completed: result=0
+11-20 10:06:55.974 14715 14715 I A02S    : POST t=12
+11-20 10:06:56.084   714  4235 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+11-20 10:06:56.088   714  4235 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }: 0
+11-20 10:06:56.101   714   738 I ActivityManager: Broadcast completed: result=0
+11-20 10:06:56.181 10133 14721 I A02P    : op=raw -> CONNECTED in 82 ms
+11-20 10:06:56.331   714  2033 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+11-20 10:06:56.332   714  2033 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }: 0
+11-20 10:06:56.368 10133 14730 I A02P    : op=dns -> OK 104.20.26.136, 172.66.157.237, 2606:4700:10::ac42:9ded, 2606:4700:10::6814:1a88
+11-20 10:06:56.371   714   738 I ActivityManager: Broadcast completed: result=0
+11-20 10:06:58.024 14741 14741 I A02S    : POST t=14
+11-20 10:06:58.223   714  2033 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+11-20 10:06:58.229   714  2033 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }: 0
+11-20 10:06:58.286   714   738 I ActivityManager: Broadcast completed: result=0
+11-20 10:06:58.425 10133 14747 I A02P    : op=raw -> CONNECTED in 170 ms
+11-20 10:06:58.647   714  2033 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+11-20 10:06:58.664   714  2033 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }: 0
+11-20 10:06:58.717 10133 14756 I A02P    : op=dns -> OK 104.20.26.136, 172.66.157.237, 2606:4700:10::ac42:9ded, 2606:4700:10::6814:1a88
+11-20 10:06:58.727   714   738 I ActivityManager: Broadcast completed: result=0
+11-20 10:07:00.343 14762 14762 I A02S    : POST t=17
+11-20 10:07:00.461   714  1912 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+11-20 10:07:00.472   714  1912 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }: 0
+11-20 10:07:00.485   714   738 I ActivityManager: Broadcast completed: result=0
+11-20 10:07:00.551 10133 14768 I A02P    : op=raw -> CONNECTED in 69 ms
+11-20 10:07:00.647   714  1912 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+11-20 10:07:00.650   714  1912 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }: 0
+11-20 10:07:00.668 10133 14777 I A02P    : op=dns -> OK 104.20.26.136, 172.66.157.237, 2606:4700:10::ac42:9ded, 2606:4700:10::6814:1a88
+11-20 10:07:00.676   714   738 I ActivityManager: Broadcast completed: result=0
+11-20 10:07:02.296 14780 14780 I A02S    : POST t=19
+11-20 10:07:02.406   714  1912 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+11-20 10:07:02.410   714  1912 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }: 0
+11-20 10:07:02.423   714   738 I ActivityManager: Broadcast completed: result=0
+11-20 10:07:02.477 10133 14786 I A02P    : op=raw -> CONNECTED in 57 ms
+11-20 10:07:02.590   714   793 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+11-20 10:07:02.592   714   793 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }: 0
+11-20 10:07:02.640   714   738 I ActivityManager: Broadcast completed: result=0
+11-20 10:07:02.641 10133 14795 I A02P    : op=dns -> OK 104.20.26.136, 172.66.157.237, 2606:4700:10::ac42:9ded, 2606:4700:10::6814:1a88
+11-20 10:07:04.253 14801 14801 I A02S    : POST t=20
+11-20 10:07:04.360   714  1912 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+11-20 10:07:04.366   714  1912 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }: 0
+11-20 10:07:04.435   714   738 I ActivityManager: Broadcast completed: result=0
+11-20 10:07:04.446 10133 14807 I A02P    : op=raw -> CONNECTED in 70 ms
+11-20 10:07:04.559   714   793 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+11-20 10:07:04.564   714   793 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }: 0
+11-20 10:07:04.569 10133 14816 I A02P    : op=dns -> OK 104.20.26.136, 172.66.157.237, 2606:4700:10::ac42:9ded, 2606:4700:10::6814:1a88
+11-20 10:07:04.576   714   738 I ActivityManager: Broadcast completed: result=0
+11-20 10:07:06.211 14819 14819 I A02S    : POST t=22
+11-20 10:07:06.323   714  1912 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+11-20 10:07:06.325   714  1912 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }: 0
+11-20 10:07:06.346   714   738 I ActivityManager: Broadcast completed: result=0
+11-20 10:07:06.463 10133 14825 I A02P    : op=raw -> CONNECTED in 122 ms
+11-20 10:07:06.486   714  4235 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+11-20 10:07:06.495   714  4235 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }: 0
+11-20 10:07:06.530 10133 14835 I A02P    : op=dns -> OK 104.20.26.136, 172.66.157.237, 2606:4700:10::ac42:9ded, 2606:4700:10::6814:1a88
+11-20 10:07:06.532   714   738 I ActivityManager: Broadcast completed: result=0
+11-20 10:07:08.227 14846 14846 I A02S    : POST t=24
+11-20 10:07:08.433   714  4235 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+11-20 10:07:08.436   714  4235 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }: 0
+11-20 10:07:08.523   714   738 I ActivityManager: Broadcast completed: result=0
+11-20 10:07:08.608 10133 14852 I A02P    : op=raw -> CONNECTED in 117 ms
+11-20 10:07:08.714   714  4235 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+11-20 10:07:08.722   714  4235 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }: 0
+11-20 10:07:08.738   714   738 I ActivityManager: Broadcast completed: result=0
+11-20 10:07:08.756 10133 14861 I A02P    : op=dns -> OK 104.20.26.136, 172.66.157.237, 2606:4700:10::ac42:9ded, 2606:4700:10::6814:1a88
+11-20 10:07:10.368 14867 14867 I A02S    : POST t=27
+11-20 10:07:10.472   714   793 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+11-20 10:07:10.474   714   793 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }: 0
+11-20 10:07:10.491   714   738 I ActivityManager: Broadcast completed: result=0
+11-20 10:07:10.561 10133 14873 I A02P    : op=raw -> CONNECTED in 71 ms
+11-20 10:07:10.688   714  4235 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+11-20 10:07:10.699   714  4235 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }: 0
+11-20 10:07:10.703 10133 14882 I A02P    : op=dns -> OK 104.20.26.136, 172.66.157.237, 2606:4700:10::ac42:9ded, 2606:4700:10::6814:1a88
+11-20 10:07:10.717   714   738 I ActivityManager: Broadcast completed: result=0
+11-20 10:07:12.356 14885 14885 I A02S    : POST t=29
+11-20 10:07:12.440   714  1912 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+11-20 10:07:12.447   714  1912 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }: 0
+11-20 10:07:12.463   714   738 I ActivityManager: Broadcast completed: result=0
+11-20 10:07:12.555 10133 14891 I A02P    : op=raw -> CONNECTED in 103 ms
+11-20 10:07:12.647   714  4235 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+11-20 10:07:12.668   714  4235 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }: 0
+11-20 10:07:12.712 10133 14900 I A02P    : op=dns -> OK 104.20.26.136, 172.66.157.237, 2606:4700:10::ac42:9ded, 2606:4700:10::6814:1a88
+11-20 10:07:12.734   714   738 I ActivityManager: Broadcast completed: result=0
+11-20 10:07:14.365 14906 14906 I A02S    : POST t=31
+11-20 10:07:14.464   714  4235 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+11-20 10:07:14.473   714  4235 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }: 0
+11-20 10:07:14.494   714   738 I ActivityManager: Broadcast completed: result=0
+11-20 10:07:14.551 10133 14912 I A02P    : op=raw -> CONNECTED in 67 ms
+11-20 10:07:14.652   714  4235 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+11-20 10:07:14.658   714  4235 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }: 0
+11-20 10:07:14.666 10133 14921 I A02P    : op=dns -> OK 104.20.26.136, 172.66.157.237, 2606:4700:10::ac42:9ded, 2606:4700:10::6814:1a88
+11-20 10:07:14.678   714   738 I ActivityManager: Broadcast completed: result=0
+11-20 10:07:16.288 14924 14924 I A02S    : POST t=33
+11-20 10:07:16.418   714  4235 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+11-20 10:07:16.421   714  4235 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }: 0
+11-20 10:07:16.446   714   738 I ActivityManager: Broadcast completed: result=0
+11-20 10:07:16.520 10133 14930 I A02P    : op=raw -> CONNECTED in 78 ms
+11-20 10:07:16.573   714  1912 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+11-20 10:07:16.575   714  1912 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }: 0
+11-20 10:07:16.615   714   738 I ActivityManager: Broadcast completed: result=0
+11-20 10:07:16.657 10133 14939 I A02P    : op=dns -> OK 104.20.26.136, 172.66.157.237, 2606:4700:10::ac42:9ded, 2606:4700:10::6814:1a88
+11-20 10:07:18.308 14950 14950 I A02S    : POST t=34
+11-20 10:07:18.577   714  2033 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+11-20 10:07:18.592   714  2033 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }: 0
+11-20 10:07:18.631   714   738 I ActivityManager: Broadcast completed: result=0
+11-20 10:07:18.773 10133 14956 I A02P    : op=raw -> CONNECTED in 141 ms
+11-20 10:07:18.832   714  4235 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+11-20 10:07:18.850   714  4235 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }: 0
+11-20 10:07:18.865   714   738 I ActivityManager: Broadcast completed: result=0
+11-20 10:07:18.890 10133 14965 I A02P    : op=dns -> OK 104.20.26.136, 172.66.157.237, 2606:4700:10::ac42:9ded, 2606:4700:10::6814:1a88
+11-20 10:07:20.526 14973 14973 I A02S    : POST t=37
+11-20 10:07:20.643   714  1912 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+11-20 10:07:20.645   714  1912 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }: 0
+11-20 10:07:20.674   714   738 I ActivityManager: Broadcast completed: result=0
+11-20 10:07:20.741 10133 14979 I A02P    : op=raw -> CONNECTED in 69 ms
+11-20 10:07:20.844   714  1912 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+11-20 10:07:20.848   714  1912 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }: 0
+11-20 10:07:20.871 10133 14988 I A02P    : op=dns -> OK 104.20.26.136, 172.66.157.237, 2606:4700:10::ac42:9ded, 2606:4700:10::6814:1a88
+11-20 10:07:20.875   714   738 I ActivityManager: Broadcast completed: result=0
+11-20 10:07:22.521 14991 14991 I A02S    : POST t=39
+11-20 10:07:22.635   714  2033 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+11-20 10:07:22.652   714  2033 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }: 0
+11-20 10:07:22.669   714   738 I ActivityManager: Broadcast completed: result=0
+11-20 10:07:22.796 10133 14997 I A02P    : op=raw -> CONNECTED in 130 ms
+11-20 10:07:22.858   714  4235 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+11-20 10:07:22.863   714  4235 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }: 0
+11-20 10:07:22.895   714   738 I ActivityManager: Broadcast completed: result=0
+11-20 10:07:22.929 10133 15006 I A02P    : op=dns -> OK 104.20.26.136, 172.66.157.237, 2606:4700:10::ac42:9ded, 2606:4700:10::6814:1a88
+11-20 10:07:24.543 15012 15012 I A02S    : POST t=41
+11-20 10:07:24.638   714   793 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+11-20 10:07:24.654   714   793 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }: 0
+11-20 10:07:24.669   714   738 I ActivityManager: Broadcast completed: result=0
+11-20 10:07:24.745 10133 15018 I A02P    : op=raw -> CONNECTED in 81 ms
+11-20 10:07:24.853   714   793 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+11-20 10:07:24.860   714   793 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }: 0
+11-20 10:07:24.877 10133 15027 I A02P    : op=dns -> OK 104.20.26.136, 172.66.157.237, 2606:4700:10::ac42:9ded, 2606:4700:10::6814:1a88
+11-20 10:07:24.883   714   738 I ActivityManager: Broadcast completed: result=0
+11-20 10:07:26.489 15030 15030 I A02S    : POST t=43
+11-20 10:07:26.598   714  2033 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+11-20 10:07:26.609   714  2033 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }: 0
+11-20 10:07:26.633   714   738 I ActivityManager: Broadcast completed: result=0
+11-20 10:07:26.664 10133 15036 I A02P    : op=raw -> CONNECTED in 42 ms
+11-20 10:07:26.766   714  4235 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+11-20 10:07:26.772   714  4235 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }: 0
+11-20 10:07:26.782   714   738 I ActivityManager: Broadcast completed: result=0
+11-20 10:07:26.828 10133 15045 I A02P    : op=dns -> OK 104.20.26.136, 172.66.157.237, 2606:4700:10::ac42:9ded, 2606:4700:10::6814:1a88
+11-20 10:07:28.516 15056 15056 I A02S    : POST t=45
+11-20 10:07:28.714   714  2033 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+11-20 10:07:28.716   714  2033 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }: 0
+11-20 10:07:28.758   714   738 I ActivityManager: Broadcast completed: result=0
+11-20 10:07:28.798 10133 15062 I A02P    : op=raw -> CONNECTED in 63 ms
+11-20 10:07:28.931   714  4235 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+11-20 10:07:28.934   714  4235 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }: 0
+11-20 10:07:28.950   714   738 I ActivityManager: Broadcast completed: result=0
+11-20 10:07:28.998 10133 15071 I A02P    : op=dns -> OK 104.20.26.136, 172.66.157.237, 2606:4700:10::ac42:9ded, 2606:4700:10::6814:1a88
+11-20 10:07:30.592 15080 15080 I A02S    : POST t=47
+11-20 10:07:30.733   714  1912 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+11-20 10:07:30.738   714  1912 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }: 0
+11-20 10:07:30.761   714   738 I ActivityManager: Broadcast completed: result=0
+11-20 10:07:30.831 10133 15086 I A02P    : op=raw -> CONNECTED in 61 ms
+11-20 10:07:30.918   714  4235 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+11-20 10:07:30.919   714  4235 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }: 0
+11-20 10:07:30.938 10133 15095 I A02P    : op=dns -> OK 104.20.26.136, 172.66.157.237, 2606:4700:10::ac42:9ded, 2606:4700:10::6814:1a88
+11-20 10:07:30.945   714   738 I ActivityManager: Broadcast completed: result=0
+11-20 10:07:32.561 15098 15098 I A02S    : POST t=49
+11-20 10:07:32.666   714  1912 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+11-20 10:07:32.678   714  1912 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }: 0
+11-20 10:07:32.698   714   738 I ActivityManager: Broadcast completed: result=0
+11-20 10:07:32.754 10133 15104 I A02P    : op=raw -> CONNECTED in 65 ms
+11-20 10:07:32.868   714   793 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+11-20 10:07:32.870   714   793 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }: 0
+11-20 10:07:32.915   714   738 I ActivityManager: Broadcast completed: result=0
+11-20 10:07:32.918 10133 15113 I A02P    : op=dns -> OK 104.20.26.136, 172.66.157.237, 2606:4700:10::ac42:9ded, 2606:4700:10::6814:1a88
+11-20 10:07:34.537 15119 15119 I A02S    : POST t=51
+11-20 10:07:34.646   714   793 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+11-20 10:07:34.651   714   793 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }: 0
+11-20 10:07:34.665   714   738 I ActivityManager: Broadcast completed: result=0
+11-20 10:07:34.711 10133 15125 I A02P    : op=raw -> CONNECTED in 54 ms
+11-20 10:07:34.825   714  2033 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+11-20 10:07:34.842   714  2033 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }: 0
+11-20 10:07:34.873 10133 15134 I A02P    : op=dns -> OK 104.20.26.136, 172.66.157.237, 2606:4700:10::ac42:9ded, 2606:4700:10::6814:1a88
+11-20 10:07:34.884   714   738 I ActivityManager: Broadcast completed: result=0
+11-20 10:07:36.516 15137 15137 I A02S    : POST t=53
+11-20 10:07:36.632   714  4235 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+11-20 10:07:36.644   714  4235 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }: 0
+11-20 10:07:36.679   714   738 I ActivityManager: Broadcast completed: result=0
+11-20 10:07:36.780 10133 15143 I A02P    : op=raw -> CONNECTED in 122 ms
+11-20 10:07:36.850   714   793 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+11-20 10:07:36.860   714   793 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }: 0
+11-20 10:07:36.881 10133 15152 I A02P    : op=dns -> OK 104.20.26.136, 172.66.157.237, 2606:4700:10::ac42:9ded, 2606:4700:10::6814:1a88
+11-20 10:07:36.887   714   738 I ActivityManager: Broadcast completed: result=0
+11-20 10:07:38.606 15163 15163 I A02S    : POST t=55
+11-20 10:07:38.873   714  1033 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+11-20 10:07:38.881   714  1033 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }: 0
+11-20 10:07:38.962   714   738 I ActivityManager: Broadcast completed: result=0
+11-20 10:07:39.054 10133 15169 I A02P    : op=raw -> CONNECTED in 132 ms
+11-20 10:07:39.134   714  1033 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+11-20 10:07:39.135   714  1033 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }: 0
+11-20 10:07:39.165 10133 15178 I A02P    : op=dns -> OK 104.20.26.136, 172.66.157.237, 2606:4700:10::ac42:9ded, 2606:4700:10::6814:1a88
+11-20 10:07:39.167   714   738 I ActivityManager: Broadcast completed: result=0
+11-20 10:07:40.795 15184 15184 I A02S    : POST t=57
+11-20 10:07:40.913   714   793 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+11-20 10:07:40.916   714   793 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }: 0
+11-20 10:07:40.937   714   738 I ActivityManager: Broadcast completed: result=0
+11-20 10:07:40.999 10133 15190 I A02P    : op=raw -> CONNECTED in 68 ms
+11-20 10:07:41.095   714  1912 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+11-20 10:07:41.096   714  1912 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }: 0
+11-20 10:07:41.108 10133 15199 I A02P    : op=dns -> OK 104.20.26.136, 172.66.157.237, 2606:4700:10::ac42:9ded, 2606:4700:10::6814:1a88
+11-20 10:07:41.140   714   738 I ActivityManager: Broadcast completed: result=0
+11-20 10:07:42.781 15202 15202 I A02S    : POST t=59
+11-20 10:07:42.911   714  1912 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+11-20 10:07:42.916   714  1912 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }: 0
+11-20 10:07:42.964 10133 15208 I A02P    : op=raw -> CONNECTED in 31 ms
+11-20 10:07:42.967   714   738 I ActivityManager: Broadcast completed: result=0
+11-20 10:07:43.112   714   793 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+11-20 10:07:43.114   714   793 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }: 0
+11-20 10:07:43.135   714   738 I ActivityManager: Broadcast completed: result=0
+11-20 10:07:43.136 10133 15217 I A02P    : op=dns -> OK 104.20.26.136, 172.66.157.237, 2606:4700:10::ac42:9ded, 2606:4700:10::6814:1a88
+11-20 10:07:44.774 15223 15223 I A02S    : POST t=61
+11-20 10:07:44.889   714  1912 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+11-20 10:07:44.891   714  1912 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }: 0
+11-20 10:07:44.919   714   738 I ActivityManager: Broadcast completed: result=0
+11-20 10:07:45.007 10133 15229 I A02P    : op=raw -> CONNECTED in 109 ms
+11-20 10:07:45.078   714  2033 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+11-20 10:07:45.088   714  2033 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }: 0
+11-20 10:07:45.114 10133 15238 I A02P    : op=dns -> OK 104.20.26.136, 172.66.157.237, 2606:4700:10::ac42:9ded, 2606:4700:10::6814:1a88
+11-20 10:07:45.143   714   738 I ActivityManager: Broadcast completed: result=0
+11-20 10:07:46.820 15241 15241 I A02S    : POST t=63
+11-20 10:07:46.942   714  2033 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+11-20 10:07:46.955   714  2033 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }: 0
+11-20 10:07:46.966   714   738 I ActivityManager: Broadcast completed: result=0
+11-20 10:07:47.063 10133 15247 I A02P    : op=raw -> CONNECTED in 101 ms
+11-20 10:07:47.114   714  1912 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+11-20 10:07:47.116   714  1912 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }: 0
+11-20 10:07:47.135   714   738 I ActivityManager: Broadcast completed: result=0
+11-20 10:07:47.157 10133 15256 I A02P    : op=dns -> OK 104.20.26.136, 172.66.157.237, 2606:4700:10::ac42:9ded, 2606:4700:10::6814:1a88
+11-20 10:07:48.793 15267 15267 I A02S    : POST t=65
+11-20 10:07:48.900   714  4235 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+11-20 10:07:48.901   714  4235 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }: 0
+11-20 10:07:48.943   714   738 I ActivityManager: Broadcast completed: result=0
+11-20 10:07:48.996 10133 15273 I A02P    : op=raw -> CONNECTED in 73 ms
+11-20 10:07:49.125   714  4235 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+11-20 10:07:49.126   714  4235 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }: 0
+11-20 10:07:49.147 10133 15282 I A02P    : op=dns -> OK 104.20.26.136, 172.66.157.237, 2606:4700:10::ac42:9ded, 2606:4700:10::6814:1a88
+11-20 10:07:49.152   714   738 I ActivityManager: Broadcast completed: result=0
+11-20 10:07:50.789 15285 15285 I A02S    : POST t=67
+11-20 10:07:50.899   714  2033 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+11-20 10:07:50.905   714  2033 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }: 0
+11-20 10:07:50.918   714   738 I ActivityManager: Broadcast completed: result=0
+11-20 10:07:50.984 10133 15291 I A02P    : op=raw -> CONNECTED in 55 ms
+11-20 10:07:51.060   714  4235 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+11-20 10:07:51.062   714  4235 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }: 0
+11-20 10:07:51.094   714   738 I ActivityManager: Broadcast completed: result=0
+11-20 10:07:51.153 10133 15300 I A02P    : op=dns -> OK 104.20.26.136, 172.66.157.237, 2606:4700:10::ac42:9ded, 2606:4700:10::6814:1a88
+11-20 10:07:52.736 15306 15306 I A02S    : POST t=69
+11-20 10:07:52.844   714  2033 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+11-20 10:07:52.849   714  2033 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }: 0
+11-20 10:07:52.868   714   738 I ActivityManager: Broadcast completed: result=0
+11-20 10:07:52.928 10133 15312 I A02P    : op=raw -> CONNECTED in 73 ms
+11-20 10:07:53.031   714  2033 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+11-20 10:07:53.032   714  2033 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }: 0
+11-20 10:07:53.050 10133 15321 I A02P    : op=dns -> OK 104.20.26.136, 172.66.157.237, 2606:4700:10::ac42:9ded, 2606:4700:10::6814:1a88
+11-20 10:07:53.053   714   738 I ActivityManager: Broadcast completed: result=0
+11-20 10:07:54.682 15324 15324 I A02S    : POST t=71
+11-20 10:07:54.782   714  2033 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+11-20 10:07:54.788   714  2033 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }: 0
+11-20 10:07:54.798   714   738 I ActivityManager: Broadcast completed: result=0
+11-20 10:07:54.838 10133 15330 I A02P    : op=raw -> CONNECTED in 46 ms
+11-20 10:07:54.927   714  1033 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+11-20 10:07:54.929   714  1033 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }: 0
+11-20 10:07:54.951 10133 15339 I A02P    : op=dns -> OK 104.20.26.136, 172.66.157.237, 2606:4700:10::ac42:9ded, 2606:4700:10::6814:1a88
+11-20 10:07:54.951   714   738 I ActivityManager: Broadcast completed: result=0
+11-20 10:07:56.578 15345 15345 I A02S    : POST t=73
+11-20 10:07:56.722   714  4235 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+11-20 10:07:56.724   714  4235 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }: 0
+11-20 10:07:56.749   714   738 I ActivityManager: Broadcast completed: result=0
+11-20 10:07:56.818 10133 15351 I A02P    : op=raw -> CONNECTED in 72 ms
+11-20 10:07:56.961   714   969 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+11-20 10:07:56.992   714   969 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }: 0
+11-20 10:07:56.998   714   738 I ActivityManager: Broadcast completed: result=0
+11-20 10:07:57.063 10133 15360 I A02P    : op=dns -> OK 104.20.26.136, 172.66.157.237, 2606:4700:10::ac42:9ded, 2606:4700:10::6814:1a88
+11-20 10:07:58.669 15371 15371 I A02S    : POST t=75
+11-20 10:07:58.796   714   969 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+11-20 10:07:58.798   714   969 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }: 0
+11-20 10:07:58.833   714   738 I ActivityManager: Broadcast completed: result=0
+11-20 10:07:58.919 10133 15377 I A02P    : op=raw -> CONNECTED in 105 ms
+11-20 10:07:59.011   714  4235 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+11-20 10:07:59.018   714  4235 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }: 0
+11-20 10:07:59.044 10133 15386 I A02P    : op=dns -> OK 104.20.26.136, 172.66.157.237, 2606:4700:10::ac42:9ded, 2606:4700:10::6814:1a88
+11-20 10:07:59.046   714   738 I ActivityManager: Broadcast completed: result=0
+11-20 10:08:00.666 15389 15389 I A02S    : POST t=77
+11-20 10:08:00.763   714  4235 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+11-20 10:08:00.767   714  4235 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }: 0
+11-20 10:08:00.813   714   738 I ActivityManager: Broadcast completed: result=0
+11-20 10:08:00.889 10133 15395 I A02P    : op=raw -> CONNECTED in 115 ms
+11-20 10:08:00.977   714  4235 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+11-20 10:08:00.989   714  4235 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }: 0
+11-20 10:08:01.001   714   738 I ActivityManager: Broadcast completed: result=0
+11-20 10:08:01.021 10133 15404 I A02P    : op=dns -> OK 104.20.26.136, 172.66.157.237, 2606:4700:10::ac42:9ded, 2606:4700:10::6814:1a88
+11-20 10:08:02.643 15410 15410 I A02S    : POST t=79
+11-20 10:08:02.753   714  1033 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+11-20 10:08:02.757   714  1033 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }: 0
+11-20 10:08:02.785   714   738 I ActivityManager: Broadcast completed: result=0
+11-20 10:08:02.850 10133 15416 I A02P    : op=raw -> CONNECTED in 76 ms
+11-20 10:08:02.960   714  1033 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+11-20 10:08:02.966   714  1033 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }: 0
+11-20 10:08:02.983 10133 15425 I A02P    : op=dns -> OK 104.20.26.136, 172.66.157.237, 2606:4700:10::ac42:9ded, 2606:4700:10::6814:1a88
+11-20 10:08:02.990   714   738 I ActivityManager: Broadcast completed: result=0
+11-20 10:08:04.629 15428 15428 I A02S    : POST t=81
+11-20 10:08:04.756   714  2033 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+11-20 10:08:04.757   714  2033 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }: 0
+11-20 10:08:04.787   714   738 I ActivityManager: Broadcast completed: result=0
+11-20 10:08:04.893 10133 15434 I A02P    : op=raw -> CONNECTED in 123 ms
+11-20 10:08:04.959   714  4235 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+11-20 10:08:04.963   714  4235 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }: 0
+11-20 10:08:05.008 10133 15443 I A02P    : op=dns -> OK 104.20.26.136, 172.66.157.237, 2606:4700:10::ac42:9ded, 2606:4700:10::6814:1a88
+11-20 10:08:05.009   714   738 I ActivityManager: Broadcast completed: result=0
+11-20 10:08:06.645 15449 15449 I A02S    : POST t=83
+11-20 10:08:06.747   714  1033 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+11-20 10:08:06.748   714  1033 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }: 0
+11-20 10:08:06.773   714   738 I ActivityManager: Broadcast completed: result=0
+11-20 10:08:06.903 10133 15455 I A02P    : op=raw -> CONNECTED in 134 ms
+11-20 10:08:06.963   714  4235 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+11-20 10:08:06.965   714  4235 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }: 0
+11-20 10:08:06.979 10133 15464 I A02P    : op=dns -> OK 104.20.26.136, 172.66.157.237, 2606:4700:10::ac42:9ded, 2606:4700:10::6814:1a88
+11-20 10:08:06.996   714   738 I ActivityManager: Broadcast completed: result=0
+11-20 10:08:08.715 15472 15472 I A02S    : POST t=85
+11-20 10:08:08.853   714  2033 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+11-20 10:08:08.859   714  2033 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }: 0
+11-20 10:08:08.893   714   738 I ActivityManager: Broadcast completed: result=0
+11-20 10:08:08.993 10133 15478 I A02P    : op=raw -> CONNECTED in 102 ms
+11-20 10:08:09.202   714  2033 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+11-20 10:08:09.216   714  2033 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }: 0
+11-20 10:08:09.274 10133 15487 I A02P    : op=dns -> OK 104.20.26.136, 172.66.157.237, 2606:4700:10::ac42:9ded, 2606:4700:10::6814:1a88
+11-20 10:08:09.275   714   738 I ActivityManager: Broadcast completed: result=0
+11-20 10:08:10.911 15493 15493 I A02S    : POST t=87
+11-20 10:08:10.997   714  4235 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+11-20 10:08:10.998   714  4235 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }: 0
+11-20 10:08:11.040   714   738 I ActivityManager: Broadcast completed: result=0
+11-20 10:08:11.116 10133 15499 I A02P    : op=raw -> CONNECTED in 103 ms
+11-20 10:08:11.201   714  4235 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+11-20 10:08:11.205   714  4235 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }: 0
+11-20 10:08:11.216 10133 15508 I A02P    : op=dns -> OK 104.20.26.136, 172.66.157.237, 2606:4700:10::ac42:9ded, 2606:4700:10::6814:1a88
+11-20 10:08:11.228   714   738 I ActivityManager: Broadcast completed: result=0
+11-20 10:08:12.848 15511 15511 I A02S    : POST t=89
+11-20 10:08:12.944   714  2033 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+11-20 10:08:12.949   714  2033 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }: 0
+11-20 10:08:12.982   714   738 I ActivityManager: Broadcast completed: result=0
+11-20 10:08:13.031 10133 15517 I A02P    : op=raw -> CONNECTED in 64 ms
+11-20 10:08:13.137   714  4235 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+11-20 10:08:13.139   714  4235 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }: 0
+11-20 10:08:13.169 10133 15526 I A02P    : op=dns -> OK 104.20.26.136, 172.66.157.237, 2606:4700:10::ac42:9ded, 2606:4700:10::6814:1a88
+11-20 10:08:13.173   714   738 I ActivityManager: Broadcast completed: result=0
+11-20 10:08:14.905 15534 15534 I A02S    : AFTER_POST pidVpn=14404

@@ -1,0 +1,1 @@
+﻿Run 1 of mode kill is INVALID: adb shell (uid 2000) cannot kill an app process (kill -9 had no effect; the VPN pid stayed 9653). The run is kept only as evidence of that. Mode kill is redone via a self-kill op (kill_vpn, Process.killProcess inside the VPN process).

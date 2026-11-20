@@ -1,0 +1,461 @@
+﻿--------- beginning of main
+11-20 09:58:26.089 10293 10293 I A02S    : PRE1
+11-20 09:58:26.281   714  1188 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+--------- beginning of system
+11-20 09:58:26.298   714  1188 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }: 0
+11-20 09:58:26.366   714   738 I ActivityManager: Broadcast completed: result=0
+11-20 09:58:26.461 10133 10300 I A02P    : op=raw -> CONNECTED in 103 ms
+11-20 09:58:26.569   714  1188 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+11-20 09:58:26.571   714  1188 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }: 0
+11-20 09:58:26.622   714   738 I ActivityManager: Broadcast completed: result=0
+11-20 09:58:26.993 10133 10309 I A02P    : op=dns -> OK 172.66.157.237, 104.20.26.136, 2606:4700:10::6814:1a88, 2606:4700:10::ac42:9ded
+11-20 09:58:27.683 10318 10318 I A02S    : PRE2
+11-20 09:58:27.968   714  2118 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+11-20 09:58:27.976   714  2118 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }: 0
+11-20 09:58:28.119   714   738 I ActivityManager: Broadcast completed: result=0
+11-20 09:58:28.140 10133 10325 I A02P    : op=raw -> CONNECTED in 75 ms
+11-20 09:58:28.388   714  2118 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+11-20 09:58:28.390   714  2118 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }: 0
+11-20 09:58:28.422 10133 10334 I A02P    : op=dns -> OK 172.66.157.237, 104.20.26.136, 2606:4700:10::6814:1a88, 2606:4700:10::ac42:9ded
+11-20 09:58:28.433   714   738 I ActivityManager: Broadcast completed: result=0
+11-20 09:58:29.507 10336 10336 I A02S    : PRE3
+11-20 09:58:29.862   714  1182 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+11-20 09:58:29.865   714  1182 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }: 0
+11-20 09:58:29.937   714   738 I ActivityManager: Broadcast completed: result=0
+11-20 09:58:30.069 10133 10343 I A02P    : op=raw -> CONNECTED in 158 ms
+11-20 09:58:30.259   714  1188 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+11-20 09:58:30.284   714  1188 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }: 0
+11-20 09:58:30.355   714   738 I ActivityManager: Broadcast completed: result=0
+11-20 09:58:30.378 10133 10354 I A02P    : op=dns -> OK 172.66.157.237, 104.20.26.136, 2606:4700:10::6814:1a88, 2606:4700:10::ac42:9ded
+11-20 09:58:30.412   714   884 W ActivityManager: pid 714 system sent binder code 1 with flags 1 and got error -2147483646
+11-20 09:58:31.366 10359 10359 I A02S    : PRE4
+11-20 09:58:31.543   714  2118 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+11-20 09:58:31.555   714  2118 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }: 0
+11-20 09:58:31.571   714   738 I ActivityManager: Broadcast completed: result=0
+11-20 09:58:31.644 10133 10367 I A02P    : op=raw -> CONNECTED in 76 ms
+11-20 09:58:31.883   714  2118 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+11-20 09:58:31.886   714  2118 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }: 0
+11-20 09:58:31.919 10133 10376 I A02P    : op=dns -> OK 172.66.157.237, 104.20.26.136, 2606:4700:10::6814:1a88, 2606:4700:10::ac42:9ded
+11-20 09:58:31.936   714   738 I ActivityManager: Broadcast completed: result=0
+11-20 09:58:32.885 10379 10379 I A02S    : PRE5
+11-20 09:58:33.059   714  1182 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+11-20 09:58:33.061   714  1182 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }: 0
+11-20 09:58:33.084   714   738 I ActivityManager: Broadcast completed: result=0
+11-20 09:58:33.132 10133 10386 I A02P    : op=raw -> CONNECTED in 52 ms
+11-20 09:58:33.258   714  2118 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+11-20 09:58:33.262   714  2118 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }: 0
+11-20 09:58:33.296   714   738 I ActivityManager: Broadcast completed: result=0
+11-20 09:58:33.309 10133 10395 I A02P    : op=dns -> OK 172.66.157.237, 104.20.26.136, 2606:4700:10::6814:1a88, 2606:4700:10::ac42:9ded
+11-20 09:58:33.380   714   884 W ActivityManager: pid 714 system sent binder code 1 with flags 1 and got error -2147483646
+11-20 09:58:34.252 10401 10401 I A02S    : KILL mode=kill pid=9653
+11-20 09:58:34.616 10406 10406 I A02S    : POST t=0
+11-20 09:58:34.759   714  1182 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+11-20 09:58:34.776   714  1182 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }: 0
+11-20 09:58:34.809   714   738 I ActivityManager: Broadcast completed: result=0
+11-20 09:58:34.841 10133 10412 I A02P    : op=raw -> CONNECTED in 50 ms
+11-20 09:58:34.980   714  4545 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+11-20 09:58:34.998   714  4545 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }: 0
+11-20 09:58:35.002 10133 10421 I A02P    : op=dns -> OK 172.66.157.237, 104.20.26.136, 2606:4700:10::6814:1a88, 2606:4700:10::ac42:9ded
+11-20 09:58:35.004   714   738 I ActivityManager: Broadcast completed: result=0
+11-20 09:58:36.405   714   884 W ActivityManager: pid 714 system sent binder code 1 with flags 1 and got error -2147483646
+11-20 09:58:36.674 10424 10424 I A02S    : POST t=2
+11-20 09:58:36.818   714  1182 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+11-20 09:58:36.819   714  1182 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }: 0
+11-20 09:58:36.844   714   738 I ActivityManager: Broadcast completed: result=0
+11-20 09:58:36.900 10133 10430 I A02P    : op=raw -> CONNECTED in 71 ms
+11-20 09:58:37.077   714  4545 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+11-20 09:58:37.080   714  4545 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }: 0
+11-20 09:58:37.135   714   738 I ActivityManager: Broadcast completed: result=0
+11-20 09:58:37.136 10133 10439 I A02P    : op=dns -> OK 172.66.157.237, 104.20.26.136, 2606:4700:10::6814:1a88, 2606:4700:10::ac42:9ded
+11-20 09:58:38.783 10450 10450 I A02S    : POST t=4
+11-20 09:58:38.910   714  4545 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+11-20 09:58:38.912   714  4545 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }: 0
+11-20 09:58:38.945   714   738 I ActivityManager: Broadcast completed: result=0
+11-20 09:58:38.987 10133 10456 I A02P    : op=raw -> CONNECTED in 62 ms
+11-20 09:58:39.148   714  2118 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+11-20 09:58:39.150   714  2118 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }: 0
+11-20 09:58:39.178   714   738 I ActivityManager: Broadcast completed: result=0
+11-20 09:58:39.205 10133 10465 I A02P    : op=dns -> OK 172.66.157.237, 104.20.26.136, 2606:4700:10::6814:1a88, 2606:4700:10::ac42:9ded
+11-20 09:58:39.508   714   884 W ActivityManager: pid 714 system sent binder code 1 with flags 1 and got error -2147483646
+11-20 09:58:40.853 10472 10472 I A02S    : POST t=6
+11-20 09:58:41.008   714  1182 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+11-20 09:58:41.011   714  1182 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }: 0
+11-20 09:58:41.064   714   738 I ActivityManager: Broadcast completed: result=0
+11-20 09:58:41.180 10133 10478 I A02P    : op=raw -> CONNECTED in 155 ms
+11-20 09:58:41.236   714  1182 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+11-20 09:58:41.239   714  1182 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }: 0
+11-20 09:58:41.257   714   738 I ActivityManager: Broadcast completed: result=0
+11-20 09:58:41.273 10133 10487 I A02P    : op=dns -> OK 172.66.157.237, 104.20.26.136, 2606:4700:10::6814:1a88, 2606:4700:10::ac42:9ded
+11-20 09:58:42.620   714   884 W ActivityManager: pid 714 system sent binder code 1 with flags 1 and got error -2147483646
+11-20 09:58:42.905 10493 10493 I A02S    : POST t=8
+11-20 09:58:43.080   714  1182 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+11-20 09:58:43.082   714  1182 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }: 0
+11-20 09:58:43.111   714   738 I ActivityManager: Broadcast completed: result=0
+11-20 09:58:43.171 10133 10499 I A02P    : op=raw -> CONNECTED in 76 ms
+11-20 09:58:43.302   714  1188 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+11-20 09:58:43.315   714  1188 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }: 0
+11-20 09:58:43.340   714   738 I ActivityManager: Broadcast completed: result=0
+11-20 09:58:43.355 10133 10508 I A02P    : op=dns -> OK 172.66.157.237, 104.20.26.136, 2606:4700:10::6814:1a88, 2606:4700:10::ac42:9ded
+11-20 09:58:45.006 10514 10514 I A02S    : POST t=10
+11-20 09:58:45.162   714  1188 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+11-20 09:58:45.177   714  1188 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }: 0
+11-20 09:58:45.195   714   738 I ActivityManager: Broadcast completed: result=0
+11-20 09:58:45.290 10133 10520 I A02P    : op=raw -> CONNECTED in 108 ms
+11-20 09:58:45.398   714  4545 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+11-20 09:58:45.405   714  4545 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }: 0
+11-20 09:58:45.433   714   738 I ActivityManager: Broadcast completed: result=0
+11-20 09:58:45.451 10133 10529 I A02P    : op=dns -> OK 172.66.157.237, 104.20.26.136, 2606:4700:10::6814:1a88, 2606:4700:10::ac42:9ded
+11-20 09:58:45.698   714   884 W ActivityManager: pid 714 system sent binder code 1 with flags 1 and got error -2147483646
+11-20 09:58:47.096 10535 10535 I A02S    : POST t=13
+11-20 09:58:47.245   714  2118 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+11-20 09:58:47.265   714  2118 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }: 0
+11-20 09:58:47.274   714   738 I ActivityManager: Broadcast completed: result=0
+11-20 09:58:47.383 10133 10541 I A02P    : op=raw -> CONNECTED in 111 ms
+11-20 09:58:47.636   714  2118 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+11-20 09:58:47.667   714  2118 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }: 0
+11-20 09:58:47.741   714   738 I ActivityManager: Broadcast completed: result=0
+11-20 09:58:47.812 10133 10555 I A02P    : op=dns -> OK 172.66.157.237, 104.20.26.136, 2606:4700:10::6814:1a88, 2606:4700:10::ac42:9ded
+11-20 09:58:48.776   714   884 W ActivityManager: pid 714 system sent binder code 1 with flags 1 and got error -2147483646
+11-20 09:58:49.380 10561 10561 I A02S    : POST t=15
+11-20 09:58:49.480   714  4545 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+11-20 09:58:49.486   714  4545 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }: 0
+11-20 09:58:49.538   714   738 I ActivityManager: Broadcast completed: result=0
+11-20 09:58:49.662 10133 10567 I A02P    : op=raw -> CONNECTED in 157 ms
+11-20 09:58:49.768   714  4545 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+11-20 09:58:49.771   714  4545 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }: 0
+11-20 09:58:49.795 10133 10578 I A02P    : op=dns -> OK 172.66.157.237, 104.20.26.136, 2606:4700:10::6814:1a88, 2606:4700:10::ac42:9ded
+11-20 09:58:49.818   714   738 I ActivityManager: Broadcast completed: result=0
+11-20 09:58:51.460 10581 10581 I A02S    : POST t=17
+11-20 09:58:51.600   714  4545 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+11-20 09:58:51.608   714  4545 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }: 0
+11-20 09:58:51.625   714   738 I ActivityManager: Broadcast completed: result=0
+11-20 09:58:51.687 10133 10587 I A02P    : op=raw -> CONNECTED in 66 ms
+11-20 09:58:51.851   714   884 W ActivityManager: pid 714 system sent binder code 1 with flags 1 and got error -2147483646
+11-20 09:58:51.910   714  1188 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+11-20 09:58:51.930   714  1188 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }: 0
+11-20 09:58:51.980   714   738 I ActivityManager: Broadcast completed: result=0
+11-20 09:58:52.021 10133 10596 I A02P    : op=dns -> OK 172.66.157.237, 104.20.26.136, 2606:4700:10::6814:1a88, 2606:4700:10::ac42:9ded
+11-20 09:58:53.638 10603 10603 I A02S    : POST t=19
+11-20 09:58:53.800   714  1188 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+11-20 09:58:53.802   714  1188 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }: 0
+11-20 09:58:53.826   714   738 I ActivityManager: Broadcast completed: result=0
+11-20 09:58:53.909 10133 10609 I A02P    : op=raw -> CONNECTED in 97 ms
+11-20 09:58:54.006   714  2118 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+11-20 09:58:54.010   714  2118 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }: 0
+11-20 09:58:54.030   714   738 I ActivityManager: Broadcast completed: result=0
+11-20 09:58:54.070 10133 10618 I A02P    : op=dns -> OK 172.66.157.237, 104.20.26.136, 2606:4700:10::6814:1a88, 2606:4700:10::ac42:9ded
+11-20 09:58:55.742 10624 10624 I A02S    : POST t=21
+11-20 09:58:55.900   714  2118 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+11-20 09:58:55.904   714  2118 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }: 0
+11-20 09:58:55.926   714   738 I ActivityManager: Broadcast completed: result=0
+11-20 09:58:55.961 10133 10630 I A02P    : op=raw -> CONNECTED in 48 ms
+11-20 09:58:56.126   714  4545 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+11-20 09:58:56.128   714  4545 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }: 0
+11-20 09:58:56.150   714   738 I ActivityManager: Broadcast completed: result=0
+11-20 09:58:56.164 10133 10639 I A02P    : op=dns -> OK 172.66.157.237, 104.20.26.136, 2606:4700:10::6814:1a88, 2606:4700:10::ac42:9ded
+11-20 09:58:57.940 10650 10650 I A02S    : POST t=23
+11-20 09:58:58.224   714  1182 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+11-20 09:58:58.242   714  1182 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }: 0
+11-20 09:58:58.305   714   738 I ActivityManager: Broadcast completed: result=0
+11-20 09:58:58.414 10133 10656 I A02P    : op=raw -> CONNECTED in 141 ms
+11-20 09:58:58.572   714  1182 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+11-20 09:58:58.579   714  1182 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }: 0
+11-20 09:58:58.606   714   738 I ActivityManager: Broadcast completed: result=0
+11-20 09:58:58.608 10133 10665 I A02P    : op=dns -> OK 172.66.157.237, 104.20.26.136, 2606:4700:10::6814:1a88, 2606:4700:10::ac42:9ded
+11-20 09:59:00.260 10671 10671 I A02S    : POST t=26
+11-20 09:59:00.395   714  2118 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+11-20 09:59:00.402   714  2118 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }: 0
+11-20 09:59:00.432   714   738 I ActivityManager: Broadcast completed: result=0
+11-20 09:59:00.507 10133 10677 I A02P    : op=raw -> CONNECTED in 95 ms
+11-20 09:59:00.604   714  1188 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+11-20 09:59:00.614   714  1188 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }: 0
+11-20 09:59:00.630   714   738 I ActivityManager: Broadcast completed: result=0
+11-20 09:59:00.676 10133 10686 I A02P    : op=dns -> OK 172.66.157.237, 104.20.26.136, 2606:4700:10::6814:1a88, 2606:4700:10::ac42:9ded
+11-20 09:59:01.004   714   884 W ActivityManager: pid 714 system sent binder code 1 with flags 1 and got error -2147483646
+11-20 09:59:02.284 10692 10692 I A02S    : POST t=28
+11-20 09:59:02.461   714  1182 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+11-20 09:59:02.466   714  1182 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }: 0
+11-20 09:59:02.499   714   738 I ActivityManager: Broadcast completed: result=0
+11-20 09:59:02.578 10133 10698 I A02P    : op=raw -> CONNECTED in 91 ms
+11-20 09:59:02.718   714  1182 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+11-20 09:59:02.719   714  1182 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }: 0
+11-20 09:59:02.754   714   738 I ActivityManager: Broadcast completed: result=0
+11-20 09:59:02.762 10133 10707 I A02P    : op=dns -> OK 172.66.157.237, 104.20.26.136, 2606:4700:10::6814:1a88, 2606:4700:10::ac42:9ded
+11-20 09:59:04.031   714   884 W ActivityManager: pid 714 system sent binder code 1 with flags 1 and got error -2147483646
+11-20 09:59:04.457 10713 10713 I A02S    : POST t=30
+11-20 09:59:04.623   714  1188 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+11-20 09:59:04.637   714  1188 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }: 0
+11-20 09:59:04.661   714   738 I ActivityManager: Broadcast completed: result=0
+11-20 09:59:04.723 10133 10719 I A02P    : op=raw -> CONNECTED in 75 ms
+11-20 09:59:04.865   714  1182 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+11-20 09:59:04.867   714  1182 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }: 0
+11-20 09:59:04.922   714   738 I ActivityManager: Broadcast completed: result=0
+11-20 09:59:04.933 10133 10728 I A02P    : op=dns -> OK 172.66.157.237, 104.20.26.136, 2606:4700:10::6814:1a88, 2606:4700:10::ac42:9ded
+11-20 09:59:06.579 10734 10734 I A02S    : POST t=32
+11-20 09:59:06.712   714  1188 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+11-20 09:59:06.734   714  1188 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }: 0
+11-20 09:59:06.757   714   738 I ActivityManager: Broadcast completed: result=0
+11-20 09:59:06.865 10133 10740 I A02P    : op=raw -> CONNECTED in 122 ms
+11-20 09:59:06.964   714  1182 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+11-20 09:59:06.976   714  1182 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }: 0
+11-20 09:59:07.006   714   738 I ActivityManager: Broadcast completed: result=0
+11-20 09:59:07.017 10133 10749 I A02P    : op=dns -> OK 172.66.157.237, 104.20.26.136, 2606:4700:10::6814:1a88, 2606:4700:10::ac42:9ded
+11-20 09:59:07.092   714   884 W ActivityManager: pid 714 system sent binder code 1 with flags 1 and got error -2147483646
+11-20 09:59:08.706 10762 10762 I A02S    : POST t=34
+11-20 09:59:08.877   714  4545 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+11-20 09:59:08.892   714  4545 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }: 0
+11-20 09:59:08.923   714   738 I ActivityManager: Broadcast completed: result=0
+11-20 09:59:08.981 10133 10768 I A02P    : op=raw -> CONNECTED in 77 ms
+11-20 09:59:09.142   714  4545 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+11-20 09:59:09.144   714  4545 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }: 0
+11-20 09:59:09.176   714   738 I ActivityManager: Broadcast completed: result=0
+11-20 09:59:09.182 10133 10777 I A02P    : op=dns -> OK 172.66.157.237, 104.20.26.136, 2606:4700:10::6814:1a88, 2606:4700:10::ac42:9ded
+11-20 09:59:10.140   714   884 W ActivityManager: pid 714 system sent binder code 1 with flags 1 and got error -2147483646
+11-20 09:59:10.876 10786 10786 I A02S    : POST t=36
+11-20 09:59:11.001   714  1188 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+11-20 09:59:11.009   714  1188 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }: 0
+11-20 09:59:11.032   714   738 I ActivityManager: Broadcast completed: result=0
+11-20 09:59:11.102 10133 10792 I A02P    : op=raw -> CONNECTED in 82 ms
+11-20 09:59:11.204   714  4545 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+11-20 09:59:11.205   714  4545 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }: 0
+11-20 09:59:11.240   714   738 I ActivityManager: Broadcast completed: result=0
+11-20 09:59:11.258 10133 10801 I A02P    : op=dns -> OK 172.66.157.237, 104.20.26.136, 2606:4700:10::6814:1a88, 2606:4700:10::ac42:9ded
+11-20 09:59:12.953 10807 10807 I A02S    : POST t=38
+11-20 09:59:13.089   714  1182 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+11-20 09:59:13.091   714  1182 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }: 0
+11-20 09:59:13.114   714   738 I ActivityManager: Broadcast completed: result=0
+11-20 09:59:13.178 10133 10813 I A02P    : op=raw -> CONNECTED in 77 ms
+11-20 09:59:13.290   714   884 W ActivityManager: pid 714 system sent binder code 1 with flags 1 and got error -2147483646
+11-20 09:59:13.339   714  1182 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+11-20 09:59:13.341   714  1182 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }: 0
+11-20 09:59:13.365   714   738 I ActivityManager: Broadcast completed: result=0
+11-20 09:59:13.400 10133 10822 I A02P    : op=dns -> OK 172.66.157.237, 104.20.26.136, 2606:4700:10::6814:1a88, 2606:4700:10::ac42:9ded
+11-20 09:59:15.053 10828 10828 I A02S    : POST t=40
+11-20 09:59:15.210   714  4545 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+11-20 09:59:15.218   714  4545 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }: 0
+11-20 09:59:15.243   714   738 I ActivityManager: Broadcast completed: result=0
+11-20 09:59:15.302 10133 10834 I A02P    : op=raw -> CONNECTED in 74 ms
+11-20 09:59:15.473   714  4545 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+11-20 09:59:15.475   714  4545 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }: 0
+11-20 09:59:15.504   714   738 I ActivityManager: Broadcast completed: result=0
+11-20 09:59:15.520 10133 10843 I A02P    : op=dns -> OK 172.66.157.237, 104.20.26.136, 2606:4700:10::6814:1a88, 2606:4700:10::ac42:9ded
+11-20 09:59:16.284   714   884 W ActivityManager: pid 714 system sent binder code 1 with flags 1 and got error -2147483646
+11-20 09:59:17.201 10849 10849 I A02S    : POST t=43
+11-20 09:59:17.364   714  1188 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+11-20 09:59:17.368   714  1188 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }: 0
+11-20 09:59:17.491   714   738 I ActivityManager: Broadcast completed: result=0
+11-20 09:59:17.519 10133 10860 I A02P    : op=raw -> CONNECTED in 128 ms
+11-20 09:59:17.913   714  1188 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+11-20 09:59:17.937   714  1188 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }: 0
+11-20 09:59:17.997 10133 10869 I A02P    : op=dns -> OK 172.66.157.237, 104.20.26.136, 2606:4700:10::6814:1a88, 2606:4700:10::ac42:9ded
+11-20 09:59:18.018   714   738 I ActivityManager: Broadcast completed: result=0
+11-20 09:59:19.374   714   884 W ActivityManager: pid 714 system sent binder code 1 with flags 1 and got error -2147483646
+11-20 09:59:19.684 10875 10875 I A02S    : POST t=45
+11-20 09:59:19.823   714  2118 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+11-20 09:59:19.827   714  2118 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }: 0
+11-20 09:59:19.852   714   738 I ActivityManager: Broadcast completed: result=0
+11-20 09:59:19.896 10133 10881 I A02P    : op=raw -> CONNECTED in 54 ms
+11-20 09:59:20.014   714  2118 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+11-20 09:59:20.023   714  2118 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }: 0
+11-20 09:59:20.045   714   738 I ActivityManager: Broadcast completed: result=0
+11-20 09:59:20.071 10133 10890 I A02P    : op=dns -> OK 172.66.157.237, 104.20.26.136, 2606:4700:10::6814:1a88, 2606:4700:10::ac42:9ded
+11-20 09:59:21.729 10896 10896 I A02S    : POST t=47
+11-20 09:59:21.860   714  4545 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+11-20 09:59:21.871   714  4545 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }: 0
+11-20 09:59:21.901   714   738 I ActivityManager: Broadcast completed: result=0
+11-20 09:59:21.947 10133 10902 I A02P    : op=raw -> CONNECTED in 65 ms
+11-20 09:59:22.088   714  2118 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+11-20 09:59:22.111   714  2118 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }: 0
+11-20 09:59:22.158   714   738 I ActivityManager: Broadcast completed: result=0
+11-20 09:59:22.173 10133 10911 I A02P    : op=dns -> OK 172.66.157.237, 104.20.26.136, 2606:4700:10::6814:1a88, 2606:4700:10::ac42:9ded
+11-20 09:59:22.417   714   884 W ActivityManager: pid 714 system sent binder code 1 with flags 1 and got error -2147483646
+11-20 09:59:23.871 10917 10917 I A02S    : POST t=49
+11-20 09:59:24.008   714  2118 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+11-20 09:59:24.024   714  2118 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }: 0
+11-20 09:59:24.058   714   738 I ActivityManager: Broadcast completed: result=0
+11-20 09:59:24.117 10133 10923 I A02P    : op=raw -> CONNECTED in 65 ms
+11-20 09:59:24.260   714  1188 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+11-20 09:59:24.262   714  1188 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }: 0
+11-20 09:59:24.286   714   738 I ActivityManager: Broadcast completed: result=0
+11-20 09:59:24.336 10133 10932 I A02P    : op=dns -> OK 172.66.157.237, 104.20.26.136, 2606:4700:10::6814:1a88, 2606:4700:10::ac42:9ded
+11-20 09:59:25.460   714   884 W ActivityManager: pid 714 system sent binder code 1 with flags 1 and got error -2147483646
+11-20 09:59:25.937 10938 10938 I A02S    : POST t=51
+11-20 09:59:26.110   714  4545 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+11-20 09:59:26.114   714  4545 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }: 0
+11-20 09:59:26.161   714   738 I ActivityManager: Broadcast completed: result=0
+11-20 09:59:26.211 10133 10944 I A02P    : op=raw -> CONNECTED in 79 ms
+11-20 09:59:26.340   714  2118 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+11-20 09:59:26.342   714  2118 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }: 0
+11-20 09:59:26.371   714   738 I ActivityManager: Broadcast completed: result=0
+11-20 09:59:26.401 10133 10953 I A02P    : op=dns -> OK 172.66.157.237, 104.20.26.136, 2606:4700:10::6814:1a88, 2606:4700:10::ac42:9ded
+11-20 09:59:28.164 10964 10964 I A02S    : POST t=53
+11-20 09:59:28.347   714  2118 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+11-20 09:59:28.357   714  2118 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }: 0
+11-20 09:59:28.409   714   738 I ActivityManager: Broadcast completed: result=0
+11-20 09:59:28.499 10133 10970 I A02P    : op=raw -> CONNECTED in 128 ms
+11-20 09:59:28.600   714  4545 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+11-20 09:59:28.607   714  4545 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }: 0
+11-20 09:59:28.657 10133 10979 I A02P    : op=dns -> OK 172.66.157.237, 104.20.26.136, 2606:4700:10::6814:1a88, 2606:4700:10::ac42:9ded
+11-20 09:59:28.691   714   738 I ActivityManager: Broadcast completed: result=0
+11-20 09:59:30.362 10985 10985 I A02S    : POST t=56
+11-20 09:59:30.524   714  1182 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+11-20 09:59:30.527   714  1182 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }: 0
+11-20 09:59:30.550   714   738 I ActivityManager: Broadcast completed: result=0
+11-20 09:59:30.642 10133 10991 I A02P    : op=raw -> CONNECTED in 96 ms
+11-20 09:59:30.788   714  1182 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+11-20 09:59:30.790   714  1182 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }: 0
+11-20 09:59:30.828   714   738 I ActivityManager: Broadcast completed: result=0
+11-20 09:59:30.872 10133 11000 I A02P    : op=dns -> OK 172.66.157.237, 104.20.26.136, 2606:4700:10::6814:1a88, 2606:4700:10::ac42:9ded
+11-20 09:59:31.572   714   884 W ActivityManager: pid 714 system sent binder code 1 with flags 1 and got error -2147483646
+11-20 09:59:32.491 11006 11006 I A02S    : POST t=58
+11-20 09:59:32.653   714  1182 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+11-20 09:59:32.661   714  1182 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }: 0
+11-20 09:59:32.678   714   738 I ActivityManager: Broadcast completed: result=0
+11-20 09:59:32.760 10133 11013 I A02P    : op=raw -> CONNECTED in 92 ms
+11-20 09:59:32.901   714  1188 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+11-20 09:59:32.906   714  1188 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }: 0
+11-20 09:59:32.934   714   738 I ActivityManager: Broadcast completed: result=0
+11-20 09:59:32.952 10133 11022 I A02P    : op=dns -> OK 172.66.157.237, 104.20.26.136, 2606:4700:10::6814:1a88, 2606:4700:10::ac42:9ded
+11-20 09:59:34.645   714   884 W ActivityManager: pid 714 system sent binder code 1 with flags 1 and got error -2147483646
+11-20 09:59:34.668 11028 11028 I A02S    : POST t=60
+11-20 09:59:34.871   714  4545 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+11-20 09:59:34.873   714  4545 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }: 0
+11-20 09:59:34.891   714   738 I ActivityManager: Broadcast completed: result=0
+11-20 09:59:34.968 10133 11034 I A02P    : op=raw -> CONNECTED in 77 ms
+11-20 09:59:35.075   714  4545 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+11-20 09:59:35.078   714  4545 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }: 0
+11-20 09:59:35.106   714   738 I ActivityManager: Broadcast completed: result=0
+11-20 09:59:35.122 10133 11043 I A02P    : op=dns -> OK 172.66.157.237, 104.20.26.136, 2606:4700:10::6814:1a88, 2606:4700:10::ac42:9ded
+11-20 09:59:36.786 11049 11049 I A02S    : POST t=62
+11-20 09:59:36.948   714  2118 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+11-20 09:59:36.957   714  2118 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }: 0
+11-20 09:59:36.992   714   738 I ActivityManager: Broadcast completed: result=0
+11-20 09:59:37.050 10133 11055 I A02P    : op=raw -> CONNECTED in 71 ms
+11-20 09:59:37.227   714  4545 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+11-20 09:59:37.228   714  4545 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }: 0
+11-20 09:59:37.258   714   738 I ActivityManager: Broadcast completed: result=0
+11-20 09:59:37.315 10133 11064 I A02P    : op=dns -> OK 172.66.157.237, 104.20.26.136, 2606:4700:10::6814:1a88, 2606:4700:10::ac42:9ded
+11-20 09:59:37.795   714   884 W ActivityManager: pid 714 system sent binder code 1 with flags 1 and got error -2147483646
+11-20 09:59:39.071 11075 11075 I A02S    : POST t=64
+11-20 09:59:39.236   714  4545 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+11-20 09:59:39.238   714  4545 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }: 0
+11-20 09:59:39.261   714   738 I ActivityManager: Broadcast completed: result=0
+11-20 09:59:39.331 10133 11081 I A02P    : op=raw -> CONNECTED in 72 ms
+11-20 09:59:39.427   714  1180 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+11-20 09:59:39.430   714  1180 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }: 0
+11-20 09:59:39.451   714   738 I ActivityManager: Broadcast completed: result=0
+11-20 09:59:39.469 10133 11090 I A02P    : op=dns -> OK 172.66.157.237, 104.20.26.136, 2606:4700:10::6814:1a88, 2606:4700:10::ac42:9ded
+11-20 09:59:41.122 11096 11096 I A02S    : POST t=67
+11-20 09:59:41.411   714  4545 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+11-20 09:59:41.427   714  4545 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }: 0
+11-20 09:59:41.462   714   738 I ActivityManager: Broadcast completed: result=0
+11-20 09:59:41.664 10133 11102 I A02P    : op=raw -> CONNECTED in 226 ms
+11-20 09:59:41.728   714   969 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+11-20 09:59:41.730   714   969 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }: 0
+11-20 09:59:41.764 10133 11111 I A02P    : op=dns -> OK 172.66.157.237, 104.20.26.136, 2606:4700:10::6814:1a88, 2606:4700:10::ac42:9ded
+11-20 09:59:41.765   714   738 I ActivityManager: Broadcast completed: result=0
+11-20 09:59:43.432 11117 11117 I A02S    : POST t=69
+11-20 09:59:43.551   714  4545 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+11-20 09:59:43.553   714  4545 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }: 0
+11-20 09:59:43.588   714   738 I ActivityManager: Broadcast completed: result=0
+11-20 09:59:43.653 10133 11123 I A02P    : op=raw -> CONNECTED in 67 ms
+11-20 09:59:43.774   714  1180 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+11-20 09:59:43.784   714  1180 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }: 0
+11-20 09:59:43.834   714   738 I ActivityManager: Broadcast completed: result=0
+11-20 09:59:43.877 10133 11132 I A02P    : op=dns -> OK 172.66.157.237, 104.20.26.136, 2606:4700:10::6814:1a88, 2606:4700:10::ac42:9ded
+11-20 09:59:44.002   714   884 W ActivityManager: pid 714 system sent binder code 1 with flags 1 and got error -2147483646
+11-20 09:59:45.461 11138 11138 I A02S    : POST t=71
+11-20 09:59:45.605   714  1180 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+11-20 09:59:45.614   714  1180 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }: 0
+11-20 09:59:45.641   714   738 I ActivityManager: Broadcast completed: result=0
+11-20 09:59:45.715 10133 11144 I A02P    : op=raw -> CONNECTED in 90 ms
+11-20 09:59:45.806   714   969 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+11-20 09:59:45.808   714   969 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }: 0
+11-20 09:59:45.821 10133 11153 I A02P    : op=dns -> OK 172.66.157.237, 104.20.26.136, 2606:4700:10::6814:1a88, 2606:4700:10::ac42:9ded
+11-20 09:59:45.824   714   738 I ActivityManager: Broadcast completed: result=0
+11-20 09:59:47.047   714   884 W ActivityManager: pid 714 system sent binder code 1 with flags 1 and got error -2147483646
+11-20 09:59:47.587 11162 11162 I A02S    : POST t=73
+11-20 09:59:47.855   714  4545 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+11-20 09:59:47.862   714  4545 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }: 0
+11-20 09:59:47.930   714   738 I ActivityManager: Broadcast completed: result=0
+11-20 09:59:48.040 10133 11168 I A02P    : op=raw -> CONNECTED in 153 ms
+11-20 09:59:48.208   714  4545 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+11-20 09:59:48.217   714  4545 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }: 0
+11-20 09:59:48.231   714   738 I ActivityManager: Broadcast completed: result=0
+11-20 09:59:48.247 10133 11177 I A02P    : op=dns -> OK 172.66.157.237, 104.20.26.136, 2606:4700:10::6814:1a88, 2606:4700:10::ac42:9ded
+11-20 09:59:49.871 11183 11183 I A02S    : POST t=75
+11-20 09:59:49.984   714  1180 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+11-20 09:59:49.992   714  1180 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }: 0
+11-20 09:59:50.007   714   738 I ActivityManager: Broadcast completed: result=0
+11-20 09:59:50.062 10133 11189 I A02P    : op=raw -> CONNECTED in 58 ms
+11-20 09:59:50.175   714   884 W ActivityManager: pid 714 system sent binder code 1 with flags 1 and got error -2147483646
+11-20 09:59:50.251   714  1180 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+11-20 09:59:50.257   714  1180 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }: 0
+11-20 09:59:50.275   714   738 I ActivityManager: Broadcast completed: result=0
+11-20 09:59:50.285 10133 11201 I A02P    : op=dns -> OK 172.66.157.237, 104.20.26.136, 2606:4700:10::6814:1a88, 2606:4700:10::ac42:9ded
+11-20 09:59:51.946 11207 11207 I A02S    : POST t=77
+11-20 09:59:52.073   714  4545 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+11-20 09:59:52.087   714  4545 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }: 0
+11-20 09:59:52.115   714   738 I ActivityManager: Broadcast completed: result=0
+11-20 09:59:52.170 10133 11213 I A02P    : op=raw -> CONNECTED in 68 ms
+11-20 09:59:52.296   714  4545 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+11-20 09:59:52.300   714  4545 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }: 0
+11-20 09:59:52.321   714   738 I ActivityManager: Broadcast completed: result=0
+11-20 09:59:52.336 10133 11222 I A02P    : op=dns -> OK 172.66.157.237, 104.20.26.136, 2606:4700:10::6814:1a88, 2606:4700:10::ac42:9ded
+11-20 09:59:53.953 11228 11228 I A02S    : POST t=79
+11-20 09:59:54.052   714  1180 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+11-20 09:59:54.053   714  1180 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }: 0
+11-20 09:59:54.070   714   738 I ActivityManager: Broadcast completed: result=0
+11-20 09:59:54.164 10133 11234 I A02P    : op=raw -> CONNECTED in 100 ms
+11-20 09:59:54.222   714  4545 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+11-20 09:59:54.223   714  4545 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }: 0
+11-20 09:59:54.238 10133 11243 I A02P    : op=dns -> OK 172.66.157.237, 104.20.26.136, 2606:4700:10::6814:1a88, 2606:4700:10::ac42:9ded
+11-20 09:59:54.259   714   738 I ActivityManager: Broadcast completed: result=0
+11-20 09:59:55.883 11246 11246 I A02S    : POST t=81
+11-20 09:59:56.001   714  4545 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+11-20 09:59:56.012   714  4545 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }: 0
+11-20 09:59:56.028   714   738 I ActivityManager: Broadcast completed: result=0
+11-20 09:59:56.125 10133 11252 I A02P    : op=raw -> CONNECTED in 106 ms
+11-20 09:59:56.197   714   969 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+11-20 09:59:56.205   714   969 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }: 0
+11-20 09:59:56.223   714   738 I ActivityManager: Broadcast completed: result=0
+11-20 09:59:56.239 10133 11261 I A02P    : op=dns -> OK 172.66.157.237, 104.20.26.136, 2606:4700:10::6814:1a88, 2606:4700:10::ac42:9ded
+11-20 09:59:57.896 11272 11272 I A02S    : POST t=83
+11-20 09:59:58.142   714   969 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+11-20 09:59:58.153   714   969 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }: 0
+11-20 09:59:58.208   714   738 I ActivityManager: Broadcast completed: result=0
+11-20 09:59:58.258 10133 11278 I A02P    : op=raw -> CONNECTED in 93 ms
+11-20 09:59:58.368   714   969 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+11-20 09:59:58.373   714   969 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }: 0
+11-20 09:59:58.379   714   738 I ActivityManager: Broadcast completed: result=0
+11-20 09:59:58.417 10133 11287 I A02P    : op=dns -> OK 172.66.157.237, 104.20.26.136, 2606:4700:10::6814:1a88, 2606:4700:10::ac42:9ded
+11-20 09:59:59.382   714   884 W ActivityManager: pid 714 system sent binder code 1 with flags 1 and got error -2147483646
+11-20 09:59:59.998 11293 11293 I A02S    : POST t=85
+11-20 10:00:00.232   714  4545 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+11-20 10:00:00.236   714  4545 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }: 0
+11-20 10:00:00.281   714   738 I ActivityManager: Broadcast completed: result=0
+11-20 10:00:00.377 10133 11299 I A02P    : op=raw -> CONNECTED in 114 ms
+11-20 10:00:00.552   714  1180 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+11-20 10:00:00.591   714  1180 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }: 0
+11-20 10:00:00.609   714   738 I ActivityManager: Broadcast completed: result=0
+11-20 10:00:00.626 10133 11308 I A02P    : op=dns -> OK 172.66.157.237, 104.20.26.136, 2606:4700:10::6814:1a88, 2606:4700:10::ac42:9ded
+11-20 10:00:02.299 11315 11315 I A02S    : POST t=88
+11-20 10:00:02.498   714  4545 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+11-20 10:00:02.500   714  4545 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }: 0
+11-20 10:00:02.522   714   738 I ActivityManager: Broadcast completed: result=0
+11-20 10:00:02.595 10133 11322 I A02P    : op=raw -> CONNECTED in 80 ms
+11-20 10:00:02.756   714  2118 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+11-20 10:00:02.757   714  2118 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }: 0
+11-20 10:00:02.792 10133 11331 I A02P    : op=dns -> OK 172.66.157.237, 104.20.26.136, 2606:4700:10::6814:1a88, 2606:4700:10::ac42:9ded
+11-20 10:00:02.795   714   738 I ActivityManager: Broadcast completed: result=0
+11-20 10:00:04.431 11337 11337 I A02S    : POST t=90
+11-20 10:00:04.552   714   969 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+11-20 10:00:04.556   714   969 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }: 0
+11-20 10:00:04.579   714   738 I ActivityManager: Broadcast completed: result=0
+11-20 10:00:04.679 10133 11343 I A02P    : op=raw -> CONNECTED in 90 ms
+11-20 10:00:04.733   714   969 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+11-20 10:00:04.739   714   969 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }: 0
+11-20 10:00:04.759 10133 11352 I A02P    : op=dns -> OK 172.66.157.237, 104.20.26.136, 2606:4700:10::6814:1a88, 2606:4700:10::ac42:9ded
+11-20 10:00:04.766   714   738 I ActivityManager: Broadcast completed: result=0
+11-20 10:00:05.519   714   884 W ActivityManager: pid 714 system sent binder code 1 with flags 1 and got error -2147483646
+11-20 10:00:06.455 11357 11357 I A02S    : AFTER_POST pidVpn=9653

@@ -1,0 +1,7 @@
+﻿# Spike A0.2b build output. Evidence files under evidence/ are kept.
+kotlin/build/
+kotlin/app/build/
+kotlin/probe/build/
+kotlin/.gradle/
+kotlin/.kotlin/
+kotlin/local.properties

@@ -1,0 +1,7 @@
+﻿Extracted from the earlier persisted output (tool-results\brywc9kcm.txt, the 11:45 boot check): A02B lines showing upstream dns=null.
+11-20 11:45:26.167  1656  1656 I A02B    : onCreate pid=1656 uptimeMs=26959
+11-20 11:45:26.179  1656  1656 I A02B    : upstream dns=null
+11-20 11:45:26.854  1656  1656 I A02B    : establish ok pid=1656 uptimeMs=27645
+11-20 11:45:26.167  1656  1656 I A02B    : onCreate pid=1656 uptimeMs=26959
+11-20 11:45:26.179  1656  1656 I A02B    : upstream dns=null
+11-20 11:45:26.854  1656  1656 I A02B    : establish ok pid=1656 uptimeMs=27645

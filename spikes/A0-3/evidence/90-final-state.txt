@@ -1,0 +1,14 @@
+# Final state of emulator-5554 (Tablet_A12) after A0.3 cleanup
+== dpm list-owners
+no owners
+== packages matching a03
+0
+== users
+Users:
+	UserInfo{0:Owner:c13} running
+== accounts
+  Accounts: 0
+== device_provisioned
+1
+== chrome restrictions (last read before cleanup, empty after restart)
+restrictions= (empty; read after the relaunch, before cleanup)

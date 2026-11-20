@@ -1,0 +1,49 @@
+﻿11-20 12:05:54.513   708  2054 I ActivityManager: Killing 3367:com.google.android.webview:sandboxed_process0:org.chromium.content.app.SandboxedProcessService0:0/u0a238i0 (adj 0): isolated not needed
+11-20 12:05:55.897  5896  5896 I WebViewFactory: Loading com.google.android.webview version 145.0.7632.218 (code 763221809)
+11-20 12:05:55.915  5896  5896 V ResourcesManager: The following library key has been added: ResourcesKey{ mHash=2ec58ab1 mResDir=null mSplitDirs=[] mOverlayDirs=[] mLibDirs=[/data/app/~~cAsOPMVmkNe7oAnGeSiNIg==/com.google.android.webview-EqSeK31L635m8shKWcL9Dg==/WebViewGoogle.apk,/system/framework/android.test.base.jar,/system_ext/framework/androidx.window.extensions.jar] mDisplayId=0 mOverrideConfig=v37 mCompatInfo={420dpi always-compat} mLoaders=[]}
+11-20 12:05:55.934  5896  5896 D nativeloader: Configuring clns-10 for other apk /data/app/~~cAsOPMVmkNe7oAnGeSiNIg==/com.google.android.webview-EqSeK31L635m8shKWcL9Dg==/WebViewGoogle.apk. target_sdk_version=36, uses_libraries=, library_path=/data/app/~~cAsOPMVmkNe7oAnGeSiNIg==/com.google.android.webview-EqSeK31L635m8shKWcL9Dg==/lib/x86_64:/data/app/~~cAsOPMVmkNe7oAnGeSiNIg==/com.google.android.webview-EqSeK31L635m8shKWcL9Dg==/WebViewGoogle.apk!/lib/x86_64, permitted_path=/data:/mnt/expand
+11-20 12:05:56.252  5896  5896 D nativeloader: Load /data/app/~~cAsOPMVmkNe7oAnGeSiNIg==/com.google.android.webview-EqSeK31L635m8shKWcL9Dg==/WebViewGoogle.apk!/lib/x86_64/libwebviewchromium.so using class loader ns clns-10 (caller=/data/app/~~cAsOPMVmkNe7oAnGeSiNIg==/com.google.android.webview-EqSeK31L635m8shKWcL9Dg==/WebViewGoogle.apk): ok
+11-20 12:05:56.264  5896  5896 D nativeloader: Load /system/lib64/libwebviewchromium_plat_support.so using class loader ns clns-10 (caller=/data/app/~~cAsOPMVmkNe7oAnGeSiNIg==/com.google.android.webview-EqSeK31L635m8shKWcL9Dg==/WebViewGoogle.apk): ok
+11-20 12:05:56.284  5896  5922 E chromium: [1120/120556.282222:ERROR:android_webview/browser/variations/variations_seed_loader.cc:39] Seed missing signature.
+11-20 12:05:56.285  5896  5922 I chromium: [1120/120556.284596:INFO:android_webview/browser/variations/variations_seed_loader.cc:67] Failed to open file for reading.: No such file or directory (2)
+11-20 12:05:56.482  5927  5927 I Zygote  : Process 5927 created for com.google.android.webview:sandboxed_process0:org.chromium.content.app.SandboxedProcessService0:0
+11-20 12:05:56.492   708   744 I ActivityManager: Start proc 5927:com.google.android.webview:sandboxed_process0:org.chromium.content.app.SandboxedProcessService0:0/u0i1 for bound-service {com.webfilter.spike.a02b.probe/org.chromium.content.app.SandboxedProcessService0:0}
+11-20 12:05:56.567  5927  5927 I cr_WebViewApkApp: version=145.0.7632.218 (763221809) minSdkVersion=29 processName=com.google.android.webview:sandboxed_process0:org.chromium.content.app.SandboxedProcessService0:0 splits=<none>
+11-20 12:05:56.633  5896  5896 W chromium: [WARNING:android_webview/browser/network_service/net_helpers.cc:137] HTTP Cache size is: 20971520
+11-20 12:05:57.969  5896  5896 I A02P    : WEBVIEW finished url=https://example.org/
+11-20 12:06:04.005   708  2077 I ActivityManager: Killing 5927:com.google.android.webview:sandboxed_process0:org.chromium.content.app.SandboxedProcessService0:0/u0a238i1 (adj 0): isolated not needed
+11-20 12:06:04.548  5991  5991 I WebViewFactory: Loading com.google.android.webview version 145.0.7632.218 (code 763221809)
+11-20 12:06:04.554  5991  5991 V ResourcesManager: The following library key has been added: ResourcesKey{ mHash=2ec58ab1 mResDir=null mSplitDirs=[] mOverlayDirs=[] mLibDirs=[/data/app/~~cAsOPMVmkNe7oAnGeSiNIg==/com.google.android.webview-EqSeK31L635m8shKWcL9Dg==/WebViewGoogle.apk,/system/framework/android.test.base.jar,/system_ext/framework/androidx.window.extensions.jar] mDisplayId=0 mOverrideConfig=v37 mCompatInfo={420dpi always-compat} mLoaders=[]}
+11-20 12:06:04.561  5991  5991 D nativeloader: Configuring clns-10 for other apk /data/app/~~cAsOPMVmkNe7oAnGeSiNIg==/com.google.android.webview-EqSeK31L635m8shKWcL9Dg==/WebViewGoogle.apk. target_sdk_version=36, uses_libraries=, library_path=/data/app/~~cAsOPMVmkNe7oAnGeSiNIg==/com.google.android.webview-EqSeK31L635m8shKWcL9Dg==/lib/x86_64:/data/app/~~cAsOPMVmkNe7oAnGeSiNIg==/com.google.android.webview-EqSeK31L635m8shKWcL9Dg==/WebViewGoogle.apk!/lib/x86_64, permitted_path=/data:/mnt/expand
+11-20 12:06:04.639  5991  5991 D nativeloader: Load /data/app/~~cAsOPMVmkNe7oAnGeSiNIg==/com.google.android.webview-EqSeK31L635m8shKWcL9Dg==/WebViewGoogle.apk!/lib/x86_64/libwebviewchromium.so using class loader ns clns-10 (caller=/data/app/~~cAsOPMVmkNe7oAnGeSiNIg==/com.google.android.webview-EqSeK31L635m8shKWcL9Dg==/WebViewGoogle.apk): ok
+11-20 12:06:04.645  5991  5991 D nativeloader: Load /system/lib64/libwebviewchromium_plat_support.so using class loader ns clns-10 (caller=/data/app/~~cAsOPMVmkNe7oAnGeSiNIg==/com.google.android.webview-EqSeK31L635m8shKWcL9Dg==/WebViewGoogle.apk): ok
+11-20 12:06:04.649  5991  6013 E chromium: [1120/120604.649535:ERROR:android_webview/browser/variations/variations_seed_loader.cc:39] Seed missing signature.
+11-20 12:06:04.650  5991  6013 I chromium: [1120/120604.650123:INFO:android_webview/browser/variations/variations_seed_loader.cc:67] Failed to open file for reading.: No such file or directory (2)
+11-20 12:06:04.700  6018  6018 I Zygote  : Process 6018 created for com.google.android.webview:sandboxed_process0:org.chromium.content.app.SandboxedProcessService0:0
+11-20 12:06:04.716   708  1512 I ActivityManager: Start proc 6018:com.google.android.webview:sandboxed_process0:org.chromium.content.app.SandboxedProcessService0:0/u0i2 for bound-service {com.webfilter.spike.a02b.probe/org.chromium.content.app.SandboxedProcessService0:0}
+11-20 12:06:04.745  6018  6018 I cr_WebViewApkApp: version=145.0.7632.218 (763221809) minSdkVersion=29 processName=com.google.android.webview:sandboxed_process0:org.chromium.content.app.SandboxedProcessService0:0 splits=<none>
+11-20 12:06:04.762  5991  5991 W chromium: [WARNING:android_webview/browser/network_service/net_helpers.cc:137] HTTP Cache size is: 20971520
+11-20 12:06:05.355  5991  5991 I A02P    : WEBVIEW error url=https://en.wikipedia.org/ code=-2 desc=net::ERR_NAME_NOT_RESOLVED
+11-20 12:06:05.355  5991  5991 I A02P    : WEBVIEW finished url=https://en.wikipedia.org/
+--- tun0 routes (IPv4)
+default dev tun0 table 1024 proto static scope link 
+10.8.0.2 dev tun0 table 1024 proto static scope link 
+10.8.0.2 dev tun0 table 1000000024 proto static scope link 
+local 10.8.0.2 dev tun0 table local proto kernel scope host src 10.8.0.2 
+fd00:8::2 dev tun0 table 1024 proto kernel metric 256 pref medium
+fd00:8::2 dev tun0 table 1024 proto static metric 1024 pref medium
+fe80::/64 dev tun0 table 1024 proto kernel metric 256 pref medium
+default dev tun0 table 1024 proto static metric 1024 pref medium
+fd00:8::2 dev tun0 table 1000000024 proto static metric 1024 pref medium
+local fd00:8::2 dev tun0 table local proto kernel metric 0 pref medium
+local fe80::8b0e:a4bc:c67d:7c3a dev tun0 table local proto kernel metric 0 pref medium
+multicast ff00::/8 dev tun0 table local proto kernel metric 256 pref medium
+--- tun0 routes (IPv6)
+fd00:8::2 dev tun0 table 1024 proto kernel metric 256 pref medium
+fd00:8::2 dev tun0 table 1024 proto static metric 1024 pref medium
+fe80::/64 dev tun0 table 1024 proto kernel metric 256 pref medium
+default dev tun0 table 1024 proto static metric 1024 pref medium
+fd00:8::2 dev tun0 table 1000000024 proto static metric 1024 pref medium
+local fd00:8::2 dev tun0 table local proto kernel metric 0 pref medium
+local fe80::8b0e:a4bc:c67d:7c3a dev tun0 table local proto kernel metric 0 pref medium
+multicast ff00::/8 dev tun0 table local proto kernel metric 256 pref medium

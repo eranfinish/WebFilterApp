@@ -1,0 +1,56 @@
+== date
+2026-11-20T12:56:13+02:00
+== adb devices
+List of devices attached
+HA1VXZS5               device product:TB328XU model:TB328XU device:TB328XU transport_id:5
+
+ro.product.manufacturer=Lenovo
+ro.product.model=TB328XU
+ro.product.device=TB328XU
+ro.build.version.release=12
+ro.build.version.sdk=31
+ro.build.version.security_patch=2025-06-05
+ro.build.display.id=TB328XU_S200189_250825_ROW
+ro.boot.verifiedbootstate=green
+ro.boot.flash.locked=1
+ro.frp.pst=/dev/block/by-name/persist
+== users
+Users:
+	UserInfo{0:<name redacted>:c13} running
+	UserInfo{10:<name redacted>:410}
+	UserInfo{11:<name redacted>:410}
+	UserInfo{12:<name redacted>:410}
+== max users
+Maximum supported users: 4
+== multi-user support
+
+== device owners
+3 owners:
+User 10: admin=com.google.android.gms/.kids.account.receiver.ProfileOwnerReceiver,ProfileOwner
+User 11: admin=com.google.android.gms/.kids.account.receiver.ProfileOwnerReceiver,ProfileOwner
+User 12: admin=com.google.android.gms/.kids.account.receiver.ProfileOwnerReceiver,ProfileOwner
+== active admins (dumpsys device_policy, admin lines only)
+    admin=ComponentInfo{com.google.android.gms/com.google.android.gms.kids.account.receiver.ProfileOwnerReceiver}
+    admin=ComponentInfo{com.google.android.gms/com.google.android.gms.kids.account.receiver.ProfileOwnerReceiver}
+    admin=ComponentInfo{com.google.android.gms/com.google.android.gms.kids.account.receiver.ProfileOwnerReceiver}
+  Enabled Device Admins (User 0, provisioningState: 0):
+  Enabled Device Admins (User 10, provisioningState: 0):
+      testOnlyAdmin=false
+      mAdminCanGrantSensorsPermissions=false
+  Enabled Device Admins (User 11, provisioningState: 0):
+      testOnlyAdmin=false
+      mAdminCanGrantSensorsPermissions=false
+  Enabled Device Admins (User 12, provisioningState: 0):
+      testOnlyAdmin=false
+      mAdminCanGrantSensorsPermissions=false
+    Admin can grant sensors permission: {0=false}
+== accounts: count and types only (no names)
+      5 Account {name=<redacted>, type=com.google}
+      1 Account {name=<redacted>, type=com.lenovo.lsf.account}
+== device_provisioned / user_setup_complete
+1
+1
+== rimon packages
+none matching
+== third-party package count
+9

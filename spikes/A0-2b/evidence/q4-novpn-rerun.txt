@@ -1,0 +1,11 @@
+﻿label=novpn-rerun
+cpu_before_rtt=pid=4011 utime=12788 stime=12640 (clock ticks, CLK_TCK=100)
+cpu_after_rtt=pid=4011 utime=12788 stime=12641 (clock ticks, CLK_TCK=100)
+cpu_after_bench=pid=4011 utime=12788 stime=12641 (clock ticks, CLK_TCK=100)
+rtt_done=True bench_done=True
+--------- beginning of main
+11-20 11:51:16.808  3333  4540 I A02P    : op=rtt -> RTT n=100 ok=100 fail=0 p50=5.0ms p95=9.7ms
+11-20 11:51:42.065  3333  4562 I A02P    : bench run bytes=52428800 secs=20.88
+11-20 11:52:01.626  3333  4562 I A02P    : bench run bytes=52428800 secs=19.56
+11-20 11:52:20.417  3333  4562 I A02P    : bench run bytes=52428800 secs=18.79
+11-20 11:52:20.418  3333  4562 I A02P    : op=bench -> BENCH n=3 ok=3 fail=0 median=2.68 MB/s runs=[2.51, 2.68, 2.79]

@@ -1,0 +1,2 @@
+﻿FINDING 3 (host clock ~13:20-13:45): the relaunched emulator-5580 never reached adb. It sat for 20+ minutes at 'Vulkan emulation initialized' after 'Showing crashdialog to get consent' (the crash-report consent dialog from A0.2 finding 9). Its adb device never appeared.
+Action: stopped only my own emulator processes with -port 5580 (pids 35136, 40600). Relaunched once more with the same command plus '-crash-report-mode never', the flag A0.2 used for the same dialog. Emulator-5590 (other session) was not touched.

@@ -1,0 +1,146 @@
+﻿device_seen=0.0 boot_completed=2 vpn_pid_seen=4.1 first_dns_example_org_OK=14 first_http_example_org_OK=16.8 (seconds after device seen in adb, host clock, polled)
+11-20 11:55:19.370   565   565 I adbd    : adbd service requested 'shell,v2,raw:am broadcast -W -n com.webfilter.spike.a02b/.CmdReceiver --es op own_test --es ip 172.66.147.243 --ei port 443'
+11-20 11:55:19.387   708  2215 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b/.CmdReceiver (has extras) }
+11-20 11:55:19.388   708  2215 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b/.CmdReceiver (has extras) }: 0
+11-20 11:55:19.394  5270  5270 I A02B    : op=own_test -> OWN_TEST broadcast sent
+11-20 11:55:19.916  5183  5297 I A02B    : OWN protected OK in 14 ms
+11-20 11:55:19.916  5183  5297 I A02B    : OWN protected counters before=[dns_relayed=2 tcp853_rst=2 tcp_connect_ok=1 tcp_in_bytes_accepted=4 tcp_out_bytes_sent=3 tcp_rst_sent=2 tcp_syn=1 udp_in=2 udp_out=2 v6_rejected=7] after=[dns_relayed=2 tcp853_rst=2 tcp_connect_ok=1 tcp_in_bytes_accepted=4 tcp_out_bytes_sent=3 tcp_rst_sent=2 tcp_syn=1 udp_in=2 udp_out=2 v6_rejected=7]
+11-20 11:55:19.926  5183  5297 I A02B    : OWN plain-default-route OK in 9 ms
+11-20 11:55:19.926  5183  5297 I A02B    : OWN plain-default-route counters before=[dns_relayed=2 tcp853_rst=2 tcp_connect_ok=1 tcp_in_bytes_accepted=4 tcp_out_bytes_sent=3 tcp_rst_sent=2 tcp_syn=1 udp_in=2 udp_out=2 v6_rejected=7] after=[dns_relayed=2 tcp853_rst=2 tcp_connect_ok=2 tcp_in_bytes_accepted=4 tcp_out_bytes_sent=3 tcp_rst_sent=2 tcp_syn=2 udp_in=2 udp_out=2 v6_rejected=7]
+11-20 11:55:19.960  5183  5297 I A02B    : OWN bound-to-wifi-network OK in 28 ms
+11-20 11:55:19.961  5183  5297 I A02B    : OWN bound-to-wifi-network counters before=[dns_relayed=2 tcp853_rst=2 tcp_connect_ok=2 tcp_in_bytes_accepted=4 tcp_out_bytes_sent=3 tcp_rst_sent=2 tcp_syn=2 udp_in=2 udp_out=2 v6_rejected=7] after=[dns_relayed=2 tcp853_rst=2 tcp_connect_ok=2 tcp_in_bytes_accepted=4 tcp_out_bytes_sent=3 tcp_rst_sent=2 tcp_syn=2 udp_in=2 udp_out=2 v6_rejected=7]
+11-20 11:55:19.961  5183  5297 I A02B    : OWN counters before=[dns_relayed=2 tcp853_rst=2 tcp_connect_ok=1 tcp_in_bytes_accepted=4 tcp_out_bytes_sent=3 tcp_rst_sent=2 tcp_syn=1 udp_in=2 udp_out=2 v6_rejected=7] after=[dns_relayed=2 tcp853_rst=2 tcp_closed=1 tcp_connect_ok=2 tcp_in_bytes_accepted=4 tcp_out_bytes_sent=3 tcp_rst_sent=2 tcp_syn=2 udp_in=2 udp_out=2 v6_rejected=7]
+11-20 11:55:31.443   565   565 I adbd    : adbd service requested 'shell,v2:export ANDROID_LOG_TAGS=''; exec logcat '-d' '--pid' '5183' '-s' 'A02B:I' 'A02B:W''
+11-20 11:55:34.292   565   565 I adbd    : adbd service requested 'shell,v2,raw:pidof com.webfilter.spike.a02b:vpn'
+11-20 11:56:08.698   708   820 D ActivityManager: freezing 5270 com.webfilter.spike.a02b
+11-20 11:58:42.834  1456  1456 I GoogleInputMethodService: GoogleInputMethodService.onStartInput():1446 onStartInput(EditorInfo{EditorInfo{packageName=com.webfilter.spike.a02b.probe, inputType=0, inputTypeString=NULL, enableLearning=false, autoCorrection=false, autoComplete=false, imeOptions=12000000, privateImeOptions=null, actionName=UNSPECIFIED, actionLabel=null, initialSelStart=-1, initialSelEnd=-1, initialCapsMode=0, label=null, fieldId=0, fieldName=null, extras=null, hintText=null, hintLocales=[]}}, false)
+11-20 11:58:42.844   708  2044 W PackageConfigPersister: App-specific configuration not found for packageName: com.webfilter.spike.a02b.probe and userId: 0
+11-20 11:58:50.054  1152  1152 D RecentsView: onGestureAnimationStart - groupedTaskInfo: Desk ID= -1, Desk Display ID=-1, Tasks=[id=33 winMode=fullscreen visReq=true vis=true excluded=false baseIntent=com.webfilter.spike.a02b.probe/.WebProbeActivity], Type=FULLSCREEN, Minimized Task IDs=null
+11-20 11:58:50.055  1152  1152 D RecentsView: showCurrentTask(onGestureAnimationStart) - groupedTaskInfo: Desk ID= -1, Desk Display ID=-1, Tasks=[id=33 winMode=fullscreen visReq=true vis=true excluded=false baseIntent=com.webfilter.spike.a02b.probe/.WebProbeActivity], Type=FULLSCREEN, Minimized Task IDs=null
+11-20 11:58:50.101   708   733 V WindowManager:         {WCT{RemoteToken{3326f30 Task{d743f0b #33 type=standard A=10238:com.webfilter.spike.a02b.probe}}} m=TO_BACK f=FLAG_CHANGED_INTERACTIVE leash=Surface(name=Task=33#96)/@0x4085dad sb=Rect(0, 0 - 1080, 2400) eb=Rect(0, 0 - 1080, 2400) epz=Point(1080, 2400) d=0 taskParent=-1 winMode=1 userId=0},
+11-20 11:58:50.243   708   795 I InputDispatcher: Channel [Gesture Monitor] swipe-up is stealing input gesture for device 4 from [8bb1271 com.webfilter.spike.a02b.probe/com.webfilter.spike.a02b.probe.WebProbeActivity, [Gesture Monitor] edge-swipe]
+11-20 11:58:50.244  1152  1152 D RecentsView: onGestureAnimationStart - groupedTaskInfo: Desk ID= -1, Desk Display ID=-1, Tasks=[id=33 winMode=fullscreen visReq=false vis=false excluded=false baseIntent=com.webfilter.spike.a02b.probe/.WebProbeActivity], Type=FULLSCREEN, Minimized Task IDs=null
+11-20 11:58:50.245  1152  1152 D RecentsView: showCurrentTask(onGestureAnimationStart) - groupedTaskInfo: Desk ID= -1, Desk Display ID=-1, Tasks=[id=33 winMode=fullscreen visReq=false vis=false excluded=false baseIntent=com.webfilter.spike.a02b.probe/.WebProbeActivity], Type=FULLSCREEN, Minimized Task IDs=null
+11-20 11:59:01.443  5183  5190 W .spike.a02b:vpn: Suspending all threads took: 6.890ms
+11-20 11:59:07.146  5183  5190 W .spike.a02b:vpn: Suspending all threads took: 10.128ms
+11-20 11:59:17.284  5183  5190 W .spike.a02b:vpn: Suspending all threads took: 7.644ms
+11-20 11:59:22.839  5183  5190 W .spike.a02b:vpn: Suspending all threads took: 15.873ms
+11-20 11:59:27.569  5183  5190 W .spike.a02b:vpn: Suspending all threads took: 8.058ms
+11-20 11:59:30.057  5183  5190 W .spike.a02b:vpn: Suspending all threads took: 6.932ms
+11-20 11:59:37.566  5183  5190 W .spike.a02b:vpn: Suspending all threads took: 7.193ms
+11-20 12:00:00.063  5183  5190 W .spike.a02b:vpn: Suspending all threads took: 5.130ms
+11-20 12:00:00.927   708   820 D ActivityManager: freezing 3333 com.webfilter.spike.a02b.probe
+11-20 12:00:07.157  5183  5190 W .spike.a02b:vpn: Suspending all threads took: 7.082ms
+11-20 12:00:17.080  5183  5190 W .spike.a02b:vpn: Suspending all threads took: 9.025ms
+11-20 12:00:21.566  5183  5190 W .spike.a02b:vpn: Suspending all threads took: 6.229ms
+11-20 12:00:48.077  5183  5190 W .spike.a02b:vpn: Suspending all threads took: 5.620ms
+11-20 12:00:55.273  5183  5190 W .spike.a02b:vpn: Suspending all threads took: 8.072ms
+11-20 12:01:17.522  5183  5190 W .spike.a02b:vpn: Suspending all threads took: 6.423ms
+11-20 12:01:18.031  5183  5190 W .spike.a02b:vpn: Suspending all threads took: 6.043ms
+11-20 12:01:18.172  5183  5190 W .spike.a02b:vpn: Suspending all threads took: 6.758ms
+11-20 12:01:25.529  5183  5190 W .spike.a02b:vpn: Suspending all threads took: 13.599ms
+11-20 12:01:27.792  5183  5190 W .spike.a02b:vpn: Suspending all threads took: 5.321ms
+11-20 12:01:43.556  5183  5190 W .spike.a02b:vpn: Suspending all threads took: 5.591ms
+11-20 12:01:45.753  5183  5190 W .spike.a02b:vpn: Suspending all threads took: 6.500ms
+11-20 12:01:47.323  5183  5190 W .spike.a02b:vpn: Suspending all threads took: 9.180ms
+11-20 12:01:47.723  5183  5190 W .spike.a02b:vpn: Suspending all threads took: 5.677ms
+11-20 12:02:04.868  5183  5190 W .spike.a02b:vpn: Suspending all threads took: 7.195ms
+11-20 12:02:07.026  5183  5190 W .spike.a02b:vpn: Suspending all threads took: 8.154ms
+11-20 12:02:30.621  5183  5190 W .spike.a02b:vpn: Suspending all threads took: 6.207ms
+11-20 12:02:37.852  5183  5190 W .spike.a02b:vpn: Suspending all threads took: 8.456ms
+11-20 12:03:23.746  5183  5190 W .spike.a02b:vpn: Suspending all threads took: 7.583ms
+11-20 12:03:24.560  5183  5190 W .spike.a02b:vpn: Suspending all threads took: 8.915ms
+11-20 12:03:40.856  3965  3983 I VerificationCheck: Verifying com.webfilter.spike.a02b (id: 7b1ba9b7a215e32c1c9a6a78c714f80f)
+11-20 12:03:40.856  3965  3983 I VerificationCheck: Verification finished for com.webfilter.spike.a02b. Result: Pass(reason=FORCED_BACKPORT, message=null)
+11-20 12:03:40.881   708  5609 W CorePackageUpdate: Package com.webfilter.spike.a02b no process with activities in it.
+11-20 12:03:40.881   708  5609 D KillAppBlocker: Adding uid 10237 for package com.webfilter.spike.a02b
+11-20 12:03:40.882   708   736 I ActivityManager: Force stopping com.webfilter.spike.a02b appid=10237 user=-1: killDueToPackageUpdate
+11-20 12:03:40.883   708   736 I ActivityManager: Killing 5183:com.webfilter.spike.a02b:vpn/u0a237 (adj 100): stop com.webfilter.spike.a02b due to killDueToPackageUpdate
+11-20 12:03:40.886   708   736 I ActivityManager: Killing 5270:com.webfilter.spike.a02b/u0a237 (adj 905): stop com.webfilter.spike.a02b due to killDueToPackageUpdate
+11-20 12:03:40.887   708   771 I AppsFilter: interaction: PackageSetting{575968a com.android.microdroid.empty_payload/10209} -> PackageSetting{dfc00b5 com.webfilter.spike.a02b/10237} BLOCKED
+11-20 12:03:40.887   708   771 I AppsFilter: interaction: PackageSetting{ebdb080 com.webfilter.spike.a02b.probe/10238} -> PackageSetting{dfc00b5 com.webfilter.spike.a02b/10237} BLOCKED
+11-20 12:03:40.891   708   771 I AppsFilter: interaction: PackageSetting{575968a com.android.microdroid.empty_payload/10209} -> PackageSetting{ae8b63a com.webfilter.spike.a02b/10237} BLOCKED
+11-20 12:03:40.891   708   771 I AppsFilter: interaction: PackageSetting{ebdb080 com.webfilter.spike.a02b.probe/10238} -> PackageSetting{ae8b63a com.webfilter.spike.a02b/10237} BLOCKED
+11-20 12:03:40.892   708   771 I PackageManager: Update package com.webfilter.spike.a02b code path from /data/app/~~31vIXrhlBesXmW5iuWsAZA==/com.webfilter.spike.a02b-cljgAHmawvR7SkM2lGcD7A== to /data/app/~~yITUKnNamZPjhaZbgr1BTQ==/com.webfilter.spike.a02b-jlGZm0tec48Frxbn2XLuRQ==; Retain data and using new
+11-20 12:03:40.898   708  1443 V ActivityManager: Got obituary of 5270:com.webfilter.spike.a02b
+11-20 12:03:40.937   708   733 W AppOps  : Operation not started: uid=10237 pkg=com.webfilter.spike.a02b(null) op=ESTABLISH_VPN_SERVICE
+11-20 12:03:40.941   708   771 I PackageManager: installation completed for package:com.webfilter.spike.a02b. Final code path: /data/app/~~yITUKnNamZPjhaZbgr1BTQ==/com.webfilter.spike.a02b-jlGZm0tec48Frxbn2XLuRQ==
+11-20 12:03:40.942   708   771 I AppsFilter: interaction: PackageSetting{abdce60 com.android.microdroid.empty_payload/10209} -> PackageSetting{76f8125 com.webfilter.spike.a02b/10237} BLOCKED
+11-20 12:03:40.942   708   771 I AppsFilter: interaction: PackageSetting{29b7bde com.webfilter.spike.a02b.probe/10238} -> PackageSetting{76f8125 com.webfilter.spike.a02b/10237} BLOCKED
+11-20 12:03:40.946   708   771 I ActivityManager: Force stopping com.webfilter.spike.a02b appid=10237 user=0: pkg removed
+11-20 12:03:40.958   708   795 V ActivityManager: Got obituary of 5183:com.webfilter.spike.a02b:vpn
+11-20 12:03:40.970   708   941 I SdkSandboxManager: No SDKs used. Skipping SDK data reconcilation for CallingInfo{mUid=10237, mPackageName='com.webfilter.spike.a02b, mAppProcessToken='null'}
+11-20 12:03:40.971   708   933 D ShortcutService: replacing package: com.webfilter.spike.a02b userId=0
+11-20 12:03:40.975  1133  1279 I SatelliteAppTracker: onPackageUpdateFinished : com.webfilter.spike.a02b
+11-20 12:03:40.975  1133  1279 I SatelliteAppTracker: onPackageModified : com.webfilter.spike.a02b
+11-20 12:03:40.991  1133  1255 V MessagingReadRestrictionAllowlistMonitor: onBroadcastReceived: No AppOp changes for package: com.webfilter.spike.a02b
+11-20 12:03:41.043  1393  1393 I SafetyLabelChangedBroadcastReceiver: received broadcast packageName: com.webfilter.spike.a02b, current user: UserHandle{0}, packageChangeEvent: UPDATE, intent user: UserHandle{0}
+11-20 12:03:41.077   708   708 I Telecom : CarModeTracker: Package com.webfilter.spike.a02b is not tracked.: SSH.oR@AK8
+11-20 12:03:41.077   708   890 D VpnManagerService: Restarting always-on VPN package com.webfilter.spike.a02b for user 0
+11-20 12:03:41.087  1133  1133 D CarrierSvcBindHelper: onPackageUpdateFinished: com.webfilter.spike.a02b
+11-20 12:03:41.089   708   941 I SdkSandboxManager: No SDKs used. Skipping SDK data reconcilation for CallingInfo{mUid=10237, mPackageName='com.webfilter.spike.a02b, mAppProcessToken='null'}
+11-20 12:03:41.097  1133  1133 D CarrierSvcBindHelper: onPackageModified: com.webfilter.spike.a02b
+11-20 12:03:41.105   708   708 D AS.AudioService: received android.intent.action.PACKAGE_ADDED replacing: true archival: false for package com.webfilter.spike.a02b with uid 10237
+11-20 12:03:41.150   708   708 D AS.AudioService: received android.intent.action.PACKAGE_REPLACED replacing: true archival: false for package com.webfilter.spike.a02b with uid 10237
+11-20 12:03:41.153   708   708 W AlarmManager: Package com.webfilter.spike.a02b, uid 10237 lost permission to set exact alarms!
+11-20 12:03:41.216   708   744 I ActivityManager: Start proc 5629:com.webfilter.spike.a02b:vpn/u0a237 for started-service {com.webfilter.spike.a02b/com.webfilter.spike.a02b.vpn.TunVpnService}
+11-20 12:03:41.230  5629  5629 I Zygote  : Process 5629 created for com.webfilter.spike.a02b:vpn
+11-20 12:03:41.230  5629  5629 I .spike.a02b:vpn: Late-enabling -Xcheck:jni
+11-20 12:03:41.232   708   849 W PackageConfigPersister: App-specific configuration not found for packageName: com.webfilter.spike.a02b and userId: 0
+11-20 12:03:41.251  5629  5629 I .spike.a02b:vpn: Using generational CollectorTypeCMC GC.
+11-20 12:03:41.252  5629  5629 W .spike.a02b:vpn: Unexpected CPU variant for x86: x86_64.
+11-20 12:03:41.252  5629  5629 W .spike.a02b:vpn: Known variants: atom, sandybridge, silvermont, goldmont, goldmont-plus, goldmont-without-sha-xsaves, tremont, kabylake, alderlake, pantherlake, default
+11-20 12:03:41.258  1521  5633 I AiAiEcho: AppIndexer Package:[com.webfilter.spike.a02b] UserProfile:[0] Enabled:[true].
+11-20 12:03:41.258  1521  5633 I AiAiEcho: AppFetcherImplV2 updateApps package:[com.webfilter.spike.a02b], userId:[0], reason:[package is updated.].
+11-20 12:03:41.291  1133  1346 D ImsResolver: maybeAddedImsService, packageName: com.webfilter.spike.a02b
+11-20 12:03:41.291  1133  1346 V ImsResolver: searchForImsServices: package=com.webfilter.spike.a02b, users=[UserHandle{0}]
+11-20 12:03:41.293  1133  1346 V ImsResolver: searchForImsServices: package=com.webfilter.spike.a02b, users=[UserHandle{0}]
+11-20 12:03:41.300  1133  1133 W VvmPkgInstalledRcvr: carrierVvmPkgAdded: carrier vvm packages doesn't contain com.webfilter.spike.a02b
+11-20 12:03:41.352  1133  1133 D SatelliteController: packageStateChanged: package:com.webfilter.spike.a02b defaultSmsPackageName: com.google.android.apps.messaging satelliteGatewayServicePackageName: 
+11-20 12:03:41.450  2342  2475 I Finsky:background: [48] IQ:PSL: skipping onPackageRemoved(replacing=true) for untracked package=com.webfilter.spike.a02b
+11-20 12:03:41.538  5629  5629 D nativeloader: Configuring clns-9 for other apk /data/app/~~yITUKnNamZPjhaZbgr1BTQ==/com.webfilter.spike.a02b-jlGZm0tec48Frxbn2XLuRQ==/base.apk. target_sdk_version=36, uses_libraries=, library_path=/data/app/~~yITUKnNamZPjhaZbgr1BTQ==/com.webfilter.spike.a02b-jlGZm0tec48Frxbn2XLuRQ==/lib/x86_64, permitted_path=/data:/mnt/expand:/data/user/0/com.webfilter.spike.a02b
+11-20 12:03:41.565  5629  5629 V GraphicsEnvironment: com.webfilter.spike.a02b is not listed in per-application setting
+11-20 12:03:41.566  2057  5652 I Finsky  : [156] Asset module broadcast after update successful for package com.webfilter.spike.a02b.
+11-20 12:03:41.599  5629  5629 I A02B    : onCreate pid=5629 uptimeMs=1122390
+11-20 12:03:41.602  5629  5629 I A02B    : onStartCommand startId=1 running=false
+11-20 12:03:41.626  5629  5629 I A02B    : upstream dns at start=/10.0.2.3 uptimeMs=1122407
+11-20 12:03:41.669  1308  5667 I ProximityAuth: [RecentAppsMediator] Package added: (user=UserHandle{0}) com.webfilter.spike.a02b
+11-20 12:03:41.704  1308  5677 W SQLiteLog: (28) double-quoted string literal: "com.webfilter.spike.a02b"
+11-20 12:03:41.728   708   796 D ConnectivityService: registerNetworkAgent NetworkAgentInfo{network{107}  handle{462967197709}  ni{VPN CONNECTING extra: VPN:com.webfilter.spike.a02b} created=2026-11-20T12:03:41.728Z Score(Policies : IS_VPN ; KeepConnected : 0)   lp{{InterfaceName: tun0 LinkAddresses: [ 10.8.0.2/32,fd00:8::2/128 ] DnsAddresses: [ /10.8.0.1 ] Domains:  MTU: 1400 Routes: [ 0.0.0.0/0 -> 0.0.0.0 tun0 mtu 0,::/0 -> :: tun0 mtu 0 ]}}  nc{[ Transports: VPN Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED&NOT_VCN_MANAGED&NOT_BANDWIDTH_CONSTRAINED TransportInfo: <VpnTransportInfo{type=1, sessionId=A0.2b full tunnel, bypassable=false longLivedTcpConnectionsExpensive=false}> Uids: <{0-99999}> OwnerUid: 10237 AdminUids: [10237] UnderlyingNetworks: Null]}  factorySerialNumber=4}
+11-20 12:03:41.728   708   796 I Vpn     : Established by com.webfilter.spike.a02b on tun0
+11-20 12:03:41.884  5629  5629 I A02B    : establish ok pid=5629 uptimeMs=1122675
+11-20 12:03:41.885  5629  5629 I A02B    : SELFTEST protect(unbound Socket)=false protect(bound Socket)=true
+11-20 12:03:41.887  5629  5629 I A02B    : SELFTEST protect(Socket)=true protect(DatagramSocket)=true
+11-20 12:03:42.135  5629  5686 I A02B    : upstream dns resolved /10.0.2.3 uptimeMs=1122926
+11-20 12:04:21.675  5629  5639 W .spike.a02b:vpn: Suspending all threads took: 42.971ms
+11-20 12:04:23.406  5629  5639 W .spike.a02b:vpn: Suspending all threads took: 35.593ms
+11-20 12:04:24.126   565   565 I adbd    : adbd service requested 'shell,v2,raw:pidof com.webfilter.spike.a02b:vpn'
+11-20 12:04:26.271   565   565 I adbd    : adbd service requested 'shell,v2,raw:am start -n com.webfilter.spike.a02b.probe/.WebProbeActivity --es url https://example.org/'
+11-20 12:04:27.150  5629  5639 W .spike.a02b:vpn: Suspending all threads took: 113.085ms
+11-20 12:04:28.525   708  1441 V ActivityTaskManager: TaskLaunchParamsModifier: phase=3 task=Task{d743f0b #33 type=standard A=10238:com.webfilter.spike.a02b.probe} activity=ActivityRecord{84498855 u0 com.webfilter.spike.a02b.probe/.WebProbeActivity t-1} display-from-task=0 display-id=0 task-display-area-windowing-mode=1 suggested-display-area=DefaultTaskDisplayArea@193138626 inherit-from-task=fullscreen non-freeform-task-display-area display-area=DefaultTaskDisplayArea@193138626 skip-bounds-fullscreen
+11-20 12:04:28.568   708  1441 I ActivityTaskManager: START u0 {flg=0x10000000 xflg=0x4 cmp=com.webfilter.spike.a02b.probe/.WebProbeActivity (has extras)} with LAUNCH_MULTIPLE from uid 2000 (com.android.shell) (BAL_ALLOW_PERMISSION) result code=2
+11-20 12:04:28.569   990  1035 V WindowManagerShell: Transition requested (#20): android.os.BinderProxy@9722e3c TransitionRequestInfo { type = OPEN, triggerTask = TaskInfo{userId=0 taskId=33 effectiveUid=10238 displayId=0 isRunning=true baseIntent=Intent { flg=0x10000000 cmp=com.webfilter.spike.a02b.probe/.WebProbeActivity } baseActivity=ComponentInfo{com.webfilter.spike.a02b.probe/com.webfilter.spike.a02b.probe.WebProbeActivity} topActivity=ComponentInfo{com.webfilter.spike.a02b.probe/com.webfilter.spike.a02b.probe.WebProbeActivity} origActivity=null realActivity=ComponentInfo{com.webfilter.spike.a02b.probe/com.webfilter.spike.a02b.probe.WebProbeActivity} realActivityIsAppLockEnabled=false numActivities=1 lastActiveTime=831661 supportsMultiWindow=true supportsMultiWindowWithoutConstraints=true resizeMode=1 isResizeable=true minWidth=-1 minHeight=-1 defaultMinSize=220 token=WCT{android.os.BinderProxy@e37fb76} topActivityType=1 pictureInPictureParams=null shouldDockBigOverlays=false launchIntoPipHostTaskId=-1 lastParentTaskIdBeforePip=-1 displayCutoutSafeInsets=Rect(0, 0 - 0, 0) topActivityInfo=ActivityInfo{e1c27c5 com.webfilter.spike.a02b.probe.WebProbeActivity} launchCookies=[] positionInParent=Point(0, 0) parentTaskId=-1 isFocused=false isInteractive=false isVisible=false isVisibleRequested=false isTopActivityNoDisplay=false isSleeping=false locusId=null displayAreaFeatureId=1 isTopActivityTransparent=false isActivityStackTransparent=false lastNonFullscreenBounds=null leafTaskBoundsFromOptions= false capturedLink=null capturedLinkTimestamp=0 requestedVisibleTypes=503 topActivityRequestOpenInBrowserEducationTimestamp=0 appCompatTaskInfo=AppCompatTaskInfo { topActivityInSizeCompat=false isLeafTask= true eligibleForLetterboxEducation= false isLetterboxEducationEnabled= true isLetterboxDoubleTapEnabled= false eligibleForUserAspectRatioButton= false topActivityBoundsLetterboxed= false isFromLetterboxDoubleTap= false topActivityLetterboxVerticalPosition= -1 topActivityLetterboxHorizontalPosition= -1 topActivityLetterboxWidth=-1 topActivityLetterboxHeight=-1 topActivityAppBounds=Rect(0, 0 - 1080, 2400) isUserFullscreenOverrideEnabled=false isSystemFullscreenOverrideEnabled=false hasMinAspectRatioOverride=false topActivityLetterboxBounds=null topNonResizableActivityAspectRatio=-1.0} topActivityMainWindowFrame=null isAppBubble=false}, pipChange = null, remoteTransitionInfo = null, displayChanges = null, requestedLocation = null, userChange = null, windowingLayerChange = null, fullscreenRequestChange = null, flags = 0, debugId = 20 }
+11-20 12:04:28.907  5629  5639 W .spike.a02b:vpn: Suspending all threads took: 9.606ms
+11-20 12:04:30.041   708   743 D ActivityManager: sync unfroze 3333 com.webfilter.spike.a02b.probe for 3
+11-20 12:04:30.103   990  1035 D WindowManagerShell: onActivityRestartAttempt: topActivity=ComponentInfo{com.webfilter.spike.a02b.probe/com.webfilter.spike.a02b.probe.WebProbeActivity}, wasVisible=false, displayId=0, pipDisplayLayoutState#displayId=0
+11-20 12:04:31.377  5629  5639 W .spike.a02b:vpn: Suspending all threads took: 45.536ms
+11-20 12:04:32.735   708   733 V WindowManager: Sent Transition (#20) createdAt=11-20 12:04:27.976 via request=TransitionRequestInfo { type = OPEN, triggerTask = TaskInfo{userId=0 taskId=33 effectiveUid=10238 displayId=0 isRunning=true baseIntent=Intent { flg=0x10000000 cmp=com.webfilter.spike.a02b.probe/.WebProbeActivity } baseActivity=ComponentInfo{com.webfilter.spike.a02b.probe/com.webfilter.spike.a02b.probe.WebProbeActivity} topActivity=ComponentInfo{com.webfilter.spike.a02b.probe/com.webfilter.spike.a02b.probe.WebProbeActivity} origActivity=null realActivity=ComponentInfo{com.webfilter.spike.a02b.probe/com.webfilter.spike.a02b.probe.WebProbeActivity} realActivityIsAppLockEnabled=false numActivities=1 lastActiveTime=831661 supportsMultiWindow=true supportsMultiWindowWithoutConstraints=true resizeMode=1 isResizeable=true minWidth=-1 minHeight=-1 defaultMinSize=220 token=WCT{RemoteToken{3326f30 Task{d743f0b #33 type=standard A=10238:com.webfilter.spike.a02b.probe}}} topActivityType=1 pictureInPictureParams=null shouldDockBigOverlays=false launchIntoPipHostTaskId=-1 lastParentTaskIdBeforePip=-1 displayCutoutSafeInsets=Rect(0, 0 - 0, 0) topActivityInfo=ActivityInfo{97a27a9 com.webfilter.spike.a02b.probe.WebProbeActivity} launchCookies=[] positionInParent=Point(0, 0) parentTaskId=-1 isFocused=false isInteractive=false isVisible=false isVisibleRequested=false isTopActivityNoDisplay=false isSleeping=false locusId=null displayAreaFeatureId=1 isTopActivityTransparent=false isActivityStackTransparent=false lastNonFullscreenBounds=null leafTaskBoundsFromOptions= false capturedLink=null capturedLinkTimestamp=0 requestedVisibleTypes=503 topActivityRequestOpenInBrowserEducationTimestamp=0 appCompatTaskInfo=AppCompatTaskInfo { topActivityInSizeCompat=false isLeafTask= true eligibleForLetterboxEducation= false isLetterboxEducationEnabled= true isLetterboxDoubleTapEnabled= false eligibleForUserAspectRatioButton= false topActivityBoundsLetterboxed= false isFromLetterboxDoubleTap= false topActivityLetterboxVerticalPosition= -1 topActivityLetterboxHorizontalPosition= -1 topActivityLetterboxWidth=-1 topActivityLetterboxHeight=-1 topActivityAppBounds=Rect(0, 0 - 1080, 2400) isUserFullscreenOverrideEnabled=false isSystemFullscreenOverrideEnabled=false hasMinAspectRatioOverride=false topActivityLetterboxBounds=null topNonResizableActivityAspectRatio=-1.0} topActivityMainWindowFrame=null isAppBubble=false}, pipChange = null, remoteTransitionInfo = null, displayChanges = null, requestedLocation = null, userChange = null, windowingLayerChange = null, fullscreenRequestChange = null, flags = 0, debugId = 20 }
+11-20 12:04:32.741   708   733 V WindowManager:         {WCT{RemoteToken{3326f30 Task{d743f0b #33 type=standard A=10238:com.webfilter.spike.a02b.probe}}} m=TO_FRONT f=MOVE_TO_TOP|FLAG_CHANGED_INTERACTIVE leash=Surface(name=Task=33#96)/@0x4085dad sb=Rect(0, 0 - 1080, 2400) eb=Rect(0, 0 - 1080, 2400) epz=Point(1080, 2400) d=0 taskParent=-1 winMode=1 userId=0},
+11-20 12:04:32.959   565   565 I adbd    : adbd service requested 'shell,v2,raw:am broadcast -n com.webfilter.spike.a02b.probe/.ProbeReceiver --es op dns --es host example.org'
+11-20 12:04:33.694   708  2054 D WindowManager: setClientSurface Surface(name=VRI-com.webfilter.spike.a02b.probe/com.webfilter.spike.a02b.probe.WebProbeActivity#159)/@0xc60e276 for 8bb1271 com.webfilter.spike.a02b.probe/com.webfilter.spike.a02b.probe.WebProbeActivity
+11-20 12:04:33.709  5629  5639 W .spike.a02b:vpn: Suspending all threads took: 43.263ms
+11-20 12:04:33.750   708   795 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+11-20 12:04:33.756   708   795 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }: 0
+11-20 12:04:34.296  5629  5639 W .spike.a02b:vpn: Suspending all threads took: 5.694ms
+11-20 12:04:34.468   708   840 I ImeTracker: com.webfilter.spike.a02b.probe:56fddde2: onRequestHide at ORIGIN_SERVER reason HIDE_UNSPECIFIED_WINDOW fromUser false userId 0 displayId 0
+11-20 12:04:34.564  3333  3333 I ImeTracker: com.webfilter.spike.a02b.probe:56fddde2: onCancelled at PHASE_CLIENT_ALREADY_HIDDEN
+11-20 12:04:34.640  1456  1456 I GoogleInputMethodService: GoogleInputMethodService.onStartInput():1446 onStartInput(EditorInfo{EditorInfo{packageName=com.webfilter.spike.a02b.probe, inputType=0, inputTypeString=NULL, enableLearning=false, autoCorrection=false, autoComplete=false, imeOptions=12000000, privateImeOptions=null, actionName=UNSPECIFIED, actionLabel=null, initialSelStart=-1, initialSelEnd=-1, initialCapsMode=0, label=null, fieldId=0, fieldName=null, extras=null, hintText=null, hintLocales=[]}}, false)
+11-20 12:04:34.731   708   794 W PackageConfigPersister: App-specific configuration not found for packageName: com.webfilter.spike.a02b.probe and userId: 0
+11-20 12:04:34.833  3333  5759 I A02P    : op=dns -> OK 172.66.157.237, 104.20.26.136, 2606:4700:10::6814:1a88, 2606:4700:10::ac42:9ded
+11-20 12:04:36.010   565   565 I adbd    : adbd service requested 'shell,v2:export ANDROID_LOG_TAGS=''; exec logcat '-d' '-s' 'A02P:I''
+11-20 12:04:36.165   565   565 I adbd    : adbd service requested 'shell,v2,raw:am broadcast -n com.webfilter.spike.a02b.probe/.ProbeReceiver --es op http --es url https://example.org/'
+11-20 12:04:36.245   708   794 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+11-20 12:04:36.246   708   794 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }: 0
+11-20 12:04:38.154  3333  5779 I A02P    : op=http -> OK code=200 bytes=577
+11-20 12:04:38.821   565   565 I adbd    : adbd service requested 'shell,v2:export ANDROID_LOG_TAGS=''; exec logcat '-d' '-s' 'A02P:I''
+

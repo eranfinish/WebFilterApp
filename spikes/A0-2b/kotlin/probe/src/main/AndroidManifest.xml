@@ -1,0 +1,21 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!-- Spike A0.2b second app (own uid). Client-side checks: DNS, HTTP, raw TCP, WebView, throughput and RTT. -->
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <uses-permission android:name="android.permission.INTERNET" />
+
+    <application
+        android:label="A0.2b probe"
+        android:allowBackup="false"
+        android:testOnly="true"
+        android:usesCleartextTraffic="true">
+
+        <receiver
+            android:name=".ProbeReceiver"
+            android:exported="true" />
+
+        <activity
+            android:name=".WebProbeActivity"
+            android:exported="true" />
+    </application>
+</manifest>

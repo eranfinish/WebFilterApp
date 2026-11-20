@@ -1,0 +1,2 @@
+﻿vpn pid before=6534 after=6534
+11-20 12:12:35.072   708  1753 W ActivityManager: Ignoring request to force stop protected package com.webfilter.spike.a02b u0

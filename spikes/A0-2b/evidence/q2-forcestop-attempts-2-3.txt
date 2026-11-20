@@ -1,0 +1,2 @@
+﻿force-stop attempt 2 : vpn pid before=5629 after=5629 ; system log 'Ignoring request to force stop' present=False
+force-stop attempt 3 : vpn pid before=5629 after=5629 ; system log 'Ignoring request to force stop' present=False

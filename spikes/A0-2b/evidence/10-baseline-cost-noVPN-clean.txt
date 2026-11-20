@@ -1,0 +1,7 @@
+﻿clean baseline, no VPN, lockdown off, only -s emulator-5580 attached
+--------- beginning of main
+11-20 09:47:01.276  6309  6680 I A02P    : op=rtt -> RTT n=100 ok=100 fail=0 p50=15.2ms p95=27.4ms
+11-20 09:48:32.602  6309  6696 I A02P    : bench run bytes=52428800 secs=72.75
+11-20 09:49:48.116  6309  6696 I A02P    : bench run bytes=52428800 secs=75.51
+11-20 09:51:04.455  6309  6696 I A02P    : bench run bytes=52428800 secs=76.34
+11-20 09:51:04.458  6309  6696 I A02P    : op=bench -> BENCH n=3 ok=3 fail=0 median=0.69 MB/s runs=[0.72, 0.69, 0.69]

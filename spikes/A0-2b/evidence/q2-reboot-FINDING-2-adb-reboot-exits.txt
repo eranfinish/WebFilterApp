@@ -1,0 +1,5 @@
+﻿FINDING 2 (host clock): emulator-5580 exited again during the second reboot-test attempt.
+- On the relaunched (cold-booted) emulator the VPN came up by itself at boot (lockdown persisted, DO intact).
+- The second reboot test ran 'adb reboot' and the emulator process exited; no q2-reboot evidence written.
+- Advisor (A0.2 session) reports the same pattern on this host: 'adb reboot' makes the emulator exit instead of rebooting, also seen in A0.3.
+- Decision: the after-reboot question is answered by a cold start (relaunch with the same command, -port 5580), timed from boot_completed to browsing through the VPN, with NIC capture started before launch.

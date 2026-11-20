@@ -1,0 +1,69 @@
+﻿probe dns example.org :: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+Broadcast completed: result=0
+probe dns blocked.example :: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+Broadcast completed: result=0
+probe dns en.wikipedia.org :: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+Broadcast completed: result=0
+probe http example.org :: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+Broadcast completed: result=0
+probe http en.wikipedia.org :: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+Broadcast completed: result=0
+probe raw 172.66.147.243:443 :: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+Broadcast completed: result=0
+probe raw 10.0.2.2:8080 (own origin) :: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+Broadcast completed: result=0
+--- A02P/A02B logcat ---
+--------- beginning of main
+11-20 09:56:35.087  9653  9671 I A02B    : A02B dns blocked name=blocked.example
+11-20 09:56:35.092  9653  9671 I A02B    : A02B dns blocked name=blocked.example
+11-20 09:56:35.105  6309  9720 I A02P    : op=dns -> FAIL UnknownHostException: Unable to resolve host "blocked.example": No address associated with hostname
+11-20 09:56:35.298  9653  9671 I A02B    : A02B dns blocked name=en.wikipedia.org
+11-20 09:56:35.312  9653  9671 I A02B    : A02B dns blocked name=en.wikipedia.org
+11-20 09:56:35.321  6309  9729 I A02P    : op=dns -> FAIL UnknownHostException: Unable to resolve host "en.wikipedia.org": No address associated with hostname
+11-20 09:56:35.393  6309  9709 I A02P    : op=dns -> OK 172.66.157.237, 104.20.26.136, 2606:4700:10::6814:1a88, 2606:4700:10::ac42:9ded
+11-20 09:56:35.816  6309  9748 I A02P    : op=http -> FAIL UnknownHostException: Unable to resolve host "en.wikipedia.org": No address associated with hostname
+11-20 09:56:36.140  6309  9754 I A02P    : op=raw -> CONNECTED in 104 ms
+11-20 09:56:36.405  6309  9766 I A02P    : op=raw -> CONNECTED in 125 ms
+11-20 09:56:36.653  6309  9738 I A02P    : op=http -> OK code=200 bytes=577
+11-20 09:57:15.346  9653  9671 I A02B    : A02B dns blocked name=en.wikipedia.org
+11-20 09:57:15.355  9653  9671 I A02B    : A02B dns blocked name=en.wikipedia.org
+11-20 09:57:15.643  9653  9671 I A02B    : A02B dns blocked name=en.wikipedia.org
+11-20 09:57:15.674  9653  9671 I A02B    : A02B dns blocked name=en.wikipedia.org
+11-20 09:57:15.747  9653  9671 I A02B    : A02B dns blocked name=en.wikipedia.org
+11-20 09:57:15.865  9653  9671 I A02B    : A02B dns blocked name=en.wikipedia.org
+11-20 09:57:15.880  9653  9671 I A02B    : A02B dns blocked name=en.wikipedia.org
+11-20 09:57:15.935  9653  9671 I A02B    : A02B dns blocked name=en.wikipedia.org
+11-20 09:57:15.935  9653  9671 I A02B    : A02B dns blocked name=en.wikipedia.org
+11-20 09:57:15.984  9653  9671 I A02B    : A02B dns blocked name=en.wikipedia.org
+11-20 09:57:16.027  9653  9671 I A02B    : A02B dns blocked name=en.wikipedia.org
+11-20 09:57:16.138  9653  9671 I A02B    : A02B dns blocked name=en.wikipedia.org
+11-20 09:57:16.260  9653  9671 I A02B    : A02B dns blocked name=en.wikipedia.org
+11-20 09:57:16.278  9653  9671 I A02B    : A02B dns blocked name=en.wikipedia.org
+11-20 09:57:16.316  9653  9671 I A02B    : A02B dns blocked name=en.wikipedia.org
+11-20 09:57:16.324  9653  9671 I A02B    : A02B dns blocked name=en.wikipedia.org
+11-20 09:57:16.339  9653  9671 I A02B    : A02B dns blocked name=en.wikipedia.org
+11-20 09:57:20.026  9653  9671 I A02B    : A02B dns blocked name=en.wikipedia.org
+11-20 09:57:20.026  9653  9671 I A02B    : A02B dns blocked name=en.wikipedia.org
+11-20 09:57:20.032  9653  9671 I A02B    : A02B dns blocked name=en.wikipedia.org
+11-20 09:57:20.045  9653  9671 I A02B    : A02B dns blocked name=en.wikipedia.org
+11-20 09:57:20.074  9653  9671 I A02B    : A02B dns blocked name=en.wikipedia.org
+11-20 09:57:20.157  9653  9671 I A02B    : A02B dns blocked name=en.wikipedia.org
+11-20 09:57:20.180  9653  9671 I A02B    : A02B dns blocked name=en.wikipedia.org
+11-20 09:57:20.180  9653  9671 I A02B    : A02B dns blocked name=en.wikipedia.org
+11-20 09:57:20.236  9653  9671 I A02B    : A02B dns blocked name=en.wikipedia.org
+11-20 09:57:20.240  9653  9671 I A02B    : A02B dns blocked name=en.wikipedia.org
+11-20 09:57:20.320  9653  9671 I A02B    : A02B dns blocked name=en.wikipedia.org
+11-20 09:57:20.326  9653  9671 I A02B    : A02B dns blocked name=en.wikipedia.org
+11-20 09:57:20.341  9653  9671 I A02B    : A02B dns blocked name=en.wikipedia.org
+11-20 09:57:20.565  9653  9671 I A02B    : A02B dns blocked name=en.wikipedia.org
+11-20 09:57:20.566  9653  9671 I A02B    : A02B dns blocked name=en.wikipedia.org
+11-20 09:57:25.809  9653  9671 I A02B    : A02B dns blocked name=en.wikipedia.org
+11-20 09:57:25.838  9653  9671 I A02B    : A02B dns blocked name=en.wikipedia.org
+11-20 09:57:25.860  9653  9671 I A02B    : A02B dns blocked name=en.wikipedia.org
+11-20 09:57:25.970  9653  9671 I A02B    : A02B dns blocked name=en.wikipedia.org
+11-20 09:57:25.978  9653  9671 I A02B    : A02B dns blocked name=en.wikipedia.org
+11-20 09:57:26.067  9653  9671 I A02B    : A02B dns blocked name=en.wikipedia.org
+11-20 09:57:26.163  9653  9671 I A02B    : A02B dns blocked name=en.wikipedia.org
+11-20 09:57:26.363  9653  9671 I A02B    : A02B dns blocked name=en.wikipedia.org
+11-20 09:57:26.388  9653  9671 I A02B    : A02B dns blocked name=en.wikipedia.org
+11-20 09:57:26.393  9653  9671 I A02B    : A02B dns blocked name=en.wikipedia.org

@@ -1,0 +1,61 @@
+﻿vpn pid=5629 ; own_test against 172.66.147.243:443 (protected / plain / bound-to-wifi)
+11-20 12:11:08.884   565   565 I adbd    : adbd service requested 'shell,v2,raw:am broadcast -W -n com.webfilter.spike.a02b/.CmdReceiver --es op own_test --es ip 172.66.147.243 --ei port 443'
+11-20 12:11:08.917   708  1126 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b/.CmdReceiver (has extras) }
+11-20 12:11:08.919   708  1126 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b/.CmdReceiver (has extras) }: 0
+11-20 12:11:08.932  5829  5829 I A02B    : op=own_test -> OWN_TEST broadcast sent
+11-20 12:11:09.470  5629  5663 I .spike.a02b:vpn: Waiting for a blocking GC ProfileSaver
+11-20 12:11:09.501  5629  5639 W .spike.a02b:vpn: Suspending all threads took: 7.375ms
+11-20 12:11:09.524  5629  6386 I A02B    : OWN protected OK in 34 ms
+11-20 12:11:09.524  5629  6386 I A02B    : OWN protected counters before=[dns_blocked=4 dns_relayed=4 tcp853_rst=2 tcp_client_rst=1 tcp_closed=1 tcp_connect_ok=2 tcp_in_bytes_accepted=7 tcp_out_bytes_sent=10 tcp_rst_sent=2 tcp_syn=2 udp_in=4 udp_out=4 v6_rejected=11] after=[dns_blocked=4 dns_relayed=4 tcp853_rst=2 tcp_client_rst=1 tcp_closed=1 tcp_connect_ok=2 tcp_in_bytes_accepted=7 tcp_out_bytes_sent=10 tcp_rst_sent=2 tcp_syn=2 udp_in=4 udp_out=4 v6_rejected=11]
+11-20 12:11:09.556  5629  6386 I A02B    : OWN plain-default-route OK in 31 ms
+11-20 12:11:09.556  5629  6386 I A02B    : OWN plain-default-route counters before=[dns_blocked=4 dns_relayed=4 tcp853_rst=2 tcp_client_rst=1 tcp_closed=1 tcp_connect_ok=2 tcp_in_bytes_accepted=7 tcp_out_bytes_sent=10 tcp_rst_sent=2 tcp_syn=2 udp_in=4 udp_out=4 v6_rejected=11] after=[dns_blocked=4 dns_relayed=4 tcp853_rst=2 tcp_client_rst=1 tcp_closed=1 tcp_connect_ok=3 tcp_in_bytes_accepted=7 tcp_out_bytes_sent=10 tcp_rst_sent=2 tcp_syn=3 udp_in=4 udp_out=4 v6_rejected=11]
+11-20 12:11:09.613  5629  6386 I A02B    : OWN bound-to-wifi-network OK in 36 ms
+11-20 12:11:09.614  5629  6386 I A02B    : OWN bound-to-wifi-network counters before=[dns_blocked=4 dns_relayed=4 tcp853_rst=2 tcp_client_rst=1 tcp_closed=1 tcp_connect_ok=3 tcp_in_bytes_accepted=7 tcp_out_bytes_sent=10 tcp_rst_sent=2 tcp_syn=3 udp_in=4 udp_out=4 v6_rejected=11] after=[dns_blocked=4 dns_relayed=4 tcp853_rst=2 tcp_client_rst=1 tcp_closed=2 tcp_connect_ok=3 tcp_in_bytes_accepted=7 tcp_out_bytes_sent=10 tcp_rst_sent=2 tcp_syn=3 udp_in=4 udp_out=4 v6_rejected=11]
+11-20 12:11:09.615  5629  6386 I A02B    : OWN counters before=[dns_blocked=4 dns_relayed=4 tcp853_rst=2 tcp_client_rst=1 tcp_closed=1 tcp_connect_ok=2 tcp_in_bytes_accepted=7 tcp_out_bytes_sent=10 tcp_rst_sent=2 tcp_syn=2 udp_in=4 udp_out=4 v6_rejected=11] after=[dns_blocked=4 dns_relayed=4 tcp853_rst=2 tcp_client_rst=1 tcp_closed=2 tcp_connect_ok=3 tcp_in_bytes_accepted=7 tcp_out_bytes_sent=10 tcp_rst_sent=2 tcp_syn=3 udp_in=4 udp_out=4 v6_rejected=11]
+11-20 12:11:18.977   708   820 D ActivityManager: freezing 5829 com.webfilter.spike.a02b
+--- ip rule (VPN up)
+0:	from all lookup local 
+11000:	from all iif lo oif dummy0 uidrange 0-0 lookup 1002 
+11000:	from all iif lo oif wlan0 uidrange 0-0 lookup 1016 
+11000:	from all iif lo oif eth0 uidrange 0-0 lookup 1015 
+12000:	from all iif tun0 lookup 97 
+13000:	from all fwmark 0xc006b/0xcffff lookup 1024 
+13000:	from all fwmark 0x0/0x20000 iif lo uidrange 0-99999 lookup 1024 
+14000:	from all fwmark 0x0/0x20000 iif lo uidrange 1-10236 prohibit
+14000:	from all fwmark 0x0/0x20000 iif lo uidrange 10238-20236 prohibit
+14000:	from all fwmark 0x0/0x20000 iif lo uidrange 20238-99999 prohibit
+15040:	from all fwmark 0x10065/0x1ffff iif lo uidrange 10158-10158 lookup 1016 
+15040:	from all fwmark 0x10065/0x1ffff iif lo uidrange 10161-10161 lookup 1016 
+15040:	from all fwmark 0x10065/0x1ffff iif lo uidrange 10166-10166 lookup 1016 
+15040:	from all fwmark 0x10065/0x1ffff iif lo uidrange 10173-10173 lookup 1016 
+15040:	from all fwmark 0x10065/0x1ffff iif lo uidrange 10224-10224 lookup 1016 
+16000:	from all fwmark 0x10063/0x1ffff iif lo lookup 97 
+16000:	from all fwmark 0x10065/0x1ffff iif lo lookup 1016 
+16000:	from all fwmark 0x50066/0x5ffff iif lo lookup 1015 
+16000:	from all fwmark 0x1006b/0x1ffff iif lo uidrange 0-0 lookup 1024 
+16000:	from all fwmark 0x1006b/0x1ffff iif lo uidrange 0-99999 lookup 1024 
+17000:	from all iif lo oif dummy0 lookup 1002 
+17000:	from all iif lo oif wlan0 lookup 1016 
+17000:	from all fwmark 0x40000/0x40000 iif lo oif eth0 lookup 1015 
+17000:	from all iif lo oif tun0 uidrange 0-99999 lookup 1024 
+20000:	from all fwmark 0x0/0x10000 lookup 97 
+22040:	from all fwmark 0x65/0x1ffff iif lo uidrange 10158-10158 lookup 1016 
+22040:	from all fwmark 0x65/0x1ffff iif lo uidrange 10161-10161 lookup 1016 
+22040:	from all fwmark 0x65/0x1ffff iif lo uidrange 10166-10166 lookup 1016 
+22040:	from all fwmark 0x65/0x1ffff iif lo uidrange 10173-10173 lookup 1016 
+22040:	from all fwmark 0x65/0x1ffff iif lo uidrange 10224-10224 lookup 1016 
+23000:	from all fwmark 0x65/0x1ffff iif lo lookup 1016 
+25000:	from all fwmark 0x0/0x10000 iif lo uidrange 10158-10158 lookup 1000000016 
+25000:	from all fwmark 0x0/0x10000 iif lo uidrange 10161-10161 lookup 1000000016 
+25000:	from all fwmark 0x0/0x10000 iif lo uidrange 10166-10166 lookup 1000000016 
+25000:	from all fwmark 0x0/0x10000 iif lo uidrange 10173-10173 lookup 1000000016 
+25000:	from all fwmark 0x0/0x10000 iif lo uidrange 10224-10224 lookup 1000000016 
+26000:	from all fwmark 0x0/0x10000 iif lo lookup 1000000016 
+28000:	from all fwmark 0x6b/0xffff lookup 1016 
+29040:	from all fwmark 0x0/0xffff iif lo uidrange 10158-10158 lookup 1016 
+29040:	from all fwmark 0x0/0xffff iif lo uidrange 10161-10161 lookup 1016 
+29040:	from all fwmark 0x0/0xffff iif lo uidrange 10166-10166 lookup 1016 
+29040:	from all fwmark 0x0/0xffff iif lo uidrange 10173-10173 lookup 1016 
+29040:	from all fwmark 0x0/0xffff iif lo uidrange 10224-10224 lookup 1016 
+31000:	from all fwmark 0x0/0xffff iif lo lookup 1016 
+32000:	from all unreachable

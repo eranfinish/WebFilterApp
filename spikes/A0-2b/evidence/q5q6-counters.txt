@@ -1,0 +1,19 @@
+﻿== stats before Chrome
+--------- beginning of main
+11-20 11:52:47.350  4161  4161 I A02B    : op=stats -> STATS broadcast sent
+11-20 11:52:47.852  4011  4011 I A02B    : STATS pid=4011 running=true dns_relayed=2 tcp853_rst=2 tcp_connect_ok=1 tcp_in_bytes_accepted=4 tcp_out_bytes_sent=3 tcp_rst_sent=2 tcp_syn=1 udp_in=2 udp_out=2 v6_rejected=6
+== stats after Chrome example.org
+--------- beginning of main
+11-20 11:52:47.350  4161  4161 I A02B    : op=stats -> STATS broadcast sent
+11-20 11:52:47.852  4011  4011 I A02B    : STATS pid=4011 running=true dns_relayed=2 tcp853_rst=2 tcp_connect_ok=1 tcp_in_bytes_accepted=4 tcp_out_bytes_sent=3 tcp_rst_sent=2 tcp_syn=1 udp_in=2 udp_out=2 v6_rejected=6
+11-20 11:53:01.656  4161  4161 I A02B    : op=stats -> STATS broadcast sent
+11-20 11:53:02.163  4011  4011 I A02B    : STATS pid=4011 running=true dns_relayed=29 tcp853_rst=2 tcp_client_rst=4 tcp_closed=12 tcp_connect_ok=14 tcp_in_bytes_accepted=41 tcp_out_bytes_sent=31 tcp_rst_sent=2 tcp_syn=14 udp443_rejected=23 udp_in=29 udp_out=29 v6_rejected=48
+== stats after probe raw IPv6 2606:4700:4700::1111
+--------- beginning of main
+11-20 11:52:47.350  4161  4161 I A02B    : op=stats -> STATS broadcast sent
+11-20 11:52:47.852  4011  4011 I A02B    : STATS pid=4011 running=true dns_relayed=2 tcp853_rst=2 tcp_connect_ok=1 tcp_in_bytes_accepted=4 tcp_out_bytes_sent=3 tcp_rst_sent=2 tcp_syn=1 udp_in=2 udp_out=2 v6_rejected=6
+11-20 11:53:01.656  4161  4161 I A02B    : op=stats -> STATS broadcast sent
+11-20 11:53:02.163  4011  4011 I A02B    : STATS pid=4011 running=true dns_relayed=29 tcp853_rst=2 tcp_client_rst=4 tcp_closed=12 tcp_connect_ok=14 tcp_in_bytes_accepted=41 tcp_out_bytes_sent=31 tcp_rst_sent=2 tcp_syn=14 udp443_rejected=23 udp_in=29 udp_out=29 v6_rejected=48
+11-20 11:53:07.229  3333  4981 I A02P    : op=raw -> FAIL ConnectException: failed to connect to /2606:4700:4700::1111 (port 443) from /fd00:8::2 (port 47192) after 5000ms: isConnected failed: ENETUNREACH (Network is unreachable) after 5 ms
+11-20 11:53:13.338  4161  4161 I A02B    : op=stats -> STATS broadcast sent
+11-20 11:53:13.843  4011  4011 I A02B    : STATS pid=4011 running=true dns_relayed=32 tcp853_rst=2 tcp_client_rst=5 tcp_closed=13 tcp_connect_ok=15 tcp_in_bytes_accepted=50 tcp_out_bytes_sent=56 tcp_rst_sent=2 tcp_syn=15 udp443_rejected=30 udp_in=32 udp_out=32 v6_rejected=58

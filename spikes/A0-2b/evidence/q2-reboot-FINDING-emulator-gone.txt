@@ -1,0 +1,6 @@
+﻿FINDING (host clock): emulator-5580 process disappeared during the Q2 reboot test.
+- The reboot test (scripts\q2-reboot.ps1) was started about 12:11 host time, after stop_self run 1 (file time 12:10:00). It had printed only the pre-reboot VPN pid (14404) and then ran 'adb reboot'.
+- The emulator console tab ended with the emulator's last log line ('Created VkInstance ...') followed by the shell prompt, so the emulator process exited. It was not seen at 12:52, and no emulator.exe or qemu process existed.
+- No q2-reboot-* evidence file was written, so the reboot measurements (boot time, VPN up time, first connect, NIC capture) are NOT available from this run.
+- Exact crash time is not known. Cause not established (the emulator may have exited during the guest reboot or a host-side crash; the console did not print an error).
+- Action: the emulator was relaunched once with the same command (-port 5580). The reboot test is to be re-run after the relaunch.

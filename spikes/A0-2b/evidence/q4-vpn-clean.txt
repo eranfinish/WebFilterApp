@@ -1,0 +1,11 @@
+﻿label=vpn-clean
+cpu_before_rtt=pid=4011 utime=6860 stime=2714 (clock ticks, CLK_TCK=100)
+cpu_after_rtt=pid=4011 utime=7343 stime=2928 (clock ticks, CLK_TCK=100)
+cpu_after_bench=pid=4011 utime=11699 stime=12201 (clock ticks, CLK_TCK=100)
+rtt_done=True bench_done=True
+--------- beginning of main
+11-20 11:49:36.599  3333  4297 I A02P    : op=rtt -> RTT n=100 ok=100 fail=0 p50=4.8ms p95=10.2ms
+11-20 11:49:57.044  3333  4323 I A02P    : bench run bytes=52428800 secs=16.22
+11-20 11:50:17.436  3333  4323 I A02P    : bench run bytes=52428800 secs=20.39
+11-20 11:50:45.495  3333  4323 I A02P    : bench run bytes=52428800 secs=28.06
+11-20 11:50:45.496  3333  4323 I A02P    : op=bench -> BENCH n=3 ok=3 fail=0 median=2.57 MB/s runs=[3.23, 2.57, 1.87]

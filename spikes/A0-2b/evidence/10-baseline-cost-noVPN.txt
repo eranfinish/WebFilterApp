@@ -1,0 +1,7 @@
+﻿== baseline (no VPN, lockdown off)
+Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+Broadcast completed: result=0, data="RTT n=100 ok=100 fail=0 p50=24.8ms p95=70.7ms"
+
+Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+Broadcast completed: result=0
+

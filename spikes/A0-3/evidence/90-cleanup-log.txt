@@ -1,0 +1,7 @@
+== before cleanup: owners
+1 owner:
+User  0: admin=com.webfilter.spike.a03/.AdminReceiver,DeviceOwner,Affiliated
+== remove-active-admin
+Success: Admin removed ComponentInfo{com.webfilter.spike.a03/com.webfilter.spike.a03.AdminReceiver}
+== uninstall
+Success

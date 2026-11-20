@@ -1,0 +1,19 @@
+﻿after lockdown_off: vpn pid=5629 tun0_present=True ; after lockdown_on: vpn pid=5629
+11-20 12:11:28.821   565   565 I adbd    : adbd service requested 'shell,v2,raw:am broadcast -W -n com.webfilter.spike.a02b/.CmdReceiver --es op lockdown_off'
+11-20 12:11:28.888  5629  5647 I A02B    : onRevoke pid=5629
+11-20 12:11:28.889  5629  5647 I A02B    : stopTunnel pid=5629 uptimeMs=1565030
+11-20 12:11:28.913   708  1441 W ActivityManager: Unable to start service Intent { act=android.net.action.VPN_MANAGER_EVENT cat=[android.net.category.EVENT_ALWAYS_ON_STATE_CHANGED] xflg=0x4 pkg=com.webfilter.spike.a02b (has extras) } U=0: not found
+11-20 12:11:28.943  5829  5829 I A02B    : op=lockdown_off -> always-on cleared; readback pkg=null
+11-20 12:11:29.004  5629  5629 I A02B    : onDestroy pid=5629 uptimeMs=1565146
+11-20 12:11:37.359   565   565 I adbd    : adbd service requested 'shell,v2,raw:am broadcast -W -n com.webfilter.spike.a02b/.CmdReceiver --es op lockdown_on'
+11-20 12:11:37.411   708  2203 W ActivityManager: Unable to start service Intent { act=android.net.action.VPN_MANAGER_EVENT cat=[android.net.category.EVENT_ALWAYS_ON_STATE_CHANGED] xflg=0x4 pkg=com.webfilter.spike.a02b (has extras) } U=0: not found
+11-20 12:11:37.464  5829  5829 I A02B    : op=lockdown_on -> set always-on pkg=com.webfilter.spike.a02b lockdown=true; readback pkg=com.webfilter.spike.a02b lockdown=true
+11-20 12:11:37.474   708   733 I ActivityManager: Broadcast completed: result=0, data="set always-on pkg=com.webfilter.spike.a02b lockdown=true; readback pkg=com.webfilter.spike.a02b lockdown=true"
+11-20 12:11:37.481  5629  5629 I A02B    : onCreate pid=5629 uptimeMs=1573623
+11-20 12:11:37.482  5629  5629 I A02B    : onStartCommand startId=1 running=false
+11-20 12:11:37.571  5629  5629 I A02B    : establish ok pid=5629 uptimeMs=1573713
+11-20 12:11:47.594   565   565 I adbd    : adbd service requested 'shell,v2,raw:am broadcast -W -n com.webfilter.spike.a02b/.CmdReceiver --es op stats'
+11-20 12:11:47.619  5829  5829 I A02B    : op=stats -> STATS broadcast sent
+11-20 12:11:48.123  5629  5629 I A02B    : STATS pid=5629 running=true dns_relayed=2 tcp853_rst=2 tcp_connect_ok=1 tcp_in_bytes_accepted=4 tcp_out_bytes_sent=3 tcp_rst_sent=2 tcp_syn=1 udp_in=2 udp_out=2 v6_rejected=6
+
+NOTE: 'tun0_present=True' in the header is not valid (same faulty match on 'tun0' text). The lifecycle lines are valid.

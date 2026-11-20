@@ -1,0 +1,66 @@
+﻿dead window: vpn pid after kill_vpn = '' ; tun0 present = True ; prohibit lines in ip rule = 3 ; back after lockdown_on pid = 6534
+--- ip rule (dead window)
+0:	from all lookup local 
+11000:	from all iif lo oif dummy0 uidrange 0-0 lookup 1002 
+11000:	from all iif lo oif wlan0 uidrange 0-0 lookup 1016 
+11000:	from all iif lo oif eth0 uidrange 0-0 lookup 1015 
+14000:	from all fwmark 0x0/0x20000 iif lo uidrange 1-10236 prohibit
+14000:	from all fwmark 0x0/0x20000 iif lo uidrange 10238-20236 prohibit
+14000:	from all fwmark 0x0/0x20000 iif lo uidrange 20238-99999 prohibit
+15040:	from all fwmark 0x10065/0x1ffff iif lo uidrange 10158-10158 lookup 1016 
+15040:	from all fwmark 0x10065/0x1ffff iif lo uidrange 10161-10161 lookup 1016 
+15040:	from all fwmark 0x10065/0x1ffff iif lo uidrange 10166-10166 lookup 1016 
+15040:	from all fwmark 0x10065/0x1ffff iif lo uidrange 10173-10173 lookup 1016 
+15040:	from all fwmark 0x10065/0x1ffff iif lo uidrange 10224-10224 lookup 1016 
+16000:	from all fwmark 0x10063/0x1ffff iif lo lookup 97 
+16000:	from all fwmark 0x10065/0x1ffff iif lo lookup 1016 
+16000:	from all fwmark 0x50066/0x5ffff iif lo lookup 1015 
+17000:	from all iif lo oif dummy0 lookup 1002 
+17000:	from all iif lo oif wlan0 lookup 1016 
+17000:	from all fwmark 0x40000/0x40000 iif lo oif eth0 lookup 1015 
+20000:	from all fwmark 0x0/0x10000 lookup 97 
+22040:	from all fwmark 0x65/0x1ffff iif lo uidrange 10158-10158 lookup 1016 
+22040:	from all fwmark 0x65/0x1ffff iif lo uidrange 10161-10161 lookup 1016 
+22040:	from all fwmark 0x65/0x1ffff iif lo uidrange 10166-10166 lookup 1016 
+22040:	from all fwmark 0x65/0x1ffff iif lo uidrange 10173-10173 lookup 1016 
+22040:	from all fwmark 0x65/0x1ffff iif lo uidrange 10224-10224 lookup 1016 
+23000:	from all fwmark 0x65/0x1ffff iif lo lookup 1016 
+25000:	from all fwmark 0x0/0x10000 iif lo uidrange 10158-10158 lookup 1000000016 
+25000:	from all fwmark 0x0/0x10000 iif lo uidrange 10161-10161 lookup 1000000016 
+25000:	from all fwmark 0x0/0x10000 iif lo uidrange 10166-10166 lookup 1000000016 
+25000:	from all fwmark 0x0/0x10000 iif lo uidrange 10173-10173 lookup 1000000016 
+25000:	from all fwmark 0x0/0x10000 iif lo uidrange 10224-10224 lookup 1000000016 
+29040:	from all fwmark 0x0/0xffff iif lo uidrange 10158-10158 lookup 1016 
+29040:	from all fwmark 0x0/0xffff iif lo uidrange 10161-10161 lookup 1016 
+29040:	from all fwmark 0x0/0xffff iif lo uidrange 10166-10166 lookup 1016 
+29040:	from all fwmark 0x0/0xffff iif lo uidrange 10173-10173 lookup 1016 
+29040:	from all fwmark 0x0/0xffff iif lo uidrange 10224-10224 lookup 1016 
+31000:	from all fwmark 0x0/0xffff iif lo lookup 1016 
+32000:	from all unreachable
+--- logcat
+11-20 12:11:59.072   565   565 I adbd    : adbd service requested 'shell,v2,raw:log -t A02S MARK kill_vpn'
+11-20 12:11:59.092  6478  6478 I A02S    : MARK kill_vpn
+11-20 12:11:59.140   565   565 I adbd    : adbd service requested 'shell,v2,raw:am broadcast -W -n com.webfilter.spike.a02b/.CmdReceiver --es op kill_vpn'
+11-20 12:11:59.164   708  2201 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b/.CmdReceiver (has extras) }
+11-20 12:11:59.166   708  2201 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b/.CmdReceiver (has extras) }: 0
+11-20 12:11:59.173  5829  5829 I A02B    : op=kill_vpn -> KILL_SELF broadcast sent
+11-20 12:11:59.695  5629  5629 I A02B    : KILL_SELF pid=5629
+11-20 12:11:59.868   708   733 W ActivityManager: Exception when unbinding service com.webfilter.spike.a02b/.vpn.TunVpnService
+11-20 12:11:59.884   708  1441 I ActivityManager: Process com.webfilter.spike.a02b:vpn (pid 5629) has died: vis BFGS
+11-20 12:12:03.298   565   565 I adbd    : adbd service requested 'shell,v2,raw:pidof com.webfilter.spike.a02b:vpn'
+11-20 12:12:03.683   565   565 I adbd    : adbd service requested 'shell,v2,raw:log -t A02S MARK probes-in-dead-window'
+11-20 12:12:03.729  6497  6497 I A02S    : MARK probes-in-dead-window
+11-20 12:12:03.856   565   565 I adbd    : adbd service requested 'shell,v2,raw:am broadcast -n com.webfilter.spike.a02b.probe/.ProbeReceiver --es op raw --es ip 172.66.147.243 --ei port 443'
+11-20 12:12:03.938   708  1441 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+11-20 12:12:03.939   708  1441 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }: 0
+11-20 12:12:03.978  5991  6504 I A02P    : op=raw -> FAIL ConnectException: failed to connect to /172.66.147.243 (port 443) from /:: (port 0) after 5000ms: connect failed: EACCES (Permission denied) after 16 ms
+11-20 12:12:04.046   565   565 I adbd    : adbd service requested 'shell,v2,raw:am broadcast -n com.webfilter.spike.a02b.probe/.ProbeReceiver --es op dns --es host example.org'
+11-20 12:12:04.087   708  2245 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+11-20 12:12:04.089   708  2245 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }: 0
+11-20 12:12:04.109  5991  6510 I A02P    : op=dns -> FAIL UnknownHostException: Unable to resolve host "example.org": No address associated with hostname
+11-20 12:12:05.027   565   565 I adbd    : adbd service requested 'shell,v2,raw:am broadcast -n com.webfilter.spike.a02b.probe/.ProbeReceiver --es op raw --es ip 172.66.147.243 --ei port 443'
+11-20 12:12:05.153   708  1441 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+11-20 12:12:05.158   708  1441 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }: 0
+11-20 12:12:05.184  5991  6522 I A02P    : op=raw -> FAIL ConnectException: failed to connect to /172.66.147.243 (port 443) from /:: (port 0) after 4999ms: connect failed: EACCES (Permission denied) after 11 ms
+
+NOTE: the 'tun0 present' value in the header is not valid. The check matched 'tun0' in the adb message 'Device tun0 does not exist', so it proves nothing. The prohibit count and the EACCES results are valid.

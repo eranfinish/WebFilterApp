@@ -129,6 +129,19 @@
 - ראיה: [30-emulator-crash-and-relaunch.txt](evidence/30-emulator-crash-and-relaunch.txt).
 - **החלטה (הסשן המתזמר, אחרי הכישלון):** לא מפעילים את Tablet_A12 שוב. Q3, Q5, Q4 של שני פרמטרים והניקוי **נדחים לריצה חוזרת על Android 17 (Chrome 145.0.7632.218)**, שמתאים יותר לשאלות הרגישות לגרסה.
 - **מצב Tablet_A12 הסופי (Device Owner, האפליקציה, מדיניות Chrome): לא ידוע אחרי הקריסה.** לפני שימוש חוזר צריך לנקות או לאפס את ה-AVD.
+- **הפעלה מחדש נוספת (לפי בקשת המשתמש, "Yes, relaunch"):** `emulator.exe -avd Tablet_A12 -memory 2048` הופעל ב-11:31 (שעון מקומי), ועלה ב-11:33 כ-`emulator-5554` (הפורט הסטנדרטי). במקביל רץ `emulator-5580` של סשן אחר, שלא נגענו בו.
+- **מה נמצא אחרי ההפעלה:**
+  - **Device Owner נשמר:** `dpm list-owners` מציג `com.webfilter.spike.a03/.AdminReceiver`, `DeviceOwner`.
+  - **האפליקציה מותקנת** (`com.webfilter.spike.a03`).
+  - **תצפית אחת, סיבה לא ידועה: מדיניות Chrome לא נמצאה אחרי ההפעלה.** `chrome_read` החזיר `restrictions=` ריק, ו-`URLBlocklist` שנקבע לפני הקריסה לא היה פעיל. ייתכן שהקריסה קרתה לפני שהמדיניות נשמרה, וזה הסבר אחד אפשרי. **לא הוכח** ש-`setApplicationRestrictions` אובד בכל הפעלה מחדש של האמולטור. זה נושא לבדיקה ב-A0.2 (נכשל-סגור) ולא מסקנה.
+  - חשבונות: 0. משתמשים: 1 (משתמש 0).
+- **נדחה לריצה על API 37 (לא בוצע כאן):** Q3, Q5 ו-Q4 של שני פרמטרים. ההנחיה של הסשן המתזמר: לא להריץ אותם על Tablet_A12.
+- **ניקוי (בוצע על `emulator-5554` בלבד):**
+  - `dpm remove-active-admin com.webfilter.spike.a03/.AdminReceiver`: `Success`.
+  - `adb uninstall com.webfilter.spike.a03`: `Success`.
+  - מצב סופי: `dpm list-owners` → `no owners`; האפליקציה לא מותקנת; משתמש 0 בלבד; חשבונות 0; `device_provisioned=1`. ראיה: [90-final-state.txt](evidence/90-final-state.txt), [90-cleanup-log.txt](evidence/90-cleanup-log.txt).
+  - האמולטור נעצר עם `adb -s emulator-5554 emu kill` ("OK: killing emulator"). לא הופעל מחדש.
+  - לא נגענו ב-`emulator-5580` ו-`emulator-5556`.
 - **מצב שנשאר על ה-AVD (לא אומת אחרי ההיעלמות, והמכשיר עצמו לא מחובר):**
   - Device Owner: `com.webfilter.spike.a03/.AdminReceiver`.
   - האפליקציה `com.webfilter.spike.a03` מותקנת.

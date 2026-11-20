@@ -1,0 +1,20 @@
+﻿owners: 
+packages a02b: 
+ip rule prohibit lines: 0
+device_provisioned: 1
+accounts: User UserInfo{0:Owner:4c13}:
+  Accounts: 0
+  
+  AccountId, Action_Type, timestamp, UID, TableName, Key
+  Accounts History
+  
+  Active Sessions: 0
+  
+  RegisteredServicesCache: 5 services
+    ServiceInfo: AuthenticatorDescription {type=com.google.android.gm.pop3}, ComponentInfo{com.google.android.gm/com.android.email.service.Pop3AuthenticatorService}, uid 10178, lastUpdateTime 1795115684204
+    ServiceInfo: AuthenticatorDescription {type=com.google}, ComponentInfo{com.google.android.gms/com.google.android.gms.auth.account.authenticator.GoogleAccountAuthenticatorService}, uid 10224, lastUpdateTime 1795116472395
+    ServiceInfo: AuthenticatorDescription {type=com.google.android.gm.exchange}, ComponentInfo{com.google.android.gm/com.android.email.service.EasAuthenticatorService}, uid 10178, lastUpdateTime 1795115684204
+    ServiceInfo: AuthenticatorDescription {type=com.google.work}, ComponentInfo{com.google.android.gms/com.google.android.gms.auth.account.authenticator.WorkAccountAuthenticatorService}, uid 10224, lastUpdateTime 1795116472395
+    ServiceInfo: AuthenticatorDescription {type=com.google.android.gm.legacyimap}, ComponentInfo{com.google.android.gm/com.android.email.service.LegacyImapAuthenticatorService}, uid 10178, lastUpdateTime 1795115684204
+  
+  Account visibility:

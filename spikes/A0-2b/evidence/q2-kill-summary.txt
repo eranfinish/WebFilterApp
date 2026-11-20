@@ -1,0 +1,3 @@
+﻿run 1: KILL_SELF 11-20 10:00:58.777 | window to establish 11-20 10:02:31.859 | successes in window 1 | EACCES lines 46
+run 2: KILL_SELF 11-20 10:03:05.062 | window to establish 11-20 10:04:39.103 | successes in window 0 | EACCES lines 46
+run 3: KILL_SELF 11-20 10:04:47.249 | window to establish 11-20 10:06:20.231 | successes in window 0 | EACCES lines 46

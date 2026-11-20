@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.webfilter.spike.a02b.PacketTest" tests="11" skipped="0" failures="0" errors="0" timestamp="2026-11-20T12:03:36" hostname="ERAN-PC3" time="0.008">
+  <properties/>
+  <testcase name="dnsRejectsResponsesCompressionAndTruncation" classname="com.webfilter.spike.a02b.PacketTest" time="0.0"/>
+  <testcase name="tcpSynAckWithMssParsesAndChecksums" classname="com.webfilter.spike.a02b.PacketTest" time="0.001"/>
+  <testcase name="dnsParsesQuestionAndNormalisesCase" classname="com.webfilter.spike.a02b.PacketTest" time="0.0"/>
+  <testcase name="ipv4BuildParseAndHeaderChecksum" classname="com.webfilter.spike.a02b.PacketTest" time="0.0"/>
+  <testcase name="ipv4RejectsShortVersionAndFragments" classname="com.webfilter.spike.a02b.PacketTest" time="0.0"/>
+  <testcase name="blockRulesMatchSuffixOnly" classname="com.webfilter.spike.a02b.PacketTest" time="0.001"/>
+  <testcase name="tcpDataSegmentPayloadAndFlags" classname="com.webfilter.spike.a02b.PacketTest" time="0.0"/>
+  <testcase name="tcpParsesIncomingSynWithMssOption" classname="com.webfilter.spike.a02b.PacketTest" time="0.001"/>
+  <testcase name="dnsNxdomainKeepsIdQuestionAndRd" classname="com.webfilter.spike.a02b.PacketTest" time="0.0"/>
+  <testcase name="udpBuildParseAndChecksum" classname="com.webfilter.spike.a02b.PacketTest" time="0.001"/>
+  <testcase name="icmpUnreachableQuotesHeaderAndChecksum" classname="com.webfilter.spike.a02b.PacketTest" time="0.0"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

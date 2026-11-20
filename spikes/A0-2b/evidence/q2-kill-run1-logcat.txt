@@ -1,0 +1,519 @@
+﻿--------- beginning of main
+11-20 10:00:49.893 11519 11519 I A02S    : PRE1
+11-20 10:00:50.045   714  4235 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+--------- beginning of system
+11-20 10:00:50.050   714  4235 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }: 0
+11-20 10:00:50.304   714   738 I ActivityManager: Broadcast completed: result=0
+11-20 10:00:50.461 10133 11527 I A02P    : op=raw -> CONNECTED in 139 ms
+11-20 10:00:50.506   714   969 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+11-20 10:00:50.521   714   969 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }: 0
+11-20 10:00:50.560   714   738 I ActivityManager: Broadcast completed: result=0
+11-20 10:00:50.686 10133 11536 I A02P    : op=dns -> OK 104.20.26.136, 172.66.157.237, 2606:4700:10::6814:1a88, 2606:4700:10::ac42:9ded
+11-20 10:00:51.615 11542 11542 I A02S    : PRE2
+11-20 10:00:51.757   714   969 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+11-20 10:00:51.765   714   969 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }: 0
+11-20 10:00:51.805   714   738 I ActivityManager: Broadcast completed: result=0
+11-20 10:00:51.923 10133 11549 I A02P    : op=raw -> CONNECTED in 143 ms
+11-20 10:00:52.069   714   969 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+11-20 10:00:52.072   714   969 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }: 0
+11-20 10:00:52.084 10133 11558 I A02P    : op=dns -> OK 104.20.26.136, 172.66.157.237, 2606:4700:10::6814:1a88, 2606:4700:10::ac42:9ded
+11-20 10:00:52.090   714   738 I ActivityManager: Broadcast completed: result=0
+11-20 10:00:53.351 11559 11559 I A02S    : PRE3
+11-20 10:00:53.538   714  1180 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+11-20 10:00:53.542   714  1180 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }: 0
+11-20 10:00:53.585   714   738 I ActivityManager: Broadcast completed: result=0
+11-20 10:00:53.683 10133 11566 I A02P    : op=raw -> CONNECTED in 116 ms
+11-20 10:00:53.816   714   969 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+11-20 10:00:53.817   714   969 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }: 0
+11-20 10:00:53.873   714   738 I ActivityManager: Broadcast completed: result=0
+11-20 10:00:53.882 10133 11575 I A02P    : op=dns -> OK 104.20.26.136, 172.66.157.237, 2606:4700:10::6814:1a88, 2606:4700:10::ac42:9ded
+11-20 10:00:54.825 11579 11579 I A02S    : PRE4
+11-20 10:00:55.030   714  4235 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+11-20 10:00:55.043   714  4235 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }: 0
+11-20 10:00:55.125   714   738 I ActivityManager: Broadcast completed: result=0
+11-20 10:00:55.194 10133 11586 I A02P    : op=raw -> CONNECTED in 115 ms
+11-20 10:00:55.377   714   969 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+11-20 10:00:55.397   714   969 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }: 0
+11-20 10:00:55.413 10133 11595 I A02P    : op=dns -> OK 104.20.26.136, 172.66.157.237, 2606:4700:10::6814:1a88, 2606:4700:10::ac42:9ded
+11-20 10:00:55.417   714   738 I ActivityManager: Broadcast completed: result=0
+11-20 10:00:56.380 11600 11600 I A02S    : PRE5
+11-20 10:00:56.627   714   969 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+11-20 10:00:56.634   714   969 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }: 0
+11-20 10:00:56.667   714   738 I ActivityManager: Broadcast completed: result=0
+11-20 10:00:56.730 10133 11607 I A02P    : op=raw -> CONNECTED in 77 ms
+11-20 10:00:56.836   714  1180 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+11-20 10:00:56.837   714  1180 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }: 0
+11-20 10:00:56.872   714   738 I ActivityManager: Broadcast completed: result=0
+11-20 10:00:56.879 10133 11616 I A02P    : op=dns -> OK 104.20.26.136, 172.66.157.237, 2606:4700:10::6814:1a88, 2606:4700:10::ac42:9ded
+11-20 10:00:57.911 11628 11628 I A02S    : KILL mode=kill pid=11420
+11-20 10:00:58.218   714  4235 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b/.CmdReceiver (has extras) }
+11-20 10:00:58.236   714  4235 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b/.CmdReceiver (has extras) }: 0
+11-20 10:00:58.274 11408 11408 I A02B    : op=kill_vpn -> KILL_SELF broadcast sent
+11-20 10:00:58.276   714   738 I ActivityManager: Broadcast completed: result=0, data="KILL_SELF broadcast sent"
+11-20 10:00:58.405 11637 11637 I A02S    : POST t=0
+11-20 10:00:58.546   714  1180 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+11-20 10:00:58.547   714  1180 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }: 0
+11-20 10:00:58.579   714   738 I ActivityManager: Broadcast completed: result=0
+11-20 10:00:58.637 10133 11643 I A02P    : op=raw -> CONNECTED in 74 ms
+11-20 10:00:58.777 11420 11420 I A02B    : KILL_SELF pid=11420
+11-20 10:00:58.790   714  4235 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+11-20 10:00:58.812   714  4235 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }: 0
+11-20 10:00:58.848 10133 11652 I A02P    : op=dns -> OK 104.20.26.136, 172.66.157.237, 2606:4700:10::6814:1a88, 2606:4700:10::ac42:9ded
+11-20 10:00:58.866   714   738 I ActivityManager: Broadcast completed: result=0
+11-20 10:00:58.962   714   738 W ActivityManager: pid 714 system sent binder code 12 with flags 1 and got error -32
+11-20 10:00:58.970   714   738 W ActivityManager: Exception when unbinding service com.webfilter.spike.a02b/.vpn.TunVpnService
+11-20 10:00:58.970   714   738 W ActivityManager: android.os.DeadObjectException
+11-20 10:00:58.970   714   738 W ActivityManager: 	at android.os.BinderProxy.transactNative(Native Method)
+11-20 10:00:58.970   714   738 W ActivityManager: 	at android.os.BinderProxy.transact(BinderProxy.java:626)
+11-20 10:00:58.970   714   738 W ActivityManager: 	at android.app.IApplicationThread$Stub$Proxy.scheduleUnbindService(IApplicationThread.java:1800)
+11-20 10:00:58.970   714   738 W ActivityManager: 	at android.app.IApplicationThread$Delegator.scheduleUnbindService(IApplicationThread.java:277)
+11-20 10:00:58.970   714   738 W ActivityManager: 	at com.android.server.am.ActiveServices.removeConnectionLocked(ActiveServices.java:7183)
+11-20 10:00:58.970   714   738 W ActivityManager: 	at com.android.server.am.ActiveServices.unbindServiceConnectionsLocked(ActiveServices.java:4731)
+11-20 10:00:58.970   714   738 W ActivityManager: 	at com.android.server.am.ActiveServices.unbindServiceLocked(ActiveServices.java:4787)
+11-20 10:00:58.970   714   738 W ActivityManager: 	at com.android.server.am.ActivityManagerService.unbindService(ActivityManagerService.java:14831)
+11-20 10:00:58.970   714   738 W ActivityManager: 	at android.app.ContextImpl.unbindService(ContextImpl.java:2382)
+11-20 10:00:58.970   714   738 W ActivityManager: 	at com.android.server.connectivity.Vpn$1.interfaceRemoved(Vpn.java:2232)
+11-20 10:00:58.970   714   738 W ActivityManager: 	at com.android.server.net.NetworkManagementService.$r8$lambda$F0vO9LyGll9GGg3aJEF0faQ74lk(NetworkManagementService.java:365)
+11-20 10:00:58.970   714   738 W ActivityManager: 	at com.android.server.net.NetworkManagementService$$ExternalSyntheticLambda5.sendCallback(R8$$SyntheticClass:0)
+11-20 10:00:58.970   714   738 W ActivityManager: 	at com.android.server.net.NetworkManagementService.invokeForAllObservers(NetworkManagementService.java:326)
+11-20 10:00:58.970   714   738 W ActivityManager: 	at com.android.server.net.NetworkManagementService.notifyInterfaceRemoved(NetworkManagementService.java:365)
+11-20 10:00:58.970   714   738 W ActivityManager: 	at com.android.server.net.NetworkManagementService.-$$Nest$mnotifyInterfaceRemoved(NetworkManagementService.java:0)
+11-20 10:00:58.970   714   738 W ActivityManager: 	at com.android.server.net.NetworkManagementService$NetdUnsolicitedEventListener.lambda$onInterfaceRemoved$6(NetworkManagementService.java:618)
+11-20 10:00:58.970   714   738 W ActivityManager: 	at com.android.server.net.NetworkManagementService$NetdUnsolicitedEventListener.$r8$lambda$--ZhjVYzWf5rB1bQpK2KpOpGMbQ(NetworkManagementService.java:0)
+11-20 10:00:58.970   714   738 W ActivityManager: 	at com.android.server.net.NetworkManagementService$NetdUnsolicitedEventListener$$ExternalSyntheticLambda1.run(R8$$SyntheticClass:0)
+11-20 10:00:58.970   714   738 W ActivityManager: 	at android.os.Handler.handleCallback(Handler.java:1095)
+11-20 10:00:58.970   714   738 W ActivityManager: 	at android.os.Handler.dispatchMessageImpl(Handler.java:135)
+11-20 10:00:58.970   714   738 W ActivityManager: 	at android.os.Handler.dispatchMessage(Handler.java:125)
+11-20 10:00:58.970   714   738 W ActivityManager: 	at android.os.Looper.loopOnce(Looper.java:296)
+11-20 10:00:58.970   714   738 W ActivityManager: 	at android.os.Looper.loop(Looper.java:397)
+11-20 10:00:58.970   714   738 W ActivityManager: 	at android.os.HandlerThread.run(HandlerThread.java:139)
+11-20 10:00:58.970   714   738 W ActivityManager: 	at com.android.server.ServiceThread.run(ServiceThread.java:46)
+11-20 10:00:59.013   714  1180 I ActivityManager: Process com.webfilter.spike.a02b:vpn (pid 11420) has died: vis BFGS
+11-20 10:01:00.611 11659 11659 I A02S    : POST t=2
+11-20 10:01:00.798   714  1993 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+11-20 10:01:00.807   714  1993 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }: 0
+11-20 10:01:00.827 10133 11666 I A02P    : op=raw -> FAIL ConnectException: failed to connect to /172.66.147.243 (port 443) from /:: (port 0) after 5000ms: connect failed: EACCES (Permission denied) after 10 ms
+11-20 10:01:00.840   714   738 I ActivityManager: Broadcast completed: result=0
+11-20 10:01:01.034   714  1912 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+11-20 10:01:01.056   714  1912 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }: 0
+11-20 10:01:01.064   714   738 I ActivityManager: Broadcast completed: result=0
+11-20 10:01:01.097 10133 11673 I A02P    : op=dns -> FAIL UnknownHostException: Unable to resolve host "example.org": No address associated with hostname
+11-20 10:01:02.694 11677 11677 I A02S    : POST t=4
+11-20 10:01:02.810   714  1993 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+11-20 10:01:02.822   714  1993 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }: 0
+11-20 10:01:02.834   714   738 I ActivityManager: Broadcast completed: result=0
+11-20 10:01:02.841 10133 11683 I A02P    : op=raw -> FAIL ConnectException: failed to connect to /172.66.147.243 (port 443) from /:: (port 0) after 4999ms: connect failed: EACCES (Permission denied) after 10 ms
+11-20 10:01:02.962   714  1912 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+11-20 10:01:02.970   714  1912 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }: 0
+11-20 10:01:02.982 10133 11689 I A02P    : op=dns -> FAIL UnknownHostException: Unable to resolve host "example.org": No address associated with hostname
+11-20 10:01:02.986   714   738 I ActivityManager: Broadcast completed: result=0
+11-20 10:01:04.627 11692 11692 I A02S    : POST t=6
+11-20 10:01:04.758   714  1033 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+11-20 10:01:04.765   714  1033 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }: 0
+11-20 10:01:04.791 10133 11698 I A02P    : op=raw -> FAIL ConnectException: failed to connect to /172.66.147.243 (port 443) from /:: (port 0) after 5000ms: connect failed: EACCES (Permission denied) after 11 ms
+11-20 10:01:04.793   714   738 I ActivityManager: Broadcast completed: result=0
+11-20 10:01:04.937   714  1033 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+11-20 10:01:04.938   714  1033 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }: 0
+11-20 10:01:04.967   714   738 I ActivityManager: Broadcast completed: result=0
+11-20 10:01:04.972 10133 11704 I A02P    : op=dns -> FAIL UnknownHostException: Unable to resolve host "example.org": No address associated with hostname
+11-20 10:01:06.623 11708 11708 I A02S    : POST t=8
+11-20 10:01:06.721   714  2033 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+11-20 10:01:06.723   714  2033 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }: 0
+11-20 10:01:06.739 10133 11714 I A02P    : op=raw -> FAIL ConnectException: failed to connect to /172.66.147.243 (port 443) from /:: (port 0) after 5000ms: connect failed: EACCES (Permission denied) after 5 ms
+11-20 10:01:06.740   714   738 I ActivityManager: Broadcast completed: result=0
+11-20 10:01:06.874   714  1912 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+11-20 10:01:06.880   714  1912 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }: 0
+11-20 10:01:06.892 10133 11720 I A02P    : op=dns -> FAIL UnknownHostException: Unable to resolve host "example.org": No address associated with hostname
+11-20 10:01:06.902   714   738 I ActivityManager: Broadcast completed: result=0
+11-20 10:01:08.613 11728 11728 I A02S    : POST t=10
+11-20 10:01:08.721   714  1180 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+11-20 10:01:08.723   714  1180 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }: 0
+11-20 10:01:08.754   714   738 I ActivityManager: Broadcast completed: result=0
+11-20 10:01:08.757 10133 11734 I A02P    : op=raw -> FAIL ConnectException: failed to connect to /172.66.147.243 (port 443) from /:: (port 0) after 5000ms: connect failed: EACCES (Permission denied) after 9 ms
+11-20 10:01:08.896   714  1912 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+11-20 10:01:08.905   714  1912 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }: 0
+11-20 10:01:08.920   714   738 I ActivityManager: Broadcast completed: result=0
+11-20 10:01:08.937 10133 11740 I A02P    : op=dns -> FAIL UnknownHostException: Unable to resolve host "example.org": No address associated with hostname
+11-20 10:01:10.546 11745 11745 I A02S    : POST t=12
+11-20 10:01:10.733   714  1912 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+11-20 10:01:10.742   714  1912 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }: 0
+11-20 10:01:10.759   714   738 I ActivityManager: Broadcast completed: result=0
+11-20 10:01:10.770 10133 11751 I A02P    : op=raw -> FAIL ConnectException: failed to connect to /172.66.147.243 (port 443) from /:: (port 0) after 5000ms: connect failed: EACCES (Permission denied) after 22 ms
+11-20 10:01:10.882   714  1180 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+11-20 10:01:10.884   714  1180 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }: 0
+11-20 10:01:10.897 10133 11757 I A02P    : op=dns -> FAIL UnknownHostException: Unable to resolve host "example.org": No address associated with hostname
+11-20 10:01:10.902   714   738 I ActivityManager: Broadcast completed: result=0
+11-20 10:01:12.536 11761 11761 I A02S    : POST t=14
+11-20 10:01:12.649   714  1912 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+11-20 10:01:12.654   714  1912 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }: 0
+11-20 10:01:12.663   714   738 I ActivityManager: Broadcast completed: result=0
+11-20 10:01:12.684 10133 11767 I A02P    : op=raw -> FAIL ConnectException: failed to connect to /172.66.147.243 (port 443) from /:: (port 0) after 5000ms: connect failed: EACCES (Permission denied) after 24 ms
+11-20 10:01:12.812   714  1180 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+11-20 10:01:12.813   714  1180 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }: 0
+11-20 10:01:12.843 10133 11773 I A02P    : op=dns -> FAIL UnknownHostException: Unable to resolve host "example.org": No address associated with hostname
+11-20 10:01:12.845   714   738 I ActivityManager: Broadcast completed: result=0
+11-20 10:01:14.473 11777 11777 I A02S    : POST t=16
+11-20 10:01:14.589   714  1912 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+11-20 10:01:14.595   714  1912 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }: 0
+11-20 10:01:14.614   714   738 I ActivityManager: Broadcast completed: result=0
+11-20 10:01:14.618 10133 11783 I A02P    : op=raw -> FAIL ConnectException: failed to connect to /172.66.147.243 (port 443) from /:: (port 0) after 5000ms: connect failed: EACCES (Permission denied) after 10 ms
+11-20 10:01:14.733   714  1180 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+11-20 10:01:14.734   714  1180 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }: 0
+11-20 10:01:14.755 10133 11789 I A02P    : op=dns -> FAIL UnknownHostException: Unable to resolve host "example.org": No address associated with hostname
+11-20 10:01:14.761   714   738 I ActivityManager: Broadcast completed: result=0
+11-20 10:01:16.445 11792 11792 I A02S    : POST t=18
+11-20 10:01:16.556   714  2033 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+11-20 10:01:16.562   714  2033 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }: 0
+11-20 10:01:16.578   714   738 I ActivityManager: Broadcast completed: result=0
+11-20 10:01:16.585 10133 11798 I A02P    : op=raw -> FAIL ConnectException: failed to connect to /172.66.147.243 (port 443) from /:: (port 0) after 5000ms: connect failed: EACCES (Permission denied) after 9 ms
+11-20 10:01:16.695   714  1912 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+11-20 10:01:16.696   714  1912 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }: 0
+11-20 10:01:16.715   714   738 I ActivityManager: Broadcast completed: result=0
+11-20 10:01:16.726 10133 11804 I A02P    : op=dns -> FAIL UnknownHostException: Unable to resolve host "example.org": No address associated with hostname
+11-20 10:01:18.368 11813 11813 I A02S    : POST t=20
+11-20 10:01:18.471   714  1180 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+11-20 10:01:18.473   714  1180 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }: 0
+11-20 10:01:18.496   714   738 I ActivityManager: Broadcast completed: result=0
+11-20 10:01:18.528 10133 11819 I A02P    : op=raw -> FAIL ConnectException: failed to connect to /172.66.147.243 (port 443) from /:: (port 0) after 5000ms: connect failed: EACCES (Permission denied) after 35 ms
+11-20 10:01:18.652   714  1993 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+11-20 10:01:18.664   714  1993 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }: 0
+11-20 10:01:18.681 10133 11825 I A02P    : op=dns -> FAIL UnknownHostException: Unable to resolve host "example.org": No address associated with hostname
+11-20 10:01:18.687   714   738 I ActivityManager: Broadcast completed: result=0
+11-20 10:01:20.307 11828 11828 I A02S    : POST t=22
+11-20 10:01:20.395   714  1912 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+11-20 10:01:20.396   714  1912 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }: 0
+11-20 10:01:20.410 10133 11834 I A02P    : op=raw -> FAIL ConnectException: failed to connect to /172.66.147.243 (port 443) from /:: (port 0) after 5000ms: connect failed: EACCES (Permission denied) after 5 ms
+11-20 10:01:20.411   714   738 I ActivityManager: Broadcast completed: result=0
+11-20 10:01:20.523   714  2033 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+11-20 10:01:20.525   714  2033 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }: 0
+11-20 10:01:20.543   714   738 I ActivityManager: Broadcast completed: result=0
+11-20 10:01:20.572 10133 11840 I A02P    : op=dns -> FAIL UnknownHostException: Unable to resolve host "example.org": No address associated with hostname
+11-20 10:01:22.208 11844 11844 I A02S    : POST t=24
+11-20 10:01:22.306   714  1912 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+11-20 10:01:22.307   714  1912 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }: 0
+11-20 10:01:22.325   714   738 I ActivityManager: Broadcast completed: result=0
+11-20 10:01:22.347 10133 11850 I A02P    : op=raw -> FAIL ConnectException: failed to connect to /172.66.147.243 (port 443) from /:: (port 0) after 5000ms: connect failed: EACCES (Permission denied) after 26 ms
+11-20 10:01:22.467   714  2033 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+11-20 10:01:22.469   714  2033 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }: 0
+11-20 10:01:22.496 10133 11856 I A02P    : op=dns -> FAIL UnknownHostException: Unable to resolve host "example.org": No address associated with hostname
+11-20 10:01:22.507   714   738 I ActivityManager: Broadcast completed: result=0
+11-20 10:01:24.128 11859 11859 I A02S    : POST t=26
+11-20 10:01:24.231   714  1993 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+11-20 10:01:24.233   714  1993 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }: 0
+11-20 10:01:24.248   714   738 I ActivityManager: Broadcast completed: result=0
+11-20 10:01:24.254 10133 11865 I A02P    : op=raw -> FAIL ConnectException: failed to connect to /172.66.147.243 (port 443) from /:: (port 0) after 5000ms: connect failed: EACCES (Permission denied) after 8 ms
+11-20 10:01:24.386   714  2033 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+11-20 10:01:24.388   714  2033 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }: 0
+11-20 10:01:24.419   714   738 I ActivityManager: Broadcast completed: result=0
+11-20 10:01:24.445 10133 11871 I A02P    : op=dns -> FAIL UnknownHostException: Unable to resolve host "example.org": No address associated with hostname
+11-20 10:01:26.059 11875 11875 I A02S    : POST t=28
+11-20 10:01:26.169   714  1912 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+11-20 10:01:26.175   714  1912 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }: 0
+11-20 10:01:26.189   714   738 I ActivityManager: Broadcast completed: result=0
+11-20 10:01:26.196 10133 11881 I A02P    : op=raw -> FAIL ConnectException: failed to connect to /172.66.147.243 (port 443) from /:: (port 0) after 5000ms: connect failed: EACCES (Permission denied) after 10 ms
+11-20 10:01:26.331   714  2033 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+11-20 10:01:26.339   714  2033 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }: 0
+11-20 10:01:26.354 10133 11887 I A02P    : op=dns -> FAIL UnknownHostException: Unable to resolve host "example.org": No address associated with hostname
+11-20 10:01:26.357   714   738 I ActivityManager: Broadcast completed: result=0
+11-20 10:01:28.042 11895 11895 I A02S    : POST t=30
+11-20 10:01:28.213   714  2033 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+11-20 10:01:28.238   714  2033 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }: 0
+11-20 10:01:28.279 10133 11902 I A02P    : op=raw -> FAIL ConnectException: failed to connect to /172.66.147.243 (port 443) from /:: (port 0) after 5000ms: connect failed: EACCES (Permission denied) after 19 ms
+11-20 10:01:28.301   714   738 I ActivityManager: Broadcast completed: result=0
+11-20 10:01:28.460   714  2033 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+11-20 10:01:28.462   714  2033 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }: 0
+11-20 10:01:28.480   714   738 I ActivityManager: Broadcast completed: result=0
+11-20 10:01:28.495 10133 11908 I A02P    : op=dns -> FAIL UnknownHostException: Unable to resolve host "example.org": No address associated with hostname
+11-20 10:01:30.116 11912 11912 I A02S    : POST t=32
+11-20 10:01:30.240   714  1912 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+11-20 10:01:30.249   714  1912 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }: 0
+11-20 10:01:30.272 10133 11918 I A02P    : op=raw -> FAIL ConnectException: failed to connect to /172.66.147.243 (port 443) from /:: (port 0) after 5000ms: connect failed: EACCES (Permission denied) after 10 ms
+11-20 10:01:30.283   714   738 I ActivityManager: Broadcast completed: result=0
+11-20 10:01:30.438   714  1912 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+11-20 10:01:30.440   714  1912 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }: 0
+11-20 10:01:30.469 10133 11924 I A02P    : op=dns -> FAIL UnknownHostException: Unable to resolve host "example.org": No address associated with hostname
+11-20 10:01:30.471   714   738 I ActivityManager: Broadcast completed: result=0
+11-20 10:01:32.097 11927 11927 I A02S    : POST t=34
+11-20 10:01:32.197   714  1180 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+11-20 10:01:32.216   714  1180 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }: 0
+11-20 10:01:32.237   714   738 I ActivityManager: Broadcast completed: result=0
+11-20 10:01:32.252 10133 11933 I A02P    : op=raw -> FAIL ConnectException: failed to connect to /172.66.147.243 (port 443) from /:: (port 0) after 5000ms: connect failed: EACCES (Permission denied) after 25 ms
+11-20 10:01:32.386   714  1180 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+11-20 10:01:32.390   714  1180 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }: 0
+11-20 10:01:32.406 10133 11939 I A02P    : op=dns -> FAIL UnknownHostException: Unable to resolve host "example.org": No address associated with hostname
+11-20 10:01:32.406   714   738 I ActivityManager: Broadcast completed: result=0
+11-20 10:01:34.060 11943 11943 I A02S    : POST t=36
+11-20 10:01:34.190   714  1993 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+11-20 10:01:34.201   714  1993 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }: 0
+11-20 10:01:34.222 10133 11949 I A02P    : op=raw -> FAIL ConnectException: failed to connect to /172.66.147.243 (port 443) from /:: (port 0) after 5000ms: connect failed: EACCES (Permission denied) after 7 ms
+11-20 10:01:34.223   714   738 I ActivityManager: Broadcast completed: result=0
+11-20 10:01:34.372   714  1993 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+11-20 10:01:34.374   714  1993 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }: 0
+11-20 10:01:34.399 10133 11955 I A02P    : op=dns -> FAIL UnknownHostException: Unable to resolve host "example.org": No address associated with hostname
+11-20 10:01:34.401   714   738 I ActivityManager: Broadcast completed: result=0
+11-20 10:01:36.056 11959 11959 I A02S    : POST t=38
+11-20 10:01:36.205   714  1993 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+11-20 10:01:36.206   714  1993 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }: 0
+11-20 10:01:36.228 10133 11965 I A02P    : op=raw -> FAIL ConnectException: failed to connect to /172.66.147.243 (port 443) from /:: (port 0) after 5000ms: connect failed: EACCES (Permission denied) after 4 ms
+11-20 10:01:36.233   714   738 I ActivityManager: Broadcast completed: result=0
+11-20 10:01:36.375   714  1180 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+11-20 10:01:36.376   714  1180 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }: 0
+11-20 10:01:36.392   714   738 I ActivityManager: Broadcast completed: result=0
+11-20 10:01:36.399 10133 11971 I A02P    : op=dns -> FAIL UnknownHostException: Unable to resolve host "example.org": No address associated with hostname
+11-20 10:01:38.088 11980 11980 I A02S    : POST t=40
+11-20 10:01:38.327   714  1180 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+11-20 10:01:38.329   714  1180 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }: 0
+11-20 10:01:38.420   714   738 I ActivityManager: Broadcast completed: result=0
+11-20 10:01:38.433 10133 11986 I A02P    : op=raw -> FAIL ConnectException: failed to connect to /172.66.147.243 (port 443) from /:: (port 0) after 5000ms: connect failed: EACCES (Permission denied) after 25 ms
+11-20 10:01:38.572   714  1033 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+11-20 10:01:38.573   714  1033 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }: 0
+11-20 10:01:38.594 10133 11992 I A02P    : op=dns -> FAIL UnknownHostException: Unable to resolve host "example.org": No address associated with hostname
+11-20 10:01:38.600   714   738 I ActivityManager: Broadcast completed: result=0
+11-20 10:01:40.227 11996 11996 I A02S    : POST t=42
+11-20 10:01:40.321   714  1993 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+11-20 10:01:40.332   714  1993 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }: 0
+11-20 10:01:40.351   714   738 I ActivityManager: Broadcast completed: result=0
+11-20 10:01:40.360 10133 12002 I A02P    : op=raw -> FAIL ConnectException: failed to connect to /172.66.147.243 (port 443) from /:: (port 0) after 5000ms: connect failed: EACCES (Permission denied) after 19 ms
+11-20 10:01:40.523   714  1033 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+11-20 10:01:40.524   714  1033 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }: 0
+11-20 10:01:40.546 10133 12008 I A02P    : op=dns -> FAIL UnknownHostException: Unable to resolve host "example.org": No address associated with hostname
+11-20 10:01:40.553   714   738 I ActivityManager: Broadcast completed: result=0
+11-20 10:01:42.176 12011 12011 I A02S    : POST t=44
+11-20 10:01:42.263   714  1033 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+11-20 10:01:42.265   714  1033 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }: 0
+11-20 10:01:42.292   714   738 I ActivityManager: Broadcast completed: result=0
+11-20 10:01:42.295 10133 12017 I A02P    : op=raw -> FAIL ConnectException: failed to connect to /172.66.147.243 (port 443) from /:: (port 0) after 5000ms: connect failed: EACCES (Permission denied) after 8 ms
+11-20 10:01:42.419   714  1033 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+11-20 10:01:42.421   714  1033 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }: 0
+11-20 10:01:42.437   714   738 I ActivityManager: Broadcast completed: result=0
+11-20 10:01:42.459 10133 12023 I A02P    : op=dns -> FAIL UnknownHostException: Unable to resolve host "example.org": No address associated with hostname
+11-20 10:01:44.075 12027 12027 I A02S    : POST t=46
+11-20 10:01:44.195   714  1180 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+11-20 10:01:44.198   714  1180 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }: 0
+11-20 10:01:44.235   714   738 I ActivityManager: Broadcast completed: result=0
+11-20 10:01:44.243 10133 12033 I A02P    : op=raw -> FAIL ConnectException: failed to connect to /172.66.147.243 (port 443) from /:: (port 0) after 4990ms: connect failed: EACCES (Permission denied) after 26 ms
+11-20 10:01:44.371   714  1912 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+11-20 10:01:44.374   714  1912 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }: 0
+11-20 10:01:44.399 10133 12039 I A02P    : op=dns -> FAIL UnknownHostException: Unable to resolve host "example.org": No address associated with hostname
+11-20 10:01:44.410   714   738 I ActivityManager: Broadcast completed: result=0
+11-20 10:01:46.043 12042 12042 I A02S    : POST t=48
+11-20 10:01:46.166   714  1912 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+11-20 10:01:46.168   714  1912 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }: 0
+11-20 10:01:46.181   714   738 I ActivityManager: Broadcast completed: result=0
+11-20 10:01:46.186 10133 12048 I A02P    : op=raw -> FAIL ConnectException: failed to connect to /172.66.147.243 (port 443) from /:: (port 0) after 5000ms: connect failed: EACCES (Permission denied) after 7 ms
+11-20 10:01:46.306   714  1912 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+11-20 10:01:46.315   714  1912 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }: 0
+11-20 10:01:46.342   714   738 I ActivityManager: Broadcast completed: result=0
+11-20 10:01:46.367 10133 12054 I A02P    : op=dns -> FAIL UnknownHostException: Unable to resolve host "example.org": No address associated with hostname
+11-20 10:01:48.021 12064 12064 I A02S    : POST t=50
+11-20 10:01:48.272   714  1912 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+11-20 10:01:48.275   714  1912 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }: 0
+11-20 10:01:48.334   714   738 I ActivityManager: Broadcast completed: result=0
+11-20 10:01:48.338 10133 12070 I A02P    : op=raw -> FAIL ConnectException: failed to connect to /172.66.147.243 (port 443) from /:: (port 0) after 4999ms: connect failed: EACCES (Permission denied) after 19 ms
+11-20 10:01:48.481   714  1180 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+11-20 10:01:48.489   714  1180 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }: 0
+11-20 10:01:48.508   714   738 I ActivityManager: Broadcast completed: result=0
+11-20 10:01:48.535 10133 12076 I A02P    : op=dns -> FAIL UnknownHostException: Unable to resolve host "example.org": No address associated with hostname
+11-20 10:01:50.143 12080 12080 I A02S    : POST t=52
+11-20 10:01:50.242   714  2033 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+11-20 10:01:50.243   714  2033 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }: 0
+11-20 10:01:50.269   714   738 I ActivityManager: Broadcast completed: result=0
+11-20 10:01:50.273 10133 12086 I A02P    : op=raw -> FAIL ConnectException: failed to connect to /172.66.147.243 (port 443) from /:: (port 0) after 5000ms: connect failed: EACCES (Permission denied) after 9 ms
+11-20 10:01:50.389   714  1912 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+11-20 10:01:50.391   714  1912 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }: 0
+11-20 10:01:50.420 10133 12092 I A02P    : op=dns -> FAIL UnknownHostException: Unable to resolve host "example.org": No address associated with hostname
+11-20 10:01:50.424   714   738 I ActivityManager: Broadcast completed: result=0
+11-20 10:01:52.041 12095 12095 I A02S    : POST t=54
+11-20 10:01:52.148   714  1993 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+11-20 10:01:52.156   714  1993 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }: 0
+11-20 10:01:52.179 10133 12101 I A02P    : op=raw -> FAIL ConnectException: failed to connect to /172.66.147.243 (port 443) from /:: (port 0) after 5000ms: connect failed: EACCES (Permission denied) after 15 ms
+11-20 10:01:52.183   714   738 I ActivityManager: Broadcast completed: result=0
+11-20 10:01:52.324   714  1993 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+11-20 10:01:52.336   714  1993 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }: 0
+11-20 10:01:52.352   714   738 I ActivityManager: Broadcast completed: result=0
+11-20 10:01:52.369 10133 12107 I A02P    : op=dns -> FAIL UnknownHostException: Unable to resolve host "example.org": No address associated with hostname
+11-20 10:01:53.977 12111 12111 I A02S    : POST t=56
+11-20 10:01:54.070   714  1912 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+11-20 10:01:54.073   714  1912 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }: 0
+11-20 10:01:54.107 10133 12117 I A02P    : op=raw -> FAIL ConnectException: failed to connect to /172.66.147.243 (port 443) from /:: (port 0) after 5000ms: connect failed: EACCES (Permission denied) after 15 ms
+11-20 10:01:54.107   714   738 I ActivityManager: Broadcast completed: result=0
+11-20 10:01:54.254   714  1912 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+11-20 10:01:54.262   714  1912 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }: 0
+11-20 10:01:54.273 10133 12123 I A02P    : op=dns -> FAIL UnknownHostException: Unable to resolve host "example.org": No address associated with hostname
+11-20 10:01:54.275   714   738 I ActivityManager: Broadcast completed: result=0
+11-20 10:01:55.883 12126 12126 I A02S    : POST t=58
+11-20 10:01:55.972   714  1993 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+11-20 10:01:55.980   714  1993 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }: 0
+11-20 10:01:55.992   714   738 I ActivityManager: Broadcast completed: result=0
+11-20 10:01:55.994 10133 12132 I A02P    : op=raw -> FAIL ConnectException: failed to connect to /172.66.147.243 (port 443) from /:: (port 0) after 5000ms: connect failed: EACCES (Permission denied) after 8 ms
+11-20 10:01:56.103   714  1912 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+11-20 10:01:56.104   714  1912 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }: 0
+11-20 10:01:56.124   714   738 I ActivityManager: Broadcast completed: result=0
+11-20 10:01:56.126 10133 12138 I A02P    : op=dns -> FAIL UnknownHostException: Unable to resolve host "example.org": No address associated with hostname
+11-20 10:01:57.816 12147 12147 I A02S    : POST t=59
+11-20 10:01:58.072   714  2033 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+11-20 10:01:58.079   714  2033 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }: 0
+11-20 10:01:58.135 10133 12153 I A02P    : op=raw -> FAIL ConnectException: failed to connect to /172.66.147.243 (port 443) from /:: (port 0) after 5000ms: connect failed: EACCES (Permission denied) after 22 ms
+11-20 10:01:58.170   714   738 I ActivityManager: Broadcast completed: result=0
+11-20 10:01:58.411   714  1912 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+11-20 10:01:58.417   714  1912 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }: 0
+11-20 10:01:58.439   714   738 I ActivityManager: Broadcast completed: result=0
+11-20 10:01:58.456 10133 12159 I A02P    : op=dns -> FAIL UnknownHostException: Unable to resolve host "example.org": No address associated with hostname
+11-20 10:02:00.137 12163 12163 I A02S    : POST t=62
+11-20 10:02:00.275   714  1993 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+11-20 10:02:00.278   714  1993 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }: 0
+11-20 10:02:00.311 10133 12169 I A02P    : op=raw -> FAIL ConnectException: failed to connect to /172.66.147.243 (port 443) from /:: (port 0) after 5000ms: connect failed: EACCES (Permission denied) after 19 ms
+11-20 10:02:00.317   714   738 I ActivityManager: Broadcast completed: result=0
+11-20 10:02:00.447   714  1180 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+11-20 10:02:00.453   714  1180 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }: 0
+11-20 10:02:00.474 10133 12175 I A02P    : op=dns -> FAIL UnknownHostException: Unable to resolve host "example.org": No address associated with hostname
+11-20 10:02:00.481   714   738 I ActivityManager: Broadcast completed: result=0
+11-20 10:02:02.113 12179 12179 I A02S    : POST t=64
+11-20 10:02:02.242   714  1993 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+11-20 10:02:02.246   714  1993 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }: 0
+11-20 10:02:02.265   714   738 I ActivityManager: Broadcast completed: result=0
+11-20 10:02:02.277 10133 12185 I A02P    : op=raw -> FAIL ConnectException: failed to connect to /172.66.147.243 (port 443) from /:: (port 0) after 5000ms: connect failed: EACCES (Permission denied) after 6 ms
+11-20 10:02:02.391   714  1180 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+11-20 10:02:02.401   714  1180 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }: 0
+11-20 10:02:02.408 10133 12191 I A02P    : op=dns -> FAIL UnknownHostException: Unable to resolve host "example.org": No address associated with hostname
+11-20 10:02:02.416   714   738 I ActivityManager: Broadcast completed: result=0
+11-20 10:02:04.037 12194 12194 I A02S    : POST t=66
+11-20 10:02:04.150   714  1912 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+11-20 10:02:04.152   714  1912 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }: 0
+11-20 10:02:04.174 10133 12200 I A02P    : op=raw -> FAIL ConnectException: failed to connect to /172.66.147.243 (port 443) from /:: (port 0) after 5000ms: connect failed: EACCES (Permission denied) after 6 ms
+11-20 10:02:04.177   714   738 I ActivityManager: Broadcast completed: result=0
+11-20 10:02:04.294   714  1993 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+11-20 10:02:04.299   714  1993 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }: 0
+11-20 10:02:04.324 10133 12206 I A02P    : op=dns -> FAIL UnknownHostException: Unable to resolve host "example.org": No address associated with hostname
+11-20 10:02:04.325   714   738 I ActivityManager: Broadcast completed: result=0
+11-20 10:02:05.952 12210 12210 I A02S    : POST t=68
+11-20 10:02:06.051   714  1180 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+11-20 10:02:06.064   714  1180 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }: 0
+11-20 10:02:06.075   714   738 I ActivityManager: Broadcast completed: result=0
+11-20 10:02:06.095 10133 12216 I A02P    : op=raw -> FAIL ConnectException: failed to connect to /172.66.147.243 (port 443) from /:: (port 0) after 5000ms: connect failed: EACCES (Permission denied) after 23 ms
+11-20 10:02:06.206   714  1180 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+11-20 10:02:06.208   714  1180 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }: 0
+11-20 10:02:06.229 10133 12222 I A02P    : op=dns -> FAIL UnknownHostException: Unable to resolve host "example.org": No address associated with hostname
+11-20 10:02:06.233   714   738 I ActivityManager: Broadcast completed: result=0
+11-20 10:02:07.891 12230 12230 I A02S    : POST t=69
+11-20 10:02:08.064   714  1993 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+11-20 10:02:08.076   714  1993 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }: 0
+11-20 10:02:08.117   714   738 I ActivityManager: Broadcast completed: result=0
+11-20 10:02:08.161 10133 12236 I A02P    : op=raw -> FAIL ConnectException: failed to connect to /172.66.147.243 (port 443) from /:: (port 0) after 5000ms: connect failed: EACCES (Permission denied) after 55 ms
+11-20 10:02:08.395   714  1993 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+11-20 10:02:08.404   714  1993 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }: 0
+11-20 10:02:08.443   714   738 I ActivityManager: Broadcast completed: result=0
+11-20 10:02:08.468 10133 12242 I A02P    : op=dns -> FAIL UnknownHostException: Unable to resolve host "example.org": No address associated with hostname
+11-20 10:02:10.086 12246 12246 I A02S    : POST t=72
+11-20 10:02:10.199   714  1180 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+11-20 10:02:10.202   714  1180 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }: 0
+11-20 10:02:10.227   714   738 I ActivityManager: Broadcast completed: result=0
+11-20 10:02:10.235 10133 12252 I A02P    : op=raw -> FAIL ConnectException: failed to connect to /172.66.147.243 (port 443) from /:: (port 0) after 5000ms: connect failed: EACCES (Permission denied) after 12 ms
+11-20 10:02:10.353   714  2033 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+11-20 10:02:10.356   714  2033 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }: 0
+11-20 10:02:10.380 10133 12258 I A02P    : op=dns -> FAIL UnknownHostException: Unable to resolve host "example.org": No address associated with hostname
+11-20 10:02:10.386   714   738 I ActivityManager: Broadcast completed: result=0
+11-20 10:02:12.050 12262 12262 I A02S    : POST t=74
+11-20 10:02:12.163   714  1993 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+11-20 10:02:12.167   714  1993 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }: 0
+11-20 10:02:12.192   714   738 I ActivityManager: Broadcast completed: result=0
+11-20 10:02:12.201 10133 12268 I A02P    : op=raw -> FAIL ConnectException: failed to connect to /172.66.147.243 (port 443) from /:: (port 0) after 5000ms: connect failed: EACCES (Permission denied) after 21 ms
+11-20 10:02:12.349   714  2033 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+11-20 10:02:12.350   714  2033 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }: 0
+11-20 10:02:12.372   714   738 I ActivityManager: Broadcast completed: result=0
+11-20 10:02:12.390 10133 12274 I A02P    : op=dns -> FAIL UnknownHostException: Unable to resolve host "example.org": No address associated with hostname
+11-20 10:02:13.973 12278 12278 I A02S    : POST t=76
+11-20 10:02:14.114   714  1912 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+11-20 10:02:14.119   714  1912 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }: 0
+11-20 10:02:14.148 10133 12284 I A02P    : op=raw -> FAIL ConnectException: failed to connect to /172.66.147.243 (port 443) from /:: (port 0) after 4999ms: connect failed: EACCES (Permission denied) after 16 ms
+11-20 10:02:14.149   714   738 I ActivityManager: Broadcast completed: result=0
+11-20 10:02:14.302   714  1993 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+11-20 10:02:14.311   714  1993 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }: 0
+11-20 10:02:14.322 10133 12290 I A02P    : op=dns -> FAIL UnknownHostException: Unable to resolve host "example.org": No address associated with hostname
+11-20 10:02:14.323   714   738 I ActivityManager: Broadcast completed: result=0
+11-20 10:02:15.960 12293 12293 I A02S    : POST t=78
+11-20 10:02:16.055   714  1912 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+11-20 10:02:16.056   714  1912 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }: 0
+11-20 10:02:16.078   714   738 I ActivityManager: Broadcast completed: result=0
+11-20 10:02:16.085 10133 12299 I A02P    : op=raw -> FAIL ConnectException: failed to connect to /172.66.147.243 (port 443) from /:: (port 0) after 5000ms: connect failed: EACCES (Permission denied) after 13 ms
+11-20 10:02:16.213   714  1180 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+11-20 10:02:16.215   714  1180 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }: 0
+11-20 10:02:16.239 10133 12305 I A02P    : op=dns -> FAIL UnknownHostException: Unable to resolve host "example.org": No address associated with hostname
+11-20 10:02:16.240   714   738 I ActivityManager: Broadcast completed: result=0
+11-20 10:02:17.921 12314 12314 I A02S    : POST t=79
+11-20 10:02:18.193   714  1180 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+11-20 10:02:18.212   714  1180 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }: 0
+11-20 10:02:18.253   714   738 I ActivityManager: Broadcast completed: result=0
+11-20 10:02:18.268 10133 12320 I A02P    : op=raw -> FAIL ConnectException: failed to connect to /172.66.147.243 (port 443) from /:: (port 0) after 5000ms: connect failed: EACCES (Permission denied) after 38 ms
+11-20 10:02:18.554   714  1180 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+11-20 10:02:18.570   714  1180 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }: 0
+11-20 10:02:18.625 10133 12326 I A02P    : op=dns -> FAIL UnknownHostException: Unable to resolve host "example.org": No address associated with hostname
+11-20 10:02:18.626   714   738 I ActivityManager: Broadcast completed: result=0
+11-20 10:02:20.277 12330 12330 I A02S    : POST t=82
+11-20 10:02:20.377   714  1993 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+11-20 10:02:20.381   714  1993 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }: 0
+11-20 10:02:20.397   714   738 I ActivityManager: Broadcast completed: result=0
+11-20 10:02:20.407 10133 12336 I A02P    : op=raw -> FAIL ConnectException: failed to connect to /172.66.147.243 (port 443) from /:: (port 0) after 5000ms: connect failed: EACCES (Permission denied) after 13 ms
+11-20 10:02:20.515   714  1993 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+11-20 10:02:20.516   714  1993 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }: 0
+11-20 10:02:20.536 10133 12342 I A02P    : op=dns -> FAIL UnknownHostException: Unable to resolve host "example.org": No address associated with hostname
+11-20 10:02:20.543   714   738 I ActivityManager: Broadcast completed: result=0
+11-20 10:02:22.165 12345 12345 I A02S    : POST t=84
+11-20 10:02:22.290   714  1033 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+11-20 10:02:22.290   714  1033 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }: 0
+11-20 10:02:22.295   714   738 I ActivityManager: Broadcast completed: result=0
+11-20 10:02:22.297 10133 12351 I A02P    : op=raw -> FAIL ConnectException: failed to connect to /172.66.147.243 (port 443) from /:: (port 0) after 5000ms: connect failed: EACCES (Permission denied) after 3 ms
+11-20 10:02:22.432   714  1993 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+11-20 10:02:22.437   714  1993 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }: 0
+11-20 10:02:22.462   714   738 I ActivityManager: Broadcast completed: result=0
+11-20 10:02:22.478 10133 12357 I A02P    : op=dns -> FAIL UnknownHostException: Unable to resolve host "example.org": No address associated with hostname
+11-20 10:02:24.098 12361 12361 I A02S    : POST t=86
+11-20 10:02:24.193   714   730 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+11-20 10:02:24.194   714   730 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }: 0
+11-20 10:02:24.214   714   738 I ActivityManager: Broadcast completed: result=0
+11-20 10:02:24.222 10133 12367 I A02P    : op=raw -> FAIL ConnectException: failed to connect to /172.66.147.243 (port 443) from /:: (port 0) after 5000ms: connect failed: EACCES (Permission denied) after 9 ms
+11-20 10:02:24.373   714   730 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+11-20 10:02:24.378   714   730 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }: 0
+11-20 10:02:24.416 10133 12373 I A02P    : op=dns -> FAIL UnknownHostException: Unable to resolve host "example.org": No address associated with hostname
+11-20 10:02:24.419   714   738 I ActivityManager: Broadcast completed: result=0
+11-20 10:02:26.054 12376 12376 I A02S    : POST t=88
+11-20 10:02:26.198   714   730 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+11-20 10:02:26.219   714   730 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }: 0
+11-20 10:02:26.241 10133 12382 I A02P    : op=raw -> FAIL ConnectException: failed to connect to /172.66.147.243 (port 443) from /:: (port 0) after 4999ms: connect failed: EACCES (Permission denied) after 13 ms
+11-20 10:02:26.241   714   738 I ActivityManager: Broadcast completed: result=0
+11-20 10:02:26.368   714  1993 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+11-20 10:02:26.370   714  1993 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }: 0
+11-20 10:02:26.387 10133 12388 I A02P    : op=dns -> FAIL UnknownHostException: Unable to resolve host "example.org": No address associated with hostname
+11-20 10:02:26.398   714   738 I ActivityManager: Broadcast completed: result=0
+11-20 10:02:28.095 12397 12397 I A02S    : POST t=90
+11-20 10:02:28.317   714  1993 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+11-20 10:02:28.322   714  1993 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }: 0
+11-20 10:02:28.388   714   738 I ActivityManager: Broadcast completed: result=0
+11-20 10:02:28.399 10133 12403 I A02P    : op=raw -> FAIL ConnectException: failed to connect to /172.66.147.243 (port 443) from /:: (port 0) after 4999ms: connect failed: EACCES (Permission denied) after 44 ms
+11-20 10:02:28.558   714  1993 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+11-20 10:02:28.563   714  1993 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }: 0
+11-20 10:02:28.586   714   738 I ActivityManager: Broadcast completed: result=0
+11-20 10:02:28.595 10133 12409 I A02P    : op=dns -> FAIL UnknownHostException: Unable to resolve host "example.org": No address associated with hostname
+11-20 10:02:30.306 12415 12415 I A02S    : AFTER_POST pidVpn=
+11-20 10:02:30.398 12416 12416 I A02S    : TRIGGER lockdown_on
+11-20 10:02:30.496   714  1033 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b/.CmdReceiver (has extras) }
+11-20 10:02:30.503   714  1033 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b/.CmdReceiver (has extras) }: 0
+11-20 10:02:30.650   714   748 I ActivityManager: Start proc 12427:com.webfilter.spike.a02b:vpn/u0a237 for started-service {com.webfilter.spike.a02b/com.webfilter.spike.a02b.vpn.TunVpnService}
+11-20 10:02:30.655 11408 11408 I A02B    : op=lockdown_on -> set always-on pkg=com.webfilter.spike.a02b lockdown=true; readback pkg=com.webfilter.spike.a02b lockdown=true
+11-20 10:02:30.660   714   738 I ActivityManager: Broadcast completed: result=0, data="set always-on pkg=com.webfilter.spike.a02b lockdown=true; readback pkg=com.webfilter.spike.a02b lockdown=true"
+11-20 10:02:30.787 12433 12433 I A02S    : RESTART t=0
+11-20 10:02:30.919   714  1033 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+11-20 10:02:30.931   714  1033 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }: 0
+11-20 10:02:30.961 10133 12447 I A02P    : op=raw -> FAIL ConnectException: failed to connect to /172.66.147.243 (port 443) from /:: (port 0) after 4999ms: connect failed: EACCES (Permission denied) after 18 ms
+11-20 10:02:30.966   714   738 I ActivityManager: Broadcast completed: result=0
+11-20 10:02:31.121   714   730 I ActivityManager: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }
+11-20 10:02:31.129   714   730 I ActivityManager: Enqueued broadcast Intent { flg=0x400000 cmp=com.webfilter.spike.a02b.probe/.ProbeReceiver (has extras) }: 0
+11-20 10:02:31.156   714   738 I ActivityManager: Broadcast completed: result=0
+11-20 10:02:31.175 10133 12454 I A02P    : op=dns -> FAIL UnknownHostException: Unable to resolve host "example.org": No address associated with hostname
+11-20 10:02:31.394 12427 12427 I A02B    : onCreate pid=12427 uptimeMs=3168667
+11-20 10:02:31.395 12427 12427 I A02B    : onStartCommand startId=3 running=false
+11-20 10:02:31.423 12427 12427 I A02B    : upstream dns=/10.0.2.3
+11-20 10:02:31.859 12427 12427 I A02B    : establish ok pid=12427 uptimeMs=3169132
+11-20 10:02:31.871 12427 12427 I A02B    : SELFTEST protect(unbound Socket)=false protect(bound Socket)=true
+11-20 10:02:31.880 12427 12427 I A02B    : SELFTEST protect(Socket)=true protect(DatagramSocket)=true
+11-20 10:02:32.537 12471 12471 I A02S    : VPN_PID_BACK

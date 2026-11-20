@@ -1,0 +1,4 @@
+﻿no VPN (lockdown off, tun0 gone)
+--------- beginning of main
+11-20 11:53:35.248  3333  5034 I A02P    : op=raw -> FAIL ConnectException: failed to connect to /2606:4700:4700::1111 (port 443) from /fec0::4c97:e50b:563b:2a0e (port 59494) after 5000ms: isConnected failed: ECONNREFUSED (Connection refused) after 4 ms
+11-20 11:53:35.336  3333  5040 I A02P    : op=raw -> CONNECTED in 10 ms
