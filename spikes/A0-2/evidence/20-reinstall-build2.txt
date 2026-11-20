@@ -1,0 +1,40 @@
+﻿== install app
+adb.exe : adb.exe: device 'emulator-5556' not found
+At line:1 char:568
++ ... pp'; $o += (& $adb -s $s install -t -r "$k\app\build\outputs\apk\debu ...
++                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (adb.exe: device...5556' not found:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+== install probe
+adb.exe : adb.exe: device 'emulator-5556' not found
+At line:1 char:682
++ ... be'; $o += (& $adb -s $s install -t -r "$k\probe\build\outputs\apk\de ...
++                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (adb.exe: device...5556' not found:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+== owners
+adb.exe : adb.exe: device 'emulator-5556' not found
+At line:1 char:793
++ ... = '== owners'; $o += (& $adb -s $s shell dpm list-owners 2>&1); $o += ...
++                           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (adb.exe: device...5556' not found:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+== appops
+adb.exe : adb.exe: device 'emulator-5556' not found
+At line:1 char:861
++ ... ps'; $o += (& $adb -s $s shell "appops get com.webfilter.spike.a02 AC ...
++                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (adb.exe: device...5556' not found:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+== status
+adb.exe : adb.exe: device 'emulator-5556' not found
+At line:1 char:963
++ ... us'; $o += (& $adb -s $s shell "am broadcast -W -n com.webfilter.spik ...
++                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (adb.exe: device...5556' not found:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 

@@ -1,0 +1,18 @@
+﻿== restore: alwayson_on
+Broadcast completed: result=0, data="OK set always-on lockdown=true consent=granted readBackPkg=com.webfilter.spike.a02 readBackLockdown=true"
+== tun0 after restore
+20: tun0: <POINTOPOINT,UP,LOWER_UP> mtu 1280 qdisc pfifo_fast state UNKNOWN group default qlen 500
+    link/none 
+== crash #2 at device ms=1795133928928
+after 10s: no A02 restart yet
+after 20s: no A02 restart yet
+after 30s: no A02 restart yet
+after 40s: no A02 restart yet
+after 50s: no A02 restart yet
+after 60s: no A02 restart yet
+after 70s: no A02 restart yet
+after 80s: no A02 restart yet
+after 90s: no A02 restart yet
+after 100s: no A02 restart yet
+after 110s: no A02 restart yet
+after 120s: no A02 restart yet

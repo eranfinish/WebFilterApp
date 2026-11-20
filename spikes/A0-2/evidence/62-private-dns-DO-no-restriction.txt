@@ -1,0 +1,3 @@
+﻿tapped 'Network'
+tapped 'Private DNS'
+page: Select Private DNS Mode | Off | Automatic | Private DNS provider hostname | Hostname | Learn more about Private DNS features | Cancel | Save

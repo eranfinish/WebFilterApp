@@ -1,0 +1,6 @@
+﻿tapped 'More options'
+tapped 'Settings'
+tapped 'Privacy and security'
+tapped 'Use secure DNS'
+Secure DNS screen: Use secure DNS | Use secure DNS | Determines how to connect to websites over a secure connection | Use your current service provider | Secure DNS may not be available all the time | Choose another provider
+enabled flags: Use your current service provider=true ; Choose another provider=true

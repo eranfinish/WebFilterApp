@@ -1,0 +1,24 @@
+﻿Performing Streamed Install
+Success
+Performing Streamed Install
+Success
+== set-device-owner (NO appops)
+Success: Device owner set to package com.webfilter.spike.a02/.AdminReceiver
+Active admin set to component com.webfilter.spike.a02/.AdminReceiver
+== appops before (fresh install)
+No operations.
+Default mode: ignore
+== consent op (no grant)
+Broadcast completed: result=0, data="prepare=intent(consent-needed)"
+== alwayson_nolock (no adb grant)
+Broadcast completed: result=0, data="OK set always-on lockdown=false consent=needed readBackPkg=com.webfilter.spike.a02 readBackLockdown=false"
+== A02 log (establish / prepare)
+11-20 00:35:20.440  9961 10015 I A02     : op=consent arg=null t=1795134920440 -> prepare=intent(consent-needed)
+11-20 00:35:20.540  9961  9961 I A02     : onCreate pid=9961 uid=10237 t=1795134920540
+11-20 00:35:20.540  9961  9961 I A02     : onStartCommand action=android.net.VpnService startId=1 t=1795134920540
+11-20 00:35:20.557  9961  9961 I A02     : establish ok fd=94 t=1795134920557
+11-20 00:35:20.558  9961  9961 I A02     : onBind action=android.net.VpnService t=1795134920558
+== tun0
+28: tun0: <POINTOPOINT,UP,LOWER_UP> mtu 1280 qdisc pfifo_fast state UNKNOWN group default qlen 500
+== appops after
+ACTIVATE_VPN: allow; time=+4s172ms ago; rejectTime=+4s190ms ago

@@ -1,0 +1,6 @@
+﻿== appops set ACTIVATE_VPN allow (shell)
+== appops get
+ACTIVATE_VPN: allow; rejectTime=+5s64ms ago
+== consent op after appops
+Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02/.CmdReceiver (has extras) }
+Broadcast completed: result=0, data="prepare=null(granted)"

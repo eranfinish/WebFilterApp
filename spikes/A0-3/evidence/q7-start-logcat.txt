@@ -1,0 +1,7 @@
+﻿--------- beginning of main
+11-19 23:53:22.532  5673  5673 I A03WV   : 1795132402531 START https://m.youtube.com/
+11-19 23:53:22.617  5673  5723 I A03WV   : 1795132402617 shouldInterceptRequest https://m.youtube.com/ main=true
+11-19 23:53:22.639  5673  5673 I A03WV   : 1795132402638 POLL https://m.youtube.com/
+11-19 23:53:22.820  5673  5673 I A03WV   : 1795132402820 onPageStarted https://m.youtube.com/
+11-19 23:53:22.820  5673  5673 I A03WV   : 1795132402820 onPageFinished https://m.youtube.com/
+11-19 23:53:22.870  5673  5673 I A03WV   : 1795132402870 doUpdateVisitedHistory https://m.youtube.com/ reload=false

@@ -1,0 +1,21 @@
+﻿== alwayson_on (lockdown)
+Broadcast completed: result=0, data="OK set always-on lockdown=true consent=granted readBackPkg=com.webfilter.spike.a02 readBackLockdown=true"
+== watchdns (probe, 8s, lockdown on)
+Broadcast completed: result=0, data="OK watchdns events=WATCHDNS UP t=1795133769442; "
+== tcp direct (lockdown on)
+Broadcast completed: result=0, data="FAIL ConnectException: failed to connect to /172.66.147.243 (port 443) from /:: (port 0) after 4000ms: connect failed: EACCES (Permission denied)"
+== resolve example.org (lockdown on)
+Broadcast completed: result=0, data="FAIL UnknownHostException: Unable to resolve host "example.org": No address associated with hostname"
+== A02 DNS/drop lines during lockdown
+11-20 00:16:14.485  3011  4062 I A02     : DNS name=x21.blocked.example type=1 action=BLOCK t=1795133774485
+11-20 00:16:14.738  3011  4062 I A02     : DNS name=x22.blocked.example type=1 action=BLOCK t=1795133774738
+11-20 00:16:14.989  3011  4062 I A02     : DNS name=x23.blocked.example type=1 action=BLOCK t=1795133774989
+11-20 00:16:15.241  3011  4062 I A02     : DNS name=x24.blocked.example type=1 action=BLOCK t=1795133775241
+11-20 00:16:15.492  3011  4062 I A02     : DNS name=x25.blocked.example type=1 action=BLOCK t=1795133775492
+11-20 00:16:15.744  3011  4062 I A02     : DNS name=x26.blocked.example type=1 action=BLOCK t=1795133775744
+11-20 00:16:15.995  3011  4062 I A02     : DNS name=x27.blocked.example type=1 action=BLOCK t=1795133775995
+11-20 00:16:16.247  3011  4062 I A02     : DNS name=x28.blocked.example type=1 action=BLOCK t=1795133776247
+11-20 00:16:16.498  3011  4062 I A02     : DNS name=x29.blocked.example type=1 action=BLOCK t=1795133776498
+11-20 00:16:16.749  3011  4062 I A02     : DNS name=x30.blocked.example type=1 action=BLOCK t=1795133776749
+11-20 00:16:17.001  3011  4062 I A02     : DNS name=x31.blocked.example type=1 action=BLOCK t=1795133777001
+11-20 00:16:17.253  3011  4062 I A02     : DNS name=x32.blocked.example type=1 action=BLOCK t=1795133777253

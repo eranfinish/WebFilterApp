@@ -1,0 +1,24 @@
+﻿Broadcast completed: result=0, data="OK always-on cleared"
+=== A: VPN DOWN
+--- neverssl #1
+Broadcast completed: result=0, data="FAIL SocketTimeoutException: timeout"
+--- neverssl #2
+Broadcast completed: result=0, data="OK code=200"
+--- neverssl #3
+Broadcast completed: result=0, data="FAIL SocketTimeoutException: timeout"
+--- example.org #1
+Broadcast completed: result=0, data="OK code=200"
+--- example.org #2
+Broadcast completed: result=0, data="OK code=200"
+Broadcast completed: result=0, data="OK set always-on lockdown=false consent=needed readBackPkg=com.webfilter.spike.a02 readBackLockdown=false"
+=== B: VPN UP (lockdown off)
+--- neverssl #1
+Broadcast completed: result=0, data="FAIL SocketTimeoutException: timeout"
+--- neverssl #2
+Broadcast completed: result=0, data="FAIL SocketTimeoutException: timeout"
+--- neverssl #3
+Broadcast completed: result=0, data="OK code=200"
+--- example.org #1
+Broadcast completed: result=0, data="OK code=200"
+--- example.org #2
+Broadcast completed: result=0, data="OK code=200"

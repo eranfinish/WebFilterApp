@@ -1,0 +1,23 @@
+﻿== alwayson_on (lockdown)
+Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02/.CmdReceiver (has extras) }
+Broadcast completed: result=0, data="OK set always-on lockdown=true consent=granted readBackPkg=com.webfilter.spike.a02 readBackLockdown=true"
+== resolve example.com #1
+Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02.probe/.ProbeReceiver (has extras) }
+Broadcast completed: result=0, data="FAIL UnknownHostException: Unable to resolve host "example.com": No address associated with hostname"
+== resolve example.com #2
+Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02.probe/.ProbeReceiver (has extras) }
+Broadcast completed: result=0, data="FAIL UnknownHostException: Unable to resolve host "example.com": No address associated with hostname"
+== resolve www.wikipedia.org
+Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02.probe/.ProbeReceiver (has extras) }
+Broadcast completed: result=0, data="FAIL UnknownHostException: Unable to resolve host "www.wikipedia.org": No address associated with hostname"
+== A02 DNS lines (names seen by the tun)
+11-20 00:09:59.375 15976 16475 I A02     : DNS name=mtalk.google.com type=1 action=FORWARD ok=true t=1795133399375
+11-20 00:09:59.442 15976 16475 I A02     : DNS name=www.google.com type=65 action=FORWARD ok=true t=1795133399442
+11-20 00:09:59.444 15976 16474 I A02     : DNS name=www.google.com type=1 action=FORWARD ok=true t=1795133399444
+== connectivity: probe uid 10236 blocked
+    UIDs: [10236-99999, 0-10234]
+    UIDs: 10236-20234
+    2026-11-20T00:04:44.568019 - Package add: uid=10236, nPerm=(NONE/NONE)
+    2026-11-20T00:04:44.498425 - Package remove: uid=10236, nPerm=(NONE/NONE)
+    2026-11-19T23:59:03.223618 - Package add: uid=10236, nPerm=(NONE/NONE)
+== dnsresolver (private dns / validation for 10.111.0.53)

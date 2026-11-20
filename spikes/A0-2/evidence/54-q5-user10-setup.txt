@@ -1,0 +1,10 @@
+﻿== install existing into user 10
+Package com.webfilter.spike.a02 installed for user: 10
+Package com.webfilter.spike.a02.probe installed for user: 10
+== start user 10
+Success: user started
+== status in user 10 (DPC as profile owner?)
+Broadcast completed: result=0, data="pid=6875 uid=1010235 deviceOwner=false profileOwner=true alwaysOnPkg=null lockdown=false vpnRunning=false profiles=1"
+== dpm list-owners
+User 0: admin=com.webfilter.spike.a02/.AdminReceiver,DeviceOwner
+User 10: admin=com.webfilter.spike.a02/.AdminReceiver,ProfileOwner

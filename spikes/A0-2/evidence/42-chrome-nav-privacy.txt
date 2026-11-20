@@ -1,0 +1,4 @@
+﻿tapped 'More options' at 1017,136.5
+tapped 'Settings' at 587,2309.5
+tapped 'Privacy and security' at 277,1397
+Privacy and security | Privacy | Delete browsing data | Delete history, cookies, site data, cacheâ€¦ | Privacy Guide | Review key privacy and security controls | Third-party cookies | Third-party cookies are allowed | Ad privacy | Customize the info used by sites to show you ads | Send a â€œDo Not Trackâ€ request | Off | Preload pages | Standard preloading | Lock Incognito tabs when you leave Chrome | Turn on screen lock in Android settings | Security | Safe Browsing | Standard protection is on | Warn you if a password was compromised in a data breach | When you use a password, Chrome warns you if it has been published online. When doing this, your passwords and usernames are encrypted, so they canâ€™t be read by anyone, including Google.

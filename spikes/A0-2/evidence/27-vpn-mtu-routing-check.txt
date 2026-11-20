@@ -1,0 +1,16 @@
+﻿== VPN network LinkProperties (tun0 mtu, routes)
+  NetworkAgentInfo{network{103}  handle{445787328525}  ni{VPN CONNECTED extra: VPN:com.webfilter.spike.a02} created=2026-11-20T00:13:16.776Z Score(Policies : EVER_EVALUATED&IS_VPN&EVER_VALIDATED&IS_VALIDATED ; KeepConnected : 0)  created 83351 firstValidated 83415 lastValidated 83415  lp{{InterfaceName: tun0 LinkAddresses: [ 10.111.0.1/32 ] DnsAddresses: [ /10.111.0.53 ] Domains:  MTU: 1280 Routes: [ 10.111.0.53/32 -> 0.0.0.0 tun0 mtu 0,::/0 unreachable mtu 0,10.111.0.1/32 -> 0.0.0.0 tun0 mtu 0 ]}}  nc{[ Transports: WIFI|VPN Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED&VALIDATED&NOT_ROAMING&FOREGROUND&NOT_CONGESTED&NOT_SUSPENDED&NOT_VCN_MANAGED&NOT_BANDWIDTH_CONSTRAINED LinkUpBandwidth>=12000Kbps LinkDnBandwidth>=30000Kbps TransportInfo: <VpnTransportInfo{type=1, sessionId=A0-2 DNS, bypassable=false longLivedTcpConnectionsExpensive=false}> Uids: <{0-99999}> OwnerUid: 10235 AdminUids: [10235] UnderlyingNetworks: [100]]}  factorySerialNumber=4}
+== neverssl over http with VPN up, verbose
+Broadcast completed: result=0, data="OK code=200"
+== ip -4 route get 34.223.124.45 (routing decision for the shell uid)
+34.223.124.45 via 10.0.2.2 dev wlan0 table 1016 src 10.0.2.17 uid 2000 
+    cache 
+== mtu of eth0 and tun0
+adb.exe : request send failed: Permission denied
+At line:1 char:1102
++ ... n0'; $o += (& $adb -s $s shell "ip link show eth0 | head -1; ip link  ...
++                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (request send failed: Permission denied:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+request send failed: Permission denied

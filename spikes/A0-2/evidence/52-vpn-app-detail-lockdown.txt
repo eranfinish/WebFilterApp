@@ -1,0 +1,3 @@
+﻿tapped 'A0.2 DPC'
+detail text: Blocked by work policy | For more info, contact your IT admin | Close
+switch/checked: 

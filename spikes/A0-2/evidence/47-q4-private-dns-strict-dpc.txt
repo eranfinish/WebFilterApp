@@ -1,0 +1,23 @@
+﻿Performing Streamed Install
+Success
+== owners
+User 0: admin=com.webfilter.spike.a02/.AdminReceiver,DeviceOwner
+== restore VPN (no lockdown)
+Broadcast completed: result=0, data="OK set always-on lockdown=false consent=granted readBackPkg=com.webfilter.spike.a02 readBackLockdown=false"
+== DPC: strict Private DNS dns.google (background thread now)
+Broadcast completed: result=0, data="OK global private dns strict host=dns.google"
+hostname
+dns.google
+--- resolve www.wikipedia.org (strict private DNS)
+Broadcast completed: result=0, data="FAIL UnknownHostException: Unable to resolve host "www.wikipedia.org": No address associated with hostname"
+--- resolve example.org (strict private DNS)
+Broadcast completed: result=0, data="FAIL UnknownHostException: Unable to resolve host "example.org": No address associated with hostname"
+--- http https://example.org/ (strict private DNS)
+Broadcast completed: result=0, data="FAIL UnknownHostException: Unable to resolve host "example.org": No address associated with hostname"
+== A02 DNS lines during strict mode (should be few/none if bypassed)
+11-20 00:24:04.922  4901  4923 I A02     : DNS name=example.org type=1 action=FORWARD ok=true t=1795134244922
+11-20 00:24:09.146  4901  4915 I A02     : DNS name=www.wikipedia.org type=1 action=BLOCK t=1795134249146
+11-20 00:24:43.143  4901  5198 I A02     : DNS name=example.org type=1 action=FORWARD ok=true t=1795134283143
+11-20 00:24:43.144  4901  4923 I A02     : DNS name=example.org type=65 action=FORWARD ok=true t=1795134283144
+== DPC: opportunistic again
+Broadcast completed: result=0, data="OK global private dns opportunistic"

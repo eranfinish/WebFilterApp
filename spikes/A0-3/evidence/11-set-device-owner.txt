@@ -1,0 +1,4 @@
+Success: Device owner set to package com.webfilter.spike.a03/.AdminReceiver
+Active admin set to component com.webfilter.spike.a03/.AdminReceiver
+1 owner:
+User  0: admin=com.webfilter.spike.a03/.AdminReceiver,DeviceOwner,Affiliated

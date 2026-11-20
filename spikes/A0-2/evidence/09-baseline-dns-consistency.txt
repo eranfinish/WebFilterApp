@@ -1,0 +1,46 @@
+﻿== baseline DNS consistency: 3 resolves per name, no VPN
+--- example.com #1
+Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02.probe/.ProbeReceiver (has extras) }
+Broadcast completed: result=0, data="OK addrs=104.20.23.154,172.66.147.243,2606:4700:10::6814:179a,2606:4700:10::ac42:93f3"
+--- example.com #2
+Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02.probe/.ProbeReceiver (has extras) }
+Broadcast completed: result=0, data="OK addrs=104.20.23.154,172.66.147.243,2606:4700:10::6814:179a,2606:4700:10::ac42:93f3"
+--- example.com #3
+Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02.probe/.ProbeReceiver (has extras) }
+Broadcast completed: result=0, data="OK addrs=104.20.23.154,172.66.147.243,2606:4700:10::6814:179a,2606:4700:10::ac42:93f3"
+--- neverssl.com #1
+Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02.probe/.ProbeReceiver (has extras) }
+Broadcast completed: result=0, data="OK addrs=34.223.124.45,2600:1f13:37c:1400:ba21:7165:5fc7:736e"
+--- neverssl.com #2
+Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02.probe/.ProbeReceiver (has extras) }
+Broadcast completed: result=0, data="OK addrs=34.223.124.45,2600:1f13:37c:1400:ba21:7165:5fc7:736e"
+--- neverssl.com #3
+Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02.probe/.ProbeReceiver (has extras) }
+Broadcast completed: result=0, data="OK addrs=34.223.124.45,2600:1f13:37c:1400:ba21:7165:5fc7:736e"
+--- example.org #1
+Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02.probe/.ProbeReceiver (has extras) }
+Broadcast completed: result=0, data="OK addrs=172.66.157.237,104.20.26.136,2606:4700:10::ac42:9ded,2606:4700:10::6814:1a88"
+--- example.org #2
+Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02.probe/.ProbeReceiver (has extras) }
+Broadcast completed: result=0, data="OK addrs=172.66.157.237,104.20.26.136,2606:4700:10::ac42:9ded,2606:4700:10::6814:1a88"
+--- example.org #3
+Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02.probe/.ProbeReceiver (has extras) }
+Broadcast completed: result=0, data="OK addrs=172.66.157.237,104.20.26.136,2606:4700:10::ac42:9ded,2606:4700:10::6814:1a88"
+--- github.com #1
+Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02.probe/.ProbeReceiver (has extras) }
+Broadcast completed: result=0, data="OK addrs=20.217.135.5"
+--- github.com #2
+Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02.probe/.ProbeReceiver (has extras) }
+Broadcast completed: result=0, data="OK addrs=20.217.135.5"
+--- github.com #3
+Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02.probe/.ProbeReceiver (has extras) }
+Broadcast completed: result=0, data="OK addrs=20.217.135.5"
+--- kernel.org #1
+Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02.probe/.ProbeReceiver (has extras) }
+Broadcast completed: result=0, data="OK addrs=172.105.4.254,2600:3c04:e001:324:0:1991:8:25"
+--- kernel.org #2
+Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02.probe/.ProbeReceiver (has extras) }
+Broadcast completed: result=0, data="OK addrs=172.105.4.254,2600:3c04:e001:324:0:1991:8:25"
+--- kernel.org #3
+Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02.probe/.ProbeReceiver (has extras) }
+Broadcast completed: result=0, data="OK addrs=172.105.4.254,2600:3c04:e001:324:0:1991:8:25"

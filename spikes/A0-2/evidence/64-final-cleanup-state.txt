@@ -1,0 +1,13 @@
+﻿Broadcast completed: result=0, data="OK always-on cleared"
+Success: Admin removed ComponentInfo{com.webfilter.spike.a02/com.webfilter.spike.a02.AdminReceiver}
+Success
+Success
+-- owners
+-- packages
+-- users
+Users:
+	UserInfo{0:Owner:4c13} running
+-- private dns
+opportunistic
+-- always-on
+null

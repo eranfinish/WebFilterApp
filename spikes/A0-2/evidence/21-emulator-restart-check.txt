@@ -1,0 +1,11 @@
+﻿== boot_completed=1
+== packages
+package:com.webfilter.spike.a02
+package:com.webfilter.spike.a02.probe
+== owners
+User 0: admin=com.webfilter.spike.a02/.AdminReceiver,DeviceOwner
+== users
+Users:
+	UserInfo{0:Owner:4c13} running
+== boot_id
+a9feebf9-1cdf-49a0-b6c3-0030d98c2bdd

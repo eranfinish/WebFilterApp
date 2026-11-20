@@ -1,0 +1,9 @@
+﻿== control: alwayson_off (VPN stops)
+Broadcast completed: result=0, data="OK always-on cleared"
+Device "tun0" does not exist.
+--- http https://example.com/ (VPN down)
+Broadcast completed: result=0, data="FAIL SSLHandshakeException: connection closed"
+--- http http://neverssl.com/ (VPN down)
+Broadcast completed: result=0, data="OK code=200"
+--- tcp 172.66.147.243:443 (VPN down)
+Broadcast completed: result=0, data="OK connect"

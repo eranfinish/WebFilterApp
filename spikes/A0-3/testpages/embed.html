@@ -1,0 +1,16 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>ALLOWED embed</title></head>
+<body>
+<p>ALLOWED embed page (10.0.2.2:8000). Subresources come from the same host on port 8001 (Q3).
+The LAN address 192.168.150.185 was not reachable from the emulator (no requests reached the host log).</p>
+<p id="res">pending</p>
+<iframe id="f" src="http://10.0.2.2:8001/sub/frame.html" width="300" height="80" onload="r('frame','load')" onerror="r('frame','error')"></iframe>
+<img id="i" src="http://10.0.2.2:8001/sub/img.svg" width="60" height="60" onload="r('img','load')" onerror="r('img','error')">
+<script src="http://10.0.2.2:8001/sub/s.js" onload="r('script','load')" onerror="r('script','error')"></script>
+<script>
+  var got = {};
+  function r(k, v) { got[k] = v; var parts = []; for (var n in got) parts.push(n + '=' + got[n]);
+    document.getElementById('res').textContent = 'RESULT ' + parts.join(' '); }
+  setTimeout(function () { var s = window.__subscript ? 'ran' : 'not-ran'; r('script-ran', s); }, 4000);
+</script>
+</body></html>

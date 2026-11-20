@@ -1,0 +1,99 @@
+﻿== 1 shell-uid DNS: ping example.com
+PING example.com (172.66.147.243) 56(84) bytes of data.
+
+--- example.com ping statistics ---
+1 packets transmitted, 0 received, 100% packet loss, time 0ms
+
+== 2 probe uid
+== netpolicy uid rules (probe)
+Restrict background: false
+Restrict power: false
+Restricted networking mode: false
+com.android.server.net.never_apply_rules_to_core_uids: true
+mRestrictBackgroundLowPowerMode: false
+mRestrictBackgroundBeforeBsm: false
+mLoadedRestrictBackground: false
+mRestrictBackgroundChangedInBsm: false
+Policy for UIDs:
+  UID=10114 policy=4 (ALLOW_METERED_BACKGROUND)
+  UID=10213 policy=4 (ALLOW_METERED_BACKGROUND)
+  UID=10215 policy=4 (ALLOW_METERED_BACKGROUND)
+  UID=10224 policy=4 (ALLOW_METERED_BACKGROUND)
+  UID=2000: true
+  UID=10106: true
+  UID=10108: true
+  UID=10109: true
+  UID=10114: true
+  UID=10123: true
+  UID=10153: true
+  UID=10157: true
+  UID=10161: true
+  UID=10204: true
+  UID=10213: true
+  UID=10215: true
+  UID=10216: true
+  UID=10224: true
+  UID=2000: true
+  UID=10108: true
+  UID=10109: true
+  UID=10114: true
+  UID=10161: true
+  UID=10204: true
+  UID=10213: true
+  UID=10215: true
+  UID=10216: true
+  UID=10224: true
+Default restrict background allowlist uids:
+  UID=10114
+  UID=10213
+  UID=10215
+  UID=10224
+Status for all known UIDs:
+  UID=-1 state=null blocked_state={blocked=NONE,allowed=NONE,effective=NONE} 
+  UID=1000 state=null blocked_state={blocked=NONE,allowed=RESTRICTED_MODE_PERMISSIONS,effective=NONE} 
+  UID=1001 state={procState=PER ,seq=18,cap=LCMNFUATI} blocked_state={blocked=NONE,allowed=RESTRICTED_MODE_PERMISSIONS,effective=NONE} 
+    callback_info={uid=1001,proc_state=PER ,seq=18,cap=LCMNFUATI,pending=false} 
+  UID=1002 state={procState=PER ,seq=20871,cap=LCMNFUATI} blocked_state={blocked=NONE,allowed=NONE,effective=NONE} 
+    callback_info={uid=1002,proc_state=PER ,seq=20871,cap=LCMNFUATI,pending=false} 
+  UID=1027 state=null blocked_state={blocked=NONE,allowed=NONE,effective=NONE} 
+  UID=1068 state={procState=PER ,seq=16,cap=LCMNFUATI} blocked_state={blocked=NONE,allowed=NONE,effective=NONE} 
+    callback_info={uid=1068,proc_state=PER ,seq=16,cap=LCMNFUATI,pending=false} 
+  UID=1073 state={procState=PER ,seq=12,cap=LCMNFUATI} blocked_state={blocked=NONE,allowed=RESTRICTED_MODE_PERMISSIONS,effective=NONE} 
+    callback_info={uid=1073,proc_state=PER ,seq=12,cap=LCMNFUATI,pending=false} 
+  UID=2000 state={procState=CEM ,seq=3299,cap=-------T-} blocked_state={blocked=NONE,allowed=RESTRICTED_MODE_PERMISSIONS,effective=NONE} 
+    callback_info={uid=2000,proc_state=CEM ,seq=3299,cap=-------T-,pending=false} 
+  UID=10000 state=null blocked_state={blocked=NONE,allowed=NONE,effective=NONE} 
+  UID=10001 state=null blocked_state={blocked=NONE,allowed=NONE,effective=NONE} 
+  UID=10002 state=null blocked_state={blocked=NONE,allowed=NONE,effective=NONE} 
+  UID=10003 state=null blocked_state={blocked=NONE,allowed=NONE,effective=NONE} 
+== connectivity: BLOCKED / blocked uids
+  UID=10147 blockedReasons=40
+  UID=10148 blockedReasons=40
+  UID=10149 blockedReasons=40
+  UID=10151 blockedReasons=44
+  UID=10160 blockedReasons=40
+  UID=10162 blockedReasons=40
+  UID=10165 blockedReasons=40
+  UID=10171 blockedReasons=40
+  UID=10172 blockedReasons=4
+  UID=10176 blockedReasons=44
+  2026-11-20T00:01:37.378340 - BLOCKED 10162(180) on netId 101: 40
+  2026-11-20T00:01:32.331755 - UNBLOCKED 10162(180) on netId 101: 0
+  2026-11-19T23:59:17.063852 - BLOCKED 10165(69) on netId 101: 40
+  2026-11-19T23:59:02.606519 - UNBLOCKED 10165(69) on netId 101: 0
+  2026-11-19T23:45:41.391158 - BLOCKED 10162(180) on netId 101: 40
+  2026-11-19T23:45:21.353683 - UNBLOCKED 10162(180) on netId 101: 0
+  2026-11-19T23:45:16.487775 - BLOCKED 10172
+  2026-11-19T23:45:13.572856 - BLOCKED 10165(69) on netId 100: 40
+  2026-11-19T23:44:56.285219 - BLOCKED 10172(64) on netId 100: 4
+  2026-11-19T23:44:56.283724 - BLOCKED 10176(90) on netId 100: 44
+  2026-11-19T23:44:56.164330 - BLOCKED 10151(143) on netId 100: 44
+  2026-11-19T23:44:53.635787 - UNBLOCKED 10165(69) on netId 100: 0
+  2026-11-19T22:19:50.683336 - BLOCKED 10176(90) on netId 100: 40
+  2026-11-19T22:19:45.307433 - UNBLOCKED 10176(90) on netId 100: 0
+  2026-11-19T21:59:54.327034 - BLOCKED 10176(90) on netId 100: 40
+  2026-11-19T21:59:49.315741 - UNBLOCKED 10176(90) on netId 100: 0
+  2026-11-19T20:52:31.098059 - BLOCKED 10176(90) on netId 100: 40
+  2026-11-19T20:52:26.083431 - UNBLOCKED 10176(90) on netId 100: 0
+  2026-11-19T20:26:52.749111 - BLOCKED 10165(69) on netId 100: 40
+  2026-11-19T20:26:47.270338 - UNBLOCKED 10165(69) on netId 100: 0

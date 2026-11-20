@@ -1,0 +1,6 @@
+﻿Broadcast completed: result=0, data="OK set always-on lockdown=false consent=needed readBackPkg=com.webfilter.spike.a02 readBackLockdown=false"
+=== WebView https://www.wikipedia.org/ (VPN up, no lockdown)
+11-20 00:30:01.893  4867  4867 I A02P    : WEBVIEW load url=https://www.wikipedia.org/ t=1795134601893
+11-20 00:30:02.551  4867  4867 I A02P    : WEBVIEW error url=https://www.wikipedia.org/ code=-2 desc=net::ERR_NAME_NOT_RESOLVED t=1795134602551
+11-20 00:30:02.552  4867  4867 I A02P    : WEBVIEW finished url=https://www.wikipedia.org/ t=1795134602552
+=== WebView https://example.org/ (VPN up, no lockdown)

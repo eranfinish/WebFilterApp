@@ -1,0 +1,4 @@
+﻿=== WebView https://example.org/ (VPN up, no lockdown)
+Starting: Intent { cmp=com.webfilter.spike.a02.probe/.WebProbeActivity (has extras) }
+11-20 00:30:41.131  9047  9047 I A02P    : WEBVIEW load url=https://example.org/ t=1795134641131
+11-20 00:30:41.912  9047  9047 I A02P    : WEBVIEW finished url=https://example.org/ t=1795134641911

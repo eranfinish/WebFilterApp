@@ -1,0 +1,5 @@
+serving C:\Projests\WebFilterApp\WebFilterApp\spikes\A0-3\testpages on :8001
+2026-11-20T00:29:44.179Z 127.0.0.1 GET 127.0.0.1:8001 /index.html ua=curl/8.21.0
+2026-11-20T00:29:44.268Z 192.168.150.185 GET 192.168.150.185:8001 /index.html ua=curl/8.21.0
+2026-11-20T00:29:44.815Z 127.0.0.1 GET 10.0.2.2:8001 /index.html ua=Mozilla/5.0 (Linux; Android 12; sdk_gphone64_x86_64) AppleWe
+2026-11-20T00:29:46.985Z 127.0.0.1 GET 10.0.2.2:8001 /favicon.ico ua=Mozilla/5.0 (Linux; Android 12; sdk_gphone64_x86_64) AppleWe

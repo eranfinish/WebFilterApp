@@ -1,0 +1,29 @@
+﻿== remove user 10
+Success: removed user
+== alwayson_off (user 0)
+Broadcast completed: result=0, data="OK always-on cleared"
+== unrestrict both (user 0)
+Broadcast completed: result=0, data="OK unrestricted config_vpn"
+Broadcast completed: result=0, data="OK unrestricted config_private_dns"
+== private DNS opportunistic (user 0)
+Broadcast completed: result=0, data="OK global private dns opportunistic"
+== remove DO admin
+Success: Admin removed ComponentInfo{com.webfilter.spike.a02/com.webfilter.spike.a02.AdminReceiver}
+== uninstall
+Success
+Success
+== final state
+-- owners
+-- users
+Users:
+	UserInfo{0:Owner:4c13} running
+-- packages
+-- private dns
+opportunistic
+-- always-on
+null
+0
+-- tun0
+Device "tun0" does not exist.
+-- chrome present
+package:com.android.chrome

@@ -1,0 +1,68 @@
+--------- beginning of main
+11-19 23:59:20.756  6992  6992 I A03WV   : 1795132760755 START https://m.youtube.com/
+11-19 23:59:20.813  6992  7022 I A03WV   : 1795132760813 shouldInterceptRequest https://m.youtube.com/ main=true
+11-19 23:59:20.817  6992  6992 I A03WV   : 1795132760817 POLL https://m.youtube.com/
+11-19 23:59:21.595  6992  6992 I A03WV   : 1795132761595 onPageStarted https://m.youtube.com/
+11-19 23:59:21.596  6992  6992 I A03WV   : 1795132761596 doUpdateVisitedHistory https://m.youtube.com/ reload=false
+11-19 23:59:21.652  6992  7041 I A03WV   : 1795132761652 shouldInterceptRequest https://i.ytimg.com/generate_204 main=false
+11-19 23:59:21.663  6992  7041 I A03WV   : 1795132761663 shouldInterceptRequest https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=optional main=false
+11-19 23:59:21.676  6992  7039 I A03WV   : 1795132761676 shouldInterceptRequest https://m.youtube.com/static/r/76eddbff/scheduler.vflset/scheduler.js main=false
+11-19 23:59:21.703  6992  7039 I A03WV   : 1795132761703 shouldInterceptRequest https://m.youtube.com/static/r/76eddbff/fetch_polyfill.vflset/fetch_polyfill.js main=false
+11-19 23:59:21.710  6992  7041 I A03WV   : 1795132761710 shouldInterceptRequest https://m.youtube.com/s/_/ytmweb/_/js/k=ytmweb.c3_base.en_US.KrnjCNnZk-Q.2021.O/am=AAAAAAAYEAACAPYM/d=1/excm=Di4hBc,DlvF1d,HDmU1e,JoU6vf,Nr0kfe,OM7xob,PzUdZb,Raq4cb,SFvGjc,Tu3MB,UAM5m,a66Lfe,c3_base,cDTHu,dpUCFd,oPp5Le,root,uhlLGb/rs=ABnK5FK2ew_S6xe6ma7ICqcyF1FAQqceAw/m=root,c3_base,Raq4cb,PzUdZb,DlvF1d,Tu3MB,SFvGjc,HDmU1e,cDTHu,uhlLGb,JoU6vf,OM7xob,UAM5m,Di4hBc,dpUCFd,oPp5Le,a66Lfe,Nr0kfe main=false
+11-19 23:59:21.711  6992  7041 I A03WV   : 1795132761711 shouldInterceptRequest https://m.youtube.com/s/_/ytmweb/_/ss/k=ytmweb.c3_base.cqccKADZ0-U.L.W.O/am=AAAAAAAYEAACAPYM/d=1/rs=ABnK5FLJtin8KbSfqPuE9-SYqoEzTDh-vw/m=root,c3_base,Raq4cb,PzUdZb,DlvF1d,Tu3MB,SFvGjc,HDmU1e,cDTHu,uhlLGb,JoU6vf,OM7xob,UAM5m,Di4hBc,dpUCFd,oPp5Le,a66Lfe,Nr0kfe main=false
+11-19 23:59:22.167  6992  7041 I A03WV   : 1795132762167 shouldInterceptRequest https://fonts.gstatic.com/s/roboto/v51/KFO7CnqEu92Fr1ME7kSn66aGLdTylUAMa3yUBHMdazQ.woff2 main=false
+11-19 23:59:22.233  6992  7042 I A03WV   : 1795132762233 shouldInterceptRequest https://m.youtube.com/s/_/ytmweb/_/js/k=ytmweb.c3_base.en_US.KrnjCNnZk-Q.2021.O/ck=ytmweb.c3_base.cqccKADZ0-U.L.W.O/am=AAAAAAAYEAACAPYM/d=1/exm=Di4hBc,DlvF1d,HDmU1e,JoU6vf,Nr0kfe,OM7xob,PzUdZb,Raq4cb,SFvGjc,Tu3MB,UAM5m,a66Lfe,c3_base,cDTHu,dpUCFd,oPp5Le,root,uhlLGb/excm=Di4hBc,DlvF1d,HDmU1e,JoU6vf,Nr0kfe,OM7xob,PzUdZb,Raq4cb,SFvGjc,Tu3MB,UAM5m,a66Lfe,c3_base,cDTHu,dpUCFd,oPp5Le,root,uhlLGb/ed=1/rs=ABnK5FJxanKiUurzVQlXm5i9JHCsITWfOw/m=Rv3e3d main=false
+11-19 23:59:22.300  6992  7042 I A03WV   : 1795132762300 shouldInterceptRequest https://accounts.google.com/ServiceLogin?ltmpl=mobile&service=youtube&uilel=3&passive=true&continue=https%3A%2F%2Fm.youtube.com%2Fsignin%3Faction_handle_signin%3Dtrue%26app%3Dm%26hl%3Den%26next%3D%252Fsignin_passive%26feature%3Dmobile_passive%26noapp%3D1&hl=en main=false
+11-19 23:59:22.317  6992  7039 I A03WV   : 1795132762317 shouldInterceptRequest https://www.google.com/js/th/OBn0-lcK2heSsQvwZqBdYDSSLon5TOClfDI9QSdpnEY.js main=false
+11-19 23:59:22.574  6992  7042 I A03WV   : 1795132762574 shouldInterceptRequest https://m.youtube.com/youtubei/v1/guide?prettyPrint=false main=false
+11-19 23:59:22.659  6992  6992 I A03WV   : 1795132762659 doUpdateVisitedHistory https://m.youtube.com/ reload=false
+11-19 23:59:22.659  6992  6992 I A03WV   : 1795132762659 onPageFinished https://m.youtube.com/
+11-19 23:59:22.796  6992  7023 I A03WV   : 1795132762796 shouldInterceptRequest https://m.youtube.com/s/_/ytmweb/_/js/k=ytmweb.c3_base.en_US.KrnjCNnZk-Q.2021.O/ck=ytmweb.c3_base.cqccKADZ0-U.L.W.O/am=AAAAAAAYEAACAPYM/d=1/exm=Di4hBc,DlvF1d,HDmU1e,JoU6vf,Nr0kfe,OM7xob,PzUdZb,Raq4cb,Rv3e3d,SFvGjc,Tu3MB,UAM5m,a66Lfe,c3_base,cDTHu,dpUCFd,oPp5Le,root,uhlLGb/excm=Di4hBc,DlvF1d,HDmU1e,JoU6vf,Nr0kfe,OM7xob,PzUdZb,Raq4cb,SFvGjc,Tu3MB,UAM5m,a66Lfe,c3_base,cDTHu,dpUCFd,oPp5Le,root,uhlLGb/ed=1/rs=ABnK5FJxanKiUurzVQlXm5i9JHCsITWfOw/m=OtKSJe,hBod9c main=false
+11-19 23:59:22.860  6992  7023 I A03WV   : 1795132762859 shouldInterceptRequest https://m.youtube.com/s/_/ytmweb/_/js/k=ytmweb.c3_base.en_US.KrnjCNnZk-Q.2021.O/ck=ytmweb.c3_base.cqccKADZ0-U.L.W.O/am=AAAAAAAYEAACAPYM/d=1/exm=Di4hBc,DlvF1d,HDmU1e,JoU6vf,Nr0kfe,OM7xob,OtKSJe,PzUdZb,Raq4cb,Rv3e3d,SFvGjc,Tu3MB,UAM5m,a66Lfe,c3_base,cDTHu,dpUCFd,hBod9c,oPp5Le,root,uhlLGb/excm=Di4hBc,DlvF1d,HDmU1e,JoU6vf,Nr0kfe,OM7xob,PzUdZb,Raq4cb,SFvGjc,Tu3MB,UAM5m,a66Lfe,c3_base,cDTHu,dpUCFd,oPp5Le,root,uhlLGb/ed=1/rs=ABnK5FJxanKiUurzVQlXm5i9JHCsITWfOw/m=hjrNn,tkEWoe,Cj1YCb,qiuJmb,jVxNAb main=false
+11-19 23:59:22.867  6992  7041 I A03WV   : 1795132762867 shouldInterceptRequest https://m.youtube.com/s/_/ytmweb/_/js/k=ytmweb.c3_base.en_US.KrnjCNnZk-Q.2021.O/ck=ytmweb.c3_base.cqccKADZ0-U.L.W.O/am=AAAAAAAYEAACAPYM/d=1/exm=Cj1YCb,Di4hBc,DlvF1d,HDmU1e,JoU6vf,Nr0kfe,OM7xob,OtKSJe,PzUdZb,Raq4cb,Rv3e3d,SFvGjc,Tu3MB,UAM5m,a66Lfe,c3_base,cDTHu,dpUCFd,hBod9c,hjrNn,jVxNAb,oPp5Le,qiuJmb,root,tkEWoe,uhlLGb/excm=Di4hBc,DlvF1d,HDmU1e,JoU6vf,Nr0kfe,OM7xob,PzUdZb,Raq4cb,SFvGjc,Tu3MB,UAM5m,a66Lfe,c3_base,cDTHu,dpUCFd,oPp5Le,root,uhlLGb/ed=1/rs=ABnK5FJxanKiUurzVQlXm5i9JHCsITWfOw/m=ERsVff main=false
+11-19 23:59:23.000  6992  7023 I A03WV   : 1795132763000 shouldInterceptRequest https://www.gstatic.com/youtube/img/icons/mweb/youtube_fill/logo_with_text/v3/20px.svg main=false
+11-19 23:59:23.005  6992  7023 I A03WV   : 1795132763005 shouldInterceptRequest https://fonts.gstatic.com/s/i/youtube_outline_experimental/search/v16/24px.svg main=false
+11-19 23:59:23.007  6992  7023 I A03WV   : 1795132763007 shouldInterceptRequest https://fonts.gstatic.com/s/i/youtube_outline_experimental/mic/v15/24px.svg main=false
+11-19 23:59:23.150  6992  7023 I A03WV   : 1795132763150 shouldInterceptRequest https://gstatic.com/youtube/img/branding/youtubeicon/2x/youtube_main_icon_2x_158x110.png main=false
+11-19 23:59:23.193  6992  7023 I A03WV   : 1795132763193 shouldInterceptRequest https://googleads.g.doubleclick.net/pagead/id main=false
+11-19 23:59:23.250  6992  7023 I A03WV   : 1795132763250 shouldInterceptRequest https://fonts.gstatic.com/s/i/youtube_outline_experimental/home/v11/24px.svg main=false
+11-19 23:59:23.253  6992  7039 I A03WV   : 1795132763253 shouldInterceptRequest https://fonts.gstatic.com/s/i/youtube_fill_experimental/home/v11/24px.svg main=false
+11-19 23:59:23.255  6992  7039 I A03WV   : 1795132763255 shouldInterceptRequest https://m.youtube.com/s/_/ytmweb/_/js/k=ytmweb.c3_base.en_US.KrnjCNnZk-Q.2021.O/ck=ytmweb.c3_base.cqccKADZ0-U.L.W.O/am=AAAAAAAYEAACAPYM/d=1/exm=Cj1YCb,Di4hBc,DlvF1d,ERsVff,HDmU1e,JoU6vf,Nr0kfe,OM7xob,OtKSJe,PzUdZb,Raq4cb,Rv3e3d,SFvGjc,Tu3MB,UAM5m,a66Lfe,c3_base,cDTHu,dpUCFd,hBod9c,hjrNn,jVxNAb,oPp5Le,qiuJmb,root,tkEWoe,uhlLGb/excm=Di4hBc,DlvF1d,HDmU1e,JoU6vf,Nr0kfe,OM7xob,PzUdZb,Raq4cb,SFvGjc,Tu3MB,UAM5m,a66Lfe,c3_base,cDTHu,dpUCFd,oPp5Le,root,uhlLGb/ed=1/rs=ABnK5FJxanKiUurzVQlXm5i9JHCsITWfOw/m=dfXAxf main=false
+11-19 23:59:23.285  6992  7039 I A03WV   : 1795132763283 shouldInterceptRequest https://fonts.gstatic.com/s/i/youtube_outline_experimental/shorts/v3/24px.svg main=false
+11-19 23:59:23.315  6992  7042 I A03WV   : 1795132763315 shouldInterceptRequest https://fonts.gstatic.com/s/i/youtube_fill_experimental/shorts/v3/24px.svg main=false
+11-19 23:59:23.329  6992  7042 I A03WV   : 1795132763329 shouldInterceptRequest https://fonts.gstatic.com/s/i/youtube_outline_experimental/person_circle/v10/24px.svg main=false
+11-19 23:59:23.382  6992  7042 I A03WV   : 1795132763382 shouldInterceptRequest https://fonts.gstatic.com/s/i/youtube_fill_experimental/person_circle/v10/24px.svg main=false
+11-19 23:59:23.388  6992  7042 I A03WV   : 1795132763388 shouldInterceptRequest https://fonts.gstatic.com/s/i/youtube_outline_experimental/compass/v9/24px.svg main=false
+11-19 23:59:23.448  6992  7042 I A03WV   : 1795132763448 shouldInterceptRequest https://m.youtube.com/youtubei/v1/feedback?prettyPrint=false main=false
+11-19 23:59:23.741  6992  7039 I A03WV   : 1795132763741 shouldInterceptRequest https://m.youtube.com/generate_204?2QYvFg main=false
+11-19 23:59:23.802  6992  6992 I A03WV   : 1795132763802 onPageFinished https://m.youtube.com/
+11-19 23:59:23.819  6992  7039 I A03WV   : 1795132763819 shouldInterceptRequest https://m.youtube.com/static/favicon.ico main=false
+11-19 23:59:23.962  6992  7039 I A03WV   : 1795132763962 shouldInterceptRequest https://m.youtube.com/api/jnn/v1/GenerateIT main=false
+11-19 23:59:24.013  6992  7039 I A03WV   : 1795132764013 shouldInterceptRequest https://m.youtube.com/s/player/6b3d0364/player-plasma-es6-tcl-en_US.vflset/base.js main=false
+11-19 23:59:24.014  6992  7023 I A03WV   : 1795132764014 shouldInterceptRequest https://m.youtube.com/s/player/6b3d0364/mweb.css main=false
+11-19 23:59:24.062  6992  7042 I A03WV   : 1795132764062 shouldInterceptRequest https://fonts.gstatic.com/s/i/youtube_outline_experimental/alert_bubble/v3/24px.svg main=false
+11-19 23:59:24.067  6992  7023 I A03WV   : 1795132764066 shouldInterceptRequest https://fonts.gstatic.com/s/i/youtube_outline_experimental/arrow_left/v9/24px.svg main=false
+11-19 23:59:24.067  6992  7023 I A03WV   : 1795132764067 shouldInterceptRequest https://fonts.gstatic.com/s/i/youtube_outline_experimental/arrow_up_right/v3/24px.svg main=false
+11-19 23:59:24.152  6992  7023 I A03WV   : 1795132764152 shouldInterceptRequest https://fonts.gstatic.com/s/i/youtube_fill_experimental/flag/v11/24px.svg main=false
+11-19 23:59:24.157  6992  7023 I A03WV   : 1795132764157 shouldInterceptRequest https://fonts.gstatic.com/s/i/youtube_outline_experimental/flag/v11/24px.svg main=false
+11-19 23:59:24.157  6992  7039 I A03WV   : 1795132764157 shouldInterceptRequest https://fonts.gstatic.com/s/i/youtube_fill_experimental/mic/v15/24px.svg main=false
+11-19 23:59:24.241  6992  7039 I A03WV   : 1795132764241 shouldInterceptRequest https://fonts.gstatic.com/s/i/youtube_outline_experimental/overflow_horizontal/v6/24px.svg main=false
+11-19 23:59:24.247  6992  7023 I A03WV   : 1795132764247 shouldInterceptRequest https://fonts.gstatic.com/s/i/youtube_outline_experimental/overflow_vertical/v14/24px.svg main=false
+11-19 23:59:24.247  6992  7042 I A03WV   : 1795132764247 shouldInterceptRequest https://www.gstatic.com/youtube/img/icons/mweb/youtube_fill/play_circle_shorts/v2/24px.svg main=false
+11-19 23:59:24.313  6992  7039 I A03WV   : 1795132764312 shouldInterceptRequest https://fonts.gstatic.com/s/i/youtube_fill_experimental/search/v16/24px.svg main=false
+11-19 23:59:24.320  6992  7039 I A03WV   : 1795132764320 shouldInterceptRequest https://fonts.gstatic.com/s/i/youtube_fill_experimental/share/v13/24px.svg main=false
+11-19 23:59:24.400  6992  7039 I A03WV   : 1795132764400 shouldInterceptRequest https://fonts.gstatic.com/s/i/youtube_outline_experimental/share/v13/24px.svg main=false
+11-19 23:59:24.408  6992  7039 I A03WV   : 1795132764408 shouldInterceptRequest https://fonts.gstatic.com/s/i/youtube_fill_experimental/text_align_left/v2/24px.svg main=false
+11-19 23:59:24.411  6992  7039 I A03WV   : 1795132764411 shouldInterceptRequest https://fonts.gstatic.com/s/i/youtube_outline_experimental/text_align_left/v2/24px.svg main=false
+11-19 23:59:24.486  6992  7039 I A03WV   : 1795132764486 shouldInterceptRequest https://fonts.gstatic.com/s/i/youtube_fill_experimental/text_bubble/v4/24px.svg main=false
+11-19 23:59:24.489  6992  7039 I A03WV   : 1795132764489 shouldInterceptRequest https://fonts.gstatic.com/s/i/youtube_outline_experimental/text_bubble/v4/24px.svg main=false
+11-19 23:59:24.490  6992  7039 I A03WV   : 1795132764490 shouldInterceptRequest https://fonts.gstatic.com/s/i/youtube_fill_experimental/thumb_down/v25/24px.svg main=false
+11-19 23:59:24.514  6992  7039 I A03WV   : 1795132764514 shouldInterceptRequest https://fonts.gstatic.com/s/i/youtube_outline_experimental/thumb_down/v25/24px.svg main=false
+11-19 23:59:24.552  6992  7039 I A03WV   : 1795132764552 shouldInterceptRequest https://fonts.gstatic.com/s/i/youtube_fill_experimental/thumb_up/v24/24px.svg main=false
+11-19 23:59:24.553  6992  7023 I A03WV   : 1795132764553 shouldInterceptRequest https://fonts.gstatic.com/s/i/youtube_outline_experimental/thumb_up/v24/24px.svg main=false
+11-19 23:59:24.561  6992  7039 I A03WV   : 1795132764561 shouldInterceptRequest https://fonts.gstatic.com/s/i/youtube_outline_experimental/waveform/v3/24px.svg main=false
+11-19 23:59:24.583  6992  7023 I A03WV   : 1795132764583 shouldInterceptRequest https://fonts.gstatic.com/s/i/youtube_outline_experimental/x/v11/24px.svg main=false
+11-19 23:59:24.616  6992  7042 I A03WV   : 1795132764616 shouldInterceptRequest https://www.gstatic.com/youtube/img/icons/mweb/youtube_fill/youtube_shorts_brand_24/v2/24px.svg main=false
+11-19 23:59:24.863  6992  7023 I A03WV   : 1795132764863 shouldInterceptRequest https://static.doubleclick.net/instream/ad_status.js main=false
+11-19 23:59:24.873  6992  7023 I A03WV   : 1795132764873 shouldInterceptRequest https://m.youtube.com/establish_zw main=false
+11-19 23:59:26.879  6992  7042 I A03WV   : 1795132766879 shouldInterceptRequest https://m.youtube.com/youtubei/v1/log_event?alt=json main=false

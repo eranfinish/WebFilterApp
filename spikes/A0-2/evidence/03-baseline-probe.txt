@@ -1,0 +1,28 @@
+﻿== baseline (no VPN, no owner)
+--- resolve example.com
+Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02.probe/.ProbeReceiver (has extras) }
+Broadcast completed: result=0, data="FAIL UnknownHostException: Unable to resolve host "example.com": No address associated with hostname"
+--- resolve blocked.example
+Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02.probe/.ProbeReceiver (has extras) }
+Broadcast completed: result=0, data="FAIL UnknownHostException: Unable to resolve host "blocked.example": No address associated with hostname"
+--- resolve www.wikipedia.org
+Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02.probe/.ProbeReceiver (has extras) }
+Broadcast completed: result=0, data="FAIL UnknownHostException: Unable to resolve host "www.wikipedia.org": No address associated with hostname"
+--- resolve neverssl.com
+Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02.probe/.ProbeReceiver (has extras) }
+Broadcast completed: result=0, data="FAIL UnknownHostException: Unable to resolve host "neverssl.com": No address associated with hostname"
+--- http https://example.com/
+Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02.probe/.ProbeReceiver (has extras) }
+Broadcast completed: result=0, data="FAIL UnknownHostException: Unable to resolve host "example.com": No address associated with hostname"
+--- http http://neverssl.com/
+Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02.probe/.ProbeReceiver (has extras) }
+Broadcast completed: result=0, data="FAIL IOException: Cleartext HTTP traffic to neverssl.com not permitted"
+--- http https://www.wikipedia.org/
+Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02.probe/.ProbeReceiver (has extras) }
+Broadcast completed: result=0, data="FAIL UnknownHostException: Unable to resolve host "www.wikipedia.org": No address associated with hostname"
+--- tcp 1.1.1.1:443
+Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02.probe/.ProbeReceiver (has extras) }
+Broadcast completed: result=0, data="FAIL SocketTimeoutException: failed to connect to /1.1.1.1 (port 443) from /10.0.2.15 (port 50996) after 4000ms"
+--- tcp 8.8.8.8:53
+Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02.probe/.ProbeReceiver (has extras) }
+Broadcast completed: result=0, data="FAIL SocketTimeoutException: failed to connect to /8.8.8.8 (port 53) from /10.0.2.15 (port 33996) after 4000ms"

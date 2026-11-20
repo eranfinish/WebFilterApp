@@ -1,0 +1,15 @@
+﻿== before reboot: boot_id=a9feebf9-1cdf-49a0-b6c3-0030d98c2bdd lockdown state:
+1
+com.webfilter.spike.a02
+== reboot issued at device ms=1795133790093
+== sys.boot_completed=1 at device ms=1795133820301
+boot_id after: 6897b1aa-2a1c-42f4-9854-de50b4400f35
+uptime: 24.10 72.49
+== A02 log since boot (establish / onStart / onBind)
+11-20 00:17:01.747  1678  1678 I A02     : onCreate pid=1678 uid=10235 t=1795133821747
+11-20 00:17:01.748  1678  1678 I A02     : onStartCommand action=android.net.VpnService startId=1 t=1795133821748
+11-20 00:17:02.103  1678  1678 I A02     : establish ok fd=94 t=1795133822103
+11-20 00:17:02.104  1678  1678 I A02     : onBind action=android.net.VpnService t=1795133822104
+== tun0 after boot
+19: tun0: <POINTOPOINT,UP,LOWER_UP> mtu 1280 qdisc pfifo_fast state UNKNOWN group default qlen 500
+    link/none 

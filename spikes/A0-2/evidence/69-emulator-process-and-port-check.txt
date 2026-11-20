@@ -1,0 +1,7 @@
+﻿== Get-CimInstance emulator.exe / qemu-system-x86_64.exe (read-only)
+34744 emulator.exe started=11/20/2026 02:35:06 cmd="C:\Users\Eran Finish\AppData\Local\Android\Sdk\emulator\emulator.exe" -avd Tablet_A12 -memory 2048 
+45464 qemu-system-x86_64.exe started=11/20/2026 02:35:06 cmd="C:\Users\Eran Finish\AppData\Local\Android\Sdk\emulator\qemu\windows-x86_64\qemu-system-x86_64.exe" -avd Tablet_A12 -memory 2048
+== Get-NetTCPConnection listening 5554-5585 (read-only)
+== adb devices
+List of devices attached
+

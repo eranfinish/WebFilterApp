@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.webfilter.spike.a02.dns.DnsPacketTest" tests="7" skipped="0" failures="0" errors="0" timestamp="2026-11-19T23:53:21" hostname="ERAN-PC3" time="0.06">
+  <properties/>
+  <testcase name="rejectsResponsesCompressionAndTruncation" classname="com.webfilter.spike.a02.dns.DnsPacketTest" time="0.034"/>
+  <testcase name="ipv4ParserRejectsNonUdpFragmentsAndIpv6" classname="com.webfilter.spike.a02.dns.DnsPacketTest" time="0.013"/>
+  <testcase name="parsesQuestionNameTypeAndEnd" classname="com.webfilter.spike.a02.dns.DnsPacketTest" time="0.001"/>
+  <testcase name="rulesMatchExactNamesAndSubdomainsOnly" classname="com.webfilter.spike.a02.dns.DnsPacketTest" time="0.009"/>
+  <testcase name="ipv4UdpRoundTripAndHeaderChecksum" classname="com.webfilter.spike.a02.dns.DnsPacketTest" time="0.001"/>
+  <testcase name="lowercasesAsciiNames" classname="com.webfilter.spike.a02.dns.DnsPacketTest" time="0.001"/>
+  <testcase name="nxdomainKeepsIdAndQuestionAndSetsFlags" classname="com.webfilter.spike.a02.dns.DnsPacketTest" time="0.0"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

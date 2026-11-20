@@ -1,0 +1,17 @@
+﻿== restore VPN (no lockdown)
+Broadcast completed: result=0, data="OK set always-on lockdown=false consent=granted readBackPkg=com.webfilter.spike.a02 readBackLockdown=false"
+== DPC: setGlobalPrivateDnsModeSpecifiedHost dns.google
+Broadcast completed: result=0, data="EXC android.os.NetworkOnMainThreadException: null"
+== private_dns_mode setting
+null
+null
+== resolve www.wikipedia.org (strict DoT to dns.google)
+Broadcast completed: result=0, data="FAIL UnknownHostException: Unable to resolve host "www.wikipedia.org": No address associated with hostname"
+== resolve example.org
+Broadcast completed: result=0, data="OK addrs=172.66.157.237,104.20.26.136"
+== tcp 8.8.8.8:853 (DoT reachability from emulator)
+Broadcast completed: result=0, data="OK connect"
+== DPC: back to opportunistic
+Broadcast completed: result=0, data="OK global private dns opportunistic"
+== resolve www.wikipedia.org after opportunistic (VPN up)
+Broadcast completed: result=0, data="FAIL UnknownHostException: Unable to resolve host "www.wikipedia.org": No address associated with hostname"

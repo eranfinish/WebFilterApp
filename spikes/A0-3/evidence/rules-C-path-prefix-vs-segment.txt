@@ -1,0 +1,8 @@
+case=C-path-prefix-vs-segment blocklist=[10.0.2.2:8000/path.html] allowlist=[]
+Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a03/.CmdReceiver (has extras) }
+Broadcast completed: result=0, data="SET mode=array t0=1795134355970 blocklist=[10.0.2.2:8000/path.html] allowlist=[]"
+Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a03/.CmdReceiver (has extras) }
+Broadcast completed: result=0, data="restrictions=URLAllowlist=[], URLBlocklist=[10.0.2.2:8000/path.html]"
+BLOCKED  http://10.0.2.2:8000/path.html  | fg=com.android.chrome | text="10.0.2.2" text="10.0.2.2 is blocked" text="The person who set up this computer has chosen to block this site." 
+ALLOWED  http://10.0.2.2:8000/pathX.html  | fg=com.android.chrome | text="ALLOWED pathX" text="ALLOWED /pathX.html" text="10.0.2.2:8000/pathX.html" 
+ALLOWED  http://10.0.2.2:8000/path/sub.html  | fg=com.android.chrome | text="ALLOWED path/sub" text="ALLOWED /path/sub.html" text="10.0.2.2:8000/path/sub.html" 

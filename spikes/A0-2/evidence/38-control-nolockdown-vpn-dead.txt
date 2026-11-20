@@ -1,0 +1,8 @@
+﻿== D control: no lockdown, VPN up, then crash the VPN process
+Broadcast completed: result=0, data="OK set always-on lockdown=false consent=granted readBackPkg=com.webfilter.spike.a02 readBackLockdown=false"
+tun before: 23: tun0: <POINTOPOINT,UP,LOWER_UP> mtu 1280 qdisc pfifo_fast state UNKNOWN group default qlen 500
+tun after crash: Device "tun0" does not exist.
+== resolve www.wikipedia.org with VPN dead (no lockdown)
+Broadcast completed: result=0, data="OK addrs=185.15.59.224,2a02:ec80:300:ed1a::1"
+== tcp direct 172.66.147.243:443
+Broadcast completed: result=0, data="OK connect"

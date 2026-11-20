@@ -1,0 +1,12 @@
+﻿== A: graceful stopvpn under lockdown (alwayson_on restore first)
+Broadcast completed: result=0, data="OK set always-on lockdown=true consent=granted readBackPkg=com.webfilter.spike.a02 readBackLockdown=true"
+stop at device ms=1795134062953
+Broadcast completed: result=0, data="OK stop-requested"
+after 10s:
+11-20 00:21:03.011  4523  4523 I A02     : onStartCommand action=com.webfilter.spike.a02.STOP startId=4 t=1795134063011
+11-20 00:21:03.011  4523  4523 I A02     : stopTunnel reason=stop-request t=1795134063011
+11-20 00:21:03.019  4523  4523 I A02     : stopTunnel(destroy): not running t=1795134063019
+== B: force-stop under lockdown
+Broadcast completed: result=0, data="OK set always-on lockdown=true consent=granted readBackPkg=com.webfilter.spike.a02 readBackLockdown=true"
+force-stop at device ms=1795134077332
+no VPN restart within 60 s

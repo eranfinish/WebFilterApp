@@ -1,0 +1,10 @@
+--------- beginning of main
+11-20 00:03:41.455  7633  7633 I A03WV   : 1795133021454 START http://10.0.2.2:8000/blocked-demo.html
+11-20 00:03:41.567  7633  7633 I A03WV   : 1795133021567 BLOCKPAGE http://10.0.2.2:8000/blocked-demo.html
+11-20 00:03:41.629  7633  7683 I A03WV   : 1795133021629 shouldInterceptRequest data:text/html;charset=utf-8;base64, main=true
+11-20 00:03:41.692  7633  7633 I A03WV   : 1795133021692 POLL about:blank
+11-20 00:03:42.101  7633  7684 I A03WV   : 1795133022101 shouldInterceptRequest https://blockpage.local/favicon.ico main=false
+11-20 00:03:42.112  7633  7633 I A03WV   : 1795133022112 onPageStarted https://blockpage.local/
+11-20 00:03:42.113  7633  7633 I A03WV   : 1795133022112 doUpdateVisitedHistory https://blockpage.local/ reload=false
+11-20 00:03:42.113  7633  7633 I A03WV   : 1795133022113 onPageFinished https://blockpage.local/
+11-20 00:03:51.260  7633  7740 I A03WV   : 1795133031260 REQUEST http://10.0.2.2:8000/blocked-demo.html

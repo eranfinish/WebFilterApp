@@ -1,0 +1,4 @@
+﻿tapped 'Close'
+tapped 'Network'
+tapped 'VPN'
+page text: Blocked by work policy | For more info, contact your IT admin | Close

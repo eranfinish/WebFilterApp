@@ -1,0 +1,13 @@
+﻿== install app (build 2)
+Performing Streamed Install
+Success
+== install probe (build 2)
+Performing Streamed Install
+Success
+== owners after reinstall
+User 0: admin=com.webfilter.spike.a02/.AdminReceiver,DeviceOwner
+== appops
+ACTIVATE_VPN: default; time=+6m46s564ms ago; rejectTime=+6m46s591ms ago
+== status
+Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02/.CmdReceiver (has extras) }
+Broadcast completed: result=0, data="pid=3011 uid=10235 deviceOwner=true profileOwner=false alwaysOnPkg=null lockdown=false vpnRunning=false profiles=1"

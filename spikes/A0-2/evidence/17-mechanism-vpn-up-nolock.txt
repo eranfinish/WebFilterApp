@@ -1,0 +1,54 @@
+﻿== ip rule (VPN up, lockdown OFF)
+0:	from all lookup local 
+11000:	from all iif lo oif dummy0 uidrange 0-0 lookup 1002 
+11000:	from all iif lo oif eth0 uidrange 0-0 lookup 1015 
+12000:	from all iif tun0 lookup 97 
+13000:	from all fwmark 0xc0068/0xcffff lookup 1020 
+13000:	from all fwmark 0x0/0x20000 iif lo uidrange 0-99999 lookup 1020 
+15040:	from all fwmark 0x10065/0x1ffff iif lo uidrange 10161-10161 lookup 1015 
+15040:	from all fwmark 0x10065/0x1ffff iif lo uidrange 10166-10166 lookup 1015 
+15040:	from all fwmark 0x10065/0x1ffff iif lo uidrange 10173-10173 lookup 1015 
+15040:	from all fwmark 0x10065/0x1ffff iif lo uidrange 10224-10224 lookup 1015 
+15040:	from all fwmark 0x10065/0x1ffff iif lo uidrange 10158-10158 lookup 1015 
+16000:	from all fwmark 0x10063/0x1ffff iif lo lookup 97 
+16000:	from all fwmark 0x10065/0x1ffff iif lo lookup 1015 
+16000:	from all fwmark 0x10068/0x1ffff iif lo uidrange 0-0 lookup 1020 
+16000:	from all fwmark 0x10068/0x1ffff iif lo uidrange 0-99999 lookup 1020 
+17000:	from all iif lo oif dummy0 lookup 1002 
+17000:	from all iif lo oif eth0 lookup 1015 
+17000:	from all iif lo oif tun0 uidrange 0-99999 lookup 1020 
+20000:	from all fwmark 0x0/0x10000 lookup 97 
+22040:	from all fwmark 0x65/0x1ffff iif lo uidrange 10161-10161 lookup 1015 
+22040:	from all fwmark 0x65/0x1ffff iif lo uidrange 10166-10166 lookup 1015 
+22040:	from all fwmark 0x65/0x1ffff iif lo uidrange 10173-10173 lookup 1015 
+22040:	from all fwmark 0x65/0x1ffff iif lo uidrange 10224-10224 lookup 1015 
+22040:	from all fwmark 0x65/0x1ffff iif lo uidrange 10158-10158 lookup 1015 
+23000:	from all fwmark 0x65/0x1ffff iif lo lookup 1015 
+25000:	from all fwmark 0x0/0x10000 iif lo uidrange 10161-10161 lookup 1000000015 
+25000:	from all fwmark 0x0/0x10000 iif lo uidrange 10166-10166 lookup 1000000015 
+25000:	from all fwmark 0x0/0x10000 iif lo uidrange 10173-10173 lookup 1000000015 
+25000:	from all fwmark 0x0/0x10000 iif lo uidrange 10224-10224 lookup 1000000015 
+25000:	from all fwmark 0x0/0x10000 iif lo uidrange 10158-10158 lookup 1000000015 
+26000:	from all fwmark 0x0/0x10000 iif lo lookup 1000000015 
+28000:	from all fwmark 0x68/0xffff lookup 1015 
+29040:	from all fwmark 0x0/0xffff iif lo uidrange 10161-10161 lookup 1015 
+29040:	from all fwmark 0x0/0xffff iif lo uidrange 10166-10166 lookup 1015 
+29040:	from all fwmark 0x0/0xffff iif lo uidrange 10173-10173 lookup 1015 
+29040:	from all fwmark 0x0/0xffff iif lo uidrange 10224-10224 lookup 1015 
+29040:	from all fwmark 0x0/0xffff iif lo uidrange 10158-10158 lookup 1015 
+31000:	from all fwmark 0x0/0xffff iif lo lookup 1015 
+32000:	from all unreachable
+== tun0 routes in all tables
+10.111.0.1 dev tun0 table 1000000020 proto static scope link 
+10.111.0.53 dev tun0 table 1000000020 proto static scope link 
+10.111.0.1 dev tun0 table 1020 proto static scope link 
+10.111.0.53 dev tun0 table 1020 proto static scope link 
+local 10.111.0.1 dev tun0 table local proto kernel scope host src 10.111.0.1 
+fe80::/64 dev tun0 table 1020 proto kernel metric 256 pref medium
+local fe80::c667:de75:8544:2477 dev tun0 table local proto kernel metric 0 pref medium
+multicast ff00::/8 dev tun0 table local proto kernel metric 256 pref medium
+== appops ACTIVATE_VPN
+ACTIVATE_VPN: allow; time=+4m3s488ms ago; rejectTime=+4m3s515ms ago
+== consent op
+Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02/.CmdReceiver (has extras) }
+Broadcast completed: result=0, data="prepare=null(granted)"

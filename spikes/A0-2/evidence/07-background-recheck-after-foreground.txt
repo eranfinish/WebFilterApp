@@ -1,0 +1,9 @@
+﻿== background (activity finished) resolve example.com
+Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02.probe/.ProbeReceiver (has extras) }
+Broadcast completed: result=0, data="OK addrs=104.20.23.154,172.66.147.243,2606:4700:10::6814:179a,2606:4700:10::ac42:93f3"
+== background tcp 172.66.147.243:443
+Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02.probe/.ProbeReceiver (has extras) }
+Broadcast completed: result=0, data="OK connect"
+== background http https://example.com/
+Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02.probe/.ProbeReceiver (has extras) }
+Broadcast completed: result=0, data="FAIL SocketTimeoutException: failed to connect to example.com/2606:4700:10::ac42:93f3 (port 443) from /fec0::5054:ff:fe12:3456 (port 33766) after 6000ms"

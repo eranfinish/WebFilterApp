@@ -1,0 +1,4 @@
+﻿Broadcast completed: result=0, data="OK restricted config_vpn"
+NOT FOUND: Network
+NOT FOUND: VPN
+page text: Blocked by work policy | For more info, contact your IT admin | Close

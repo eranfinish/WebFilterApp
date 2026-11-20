@@ -1,0 +1,2 @@
+Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a03/.CmdReceiver (has extras) }
+Broadcast completed: result=0, data="EXC java.lang.IllegalArgumentException: No such package com.android.chrome"

@@ -1,0 +1,5 @@
+--------- beginning of main
+11-20 00:04:07.602  7633  7633 I A03     : op=status -> owner=true admin=true t=1795133047601
+11-20 00:04:07.709  7633  7633 I A03     : op=manifest -> EXC java.lang.IllegalArgumentException: No such package com.android.chrome
+11-20 00:04:07.848  7633  7633 I A03     : op=chrome_set -> SET mode=array t0=1795133047830 blocklist=[10.0.2.2:8000/blocked-demo.html] allowlist=[]
+11-20 00:04:08.061  7633  7633 I A03     : op=chrome_read -> restrictions=URLAllowlist=[], URLBlocklist=[10.0.2.2:8000/blocked-demo.html]

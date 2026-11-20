@@ -1,0 +1,19 @@
+﻿== now: tun0?
+adb.exe : request send failed: Permission denied
+At line:1 char:504
++ ... w: tun0?'; $o += (& $adb -s $s shell "ip link show tun0" 2>&1); $o += ...
++                       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (request send failed: Permission denied:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+== pid alive?
+== status op
+Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02/.CmdReceiver (has extras) }
+Broadcast completed: result=0, data="pid=4342 uid=10235 deviceOwner=true profileOwner=false alwaysOnPkg=com.webfilter.spike.a02 lockdown=true vpnRunning=false profiles=1"
+== poll head/tail
+1795133850467 0
+1795133850695 0
+1795133850915 0
+1795133903203 0
+1795133903431 0
+1795133903670 0

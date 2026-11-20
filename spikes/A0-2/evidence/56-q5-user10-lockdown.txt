@@ -1,0 +1,10 @@
+﻿== user 10: alwayson_on (lockdown)
+Broadcast completed: result=0, data="OK set always-on lockdown=true consent=granted readBackPkg=com.webfilter.spike.a02 readBackLockdown=true"
+== user 10 tcp direct (gate, lockdown)
+Broadcast completed: result=0, data="FAIL ConnectException: failed to connect to /172.66.147.243 (port 443) from /:: (port 0) after 4000ms: connect failed: EACCES (Permission denied)"
+== user 10 watchdns (lockdown)
+Broadcast completed: result=0, data="OK watchdns events=WATCHDNS UP t=1795134580978; "
+== user 10 resolve example.org (lockdown)
+Broadcast completed: result=0, data="FAIL UnknownHostException: Unable to resolve host "example.org": No address associated with hostname"
+== user 10 alwayson_off
+Broadcast completed: result=0, data="OK always-on cleared"

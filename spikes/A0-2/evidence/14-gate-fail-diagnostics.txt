@@ -1,0 +1,60 @@
+﻿== A02 log tail (DNS lines + drops)
+11-20 00:04:56.942 15976 16078 I A02     : drop: not an IPv4 UDP packet (len=76) t=1795133096942
+11-20 00:04:56.943 15976 16078 I A02     : drop: not an IPv4 UDP packet (len=48) t=1795133096942
+11-20 00:04:56.943 15976 16078 I A02     : drop: not an IPv4 UDP packet (len=76) t=1795133096943
+11-20 00:04:57.043 15976 16078 I A02     : drop: not an IPv4 UDP packet (len=76) t=1795133097043
+11-20 00:04:57.080 15976 16078 I A02     : drop: not an IPv4 UDP packet (len=64) t=1795133097080
+11-20 00:04:57.590 15976 16094 I A02     : DNS name=android.googleapis.com type=1 action=FORWARD ok=true t=1795133097590
+11-20 00:04:57.590 15976 16091 I A02     : DNS name=mtalk.google.com type=1 action=FORWARD ok=true t=1795133097590
+11-20 00:04:57.592 15976 16092 I A02     : DNS name=www.google.com type=65 action=FORWARD ok=true t=1795133097592
+11-20 00:04:57.594 15976 16093 I A02     : DNS name=www.google.com type=1 action=FORWARD ok=true t=1795133097594
+11-20 00:04:57.674 15976 16093 I A02     : DNS name=voilatile-pa.googleapis.com type=1 action=FORWARD ok=true t=1795133097674
+11-20 00:04:57.768 15976 16078 I A02     : drop: not an IPv4 UDP packet (len=76) t=1795133097768
+11-20 00:04:58.089 15976 16078 I A02     : drop: not an IPv4 UDP packet (len=60) t=1795133098089
+11-20 00:04:59.111 15976 16078 I A02     : drop: not an IPv4 UDP packet (len=60) t=1795133099111
+11-20 00:05:00.140 15976 16078 I A02     : drop: not an IPv4 UDP packet (len=60) t=1795133100140
+11-20 00:05:01.159 15976 16078 I A02     : drop: not an IPv4 UDP packet (len=60) t=1795133101159
+11-20 00:05:01.288 15976 16078 I A02     : drop: not an IPv4 UDP packet (len=48) t=1795133101288
+11-20 00:05:02.183 15976 16078 I A02     : drop: not an IPv4 UDP packet (len=60) t=1795133102183
+11-20 00:05:04.200 15976 16078 I A02     : drop: not an IPv4 UDP packet (len=60) t=1795133104200
+11-20 00:05:08.458 15976 16078 I A02     : drop: not an IPv4 UDP packet (len=60) t=1795133108457
+11-20 00:05:09.479 15976 16078 I A02     : drop: not an IPv4 UDP packet (len=48) t=1795133109479
+11-20 00:05:16.648 15976 16078 I A02     : drop: not an IPv4 UDP packet (len=60) t=1795133116648
+11-20 00:05:25.096 15976 16078 I A02     : drop: not an IPv4 UDP packet (len=48) t=1795133125096
+== A02P log (probe)
+== table 1019 routes (v4)
+10.111.0.1 dev tun0 proto static scope link 
+10.111.0.53 dev tun0 proto static scope link 
+---
+10.111.0.1 dev tun0 table 1000000019 proto static scope link 
+10.111.0.53 dev tun0 table 1000000019 proto static scope link 
+10.111.0.1 dev tun0 table 1019 proto static scope link 
+10.111.0.53 dev tun0 table 1019 proto static scope link 
+local 10.111.0.1 dev tun0 table local proto kernel scope host src 10.111.0.1 
+fe80::/64 dev tun0 table 1019 proto kernel metric 256 pref medium
+unreachable default dev lo table 1019 proto static metric 1024 pref medium
+local fe80::defe:1609:cd33:9b62 dev tun0 table local proto kernel metric 0 pref medium
+multicast ff00::/8 dev tun0 table local proto kernel metric 256 pref medium
+== connectivity: VPN network caps
+  4: VpnNetworkProvider:0
+  NetworkAgentInfo{network{101}  handle{437197393933}  ni{MOBILE[LTE] CONNECTED extra: epc.tmobile.com} created=2026-11-19T19:15:51.590Z Score(Policies : TRANSPORT_PRIMARY&EVER_EVALUATED&EVER_VALIDATED&IS_VALIDATED ; KeepConnected : 0)  created 96672 firstValidated 100307 lastValidated 100307  lp{{InterfaceName: eth0 LinkAddresses: [ 10.0.2.15/24 ] DnsAddresses: [ /10.0.2.3 ] Domains: null MTU: 1500 TcpBufferSizes: 2097152,6291456,16777216,512000,2097152,8388608 Routes: [ 0.0.0.0/0 -> 10.0.2.2 eth0 mtu 1500,10.0.2.0/24 -> 0.0.0.0 eth0 mtu 0 ]}}  nc{[ Transports: CELLULAR Capabilities: MMS&SUPL&DUN&FOTA&IMS&CBS&INTERNET&NOT_RESTRICTED&TRUSTED&NOT_VPN&VALIDATED&NOT_ROAMING&FOREGROUND&NOT_CONGESTED&NOT_SUSPENDED&NOT_VCN_MANAGED&MMTEL&NOT_BANDWIDTH_CONSTRAINED LinkUpBandwidth>=60000Kbps LinkDnBandwidth>=145000Kbps Specifier: <TelephonyNetworkSpecifier [mSubId = 1]> SubscriptionIds: {1} UnderlyingNetworks: Null]}  factorySerialNumber=5}
+      NetworkRequest [ REQUEST id=1, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED&NOT_VPN&NOT_VCN_MANAGED&NOT_BANDWIDTH_CONSTRAINED RequestorUid: 1000 RequestorPkg: android UnderlyingNetworks: Null] ]
+      NetworkRequest [ BACKGROUND_REQUEST id=2, [ Transports: CELLULAR Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED&NOT_VPN&NOT_VCN_MANAGED&NOT_BANDWIDTH_CONSTRAINED RequestorUid: 1000 RequestorPkg: android UnderlyingNetworks: Null] ]
+      NetworkRequest [ LISTEN id=11, [ Capabilities: NOT_RESTRICTED&TRUSTED&NOT_VPN&NOT_VCN_MANAGED&NOT_BANDWIDTH_CONSTRAINED Uid: 1000 RequestorUid: 1000 RequestorPkg: android MatchNonThreadLocalNetworks UnderlyingNetworks: Null] ]
+      NetworkRequest [ LISTEN id=14, [ Transports: CELLULAR Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED&NOT_VPN&NOT_VCN_MANAGED&NOT_BANDWIDTH_CONSTRAINED Uid: 1000 RequestorUid: 1000 RequestorPkg: android MatchNonThreadLocalNetworks UnderlyingNetworks: Null] ]
+      NetworkRequest [ TRACK_SYSTEM_DEFAULT id=27, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED&NOT_VPN&NOT_VCN_MANAGED&NOT_BANDWIDTH_CONSTRAINED RequestorUid: 1073 RequestorPkg: com.google.android.networkstack.tethering UnderlyingNetworks: Null] ]
+      NetworkRequest [ LISTEN_FOR_BEST id=32, [ Capabilities: INTERNET&TRUSTED&NOT_VPN&NOT_VCN_MANAGED Uid: 10199 RequestorUid: 10199 RequestorPkg: com.android.systemui MatchNonThreadLocalNetworks UnderlyingNetworks: Null] ]
+      NetworkRequest [ TRACK_SYSTEM_DEFAULT id=33, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED&NOT_VPN&NOT_VCN_MANAGED&NOT_BANDWIDTH_CONSTRAINED RequestorUid: 1001 RequestorPkg: com.android.phone UnderlyingNetworks: Null] ]
+      NetworkRequest [ TRACK_SYSTEM_DEFAULT id=34, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED&NOT_VPN&NOT_VCN_MANAGED&NOT_BANDWIDTH_CONSTRAINED RequestorUid: 1001 RequestorPkg: com.android.phone UnderlyingNetworks: Null] ]
+      NetworkRequest [ LISTEN id=35, [ Transports: CELLULAR|WIFI Capabilities: NOT_VPN RequestorUid: 10199 RequestorPkg: com.android.systemui MatchNonThreadLocalNetworks UnderlyingNetworks: Null] ]
+      NetworkRequest [ LISTEN_FOR_BEST id=41, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED&NOT_VPN&NOT_VCN_MANAGED Uid: 1001 RequestorUid: 1001 RequestorPkg: com.android.phone MatchNonThreadLocalNetworks UnderlyingNetworks: Null] ]
+      NetworkRequest [ LISTEN id=48, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED&NOT_VPN&NOT_VCN_MANAGED&NOT_BANDWIDTH_CONSTRAINED Uid: 1001 RequestorUid: 1001 RequestorPkg: com.android.phone MatchNonThreadLocalNetworks UnderlyingNetworks: Null] ]
+      NetworkRequest [ LISTEN id=76, [ Capabilities: NOT_RESTRICTED&TRUSTED&NOT_VPN&VALIDATED&NOT_VCN_MANAGED&NOT_BANDWIDTH_CONSTRAINED Uid: 1001 RequestorUid: 1001 RequestorPkg: com.android.ons MatchNonThreadLocalNetworks UnderlyingNetworks: Null] ]
+      NetworkRequest [ TRACK_DEFAULT id=227, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED&NOT_VPN&NOT_VCN_MANAGED&NOT_BANDWIDTH_CONSTRAINED Uids: <{10161-10161, 10166-10166, 10173-10173, 10224-10224}> RequestorUid: 1000 RequestorPkg: android UnderlyingNetworks: Null] ]
+adb.exe : Failed to write while dumping service connectivity: Broken pipe
+At line:1 char:1007
++ ... ps'; $o += (& $adb -s $s shell "dumpsys connectivity | grep -E 'Vpn|V ...
++                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (Failed to write...ty: Broken pipe:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 

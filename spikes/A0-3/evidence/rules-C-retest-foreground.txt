@@ -1,0 +1,2 @@
+case=C-retest-foreground blocklist=[10.0.2.2:8000/path.html] allowlist=[]
+ALLOWED  http://10.0.2.2:8000/path.html  | fg=com.android.chrome | text="ALLOWED path" text="ALLOWED /path.html" text="10.0.2.2:8000/path.html" 

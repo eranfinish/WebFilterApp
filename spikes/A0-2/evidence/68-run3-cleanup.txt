@@ -1,0 +1,11 @@
+﻿Broadcast completed: result=0, data="OK always-on cleared"
+Success: Admin removed ComponentInfo{com.webfilter.spike.a02/com.webfilter.spike.a02.AdminReceiver}
+Success
+Success
+-- owners
+-- packages
+-- always-on
+null
+0
+-- tun0
+Device "tun0" does not exist.

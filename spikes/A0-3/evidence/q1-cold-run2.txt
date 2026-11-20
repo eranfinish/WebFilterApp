@@ -1,0 +1,6 @@
+condition=cold run=2 blocked=10.0.2.2:8000/blocked-demo.html allowed=http://10.0.2.2:8000/index.html
+before: allowed marker present? 0
+dpc: Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a03/.CmdReceiver (has extras) }
+Broadcast completed: result=0, data="SET mode=array t0=1795133500101 blocklist=[10.0.2.2:8000/blocked-demo.html] allowlist=[]"
+probe 1 at 1795133505529: BLOCKED
+RESULT t0=1795133500101 first_blocked=1795133505529 latency_ms=5428

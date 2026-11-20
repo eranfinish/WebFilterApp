@@ -1,0 +1,19 @@
+﻿== alwayson_nolock again (VPN up, lockdown off)
+Broadcast completed: result=0, data="OK set always-on lockdown=false consent=needed readBackPkg=com.webfilter.spike.a02 readBackLockdown=false"
+--- http http://neverssl.com/ (VPN up)
+Broadcast completed: result=0, data="FAIL SocketTimeoutException: timeout"
+--- http https://www.wikipedia.org/ (VPN up)
+Broadcast completed: result=0, data="FAIL UnknownHostException: Unable to resolve host "www.wikipedia.org": No address associated with hostname"
+--- http https://example.com/ (VPN up)
+Broadcast completed: result=0, data="FAIL SSLHandshakeException: connection closed"
+--- tcp 34.223.124.45:80 (VPN up)
+Broadcast completed: result=0, data="OK connect"
+== A02 DNS lines for these names
+11-20 00:12:47.446  3011  3557 I A02     : DNS name=en.wikipedia.org type=1 action=BLOCK t=1795133567446
+11-20 00:12:47.526  3011  3572 I A02     : DNS name=example.com type=1 action=FORWARD ok=true t=1795133567526
+11-20 00:12:47.615  3011  3572 I A02     : DNS name=neverssl.com type=1 action=FORWARD ok=true t=1795133567615
+11-20 00:12:52.175  3011  3557 I A02     : DNS name=www.wikipedia.org type=1 action=BLOCK t=1795133572175
+11-20 00:13:16.869  3011  3798 I A02     : DNS name=mtalk.google.com type=1 action=FORWARD ok=true t=1795133596869
+11-20 00:13:20.859  3011  3798 I A02     : DNS name=neverssl.com type=1 action=FORWARD ok=true t=1795133600859
+11-20 00:13:26.995  3011  3791 I A02     : DNS name=www.wikipedia.org type=1 action=BLOCK t=1795133606995
+11-20 00:13:27.074  3011  3798 I A02     : DNS name=example.com type=1 action=FORWARD ok=true t=1795133607074

@@ -1,0 +1,85 @@
+﻿== t_before_set_ms=1795133096744
+== alwayson_on (lockdown)
+Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02/.CmdReceiver (has extras) }
+Broadcast completed: result=0, data="OK set always-on lockdown=true consent=granted readBackPkg=com.webfilter.spike.a02 readBackLockdown=true"
+== status
+Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02/.CmdReceiver (has extras) }
+Broadcast completed: result=0, data="pid=15976 uid=10235 deviceOwner=true profileOwner=false alwaysOnPkg=com.webfilter.spike.a02 lockdown=true vpnRunning=true profiles=1"
+== settings
+com.webfilter.spike.a02
+1
+== tun
+19: tun0: <POINTOPOINT,UP,LOWER_UP> mtu 1280 qdisc pfifo_fast state UNKNOWN group default qlen 500
+    link/none 
+    inet 10.111.0.1/32 scope global tun0
+       valid_lft forever preferred_lft forever
+    inet6 fe80::defe:1609:cd33:9b62/64 scope link stable-privacy 
+       valid_lft forever preferred_lft forever
+10.0.2.0/24 dev eth0 proto kernel scope link src 10.0.2.15 
+0:	from all lookup local 
+11000:	from all iif lo oif dummy0 uidrange 0-0 lookup 1002 
+11000:	from all iif lo oif eth0 uidrange 0-0 lookup 1015 
+12000:	from all iif tun0 lookup 97 
+13000:	from all fwmark 0xc0067/0xcffff lookup 1019 
+13000:	from all fwmark 0x0/0x20000 iif lo uidrange 0-99999 lookup 1019 
+14000:	from all fwmark 0x0/0x20000 iif lo uidrange 1-10234 prohibit
+14000:	from all fwmark 0x0/0x20000 iif lo uidrange 10236-20234 prohibit
+14000:	from all fwmark 0x0/0x20000 iif lo uidrange 20236-99999 prohibit
+15040:	from all fwmark 0x10065/0x1ffff iif lo uidrange 10161-10161 lookup 1015 
+15040:	from all fwmark 0x10065/0x1ffff iif lo uidrange 10166-10166 lookup 1015 
+15040:	from all fwmark 0x10065/0x1ffff iif lo uidrange 10173-10173 lookup 1015 
+15040:	from all fwmark 0x10065/0x1ffff iif lo uidrange 10224-10224 lookup 1015 
+15040:	from all fwmark 0x10065/0x1ffff iif lo uidrange 10158-10158 lookup 1015 
+16000:	from all fwmark 0x10063/0x1ffff iif lo lookup 97 
+16000:	from all fwmark 0x10065/0x1ffff iif lo lookup 1015 
+16000:	from all fwmark 0x10067/0x1ffff iif lo uidrange 0-0 lookup 1019 
+16000:	from all fwmark 0x10067/0x1ffff iif lo uidrange 0-99999 lookup 1019 
+17000:	from all iif lo oif dummy0 lookup 1002 
+17000:	from all iif lo oif eth0 lookup 1015 
+17000:	from all iif lo oif tun0 uidrange 0-99999 lookup 1019 
+20000:	from all fwmark 0x0/0x10000 lookup 97 
+22040:	from all fwmark 0x65/0x1ffff iif lo uidrange 10161-10161 lookup 1015 
+22040:	from all fwmark 0x65/0x1ffff iif lo uidrange 10166-10166 lookup 1015 
+22040:	from all fwmark 0x65/0x1ffff iif lo uidrange 10173-10173 lookup 1015 
+22040:	from all fwmark 0x65/0x1ffff iif lo uidrange 10224-10224 lookup 1015 
+22040:	from all fwmark 0x65/0x1ffff iif lo uidrange 10158-10158 lookup 1015 
+23000:	from all fwmark 0x65/0x1ffff iif lo lookup 1015 
+25000:	from all fwmark 0x0/0x10000 iif lo uidrange 10161-10161 lookup 1000000015 
+25000:	from all fwmark 0x0/0x10000 iif lo uidrange 10166-10166 lookup 1000000015 
+25000:	from all fwmark 0x0/0x10000 iif lo uidrange 10173-10173 lookup 1000000015 
+25000:	from all fwmark 0x0/0x10000 iif lo uidrange 10224-10224 lookup 1000000015 
+25000:	from all fwmark 0x0/0x10000 iif lo uidrange 10158-10158 lookup 1000000015 
+26000:	from all fwmark 0x0/0x10000 iif lo lookup 1000000015 
+28000:	from all fwmark 0x67/0xffff lookup 1015 
+29040:	from all fwmark 0x0/0xffff iif lo uidrange 10161-10161 lookup 1015 
+29040:	from all fwmark 0x0/0xffff iif lo uidrange 10166-10166 lookup 1015 
+29040:	from all fwmark 0x0/0xffff iif lo uidrange 10173-10173 lookup 1015 
+29040:	from all fwmark 0x0/0xffff iif lo uidrange 10224-10224 lookup 1015 
+29040:	from all fwmark 0x0/0xffff iif lo uidrange 10158-10158 lookup 1015 
+31000:	from all fwmark 0x0/0xffff iif lo lookup 1015 
+32000:	from all unreachable
+== logcat A02
+--------- beginning of main
+11-20 00:04:56.864 15976 15976 I A02     : op=alwayson_on arg=null t=1795133096864 -> OK set always-on lockdown=true consent=granted readBackPkg=com.webfilter.spike.a02 readBackLockdown=true
+11-20 00:04:56.868 15976 15976 I A02     : onCreate pid=15976 uid=10235 t=1795133096868
+11-20 00:04:56.869 15976 15976 I A02     : onStartCommand action=android.net.VpnService startId=1 t=1795133096869
+11-20 00:04:56.933 15976 15976 I A02     : establish ok fd=94 t=1795133096933
+11-20 00:04:56.936 15976 15976 I A02     : onBind action=android.net.VpnService t=1795133096936
+11-20 00:04:56.942 15976 16078 I A02     : drop: not an IPv4 UDP packet (len=76) t=1795133096942
+11-20 00:04:56.943 15976 16078 I A02     : drop: not an IPv4 UDP packet (len=48) t=1795133096942
+11-20 00:04:56.943 15976 16078 I A02     : drop: not an IPv4 UDP packet (len=76) t=1795133096943
+11-20 00:04:57.043 15976 16078 I A02     : drop: not an IPv4 UDP packet (len=76) t=1795133097043
+11-20 00:04:57.080 15976 16078 I A02     : drop: not an IPv4 UDP packet (len=64) t=1795133097080
+11-20 00:04:57.590 15976 16094 I A02     : DNS name=android.googleapis.com type=1 action=FORWARD ok=true t=1795133097590
+11-20 00:04:57.590 15976 16091 I A02     : DNS name=mtalk.google.com type=1 action=FORWARD ok=true t=1795133097590
+11-20 00:04:57.592 15976 16092 I A02     : DNS name=www.google.com type=65 action=FORWARD ok=true t=1795133097592
+11-20 00:04:57.594 15976 16093 I A02     : DNS name=www.google.com type=1 action=FORWARD ok=true t=1795133097594
+11-20 00:04:57.674 15976 16093 I A02     : DNS name=voilatile-pa.googleapis.com type=1 action=FORWARD ok=true t=1795133097674
+11-20 00:04:57.768 15976 16078 I A02     : drop: not an IPv4 UDP packet (len=76) t=1795133097768
+11-20 00:04:58.089 15976 16078 I A02     : drop: not an IPv4 UDP packet (len=60) t=1795133098089
+11-20 00:04:59.111 15976 16078 I A02     : drop: not an IPv4 UDP packet (len=60) t=1795133099111
+11-20 00:05:00.140 15976 16078 I A02     : drop: not an IPv4 UDP packet (len=60) t=1795133100140
+11-20 00:05:01.159 15976 16078 I A02     : drop: not an IPv4 UDP packet (len=60) t=1795133101159
+11-20 00:05:01.288 15976 16078 I A02     : drop: not an IPv4 UDP packet (len=48) t=1795133101288
+11-20 00:05:02.023 15976 15976 I A02     : op=status arg=null t=1795133102023 -> pid=15976 uid=10235 deviceOwner=true profileOwner=false alwaysOnPkg=com.webfilter.spike.a02 lockdown=true vpnRunning=true profiles=1
+11-20 00:05:02.183 15976 16078 I A02     : drop: not an IPv4 UDP packet (len=60) t=1795133102183

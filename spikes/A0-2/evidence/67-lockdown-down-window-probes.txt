@@ -1,0 +1,18 @@
+﻿== crash marker device ms=1795138017006
+== DOWN window probes (t=1795138019218)
+-- tun0 present?
+Device "tun0" does not exist.
+-- ip rule | grep prohibit (count)
+3
+-- probe tcp direct 172.66.147.243:443
+Broadcast completed: result=0, data="FAIL ConnectException: failed to connect to /172.66.147.243 (port 443) from /:: (port 0) after 4000ms: connect failed: EACCES (Permission denied)"
+-- probe resolve example.org
+Broadcast completed: result=0, data="FAIL UnknownHostException: Unable to resolve host "example.org": No address associated with hostname"
+-- probe watchdns 5 (UP expected only if tunnel answers)
+Broadcast completed: result=0, data="OK watchdns events=WATCHDNS DOWN t=1795138019675; "
+-- end down-window t=1795138024757
+-- A02 log
+11-20 01:26:43.843  3910  3910 I A02     : onCreate pid=3910 uid=10235 t=1795138003843
+11-20 01:26:43.844  3910  3910 I A02     : onStartCommand action=android.net.VpnService startId=1 t=1795138003844
+11-20 01:26:43.908  3910  3910 I A02     : establish ok fd=94 t=1795138003908
+11-20 01:26:57.096  3910  4046 I A02     : op=crash arg=null t=1795138017096 -> OK crashing pid=3910

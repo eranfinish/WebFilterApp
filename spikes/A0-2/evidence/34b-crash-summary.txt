@@ -1,0 +1,18 @@
+﻿== crash test. before: tun?
+adb.exe : request send failed: Permission denied
+At line:1 char:518
++ ... n?"; $o += (& $adb -s $s shell "ip link show tun0 | head -1" 2>&1); $ ...
++                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (request send failed: Permission denied:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+== kill marker device ms=1795133854231
+Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02/.CmdReceiver (has extras) }
+Broadcast completed: result=0
+== A02 lines after kill
+11-20 00:17:01.747  1678  1678 I A02     : onCreate pid=1678 uid=10235 t=1795133821747
+11-20 00:17:01.748  1678  1678 I A02     : onStartCommand action=android.net.VpnService startId=1 t=1795133821748
+11-20 00:17:02.103  1678  1678 I A02     : establish ok fd=94 t=1795133822103
+11-20 00:17:02.104  1678  1678 I A02     : onBind action=android.net.VpnService t=1795133822104
+== tun poll transitions (ms, present)
+1795133850467 present=0

@@ -1,0 +1,6 @@
+﻿== install app
+Performing Streamed Install
+Success
+== install probe
+Performing Streamed Install
+Success

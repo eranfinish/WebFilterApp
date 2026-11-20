@@ -1,0 +1,7 @@
+﻿Broadcast completed: result=0, data="OK unrestricted config_vpn"
+Broadcast completed: result=0, data="OK unrestricted config_private_dns"
+Broadcast completed: result=0, data="OK set always-on lockdown=true consent=granted readBackPkg=com.webfilter.spike.a02 readBackLockdown=true"
+tapped 'Network'
+tapped 'VPN'
+page text: A0.2 DPC | Connected / Always on
+enabled flags: A0.2 DPC=false ; Connected / Always on=false

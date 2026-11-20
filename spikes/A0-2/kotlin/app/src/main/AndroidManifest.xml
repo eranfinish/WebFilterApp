@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Spike A0.2. testOnly lets `adb install -t` install it and lets `dpm remove-active-admin` remove the owner. -->
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <uses-permission android:name="android.permission.INTERNET" />
+
+    <application
+        android:label="A0.2 DPC"
+        android:allowBackup="false"
+        android:testOnly="true">
+
+        <receiver
+            android:name=".AdminReceiver"
+            android:exported="true"
+            android:permission="android.permission.BIND_DEVICE_ADMIN">
+            <meta-data
+                android:name="android.app.device_admin"
+                android:resource="@xml/device_admin" />
+            <intent-filter>
+                <action android:name="android.app.action.DEVICE_ADMIN_ENABLED" />
+            </intent-filter>
+        </receiver>
+
+        <!-- Test harness entry point, driven by `adb shell am broadcast -n`. -->
+        <receiver
+            android:name=".CmdReceiver"
+            android:exported="true" />
+
+        <!-- The DNS-only VPN. The system binds it with VpnService.SERVICE_INTERFACE, so it needs BIND_VPN_SERVICE. -->
+        <service
+            android:name=".DnsVpnService"
+            android:exported="true"
+            android:permission="android.permission.BIND_VPN_SERVICE">
+            <intent-filter>
+                <action android:name="android.net.VpnService" />
+            </intent-filter>
+            <meta-data
+                android:name="android.net.VpnService.SUPPORTS_ALWAYS_ON"
+                android:value="true" />
+        </service>
+    </application>
+</manifest>

@@ -1,0 +1,25 @@
+﻿== baseline re-run (no VPN, no owner), after the transient outage cleared
+--- resolve example.com
+Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02.probe/.ProbeReceiver (has extras) }
+Broadcast completed: result=0, data="FAIL UnknownHostException: Unable to resolve host "example.com": No address associated with hostname"
+--- resolve blocked.example
+Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02.probe/.ProbeReceiver (has extras) }
+Broadcast completed: result=0, data="FAIL UnknownHostException: Unable to resolve host "blocked.example": No address associated with hostname"
+--- resolve www.wikipedia.org
+Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02.probe/.ProbeReceiver (has extras) }
+Broadcast completed: result=0, data="OK addrs=185.15.59.224,2a02:ec80:300:ed1a::1"
+--- resolve neverssl.com
+Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02.probe/.ProbeReceiver (has extras) }
+Broadcast completed: result=0, data="OK addrs=34.223.124.45,2600:1f13:37c:1400:ba21:7165:5fc7:736e"
+--- http https://example.com/
+Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02.probe/.ProbeReceiver (has extras) }
+Broadcast completed: result=0, data="FAIL UnknownHostException: Unable to resolve host "example.com": No address associated with hostname"
+--- http https://www.wikipedia.org/
+Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02.probe/.ProbeReceiver (has extras) }
+Broadcast completed: result=0, data="OK code=200"
+--- tcp 172.66.147.243:443
+Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02.probe/.ProbeReceiver (has extras) }
+Broadcast completed: result=0, data="OK connect"
+--- tcp 1.1.1.1:443
+Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02.probe/.ProbeReceiver (has extras) }
+Broadcast completed: result=0, data="OK connect"

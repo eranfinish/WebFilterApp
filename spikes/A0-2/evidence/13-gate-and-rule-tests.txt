@@ -1,0 +1,29 @@
+﻿== ip -6 route (incl tun0)
+fe80::/64 dev dummy0 table 1002 proto kernel metric 256 pref medium
+default dev dummy0 table 1002 proto static metric 1024 pref medium
+fe80::/64 dev eth0 table 1015 proto kernel metric 256 pref medium
+default via fe80::2 dev eth0 table 1015 proto ra metric 1024 expires 1576sec hoplimit 64 pref medium
+fe80::/64 dev tun0 table 1019 proto kernel metric 256 pref medium
+unreachable default dev lo table 1019 proto static metric 1024 pref medium
+local fe80::5054:ff:fe12:3456 dev eth0 table local proto kernel metric 0 pref medium
+local fe80::88c9:d4ff:fee9:1d2a dev dummy0 table local proto kernel metric 0 pref medium
+local fe80::defe:1609:cd33:9b62 dev tun0 table local proto kernel metric 0 pref medium
+multicast ff00::/8 dev tun0 table local proto kernel metric 256 pref medium
+== gate: direct TCP 172.66.147.243:443 (not DNS, outside tun route)
+Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02.probe/.ProbeReceiver (has extras) }
+Broadcast completed: result=0, data="FAIL ConnectException: failed to connect to /172.66.147.243 (port 443) from /:: (port 0) after 4000ms: connect failed: EACCES (Permission denied)"
+== gate: resolve example.com (DNS via tun)
+Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02.probe/.ProbeReceiver (has extras) }
+Broadcast completed: result=0, data="FAIL UnknownHostException: Unable to resolve host "example.com": No address associated with hostname"
+== resolve wikipedia.org (BLOCK)
+Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02.probe/.ProbeReceiver (has extras) }
+Broadcast completed: result=0, data="FAIL UnknownHostException: Unable to resolve host "www.wikipedia.org": No address associated with hostname"
+== resolve blocked.example (BLOCK)
+Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02.probe/.ProbeReceiver (has extras) }
+Broadcast completed: result=0, data="FAIL UnknownHostException: Unable to resolve host "blocked.example": No address associated with hostname"
+== http https://example.com/
+Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02.probe/.ProbeReceiver (has extras) }
+Broadcast completed: result=0, data="FAIL UnknownHostException: Unable to resolve host "example.com": No address associated with hostname"
+== http https://www.wikipedia.org/ (BLOCK)
+Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02.probe/.ProbeReceiver (has extras) }
+Broadcast completed: result=0, data="FAIL UnknownHostException: Unable to resolve host "www.wikipedia.org": No address associated with hostname"

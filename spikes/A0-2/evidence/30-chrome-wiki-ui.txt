@@ -1,0 +1,4 @@
+﻿== Chrome: wikipedia (BLOCK expected), VPN up
+Starting: Intent { act=android.intent.action.VIEW dat=https://www.wikipedia.org/... }
+UI hierchary dumped to: /sdcard/a02-chrome-wiki.xml
+text="wikipedia.org"

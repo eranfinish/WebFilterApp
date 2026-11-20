@@ -1,0 +1,12 @@
+﻿== alwayson_off
+Broadcast completed: result=0, data="OK always-on cleared"
+== create_user via DPC
+Broadcast completed: result=0, data="OK created handle=UserHandle{10}"
+== pm list users
+Users:
+	UserInfo{0:Owner:4c13} running
+	UserInfo{10:a02-kid-1795134527611:400}
+== free mem
+MemTotal:        4005312 kB
+MemFree:          774220 kB
+MemAvailable:    2337912 kB

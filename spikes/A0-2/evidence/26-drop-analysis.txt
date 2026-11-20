@@ -1,0 +1,29 @@
+﻿== A02 drop lines with describe() (build 2)
+11-20 00:12:44.255  3011  3557 I A02     : drop: not an IPv4 UDP packet (ver=4 proto=6 dst=10.111.0.53 dport=853 len=60) t=1795133564255
+11-20 00:12:45.283  3011  3557 I A02     : drop: not an IPv4 UDP packet (ver=4 proto=6 dst=10.111.0.53 dport=853 len=60) t=1795133565283
+11-20 00:12:46.302  3011  3557 I A02     : drop: not an IPv4 UDP packet (ver=4 proto=6 dst=10.111.0.53 dport=853 len=60) t=1795133566302
+11-20 00:12:46.910  3011  3557 I A02     : drop: not an IPv4 UDP packet (ver=6 len=48 head=[60 00 00 00 00 08 3a ff fe 80 00 00 00 00 00 00]) t=1795133566910
+11-20 00:12:47.329  3011  3557 I A02     : drop: not an IPv4 UDP packet (ver=4 proto=6 dst=10.111.0.53 dport=853 len=60) t=1795133567329
+11-20 00:12:48.349  3011  3557 I A02     : drop: not an IPv4 UDP packet (ver=4 proto=6 dst=10.111.0.53 dport=853 len=60) t=1795133568349
+11-20 00:12:50.373  3011  3557 I A02     : drop: not an IPv4 UDP packet (ver=4 proto=6 dst=10.111.0.53 dport=853 len=60) t=1795133570373
+11-20 00:12:54.590  3011  3557 I A02     : drop: not an IPv4 UDP packet (ver=4 proto=6 dst=10.111.0.53 dport=853 len=60) t=1795133574590
+11-20 00:12:55.102  3011  3557 I A02     : drop: not an IPv4 UDP packet (ver=6 len=48 head=[60 00 00 00 00 08 3a ff fe 80 00 00 00 00 00 00]) t=1795133575102
+11-20 00:13:02.786  3011  3557 I A02     : drop: not an IPv4 UDP packet (ver=4 proto=6 dst=10.111.0.53 dport=853 len=60) t=1795133582783
+11-20 00:13:16.779  3011  3791 I A02     : drop: not an IPv4 UDP packet (ver=6 len=76 head=[60 00 00 00 00 24 00 01 fe 80 00 00 00 00 00 00]) t=1795133596779
+11-20 00:13:16.779  3011  3791 I A02     : drop: not an IPv4 UDP packet (ver=6 len=48 head=[60 00 00 00 00 08 3a ff fe 80 00 00 00 00 00 00]) t=1795133596779
+11-20 00:13:16.780  3011  3791 I A02     : drop: not an IPv4 UDP packet (ver=6 len=76 head=[60 00 00 00 00 24 00 01 fe 80 00 00 00 00 00 00]) t=1795133596780
+11-20 00:13:16.840  3011  3791 I A02     : drop: not an IPv4 UDP packet (ver=4 proto=6 dst=10.111.0.53 dport=853 len=64) t=1795133596840
+11-20 00:13:16.916  3011  3791 I A02     : drop: not an IPv4 UDP packet (ver=6 len=76 head=[60 00 00 00 00 24 00 01 fe 80 00 00 00 00 00 00]) t=1795133596916
+11-20 00:13:17.693  3011  3791 I A02     : drop: not an IPv4 UDP packet (ver=6 len=76 head=[60 00 00 00 00 24 00 01 fe 80 00 00 00 00 00 00]) t=1795133597693
+11-20 00:13:17.853  3011  3791 I A02     : drop: not an IPv4 UDP packet (ver=4 proto=6 dst=10.111.0.53 dport=853 len=60) t=1795133597853
+11-20 00:13:18.877  3011  3791 I A02     : drop: not an IPv4 UDP packet (ver=4 proto=6 dst=10.111.0.53 dport=853 len=60) t=1795133598877
+11-20 00:13:19.901  3011  3791 I A02     : drop: not an IPv4 UDP packet (ver=4 proto=6 dst=10.111.0.53 dport=853 len=60) t=1795133599901
+11-20 00:13:20.926  3011  3791 I A02     : drop: not an IPv4 UDP packet (ver=4 proto=6 dst=10.111.0.53 dport=853 len=60) t=1795133600926
+11-20 00:13:20.958  3011  3791 I A02     : drop: not an IPv4 UDP packet (ver=6 len=48 head=[60 00 00 00 00 08 3a ff fe 80 00 00 00 00 00 00]) t=1795133600958
+11-20 00:13:21.950  3011  3791 I A02     : drop: not an IPv4 UDP packet (ver=4 proto=6 dst=10.111.0.53 dport=853 len=60) t=1795133601950
+11-20 00:13:23.966  3011  3791 I A02     : drop: not an IPv4 UDP packet (ver=4 proto=6 dst=10.111.0.53 dport=853 len=60) t=1795133603966
+11-20 00:13:28.126  3011  3791 I A02     : drop: not an IPv4 UDP packet (ver=4 proto=6 dst=10.111.0.53 dport=853 len=60) t=1795133608126
+11-20 00:13:29.662  3011  3791 I A02     : drop: not an IPv4 UDP packet (ver=6 len=48 head=[60 00 00 00 00 08 3a ff fe 80 00 00 00 00 00 00]) t=1795133609662
+== proto counts
+non-ipv4 count=14
+proto=6 count=17

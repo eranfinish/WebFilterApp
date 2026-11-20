@@ -1,0 +1,7 @@
+﻿Host time of crash report and relaunch (local host clock)
+Crash minidump: C:\Users\ERANFI~1\AppData\Local\Temp\AndroidEmulator\emu-crash-37.2.13.db\reports\1d059147-cfbd-4aab-a415-c0de3e634bb9.dmp (67,458,896 bytes, written 2026-11-20 02:30:04 host time; not copied into the repo)
+Clocks: host local = UTC+2 (02:30 local = 00:30 UTC). The emulator clock is UTC; its status bar shows 12:30 (12-hour format, 00:30). The "12:30" in the earlier notes is that status-bar time, i.e. the same instant as host 02:30 local.
+Relaunch of Tablet_A12 by command: emulator.exe -avd Tablet_A12 -memory 2048 (approved by parent session) started 2026-11-20 02:35:06 host time.
+02:39:19 a second emulator process (qemu) started; not started by this session, owner unknown.
+At 02:46 (about 11 min after the relaunch): no emulator console port listening (5554, 5555, 5556, 5557); adb devices lists no devices (emulator-5556 also absent at that time).
+Action taken: stopped device runs. Did not kill any process, did not restart adb server again.

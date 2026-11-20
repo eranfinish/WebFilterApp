@@ -1,0 +1,14 @@
+﻿== VPN up (alwayson_nolock): repeated allowed HTTP
+Broadcast completed: result=0, data="OK set always-on lockdown=false consent=granted readBackPkg=com.webfilter.spike.a02 readBackLockdown=false"
+--- neverssl #1
+Broadcast completed: result=0, data="FAIL SocketTimeoutException: timeout"
+--- neverssl #2
+Broadcast completed: result=0, data="FAIL SocketTimeoutException: timeout"
+--- neverssl #3
+Broadcast completed: result=0, data="FAIL SocketTimeoutException: timeout"
+--- example.org http #1
+Broadcast completed: result=0, data="OK code=200"
+--- example.org http #2
+Broadcast completed: result=0, data="OK code=200"
+== VPN up: wikipedia https (BLOCK expected)
+Broadcast completed: result=0, data="FAIL UnknownHostException: Unable to resolve host "en.wikipedia.org": No address associated with hostname"

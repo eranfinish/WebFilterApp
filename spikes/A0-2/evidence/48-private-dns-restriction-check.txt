@@ -1,0 +1,5 @@
+﻿== restrict config_private_dns
+Broadcast completed: result=0, data="OK restricted config_private_dns"
+Broadcast completed: result=0, data="restrictions=Bundle[mParcelledData.dataSize=72]"
+Private DNS page text: Use secure DNS | Use secure DNS | This setting is disabled on managed browsers | Use your current service provider | Secure DNS may not be available all the time | Choose another provider
+Enabled flags: =true ; =true ; =true ; =true ; =true ; =true ; =true ; =true ; =true ; =true ; =true ; =true

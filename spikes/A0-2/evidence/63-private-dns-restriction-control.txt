@@ -1,0 +1,5 @@
+﻿Broadcast completed: result=0, data="OK restricted config_private_dns"
+tapped 'Network'
+tapped 'Private DNS'
+page: Blocked by work policy | For more info, contact your IT admin | Close
+Broadcast completed: result=0, data="OK unrestricted config_private_dns"

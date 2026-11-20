@@ -1,0 +1,7 @@
+--------- beginning of main
+11-19 23:54:11.922  6139  6139 I A03WV   : 1795132451921 START http://10.0.2.2:8000/index.html
+11-19 23:54:12.010  6139  6181 I A03WV   : 1795132452009 shouldInterceptRequest http://10.0.2.2:8000/index.html main=true
+11-19 23:54:12.023  6139  6139 I A03WV   : 1795132452022 POLL http://10.0.2.2:8000/index.html
+11-19 23:54:12.236  6139  6139 I A03WV   : 1795132452236 onPageStarted http://10.0.2.2:8000/index.html
+11-19 23:54:12.237  6139  6139 I A03WV   : 1795132452237 onPageFinished http://10.0.2.2:8000/index.html
+11-19 23:54:12.238  6139  6139 I A03WV   : 1795132452238 doUpdateVisitedHistory http://10.0.2.2:8000/index.html reload=false

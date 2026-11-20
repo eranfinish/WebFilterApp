@@ -1,0 +1,2 @@
+﻿tapped 'Use secure DNS' at 238.5,1572
+Use secure DNS | Use secure DNS | This setting is disabled on managed browsers | Use your current service provider | Secure DNS may not be available all the time | Choose another provider

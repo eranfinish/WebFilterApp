@@ -1,0 +1,17 @@
+﻿== alwayson_off (VPN process left running if possible)
+Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02/.CmdReceiver (has extras) }
+Broadcast completed: result=0, data="OK always-on cleared"
+== status
+Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02/.CmdReceiver (has extras) }
+Broadcast completed: result=0, data="pid=15976 uid=10235 deviceOwner=true profileOwner=false alwaysOnPkg=null lockdown=false vpnRunning=false profiles=1"
+== tun0 present?
+Device "tun0" does not exist.
+== direct TCP 172.66.147.243:443 (no lockdown)
+Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02.probe/.ProbeReceiver (has extras) }
+Broadcast completed: result=0, data="OK connect"
+== resolve example.com (no lockdown)
+Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02.probe/.ProbeReceiver (has extras) }
+Broadcast completed: result=0, data="OK addrs=104.20.23.154,172.66.147.243,2606:4700:10::6814:179a,2606:4700:10::ac42:93f3"
+== resolve blocked.example
+Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a02.probe/.ProbeReceiver (has extras) }
+Broadcast completed: result=0, data="FAIL UnknownHostException: Unable to resolve host "blocked.example": No address associated with hostname"

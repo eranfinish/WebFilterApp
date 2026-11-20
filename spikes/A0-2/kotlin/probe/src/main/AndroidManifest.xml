@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Spike A0.2 second app. Makes the requests; has no owner rights. -->
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <uses-permission android:name="android.permission.INTERNET" />
+
+    <application
+        android:label="A0.2 probe"
+        android:allowBackup="false"
+        android:usesCleartextTraffic="true"
+        android:testOnly="true">
+
+        <receiver
+            android:name=".ProbeReceiver"
+            android:exported="true" />
+
+        <activity
+            android:name=".WebProbeActivity"
+            android:exported="true" />
+    </application>
+</manifest>
