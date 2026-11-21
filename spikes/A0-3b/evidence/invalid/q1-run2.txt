@@ -1,0 +1,7 @@
+q1 run=2
+Broadcast completed: result=0, data="SET mode=array t0=1795293232279 blocklist=[10.0.2.2:8130] allowlist=[]"
+host_before_broadcast_ms=1795293232906 host_after_broadcast_ms=1795293233393
+text="n=27"
+server_lines_for_run=29
+last_allowed_n=11 last_allowed_host_ms=1795293232961
+enforcement_latency_ms in [-432, 555] (lower = last_allowed - host_after; upper = last_allowed + ~500 - host_before)

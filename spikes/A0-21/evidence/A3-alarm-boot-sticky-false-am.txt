@@ -1,0 +1,2 @@
+11-21 21:14:05.065   539   556 I ActivityManager: Process com.webfilter.spike.a021:vpn (pid 7520) has died: cch+5 CEM 
+11-21 21:14:08.133   539   575 I ActivityManager: Start proc 8025:com.webfilter.spike.a021:vpn/u0a147 for service {com.webfilter.spike.a021/com.webfilter.spike.a021.vpn.TunVpnService}

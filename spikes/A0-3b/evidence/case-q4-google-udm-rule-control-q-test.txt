@@ -1,0 +1,10 @@
+case=q4-google-udm-rule-control-q-test blocklist=[www.google.com/search?udm=2] allowlist=[] url=https://www.google.com/search?q=test
+chrome_pid_before=9395
+Broadcast completed: result=0, data="SET mode=array t0=1795293098591 blocklist=[www.google.com/search?udm=2] allowlist=[]"
+Broadcast completed: result=0, data="restrictions=URLBlocklist=[www.google.com/search?udm=2]"
+navigated_at_ms=1795293116910
+chrome_pid_after=9395
+fg: com.android.chrome/org.chromium.chrome.browser.ChromeTabbedActivity
+url_bar:  text="google.com/search?q=test&amp;sei=vf8Ba8X9NoWHnesPjMvlwAo"
+screen: text="test - חיפוש ב-Google" text="?sa=X&amp;ved=2ahUKEwixtY2F9JmYAxV6d2wGHa6UOu8QO3oECAUQAA" text="search%3Fq%3Dtest%26sei%3Dvf8Ba8X9NoWHnesPjMvlwAo&amp;ec=futura_srp_og_si_72236_p" text="כניסה" text="הגדרות חיפוש" text="התפריט הראשי" text="test" text="חיפוש קולי" text="מצב AI" text="הכול" text="תמונות" text="סרטונים" 
+--- server log lines for this case:

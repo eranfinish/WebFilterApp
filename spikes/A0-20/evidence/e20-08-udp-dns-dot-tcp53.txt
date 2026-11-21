@@ -1,0 +1,7 @@
+11-21 20:27:32.308 13246 13478 I A020P   : op=udp_dns uid=10148 -> REPLY from 8.8.8.8 rcode=0 answers=2
+11-21 20:27:35.276 12958 12989 I A020    : A020 dns blocked name=en.wikipedia.org
+11-21 20:27:35.277 13246 13485 I A020P   : op=udp_dns uid=10148 -> REPLY from 8.8.8.8 rcode=3 answers=0
+11-21 20:27:39.638 12958 12989 I A020    : A020 dns blocked name=en.wikipedia.org
+11-21 20:27:39.639 13246 13491 I A020P   : op=udp_dns uid=10148 -> REPLY from 1.1.1.1 rcode=3 answers=0
+11-21 20:27:44.041 13246 13497 I A020P   : op=raw uid=10148 -> CONNECTED in 59 ms
+11-21 20:27:50.469 13246 13506 I A020P   : op=raw uid=10148 -> CONNECTED in 25 ms

@@ -1,0 +1,41 @@
+== boot_completed
+1
+== release/sdk/product
+17
+37
+sdk_gphone64_x86_64
+sdk_gphone64_x86_64
+google/sdk_gphone64_x86_64/emu64xa:17/CE2A.260420.051.A2/16418371:user/release-keys
+== chrome
+    versionCode=763221838 minSdk=29 targetSdk=36
+    versionName=145.0.7632.218
+    versionCode=763221838 minSdk=29 targetSdk=36
+    versionName=145.0.7632.218
+== webview
+Current WebView Update Service state
+  Current WebView package (name, version): (com.google.android.webview, 145.0.7632.218)
+  Minimum targetSdkVersion: 33
+  Minimum WebView version code: 763221809
+  Number of relros started: 1
+  Number of relros finished: 1
+  WebView package dirty: false
+  Any WebView package installed: true
+  Preferred WebView package (name, version): (com.google.android.webview, 145.0.7632.218)
+  WebView packages:
+    Valid package com.google.android.webview (versionName: 145.0.7632.218, versionCode: 763221809, targetSdkVersion: 36) is  installed/enabled for all users
+    com.google.android.webview.beta is NOT installed.
+    com.google.android.webview.dev is NOT installed.
+    com.google.android.webview.canary is NOT installed.
+    com.google.android.webview.debug is NOT installed.
+    com.android.webview is NOT installed.
+== users
+Users:
+	UserInfo{0:Owner:4c13} running
+== accounts
+  Accounts: 0
+== device_provisioned
+1
+== dpm owners
+== view resolve
+priority=0 preferredOrder=0 match=0x208000 specificIndex=-1 isDefault=true
+com.android.chrome/com.google.android.apps.chrome.IntentDispatcher

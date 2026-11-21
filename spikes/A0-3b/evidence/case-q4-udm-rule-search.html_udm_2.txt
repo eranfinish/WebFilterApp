@@ -1,0 +1,10 @@
+case=q4-udm-rule-search.html_udm_2 blocklist=[10.0.2.2:8131/search.html?udm=2] allowlist=[] url=http://10.0.2.2:8131/search.html?udm=2
+chrome_pid_before=9395
+Broadcast completed: result=0, data="SET mode=array t0=1795292959042 blocklist=[10.0.2.2:8131/search.html?udm=2] allowlist=[]"
+Broadcast completed: result=0, data="restrictions=URLBlocklist=[10.0.2.2:8131/search.html?udm=2]"
+navigated_at_ms=1795292977620
+chrome_pid_after=9395
+fg: com.android.chrome/org.chromium.chrome.browser.ChromeTabbedActivity
+url_bar:  text="10.0.2.2:8131/search.html?udm=2"
+screen: text="10.0.2.2" text="10.0.2.2 is blocked" text="Your organization doesn’t allow you to view this site" text="10.0.2.2:8131/search.html?udm=2" 
+--- server log lines for this case:

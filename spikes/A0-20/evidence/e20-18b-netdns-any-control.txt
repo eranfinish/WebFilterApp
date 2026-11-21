@@ -1,0 +1,1 @@
+11-21 20:37:57.174 14689 14721 I A020P   : op=net_dns uid=10148 -> net[handle=432902426637 wifi iface=wlan0] getAllByName(example.org) OK 172.66.157.237, 104.20.26.136, 2606:4700:10::ac42:9ded, 2606:4700:10::6814:1a88 | net[handle=441492361229 cell iface=eth0] getAllByName(example.org) OK 172.66.157.237, 104.20.26.136, 2606:4700:10::ac42:9ded, 2606:4700:10::6814:1a88

@@ -1,0 +1,10 @@
+case=q2-B-host-block-path-allow-index blocklist=[10.0.2.2:8131] allowlist=[10.0.2.2:8131/path.html] url=http://10.0.2.2:8131/index.html
+chrome_pid_before=9395
+Broadcast completed: result=0, data="SET mode=array t0=1795292665776 blocklist=[10.0.2.2:8131] allowlist=[10.0.2.2:8131/path.html]"
+Broadcast completed: result=0, data="restrictions=URLAllowlist=[10.0.2.2:8131/path.html], URLBlocklist=[10.0.2.2:8131]"
+navigated_at_ms=1795292684253
+chrome_pid_after=9395
+fg: com.android.chrome/org.chromium.chrome.browser.ChromeTabbedActivity
+url_bar:  text="10.0.2.2:8131/index.html"
+screen: text="10.0.2.2" text="10.0.2.2 is blocked" text="Your organization doesn’t allow you to view this site" text="10.0.2.2:8131/index.html" 
+--- server log lines for this case:

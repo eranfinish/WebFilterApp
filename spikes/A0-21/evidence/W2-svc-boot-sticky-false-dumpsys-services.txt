@@ -1,0 +1,122 @@
+ACTIVITY MANAGER SERVICES (dumpsys activity services)
+  User 0 active services:
+  * ServiceRecord{d56530c u0 com.webfilter.spike.a021/.vpn.WatchTarget}
+    intent={cmp=com.webfilter.spike.a021/.vpn.WatchTarget}
+    packageName=com.webfilter.spike.a021
+    processName=com.webfilter.spike.a021:vpn
+    baseDir=/data/app/~~5dMxCba8_AQttzwNEsEdjQ==/com.webfilter.spike.a021-rG-Pi-O0VhMSVYLY0ceKkw==/base.apk
+    dataDir=/data/user/0/com.webfilter.spike.a021
+    app=ProcessRecord{c68f679 5333:com.webfilter.spike.a021:vpn/u0a147}
+    allowWhileInUsePermissionInFgs=true
+    recentCallingPackage=com.webfilter.spike.a021
+    recentCallingUid=10147
+    allowStartForeground=55
+    startForegroundCount=0
+    infoAllowStartForeground=[callingPackage: com.webfilter.spike.a021; callingUid: 10147; uidState: FGS ; intent: Intent { cmp=com.webfilter.spike.a021/.vpn.WatchTarget }; code:DEVICE_OWNER; tempAllowListReason:<vpn,reasonCode:VPN,duration:60000,callingUid:1000>; targetSdkVersion:36; callerTargetSdkVersion:36; startForegroundCount:0; bindFromPackage:null]
+    createTime=-1m7s651ms startingBgTimeout=--
+    lastActivity=-55s619ms restartTime=-55s619ms createdFromFg=false
+    restartCount=0 restartDelay=-- nextRestartTime=-54s779ms crashCount=0
+    Bindings:
+    * IntentBindRecord{19a3294 CREATE}:
+      intent={cmp=com.webfilter.spike.a021/.vpn.WatchTarget}
+      binder=android.os.BinderProxy@c88d13d
+      requested=true received=true hasBound=true doRebind=false
+      * Client AppBindRecord{82fdd32 ProcessRecord{4055bbc 4110:com.webfilter.spike.a021/u0a147}}
+        Per-process Connections:
+          ConnectionRecord{96e6e3f u0 CR com.webfilter.spike.a021/.vpn.WatchTarget:@1c3fa5e}
+          ConnectionRecord{e5fffbe u0 CR com.webfilter.spike.a021/.vpn.WatchTarget:@1c3fa5e}
+    All Connections:
+      ConnectionRecord{96e6e3f u0 CR com.webfilter.spike.a021/.vpn.WatchTarget:@1c3fa5e}
+      ConnectionRecord{e5fffbe u0 CR com.webfilter.spike.a021/.vpn.WatchTarget:@1c3fa5e}
+
+  * ServiceRecord{77e6043 u0 com.webfilter.spike.a021.probe/org.chromium.content.app.SandboxedProcessService0:0}
+    intent={cmp=com.webfilter.spike.a021.probe/org.chromium.content.app.SandboxedProcessService0:0}
+    packageName=com.webfilter.spike.a021.probe
+    processName=com.google.android.webview:sandboxed_process0:org.chromium.content.app.SandboxedProcessService0:0
+    baseDir=/data/app/~~jDsopSgI_i-oFaIsQpsRtA==/com.google.android.webview-_LG_QDeP-TNd_fLqGk0UHw==/WebViewGoogle.apk
+    dataDir=/data/user/0/com.google.android.webview
+    app=ProcessRecord{d7e4289 2805:com.google.android.webview:sandboxed_process0:org.chromium.content.app.SandboxedProcessService0:0/u0a148i0}
+    isolatedProc=ProcessRecord{d7e4289 2805:com.google.android.webview:sandboxed_process0:org.chromium.content.app.SandboxedProcessService0:0/u0a148i0}
+    allowWhileInUsePermissionInFgs=true
+    recentCallingPackage=com.webfilter.spike.a021.probe
+    recentCallingUid=10148
+    allowStartForeground=12
+    startForegroundCount=0
+    infoAllowStartForeground=[callingPackage: com.webfilter.spike.a021.probe; callingUid: 10148; uidState: TOP ; intent: Intent { cmp=com.webfilter.spike.a021.probe/org.chromium.content.app.SandboxedProcessService0:0 (has extras) }; code:PROC_STATE_TOP; tempAllowListReason:<null>; targetSdkVersion:31; callerTargetSdkVersion:36; startForegroundCount:0; bindFromPackage:null]
+    createTime=-3m7s639ms startingBgTimeout=--
+    lastActivity=-3m6s675ms restartTime=-3m7s530ms createdFromFg=true
+    Bindings:
+    * IntentBindRecord{388709f CREATE}:
+      intent={cmp=com.webfilter.spike.a021.probe/org.chromium.content.app.SandboxedProcessService0:0}
+      binder=android.os.BinderProxy@d6295ec
+      requested=true received=true hasBound=true doRebind=false
+      * Client AppBindRecord{d2fedb5 ProcessRecord{582ad44 2709:com.webfilter.spike.a021.probe/u0a148}}
+        Per-process Connections:
+          ConnectionRecord{c55ac09 u0 CR IMP com.webfilter.spike.a021.probe/org.chromium.content.app.SandboxedProcessService0:0:@fb1c910}
+          ConnectionRecord{d5dcaaf u0 CR WPRI com.webfilter.spike.a021.probe/org.chromium.content.app.SandboxedProcessService0:0:@5fe428e}
+    All Connections:
+      ConnectionRecord{d5dcaaf u0 CR WPRI com.webfilter.spike.a021.probe/org.chromium.content.app.SandboxedProcessService0:0:@5fe428e}
+      ConnectionRecord{c55ac09 u0 CR IMP com.webfilter.spike.a021.probe/org.chromium.content.app.SandboxedProcessService0:0:@fb1c910}
+
+  * ServiceRecord{5bc2305 u0 com.webfilter.spike.a021/.vpn.TunVpnService}
+    intent={act=android.net.VpnService pkg=com.webfilter.spike.a021}
+    packageName=com.webfilter.spike.a021
+    processName=com.webfilter.spike.a021:vpn
+    permission=android.permission.BIND_VPN_SERVICE
+    baseDir=/data/app/~~5dMxCba8_AQttzwNEsEdjQ==/com.webfilter.spike.a021-rG-Pi-O0VhMSVYLY0ceKkw==/base.apk
+    dataDir=/data/user/0/com.webfilter.spike.a021
+    app=ProcessRecord{c68f679 5333:com.webfilter.spike.a021:vpn/u0a147}
+    allowWhileInUsePermissionInFgs=true
+    recentCallingPackage=android
+    recentCallingUid=10147
+    allowStartForeground=10
+    startForegroundCount=0
+    infoAllowStartForeground=[callingPackage: android; callingUid: 1000; uidState: PER ; intent: Intent { act=android.net.VpnService pkg=com.webfilter.spike.a021 }; code:PROC_STATE_PERSISTENT; tempAllowListReason:<null>; targetSdkVersion:36; callerTargetSdkVersion:31; startForegroundCount:0; bindFromPackage:null]
+    createTime=-1m14s165ms startingBgTimeout=--
+    lastActivity=-55s533ms restartTime=-55s626ms createdFromFg=true
+    startRequested=true delayedStop=false stopIfKilled=true callStart=true lastStartId=2
+    Bindings:
+    * IntentBindRecord{8729a83 CREATE}:
+      intent={act=android.net.VpnService cmp=com.webfilter.spike.a021/.vpn.TunVpnService}
+      binder=android.os.BinderProxy@831e400
+      requested=true received=true hasBound=true doRebind=false
+      * Client AppBindRecord{8b64439 ProcessRecord{dd64b3d 539:system/1000}}
+        Per-process Connections:
+          ConnectionRecord{643321 u0 CR FGS com.webfilter.spike.a021/.vpn.TunVpnService:@fc81d88}
+    All Connections:
+      ConnectionRecord{643321 u0 CR FGS com.webfilter.spike.a021/.vpn.TunVpnService:@fc81d88}
+
+  * ServiceRecord{8611d47 u0 com.webfilter.spike.a021/.WatchService}
+    intent={cmp=com.webfilter.spike.a021/.WatchService}
+    packageName=com.webfilter.spike.a021
+    processName=com.webfilter.spike.a021
+    baseDir=/data/app/~~5dMxCba8_AQttzwNEsEdjQ==/com.webfilter.spike.a021-rG-Pi-O0VhMSVYLY0ceKkw==/base.apk
+    dataDir=/data/user/0/com.webfilter.spike.a021
+    app=ProcessRecord{4055bbc 4110:com.webfilter.spike.a021/u0a147}
+    allowWhileInUsePermissionInFgs=true
+    recentCallingPackage=com.webfilter.spike.a021
+    recentCallingUid=10147
+    allowStartForeground=55
+    startForegroundCount=1
+    infoAllowStartForeground=[callingPackage: com.webfilter.spike.a021; callingUid: 10147; uidState: BFGS; intent: Intent { cmp=com.webfilter.spike.a021/.WatchService (has extras) }; code:DEVICE_OWNER; tempAllowListReason:<vpn,reasonCode:VPN,duration:60000,callingUid:1000>; targetSdkVersion:36; callerTargetSdkVersion:36; startForegroundCount:0; bindFromPackage:null]
+    isForeground=true foregroundId=1 foregroundNoti=Notification(channel=a021-watch shortcut=null contentView=null vibrate=null sound=null defaults=0x0 flags=0x62 color=0x00000000 vis=PRIVATE)
+    createTime=-1m7s657ms startingBgTimeout=--
+    lastActivity=-1m7s657ms restartTime=-1m7s657ms createdFromFg=false
+    startRequested=true delayedStop=false stopIfKilled=false callStart=true lastStartId=1
+
+  Connection bindings to services:
+  * ConnectionRecord{96e6e3f u0 CR com.webfilter.spike.a021/.vpn.WatchTarget:@1c3fa5e}
+    binding=AppBindRecord{82fdd32 com.webfilter.spike.a021/.vpn.WatchTarget:com.webfilter.spike.a021}
+    conn=android.os.BinderProxy@1c3fa5e flags=0x1
+  * ConnectionRecord{e5fffbe u0 CR com.webfilter.spike.a021/.vpn.WatchTarget:@1c3fa5e}
+    binding=AppBindRecord{82fdd32 com.webfilter.spike.a021/.vpn.WatchTarget:com.webfilter.spike.a021}
+    conn=android.os.BinderProxy@1c3fa5e flags=0x1
+  * ConnectionRecord{d5dcaaf u0 CR WPRI com.webfilter.spike.a021.probe/org.chromium.content.app.SandboxedProcessService0:0:@5fe428e}
+    binding=AppBindRecord{d2fedb5 com.webfilter.spike.a021.probe/org.chromium.content.app.SandboxedProcessService0:0:com.webfilter.spike.a021.probe}
+    conn=android.os.BinderProxy@5fe428e flags=0x80000021
+  * ConnectionRecord{c55ac09 u0 CR IMP com.webfilter.spike.a021.probe/org.chromium.content.app.SandboxedProcessService0:0:@fb1c910}
+    binding=AppBindRecord{d2fedb5 com.webfilter.spike.a021.probe/org.chromium.content.app.SandboxedProcessService0:0:com.webfilter.spike.a021.probe}
+    conn=android.os.BinderProxy@fb1c910 flags=0x80000041
+  * ConnectionRecord{643321 u0 CR FGS com.webfilter.spike.a021/.vpn.TunVpnService:@fc81d88}
+    binding=AppBindRecord{8b64439 com.webfilter.spike.a021/.vpn.TunVpnService:system}
+    conn=android.app.LoadedApk$ServiceDispatcher$InnerConnection@fc81d88 flags=0x4000001

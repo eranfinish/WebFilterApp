@@ -1,0 +1,7 @@
+== set probe policy
+Broadcast completed: result=0, data="SET mode=array t0=1795291849350 blocklist=[10.0.2.2:8130/blocked.html] allowlist=[]"
+Broadcast completed: result=0, data="restrictions=URLBlocklist=[10.0.2.2:8130/blocked.html]"
+1795291851359
+== wait 10s
+== top
+    topResumedActivity=ActivityRecord{102635349 u0 com.android.chrome/org.chromium.chrome.browser.ChromeTabbedActivity t9}

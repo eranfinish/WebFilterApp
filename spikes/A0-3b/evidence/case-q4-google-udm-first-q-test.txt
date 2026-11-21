@@ -1,0 +1,10 @@
+case=q4-google-udm-first-q-test blocklist=[www.google.com/search?udm=2] allowlist=[] url=https://www.google.com/search?udm=2&q=test
+chrome_pid_before=9395
+Broadcast completed: result=0, data="SET mode=array t0=1795293139166 blocklist=[www.google.com/search?udm=2] allowlist=[]"
+Broadcast completed: result=0, data="restrictions=URLBlocklist=[www.google.com/search?udm=2]"
+navigated_at_ms=1795293157790
+chrome_pid_after=9395
+fg: com.android.chrome/org.chromium.chrome.browser.ChromeTabbedActivity
+url_bar:  text="google.com/search?udm=2&amp;q=test"
+screen: text="www.google.com" text="www.google.com is blocked" text="Your organization doesn’t allow you to view this site" text="google.com/search?udm=2&amp;q=test" 
+--- server log lines for this case:

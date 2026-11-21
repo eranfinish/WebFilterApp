@@ -1,0 +1,7 @@
+11-21 20:40:07.376 14026 14073 I A020    : A020 doh ip refused 8.8.4.4:443
+11-21 20:40:07.377 14689 14856 I A020P   : op=doh_sni uid=10148 -> FAIL at=connect ip=8.8.4.4 sni=dns.google ConnectException: failed to connect to /8.8.4.4 (port 443) from /10.8.0.2 (port 56578) after 5000ms: isConnected failed: ECONNREFUSED (Connection refused) ms=2
+11-21 20:40:16.693 14026 14073 I A020    : A020 doh ip refused 8.8.8.8:443
+11-21 20:40:16.693 14689 14865 I A020P   : op=doh_sni uid=10148 -> FAIL at=connect ip=8.8.8.8 sni=dns.google ConnectException: failed to connect to /8.8.8.8 (port 443) from /10.8.0.2 (port 43754) after 5000ms: isConnected failed: ECONNREFUSED (Connection refused) ms=1
+11-21 20:40:26.011 14026 14073 I A020    : A020 doh ip refused 104.16.248.249:443
+11-21 20:40:26.013 14689 14872 I A020P   : op=doh_sni uid=10148 -> FAIL at=connect ip=104.16.248.249 sni=cloudflare-dns.com ConnectException: failed to connect to /104.16.248.249 (port 443) from /10.8.0.2 (port 39324) after 5000ms: isConnected failed: ECONNREFUSED (Connection refused) ms=2
+11-21 20:40:36.023 14689 14887 I A020P   : op=doh_sni uid=10148 -> OK ip=185.15.59.224 sni=en.wikipedia.org status="HTTP/1.1 403 Forbidden" answerInBody=false ms=674 body=Please set a user-agent and respect our robot policy https://w.wiki/4wJS. See also https://phabricator.wikimedia.org/T400119. 

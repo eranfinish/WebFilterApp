@@ -1,0 +1,7 @@
+11-21 21:06:17.133   539   574 W ProcessStats: Tracking association SourceState{c5c7f52 system/1000 BTopFgs #3101} whose proc state 2 is better than process ProcessState{d996223 com.webfilter.spike.a021:vpn/10147 pkg=com.webfilter.spike.a021} proc state 3 (5 skipped)
+11-21 21:06:17.174   539  1993 I ActivityManager: Process com.webfilter.spike.a021:vpn (pid 5333) has died: prcp FGS 
+11-21 21:06:17.175   539  1993 W ActivityManager: Scheduling restart of crashed service com.webfilter.spike.a021/.vpn.WatchTarget in 1000ms for connection
+11-21 21:06:17.184   539   575 I ActivityManager: Start proc 5814:com.webfilter.spike.a021:vpn/u0a147 for service {com.webfilter.spike.a021/com.webfilter.spike.a021.vpn.TunVpnService}
+11-21 21:06:32.342   539  2912 W ProcessStats: Tracking association SourceState{c5c7f52 system/1000 BTopFgs #3133} whose proc state 2 is better than process ProcessState{d996223 com.webfilter.spike.a021:vpn/10147 pkg=com.webfilter.spike.a021} proc state 3 (13 skipped)
+11-21 21:06:55.015   539  4237 W ProcessStats: Tracking association SourceState{c5c7f52 system/1000 BTopFgs #3136} whose proc state 2 is better than process ProcessState{d996223 com.webfilter.spike.a021:vpn/10147 pkg=com.webfilter.spike.a021} proc state 3 (2 skipped)
+11-21 21:07:06.176   539   556 W ProcessStats: Tracking association SourceState{c5c7f52 system/1000 BTopFgs #3270} whose proc state 2 is better than process ProcessState{d996223 com.webfilter.spike.a021:vpn/10147 pkg=com.webfilter.spike.a021} proc state 3 (60 skipped)

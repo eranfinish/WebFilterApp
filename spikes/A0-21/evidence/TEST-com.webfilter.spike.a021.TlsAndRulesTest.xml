@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.webfilter.spike.a021.TlsAndRulesTest" tests="7" skipped="0" failures="0" errors="0" timestamp="2026-11-21T20:47:17" hostname="ERAN-PC3" time="0.011">
+  <properties/>
+  <testcase name="dnsLayerOnlyBlocksDohNamesWhenSwitchedOn" classname="com.webfilter.spike.a021.TlsAndRulesTest" time="0.004"/>
+  <testcase name="nonHandshakeRecordGivesNull" classname="com.webfilter.spike.a021.TlsAndRulesTest" time="0.001"/>
+  <testcase name="noServerNameExtensionGivesNull" classname="com.webfilter.spike.a021.TlsAndRulesTest" time="0.0"/>
+  <testcase name="sniLayerIncludesDohNamesAndBlockList" classname="com.webfilter.spike.a021.TlsAndRulesTest" time="0.0"/>
+  <testcase name="readsSniFromClientHello" classname="com.webfilter.spike.a021.TlsAndRulesTest" time="0.0"/>
+  <testcase name="truncatedRecordGivesNullNotException" classname="com.webfilter.spike.a021.TlsAndRulesTest" time="0.002"/>
+  <testcase name="sniIsLowercased" classname="com.webfilter.spike.a021.TlsAndRulesTest" time="0.001"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

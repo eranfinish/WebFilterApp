@@ -1,0 +1,887 @@
+--------- beginning of system
+11-21 20:49:19.533   787  3622 E TaskPersister: File error accessing recents directory (directory doesn't exist?).
+--------- beginning of main
+11-21 20:49:19.614   586   586 I adbd    : adbd service requested 'shell,v2,TERM=xterm-256color,raw:am start -W -n com.webfilter.spike.a03b/.WebTestActivity --es url https://m.youtube.com/results?search_query=nature --es click a[href*=watch]'
+11-21 20:49:19.634 15953 15953 I chromium: [INFO:CONSOLE:0] "The resource https://i.ytimg.com/generate_204 was preloaded using link preload but not used within a few seconds from the window's load event. Please make sure it has an appropriate `as` value and it is preloaded intentionally.", source: https://m.youtube.com/results?search_query=nature (0)
+11-21 20:49:19.639   787  2179 W ActivityTaskManager: callingPackage for (uid=2000, pid=16178) has no WPC
+11-21 20:49:19.641   787  2179 V GrammaticalInflectionUtils: AttributionSource: android.content.AttributionSource@bc7c52fc does not have READ_SYSTEM_GRAMMATICAL_GENDER permission.
+11-21 20:49:19.643  1285  1285 D RecentsView: onTaskDisplayChanged: 31, new displayId = 0
+11-21 20:49:19.645   574   665 I libbinder.BpBinder: onLastStrongRef automatically unlinking death recipients for binder (0x76eaf8c2ed70) with descriptor: '(not cached)'
+11-21 20:49:19.646   787  2179 D CorePackageUpdate: onRecentTaskRemoved Removing task: 30
+11-21 20:49:19.646   787  2179 D CorePackageUpdate: Couldn't find a persistent state for task= 30
+11-21 20:49:19.647  1101  1147 V RecentTasksController: Notify recent tasks changed
+11-21 20:49:19.648  1285  1285 D RecentTasksList: invalidateLoadedTasks - previous requestLoadId: -1
+11-21 20:49:19.649   658   738 W libbinder.IPCThreadState: Sending oneway calls to frozen process.
+11-21 20:49:19.650  1101  1147 D ShellDesktopMode: DesktopRepository(0): Removes freeform task: taskId=30
+11-21 20:49:19.650  1101  1147 W ShellDesktopMode: DesktopRepository(0): No display id found for task: taskId=30
+11-21 20:49:19.650  1101  1147 V RecentTasksController: Notify recent tasks changed
+11-21 20:49:19.650   787  2179 V ActivityTaskManager: TaskLaunchParamsModifier: phase=3 task=Task{52b2a64 #31 type=standard A=10235:com.webfilter.spike.a03b} activity=ActivityRecord{11348983 u0 com.webfilter.spike.a03b/.WebTestActivity t-1} display-from-task=0 display-id=0 task-display-area-windowing-mode=1 suggested-display-area=DefaultTaskDisplayArea@166971003 inherit-from-task=fullscreen non-freeform-task-display-area display-area=DefaultTaskDisplayArea@166971003 skip-bounds-fullscreen
+11-21 20:49:19.650   787  2179 I ActivityTaskManager: START u0 {flg=0x10000000 xflg=0x4 cmp=com.webfilter.spike.a03b/.WebTestActivity (has extras)} with LAUNCH_MULTIPLE from uid 2000 (com.android.shell) (BAL_ALLOW_PERMISSION) result code=0
+11-21 20:49:19.650  1285  1285 D BaseActivity: Launcher flags updated: [state_started|state_resumed|state_deferred_resumed|state_window_focused|state_user_active] -[]
+11-21 20:49:19.651  1285  1285 D BaseActivity: Launcher flags updated: [state_started|state_resumed|state_deferred_resumed|state_window_focused] -[state_user_active]
+11-21 20:49:19.651  1101  1147 V WindowManagerShell: Transition requested (#66): android.os.BinderProxy@e9efdf5 TransitionRequestInfo { type = OPEN, triggerTask = TaskInfo{userId=0 taskId=31 effectiveUid=10235 displayId=0 isRunning=true baseIntent=Intent { flg=0x10000000 cmp=com.webfilter.spike.a03b/.WebTestActivity } baseActivity=ComponentInfo{com.webfilter.spike.a03b/com.webfilter.spike.a03b.WebTestActivity} topActivity=ComponentInfo{com.webfilter.spike.a03b/com.webfilter.spike.a03b.WebTestActivity} origActivity=null realActivity=ComponentInfo{com.webfilter.spike.a03b/com.webfilter.spike.a03b.WebTestActivity} realActivityIsAppLockEnabled=false numActivities=1 lastActiveTime=3128125 supportsMultiWindow=true supportsMultiWindowWithoutConstraints=true resizeMode=1 isResizeable=true minWidth=-1 minHeight=-1 defaultMinSize=220 token=WCT{android.os.BinderProxy@b90f78a} topActivityType=1 pictureInPictureParams=null shouldDockBigOverlays=false launchIntoPipHostTaskId=-1 lastParentTaskIdBeforePip=-1 displayCutoutSafeInsets=Rect(0, 0 - 0, 0) topActivityInfo=ActivityInfo{6e1a1fb com.webfilter.spike.a03b.WebTestActivity} launchCookies=[] positionInParent=Point(0, 0) parentTaskId=-1 isFocused=false isInteractive=false isVisible=false isVisibleRequested=false isTopActivityNoDisplay=false isSleeping=false locusId=null displayAreaFeatureId=1 isTopActivityTransparent=false isActivityStackTransparent=false lastNonFullscreenBounds=null leafTaskBoundsFromOptions= false capturedLink=null capturedLinkTimestamp=0 requestedVisibleTypes=503 topActivityRequestOpenInBrowserEducationTimestamp=0 appCompatTaskInfo=AppCompatTaskInfo { topActivityInSizeCompat=false isLeafTask= true eligibleForLetterboxEducation= false isLetterboxEducationEnabled= true isLetterboxDoubleTapEnabled= false eligibleForUserAspectRatioButton= false topActivityBoundsLetterboxed= false isFromLetterboxDoubleTap= false topActivityLetterboxVerticalPosition= -1 topActivityLetterboxHorizontalPosition= -1 topActivityLetterboxWidth=-1 topActivityLetterboxHeight=-1 topActivityAppBounds=Rect(0, 0 - 1080, 2400) isUserFullscreenOverrideEnabled=false isSystemFullscreenOverrideEnabled=false hasMinAspectRatioOverride=false topActivityLetterboxBounds=null topNonResizableActivityAspectRatio=-1.0} topActivityMainWindowFrame=null isAppBubble=false}, pipChange = null, remoteTransitionInfo = null, displayChanges = null, requestedLocation = null, userChange = null, windowingLayerChange = null, fullscreenRequestChange = null, flags = 0, debugId = 66 }
+11-21 20:49:19.651  1285  1285 D BaseActivity: Launcher flags updated: [state_started|state_window_focused] -[state_resumed|state_deferred_resumed]
+11-21 20:49:19.651  1101  1147 W DisconnectHandler: No disconnect change found in the transition, not handling request.
+11-21 20:49:19.651  1285  1285 W SplitSelectStateCtor: Missing session instanceIds
+11-21 20:49:19.651  1101  1147 V ShellDesktopMode: DesktopTasksController: skipping handleRequest reason=triggerTask's display doesn't support desktop mode
+11-21 20:49:19.651  1285  1285 D StatsLog: LAUNCHER_SPLIT_SELECTION_EXIT_INTERRUPTED
+11-21 20:49:19.651  1101  1147 D ShellSplitScreen: logExit: no-op, mLoggerSessionId is null
+11-21 20:49:19.652   787  1065 W InputChannel-JNI: Channel already disposed.
+11-21 20:49:19.654   787   900 D CorePackageUpdate: Couldn't find a persistent state for task= 31
+11-21 20:49:19.657 15953 15995 W libc    : Access denied finding property "vendor.mesa.virtgpu.kumquat"
+11-21 20:49:19.661   658   738 W libbinder.IPCThreadState: Sending oneway calls to frozen process.
+11-21 20:49:19.663   787   900 V WindowManager: Defer transition id=66 for TaskFragmentTransaction=android.os.Binder@9f7a2ef
+11-21 20:49:19.665  1285  1285 D RecentTasksList: invalidateLoadedTasks - previous requestLoadId: -1
+11-21 20:49:19.665   787  1713 D WindowManager: setClientSurface Surface(name=VRI-Splash Screen com.webfilter.spike.a03b#646)/@0x5ef61fc for ea288d0 Splash Screen com.webfilter.spike.a03b
+11-21 20:49:19.666  1101  1147 D WindowManagerShell: setLauncherKeepClearAreaHeight: visible=false, height=495
+11-21 20:49:19.668  1101  1210 I Surface : Creating surface for consumer unnamed-1101-14 with slotExpansion=1 for 64 slots
+11-21 20:49:19.668  1101  1210 I Surface : Creating surface for consumer VRI[a03b]#14(BLAST Consumer)14 with slotExpansion=1 for 64 slots
+11-21 20:49:19.668 15953 15995 W HWUI    : Failed to choose config with EGL_SWAP_BEHAVIOR_PRESERVED, retrying without...
+11-21 20:49:19.668   787  1065 V WindowManager: Continue transition id=66 for TaskFragmentTransaction=android.os.Binder@9f7a2ef
+11-21 20:49:19.669 15953 15995 W HWUI    : Failed to initialize 101010-2 format, error = EGL_SUCCESS
+11-21 20:49:19.685  1285  1285 D BaseActivity: Launcher flags updated: [state_started] -[state_window_focused]
+11-21 20:49:19.690 15953 15953 I A03BWV  : 1795294159690 START https://m.youtube.com/results?search_query=nature deny=[]
+11-21 20:49:19.705   787   834 V WindowManager: Sent Transition (#66) createdAt=11-21 20:49:19.641 via request=TransitionRequestInfo { type = OPEN, triggerTask = TaskInfo{userId=0 taskId=31 effectiveUid=10235 displayId=0 isRunning=true baseIntent=Intent { flg=0x10000000 cmp=com.webfilter.spike.a03b/.WebTestActivity } baseActivity=ComponentInfo{com.webfilter.spike.a03b/com.webfilter.spike.a03b.WebTestActivity} topActivity=ComponentInfo{com.webfilter.spike.a03b/com.webfilter.spike.a03b.WebTestActivity} origActivity=null realActivity=ComponentInfo{com.webfilter.spike.a03b/com.webfilter.spike.a03b.WebTestActivity} realActivityIsAppLockEnabled=false numActivities=1 lastActiveTime=3128125 supportsMultiWindow=true supportsMultiWindowWithoutConstraints=true resizeMode=1 isResizeable=true minWidth=-1 minHeight=-1 defaultMinSize=220 token=WCT{RemoteToken{d457f0b Task{52b2a64 #31 type=standard A=10235:com.webfilter.spike.a03b}}} topActivityType=1 pictureInPictureParams=null shouldDockBigOverlays=false launchIntoPipHostTaskId=-1 lastParentTaskIdBeforePip=-1 displayCutoutSafeInsets=Rect(0, 0 - 0, 0) topActivityInfo=ActivityInfo{cea1e8 com.webfilter.spike.a03b.WebTestActivity} launchCookies=[] positionInParent=Point(0, 0) parentTaskId=-1 isFocused=false isInteractive=false isVisible=false isVisibleRequested=false isTopActivityNoDisplay=false isSleeping=false locusId=null displayAreaFeatureId=1 isTopActivityTransparent=false isActivityStackTransparent=false lastNonFullscreenBounds=null leafTaskBoundsFromOptions= false capturedLink=null capturedLinkTimestamp=0 requestedVisibleTypes=503 topActivityRequestOpenInBrowserEducationTimestamp=0 appCompatTaskInfo=AppCompatTaskInfo { topActivityInSizeCompat=false isLeafTask= true eligibleForLetterboxEducation= false isLetterboxEducationEnabled= true isLetterboxDoubleTapEnabled= false eligibleForUserAspectRatioButton= false topActivityBoundsLetterboxed= false isFromLetterboxDoubleTap= false topActivityLetterboxVerticalPosition= -1 topActivityLetterboxHorizontalPosition= -1 topActivityLetterboxWidth=-1 topActivityLetterboxHeight=-1 topActivityAppBounds=Rect(0, 0 - 1080, 2400) isUserFullscreenOverrideEnabled=false isSystemFullscreenOverrideEnabled=false hasMinAspectRatioOverride=false topActivityLetterboxBounds=null topNonResizableActivityAspectRatio=-1.0} topActivityMainWindowFrame=null isAppBubble=false}, pipChange = null, remoteTransitionInfo = null, displayChanges = null, requestedLocation = null, userChange = null, windowingLayerChange = null, fullscreenRequestChange = null, flags = 0, debugId = 66 }
+11-21 20:49:19.705   787   834 V WindowManager:     startWCT=WindowContainerTransaction { changes= {} hops= [] flags= 0 errorCallbackToken=null taskFragmentOrganizer=null }
+11-21 20:49:19.705   787   834 V WindowManager:     info={id=66 t=OPEN f=0x0 trk=0 r=[0@Point(0, 0)] c=[
+11-21 20:49:19.705   787   834 V WindowManager:         {WCT{RemoteToken{d457f0b Task{52b2a64 #31 type=standard A=10235:com.webfilter.spike.a03b}}} m=OPEN f=MOVE_TO_TOP|FLAG_CHANGED_INTERACTIVE leash=Surface(name=Task=31#643)/@0xbafb085 sb=Rect(0, 0 - 1080, 2400) eb=Rect(0, 0 - 1080, 2400) epz=Point(1080, 2400) d=0 taskParent=-1 winMode=1 userId=0},
+11-21 20:49:19.705   787   834 V WindowManager:         {WCT{RemoteToken{5b29594 Task{3c833b2 #1 type=home}}} m=TO_BACK f=SHOW_WALLPAPER|FLAG_CHANGED_INTERACTIVE leash=Surface(name=Task=1#35)/@0xdd72593 sb=Rect(0, 0 - 1080, 2400) eb=Rect(0, 0 - 1080, 2400) epz=Point(1080, 2400) d=0 taskParent=-1 winMode=1 userId=0},
+11-21 20:49:19.705   787   834 V WindowManager:         {m=TO_BACK f=IS_WALLPAPER leash=Surface(name=WallpaperWindowToken{d3e4515}#53)/@0x9f071fb sb=Rect(0, 0 - 1080, 2400) eb=Rect(0, 0 - 1080, 2400) epz=Point(1080, 2400) d=0}
+11-21 20:49:19.705   787   834 V WindowManager:     ]}
+11-21 20:49:19.706  1101  1245 V WindowManagerShell: onTransitionReady(transaction=3380139270342)
+11-21 20:49:19.706  1101  1147 V WindowManagerShell: onTransitionReady (#66) android.os.BinderProxy@e9efdf5: {id=66 t=OPEN f=0x0 trk=0 r=[0@Point(0, 0)] c=[
+11-21 20:49:19.706  1101  1147 V WindowManagerShell:         {m=OPEN f=MOVE_TO_TOP|FLAG_CHANGED_INTERACTIVE leash=Surface(name=Task=31#643)/@0x63cd5cf sb=Rect(0, 0 - 1080, 2400) eb=Rect(0, 0 - 1080, 2400) epz=Point(1080, 2400) d=0 taskParent=-1 winMode=1 userId=0},
+11-21 20:49:19.706  1101  1147 V WindowManagerShell:         {m=TO_BACK f=SHOW_WALLPAPER|FLAG_CHANGED_INTERACTIVE leash=Surface(name=Task=1#35)/@0xe264b5c sb=Rect(0, 0 - 1080, 2400) eb=Rect(0, 0 - 1080, 2400) epz=Point(1080, 2400) d=0 taskParent=-1 winMode=1 userId=0},
+11-21 20:49:19.706  1101  1147 V WindowManagerShell:         {m=TO_BACK f=IS_WALLPAPER leash=Surface(name=WallpaperWindowToken{d3e4515}#53)/@0x66c4e65 sb=Rect(0, 0 - 1080, 2400) eb=Rect(0, 0 - 1080, 2400) epz=Point(1080, 2400) d=0}
+11-21 20:49:19.706  1101  1147 V WindowManagerShell:     ]}
+11-21 20:49:19.707  1101  1147 V WindowManagerShell: Playing animation for (#66) android.os.BinderProxy@e9efdf5@0
+11-21 20:49:19.707  1101  1147 D ShellSplitScreen: startAnimation: transition=66 isSplitActive=false
+11-21 20:49:19.707  1101  1147 V ShellRecents: RecentsTransitionHandler.startAnimation: no controller found
+11-21 20:49:19.707  1101  1147 V ShellDesktopMode: DesktopMixedTransitionHandler: No pending desktop transition
+11-21 20:49:19.707  1101  1147 V WindowManagerShell: Transition doesn't have explicit remote, search filters for match for {id=66 t=OPEN f=0x0 trk=0 r=[0@Point(0, 0)] c=[{m=OPEN f=MOVE_TO_TOP|FLAG_CHANGED_INTERACTIVE leash=Surface(name=Task=31#643)/@0x63cd5cf sb=Rect(0, 0 - 1080, 2400) eb=Rect(0, 0 - 1080, 2400) epz=Point(1080, 2400) d=0 taskParent=-1 winMode=1 userId=0},{m=TO_BACK f=SHOW_WALLPAPER|FLAG_CHANGED_INTERACTIVE leash=Surface(name=Task=1#35)/@0xe264b5c sb=Rect(0, 0 - 1080, 2400) eb=Rect(0, 0 - 1080, 2400) epz=Point(1080, 2400) d=0 taskParent=-1 winMode=1 userId=0},{m=TO_BACK f=IS_WALLPAPER leash=Surface(name=WallpaperWindowToken{d3e4515}#53)/@0x66c4e65 sb=Rect(0, 0 - 1080, 2400) eb=Rect(0, 0 - 1080, 2400) epz=Point(1080, 2400) d=0}]}
+11-21 20:49:19.707  1101  1147 V WindowManagerShell:  Checking filter Pair{{types=[] flags=0x0 notFlags=0x0 checks=[{atype=undefined independent=true modes=[CLOSE,TO_BACK] flags=IN_TASK_WITH_EMBEDDED_ACTIVITY mustBeTask=false order=ANY topActivity=null launchCookie=null taskFragmentToken=android.os.BinderProxy@413f5f3 windowingMode=undefined isCrossDisplayMove=false}]} RemoteTransition { remoteTransition = android.window.IRemoteTransition$Stub$Proxy@e61f2b0, appThread = android.app.IApplicationThread$Stub$Proxy@bc62529, debugName = overlayBackTransition, filter = {types=[] flags=0x0 notFlags=0x0 checks=[{atype=undefined independent=true modes=[CLOSE,TO_BACK] flags=IN_TASK_WITH_EMBEDDED_ACTIVITY mustBeTask=false order=ANY topActivity=null launchCookie=null taskFragmentToken=android.os.BinderProxy@413f5f3 windowingMode=undefined isCrossDisplayMove=false}]} }}
+11-21 20:49:19.707  1101  1147 V WindowManagerShell:  Checking filter Pair{{types=[] flags=0x0 notFlags=0x0 checks=[{atype=dream independent=true modes=[OPEN,TO_FRONT] flags=NONE mustBeTask=false order=ANY topActivity=null launchCookie=null windowingMode=undefined isCrossDisplayMove=false},{atype=home independent=true modes=[CLOSE,TO_BACK] flags=NONE mustBeTask=false order=ANY topActivity=null launchCookie=null windowingMode=undefined isCrossDisplayMove=false}]} RemoteTransition { remoteTransition = android.window.IRemoteTransition$Stub$Proxy@96680ae, appThread = android.app.IApplicationThread$Stub$Proxy@6dfe4f, debugName = LauncherToDream, filter = {types=[] flags=0x0 notFlags=0x0 checks=[{atype=dream independent=true modes=[OPEN,TO_FRONT] flags=NONE mustBeTask=false order=ANY topActivity=null launchCookie=null windowingMode=undefined isCrossDisplayMove=false},{atype=home independent=true modes=[CLOSE,TO_BACK] flags=NONE mustBeTask=false order=ANY topActivity=null launchCookie=null windowingMode=undefined isCrossDisplayMove=false}]} }}
+11-21 20:49:19.707  1101  1147 V WindowManagerShell:  Checking filter Pair{{types=[] flags=0x0 notFlags=0x0 checks=[{atype=standard independent=false modes=[CHANGE] flags=NONE mustBeTask=true order=ANY topActivity=null launchCookie=null windowingMode=undefined isCrossDisplayMove=true}]} RemoteTransition { remoteTransition = android.window.IRemoteTransition$Stub$Proxy@26b89dc, appThread = android.app.IApplicationThread$Stub$Proxy@7f2eae5, debugName = QuickstepDisplayMove, filter = {types=[] flags=0x0 notFlags=0x0 checks=[{atype=standard independent=false modes=[CHANGE] flags=NONE mustBeTask=true order=ANY topActivity=null launchCookie=null windowingMode=undefined isCrossDisplayMove=true}]} }}
+11-21 20:49:19.707  1101  1147 V WindowManagerShell:  Checking filter Pair{{types=[] flags=0x0 notFlags=0x100 checks=[{atype=home independent=true modes=[OPEN,TO_FRONT] flags=NONE mustBeTask=false order=ANY topActivity=ComponentInfo{com.google.android.apps.nexuslauncher/com.google.android.apps.nexuslauncher.NexusLauncherActivity} launchCookie=null windowingMode=undefined isCrossDisplayMove=false},{atype=standard independent=true modes=[CLOSE,TO_BACK] flags=NONE mustBeTask=false order=ANY topActivity=null launchCookie=null windowingMode=undefined isCrossDisplayMove=false},{NOT atype=undefined independent=true modes=[] flags=NONE mustBeTask=true order=ANY topActivity=null launchCookie=null customAnim=true windowingMode=undefined isCrossDisplayMove=false}]} RemoteTransition { remoteTransition = android.window.IRemoteTransition$Stub$Proxy@81df9ba, appThread = android.app.IApplicationThread$Stub$Proxy@6b6306b, debugName = QuickstepLaunchHome, filter = {types=[] flags=0x0 notFlags=0x100 checks=[{atype=home independent=true modes=[OPEN,TO_FRONT] flags=NONE mustBeTask=false order=ANY topActivity=ComponentInfo{com.google.android.apps.nexuslauncher/com.google.android.apps.nexuslauncher.NexusLauncherActivity} launchCookie=null windowingMode=undefined isCrossDisplayMove=false},{atype=standard independent=true modes=[CLOSE,TO_BACK] flags=NONE mustBeTask=false order=ANY topActivity=null launchCookie=null windowingMode=undefined isCrossDisplayMove=false},{NOT atype=undefined independent=true modes=[] flags=NONE mustBeTask=true order=ANY topActivity=null launchCookie=null customAnim=true windowingMode=undefined isCrossDisplayMove=false}]} }}
+11-21 20:49:19.707  1101  1147 V WindowManagerShell:  Checking filter Pair{{types=[OPEN,TO_FRONT] flags=0x0 notFlags=0x0 checks=[{atype=standard independent=true modes=[OPEN,TO_FRONT] flags=NONE mustBeTask=true order=ANY topActivity=null launchCookie=null windowingMode=freeform isCrossDisplayMove=false}]} RemoteTransition { remoteTransition = android.window.IRemoteTransition$Stub$Proxy@680c8ec, appThread = null, debugName = DesktopWindowLimitUnminimize, filter = {types=[OPEN,TO_FRONT] flags=0x0 notFlags=0x0 checks=[{atype=standard independent=true modes=[OPEN,TO_FRONT] flags=NONE mustBeTask=true order=ANY topActivity=null launchCookie=null windowingMode=freeform isCrossDisplayMove=false}]} }}
+11-21 20:49:19.707  1101  1147 V WindowManagerShell:  Checking filter Pair{{types=[OPEN,TO_FRONT] flags=0x0 notFlags=0x0 checks=[{atype=standard independent=true modes=[OPEN,TO_FRONT] flags=NONE mustBeTask=true order=ANY topActivity=null launchCookie=null windowingMode=freeform isCrossDisplayMove=false}]} RemoteTransition { remoteTransition = android.window.IRemoteTransition$Stub$Proxy@f360eca, appThread = null, debugName = DesktopWindowLimitUnminimize, filter = {types=[OPEN,TO_FRONT] flags=0x0 notFlags=0x0 checks=[{atype=standard independent=true modes=[OPEN,TO_FRONT] flags=NONE mustBeTask=true order=ANY topActivity=null launchCookie=null windowingMode=freeform isCrossDisplayMove=false}]} }}
+11-21 20:49:19.707  1101  1147 V WindowManagerShell:  Delegate animation for (#66) to null
+11-21 20:49:19.707  1101  1147 V WindowManagerShell: start default transition animation, info = {id=66 t=OPEN f=0x0 trk=0 r=[0@Point(0, 0)] c=[{m=OPEN f=MOVE_TO_TOP|FLAG_CHANGED_INTERACTIVE leash=Surface(name=Task=31#643)/@0x63cd5cf sb=Rect(0, 0 - 1080, 2400) eb=Rect(0, 0 - 1080, 2400) epz=Point(1080, 2400) d=0 taskParent=-1 winMode=1 userId=0},{m=TO_BACK f=SHOW_WALLPAPER|FLAG_CHANGED_INTERACTIVE leash=Surface(name=Task=1#35)/@0xe264b5c sb=Rect(0, 0 - 1080, 2400) eb=Rect(0, 0 - 1080, 2400) epz=Point(1080, 2400) d=0 taskParent=-1 winMode=1 userId=0},{m=TO_BACK f=IS_WALLPAPER leash=Surface(name=WallpaperWindowToken{d3e4515}#53)/@0x66c4e65 sb=Rect(0, 0 - 1080, 2400) eb=Rect(0, 0 - 1080, 2400) epz=Point(1080, 2400) d=0}]}
+11-21 20:49:19.708  1101  1147 V WindowManagerShell: loadAnimation: anim=android.view.animation.AnimationSet@35affeb animAttr=0x13 type=OPEN isEntrance=false
+11-21 20:49:19.708  1101  1147 V WindowManagerShell: loadAnimation: anim=android.view.animation.AnimationSet@27ac148 animAttr=0x12 type=OPEN isEntrance=true
+11-21 20:49:19.709  1101  1147 V WindowManagerShell:  animated by com.android.wm.shell.transition.DefaultTransitionHandler@2ecf644
+11-21 20:49:19.716 15953 16022 I A03BWV  : 1795294159716 shouldInterceptRequest https://m.youtube.com/results?search_query=nature main=true
+11-21 20:49:19.717  1101  1147 V ShellTaskOrganizer: Task appeared taskId=31 listener=FullscreenTaskListener
+11-21 20:49:19.718  1101  1147 V ShellTaskOrganizer: Fullscreen Task Appeared: #31
+11-21 20:49:19.718  1101  1147 D ShellPackageUpdate: PackageUpdateController: Setting handlePackageUpdate for task: 31
+11-21 20:49:19.718   787  1065 E TransitionChain: Can't collect into a chain with no transition
+11-21 20:49:19.718  1101  1147 V RecentTasksController: Notify recent tasks changed
+11-21 20:49:19.719  1285  1285 D RecentTasksList: invalidateLoadedTasks - previous requestLoadId: -1
+11-21 20:49:19.722   787  1065 W InputChannel-JNI: Channel already disposed.
+11-21 20:49:19.724  9128  9128 D BoundBrokerSvc: onRebind: Intent { act=com.google.android.gms.safebrowsing.SafeBrowsingService.START dat=chimera-action:/... xflg=0x4 cmp=com.google.android.gms/.chimera.GmsApiService }
+11-21 20:49:19.727 15953 15953 I A03BWV  : 1795294159727 POLL https://m.youtube.com/results?search_query=nature
+11-21 20:49:19.729 15953 15953 D WindowOnBackDispatcher: setTopOnBackInvokedCallback (unwrapped): android.app.Activity$$ExternalSyntheticLambda0@b50c70d
+11-21 20:49:19.730   787  1065 D CoreBackPreview: Window{ad20ea6 u0 com.webfilter.spike.a03b/com.webfilter.spike.a03b.WebTestActivity}: Setting back callback OnBackInvokedCallbackInfo{mCallback=android.window.IOnBackInvokedCallback$Stub$Proxy@e3cc483, mPriority=-1, mIsAnimationCallback=false, mOverrideBehavior=0}
+11-21 20:49:19.732 15953 15953 D VRI[WebTestActivity]: WindowInsets changed: 1080x2400 statusBars:[0,63,0,0] navigationBars:[0,0,0,63] mandatorySystemGestures:[0,63,0,84] 
+11-21 20:49:19.735   787   900 D WindowManager: setClientSurface Surface(name=VRI-com.webfilter.spike.a03b/com.webfilter.spike.a03b.WebTestActivity#650)/@0x411c600 for ad20ea6 com.webfilter.spike.a03b/com.webfilter.spike.a03b.WebTestActivity
+11-21 20:49:19.741 15953 15953 I Surface : Creating surface for consumer unnamed-15953-2 with slotExpansion=1 for 64 slots
+11-21 20:49:19.741 15953 15953 I Surface : Creating surface for consumer VRI[WebTestActivity]#2(BLAST Consumer)2 with slotExpansion=1 for 64 slots
+11-21 20:49:19.765  1101  1147 V RecentTasksController: Notify recent tasks changed
+11-21 20:49:19.766  1285  1285 D RecentTasksList: invalidateLoadedTasks - previous requestLoadId: -1
+11-21 20:49:19.881  1101  1147 V RecentTasksController: generateList(getRecentTasks)
+11-21 20:49:19.885  1101  1147 V RecentTasksController: initializeDesksMap - allDeskIds: []
+11-21 20:49:19.885  1101  1147 V RecentTasksController: Task 31 is not an active desktop task
+11-21 20:49:19.888  1101  1147 V RecentTasksController: Added fullscreen task: 31
+11-21 20:49:19.888  1101  1147 V RecentTasksController: Task 11 is not an active desktop task
+11-21 20:49:19.888  1101  1147 V RecentTasksController: Added fullscreen task: 11
+11-21 20:49:19.888  1101  1147 V RecentTasksController: generateList - complete
+11-21 20:49:19.889  1285  1356 D PreloadThumbnailUseCase: Preloading thumbnails for task ids: [[id=11 windowingMode=1 user=0 lastActiveTime=2444017] null, [id=31 windowingMode=1 user=0 lastActiveTime=3128130] null]
+11-21 20:49:19.933   574   601 W skia    : AGTM parsing failed flags.readFromStream(s) at 159
+11-21 20:49:19.933   574   601 W skia    : AGTM parsing failed flags.readFromStream(s) at 159
+11-21 20:49:19.933   574   601 W skia    : AGTM parsing failed flags.readFromStream(s) at 159
+11-21 20:49:19.936   787   834 I ActivityTaskManager: Displayed com.webfilter.spike.a03b/.WebTestActivity for user 0: +293ms
+11-21 20:49:19.987   787   944 I ImeTracker: com.webfilter.spike.a03b:dffe9844: onRequestHide at ORIGIN_SERVER reason HIDE_UNSPECIFIED_WINDOW fromUser false userId 0 displayId 0
+11-21 20:49:19.988 15953 15953 I A03BWV  : 1795294159988 onPageStarted https://m.youtube.com/results?search_query=nature
+11-21 20:49:19.988 15953 15953 I A03BWV  : 1795294159988 doUpdateVisitedHistory https://m.youtube.com/results?search_query=nature reload=false
+11-21 20:49:19.991 15953 15953 D InsetsController: hide(ime())
+11-21 20:49:19.992   787   944 W InputChannel-JNI: Channel already disposed.
+11-21 20:49:19.992 15953 15953 I ImeTracker: com.webfilter.spike.a03b:dffe9844: onCancelled at PHASE_CLIENT_ALREADY_HIDDEN
+11-21 20:49:19.996 15953 16022 I A03BWV  : 1795294159996 shouldInterceptRequest https://m.youtube.com/s/_/ytmweb/_/ss/k=ytmweb.c3_base.2h9D9urb5ww.L.W.O/am=AAAAAAAwIAAEAOwZ/d=1/br=1/rs=ABnK5FK85tWfX8_7akEnzhJ8i5a2B929SA/m=root,c3_base,Raq4cb,PzUdZb,FHXuwb,SFvGjc,JoU6vf,OvPPad,dpUCFd,Nr0kfe,Nuilue main=false
+11-21 20:49:19.998 15953 15953 I chromium: [INFO:CONSOLE:1] "The key "" is not recognized and ignored.", source: https://m.youtube.com/results?search_query=nature (1)
+11-21 20:49:19.998 15953 16022 I A03BWV  : 1795294159998 shouldInterceptRequest https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=optional main=false
+11-21 20:49:19.999  8659  8659 I GoogleInputMethodService: GoogleInputMethodService.onFinishInput():2259 
+11-21 20:49:20.000   787   900 I ImeTracker: system_server:6dfd6c44: onRequestHide at ORIGIN_SERVER reason IME_REQUESTED_CHANGED_LISTENER fromUser false displayId 0
+11-21 20:49:20.001   787   837 I ImeTracker: system_server:6dfd6c44: onCancelled at PHASE_SERVER_SHOULD_HIDE
+11-21 20:49:20.002  8659  8659 I Module  : DeviceLockedStatusModuleProvider$Module.updateDeviceLockedStatus():103 repeatCheckTimes = 0, locked = false
+11-21 20:49:20.002  8659  8659 I GoogleInputMethodService: GoogleInputMethodService.onStartInput():1446 onStartInput(EditorInfo{EditorInfo{packageName=com.webfilter.spike.a03b, inputType=0, inputTypeString=NULL, enableLearning=false, autoCorrection=false, autoComplete=false, imeOptions=0, privateImeOptions=null, actionName=UNSPECIFIED, actionLabel=null, initialSelStart=-1, initialSelEnd=-1, initialCapsMode=0, label=null, fieldId=0, fieldName=null, extras=null, hintText=null, hintLocales=[]}}, false)
+11-21 20:49:20.002  8659  8659 I AndroidIME: LatinIMEBase.updateInputViewCoverNavigation():322 Update input view padding, isNavbarOverInputWindow=true, bottom inset=126
+11-21 20:49:20.003 15953 16022 I A03BWV  : 1795294160003 shouldInterceptRequest https://i.ytimg.com/generate_204 main=false
+11-21 20:49:20.011  8659  8659 I Module  : DeviceLockedStatusModuleProvider$Module.updateDeviceLockedStatus():103 repeatCheckTimes = 1, locked = false
+11-21 20:49:20.012   787   900 W PackageConfigPersister: App-specific configuration not found for packageName: com.webfilter.spike.a03b and userId: 0
+11-21 20:49:20.028  1101  1147 V WindowManagerShell: Transition animation finished (aborted=false), notifying core (#66) android.os.BinderProxy@e9efdf5@0
+11-21 20:49:20.031   787   834 V WindowManager: Finish Transition (#66): created at 11-21 20:49:19.641 collect-started=0.022ms request-sent=8.387ms started=22.934ms ready=27.117ms sent=62.037ms commit=7.344ms finished=389.397ms
+11-21 20:49:20.032  1285  1285 D VRI[NexusLauncherActivity]: visibilityChanged oldVisibility=true newVisibility=false
+11-21 20:49:20.033  1101  1147 V WindowManagerShell: Track 0 became idle
+11-21 20:49:20.033  1101  1147 V WindowManagerShell: All active transition animations finished
+11-21 20:49:20.034  1101  1365 D WallpaperService: onVisibilityChanged(false): com.android.systemui.wallpapers.ImageWallpaper$CanvasEngine@a6800ca
+11-21 20:49:20.035   574   601 W skia    : AGTM parsing failed flags.readFromStream(s) at 159
+11-21 20:49:20.035   574   601 W skia    : AGTM parsing failed flags.readFromStream(s) at 159
+11-21 20:49:20.044  1285  1285 D SmartspaceInteractor: notifySmartspaceEvent: SmartspaceTargetEvent{mSmartspaceTarget=null, mSmartspaceActionId='null', mEventType=7}
+11-21 20:49:20.053  1285  1285 D BaseActivity: Launcher flags updated: [] -[state_started]
+11-21 20:49:20.053  1285  1285 D BaseDepthController: setSurface:
+11-21 20:49:20.053  1285  1285 D BaseDepthController: 	mWaitingOnSurfaceValidity: false
+11-21 20:49:20.053  1285  1285 D BaseDepthController: 	mBaseSurface: null
+11-21 20:49:20.053  1285  1285 D BaseDepthController: mSurface is null and mCurrentBlur is: 0
+11-21 20:49:20.053  1285  1285 D LauncherStateManager: StateManager.goToState: fromState: Normal, toState: Normal, partial trace:
+11-21 20:49:20.053  1285  1285 D LauncherStateManager: 	at com.android.launcher3.statemanager.StateManager.moveToRestState(go/retraceme 9bf9d747b28c192bd799fb0161a08498ac2b938f666e7966c0095b4da2c9b843:26)
+11-21 20:49:20.053  1285  1285 D LauncherStateManager: 	at com.android.launcher3.statemanager.StateManager.moveToRestState(go/retraceme 9bf9d747b28c192bd799fb0161a08498ac2b938f666e7966c0095b4da2c9b843:35)
+11-21 20:49:20.053  1285  1285 D LauncherStateManager: 	at com.android.launcher3.statemanager.StatefulActivity.onStop(go/retraceme 9bf9d747b28c192bd799fb0161a08498ac2b938f666e7966c0095b4da2c9b843:31)
+11-21 20:49:20.053  1285  1285 D LauncherStateManager: StateManager.onRepeatStateSetAborted: state: Normal
+11-21 20:49:20.053  1285  1285 D KeyboardStateManager: hideKeyboard
+11-21 20:49:20.053  1285  1285 D KeyboardStateManager: isImeShown: false
+11-21 20:49:20.053  1285  1285 D StatsLog: LAUNCHER_ONSTOP
+11-21 20:49:20.054  1285  1285 D StatsLog: LAUNCHER_GOOGLE_SEARCH_RESTORE_LIST_SIZE_AFTER_ACTIVITY_RESTART
+11-21 20:49:20.138   574   601 W skia    : AGTM parsing failed flags.readFromStream(s) at 159
+11-21 20:49:20.139   574   601 W skia    : AGTM parsing failed flags.readFromStream(s) at 159
+11-21 20:49:20.216 15953 16022 I A03BWV  : 1795294160216 shouldInterceptRequest https://m.youtube.com/s/_/ytmweb/_/js/k=ytmweb.c3_base.en_US.I1n-wrGLdQU.2021.O/ck=ytmweb.c3_base.2h9D9urb5ww.L.W.O/am=AAAAAAAwIAAEAOwZ/d=1/exm=FHXuwb,JoU6vf,Nr0kfe,Nuilue,OvPPad,PzUdZb,Raq4cb,SFvGjc,c3_base,dpUCFd,root/excm=FHXuwb,JoU6vf,Nr0kfe,Nuilue,OvPPad,PzUdZb,Raq4cb,SFvGjc,c3_base,dpUCFd,root/ed=1/br=1/rs=ABnK5FIDySz51XP0X-9U5h81b20RUxuzeg/m=Rv3e3d main=false
+11-21 20:49:20.239   574   601 W skia    : AGTM parsing failed flags.readFromStream(s) at 159
+11-21 20:49:20.239   574   601 W skia    : AGTM parsing failed flags.readFromStream(s) at 159
+11-21 20:49:20.272 15953 16022 I A03BWV  : 1795294160271 shouldInterceptRequest https://m.youtube.com/youtubei/v1/guide?prettyPrint=false main=false
+11-21 20:49:20.318   658   738 W libbinder.IPCThreadState: Sending oneway calls to frozen process.
+11-21 20:49:20.347   574   601 W skia    : AGTM parsing failed flags.readFromStream(s) at 159
+11-21 20:49:20.348   574   601 W skia    : AGTM parsing failed flags.readFromStream(s) at 159
+11-21 20:49:20.453   574   601 W skia    : AGTM parsing failed flags.readFromStream(s) at 159
+11-21 20:49:20.453   574   601 W skia    : AGTM parsing failed flags.readFromStream(s) at 159
+11-21 20:49:20.470 15953 16025 I A03BWV  : 1795294160470 shouldInterceptRequest https://www.google.com/js/th/OBn0-lcK2heSsQvwZqBdYDSSLon5TOClfDI9QSdpnEY.js main=false
+11-21 20:49:20.542 15953 15953 I A03BWV  : 1795294160542 onPageFinished https://m.youtube.com/results?search_query=nature
+11-21 20:49:20.547 15953 16022 I A03BWV  : 1795294160547 shouldInterceptRequest https://m.youtube.com/static/favicon.ico main=false
+11-21 20:49:20.556   574   601 W skia    : AGTM parsing failed flags.readFromStream(s) at 159
+11-21 20:49:20.669   574   601 W skia    : AGTM parsing failed flags.readFromStream(s) at 159
+11-21 20:49:20.687 15953 16022 I A03BWV  : 1795294160687 shouldInterceptRequest https://m.youtube.com/s/player/6b3d0364/player-plasma-es6-en_US.vflset/base.js main=false
+11-21 20:49:20.688 15953 16023 I A03BWV  : 1795294160688 shouldInterceptRequest https://m.youtube.com/s/player/6b3d0364/mweb.css main=false
+11-21 20:49:20.715 15953 16044 I A03BWV  : 1795294160715 GT replaceState https://m.youtube.com/results?search_query=nature
+11-21 20:49:20.733 15953 15953 I A03BWV  : 1795294160733 doUpdateVisitedHistory https://m.youtube.com/results?search_query=nature reload=false
+11-21 20:49:20.733 15953 15953 I A03BWV  : 1795294160733 onPageFinished https://m.youtube.com/results?search_query=nature
+11-21 20:49:20.770   574   601 W skia    : AGTM parsing failed flags.readFromStream(s) at 159
+11-21 20:49:20.872   574   601 W skia    : AGTM parsing failed flags.readFromStream(s) at 159
+11-21 20:49:20.901 15953 16022 I A03BWV  : 1795294160901 shouldInterceptRequest https://m.youtube.com/s/_/ytmweb/_/js/k=ytmweb.c3_base.en_US.I1n-wrGLdQU.2021.O/ck=ytmweb.c3_base.2h9D9urb5ww.L.W.O/am=AAAAAAAwIAAEAOwZ/d=1/exm=FHXuwb,JoU6vf,Nr0kfe,Nuilue,OvPPad,PzUdZb,Raq4cb,Rv3e3d,SFvGjc,c3_base,dpUCFd,root/excm=FHXuwb,JoU6vf,Nr0kfe,Nuilue,OvPPad,PzUdZb,Raq4cb,SFvGjc,c3_base,dpUCFd,root/ed=1/br=1/rs=ABnK5FIDySz51XP0X-9U5h81b20RUxuzeg/m=OtKSJe,pOLWfd main=false
+11-21 20:49:20.911 15953 16022 I A03BWV  : 1795294160911 shouldInterceptRequest https://m.youtube.com/static/favicon.ico main=false
+11-21 20:49:20.924 15953 16022 I A03BWV  : 1795294160924 shouldInterceptRequest https://m.youtube.com/s/_/ytmweb/_/js/k=ytmweb.c3_base.en_US.I1n-wrGLdQU.2021.O/ck=ytmweb.c3_base.2h9D9urb5ww.L.W.O/am=AAAAAAAwIAAEAOwZ/d=1/exm=FHXuwb,JoU6vf,Nr0kfe,Nuilue,OtKSJe,OvPPad,PzUdZb,Raq4cb,Rv3e3d,SFvGjc,c3_base,dpUCFd,pOLWfd,root/excm=FHXuwb,JoU6vf,Nr0kfe,Nuilue,OvPPad,PzUdZb,Raq4cb,SFvGjc,c3_base,dpUCFd,root/ed=1/br=1/rs=ABnK5FIDySz51XP0X-9U5h81b20RUxuzeg/m=JAgkc,BoMjYe main=false
+11-21 20:49:20.926 15953 16023 I A03BWV  : 1795294160926 shouldInterceptRequest https://m.youtube.com/s/_/ytmweb/_/js/k=ytmweb.c3_base.en_US.I1n-wrGLdQU.2021.O/ck=ytmweb.c3_base.2h9D9urb5ww.L.W.O/am=AAAAAAAwIAAEAOwZ/d=1/exm=BoMjYe,FHXuwb,JAgkc,JoU6vf,Nr0kfe,Nuilue,OtKSJe,OvPPad,PzUdZb,Raq4cb,Rv3e3d,SFvGjc,c3_base,dpUCFd,pOLWfd,root/excm=FHXuwb,JoU6vf,Nr0kfe,Nuilue,OvPPad,PzUdZb,Raq4cb,SFvGjc,c3_base,dpUCFd,root/ed=1/br=1/rs=ABnK5FIDySz51XP0X-9U5h81b20RUxuzeg/m=DlvF1d main=false
+11-21 20:49:20.937 15953 16031 I A03BWV  : 1795294160937 shouldInterceptRequest https://m.youtube.com/s/_/ytmweb/_/js/k=ytmweb.c3_base.en_US.I1n-wrGLdQU.2021.O/ck=ytmweb.c3_base.2h9D9urb5ww.L.W.O/am=AAAAAAAwIAAEAOwZ/d=1/exm=BoMjYe,DlvF1d,FHXuwb,JAgkc,JoU6vf,Nr0kfe,Nuilue,OtKSJe,OvPPad,PzUdZb,Raq4cb,Rv3e3d,SFvGjc,c3_base,dpUCFd,pOLWfd,root/excm=FHXuwb,JoU6vf,Nr0kfe,Nuilue,OvPPad,PzUdZb,Raq4cb,SFvGjc,c3_base,dpUCFd,root/ed=1/br=1/rs=ABnK5FIDySz51XP0X-9U5h81b20RUxuzeg/m=ERsVff main=false
+11-21 20:49:20.980   574   601 W skia    : AGTM parsing failed flags.readFromStream(s) at 159
+11-21 20:49:21.071 15953 16023 I A03BWV  : 1795294161071 shouldInterceptRequest https://m.youtube.com/s/_/ytmweb/_/js/k=ytmweb.c3_base.en_US.I1n-wrGLdQU.2021.O/ck=ytmweb.c3_base.2h9D9urb5ww.L.W.O/am=AAAAAAAwIAAEAOwZ/d=1/exm=BoMjYe,DlvF1d,ERsVff,FHXuwb,JAgkc,JoU6vf,Nr0kfe,Nuilue,OtKSJe,OvPPad,PzUdZb,Raq4cb,Rv3e3d,SFvGjc,c3_base,dpUCFd,pOLWfd,root/excm=FHXuwb,JoU6vf,Nr0kfe,Nuilue,OvPPad,PzUdZb,Raq4cb,SFvGjc,c3_base,dpUCFd,root/ed=1/br=1/rs=ABnK5FIDySz51XP0X-9U5h81b20RUxuzeg/m=SU3ui main=false
+11-21 20:49:21.097   787   979 I HalDevMgr: bestIfaceCreationProposal is null, requestIface=STA, existingIface=[name=wlan0 type=STA]
+11-21 20:49:21.099 15953 15953 I chromium: [INFO:CONSOLE:0] "ResizeObserver loop completed with undelivered notifications.", source: https://m.youtube.com/results?search_query=nature (0)
+11-21 20:49:21.133   574   601 W skia    : AGTM parsing failed flags.readFromStream(s) at 159
+11-21 20:49:21.176 15953 16022 I A03BWV  : 1795294161176 shouldInterceptRequest https://googleads.g.doubleclick.net/pagead/id main=false
+11-21 20:49:21.235   574   601 W skia    : AGTM parsing failed flags.readFromStream(s) at 159
+11-21 20:49:21.346   574   601 W skia    : AGTM parsing failed flags.readFromStream(s) at 159
+11-21 20:49:21.447   574   601 W skia    : AGTM parsing failed flags.readFromStream(s) at 159
+11-21 20:49:21.465 15953 16031 I A03BWV  : 1795294161465 shouldInterceptRequest https://m.youtube.com/s/_/ytmweb/_/js/k=ytmweb.c3_base.en_US.I1n-wrGLdQU.2021.O/ck=ytmweb.c3_base.2h9D9urb5ww.L.W.O/am=AAAAAAAwIAAEAOwZ/d=1/exm=BoMjYe,DlvF1d,ERsVff,FHXuwb,JAgkc,JoU6vf,Nr0kfe,Nuilue,OtKSJe,OvPPad,PzUdZb,Raq4cb,Rv3e3d,SFvGjc,SU3ui,c3_base,dpUCFd,pOLWfd,root/excm=FHXuwb,JoU6vf,Nr0kfe,Nuilue,OvPPad,PzUdZb,Raq4cb,SFvGjc,c3_base,dpUCFd,root/ed=1/br=1/rs=ABnK5FIDySz51XP0X-9U5h81b20RUxuzeg/m=RZekJ main=false
+11-21 20:49:21.540 15953 16025 I A03BWV  : 1795294161540 shouldInterceptRequest https://m.youtube.com/static/r/d72d162d/lottie-light.vflset/lottie-light.js main=false
+11-21 20:49:21.547   574   601 W skia    : AGTM parsing failed flags.readFromStream(s) at 159
+11-21 20:49:21.597 15953 16023 I A03BWV  : 1795294161597 shouldInterceptRequest https://m.youtube.com/generate_204?FwCM5w main=false
+11-21 20:49:21.606 15953 16022 I A03BWV  : 1795294161606 shouldInterceptRequest https://www.gstatic.com/youtube/img/lottie/subscribe_action/subscribe_action_container_light_v5.json main=false
+11-21 20:49:21.606 15953 16023 I A03BWV  : 1795294161606 shouldInterceptRequest https://www.gstatic.com/youtube/img/lottie/subscribe_action/subscribe_action_sparkles_light_v4.json main=false
+11-21 20:49:21.634 15953 16029 W cr_media: Requires MODIFY_AUDIO_SETTINGS and RECORD_AUDIO. No audio device will be available for recording
+11-21 20:49:21.638 15953 16042 E GFXSTREAM: [GLClientState.cpp(298)] set vao to self, no-op (1)
+11-21 20:49:21.648   574   601 W skia    : AGTM parsing failed flags.readFromStream(s) at 159
+11-21 20:49:21.684   787   924 D ActivityManager: freezing 6489 com.google.android.verifier
+11-21 20:49:21.686   787   993 D InetDiagMessage: Destroyed 0 sockets, proto=IPPROTO_TCP, family=AF_INET, states=14
+11-21 20:49:21.686   787   993 D InetDiagMessage: Destroyed 0 sockets, proto=IPPROTO_TCP, family=AF_INET6, states=14
+11-21 20:49:21.686   787   993 D InetDiagMessage: Destroyed live tcp sockets for uids={10164} in 1ms
+11-21 20:49:21.723 15953 16022 I A03BWV  : 1795294161723 shouldInterceptRequest https://m.youtube.com/api/jnn/v1/GenerateIT main=false
+11-21 20:49:21.749   574   601 W skia    : AGTM parsing failed flags.readFromStream(s) at 159
+11-21 20:49:21.992   787   924 D ActivityManager: freezing 1811 com.android.keychain
+11-21 20:49:21.994   787   924 D ActivityManager: freezing 1320 com.android.settings
+11-21 20:49:21.997   787   924 D ActivityManager: freezing 4222 com.android.dynsystem:dynsystem
+11-21 20:49:21.998   787   924 D ActivityManager: freezing 4158 com.android.dynsystem
+11-21 20:49:21.999   787   924 D ActivityManager: freezing 1925 com.android.localtransport
+11-21 20:49:22.893  3460  3586 D SatelliteController: isInCarrierRoamingNbIotNtn: satellite is disabled
+11-21 20:49:22.893  3460  3586 D SatelliteController: getCarrierRoamingNtnConnectType: Checking connect type from PLMN config for subId: 1
+11-21 20:49:22.893  3460  3586 D TelephonyConfigUpdateInstallReceiver: getConfigParser: domain=satellite
+11-21 20:49:22.893  3460  3586 V SatelliteController: satelliteConfigParser is not ready
+11-21 20:49:22.893  3460  3586 D SatelliteController: isSatelliteAttachSupportedViaConfigupdater: return null (satelliteConfig is null)
+11-21 20:49:22.893  3460  3586 D SatelliteController: getSatellitePerPlmnConfiguration: invalid subId or not supported via carrier.
+11-21 20:49:22.893  3460  3586 D SatelliteController: getCarrierRoamingNtnConnectType: config: null
+11-21 20:49:22.893  3460  3586 D TelephonyConfigUpdateInstallReceiver: getConfigParser: domain=satellite
+11-21 20:49:22.893  3460  3586 V SatelliteController: satelliteConfigParser is not ready
+11-21 20:49:22.893  3460  3586 D SatelliteController: getCarrierRoamingNtnConnectTypeViaConfigUpdater: return null (satelliteConfig is null)
+11-21 20:49:22.894  3460  3586 D SatelliteController: getCarrierRoamingNtnConnectType: Falling back to global carrier config connect type: 0
+11-21 20:49:22.894  3460  3586 D TelephonyConfigUpdateInstallReceiver: getConfigParser: domain=satellite
+11-21 20:49:22.894  3460  3586 V SatelliteController: satelliteConfigParser is not ready
+11-21 20:49:22.894  3460  3586 D SatelliteController: isSatelliteAttachSupportedViaConfigupdater: return null (satelliteConfig is null)
+11-21 20:49:22.894  3460  3586 D SatelliteController: getCarrierRoamingNtnConnectType: Checking connect type from PLMN config for subId: 1
+11-21 20:49:22.894  3460  3586 D TelephonyConfigUpdateInstallReceiver: getConfigParser: domain=satellite
+11-21 20:49:22.894  3460  3586 V SatelliteController: satelliteConfigParser is not ready
+11-21 20:49:22.894  3460  3586 D SatelliteController: isSatelliteAttachSupportedViaConfigupdater: return null (satelliteConfig is null)
+11-21 20:49:22.894  3460  3586 D SatelliteController: getSatellitePerPlmnConfiguration: invalid subId or not supported via carrier.
+11-21 20:49:22.894  3460  3586 D SatelliteController: getCarrierRoamingNtnConnectType: config: null
+11-21 20:49:22.894  3460  3586 D TelephonyConfigUpdateInstallReceiver: getConfigParser: domain=satellite
+11-21 20:49:22.894  3460  3586 V SatelliteController: satelliteConfigParser is not ready
+11-21 20:49:22.894  3460  3586 D SatelliteController: getCarrierRoamingNtnConnectTypeViaConfigUpdater: return null (satelliteConfig is null)
+11-21 20:49:22.894  3460  3586 D SatelliteController: getCarrierRoamingNtnConnectType: Falling back to global carrier config connect type: 0
+11-21 20:49:22.894  3460  3586 D TelephonyConfigUpdateInstallReceiver: getConfigParser: domain=satellite
+11-21 20:49:22.894  3460  3586 V SatelliteController: satelliteConfigParser is not ready
+11-21 20:49:22.894  3460  3586 D SatelliteController: isSatelliteAttachSupportedViaConfigupdater: return null (satelliteConfig is null)
+11-21 20:49:23.547 15953 15953 I A03BWV  : 1795294163547 CLICK_RESULT "clicked /watch?v=EnkWqUk2aA8&pp=ygUGbmF0dXJl"
+11-21 20:49:23.548 15953 16022 I A03BWV  : 1795294163548 shouldInterceptRequest https://m.youtube.com/s/_/ytmweb/_/js/k=ytmweb.c3_base.en_US.I1n-wrGLdQU.2021.O/ck=ytmweb.c3_base.2h9D9urb5ww.L.W.O/am=AAAAAAAwIAAEAOwZ/d=1/exm=BoMjYe,DlvF1d,ERsVff,FHXuwb,JAgkc,JoU6vf,Nr0kfe,Nuilue,OtKSJe,OvPPad,PzUdZb,RZekJ,Raq4cb,Rv3e3d,SFvGjc,SU3ui,c3_base,dpUCFd,pOLWfd,root/excm=FHXuwb,JoU6vf,Nr0kfe,Nuilue,OvPPad,PzUdZb,Raq4cb,SFvGjc,c3_base,dpUCFd,root/ed=1/br=1/rs=ABnK5FIDySz51XP0X-9U5h81b20RUxuzeg/m=ZLOvOd main=false
+11-21 20:49:23.610 15953 16022 I A03BWV  : 1795294163610 shouldInterceptRequest https://m.youtube.com/complete/search?ds=yt&hl=en&gl=il&client=youtube-reduced&gs_ri=youtube-reduced&gs_id=0&q=&cp=0 main=false
+11-21 20:49:23.629 15953 16022 I A03BWV  : 1795294163628 shouldInterceptRequest https://m.youtube.com/youtubei/v1/get_watch?prettyPrint=false main=false
+11-21 20:49:23.629 15953 16044 I A03BWV  : 1795294163629 GT pushState https://m.youtube.com/watch?v=EnkWqUk2aA8&pp=ygUGbmF0dXJl
+11-21 20:49:23.633 15953 15953 I A03BWV  : 1795294163633 doUpdateVisitedHistory https://m.youtube.com/watch?v=EnkWqUk2aA8&pp=ygUGbmF0dXJl reload=false
+11-21 20:49:23.657   787  3622 E TaskPersister: File error accessing recents directory (directory doesn't exist?).
+11-21 20:49:23.665   586   586 I adbd    : adbd service requested 'shell,v2,TERM=xterm-256color,raw:dumpsys package com.google.android.gms'
+11-21 20:49:23.677 15953 16023 I A03BWV  : 1795294163677 shouldInterceptRequest https://m.youtube.com/s/_/ytmweb/_/js/k=ytmweb.c3_base.en_US.I1n-wrGLdQU.2021.O/ck=ytmweb.c3_base.2h9D9urb5ww.L.W.O/am=AAAAAAAwIAAEAOwZ/d=1/exm=BoMjYe,DlvF1d,ERsVff,FHXuwb,JAgkc,JoU6vf,Nr0kfe,Nuilue,OtKSJe,OvPPad,PzUdZb,RZekJ,Raq4cb,Rv3e3d,SFvGjc,SU3ui,ZLOvOd,c3_base,dpUCFd,pOLWfd,root/excm=FHXuwb,JoU6vf,Nr0kfe,Nuilue,OvPPad,PzUdZb,Raq4cb,SFvGjc,c3_base,dpUCFd,root/ed=1/br=1/rs=ABnK5FIDySz51XP0X-9U5h81b20RUxuzeg/m=bclWnc,g8NBcb,DT0Xrc,T2DsNe,q21kjb,IWFJ1b,FHiRVe main=false
+11-21 20:49:23.694 15953 16022 I A03BWV  : 1795294163694 shouldInterceptRequest https://m.youtube.com/static/favicon.ico main=false
+11-21 20:49:23.786   574   601 W skia    : AGTM parsing failed flags.readFromStream(s) at 159
+11-21 20:49:23.787 15953 15953 I A03BWV  : 1795294163787 POLL https://m.youtube.com/watch?v=EnkWqUk2aA8&pp=ygUGbmF0dXJl
+11-21 20:49:23.804  1813  8495 I artd    : GetBestInfo: odex next to the dex file (/data/app/~~CRYGJvAcDUnAWFaIi24hyQ==/com.google.android.gms-uy7Xq0-qbFc3ye8Av2NScg==/oat/x86_64/base.odex) is kOatUpToDate with filter 'speed-profile' executable 'false'
+11-21 20:49:23.806  1813  8495 I artd    : GetBestInfo: dm (/data/app/~~CRYGJvAcDUnAWFaIi24hyQ==/com.google.android.gms-uy7Xq0-qbFc3ye8Av2NScg==/split_AdsDynamite_installtime.dm) is kOatUpToDate with filter 'verify' executable 'false'
+11-21 20:49:23.808  1813  8495 I artd    : GetBestInfo: odex next to the dex file (/data/app/~~CRYGJvAcDUnAWFaIi24hyQ==/com.google.android.gms-uy7Xq0-qbFc3ye8Av2NScg==/oat/x86_64/split_CronetDynamite_installtime.odex) is kOatUpToDate with filter 'speed-profile' executable 'false'
+11-21 20:49:23.810  1813  8495 I artd    : GetBestInfo: dm (/data/app/~~CRYGJvAcDUnAWFaIi24hyQ==/com.google.android.gms-uy7Xq0-qbFc3ye8Av2NScg==/split_DynamiteLoader_installtime.dm) is kOatUpToDate with filter 'verify' executable 'false'
+11-21 20:49:23.812  1813  8495 I artd    : GetBestInfo: dm (/data/app/~~CRYGJvAcDUnAWFaIi24hyQ==/com.google.android.gms-uy7Xq0-qbFc3ye8Av2NScg==/split_DynamiteModulesA_installtime.dm) is kOatUpToDate with filter 'verify' executable 'false'
+11-21 20:49:23.814  1813  8495 I artd    : GetBestInfo: dm (/data/app/~~CRYGJvAcDUnAWFaIi24hyQ==/com.google.android.gms-uy7Xq0-qbFc3ye8Av2NScg==/split_DynamiteModulesC_installtime.dm) is kOatUpToDate with filter 'verify' executable 'false'
+11-21 20:49:23.815  1813  8495 I artd    : GetBestInfo: dm (/data/app/~~CRYGJvAcDUnAWFaIi24hyQ==/com.google.android.gms-uy7Xq0-qbFc3ye8Av2NScg==/split_GoogleCertificates_installtime.dm) is kOatUpToDate with filter 'verify' executable 'false'
+11-21 20:49:23.817  1813  8495 I artd    : GetBestInfo: dm (/data/app/~~CRYGJvAcDUnAWFaIi24hyQ==/com.google.android.gms-uy7Xq0-qbFc3ye8Av2NScg==/split_MapsDynamite_installtime.dm) is kOatUpToDate with filter 'verify' executable 'false'
+11-21 20:49:23.819  1813  8495 I artd    : GetBestInfo: dm (/data/app/~~CRYGJvAcDUnAWFaIi24hyQ==/com.google.android.gms-uy7Xq0-qbFc3ye8Av2NScg==/split_MeasurementDynamite_installtime.dm) is kOatUpToDate with filter 'verify' executable 'false'
+11-21 20:49:23.819  1813  8495 I artd    : GetBestInfo: /data/user_de/0/com.google.android.gms/app_chimera/m/00000008/GoogleCertificates.apk has no usable artifacts
+11-21 20:49:23.820  1813  8495 I artd    : GetBestInfo: /data/user_de/0/com.google.android.gms/app_chimera/m/00000010/dl-TfliteDynamiteDynamite.integ_264010405100800.apk has no usable artifacts
+11-21 20:49:23.822  1813  8495 I artd    : GetBestInfo: /data/user_de/0/com.google.android.gms/app_chimera/m/00000001/CronetDynamite.apk has no usable artifacts
+11-21 20:49:23.823  1813  8495 I artd    : GetBestInfo: /data/user_de/0/com.google.android.gms/app_chimera/m/00000002/DynamiteLoader.apk has no usable artifacts
+11-21 20:49:23.824  1813  8495 I artd    : GetBestInfo: /data/user_de/0/com.google.android.gms/app_chimera/m/00000012/dl-IdentityCredentialsPlatform.optional_264531100800.apk has no usable artifacts
+11-21 20:49:23.825  1813  8495 I artd    : GetBestInfo: /data/user_de/0/com.google.android.gms/app_chimera/m/0000000d/dl-IdentityCredentialsPlatform.optional_261136100800.apk has no usable artifacts
+11-21 20:49:23.826  1813  8495 I artd    : GetBestInfo: /data/user_de/0/com.google.android.gms/app_chimera/m/0000000a/MeasurementDynamite.apk has no usable artifacts
+11-21 20:49:23.828  1813  8495 I artd    : GetBestInfo: /data/user_de/0/com.google.android.gms/app_chimera/m/00000015/dl-MlkitBarcodeUi.optional_264531100800.apk has no usable artifacts
+11-21 20:49:23.831  1813  8495 I artd    : GetBestInfo: vdex next to the dex file (/data/user/0/com.google.android.gms/app_dg_cache/BCD37DA6707F74E3F78AB9C0F65BC34E65B1F2E1/oat/x86_64/the.vdex) is kOatUpToDate with filter 'verify' executable 'false'
+11-21 20:49:23.833  1813  8495 I artd    : GetBestInfo: /data/user_de/0/com.google.android.gms/app_chimera/m/0000000c/dl-MlkitBarcodeUi.optional_261136100800.apk has no usable artifacts
+11-21 20:49:23.835  1813  8495 I artd    : GetBestInfo: /data/user_de/0/com.google.android.gms/app_chimera/m/00000013/dl-Appsearch.optional_264531100800.apk has no usable artifacts
+11-21 20:49:23.842 15953 15953 I chromium: [INFO:CONSOLE:1] "Failed to create WebGPU Context Provider", source:  (1)
+11-21 20:49:23.852 15953 16022 I A03BWV  : 1795294163851 shouldInterceptRequest https://static.doubleclick.net/instream/ad_status.js main=false
+11-21 20:49:23.888   574   601 W skia    : AGTM parsing failed flags.readFromStream(s) at 159
+11-21 20:49:24.103   787   979 I HalDevMgr: bestIfaceCreationProposal is null, requestIface=STA, existingIface=[name=wlan0 type=STA]
+11-21 20:49:24.104   787  1019 I AdbWifiNetworkMonitor: Wi-Fi network available
+11-21 20:49:24.105   787  1019 I AdbWifiNetworkMonitor: Received the same Wi-Fi SSID. Ignoring.
+11-21 20:49:24.108  9128 10329 I NullBinder: NullBinder for android.net.action.RECOMMEND_NETWORKS triggering remote TransactionTooLargeException due to Service without Chimera impl, calling uid: 1000, calling pid: 0
+11-21 20:49:24.108  9128 10329 W libbinder.Binder: Large reply transaction of 1056768 bytes, interface descriptor , function: UNKNOWN_FUNCTION_NAME, code: 1, flags: 17
+11-21 20:49:24.111   787   993 D ConnectivityService: NetReassign [no changes] [c 0] [a 1] [i 1]
+11-21 20:49:24.111  9128 10657 I NearbyMediums: Wifi changed new SSID: "AndroidWifi"
+11-21 20:49:24.111  9128 10657 I NearbyMediums: WifiLanConnectivityInfo is not changed, skip notify.
+11-21 20:49:24.112  1189  1377 D IpClient/wlan0: interfaceLinkStateChanged: ifindex 16 up
+11-21 20:49:24.124  1189  1377 D IpClient/wlan0: interfaceLinkStateChanged: ifindex 16 up
+11-21 20:49:24.246 15953 15953 I PlayCore: UID: [10235]  PID: [15953] StandardIntegrity : requestExpressIntegrityToken(-2686416618339851119)
+11-21 20:49:24.246   787  2179 W ActivityManager: Skipping manifest association check for null package. SourceUid: -1, SourcePkg: null, TargetUid: 10235, TargetPkg: com.webfilter.spike.a03b
+11-21 20:49:24.247 15953 16095 I PlayCore: UID: [10235]  PID: [15953] StandardIntegrity : Initiate binding to the service.
+11-21 20:49:24.247   787   846 W ActivityManager: Skipping manifest association check for null package. SourceUid: -1, SourcePkg: null, TargetUid: 10235, TargetPkg: com.webfilter.spike.a03b
+11-21 20:49:24.249   787   993 W libbinder.IPCThreadState: Sending oneway calls to frozen process.
+11-21 20:49:24.249   787   993 W libbinder.IPCThreadState: Sending oneway calls to frozen process.
+11-21 20:49:24.251   787  2179 D ActivityManager: sync unfroze 8556 com.android.vending for 6
+11-21 20:49:24.259   787  1713 W ProcessStats: Tracking association SourceState{93d0a9e com.webfilter.spike.a03b/10235 BTop #13335} whose proc state 2 is better than process ProcessState{1e2a7bc com.android.vending/10157 pkg=com.android.vending} proc state 14 (0 skipped)
+11-21 20:49:24.259 15953 15953 I PlayCore: UID: [10235]  PID: [15953] StandardIntegrity : ServiceConnectionImpl.onServiceConnected(ComponentInfo{com.android.vending/com.google.android.finsky.expressintegrityservice.ExpressIntegrityService})
+11-21 20:49:24.259 15953 16095 I PlayCore: UID: [10235]  PID: [15953] StandardIntegrity : linkToDeath
+11-21 20:49:24.291 15953 16022 I A03BWV  : 1795294164291 shouldInterceptRequest https://rr1---sn-gphvo-ua8l.googlevideo.com/videoplayback?expire=1795315765&ei=1QMCa9KIDPmHvdIPuJLfgAk&ip=2a01%3A6500%3Aa034%3A737d%3A4c0a%3A172d%3Abc70%3A8486&id=o-ANJhSHjw23MUkJdFr_RLVhR_n-YMHPrPJj3ukRQKsyQB&source=youtube&requiressl=yes&xpc=EgVo2aDSNQ%3D%3D&cps=327&met=1795294165%2C&mh=s7&mm=31%2C29&mn=sn-gphvo-ua8l%2Csn-u1ua85-5i&ms=au%2Crdu&mv=m&mvi=1&pl=46&rms=au%2Cau&pcm2=no&gcr=il&initcwndbps=2257500&spc=nfZ8Zosn-gI3G9PcJ-EFGxRHg4gyKWvTrt62Sjqla1UWhmbaZTrzZ3JaZH1Xsrvn-jb_MFL_og&svpuc=1&ns=EZXHld_qHf4OF1vE_5_P_8Ma&sabr=1&rqh=1&mt=1795293639&fvip=3&epbp=1&keepalive=yes&fexp=51565115%2C52323638%2C52338435&c=MWEB&n=HZCvpQlk2U5zEQ&sparams=expire%2Cei%2Cip%2Cid%2Csource%2Crequiressl%2Cxpc%2Cpcm2%2Cgcr%2Cspc%2Csvpuc%2Cns%2Csabr%2Crqh&sig=AE0s2JYwRgIhAKEcxBhkPC2_wwwajrGumXC-4OGTGpffcM89mZLrwGjSAiEA9i8Th5knAqMXLJ2Z3vk-TEzIxBvC_wZan-IaoS3Bb7M%3D&lsparams=cps%2Cmet%2Cmh%2Cmm%2Cmn%2Cms%2Cmv%2Cmvi%2Cpl%2Crms%2Cinitcwndbps&lsig=APaTxxMwRgIhAKhPEVwkdAjA6Fz-46h2jK4mO_WL-jrPpNuuS1HV-HU4AiEA7tIY7jgZChWqtwxlWI4AoksM1k7-dd6jFl278pSG7pg%3D&cpn=ZPeP1nPTk6v_fejE&cver=2.20261120.00.00&rn=1&alr=yes main=false
+11-21 20:49:24.295 15953 16074 I PlayCore: UID: [10235]  PID: [15953] OnRequestIntegrityTokenCallback : onRequestExpressIntegrityToken
+11-21 20:49:24.297 15953 16095 I PlayCore: UID: [10235]  PID: [15953] StandardIntegrity : Unbind from service.
+11-21 20:49:24.297 15953 16022 I A03BWV  : 1795294164297 shouldInterceptRequest https://m.youtube.com/s/player/6b3d0364/player-plasma-es6-en_US.vflset/ad.js main=false
+11-21 20:49:24.298 15953 16022 I A03BWV  : 1795294164298 shouldInterceptRequest https://m.youtube.com/s/player/6b3d0364/player-plasma-es6-en_US.vflset/captions.js main=false
+11-21 20:49:24.306  8556  8556 I Finsky  : [2] Memory trim requested to level 40
+11-21 20:49:24.306  8556  8556 I Finsky  : [2] Flushing in-memory image cache
+11-21 20:49:24.372   574   601 W skia    : AGTM parsing failed flags.readFromStream(s) at 159
+11-21 20:49:24.487 15953 16022 I A03BWV  : 1795294164487 shouldInterceptRequest https://m.youtube.com/s/_/ytmweb/_/js/k=ytmweb.c3_base.en_US.I1n-wrGLdQU.2021.O/ck=ytmweb.c3_base.2h9D9urb5ww.L.W.O/am=AAAAAAAwIAAEAOwZ/d=1/exm=BoMjYe,DT0Xrc,DlvF1d,ERsVff,FHXuwb,FHiRVe,IWFJ1b,JAgkc,JoU6vf,Nr0kfe,Nuilue,OtKSJe,OvPPad,PzUdZb,RZekJ,Raq4cb,Rv3e3d,SFvGjc,SU3ui,T2DsNe,ZLOvOd,bclWnc,c3_base,dpUCFd,g8NBcb,pOLWfd,q21kjb,root/excm=FHXuwb,JoU6vf,Nr0kfe,Nuilue,OvPPad,PzUdZb,Raq4cb,SFvGjc,c3_base,dpUCFd,root/ed=1/br=1/rs=ABnK5FIDySz51XP0X-9U5h81b20RUxuzeg/m=f90tCb main=false
+11-21 20:49:24.497 15953 16022 I A03BWV  : 1795294164497 shouldInterceptRequest https://www.gstatic.com/youtube/img/lottie/subscribe_action/subscribe_action_container_light_v5.json main=false
+11-21 20:49:24.498 15953 16022 I A03BWV  : 1795294164498 shouldInterceptRequest https://www.gstatic.com/youtube/img/lottie/subscribe_action/subscribe_action_sparkles_light_v4.json main=false
+11-21 20:49:24.503 15953 16022 I A03BWV  : 1795294164503 shouldInterceptRequest https://m.youtube.com/s/_/ytmweb/_/js/k=ytmweb.c3_base.en_US.I1n-wrGLdQU.2021.O/ck=ytmweb.c3_base.2h9D9urb5ww.L.W.O/am=AAAAAAAwIAAEAOwZ/d=1/exm=BoMjYe,DT0Xrc,DlvF1d,ERsVff,FHXuwb,FHiRVe,IWFJ1b,JAgkc,JoU6vf,Nr0kfe,Nuilue,OtKSJe,OvPPad,PzUdZb,RZekJ,Raq4cb,Rv3e3d,SFvGjc,SU3ui,T2DsNe,ZLOvOd,bclWnc,c3_base,dpUCFd,f90tCb,g8NBcb,pOLWfd,q21kjb,root/excm=FHXuwb,JoU6vf,Nr0kfe,Nuilue,OvPPad,PzUdZb,Raq4cb,SFvGjc,c3_base,dpUCFd,root/ed=1/br=1/rs=ABnK5FIDySz51XP0X-9U5h81b20RUxuzeg/m=adyZP,II1oUe main=false
+11-21 20:49:24.530 15953 16022 I A03BWV  : 1795294164530 shouldInterceptRequest https://fonts.gstatic.com/s/i/youtube_outline_experimental/closed_captions/v4/24px.svg main=false
+11-21 20:49:24.531 15953 16031 I A03BWV  : 1795294164531 shouldInterceptRequest https://fonts.gstatic.com/s/i/youtube_outline_experimental/gear/v10/24px.svg main=false
+11-21 20:49:24.533 15953 16022 I A03BWV  : 1795294164533 shouldInterceptRequest https://fonts.gstatic.com/s/i/youtube_fill_experimental/skip_previous/v6/24px.svg main=false
+11-21 20:49:24.568   574   601 W skia    : AGTM parsing failed flags.readFromStream(s) at 159
+11-21 20:49:24.585 15953 16023 I A03BWV  : 1795294164585 shouldInterceptRequest https://yt3.ggpht.com/6kgN5uo3fzAOOQFJHpbKOI8n2-6rAOwsTHlG0guKXK7G8X8NsY6LuL3nu_aBjgiM8ly-k--L=s48-c-k-c0x00ffffff-no-rj main=false
+11-21 20:49:24.586 15953 16025 I A03BWV  : 1795294164586 shouldInterceptRequest https://i.ytimg.com/vi/zZBQ-JGY2PM/hq720.jpg?sqp=-oaymwEcCK4FEIIDSEbyq4qpAw4IARUAAIhCGAFwAcABBg==&rs=AOn4CLDcBInoNYz-4ebs5VfP1iW4jxBzEA main=false
+11-21 20:49:24.586 15953 16025 I A03BWV  : 1795294164586 shouldInterceptRequest https://yt3.ggpht.com/6kgN5uo3fzAOOQFJHpbKOI8n2-6rAOwsTHlG0guKXK7G8X8NsY6LuL3nu_aBjgiM8ly-k--L=s68-c-k-c0x00ffffff-no-rj main=false
+11-21 20:49:24.586 15953 16023 I A03BWV  : 1795294164586 shouldInterceptRequest https://i.ytimg.com/vi/9FqwhW0B3tY/hq720.jpg?sqp=-oaymwEcCK4FEIIDSEbyq4qpAw4IARUAAIhCGAFwAcABBg==&rs=AOn4CLBlj-G1VGx-sUlet4MDkaiW_5BIXg main=false
+11-21 20:49:24.608 15953 16022 I A03BWV  : 1795294164608 shouldInterceptRequest https://fonts.gstatic.com/s/i/youtube_fill_experimental/play/v4/24px.svg main=false
+11-21 20:49:24.608 15953 16023 I A03BWV  : 1795294164608 shouldInterceptRequest https://m.youtube.com/s/_/ytmweb/_/js/k=ytmweb.c3_base.en_US.I1n-wrGLdQU.2021.O/ck=ytmweb.c3_base.2h9D9urb5ww.L.W.O/am=AAAAAAAwIAAEAOwZ/d=1/exm=BoMjYe,DT0Xrc,DlvF1d,ERsVff,FHXuwb,FHiRVe,II1oUe,IWFJ1b,JAgkc,JoU6vf,Nr0kfe,Nuilue,OtKSJe,OvPPad,PzUdZb,RZekJ,Raq4cb,Rv3e3d,SFvGjc,SU3ui,T2DsNe,ZLOvOd,adyZP,bclWnc,c3_base,dpUCFd,f90tCb,g8NBcb,pOLWfd,q21kjb,root/excm=FHXuwb,JoU6vf,Nr0kfe,Nuilue,OvPPad,PzUdZb,Raq4cb,SFvGjc,c3_base,dpUCFd,root/ed=1/br=1/rs=ABnK5FIDySz51XP0X-9U5h81b20RUxuzeg/m=hNelvd,osTtxe,fKE8qd,Hxjlbb,W0gSKb main=false
+11-21 20:49:24.612  9128 10657 I NearbySharing: Network state changed: NetworkState(isRestricted=false, isOnline=true, isCongested=false, isMetered=false, isWifiConnected=true)
+11-21 20:49:24.613 15953 16022 I A03BWV  : 1795294164613 shouldInterceptRequest https://fonts.gstatic.com/s/i/youtube_fill_experimental/skip_next/v7/24px.svg main=false
+11-21 20:49:24.617 15953 16023 I A03BWV  : 1795294164617 shouldInterceptRequest https://fonts.gstatic.com/s/i/youtube_outline_experimental/player_full_enter_alt/v1/24px.svg main=false
+11-21 20:49:24.655 15953 16023 I A03BWV  : 1795294164655 shouldInterceptRequest https://m.youtube.com/api/timedtext?v=EnkWqUk2aA8&ei=1QMCa9KIDPmHvdIPuJLfgAk&caps=asr&opi=112496729&exp=xpo%2Cxwmhp%2Cxpe&xoaf=5&xowf=1&xowatf=1&xospf=1&hl=en&ip=0.0.0.0&ipbits=0&expire=1795319365&sparams=ip%2Cipbits%2Cexpire%2Cv%2Cei%2Ccaps%2Copi%2Cexp%2Cxoaf&signature=5D7E4997EF1F32EDA830F3296B8C22D42E86A898.7B0CD2EC04841A25E7917ACF1335A94C18FB6A48&key=yt8&kind=asr&lang=en&potc=1&pot=MlPaJ0v2H0LBitobh1Vf3qRNncARgiZOfkUSVTwzF9iN1hH4faa00JTO8BEHiVaPGPvNugDPXDughlFYnTnzdHiX6GWlopBFCxCGqInnaJBkjcboMA%3D%3D&fmt=json3&xorb=2&xobt=3&xovt=3&cbrand=generic&cbr=Chrome%20Mobile%20Webview&cbrver=145.0.7632.218&c=MWEB&cver=2.20261120.00.00&cplayer=UNIPLAYER&cmodel=android%2017.0&cos=Android&cosver=17&cplatform=MOBILE main=false
+11-21 20:49:24.726 15953 16022 I A03BWV  : 1795294164726 shouldInterceptRequest https://tpc.googlesyndication.com/sodar/56-y-0RG.js main=false
+11-21 20:49:24.751 15953 16022 I A03BWV  : 1795294164751 shouldInterceptRequest https://rr1---sn-gphvo-ua8l.googlevideo.com/videoplayback?expire=1795315765&ei=1QMCa_ebIvmHvdIPuJLfgAk&ip=2a01%3A6500%3Aa034%3A737d%3A4c0a%3A172d%3Abc70%3A8486&id=o-ANQOpsBHRQu5WfDX2zTUVt3N-F1-GySt0i_wNKMFB67n&source=youtube&requiressl=yes&xpc=EgVo2aDSNQ%3D%3D&cps=679&met=1795294165%2C&mh=Cv&mm=18%2C29&mn=sn-gphvo-ua8l%2Csn-ajua89-5x&ms=aub%2Crdu&mv=m&mvi=1&pl=46&rms=aub%2Caub&ctier=L&pcm2=no&initcwndbps=2276250&spc=nfZ8Zpk8Xu6jLdDFDN2sngCOouhybsyXGfPzPjeGd4EDwsKI9YpMCfYkrsU2UyQGiw&svpuc=1&ns=5rGocxhtXMqZ3BlRqhBMz2Ya&sabr=1&rqh=1&mt=1795293463&fvip=4&epbp=1&keepalive=yes&fexp=51565115%2C52323638%2C52338435&c=MWEB&n=P41-32C1YyV7xg&sparams=expire%2Cei%2Cip%2Cid%2Csource%2Crequiressl%2Cxpc%2Cctier%2Cpcm2%2Cspc%2Csvpuc%2Cns%2Csabr%2Crqh&sig=AE0s2JYwRQIgeYGYo1t6KcIK_maxM_22EKLwZ1g5yLWESLwqGaWAYqYCIQCF9oqOgvJmP6uWmD7rLBVom_OK-FSie6YDtgQmR_24mg%3D%3D&lsparams=cps%2Cmet%2Cmh%2Cmm%2Cmn%2Cms%2Cmv%2Cmvi%2Cpl%2Crms%2Cinitcwndbps&lsig=APaTxxMwRQIgcQKFmES1CemPA5mFkTGKdN5oKi5-9aZycAvtEfI5E3MCIQCuP9DUlXdqjKbZKeYvFvTn1yVR06Yiyjk280nry3b0OA%3D%3D&cpn=SRPqzjhX5kwT77zp&cver=2.20261120.00.00&rn=2&alr=yes main=false
+11-21 20:49:24.802 15953 16022 I A03BWV  : 1795294164802 shouldInterceptRequest https://www.gstatic.com/youtube/img/icons/mweb/youtube_fill/autonav_on_toggle_spanner/v1/36px.svg main=false
+11-21 20:49:24.803 15953 16022 I A03BWV  : 1795294164802 shouldInterceptRequest https://fonts.gstatic.com/s/i/youtube_outline_experimental/chevron_right/v8/24px.svg main=false
+11-21 20:49:24.803 15953 16023 I A03BWV  : 1795294164803 shouldInterceptRequest https://fonts.gstatic.com/s/i/youtube_fill_experimental/play_circle/v2/24px.svg main=false
+11-21 20:49:25.048 15953 16022 I A03BWV  : 1795294165048 shouldInterceptRequest https://fonts.gstatic.com/s/i/youtube_outline_experimental/bookmark/v11/24px.svg main=false
+11-21 20:49:25.048 15953 16022 I A03BWV  : 1795294165048 shouldInterceptRequest https://fonts.gstatic.com/s/i/youtube_fill_experimental/closed_captions/v4/24px.svg main=false
+11-21 20:49:25.053 15953 16022 I A03BWV  : 1795294165053 shouldInterceptRequest https://m.youtube.com/s/_/ytmweb/_/js/k=ytmweb.c3_base.en_US.I1n-wrGLdQU.2021.O/ck=ytmweb.c3_base.2h9D9urb5ww.L.W.O/am=AAAAAAAwIAAEAOwZ/d=1/exm=BoMjYe,DT0Xrc,DlvF1d,ERsVff,FHXuwb,FHiRVe,Hxjlbb,II1oUe,IWFJ1b,JAgkc,JoU6vf,Nr0kfe,Nuilue,OtKSJe,OvPPad,PzUdZb,RZekJ,Raq4cb,Rv3e3d,SFvGjc,SU3ui,T2DsNe,W0gSKb,ZLOvOd,adyZP,bclWnc,c3_base,dpUCFd,f90tCb,fKE8qd,g8NBcb,hNelvd,osTtxe,pOLWfd,q21kjb,root/excm=FHXuwb,JoU6vf,Nr0kfe,Nuilue,OvPPad,PzUdZb,Raq4cb,SFvGjc,c3_base,dpUCFd,root/ed=1/br=1/rs=ABnK5FIDySz51XP0X-9U5h81b20RUxuzeg/m=e3UtW main=false
+11-21 20:49:25.055 15953 15953 I PlayCore: UID: [10235]  PID: [15953] StandardIntegrity : requestExpressIntegrityToken(-2686416618339851119)
+11-21 20:49:25.055 15953 15953 I PlayCore: UID: [10235]  PID: [15953] StandardIntegrity : requestExpressIntegrityToken(-2686416618339851119)
+11-21 20:49:25.057 15953 16095 I PlayCore: UID: [10235]  PID: [15953] StandardIntegrity : Initiate binding to the service.
+11-21 20:49:25.067 15953 15953 I PlayCore: UID: [10235]  PID: [15953] StandardIntegrity : ServiceConnectionImpl.onServiceConnected(ComponentInfo{com.android.vending/com.google.android.finsky.expressintegrityservice.ExpressIntegrityService})
+11-21 20:49:25.067   574   601 W skia    : AGTM parsing failed flags.readFromStream(s) at 159
+11-21 20:49:25.069 15953 16095 I PlayCore: UID: [10235]  PID: [15953] StandardIntegrity : Already connected to the service.
+11-21 20:49:25.070 15953 16095 I PlayCore: UID: [10235]  PID: [15953] StandardIntegrity : Waiting to bind to the service.
+11-21 20:49:25.070 15953 16095 I PlayCore: UID: [10235]  PID: [15953] StandardIntegrity : linkToDeath
+11-21 20:49:25.080 15953 16022 I A03BWV  : 1795294165080 shouldInterceptRequest https://i.ytimg.com/vi/zAOdomrYw8Q/sddefault.jpg?sqp=-oaymwEmCIAFEOAD8quKqQMa8AEB-AH-DoACuAiKAgwIABABGB8gTCh_MA8=&rs=AOn4CLDNzA-V8oQwDCTnRnw_mLSK76QFrA main=false
+11-21 20:49:25.086 15953 16074 I PlayCore: UID: [10235]  PID: [15953] OnRequestIntegrityTokenCallback : onRequestExpressIntegrityToken
+11-21 20:49:25.086 15953 16095 I PlayCore: UID: [10235]  PID: [15953] StandardIntegrity : Leaving the connection open for other ongoing calls.
+11-21 20:49:25.091 15953 16074 I PlayCore: UID: [10235]  PID: [15953] OnRequestIntegrityTokenCallback : onRequestExpressIntegrityToken
+11-21 20:49:25.092 15953 16095 I PlayCore: UID: [10235]  PID: [15953] StandardIntegrity : Unbind from service.
+11-21 20:49:25.102  8556  8556 I Finsky  : [2] Memory trim requested to level 40
+11-21 20:49:25.102  8556  8556 I Finsky  : [2] Flushing in-memory image cache
+11-21 20:49:25.112 15953 16023 I A03BWV  : 1795294165112 shouldInterceptRequest https://m.youtube.com/api/stats/qoe?fmt=243&afmt=251&cpn=SRPqzjhX5kwT77zp&el=detailpage&content_v=EnkWqUk2aA8&ns=yt&fexp=v1%2C100673025%2C1884%2C364%2C-76827062%2C58739%2C97694%2C27058999%2C31835%2C2821%2C124674%2C117689%2C9252%2C16509%2C23206%2C35404%2C45268%2C20030%2C15105%2C25059%2C4174%2C30446%2C18706%2C26008%2C13015%2C15427%2C661%2C33230%2C9330%2C170%2C73191%2C5133%2C38942%2C43494%2C59015%2C1168%2C8130%2C1538%2C28667%2C4116%2C57750%2C10304%2C3026%2C24249%2C2290%2C3844%2C18498%2C6470%2C22506%2C2402%2C111%2C9537%2C24935%2C18135%2C3%2C14786%2C4%2C12861%2C1946%2C6900%2C4594%2C9280%2C760%2C455%2C7749%2C2266%2C1929%2C2854%2C15703%2C7809%2C9786%2C2264%2C10055%2C1814%2C4270%2C451%2C3810%2C752%2C1626%2C441%2C4349%2C1446%2C1313%2C4340%2C12321%2C148%2C1928%2C3131%2C1480%2C774%2C94%2C4565%2C12952%2C516%2C1998%2C1386%2C437%2C134%2C380%2C10462%2C786%2C1292%2C9481%2C44%2C26%2C3752%2C9446%2C1181%2C1621%2C522%2C627%2C601%2C11655%2C6430%2C1915%2C4628%2C1959%2C1067%2C7541%2C76%2C6754%2C2718%2C19&cl=1024232073&adformat=15_2_4&seq=1&adcontext=CAESEwiHn_H395mYAxUJVx0JHSrFEm4gAygGMAE&docid=zAOdomrYw8Q&ei=1QMCa_ebIvmHvdIPuJLfgAk&event=streamingstats&plid=AAZgz38Bhx3QQMJy&sdetail=p%3Am.youtube.com%2Fresults&sourceid=r&cbrand=generic&cbr=Chrome%20Mobile%20Webview&cbrver=145.0.7632.218&c=MWEB&cver=2.20261120.00.00&cplayer=UNIPLAYER&cmodel=android%2017.0&cos=Android&cosver=17&cplatform=MOBILE&vps=0.000:N,0.018:B,0.027:N,0.343:N&cat=streaming,sabr&cmt=0.018:0.000,0.027:0.000,0.343:0.000&afs=0.318:251;CggKA2RyYxIBMQ::i:fl.-14;tl.-20.33;vg.-14.270000099999997;nm.2;sms.2:CAIoAQ&vfs=0.343:243:396::a:sms.2:CAIoAQ&view=0.343:411:231:2.625&bwm=0.343:214259:0.299&bwe=0.343:325371&bat=0.343:1:0&vis=0.343:0&conn=0.343:1&bh=0.343:0.000&qclc=ChBTUlBxempoWDVrd1Q3N3pwEAE main=false
+11-21 20:49:25.154 15953 16022 I A03BWV  : 1795294165154 shouldInterceptRequest https://yt3.ggpht.com/_Ry220XM8tA2jnWrcBv9oy1ZDcmQ9HO55I5syfHClTj69kRrXzVudog5iy65-FQ-4IWWBrGoEg=s48-c-k-c0x00ffffff-no-rj main=false
+11-21 20:49:25.167   574   601 W skia    : AGTM parsing failed flags.readFromStream(s) at 159
+11-21 20:49:25.226 15953 16029 D AudioSystem: onNewServiceWithAdapter: media.audio_flinger service obtained 0x79a84ac1bf50
+11-21 20:49:25.229 15953 16022 I A03BWV  : 1795294165229 shouldInterceptRequest https://tpc.googlesyndication.com/sodar/5k7CCto5.html main=false
+11-21 20:49:25.234   568 15019 D AudioFlinger: onStateChanged: pid:15953  uid:10235  state:unfrozen - no freeze activity
+11-21 20:49:25.238 15953 16029 D AudioSystem: getService: IAudioFlingerService retrieved: 0x79a6cac9fc60  IAudioFlinger cached: 0x79a84ac1bf50
+11-21 20:49:25.269   574   601 W skia    : AGTM parsing failed flags.readFromStream(s) at 159
+11-21 20:49:25.329 15953 16022 I A03BWV  : 1795294165329 shouldInterceptRequest https://pagead2.googlesyndication.com/bg/L8uTFvrF0r1nK0gwqXb4ldkGoza4Pgo55Cqe59VPgRk.js main=false
+11-21 20:49:25.333 15953 16029 I AAudio  : AAudioStreamBuilder_openStream() called ----------------------------------------
+11-21 20:49:25.333 15953 16029 I AudioStreamBuilder: rate   =  48000, channels  = 2, channelMask = 0x3, format   = 0x5, sharing = SH, dir = OUTPUT
+11-21 20:49:25.333 15953 16029 I AudioStreamBuilder: devices = AUDIO_PORT_HANDLE_NONE, sessionId = -1, perfMode = 11, callback: ON with frames = 4360
+11-21 20:49:25.333 15953 16029 I AudioStreamBuilder: usage  =      1, contentType = 0, inputPreset = 0, allowedCapturePolicy = 0
+11-21 20:49:25.333 15953 16029 I AudioStreamBuilder: privacy sensitive = false, opPackageName = (null), attributionTag = (null)
+11-21 20:49:25.334 15953 16029 D AudioStreamBuilder: build, global mmap policy is 0
+11-21 20:49:25.336 15953 16029 D AudioStreamBuilder: build, system mmap policy is 1
+11-21 20:49:25.336 15953 16029 D AudioStreamBuilder: build, final mmap policy is 1
+11-21 20:49:25.338 15953 16029 D AudioStreamBuilder: build, system mmap exclusive policy is 1
+11-21 20:49:25.338 15953 16029 D AudioStreamBuilder: build, final mmap exclusive policy is 1
+11-21 20:49:25.338 15953 16029 D AudioStreamBuilder: build() MMAP not used because AAUDIO_PERFORMANCE_MODE_LOW_LATENCY or AAUDIO_PERFORMANCE_MODE_POWER_SAVING_OFFLOADED not requested.
+11-21 20:49:25.341 15953 16029 D lter.spike.a03b: PlayerBase::PlayerBase()
+11-21 20:49:25.342 15953 16029 D AudioStreamTrack: open(), request notificationFrames = 0, frameCount = 0
+11-21 20:49:25.358   568 15069 W AudioFlinger: createTrack_l(): mismatch between requested flags (00000008) and output flags (00000002)
+11-21 20:49:25.360   568 15069 D AudioFlinger: Client defaulted notificationFrames to 2180 for frameCount 4360
+11-21 20:49:25.363   568 15069 I AF::AfPlaybackCommon: AfPlaybackCommon: creating track with enforcement level 1 reason TARGET_SDK shouldHarden 1
+11-21 20:49:25.370   574   601 W skia    : AGTM parsing failed flags.readFromStream(s) at 159
+11-21 20:49:25.381 15953 16042 I Surface : Creating surface for consumer unnamed-15953-3 with slotExpansion=1 for 64 slots
+11-21 20:49:25.385 15953 16022 I cr_MediaCodecBridge: create MediaCodec video decoder, mime video/x-vnd.on2.vp9, decoder name c2.goldfish.vp9.decoder, block_model=false
+11-21 20:49:25.399 15953 16022 I MediaCodec: Retry enabled for HDCP failure
+11-21 20:49:25.402 15953 16029 D AudioStreamTrack: open() flags changed from 0x00000008 to 0x00000000
+11-21 20:49:25.403 15953 16029 D AudioStreamTrack: open() perfMode changed from 11 to 10
+11-21 20:49:25.403 15953 16029 D AAudioStream: setState(s#1) from 0 to 2
+11-21 20:49:25.406 15953 16029 I AAudio  : AAudioStreamBuilder_openStream() got Legacy, devIds = [2], perf = NO, burst = 2180
+11-21 20:49:25.406 15953 16029 I AAudio  : AAudioStreamBuilder_openStream() returns 0 = AAUDIO_OK for s#1 ----------------
+11-21 20:49:25.414 15953 16029 D AAudio  : AAudioStream_requestStart(s#1) called --------------
+11-21 20:49:25.416 15953 16029 D AAudioStream: setState(s#1) from 2 to 3
+11-21 20:49:25.434   787  1065 E AppOps  : attributionTag  not declared in manifest of com.webfilter.spike.a03b
+11-21 20:49:25.437   787  1065 E AppOps  : attributionTag  not declared in manifest of com.webfilter.spike.a03b
+11-21 20:49:25.438 15953 15966 D AudioStreamLegacy: onAudioDeviceUpdate() devices 2 => 2
+11-21 20:49:25.438 15953 15966 D AudioStreamLegacy: onAudioDeviceUpdate, ignore device update as it is the same as the old one
+11-21 20:49:25.439 15953 16029 D AAudio  : AAudioStream_requestStart(s#1) returned 0 ---------
+11-21 20:49:25.442 15953 16208 D AAudioStream: setState(s#1) from 3 to 4
+11-21 20:49:25.474   574   601 W skia    : AGTM parsing failed flags.readFromStream(s) at 159
+11-21 20:49:25.505  1252  1252 I bluetooth: system/btif/avrcp/avrcp_service.cc:533 SendMediaUpdate: track_changed=true :  play_state=true :  queue=true
+11-21 20:49:25.513  1252  1252 E MediaControlProfile: onCurrentPlayerStateUpdated: base actions not supported, player actions= 0, expected at least= 7f
+11-21 20:49:25.528  1252  1252 W MediaControlGattService: Feature PLAYBACK_SPEED support: true
+11-21 20:49:25.529  1252  1252 W MediaControlGattService: Feature PLAYBACK_SPEED support: true
+11-21 20:49:25.531  1252  1252 W MediaControlGattService: Feature PLAYBACK_SPEED support: true
+11-21 20:49:25.531  1252  1252 W MediaControlGattService: Feature TRACK_POSITION support: true
+11-21 20:49:25.534  1252  1252 W MediaControlGattService: Feature TRACK_POSITION_NOTIFY support: true
+11-21 20:49:25.534  1252  1252 W MediaControlGattService: Feature MEDIA_STATE support: true
+11-21 20:49:25.534  1252  1252 W MediaControlGattService: Feature MEDIA_STATE support: true
+11-21 20:49:25.537   568   614 D AudioFlinger: mixer(0x76f479695790) throttle end: throttle time(29)
+11-21 20:49:25.543 15953 16022 I ApexCodecsLazy: ApexCodecs loaded
+11-21 20:49:25.546 15953 16022 I Codec2Client: Available Codec2 services: "default" "software" "__ApexCodecs__"
+11-21 20:49:25.553  1252  1252 W MediaControlGattService: Feature MEDIA_CONTROL_POINT_OPCODES_SUPPORTED support: true
+11-21 20:49:25.553  1252  1252 W MediaControlGattService: Feature TRACK_TITLE support: true
+11-21 20:49:25.553  1252  1252 W MediaControlGattService: Feature TRACK_TITLE support: true
+11-21 20:49:25.553  1252  1252 W MediaControlGattService: Feature TRACK_TITLE_NOTIFY support: true
+11-21 20:49:25.554  1252  1252 W MediaControlGattService: Feature TRACK_DURATION support: true
+11-21 20:49:25.554  1252  1252 W MediaControlGattService: Feature TRACK_DURATION support: true
+11-21 20:49:25.554  1252  1252 W MediaControlGattService: Feature TRACK_DURATION_NOTIFY support: true
+11-21 20:49:25.555  1252  1252 W MediaControlGattService: Feature MEDIA_STATE support: true
+11-21 20:49:25.556  1252  1252 W MediaControlGattService: Feature MEDIA_STATE support: true
+11-21 20:49:25.562  1252  1252 W MediaControlGattService: Feature MEDIA_STATE support: true
+11-21 20:49:25.562  1252  1252 W MediaControlGattService: Feature SEEKING_SPEED support: true
+11-21 20:49:25.562  1252  1252 W MediaControlGattService: Feature SEEKING_SPEED support: true
+11-21 20:49:25.562  1252  1252 W MediaControlGattService: Feature SEEKING_SPEED support: true
+11-21 20:49:25.562  1252  1252 W MediaControlGattService: Feature TRACK_CHANGED support: true
+11-21 20:49:25.564  1252  1252 W MediaControlProfile: MCS service state fields left unhandled: 
+11-21 20:49:25.566  1252  1252 W MediaControlProfile:    > PLAYER_NAME
+11-21 20:49:25.566  1252  1252 W MediaControlProfile:    > PLAYING_ORDER_SUPPORTED
+11-21 20:49:25.575 15953 16022 W lter.spike.a03b: Failed to query component store for system resources: 6
+11-21 20:49:25.581   574   601 W skia    : AGTM parsing failed flags.readFromStream(s) at 159
+11-21 20:49:25.594 15953 16212 D CCodec  : allocate(c2.goldfish.vp9.decoder)
+11-21 20:49:25.598 15953 16212 I CCodec  : setting up 'default' as default (vendor) store
+11-21 20:49:25.617 15953 16023 I A03BWV  : 1795294165617 shouldInterceptRequest https://tpc.googlesyndication.com/generate_204?ro21jw main=false
+11-21 20:49:25.630 15953 16212 I CCodec  : Created component [c2.goldfish.vp9.decoder] for [c2.goldfish.vp9.decoder]
+11-21 20:49:25.630 15953 16212 D CCodecConfig: read media type: video/x-vnd.on2.vp9
+11-21 20:49:25.632 15953 16212 D ReflectedParamUpdater: ignored struct field coded.color-format.locations
+11-21 20:49:25.633 15953 16212 D ReflectedParamUpdater: extent() != 1 for single value type: algo.buffers.max-count.values
+11-21 20:49:25.633 15953 16212 D ReflectedParamUpdater: extent() != 1 for single value type: output.subscribed-indices.values
+11-21 20:49:25.633 15953 16212 D ReflectedParamUpdater: extent() != 1 for single value type: input.buffers.allocator-ids.values
+11-21 20:49:25.633 15953 16212 D ReflectedParamUpdater: extent() != 1 for single value type: output.buffers.allocator-ids.values
+11-21 20:49:25.633 15953 16212 D ReflectedParamUpdater: extent() != 1 for single value type: algo.buffers.allocator-ids.values
+11-21 20:49:25.634 15953 16212 D ReflectedParamUpdater: extent() != 1 for single value type: output.buffers.pool-ids.values
+11-21 20:49:25.634 15953 16212 D ReflectedParamUpdater: extent() != 1 for single value type: algo.buffers.pool-ids.values
+11-21 20:49:25.634 15953 16212 D CCodecConfig: ignoring local param raw.size (0xd2001800) as it is already supported
+11-21 20:49:25.634 15953 16212 D CCodecConfig: ignoring local param default.color (0x5200180b) as it is already supported
+11-21 20:49:25.634 15953 16212 D ReflectedParamUpdater: ignored struct field raw.hdr-static-info.mastering
+11-21 20:49:25.637 15953 16212 I CCodecConfig: query failed after returning 14 values (BAD_INDEX)
+11-21 20:49:25.637 15953 16212 D CCodecConfig: c2 config diff is Dict {
+11-21 20:49:25.637 15953 16212 D CCodecConfig:   c2::u32 coded.pl.level = 28680
+11-21 20:49:25.637 15953 16212 D CCodecConfig:   c2::u32 coded.pl.profile = 28672
+11-21 20:49:25.637 15953 16212 D CCodecConfig:   c2::u32 coded.vui.color.matrix = 0
+11-21 20:49:25.637 15953 16212 D CCodecConfig:   c2::u32 coded.vui.color.primaries = 0
+11-21 20:49:25.637 15953 16212 D CCodecConfig:   c2::u32 coded.vui.color.range = 2
+11-21 20:49:25.637 15953 16212 D CCodecConfig:   c2::u32 coded.vui.color.transfer = 0
+11-21 20:49:25.637 15953 16212 D CCodecConfig:   c2::u32 default.color.matrix = 0
+11-21 20:49:25.637 15953 16212 D CCodecConfig:   c2::u32 default.color.primaries = 0
+11-21 20:49:25.637 15953 16212 D CCodecConfig:   c2::u32 default.color.range = 0
+11-21 20:49:25.637 15953 16212 D CCodecConfig:   c2::u32 default.color.transfer = 0
+11-21 20:49:25.637 15953 16212 D CCodecConfig:   c2::u32 input.buffers.max-size.value = 6291456
+11-21 20:49:25.637 15953 16212 D CCodecConfig:   c2::u32 input.delay.value = 0
+11-21 20:49:25.637 15953 16212 D CCodecConfig:   Buffer input.hdr10-plus-info.value = {
+11-21 20:49:25.637 15953 16212 D CCodecConfig:   }
+11-21 20:49:25.637 15953 16212 D CCodecConfig:   string input.media-type.value = "video/x-vnd.on2.vp9"
+11-21 20:49:25.637 15953 16212 D CCodecConfig:   c2::u32 output.delay.value = 8
+11-21 20:49:25.637 15953 16212 D CCodecConfig:   Buffer output.hdr10-plus-info.value = {
+11-21 20:49:25.637 15953 16212 D CCodecConfig:   }
+11-21 20:49:25.637 15953 16212 D CCodecConfig:   string output.media-type.value = "video/raw"
+11-21 20:49:25.637 15953 16212 D CCodecConfig:   c2::u32 raw.color.matrix = 0
+11-21 20:49:25.637 15953 16212 D CCodecConfig:   c2::u32 raw.color.primaries = 0
+11-21 20:49:25.637 15953 16212 D CCodecConfig:   c2::u32 raw.color.range = 2
+11-21 20:49:25.637 15953 16212 D CCodecConfig:   c2::u32 raw.color.transfer = 0
+11-21 20:49:25.637 15953 16212 D CCodecConfig:   c2::u32 raw.max-size.height = 240
+11-21 20:49:25.637 15953 16212 D CCodecConfig:   c2::u32 raw.max-size.width = 320
+11-21 20:49:25.637 15953 16212 D CCodecConfig:   c2::u32 raw.pixel-format.value = 35
+11-21 20:49:25.637 15953 16212 D CCodecConfig:   c2::i32 raw.rotation.flip = 0
+11-21 20:49:25.637 15953 16212 D CCodecConfig:   c2::i32 raw.rotation.value = 0
+11-21 20:49:25.637 15953 16212 D CCodecConfig:   c2::u32 raw.sar.height
+11-21 20:49:25.638 15953 16042 E GFXSTREAM: [GLClientState.cpp(298)] set vao to self, no-op (1)
+11-21 20:49:25.638 15953 16212 W ColorUtils: expected specified color aspects (2:0:0:0)
+11-21 20:49:25.644 15953 16210 I MediaCodec: MediaCodec will operate in async mode
+11-21 20:49:25.645 15953 16022 I Surface : Creating surface for consumer ImageReader-1x1f22u256m2-15953-0 with slotExpansion=1 for 64 slots
+11-21 20:49:25.646 15953 16022 I MediaCodec: media_quality service unavailable, skipping updatePictureProfile
+11-21 20:49:25.646 15953 16210 D SurfaceUtils: connecting to surface 0x79a74ac3e2a0, reason connectToSurface
+11-21 20:49:25.646 15953 16210 I MediaCodec: [c2.goldfish.vp9.decoder] setting surface generation to 16335873
+11-21 20:49:25.646 15953 16210 D SurfaceUtils: disconnecting from surface 0x79a74ac3e2a0, reason connectToSurface(reconnect)
+11-21 20:49:25.646 15953 16210 D SurfaceUtils: connecting to surface 0x79a74ac3e290, reason connectToSurface(reconnect-with-listener)
+11-21 20:49:25.647 15953 16212 D CCodec  : [c2.goldfish.vp9.decoder] buffers are bound to CCodec for this session
+11-21 20:49:25.647 15953 16212 D CCodecConfig: no c2 equivalents for native-window
+11-21 20:49:25.648 15953 16212 D CCodecConfig: no c2 equivalents for native-window-generation
+11-21 20:49:25.648 15953 16212 D CCodecConfig: no c2 equivalents for flags
+11-21 20:49:25.648 15953 16212 D CCodecConfig: config failed => CORRUPTED
+11-21 20:49:25.648 15953 16212 D CCodecConfig: c2 config diff is   c2::u32 raw.max-size.height = 360
+11-21 20:49:25.648 15953 16212 D CCodecConfig:   c2::u32 raw.max-size.width = 640
+11-21 20:49:25.648 15953 16212 D CCodecConfig:   c2::u32 raw.size.height = 360
+11-21 20:49:25.648 15953 16212 D CCodecConfig:   c2::u32 raw.size.width = 640
+11-21 20:49:25.648 15953 16212 D CCodec  : client requested max input size 86400, which is smaller than what component recommended (6291456); overriding with component recommendation.
+11-21 20:49:25.648 15953 16212 W CCodec  : This behavior is subject to change. It is recommended that app developers double check whether the requested max input size is in reasonable range.
+11-21 20:49:25.648 15953 16212 D CCodec  : encoding statistics level = 0
+11-21 20:49:25.648 15953 16212 D CCodec  : setup formats input: AMessage(what = 0x00000000) = {
+11-21 20:49:25.648 15953 16212 D CCodec  :   int32_t height = 360
+11-21 20:49:25.648 15953 16212 D CCodec  :   int32_t level = 256
+11-21 20:49:25.648 15953 16212 D CCodec  :   int32_t max-input-size = 6291456
+11-21 20:49:25.648 15953 16212 D CCodec  :   string mime = "video/x-vnd.on2.vp9"
+11-21 20:49:25.648 15953 16212 D CCodec  :   int32_t profile = 1
+11-21 20:49:25.648 15953 16212 D CCodec  :   int32_t width = 640
+11-21 20:49:25.648 15953 16212 D CCodec  :   Rect crop(0, 0, 639, 359)
+11-21 20:49:25.648 15953 16212 D CCodec  : }
+11-21 20:49:25.648 15953 16212 D CCodec  : setup formats output: AMessage(what = 0x00000000) = {
+11-21 20:49:25.648 15953 16212 D CCodec  :   int32_t android._color-format = 2135033992
+11-21 20:49:25.648 15953 16212 D CCodec  :   int32_t android._video-scaling = 1
+11-21 20:49:25.648 15953 16212 D CCodec  :   int32_t rotation-degrees = 0
+11-21 20:49:25.648 15953 16212 D CCodec  :   int32_t color-standard = 4
+11-21 20:49:25.648 15953 16212 D CCodec  :   int32_t color-range = 2
+11-21 20:49:25.648 15953 16212 D CCodec  :   int32_t color-transfer = 3
+11-21 20:49:25.648 15953 16212 D CCodec  :   int32_t sar-height = 1
+11-21 20:49:25.648 15953 16212 D CCodec  :   int32_t sar-width = 1
+11-21 20:49:25.648 15953 16212 D CCodec  :   Rect crop(0, 0, 639, 359)
+11-21 20:49:25.648 15953 16212 D CCodec  :   int32_t width = 640
+11-21 20:49:25.648 15953 16212 D CCodec  :   Buffer hdr10-plus-info = {
+11-21 20:49:25.648 15953 16212 D CCodec  :   }
+11-21 20:49:25.648 15953 16212 D CCodec  :   int32_t height = 360
+11-21 20:49:25.648 15953 16212 D CCodec  :   int32_t max-height = 360
+11-21 20:49:25.648 15953 16212 D CCodec  :   int32_t max-width = 640
+11-21 20:49:25.648 15953 16212 D CCodec  :   string mime = "video/raw"
+11-21 20:49:25.648 15953 16212 D CCodec  :   int32_t android._dataspace = 259
+11-21 20:49:25.648 15953 16212 D CCodec  :   int32_t color-format = 2130708361
+11-21 20:49:25.648 15953 16212 D CCodec  : }
+11-21 20:49:25.648 15953 16212 I CCodecConfig: query failed after returning 14 values (BAD_INDEX)
+11-21 20:49:25.649 15953 16212 E lter.spike.a03b: Failed to query component interface for required system resources: 6
+11-21 20:49:25.652 15953 16022 D MediaCodec: keep callback message for reclaim
+11-21 20:49:25.652   537 16216 I android.hardware.media.c2-service-goldfish: calling init GoldfishVPX
+11-21 20:49:25.655 15953 16212 D C2Store : Using DMABUF Heaps
+11-21 20:49:25.657 15953 16212 D CCodecBufferChannel: [c2.goldfish.vp9.decoder#742] Created input block pool with allocatorID 16 => poolID 17 - OK (0)
+11-21 20:49:25.659 15953 16212 D CCodecBufferChannel: [c2.goldfish.vp9.decoder#742] Query output surface allocator returned 0 params => BAD_INDEX (6)
+11-21 20:49:25.659 15953 16212 D Codec2Client: GraphicBufferAllocator created
+11-21 20:49:25.664 15953 16212 I CCodecBufferChannel: [c2.goldfish.vp9.decoder#742] Created output block pool with allocatorID 18 => poolID 17 - OK
+11-21 20:49:25.665 15953 16212 D CCodecBufferChannel: [c2.goldfish.vp9.decoder#742] Configured output block pool ids 17 => OK
+11-21 20:49:25.666 15953 16212 D Codec2Client: setOutputSurface -- failed to set consumer usage (6/BAD_INDEX)
+11-21 20:49:25.666 15953 16212 D LegacyGraphicsTracker: new surface in configuration: maxDequeueRequested(0), maxDequeueCommitted(3)
+11-21 20:49:25.666 15953 16212 D LegacyGraphicsTracker: new surface configured with id:68517613273091 gen:16335873 maxDequeue:3
+11-21 20:49:25.666 15953 16212 D LegacyGraphicsTracker: maxDequeueCount committed to IGBP: 12
+11-21 20:49:25.666 15953 16212 D LegacyGraphicsTracker: Cache size 0 -> 0: maybe_cleared(0), dequeued(0)
+11-21 20:49:25.666 15953 16212 D LegacyGraphicsTracker: maxDqueueCount change 3 -> 12: pending: 0
+11-21 20:49:25.666 15953 16212 D Codec2Client: setOutputSurface -- generation=16335873 consumer usage=0x900
+11-21 20:49:25.691   672  3246 W ResourceManagerServiceUtils: Ignoring request to add new resource entry with value <= 0
+11-21 20:49:25.691 15953 16023 I A03BWV  : 1795294165691 shouldInterceptRequest https://pagead2.googlesyndication.com/pagead/gen_204?id=sodar&v=32&t=2&li=v_h.3.0.0.0&bgai=BqddZ1QMCa8fgDYmu9fgPqorL8AYAAAAAOAE&bg=!bG-lbzTNAAbNhJMf7YQ7AEABdsCQk93mKkn0hnr4UTe7YGlkR1SdBK-7FEtqLHQZqIq3APNw5zh6JgZrKt5u6c-tOb3x2MRnU36097X9_FyZAgAAAPVSAAAABWgBB34ALt4CtbGK6tU0M2DW90yfLJ3r_W7OExKXuu2Bsb_rwyLaI3ZFHVqtNOueU5zDoDyZAlBGM0Bw5j6U3GyMF3K84YHhEPiShz6gnIwlg7euY01KOgWynQmovwWRX80CiOEcyqKdXPAduArzWwPZcBYAYIUQsogC0-qvF6yn1vRv3zsVwYTHUpzBVb4hDt_9Nr8e6n5BhYNU3lB_kuHx-fgikOXsYZJpfWhBqaQS69RsFruaPtwGuRplSYXnjN4W97y5HrC8_aFSpc44sq0JAEaji_3HlIffclUDGmw1ts5BihFhx9OmxQk9P8lCQcMjRKc8sXqMuPsqXCHBC7MIfqPLgxJq54DaDHN5ChAewXgQEu723cuA4NwYSYb4NBev2Y4v2ClIRU6ujZ_ujmR94lD_2Pu-y-NAz2SFsEuXS2VzUeiLIcTmphvfQ_-O4fuG9T1kAGU46L9konaK29gzhaM2asT2SJSBzgbJlljebSXxEgvpPdYC9rouMAyYUGQGqJNWwvxJOqssXP8qMR1u7LlHuQI4lD3O5fOSvkw7SkMcrHyWzrp7nxPrCIElS1l-d8t-bQZ9itwOt4Gf2ByJl9KaoiuCBg90vi-jfdf2DRzacCcLlD-LmESSCs4YV84cPpvdHkyq0tp_ZwjFpplvoTEVbq9UtC8gZiVgEk2e8hHo-PJqvZRW72zkv98etvZQBcbOjN9RLnqfclGi78qTmEO01RKCCaY2DwTUG2CbK76lgjx-TN-w6Fc7ltS64CZW8TT1UbrCPB3okq4Moc3TJlDC-q422qdQubbCSa8x9WAWEFMR67WtrPMhKj8XDeJzMavkuXkdXxQVSihs2t8UIuGzSLO8 main=false
+11-21 20:49:25.702 15953 16210 W lter.spike.a03b: AIBinder_linkToDeath is being called with a non-null cookie and no onUnlink callback set. Use AIBinder_DeathRecipient_setOnUnlinked to manage the lifetime of the cookie. This will become an abort.
+11-21 20:49:25.704   537  1679 D C2Store : Using DMABUF Heaps
+11-21 20:49:25.711   537 16216 D SimpleC2Component: Using output block pool with poolID 17 => got 17 - 0
+11-21 20:49:25.711   537 16216 I android.hardware.media.c2-service-goldfish: created decoder context w 640 h 360
+11-21 20:49:25.712   537 16216 I android.hardware.media.c2-service-goldfish: successfully allocated 33558528 bytes in goldfish_address_block
+11-21 20:49:25.712   537 16216 I android.hardware.media.c2-service-goldfish: guest address is 0x78cdc6fe7000
+11-21 20:49:25.713   537 16216 I android.hardware.media.c2-service-goldfish: successfully pinged host to allocate memory
+11-21 20:49:25.770   537 16216 W libc    : Access denied finding property "mesa.virtgpu.kumquat"
+11-21 20:49:25.766   537   537 W ish.vp9.decoder: type=1400 audit(0.0:182): avc:  denied  { read } for  name="u:object_r:default_prop:s0" dev="tmpfs" ino=155 scontext=u:r:mediacodec:s0 tcontext=u:object_r:default_prop:s0 tclass=file permissive=0
+11-21 20:49:25.807 15953 16212 D CCodecConfig: c2 config diff is   c2::u32 raw.crop.height = 360
+11-21 20:49:25.807 15953 16212 D CCodecConfig:   c2::u32 raw.crop.left = 0
+11-21 20:49:25.807 15953 16212 D CCodecConfig:   c2::u32 raw.crop.top = 0
+11-21 20:49:25.807 15953 16212 D CCodecConfig:   c2::u32 raw.crop.width = 640
+11-21 20:49:25.963 15953 16022 I A03BWV  : 1795294165963 shouldInterceptRequest https://www.gstatic.com/youtube/img/lottie/animated_like_icon/animated_like_icon_light_v5.json main=false
+11-21 20:49:26.022 15953 16022 I A03BWV  : 1795294166022 shouldInterceptRequest https://www.gstatic.com/youtube/img/lottie/animated_like_icon/animated_like_icon_light_v5.json main=false
+11-21 20:49:26.056   574   601 W skia    : AGTM parsing failed flags.readFromStream(s) at 159
+11-21 20:49:26.158   574   601 W skia    : AGTM parsing failed flags.readFromStream(s) at 159
+11-21 20:49:27.108   787   979 I HalDevMgr: bestIfaceCreationProposal is null, requestIface=STA, existingIface=[name=wlan0 type=STA]
+11-21 20:49:27.108   787  1019 I AdbWifiNetworkMonitor: Wi-Fi network available
+11-21 20:49:27.108   787  1019 I AdbWifiNetworkMonitor: Received the same Wi-Fi SSID. Ignoring.
+11-21 20:49:27.108   787   993 W libbinder.IPCThreadState: Sending oneway calls to frozen process.
+11-21 20:49:27.108   787   993 W libbinder.IPCThreadState: Sending oneway calls to frozen process.
+11-21 20:49:27.112  9128  9321 I NullBinder: NullBinder for android.net.action.RECOMMEND_NETWORKS triggering remote TransactionTooLargeException due to Service without Chimera impl, calling uid: 1000, calling pid: 0
+11-21 20:49:27.113  9128  9321 W libbinder.Binder: Large reply transaction of 1056768 bytes, interface descriptor , function: UNKNOWN_FUNCTION_NAME, code: 1, flags: 17
+11-21 20:49:27.114   787   993 D ConnectivityService: NetReassign [no changes] [c 1] [a 0] [i 0]
+11-21 20:49:27.114  9128 10657 I NearbyMediums: Wifi changed new SSID: "AndroidWifi"
+11-21 20:49:27.114  9128 10657 I NearbyMediums: WifiLanConnectivityInfo is not changed, skip notify.
+11-21 20:49:27.613  9128 10657 I NearbySharing: Network state changed: NetworkState(isRestricted=false, isOnline=true, isCongested=false, isMetered=false, isWifiConnected=true)
+11-21 20:49:29.044 15953 15953 I chromium: [INFO:CONSOLE:0] "The resource https://i.ytimg.com/generate_204 was preloaded using link preload but not used within a few seconds from the window's load event. Please make sure it has an appropriate `as` value and it is preloaded intentionally.", source: https://m.youtube.com/watch?v=EnkWqUk2aA8&pp=ygUGbmF0dXJl (0)
+11-21 20:49:30.110   787   979 I HalDevMgr: bestIfaceCreationProposal is null, requestIface=STA, existingIface=[name=wlan0 type=STA]
+11-21 20:49:30.119  1189  1377 D IpClient/wlan0: interfaceLinkStateChanged: ifindex 16 up
+11-21 20:49:30.133  1189  1377 D IpClient/wlan0: interfaceLinkStateChanged: ifindex 16 up
+11-21 20:49:30.664 15953 16215 D AidlBufferPool: bufferpool2 0x79a81ac4fc48 : 4(25165824 size) total buffers - 4(25165824 size) used buffers - 11/15 (recycle/alloc) - 4/22 (fetch/transfer)
+11-21 20:49:30.664 15953 16215 D AidlBufferPoolAcc: evictor expired: 1, evicted: 1
+11-21 20:49:31.885 15953 16022 I A03BWV  : 1795294171885 shouldInterceptRequest https://googleads.g.doubleclick.net/pagead/id main=false
+11-21 20:49:32.059 15953 16022 I A03BWV  : 1795294172059 shouldInterceptRequest https://m.youtube.com/youtubei/v1/log_event?alt=json main=false
+11-21 20:49:32.894  3460  3586 D SatelliteController: isInCarrierRoamingNbIotNtn: satellite is disabled
+11-21 20:49:32.894  3460  3586 D SatelliteController: getCarrierRoamingNtnConnectType: Checking connect type from PLMN config for subId: 1
+11-21 20:49:32.894  3460  3586 D TelephonyConfigUpdateInstallReceiver: getConfigParser: domain=satellite
+11-21 20:49:32.894  3460  3586 V SatelliteController: satelliteConfigParser is not ready
+11-21 20:49:32.894  3460  3586 D SatelliteController: isSatelliteAttachSupportedViaConfigupdater: return null (satelliteConfig is null)
+11-21 20:49:32.896  3460  3586 D SatelliteController: getSatellitePerPlmnConfiguration: invalid subId or not supported via carrier.
+11-21 20:49:32.896  3460  3586 D SatelliteController: getCarrierRoamingNtnConnectType: config: null
+11-21 20:49:32.896  3460  3586 D TelephonyConfigUpdateInstallReceiver: getConfigParser: domain=satellite
+11-21 20:49:32.896  3460  3586 V SatelliteController: satelliteConfigParser is not ready
+11-21 20:49:32.896  3460  3586 D SatelliteController: getCarrierRoamingNtnConnectTypeViaConfigUpdater: return null (satelliteConfig is null)
+11-21 20:49:32.896  3460  3586 D SatelliteController: getCarrierRoamingNtnConnectType: Falling back to global carrier config connect type: 0
+11-21 20:49:32.897  3460  3586 D TelephonyConfigUpdateInstallReceiver: getConfigParser: domain=satellite
+11-21 20:49:32.897  3460  3586 V SatelliteController: satelliteConfigParser is not ready
+11-21 20:49:32.897  3460  3586 D SatelliteController: isSatelliteAttachSupportedViaConfigupdater: return null (satelliteConfig is null)
+11-21 20:49:32.897  3460  3586 D SatelliteController: getCarrierRoamingNtnConnectType: Checking connect type from PLMN config for subId: 1
+11-21 20:49:32.897  3460  3586 D TelephonyConfigUpdateInstallReceiver: getConfigParser: domain=satellite
+11-21 20:49:32.897  3460  3586 V SatelliteController: satelliteConfigParser is not ready
+11-21 20:49:32.897  3460  3586 D SatelliteController: isSatelliteAttachSupportedViaConfigupdater: return null (satelliteConfig is null)
+11-21 20:49:32.897  3460  3586 D SatelliteController: getSatellitePerPlmnConfiguration: invalid subId or not supported via carrier.
+11-21 20:49:32.897  3460  3586 D SatelliteController: getCarrierRoamingNtnConnectType: config: null
+11-21 20:49:32.897  3460  3586 D TelephonyConfigUpdateInstallReceiver: getConfigParser: domain=satellite
+11-21 20:49:32.897  3460  3586 V SatelliteController: satelliteConfigParser is not ready
+11-21 20:49:32.897  3460  3586 D SatelliteController: getCarrierRoamingNtnConnectTypeViaConfigUpdater: return null (satelliteConfig is null)
+11-21 20:49:32.897  3460  3586 D SatelliteController: getCarrierRoamingNtnConnectType: Falling back to global carrier config connect type: 0
+11-21 20:49:32.897  3460  3586 D TelephonyConfigUpdateInstallReceiver: getConfigParser: domain=satellite
+11-21 20:49:32.897  3460  3586 V SatelliteController: satelliteConfigParser is not ready
+11-21 20:49:32.897  3460  3586 D SatelliteController: isSatelliteAttachSupportedViaConfigupdater: return null (satelliteConfig is null)
+11-21 20:49:33.118   787  1019 I AdbWifiNetworkMonitor: Wi-Fi network available
+11-21 20:49:33.118   787   979 I HalDevMgr: bestIfaceCreationProposal is null, requestIface=STA, existingIface=[name=wlan0 type=STA]
+11-21 20:49:33.118   787  1019 I AdbWifiNetworkMonitor: Received the same Wi-Fi SSID. Ignoring.
+11-21 20:49:33.123   787   993 W libbinder.IPCThreadState: Sending oneway calls to frozen process.
+11-21 20:49:33.125   787   993 W libbinder.IPCThreadState: Sending oneway calls to frozen process.
+11-21 20:49:33.127  9128  9321 I NullBinder: NullBinder for android.net.action.RECOMMEND_NETWORKS triggering remote TransactionTooLargeException due to Service without Chimera impl, calling uid: 1000, calling pid: 0
+11-21 20:49:33.127  9128  9321 W libbinder.Binder: Large reply transaction of 1056768 bytes, interface descriptor , function: UNKNOWN_FUNCTION_NAME, code: 1, flags: 17
+11-21 20:49:33.142   787   993 D ConnectivityService: NetReassign [no changes] [c 0] [a 1] [i 2]
+11-21 20:49:33.147  9128 10657 I NearbyMediums: Wifi changed new SSID: "AndroidWifi"
+11-21 20:49:33.147  9128 10657 I NearbyMediums: WifiLanConnectivityInfo is not changed, skip notify.
+11-21 20:49:33.642  9128 10657 I NearbySharing: Network state changed: NetworkState(isRestricted=false, isOnline=true, isCongested=false, isMetered=false, isWifiConnected=true)
+11-21 20:49:33.700   586   586 I adbd    : adbd service requested 'shell,v2,TERM=xterm-256color,raw:dumpsys package com.google.android.gms'
+11-21 20:49:33.807  1813  8495 I artd    : GetBestInfo: odex next to the dex file (/data/app/~~CRYGJvAcDUnAWFaIi24hyQ==/com.google.android.gms-uy7Xq0-qbFc3ye8Av2NScg==/oat/x86_64/base.odex) is kOatUpToDate with filter 'speed-profile' executable 'false'
+11-21 20:49:33.808  1813  8495 I artd    : GetBestInfo: dm (/data/app/~~CRYGJvAcDUnAWFaIi24hyQ==/com.google.android.gms-uy7Xq0-qbFc3ye8Av2NScg==/split_AdsDynamite_installtime.dm) is kOatUpToDate with filter 'verify' executable 'false'
+11-21 20:49:33.810  1813  8495 I artd    : GetBestInfo: odex next to the dex file (/data/app/~~CRYGJvAcDUnAWFaIi24hyQ==/com.google.android.gms-uy7Xq0-qbFc3ye8Av2NScg==/oat/x86_64/split_CronetDynamite_installtime.odex) is kOatUpToDate with filter 'speed-profile' executable 'false'
+11-21 20:49:33.811  1813  8495 I artd    : GetBestInfo: dm (/data/app/~~CRYGJvAcDUnAWFaIi24hyQ==/com.google.android.gms-uy7Xq0-qbFc3ye8Av2NScg==/split_DynamiteLoader_installtime.dm) is kOatUpToDate with filter 'verify' executable 'false'
+11-21 20:49:33.813  1813  8495 I artd    : GetBestInfo: dm (/data/app/~~CRYGJvAcDUnAWFaIi24hyQ==/com.google.android.gms-uy7Xq0-qbFc3ye8Av2NScg==/split_DynamiteModulesA_installtime.dm) is kOatUpToDate with filter 'verify' executable 'false'
+11-21 20:49:33.817  1813  8495 I artd    : GetBestInfo: dm (/data/app/~~CRYGJvAcDUnAWFaIi24hyQ==/com.google.android.gms-uy7Xq0-qbFc3ye8Av2NScg==/split_DynamiteModulesC_installtime.dm) is kOatUpToDate with filter 'verify' executable 'false'
+11-21 20:49:33.818  1813  8495 I artd    : GetBestInfo: dm (/data/app/~~CRYGJvAcDUnAWFaIi24hyQ==/com.google.android.gms-uy7Xq0-qbFc3ye8Av2NScg==/split_GoogleCertificates_installtime.dm) is kOatUpToDate with filter 'verify' executable 'false'
+11-21 20:49:33.820  1813  8495 I artd    : GetBestInfo: dm (/data/app/~~CRYGJvAcDUnAWFaIi24hyQ==/com.google.android.gms-uy7Xq0-qbFc3ye8Av2NScg==/split_MapsDynamite_installtime.dm) is kOatUpToDate with filter 'verify' executable 'false'
+11-21 20:49:33.821  1813  8495 I artd    : GetBestInfo: dm (/data/app/~~CRYGJvAcDUnAWFaIi24hyQ==/com.google.android.gms-uy7Xq0-qbFc3ye8Av2NScg==/split_MeasurementDynamite_installtime.dm) is kOatUpToDate with filter 'verify' executable 'false'
+11-21 20:49:33.821  1813  8495 I artd    : GetBestInfo: /data/user_de/0/com.google.android.gms/app_chimera/m/00000008/GoogleCertificates.apk has no usable artifacts
+11-21 20:49:33.823  1813  8495 I artd    : GetBestInfo: /data/user_de/0/com.google.android.gms/app_chimera/m/00000010/dl-TfliteDynamiteDynamite.integ_264010405100800.apk has no usable artifacts
+11-21 20:49:33.824  1813  8495 I artd    : GetBestInfo: /data/user_de/0/com.google.android.gms/app_chimera/m/00000001/CronetDynamite.apk has no usable artifacts
+11-21 20:49:33.824  1813  8495 I artd    : GetBestInfo: /data/user_de/0/com.google.android.gms/app_chimera/m/00000002/DynamiteLoader.apk has no usable artifacts
+11-21 20:49:33.827  1813  8495 I artd    : GetBestInfo: /data/user_de/0/com.google.android.gms/app_chimera/m/00000012/dl-IdentityCredentialsPlatform.optional_264531100800.apk has no usable artifacts
+11-21 20:49:33.829  1813  8495 I artd    : GetBestInfo: /data/user_de/0/com.google.android.gms/app_chimera/m/0000000d/dl-IdentityCredentialsPlatform.optional_261136100800.apk has no usable artifacts
+11-21 20:49:33.830  1813  8495 I artd    : GetBestInfo: /data/user_de/0/com.google.android.gms/app_chimera/m/0000000a/MeasurementDynamite.apk has no usable artifacts
+11-21 20:49:33.831  1813  8495 I artd    : GetBestInfo: /data/user_de/0/com.google.android.gms/app_chimera/m/00000015/dl-MlkitBarcodeUi.optional_264531100800.apk has no usable artifacts
+11-21 20:49:33.833  1813  8495 I artd    : GetBestInfo: vdex next to the dex file (/data/user/0/com.google.android.gms/app_dg_cache/BCD37DA6707F74E3F78AB9C0F65BC34E65B1F2E1/oat/x86_64/the.vdex) is kOatUpToDate with filter 'verify' executable 'false'
+11-21 20:49:33.835  1813  8495 I artd    : GetBestInfo: /data/user_de/0/com.google.android.gms/app_chimera/m/0000000c/dl-MlkitBarcodeUi.optional_261136100800.apk has no usable artifacts
+11-21 20:49:33.836  1813  8495 I artd    : GetBestInfo: /data/user_de/0/com.google.android.gms/app_chimera/m/00000013/dl-Appsearch.optional_264531100800.apk has no usable artifacts
+11-21 20:49:34.264 15953 16022 I A03BWV  : 1795294174264 shouldInterceptRequest https://m.youtube.com/api/stats/qoe?cpn=ZPeP1nPTk6v_fejE&el=detailpage&ns=yt&fexp=v1%2C100673025%2C1884%2C364%2C-76827062%2C58739%2C97694%2C27058999%2C31835%2C2821%2C124674%2C117689%2C9252%2C16509%2C23206%2C35404%2C45268%2C20030%2C15105%2C25059%2C4174%2C30446%2C18706%2C26008%2C13015%2C15427%2C661%2C33230%2C9330%2C170%2C73191%2C5133%2C38942%2C43494%2C59015%2C1168%2C8130%2C1538%2C28667%2C4116%2C57750%2C10304%2C3026%2C24249%2C2290%2C3844%2C18498%2C6470%2C22506%2C2402%2C111%2C9537%2C24935%2C18135%2C3%2C14786%2C4%2C12861%2C1946%2C6900%2C4594%2C9280%2C760%2C455%2C7749%2C2266%2C1929%2C2854%2C15703%2C7809%2C9786%2C2264%2C10055%2C1814%2C4270%2C451%2C3810%2C752%2C1626%2C441%2C4349%2C1446%2C1313%2C4340%2C12321%2C148%2C1928%2C3131%2C1480%2C774%2C94%2C4565%2C12952%2C516%2C1998%2C1386%2C437%2C134%2C380%2C10462%2C786%2C1292%2C9481%2C44%2C26%2C3752%2C9446%2C1181%2C1621%2C522%2C627%2C601%2C11655%2C6430%2C1915%2C4628%2C1959%2C1067%2C7541%2C76%2C6754%2C2718%2C19&cl=1024232073&seq=1&docid=EnkWqUk2aA8&ei=1QMCa9KIDPmHvdIPuJLfgAk&event=streamingstats&feature=search&plid=AAZgz378Q97cSAbD&sdetail=p%3Am.youtube.com%2Fresults&sourceid=r&cbrand=generic&cbr=Chrome%20Mobile%20Webview&cbrver=145.0.7632.218&c=MWEB&cver=2.20261120.00.00&cplayer=UNIPLAYER&cmodel=android%2017.0&cos=Android&cosver=17&cplatform=MOBILE&vps=0.000:N,0.057:B,0.473:SU&cat=streaming&cmt=0.057:0.000,0.473:0.000,10.016:0.000&ad_playback=0.475:j-NAvUq74pRsxgaW::0,0.492:SRPqzjhX5kwT77zp:15_2_4:1&bwm=10.016:105:0.494&bwe=10.016:596157&bat=10.016:1:0&vis=10.016:0&conn=10.016:1&bh=10.016:0.000&qclc=ChBaUGVQMW5QVGs2dl9mZWpFEAE main=false
+11-21 20:49:34.749 15953 16022 I A03BWV  : 1795294174749 shouldInterceptRequest https://www.youtube.com/ytcs/adinteraction?xi=Abq_774YdoLFBLMPx-3pxDSw1v1Z1W9_c2xgHOW5z8u-ToSdn_5IwQv2GmjDTUcaxDZmrBhjeunzT4uemqLzRjaY4Ygnfip5k0rHnpfPq9xV6sdfkef_7fsPH_QgiqF_j-BCPvi0i3avRst7AqJqsxJfYmr31sB-WLnaHnJ40cMquyACnAsZEIlvALLdlQaTIyVo8jgR6cJ4lQ2QjVgcuT1Wmro2W_aavYK1bFSoplY2-grh-t0CW8k7spPZYukraLs2VwvFfMEaHn4GMr9SFuVVHmwi1One3Q7ZVhSYqBlRugyOkswItKla9CA1h29ZfLY7Xouyv3nCHg8ULVkgk6ZrdFoW5ERG2HXqWm0mlozCfKP_jmdxn5-rhykkIMoau_AeXUQ9ZNxWKyBoYYtfWtgnoWVSchUj4r51f8wEISTc-HTMTLsJWjmsUc2PLdhLvRroAywuyANhDL6K5F_SqCbYm09Zz7Q0EQjVdxfiA1LP6ePzMZAgpt2QZAblQ52RYTUw9fub30pLF-92ybfA6p4giHbhbteW4_VbnxuI8QJ-ONq5kofm3sZG_yXAwZQ358yHMBcHGoRH2WlJrBlildKlarGpSMtJcMDl5x0b2D7BsZMDtSnNuz-hB6i4jdLEk2xM1dpE9SaufABcE_n3-q2ZxIqPfxu6_2kHBS3vXcxfnwUhvMm7Bjl78ktbkp37HgVrGVFszZlI0RiGmeXs5b0D7AVykojeAw2ZHOCootq43e1dqcfN_2eaUW4k_qPNZF4eMwU9jXgKMN_gkUXdYkHmWlZZod9rE9LEAAiRnG6haXgrN-esFSPY3BowoXfBEwShmG7T-a65bwVK1zCtHA5omS2Qc10UCZEmXVNAsa8kZb698Ks1tZOEanhwMH6quT2ExezOkluijPyECj49snnNcWgRkxK-xYDb_xlc0Mrh42ocWsQlpc0rD9IMA077QqCRFIx-HcmfOkseAVNooaDHhJL55DlisC0Z5o6SduJiZ_1TpgB6cIcf_fqVCw2i0V0xj6MlbQutATil-vpqhxX6UbNoviaJrOXCwts9dg1hBlTFffTYtETOz7pkgshJSdvhWZDvY8NbDSoF_3S1BIJb57SGXQVrWOYc3zcEjkwTtuihGt4l7Zunof0kbzhu2tFoLXfp-P1eWcWJBddz_bOFmiQbmbqgs4YiIoqqHbIhGlM1DPFdZDdiQCtXwXoDPACjkTGdO7-e_EYHSH7JtPfaW7ttR5RehdwmJnJMllGa9U4bM5hy3g4z2UGmwWx4GNWDtU9Q56VGvxoB4LCSsDFO8L0BJCX0LEsY5k4RKS6FlYT4pV9tWP3HOd3OlsMo4ZpoAhSVheyke9D-xk8rtSaUf3VR51dyLXhnPYfYiZ4ShVxwXKXrSW9fnj52h6MP4j9Ea7ezDPGFlEcrtC8AG2jYpClyA4h8DaPDHmYCNh_g7C0c50Gmo8Jk4cnDTWBhvKabAtXzL6U3JoAgToGn0qDT0wTQBTvdfI0ET_C7FXcQASblLZrD4JKQSlLJxZnyoGFUBfpPsZ5qSAL4fwW3mjqx4XakrtTydAByOOeGEmAr6hVKCUUzIWvelAuV7daA01nJ6cTCjsHyirgWARZjIY8gFGaL8IlDIxBpMSXQUQ&ytcs_id=1&label=videoplayfailed402 main=false
+11-21 20:49:34.751 15953 16023 I A03BWV  : 1795294174751 shouldInterceptRequest https://tpc.googlesyndication.com/sodar/56-y-0RG.js main=false
+11-21 20:49:34.758 15953 16029 D AAudio  : AAudioStream_requestStop(s#1) called
+11-21 20:49:34.759 15953 16029 D AAudioStream: setState(s#1) from 4 to 9
+11-21 20:49:34.759 15953 16029 D AudioTrack: stop(16): called with 453440 frames delivered
+11-21 20:49:34.759 15953 16023 W cr_MediaCodecBridge: Releasing: c2.goldfish.vp9.decoder
+11-21 20:49:34.760 15953 16210 I Surface : Creating surface for consumer unnamed-15953-4 with slotExpansion=0 for 64 slots
+11-21 20:49:34.760 15953 16210 D SurfaceUtils: connecting to surface 0x79a74ac3bc00, reason connectToSurface
+11-21 20:49:34.760 15953 16210 I MediaCodec: [c2.goldfish.vp9.decoder] setting surface generation to 16335874
+11-21 20:49:34.760 15953 16210 D SurfaceUtils: disconnecting from surface 0x79a74ac3bc00, reason connectToSurface(reconnect)
+11-21 20:49:34.760 15953 16210 D SurfaceUtils: connecting to surface 0x79a74ac3bbf0, reason connectToSurface(reconnect-with-listener)
+11-21 20:49:34.760   787   900 E AppOps  : attributionTag  not declared in manifest of com.webfilter.spike.a03b
+11-21 20:49:34.761   787  1065 E AppOps  : attributionTag  not declared in manifest of com.webfilter.spike.a03b
+11-21 20:49:34.761 15953 16210 D Codec2Client: setOutputSurface -- failed to set consumer usage (6/BAD_INDEX)
+11-21 20:49:34.761 15953 16210 D LegacyGraphicsTracker: new surface in configuration: maxDequeueRequested(0), maxDequeueCommitted(12)
+11-21 20:49:34.761 15953 16210 D LegacyGraphicsTracker: new surface configured with id:68517613273092 gen:16335874 maxDequeue:12
+11-21 20:49:34.762 15953 16210 D LegacyGraphicsTracker: maxDequeueCount is already 12
+11-21 20:49:34.762 15953 16210 D Codec2Client: setOutputSurface -- generation=16335874 consumer usage=0x900
+11-21 20:49:34.762 15953 16210 D SurfaceUtils: disconnecting from surface 0x79a74ac3e2a0, reason disconnectFromSurface
+11-21 20:49:34.762 15953 16029 D AAudioStream: setState(s#1) from 9 to 10
+11-21 20:49:34.764 15953 16210 D CCodecBufferChannel: [c2.goldfish.vp9.decoder#742] MediaCodec discarded an unknown buffer
+11-21 20:49:34.765 15953 16210 D CCodecBufferChannel: [c2.goldfish.vp9.decoder#742] MediaCodec discarded an unknown buffer
+11-21 20:49:34.765 15953 16210 D CCodecBufferChannel: [c2.goldfish.vp9.decoder#742] MediaCodec discarded an unknown buffer
+11-21 20:49:34.765 15953 16210 D CCodecBufferChannel: [c2.goldfish.vp9.decoder#742] MediaCodec discarded an unknown buffer
+11-21 20:49:34.765 15953 16226 D CCodec  : hold CodecLooper(1) until release
+11-21 20:49:34.767 15953 15953 I PlayCore: UID: [10235]  PID: [15953] StandardIntegrity : requestExpressIntegrityToken(-2686416618339851119)
+11-21 20:49:34.767  1252  1252 I bluetooth: system/btif/avrcp/avrcp_service.cc:533 SendMediaUpdate: track_changed=false :  play_state=true :  queue=false
+11-21 20:49:34.767 15953 16095 I PlayCore: UID: [10235]  PID: [15953] StandardIntegrity : Initiate binding to the service.
+11-21 20:49:34.768 15953 16210 D SurfaceUtils: disconnecting from surface 0x79a74ac3bc00, reason disconnectFromSurface
+11-21 20:49:34.768  1252  1252 E MediaControlProfile: onCurrentPlayerStateUpdated: base actions not supported, player actions= 0, expected at least= 7f
+11-21 20:49:34.768 15953 16023 W cr_MediaCodecBridge: Codec released
+11-21 20:49:34.768 15953 16025 I A03BWV  : 1795294174768 shouldInterceptRequest https://m.youtube.com/api/stats/qoe?fmt=243&afmt=251&cpn=SRPqzjhX5kwT77zp&el=detailpage&content_v=EnkWqUk2aA8&ns=yt&fexp=v1%2C100673025%2C1884%2C364%2C-76827062%2C58739%2C97694%2C27058999%2C31835%2C2821%2C124674%2C117689%2C9252%2C16509%2C23206%2C35404%2C45268%2C20030%2C15105%2C25059%2C4174%2C30446%2C18706%2C26008%2C13015%2C15427%2C661%2C33230%2C9330%2C170%2C73191%2C5133%2C38942%2C43494%2C59015%2C1168%2C8130%2C1538%2C28667%2C4116%2C57750%2C10304%2C3026%2C24249%2C2290%2C3844%2C18498%2C6470%2C22506%2C2402%2C111%2C9537%2C24935%2C18135%2C3%2C14786%2C4%2C12861%2C1946%2C6900%2C4594%2C9280%2C760%2C455%2C7749%2C2266%2C1929%2C2854%2C15703%2C7809%2C9786%2C2264%2C10055%2C1814%2C4270%2C451%2C3810%2C752%2C1626%2C441%2C4349%2C1446%2C1313%2C4340%2C12321%2C148%2C1928%2C3131%2C1480%2C774%2C94%2C4565%2C12952%2C516%2C1998%2C1386%2C437%2C134%2C380%2C10462%2C786%2C1292%2C9481%2C44%2C26%2C3752%2C9446%2C1181%2C1621%2C522%2C627%2C601%2C11655%2C6430%2C1915%2C4628%2C1959%2C1067%2C7541%2C76%2C6754%2C2718%2C19&cl=1024232073&adformat=15_2_4&seq=2&adcontext=CAESEwiHn_H395mYAxUJVx0JHSrFEm4gAygGMAE&docid=zAOdomrYw8Q&ei=1QMCa_ebIvmHvdIPuJLfgAk&event=streamingstats&plid=AAZgz38Bhx3QQMJy&sdetail=p%3Am.youtube.com%2Fresults&sourceid=r&cbrand=generic&cbr=Chrome%20Mobile%20Webview&cbrver=145.0.7632.218&c=MWEB&cver=2.20261120.00.00&cplayer=UNIPLAYER&cmodel=android%2017.0&cos=Android&cosver=17&cplatform=MOBILE&cmt=10.019:0.000,10.020:0.000&vps=10.019:SU,10.020:SU&bat=10.020:1:0&bh=10.020:0.000&qclc=ChBTUlBxempoWDVrd1Q3N3pwEAI main=false
+11-21 20:49:34.769 15953 16042 E ConsumerBase: [ImageReader-1x1f22u256m2-15953-0] abandonLocked: ConsumerBase is abandoned!
+11-21 20:49:34.770  1252  1252 W MediaControlGattService: Feature PLAYBACK_SPEED support: true
+11-21 20:49:34.770  1252  1252 W MediaControlGattService: Feature PLAYBACK_SPEED support: true
+11-21 20:49:34.770  1252  1252 W MediaControlGattService: Feature PLAYBACK_SPEED support: true
+11-21 20:49:34.770  1252  1252 W MediaControlGattService: Feature PLAYBACK_SPEED_NOTIFY support: true
+11-21 20:49:34.774 15953 15953 I PlayCore: UID: [10235]  PID: [15953] StandardIntegrity : ServiceConnectionImpl.onServiceConnected(ComponentInfo{com.android.vending/com.google.android.finsky.expressintegrityservice.ExpressIntegrityService})
+11-21 20:49:34.774 15953 16095 I PlayCore: UID: [10235]  PID: [15953] StandardIntegrity : linkToDeath
+11-21 20:49:34.776  1252  1252 W MediaControlGattService: Feature TRACK_POSITION support: true
+11-21 20:49:34.776  1252  1252 W MediaControlGattService: Feature TRACK_POSITION_NOTIFY support: true
+11-21 20:49:34.776  1252  1252 W MediaControlGattService: Feature MEDIA_STATE support: true
+11-21 20:49:34.776  1252  1252 W MediaControlGattService: Feature MEDIA_STATE support: true
+11-21 20:49:34.778  1252  1252 W MediaControlGattService: Feature MEDIA_CONTROL_POINT_OPCODES_SUPPORTED support: true
+11-21 20:49:34.778  1252  1252 W MediaControlGattService: Feature MEDIA_STATE support: true
+11-21 20:49:34.778  1252  1252 W MediaControlGattService: Feature MEDIA_STATE support: true
+11-21 20:49:34.779  1252  1252 W MediaControlGattService: Feature MEDIA_STATE support: true
+11-21 20:49:34.779  1252  1252 W MediaControlGattService: Feature SEEKING_SPEED support: true
+11-21 20:49:34.779  1252  1252 W MediaControlGattService: Feature SEEKING_SPEED support: true
+11-21 20:49:34.779  1252  1252 W MediaControlGattService: Feature SEEKING_SPEED support: true
+11-21 20:49:34.780  1252  1252 W MediaControlProfile: MCS service state fields left unhandled: 
+11-21 20:49:34.780  1252  1252 W MediaControlProfile:    > PLAYER_NAME
+11-21 20:49:34.780  1252  1252 W MediaControlProfile:    > PLAYING_ORDER_SUPPORTED
+11-21 20:49:34.781 15953 16227 I PlayCore: UID: [10235]  PID: [15953] OnRequestIntegrityTokenCallback : onRequestExpressIntegrityToken
+11-21 20:49:34.781 15953 16095 I PlayCore: UID: [10235]  PID: [15953] StandardIntegrity : Unbind from service.
+11-21 20:49:34.786  8556  8556 I Finsky  : [2] Memory trim requested to level 40
+11-21 20:49:34.786  8556  8556 I Finsky  : [2] Flushing in-memory image cache
+11-21 20:49:34.789 15953 16022 I A03BWV  : 1795294174789 shouldInterceptRequest https://rr1---sn-gphvo-ua8l.googlevideo.com/videoplayback?expire=1795315765&ei=1QMCa_abIvmHvdIPuJLfgAk&ip=2a01%3A6500%3Aa034%3A737d%3A4c0a%3A172d%3Abc70%3A8486&id=o-ANToSAc7EfoJsgthJvx8ukbrf5-Mn4o6AK548Jtb91up&source=youtube&requiressl=yes&xpc=EgVo2aDSNQ%3D%3D&cps=108&met=1795294165%2C&mh=TO&mm=31%2C29&mn=sn-gphvo-ua8l%2Csn-ajua89-5x&ms=au%2Crdu&mv=m&mvi=1&pl=46&rms=au%2Cau&ctier=L&pcm2=no&initcwndbps=2257500&spc=nfZ8ZktszTOZMeNpfaeV97SP1--c7CfWM3ZYIcDXFWUg9lDanc8Kjzm8UEThLV2Akg&svpuc=1&ns=_c9wLWQd5Zc5AHEgl848D14a&sabr=1&rqh=1&mt=1795293639&fvip=1&epbp=1&keepalive=yes&fexp=51565115%2C52323638%2C52338435&c=MWEB&n=Ul_rvEuUcYQFAw&sparams=expire%2Cei%2Cip%2Cid%2Csource%2Crequiressl%2Cxpc%2Cctier%2Cpcm2%2Cspc%2Csvpuc%2Cns%2Csabr%2Crqh&sig=AE0s2JYwRQIgBrhlkpwgz1DrxtDzOUXpOfqdG6c6R0zHH-PCh2VQXIwCIQDAY0paK6rbqgUfkDDrpAcmNhXxElSwMwrqeL6jVaW-iA%3D%3D&lsparams=cps%2Cmet%2Cmh%2Cmm%2Cmn%2Cms%2Cmv%2Cmvi%2Cpl%2Crms%2Cinitcwndbps&lsig=APaTxxMwRQIhAOXn_laD7AdoG__z3UX8zvk6RC6QTtAEd_kZEouXs_zOAiBae0RNw1FEXz54rNRQt_UiGerOxUSHa1e6ijG-9X-psg%3D%3D&cpn=CDLbxNYkQ81lsFXO&cver=2.20261120.00.00&rn=3&alr=yes main=false
+11-21 20:49:34.805 15953 16022 I A03BWV  : 1795294174805 shouldInterceptRequest https://i.ytimg.com/vi/SFlt9kDYWIM/sddefault.jpg main=false
+11-21 20:49:34.812 15953 16022 I A03BWV  : 1795294174812 shouldInterceptRequest https://tpc.googlesyndication.com/sodar/5k7CCto5.html main=false
+11-21 20:49:34.830   574   601 W skia    : AGTM parsing failed flags.readFromStream(s) at 159
+11-21 20:49:34.832 15953 16022 I A03BWV  : 1795294174832 shouldInterceptRequest https://pagead2.googlesyndication.com/bg/L8uTFvrF0r1nK0gwqXb4ldkGoza4Pgo55Cqe59VPgRk.js main=false
+11-21 20:49:34.923 15953 16022 I A03BWV  : 1795294174923 shouldInterceptRequest https://m.youtube.com/api/stats/qoe?fmt=243&cpn=CDLbxNYkQ81lsFXO&el=detailpage&content_v=EnkWqUk2aA8&ns=yt&fexp=v1%2C100673025%2C1884%2C364%2C-76827062%2C58739%2C97694%2C27058999%2C31835%2C2821%2C124674%2C117689%2C9252%2C16509%2C23206%2C35404%2C45268%2C20030%2C15105%2C25059%2C4174%2C30446%2C18706%2C26008%2C13015%2C15427%2C661%2C33230%2C9330%2C170%2C73191%2C5133%2C38942%2C43494%2C59015%2C1168%2C8130%2C1538%2C28667%2C4116%2C57750%2C10304%2C3026%2C24249%2C2290%2C3844%2C18498%2C6470%2C22506%2C2402%2C111%2C9537%2C24935%2C18135%2C3%2C14786%2C4%2C12861%2C1946%2C6900%2C4594%2C9280%2C760%2C455%2C7749%2C2266%2C1929%2C2854%2C15703%2C7809%2C9786%2C2264%2C10055%2C1814%2C4270%2C451%2C3810%2C752%2C1626%2C441%2C4349%2C1446%2C1313%2C4340%2C12321%2C148%2C1928%2C3131%2C1480%2C774%2C94%2C4565%2C12952%2C516%2C1998%2C1386%2C437%2C134%2C380%2C10462%2C786%2C1292%2C9481%2C44%2C26%2C3752%2C9446%2C1181%2C1621%2C522%2C627%2C601%2C11655%2C6430%2C1915%2C4628%2C1959%2C1067%2C7541%2C76%2C6754%2C2718%2C19&cl=1024232073&adformat=15_2_1&seq=1&adcontext=CAESEwiHn_H395mYAxUJVx0JHSrFEm4YAiABKAQwATgC&docid=SFlt9kDYWIM&ei=1QMCa_abIvmHvdIPuJLfgAk&event=streamingstats&plid=AAZgz38BicY34kGK&sdetail=p%3Am.youtube.com%2Fresults&sourceid=r&cbrand=generic&cbr=Chrome%20Mobile%20Webview&cbrver=145.0.7632.218&c=MWEB&cver=2.20261120.00.00&cplayer=UNIPLAYER&cmodel=android%2017.0&cos=Android&cosver=17&cplatform=MOBILE&vps=0.000:N,0.022:B,0.025:N,0.148:N&cat=streaming,sabr&cmt=0.022:0.000,0.025:0.000,0.148:0.000&vfs=0.148:243:396::a:sms.2:CAMoAQ&view=0.148:411:231:2.625&bwm=0.148:739:0.130&bwe=0.148:596157&bat=0.148:1:0&vis=0.148:0&conn=0.148:1&bh=0.148:0.000&qclc=ChBDRExieE5Za1E4MWxzRlhPEAE main=false
+11-21 20:49:34.935   574   601 W skia    : AGTM parsing failed flags.readFromStream(s) at 159
+11-21 20:49:34.973   568   598 I APM_AudioPolicyManager: getNewOutputDevices io 13 recent device override {AUDIO_DEVICE_OUT_SPEAKER, @:}
+11-21 20:49:34.991 15953 16042 I Surface : Creating surface for consumer unnamed-15953-4 with slotExpansion=1 for 64 slots
+11-21 20:49:34.993 15953 16029 D AAudio  : AAudioStream_requestStart(s#1) called --------------
+11-21 20:49:34.993 15953 16029 D AAudioStream: setState(s#1) from 10 to 3
+11-21 20:49:34.999 15953 16022 I cr_MediaCodecBridge: create MediaCodec video decoder, mime video/x-vnd.on2.vp9, decoder name c2.goldfish.vp9.decoder, block_model=false
+11-21 20:49:34.999 15953 16022 I MediaCodec: Retry enabled for HDCP failure
+11-21 20:49:35.000   787   900 E AppOps  : attributionTag  not declared in manifest of com.webfilter.spike.a03b
+11-21 20:49:35.003   787  1713 E AppOps  : attributionTag  not declared in manifest of com.webfilter.spike.a03b
+11-21 20:49:35.005  9128  9128 D BoundBrokerSvc: onUnbind: Intent { act=com.google.android.gms.safebrowsing.SafeBrowsingService.START dat=chimera-action:/... xflg=0x4 cmp=com.google.android.gms/.chimera.GmsApiService }
+11-21 20:49:35.010 15953 16029 D AAudio  : AAudioStream_requestStart(s#1) returned 0 ---------
+11-21 20:49:35.017 15953 16227 D AudioStreamLegacy: onAudioDeviceUpdate() devices 2 => 2
+11-21 20:49:35.017 15953 16227 D AudioStreamLegacy: onAudioDeviceUpdate, ignore device update as it is the same as the old one
+11-21 20:49:35.017  1252  1252 I bluetooth: system/btif/avrcp/avrcp_service.cc:533 SendMediaUpdate: track_changed=false :  play_state=true :  queue=false
+11-21 20:49:35.019  1252  1252 E MediaControlProfile: onCurrentPlayerStateUpdated: base actions not supported, player actions= 0, expected at least= 7f
+11-21 20:49:35.019  1252  1252 W MediaControlGattService: Feature PLAYBACK_SPEED support: true
+11-21 20:49:35.019  1252  1252 W MediaControlGattService: Feature PLAYBACK_SPEED support: true
+11-21 20:49:35.019  1252  1252 W MediaControlGattService: Feature PLAYBACK_SPEED support: true
+11-21 20:49:35.019  1252  1252 W MediaControlGattService: Feature PLAYBACK_SPEED_NOTIFY support: true
+11-21 20:49:35.019 15953 16022 W lter.spike.a03b: Failed to query component store for system resources: 6
+11-21 20:49:35.022  1252  1252 W MediaControlGattService: Feature TRACK_POSITION support: true
+11-21 20:49:35.022  1252  1252 W MediaControlGattService: Feature TRACK_POSITION_NOTIFY support: true
+11-21 20:49:35.022  1252  1252 W MediaControlGattService: Feature MEDIA_STATE support: true
+11-21 20:49:35.026  1252  1252 W MediaControlGattService: Feature MEDIA_CONTROL_POINT_OPCODES_SUPPORTED support: true
+11-21 20:49:35.026  1252  1252 W MediaControlGattService: Feature MEDIA_STATE support: true
+11-21 20:49:35.026  1252  1252 W MediaControlGattService: Feature MEDIA_STATE support: true
+11-21 20:49:35.031 15953 16231 D CCodec  : allocate(c2.goldfish.vp9.decoder)
+11-21 20:49:35.036   574   601 W skia    : AGTM parsing failed flags.readFromStream(s) at 159
+11-21 20:49:35.041  1252  1252 W MediaControlGattService: Feature MEDIA_STATE support: true
+11-21 20:49:35.041  1252  1252 W MediaControlGattService: Feature SEEKING_SPEED support: true
+11-21 20:49:35.041  1252  1252 W MediaControlGattService: Feature SEEKING_SPEED support: true
+11-21 20:49:35.041  1252  1252 W MediaControlGattService: Feature SEEKING_SPEED support: true
+11-21 20:49:35.041  1252  1252 W MediaControlProfile: MCS service state fields left unhandled: 
+11-21 20:49:35.041  1252  1252 W MediaControlProfile:    > PLAYER_NAME
+11-21 20:49:35.041  1252  1252 W MediaControlProfile:    > PLAYING_ORDER_SUPPORTED
+11-21 20:49:35.047 15953 16231 I CCodec  : setting up 'default' as default (vendor) store
+11-21 20:49:35.053 15953 16231 W lter.spike.a03b: AIBinder_linkToDeath is being called with a non-null cookie and no onUnlink callback set. Use AIBinder_DeathRecipient_setOnUnlinked to manage the lifetime of the cookie. This will become an abort.
+11-21 20:49:35.053 15953 16231 I CCodec  : Created component [c2.goldfish.vp9.decoder] for [c2.goldfish.vp9.decoder]
+11-21 20:49:35.053 15953 16231 D CCodecConfig: read media type: video/x-vnd.on2.vp9
+11-21 20:49:35.054 15953 16231 D ReflectedParamUpdater: ignored struct field coded.color-format.locations
+11-21 20:49:35.055 15953 16231 D ReflectedParamUpdater: extent() != 1 for single value type: algo.buffers.max-count.values
+11-21 20:49:35.055 15953 16231 D ReflectedParamUpdater: extent() != 1 for single value type: output.subscribed-indices.values
+11-21 20:49:35.055 15953 16231 D ReflectedParamUpdater: extent() != 1 for single value type: input.buffers.allocator-ids.values
+11-21 20:49:35.055 15953 16231 D ReflectedParamUpdater: extent() != 1 for single value type: output.buffers.allocator-ids.values
+11-21 20:49:35.055 15953 16231 D ReflectedParamUpdater: extent() != 1 for single value type: algo.buffers.allocator-ids.values
+11-21 20:49:35.055 15953 16231 D ReflectedParamUpdater: extent() != 1 for single value type: output.buffers.pool-ids.values
+11-21 20:49:35.055 15953 16231 D ReflectedParamUpdater: extent() != 1 for single value type: algo.buffers.pool-ids.values
+11-21 20:49:35.055 15953 16231 D CCodecConfig: ignoring local param raw.size (0xd2001800) as it is already supported
+11-21 20:49:35.055 15953 16231 D CCodecConfig: ignoring local param default.color (0x5200180b) as it is already supported
+11-21 20:49:35.055 15953 16231 D ReflectedParamUpdater: ignored struct field raw.hdr-static-info.mastering
+11-21 20:49:35.058 15953 16231 I CCodecConfig: query failed after returning 14 values (BAD_INDEX)
+11-21 20:49:35.058 15953 16231 D CCodecConfig: c2 config diff is Dict {
+11-21 20:49:35.058 15953 16231 D CCodecConfig:   c2::u32 coded.pl.level = 28680
+11-21 20:49:35.058 15953 16231 D CCodecConfig:   c2::u32 coded.pl.profile = 28672
+11-21 20:49:35.058 15953 16231 D CCodecConfig:   c2::u32 coded.vui.color.matrix = 0
+11-21 20:49:35.058 15953 16231 D CCodecConfig:   c2::u32 coded.vui.color.primaries = 0
+11-21 20:49:35.058 15953 16231 D CCodecConfig:   c2::u32 coded.vui.color.range = 2
+11-21 20:49:35.058 15953 16231 D CCodecConfig:   c2::u32 coded.vui.color.transfer = 0
+11-21 20:49:35.058 15953 16231 D CCodecConfig:   c2::u32 default.color.matrix = 0
+11-21 20:49:35.058 15953 16231 D CCodecConfig:   c2::u32 default.color.primaries = 0
+11-21 20:49:35.058 15953 16231 D CCodecConfig:   c2::u32 default.color.range = 0
+11-21 20:49:35.058 15953 16231 D CCodecConfig:   c2::u32 default.color.transfer = 0
+11-21 20:49:35.058 15953 16231 D CCodecConfig:   c2::u32 input.buffers.max-size.value = 6291456
+11-21 20:49:35.058 15953 16231 D CCodecConfig:   c2::u32 input.delay.value = 0
+11-21 20:49:35.058 15953 16231 D CCodecConfig:   Buffer input.hdr10-plus-info.value = {
+11-21 20:49:35.058 15953 16231 D CCodecConfig:   }
+11-21 20:49:35.058 15953 16231 D CCodecConfig:   string input.media-type.value = "video/x-vnd.on2.vp9"
+11-21 20:49:35.058 15953 16231 D CCodecConfig:   c2::u32 output.delay.value = 8
+11-21 20:49:35.058 15953 16231 D CCodecConfig:   Buffer output.hdr10-plus-info.value = {
+11-21 20:49:35.058 15953 16231 D CCodecConfig:   }
+11-21 20:49:35.058 15953 16231 D CCodecConfig:   string output.media-type.value = "video/raw"
+11-21 20:49:35.058 15953 16231 D CCodecConfig:   c2::u32 raw.color.matrix = 0
+11-21 20:49:35.058 15953 16231 D CCodecConfig:   c2::u32 raw.color.primaries = 0
+11-21 20:49:35.058 15953 16231 D CCodecConfig:   c2::u32 raw.color.range = 2
+11-21 20:49:35.058 15953 16231 D CCodecConfig:   c2::u32 raw.color.transfer = 0
+11-21 20:49:35.058 15953 16231 D CCodecConfig:   c2::u32 raw.max-size.height = 240
+11-21 20:49:35.058 15953 16231 D CCodecConfig:   c2::u32 raw.max-size.width = 320
+11-21 20:49:35.058 15953 16231 D CCodecConfig:   c2::u32 raw.pixel-format.value = 35
+11-21 20:49:35.058 15953 16231 D CCodecConfig:   c2::i32 raw.rotation.flip = 0
+11-21 20:49:35.058 15953 16231 D CCodecConfig:   c2::i32 raw.rotation.value = 0
+11-21 20:49:35.058 15953 16231 D CCodecConfig:   c2::u32 raw.sar.height
+11-21 20:49:35.058 15953 16231 W ColorUtils: expected specified color aspects (2:0:0:0)
+11-21 20:49:35.073 15953 16023 I A03BWV  : 1795294175073 shouldInterceptRequest https://tpc.googlesyndication.com/generate_204?X47Axg main=false
+11-21 20:49:35.079 15953 16230 I MediaCodec: MediaCodec will operate in async mode
+11-21 20:49:35.080 15953 16022 I Surface : Creating surface for consumer ImageReader-1x1f22u256m2-15953-1 with slotExpansion=1 for 64 slots
+11-21 20:49:35.081 15953 16208 D AAudioStream: setState(s#1) from 3 to 4
+11-21 20:49:35.081 15953 16022 I MediaCodec: media_quality service unavailable, skipping updatePictureProfile
+11-21 20:49:35.085 15953 16230 D SurfaceUtils: connecting to surface 0x79a74ac35b70, reason connectToSurface
+11-21 20:49:35.086 15953 16230 I MediaCodec: [c2.goldfish.vp9.decoder] setting surface generation to 16335875
+11-21 20:49:35.086 15953 16230 D SurfaceUtils: disconnecting from surface 0x79a74ac35b70, reason connectToSurface(reconnect)
+11-21 20:49:35.086 15953 16230 D SurfaceUtils: connecting to surface 0x79a74ac35b60, reason connectToSurface(reconnect-with-listener)
+11-21 20:49:35.087 15953 16231 D CCodec  : [c2.goldfish.vp9.decoder] buffers are bound to CCodec for this session
+11-21 20:49:35.088 15953 16231 D CCodecConfig: no c2 equivalents for native-window
+11-21 20:49:35.088 15953 16231 D CCodecConfig: no c2 equivalents for native-window-generation
+11-21 20:49:35.088 15953 16231 D CCodecConfig: no c2 equivalents for flags
+11-21 20:49:35.088 15953 16023 I A03BWV  : 1795294175088 shouldInterceptRequest https://www.youtube.com/ytcs/adinteraction?xi=Abq_774YdoLFBLMPx-3pxDSw1v1Z1W9_c2xgHOW5z8u-ToSdn_5IwQv2GmjDTUcaxDZmrBhjeunzT4uemqLzRjaY4Ygnfip5k0rHnpfPq9xV6sdfkef_7fsPH_QgiqF_j-BCPvi0i3avRst7AqJqsxJfYmr31sB-WLnaHnJ40cMquyACnAsZEIlvALLdlQaTIyVo8jgR6cJ4lQ2QjVgcuT1Wmro2W_aavYK1bFSoplY2-grh-t0CW8k7spPZYukraLs2VwvFfMEaHn4GMr9SFuVVHmwi1One3Q7ZVhSYqBlRugyOkswItKla9CA1h29ZfLY7Xouyv3nCHg8ULVkgk6ZrdFoW5ERG2HXqWm0mlozCfKP_jmdxn5-rhykkIMoau_AeXUQ9ZNxWKyBoYYtfWtgnoWVSchUj4r51f8wEISTc-HTMTLsJWjmsUc2PLdhLvRroAywuyANhDL6K5F_SqCbYm09Zz7Q0EQjVdxfiA1LP6ePzMZAgpt2QZAblQ52RYTUw9fub30pLF-92ybfA6p4giHbhbteW4_VbnxuI8QJ-ONq5kofm3sZG_yXAwZQ358yHMBcHGoRH2WlJrBlildKlarGpSMtJcMDl5x0b2D7BsZMDtSnNuz-hB6i4jdLEk2xM1dpE9SaufABcE_n3-q2ZxIqPfxu6_2kHBS3vXcxfnwUhvMm7Bjl78ktbkp37HgVrGVFszZlI0RiGmeXs5b0D7AVykojeAw2ZHOCootq43e1dqcfN_2eaUW4k_qPNZF4eMwU9jXgKMN_gkUXdYkHmWlZZod9rE9LEAAiRnG6haXgrN-esFSPY3BowoXfBEwShmG7T-a65bwVK1zCtHA5omS2Qc10UCZEmXVNAsa8kZb698Ks1tZOEanhwMH6quT2ExezOkluijPyECj49snnNcWgRkxK-xYDb_xlc0Mrh42ocWsQlpc0rD9IMA077QqCRFIx-HcmfOkseAVNooaDHhJL55DlisC0Z5o6SduJiZ_1TpgB6cIcf_fqVCw2i0V0xj6MlbQutATil-vpqhxX6UbNoviaJrOXCwts9dg1hBlTFffTYtETOz7pkgshJSdvhWZDvY8NbDSoF_3S1BIJb57SGXQVrWOYc3zcEjkwTtuihGt4l7Zunof0kbzhu2tFoLXfp-P1eWcWJBddz_bOFmiQbmbqgs4YiIoqqHbIhGlM1DPFdZDdiQCtXwXoDPACjkTGdO7-e_EYHSH7JtPfaW7ttR5RehdwmJnJMllGa9U4bM5hy3g4z2UGmwWx4GNWDtU9Q56VGvxoB4LCSsDFO8L0BJCX0LEsY5k4RKS6FlYT4pV9tWP3HOd3OlsMo4ZpoAhSVheyke9D-xk8rtSaUf3VR51dyLXhnPYfYiZ4ShVxwXKXrSW9fnj52h6MP4j9Ea7ezDPGFlEcrtC8AG2jYpClyA4h8DaPDHmYCNh_g7C0c50Gmo8Jk4cnDTWBhvKabAtXzL6U3JoAgToGn0qDT0wTQBTvdfI0ET_C7FXcQASblLZrD4JKQSlLJxZnyoGFUBfpPsZ5qSAL4fwW3mjqx4XakrtTydAByOOeGEmAr6hVKCUUzIWvelAuV7daA01nJ6cTCjsHyirgWARZjIY8gFGaL8IlDIxBpMSXQUQ&ytcs_id=1&label=videoplayfailed402 main=false
+11-21 20:49:35.091 15953 16231 D CCodecConfig: config failed => CORRUPTED
+11-21 20:49:35.094 15953 16231 D CCodecConfig: c2 config diff is   c2::u32 raw.max-size.height = 360
+11-21 20:49:35.094 15953 16231 D CCodecConfig:   c2::u32 raw.max-size.width = 640
+11-21 20:49:35.094 15953 16231 D CCodecConfig:   c2::u32 raw.size.height = 360
+11-21 20:49:35.094 15953 16231 D CCodecConfig:   c2::u32 raw.size.width = 640
+11-21 20:49:35.095 15953 16231 D CCodec  : client requested max input size 86400, which is smaller than what component recommended (6291456); overriding with component recommendation.
+11-21 20:49:35.095 15953 16231 W CCodec  : This behavior is subject to change. It is recommended that app developers double check whether the requested max input size is in reasonable range.
+11-21 20:49:35.095 15953 16231 D CCodec  : encoding statistics level = 0
+11-21 20:49:35.095 15953 16231 D CCodec  : setup formats input: AMessage(what = 0x00000000) = {
+11-21 20:49:35.095 15953 16231 D CCodec  :   int32_t height = 360
+11-21 20:49:35.095 15953 16231 D CCodec  :   int32_t level = 256
+11-21 20:49:35.095 15953 16231 D CCodec  :   int32_t max-input-size = 6291456
+11-21 20:49:35.095 15953 16231 D CCodec  :   string mime = "video/x-vnd.on2.vp9"
+11-21 20:49:35.095 15953 16231 D CCodec  :   int32_t profile = 1
+11-21 20:49:35.095 15953 16231 D CCodec  :   int32_t width = 640
+11-21 20:49:35.095 15953 16231 D CCodec  :   Rect crop(0, 0, 639, 359)
+11-21 20:49:35.095 15953 16231 D CCodec  : }
+11-21 20:49:35.095 15953 16231 D CCodec  : setup formats output: AMessage(what = 0x00000000) = {
+11-21 20:49:35.095 15953 16231 D CCodec  :   int32_t android._color-format = 2135033992
+11-21 20:49:35.095 15953 16231 D CCodec  :   int32_t android._video-scaling = 1
+11-21 20:49:35.095 15953 16231 D CCodec  :   int32_t rotation-degrees = 0
+11-21 20:49:35.095 15953 16231 D CCodec  :   int32_t color-standard = 4
+11-21 20:49:35.095 15953 16231 D CCodec  :   int32_t color-range = 2
+11-21 20:49:35.095 15953 16231 D CCodec  :   int32_t color-transfer = 3
+11-21 20:49:35.095 15953 16231 D CCodec  :   int32_t sar-height = 1
+11-21 20:49:35.095 15953 16231 D CCodec  :   int32_t sar-width = 1
+11-21 20:49:35.095 15953 16231 D CCodec  :   Rect crop(0, 0, 639, 359)
+11-21 20:49:35.095 15953 16231 D CCodec  :   int32_t width = 640
+11-21 20:49:35.095 15953 16231 D CCodec  :   Buffer hdr10-plus-info = {
+11-21 20:49:35.095 15953 16231 D CCodec  :   }
+11-21 20:49:35.095 15953 16231 D CCodec  :   int32_t height = 360
+11-21 20:49:35.095 15953 16231 D CCodec  :   int32_t max-height = 360
+11-21 20:49:35.095 15953 16231 D CCodec  :   int32_t max-width = 640
+11-21 20:49:35.095 15953 16231 D CCodec  :   string mime = "video/raw"
+11-21 20:49:35.095 15953 16231 D CCodec  :   int32_t android._dataspace = 259
+11-21 20:49:35.095 15953 16231 D CCodec  :   int32_t color-format = 2130708361
+11-21 20:49:35.095 15953 16231 D CCodec  : }
+11-21 20:49:35.096 15953 16231 I CCodecConfig: query failed after returning 14 values (BAD_INDEX)
+11-21 20:49:35.098 15953 16231 E lter.spike.a03b: Failed to query component interface for required system resources: 6
+11-21 20:49:35.098 15953 16022 D MediaCodec: keep callback message for reclaim
+11-21 20:49:35.102   537 16232 I android.hardware.media.c2-service-goldfish: calling init GoldfishVPX
+11-21 20:49:35.105 15953 16231 D CCodecBufferChannel: [c2.goldfish.vp9.decoder#742] Created input block pool with allocatorID 16 => poolID 18 - OK (0)
+11-21 20:49:35.107 15953 16231 D CCodecBufferChannel: [c2.goldfish.vp9.decoder#742] Query output surface allocator returned 0 params => BAD_INDEX (6)
+11-21 20:49:35.107 15953 16231 D Codec2Client: GraphicBufferAllocator created
+11-21 20:49:35.111 15953 16231 I CCodecBufferChannel: [c2.goldfish.vp9.decoder#742] Created output block pool with allocatorID 18 => poolID 18 - OK
+11-21 20:49:35.112 15953 16231 D CCodecBufferChannel: [c2.goldfish.vp9.decoder#742] Configured output block pool ids 18 => OK
+11-21 20:49:35.113 15953 16231 D Codec2Client: setOutputSurface -- failed to set consumer usage (6/BAD_INDEX)
+11-21 20:49:35.113 15953 16231 D LegacyGraphicsTracker: new surface in configuration: maxDequeueRequested(0), maxDequeueCommitted(3)
+11-21 20:49:35.113 15953 16231 D LegacyGraphicsTracker: new surface configured with id:68517613273093 gen:16335875 maxDequeue:3
+11-21 20:49:35.113 15953 16231 D LegacyGraphicsTracker: maxDequeueCount committed to IGBP: 12
+11-21 20:49:35.113 15953 16231 D LegacyGraphicsTracker: Cache size 0 -> 0: maybe_cleared(0), dequeued(0)
+11-21 20:49:35.113 15953 16231 D LegacyGraphicsTracker: maxDqueueCount change 3 -> 12: pending: 0
+11-21 20:49:35.113 15953 16231 D Codec2Client: setOutputSurface -- generation=16335875 consumer usage=0x900
+11-21 20:49:35.121   672  2266 W ResourceManagerServiceUtils: Ignoring request to add new resource entry with value <= 0
+11-21 20:49:35.124 15953 16042 E GFXSTREAM: [GLClientState.cpp(298)] set vao to self, no-op (1)
+11-21 20:49:35.138   574   601 W skia    : AGTM parsing failed flags.readFromStream(s) at 159
+11-21 20:49:35.142   537  1679 W android.hardware.media.c2-service-goldfish: AIBinder_linkToDeath is being called with a non-null cookie and no onUnlink callback set. Use AIBinder_DeathRecipient_setOnUnlinked to manage the lifetime of the cookie. This will become an abort.
+11-21 20:49:35.143 15953 16230 W lter.spike.a03b: AIBinder_linkToDeath is being called with a non-null cookie and no onUnlink callback set. Use AIBinder_DeathRecipient_setOnUnlinked to manage the lifetime of the cookie. This will become an abort.
+11-21 20:49:35.144   537 16232 D SimpleC2Component: Using output block pool with poolID 18 => got 18 - 0
+11-21 20:49:35.144   537 16232 I android.hardware.media.c2-service-goldfish: created decoder context w 640 h 360
+11-21 20:49:35.168 15953 16231 D CCodecConfig: c2 config diff is   c2::u32 raw.crop.height = 360
+11-21 20:49:35.168 15953 16231 D CCodecConfig:   c2::u32 raw.crop.left = 0
+11-21 20:49:35.168 15953 16231 D CCodecConfig:   c2::u32 raw.crop.top = 0
+11-21 20:49:35.168 15953 16231 D CCodecConfig:   c2::u32 raw.crop.width = 640
+11-21 20:49:35.268   574   601 W skia    : AGTM parsing failed flags.readFromStream(s) at 159
+11-21 20:49:35.286 15953 16022 I A03BWV  : 1795294175286 shouldInterceptRequest https://pagead2.googlesyndication.com/pagead/gen_204?id=sodar&v=32&t=2&li=v_h.3.0.0.0&bgai=BqddZ1QMCa8fgDYmu9fgPqorL8AYAAAAAOAE&bg=!5eal5r3NAAbNhJMf7YQ7AEABdsCQk8dGtPIEZelo6abcbrbMLyxsb8dMesBeJtmFPkZt_4K2CqO-g3FGRKerSbfvwC6KguvgPcs6XNMkuCbhAgAAAYBSAAAACWgBB34ALpAe6HhIFekAFA2-hlnxBWIRo752ir3Q7T1dZ4IYIDjIoDDeDk7zcNO1RpPQhZEKALWcecXl3mAi5weFprIulLMhFYAaJ_iqn_mpXiLBelFqqtizySmFRMv3FFDVo2hsY4xUnfLrUBHtfhCQS0AwDt5NrJGLnNhF9QNNoNvK7U65keqODSvam5yHbOl3A4GHQDPfx7-nWreXSD7zio4mcSDJPKfkAbdgHtXbAlbVJiLH-yR8yMPvoLCKl7PQj_yWR1rDy5139-Ce8A1MJCo508H6LnKLckRerqVNTefILIE39leHrKQEmQJDdpYCjaI5Lj7pb_DZRg5TibPN93reUT9gh_K0vDC2mCIkv8R0FW7GUd856KhmjCIOwKDAvjPUWO3lh3m2tBKBfqsvPFi7zyyvauHsVIrApxZxJa_gfKhyjOOTI-8Auw4epqDYg0MFmx9194lmwjCAf5ZPNjEJWDybSpLuwQNNc--1SbB5i8xkY8J4fnUinD3Mv6flJEBtElsSjMCqFkGnQ20m7F7M5BvNsC5X_BofKnwbg9EmBnW_RqB_zgw_sGsCB53MnJxyGJCgZY_NFr2WNFuxzd0Vf1EbZhVgl7DZ06avYYQhe2YeE7oQUwqrc9r_agbs5M66XI-_JWKYQ4EAyCG_ZelsmrIReHPUqbXrB_-6_m4YoD-SutkVM4a0XjhxTtbXcFgfSw4pUIKsmX4Fs5tRiSy2WcL5IwOnicSyO4k8OugN5xf3nCSKPkoscU-gpAnKEDy4MdaZj24bqAVJkck43LF_BNH56q2XTgpzXAH_GSBDb4lEHaUJxigPvHQkKSp6gPoYDPzvqN1zLAvF7J0M0gBsQ9yY1xI5TST4goQ5dSZSbyYmFQEs8ulPIysgnmnw13a-ChISD19BVz-3gpvzXwqWahPXYf-JNwrazwOSUhQJ-AYqgHw42oTDuRkfN7IEmPPTmnnfILhIsXD-Sms1xx4xpi2MPVOOpb3L6AjEXMzSX5JrUl6-cwuY9adaq3GLVyrwdHgLFJqxFXdGuWHlft_-plBYbPxTmYhQbqSe7HIK5HzOsaHR2q40NcH9ywlQ main=false
+11-21 20:49:35.369   574   601 W skia    : AGTM parsing failed flags.readFromStream(s) at 159
+11-21 20:49:35.533 15953 15953 I chromium: [INFO:CONSOLE:0] "Access to XMLHttpRequest at 'https://www.youtube.com/ytcs/adinteraction?xi=Abq_774YdoLFBLMPx-3pxDSw1v1Z1W9_c2xgHOW5z8u-ToSdn_5IwQv2GmjDTUcaxDZmrBhjeunzT4uemqLzRjaY4Ygnfip5k0rHnpfPq9xV6sdfkef_7fsPH_QgiqF_j-BCPvi0i3avRst7AqJqsxJfYmr31sB-WLnaHnJ40cMquyACnAsZEIlvALLdlQaTIyVo8jgR6cJ4lQ2QjVgcuT1Wmro2W_aavYK1bFSoplY2-grh-t0CW8k7spPZYukraLs2VwvFfMEaHn4GMr9SFuVVHmwi1One3Q7ZVhSYqBlRugyOkswItKla9CA1h29ZfLY7Xouyv3nCHg8ULVkgk6ZrdFoW5ERG2HXqWm0mlozCfKP_jmdxn5-rhykkIMoau_AeXUQ9ZNxWKyBoYYtfWtgnoWVSchUj4r51f8wEISTc-HTMTLsJWjmsUc2PLdhLvRroAywuyANhDL6K5F_SqCbYm09Zz7Q0EQjVdxfiA1LP6ePzMZAgpt2QZAblQ52RYTUw9fub30pLF-92ybfA6p4giHbhbteW4_VbnxuI8QJ-ONq5kofm3sZG_yXAwZQ358yHMBcHGoRH2WlJrBlildKlarGpSMtJcMDl5x0b2D7BsZMDtSnNuz-hB6i4jdLEk2xM1dpE9SaufABcE_n3-q2ZxIqPfxu6_2kHBS3vXcxfnwUhvMm7Bjl78ktbkp37HgVrGVFszZlI0RiGmeXs5b0D7AVykojeAw2ZHOCootq43e1dqcfN_2eaUW4k_qPNZF4eMwU9jXgKMN_gkUXdYkHmWlZZod9rE9LEAAiRnG6haXgrN-esFSPY3BowoXfBEwShmG7T-a65bwVK1zCtHA5omS2Qc10UCZEmXVNAsa8kZb698Ks1tZOEanhwMH6quT2ExezOkluijPyECj49snnNcWgRkxK-xYDb_xlc0Mrh42ocWsQlpc0rD9IMA077QqCRFIx-HcmfOkseAVNooaDHhJL55DlisC0Z5o6SduJiZ_1TpgB6cIcf_fqVCw2i0V0xj6MlbQutATil-vpqhxX6UbNoviaJrOXCwts9dg1hBlTFffTYtETOz7pkgshJSdvhWZDvY8NbDSoF_3S1BIJb57SGXQVrWOYc3zcEjkwTtuihGt4l7Zunof0kbzhu2tFoLXfp-P1eWcWJBddz_bOFmiQbmbqgs4YiIoqqHbIhGlM1DPFdZDdiQCtXwXoDPACjkTGdO7-e_EYHSH7JtPfaW7ttR5RehdwmJnJMllGa9U4bM5hy3g4z2UGmwWx4GNWDtU9Q56VGvxoB4LCSsDFO8L0BJCX0LEsY5k4RKS6FlYT4pV9tWP3HOd3OlsMo4ZpoAhSVheyke9D-xk8rtSaUf3VR51dyLXhnPYfYiZ4ShVxwXKXrSW9fnj52h6MP4j9Ea7ezDPGFlEcrtC8AG2jYpClyA4h8DaPDHmYCNh_g7C0c50Gmo8Jk4cnDTWBhvKabAtXzL6U3JoAgToGn0qDT0wTQBTvdfI0ET_C7FXcQASblLZrD4JKQSlLJxZnyoGFUBfpPsZ5qSAL4fwW3mjqx4XakrtTydAByOOeGEmAr6hVKCUUzIWvelAuV7daA01nJ6cTCjsHyirgWARZjIY8gFGaL8IlDIxBpMSXQUQ&ytcs_id=1&label=videoplayfailed402' from origin 'https://m.youtube.com' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.", source: https://m.youtube.com/watch?v=EnkWqUk2aA8&pp=ygUGbmF0dXJl (0)
+11-21 20:49:36.123   787   979 I HalDevMgr: bestIfaceCreationProposal is null, requestIface=STA, existingIface=[name=wlan0 type=STA]
+11-21 20:49:36.123   787  1019 I AdbWifiNetworkMonitor: Wi-Fi network available
+11-21 20:49:36.124   787  1019 I AdbWifiNetworkMonitor: Received the same Wi-Fi SSID. Ignoring.
+11-21 20:49:36.125   787   993 W libbinder.IPCThreadState: Sending oneway calls to frozen process.
+11-21 20:49:36.125   787   993 W libbinder.IPCThreadState: Sending oneway calls to frozen process.
+11-21 20:49:36.130  9128  9189 I NullBinder: NullBinder for android.net.action.RECOMMEND_NETWORKS triggering remote TransactionTooLargeException due to Service without Chimera impl, calling uid: 1000, calling pid: 0
+11-21 20:49:36.130  9128  9189 W libbinder.Binder: Large reply transaction of 1056768 bytes, interface descriptor , function: UNKNOWN_FUNCTION_NAME, code: 1, flags: 17
+11-21 20:49:36.132   787   993 D ConnectivityService: NetReassign [no changes] [c 0] [a 1] [i 0]
+11-21 20:49:36.133  9128 10657 I NearbyMediums: Wifi changed new SSID: "AndroidWifi"
+11-21 20:49:36.133  9128 10657 I NearbyMediums: WifiLanConnectivityInfo is not changed, skip notify.
+11-21 20:49:36.635  9128 10657 I NearbySharing: Network state changed: NetworkState(isRestricted=false, isOnline=true, isCongested=false, isMetered=false, isWifiConnected=true)
+11-21 20:49:37.816 15953 16022 I A03BWV  : 1795294177816 shouldInterceptRequest https://rr1---sn-gphvo-ua8l.googlevideo.com/videoplayback?expire=1795315765&ei=1QMCa9KIDPmHvdIPuJLfgAk&ip=2a01%3A6500%3Aa034%3A737d%3A4c0a%3A172d%3Abc70%3A8486&id=o-ANJhSHjw23MUkJdFr_RLVhR_n-YMHPrPJj3ukRQKsyQB&source=youtube&requiressl=yes&xpc=EgVo2aDSNQ%3D%3D&cps=327&met=1795294165%2C&mh=s7&mm=31%2C29&mn=sn-gphvo-ua8l%2Csn-u1ua85-5i&ms=au%2Crdu&mv=m&mvi=1&pl=46&rms=au%2Cau&pcm2=no&gcr=il&initcwndbps=2257500&spc=nfZ8Zosn-gI3G9PcJ-EFGxRHg4gyKWvTrt62Sjqla1UWhmbaZTrzZ3JaZH1Xsrvn-jb_MFL_og&svpuc=1&ns=EZXHld_qHf4OF1vE_5_P_8Ma&sabr=1&rqh=1&mt=1795293639&fvip=3&epbp=1&keepalive=yes&fexp=51565115%2C52323638%2C52338435&c=MWEB&n=HZCvpQlk2U5zEQ&sparams=expire%2Cei%2Cip%2Cid%2Csource%2Crequiressl%2Cxpc%2Cpcm2%2Cgcr%2Cspc%2Csvpuc%2Cns%2Csabr%2Crqh&sig=AE0s2JYwRgIhAKEcxBhkPC2_wwwajrGumXC-4OGTGpffcM89mZLrwGjSAiEA9i8Th5knAqMXLJ2Z3vk-TEzIxBvC_wZan-IaoS3Bb7M%3D&lsparams=cps%2Cmet%2Cmh%2Cmm%2Cmn%2Cms%2Cmv%2Cmvi%2Cpl%2Crms%2Cinitcwndbps&lsig=APaTxxMwRgIhAKhPEVwkdAjA6Fz-46h2jK4mO_WL-jrPpNuuS1HV-HU4AiEA7tIY7jgZChWqtwxlWI4AoksM1k7-dd6jFl278pSG7pg%3D&cpn=ZPeP1nPTk6v_fejE&cver=2.20261120.00.00&rn=4&alr=yes main=false
+11-21 20:49:38.538 15953 15953 I chromium: [INFO:CONSOLE:0] "The resource https://i.ytimg.com/generate_204 was preloaded using link preload but not used within a few seconds from the window's load event. Please make sure it has an appropriate `as` value and it is preloaded intentionally.", source: https://m.youtube.com/watch?v=EnkWqUk2aA8&pp=ygUGbmF0dXJl (0)
+11-21 20:49:38.563 15953 16022 I A03BWV  : 1795294178563 shouldInterceptRequest https://m.youtube.com/api/stats/qoe?fmt=243&afmt=251&cpn=ZPeP1nPTk6v_fejE&el=detailpage&ns=yt&fexp=v1%2C100673025%2C1884%2C364%2C-76827062%2C58739%2C97694%2C27058999%2C31835%2C2821%2C124674%2C117689%2C9252%2C16509%2C23206%2C35404%2C45268%2C20030%2C15105%2C25059%2C4174%2C30446%2C18706%2C26008%2C13015%2C15427%2C661%2C33230%2C9330%2C170%2C73191%2C5133%2C38942%2C43494%2C59015%2C1168%2C8130%2C1538%2C28667%2C4116%2C57750%2C10304%2C3026%2C24249%2C2290%2C3844%2C18498%2C6470%2C22506%2C2402%2C111%2C9537%2C24935%2C18135%2C3%2C14786%2C4%2C12861%2C1946%2C6900%2C4594%2C9280%2C760%2C455%2C7749%2C2266%2C1929%2C2854%2C15703%2C7809%2C9786%2C2264%2C10055%2C1814%2C4270%2C451%2C3810%2C752%2C1626%2C441%2C4349%2C1446%2C1313%2C4340%2C12321%2C148%2C1928%2C3131%2C1480%2C774%2C94%2C4565%2C12952%2C516%2C1998%2C1386%2C437%2C134%2C380%2C10462%2C786%2C1292%2C9481%2C44%2C26%2C3752%2C9446%2C1181%2C1621%2C522%2C627%2C601%2C11655%2C6430%2C1915%2C4628%2C1959%2C1067%2C7541%2C76%2C6754%2C2718%2C19&cl=1024232073&seq=2&docid=EnkWqUk2aA8&ei=1QMCa9KIDPmHvdIPuJLfgAk&event=streamingstats&feature=search&plid=AAZgz378Q97cSAbD&sdetail=p%3Am.youtube.com%2Fresults&sourceid=r&cbrand=generic&cbr=Chrome%20Mobile%20Webview&cbrver=145.0.7632.218&c=MWEB&cver=2.20261120.00.00&cplayer=UNIPLAYER&cmodel=android%2017.0&cos=Android&cosver=17&cplatform=MOBILE&ad_playback=10.520:CDLbxNYkQ81lsFXO:15_2_1:1&ctmp=agc:t.14312;stnorm.0;env.-20.33;fml.-20.33;tmin.-31;tmax.-14;ng.0&afs=14.312:251;CggKA2RyYxIBMQ::i:fl.-18.2;tl.-14;vg.0;nm.1;sms.2:CAQoAQ&vfs=14.314:243:396::a:sms.2:CAQoAQ&view=14.314:411:231:2.625&vps=14.314:SU&bwm=14.314:932503:0.745&bwe=14.314:1471550&bat=14.314:1:0&cmt=14.314:0.000&bh=14.314:0.000&qclc=ChBaUGVQMW5QVGs2dl9mZWpFEAI main=false
+11-21 20:49:38.766 15953 16023 I A03BWV  : 1795294178766 shouldInterceptRequest https://m.youtube.com/youtubei/v1/log_event?alt=json main=false
+11-21 20:49:39.128   787  1019 I AdbWifiNetworkMonitor: Wi-Fi network available
+11-21 20:49:39.128   787   979 I HalDevMgr: bestIfaceCreationProposal is null, requestIface=STA, existingIface=[name=wlan0 type=STA]
+11-21 20:49:39.128   787  1019 I AdbWifiNetworkMonitor: Received the same Wi-Fi SSID. Ignoring.
+11-21 20:49:39.129   787   993 W libbinder.IPCThreadState: Sending oneway calls to frozen process.
+11-21 20:49:39.129   787   993 W libbinder.IPCThreadState: Sending oneway calls to frozen process.
+11-21 20:49:39.132  9128 10328 I NullBinder: NullBinder for android.net.action.RECOMMEND_NETWORKS triggering remote TransactionTooLargeException due to Service without Chimera impl, calling uid: 1000, calling pid: 0
+11-21 20:49:39.132  9128 10328 W libbinder.Binder: Large reply transaction of 1056768 bytes, interface descriptor , function: UNKNOWN_FUNCTION_NAME, code: 1, flags: 17
+11-21 20:49:39.136   787   993 D ConnectivityService: NetReassign [no changes] [c 0] [a 1] [i 0]
+11-21 20:49:39.137  9128 10657 I NearbyMediums: Wifi changed new SSID: "AndroidWifi"
+11-21 20:49:39.137  9128 10657 I NearbyMediums: WifiLanConnectivityInfo is not changed, skip notify.
+11-21 20:49:39.636  9128 10657 I NearbySharing: Network state changed: NetworkState(isRestricted=false, isOnline=true, isCongested=false, isMetered=false, isWifiConnected=true)
+11-21 20:49:39.773 15953 16215 D AidlBufferPool: bufferpool2 0x79a81ac4fc48 : 0(0 size) total buffers - 0(0 size) used buffers - 11/15 (recycle/alloc) - 4/22 (fetch/transfer)
+11-21 20:49:39.773 15953 16215 D AidlBufferPoolAcc: evictor expired: 1, evicted: 1
+11-21 20:49:40.773 15953 16215 D AidlBufferPool: bufferpool2 0x79a81ac4ec18 : 4(25165824 size) total buffers - 4(25165824 size) used buffers - 12/16 (recycle/alloc) - 4/25 (fetch/transfer)
+11-21 20:49:40.773 15953 16215 D AidlBufferPoolAcc: evictor expired: 1, evicted: 1
+11-21 20:49:41.585   787  1713 I BluetoothPowerStatsCollector: BluetoothActivityEnergyInfo not supported.
+11-21 20:49:41.874 15953 15953 I chromium: [INFO:CONSOLE:0] "The resource https://i.ytimg.com/generate_204 was preloaded using link preload but not used within a few seconds from the window's load event. Please make sure it has an appropriate `as` value and it is preloaded intentionally.", source: https://m.youtube.com/watch?v=EnkWqUk2aA8&pp=ygUGbmF0dXJl (0)
+11-21 20:49:42.140   787   979 I HalDevMgr: bestIfaceCreationProposal is null, requestIface=STA, existingIface=[name=wlan0 type=STA]
+11-21 20:49:42.140   787  1019 I AdbWifiNetworkMonitor: Wi-Fi network available
+11-21 20:49:42.140   787  1019 I AdbWifiNetworkMonitor: Received the same Wi-Fi SSID. Ignoring.
+11-21 20:49:42.155   787   993 W libbinder.IPCThreadState: Sending oneway calls to frozen process.
+11-21 20:49:42.155   787   993 W libbinder.IPCThreadState: Sending oneway calls to frozen process.
+11-21 20:49:42.164  9128 10242 I NullBinder: NullBinder for android.net.action.RECOMMEND_NETWORKS triggering remote TransactionTooLargeException due to Service without Chimera impl, calling uid: 1000, calling pid: 0
+11-21 20:49:42.165  9128 10242 W libbinder.Binder: Large reply transaction of 1056768 bytes, interface descriptor , function: UNKNOWN_FUNCTION_NAME, code: 1, flags: 17
+11-21 20:49:42.186   787   993 D ConnectivityService: NetReassign [no changes] [c 1] [a 4] [i 2]
+11-21 20:49:42.188  9128 10657 I NearbyMediums: Wifi changed new SSID: "AndroidWifi"
+11-21 20:49:42.188  9128 10657 I NearbyMediums: WifiLanConnectivityInfo is not changed, skip notify.
+11-21 20:49:42.263   586   586 I adbd    : adbd service requested 'shell,v2,TERM=xterm-256color:export ANDROID_LOG_TAGS=''; exec logcat '-d''

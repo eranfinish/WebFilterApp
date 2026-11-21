@@ -1,0 +1,18 @@
+<!doctype html><meta charset="utf-8"><title>Q1 poll</title>
+<body>
+<p id="st">n=0</p>
+<iframe id="f" width="10" height="10" src="about:blank"></iframe>
+<script>
+// Q1 probe. Every 500 ms this allowed page navigates a subframe to the blocked origin (port 8130) with ?run=<id>&n=<i>.
+// Attempts that reach the server are logged there. The page stops itself after 14 s, so a tab from an earlier run
+// cannot keep polling during a later run (that contaminated protocol v1).
+var run = new URLSearchParams(location.search).get('run') || '0';
+var i = 0;
+var f = document.getElementById('f');
+var timer = setInterval(function () {
+  f.src = 'http://10.0.2.2:8130/blocked.html?run=' + run + '&n=' + (i++);
+  document.getElementById('st').textContent = 'n=' + i;
+}, 500);
+setTimeout(function () { clearInterval(timer); document.getElementById('st').textContent = 'stopped n=' + i; }, 14000);
+</script>
+</body>

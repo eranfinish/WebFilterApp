@@ -1,0 +1,11 @@
+case=q2-A-star-allow-host-8131 blocklist=[*] allowlist=[10.0.2.2:8131] url=http://10.0.2.2:8131/index.html
+chrome_pid_before=9395
+Broadcast completed: result=0, data="SET mode=array t0=1795292590503 blocklist=[*] allowlist=[10.0.2.2:8131]"
+Broadcast completed: result=0, data="restrictions=URLAllowlist=[10.0.2.2:8131], URLBlocklist=[*]"
+navigated_at_ms=1795292609017
+chrome_pid_after=9395
+fg: com.android.chrome/org.chromium.chrome.browser.ChromeTabbedActivity
+url_bar:  text="10.0.2.2:8131/index.html"
+screen: text="ALLOWED index" text="ALLOWED index" text="10.0.2.2:8131/index.html" 
+--- server log lines for this case:
+{"ts":"2026-11-21T20:23:34.082Z","port":8131,"method":"GET","host":"10.0.2.2:8131","path":"/index.html","query":"","referer":"","dest":"","ua":"Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome"}

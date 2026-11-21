@@ -1,0 +1,2 @@
+11-21 20:49:31.709   552   579 I ActivityManager: Start proc 16880:com.webfilter.spike.a021.probe/u0a150 for broadcast {com.webfilter.spike.a021.probe/com.webfilter.spike.a021.probe.ProbeReceiver}
+11-21 20:49:40.035   552  1766 I ActivityManager: Process com.webfilter.spike.a021:vpn (pid 16834) has died: cch+5 CEM 

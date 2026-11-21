@@ -1,0 +1,20 @@
+11-21 20:20:57.933  5295  5305 I .spike.a020:vp: Background young concurrent copying GC freed 44089(3663KB) AllocSpace objects, 0(0B) LOS objects, 54% free, 2983KB/6515KB, paused 6.570ms,1.043ms total 26.115ms
+11-21 20:20:59.241 12499 12499 I A020    : op=kill_vpn -> KILL_SELF broadcast sent
+11-21 20:20:59.242  5295  5295 I A020    : KILL_SELF pid=5295
+11-21 20:20:59.409   552   837 I ActivityManager: Process com.webfilter.spike.a020:vpn (pid 5295) has died: vis BFGS
+11-21 20:20:59.414   552   837 W ActivityManager: Scheduling restart of crashed service com.webfilter.spike.a020/.vpn.TunVpnService in 1000ms for start-requested
+11-21 20:21:00.431   552   579 I ActivityManager: Start proc 12958:com.webfilter.spike.a020:vpn/u0a147 for service {com.webfilter.spike.a020/com.webfilter.spike.a020.vpn.TunVpnService}
+11-21 20:21:00.439 12958 12958 I .spike.a020:vp: Late-enabling -Xcheck:jni
+11-21 20:21:00.471 12958 12958 W .spike.a020:vp: Unexpected CPU variant for X86 using defaults: x86_64
+11-21 20:21:00.653 12958 12958 V GraphicsEnvironment: ANGLE Developer option for 'com.webfilter.spike.a020' set to: 'default'
+11-21 20:21:00.681 12958 12958 I A020    : onCreate pid=12958 uptimeMs=1566038
+11-21 20:21:00.681 12958 12958 I A020    : onStartCommand startId=6 running=false
+11-21 20:21:00.688 12958 12958 I A020    : upstream dns at start=/10.0.2.3 uptimeMs=1566046
+11-21 20:21:00.744   552  1165 I Vpn     : Established by com.webfilter.spike.a020 on tun0
+11-21 20:21:00.804 12958 12958 I A020    : establish ok pid=12958 uptimeMs=1566162
+11-21 20:21:00.805 12958 12958 I A020    : SELFTEST protect(unbound Socket)=false protect(bound Socket)=true
+11-21 20:21:00.807 12958 12958 I A020    : SELFTEST protect(Socket)=true protect(DatagramSocket)=true
+11-21 20:21:01.081 12958 12989 I A020    : upstream dns resolved /10.0.2.3 uptimeMs=1566439
+11-21 20:21:04.180 12499 12499 I A020    : op=start -> startService requested
+11-21 20:21:04.181 12958 12958 I A020    : onStartCommand startId=7 running=true
+11-21 20:21:16.097 12958 12967 I .spike.a020:vp: Background concurrent copying GC freed 29072(2432KB) AllocSpace objects, 0(0B) LOS objects, 49% free, 2219KB/4439KB, paused 5.923ms,68us total 19.895ms

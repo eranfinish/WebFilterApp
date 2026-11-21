@@ -1,0 +1,10 @@
+Broadcast completed: result=0, data="SET mode=array t0=1795295447924 blocklist=[www.google.com/search?udm=2] allowlist=[]"
+before tap:
+ text="google.com/search?q=test"
+after tap:
+ text="google.com/search?sca_esv=364111ea1c1b2423&amp;sxsrf=AKL5yDhqXFFqbIlMo2xNsvCoUOpaEocSLQ:1795295460129&amp;udm=2&amp;fbs=ACAhTvxAl5dEdnYCAy4wtGl6vwrKETGPkQNwAb3NgAw5n-tH10yfjz5J_IBaQC7UV-NQT1Dl2S"
+text="www.google.com is blocked"
+text="www.google.com"
+text="www.google.com is blocked"
+text="Your organization doesn’t allow you to view this site"
+text="google.com/search?sca_esv=364111ea1c1b2423&amp;sxsrf=AKL5yDhqXFFqbIlMo2xNsvCoUOpaEocSLQ:1795295460129&amp;udm=2&amp;fbs=ACAhTvxAl5dEdnYCAy4wtGl6vwrKETGPkQNwAb3NgAw5n-tH10yfjz5J_IBaQC7UV-NQT1Dl2S"

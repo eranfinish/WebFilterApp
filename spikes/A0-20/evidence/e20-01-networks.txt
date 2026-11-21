@@ -1,0 +1,1 @@
+11-21 20:23:42.122 13246 13263 I A020P   : op=nets uid=10148 -> handle=432902426637 wifi iface=wlan0 internet=true validated=true | handle=441492361229 cell iface=eth0 internet=true validated=true | handle=450082295821 wifi+vpn iface=tun0 internet=true validated=true

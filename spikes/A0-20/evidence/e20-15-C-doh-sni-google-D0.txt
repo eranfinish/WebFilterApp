@@ -1,0 +1,2 @@
+11-21 20:35:12.882 14026 14073 I A020    : A020 syn 8.8.8.8:443 srcPort=43682
+11-21 20:35:13.258 14358 14492 I A020P   : op=doh_sni uid=10148 -> OK ip=8.8.8.8 sni=dns.google status="HTTP/1.1 200 OK" answerInBody=true ms=377 body=142  {"Status":0,"TC":false,"RD":true,"RA":true,"AD":false,"CD":false,"Question":[{"name":"en.wikipedia.org.","type":1}],"Answer":[{"name":"en.wikipedia.org.","type":5,"TTL":12317,"data":"dyna.wikimedia.org."},{"name":"dyna.wikimedia.org.","type":1,"TTL":180,"data":"185.15.59.224"}],"Comment":"Respo

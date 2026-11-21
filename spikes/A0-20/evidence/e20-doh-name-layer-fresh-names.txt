@@ -1,0 +1,5 @@
+D0 quad9 (fresh):
+11-21 20:41:47.958 14689 14966 I A020P   : op=dns uid=10148 -> OK 149.112.112.112, 9.9.9.9, 2620:fe::fe, 2620:fe::9
+D1 fresh names:
+11-21 20:41:56.472 14689 14987 I A020P   : op=dns uid=10148 -> OK 172.64.41.4, 162.159.61.4, 2a06:98c1:52::4, 2803:f800:53::4
+11-21 20:41:56.781 14689 14998 I A020P   : op=dns uid=10148 -> FAIL UnknownHostException: Unable to resolve host "uniq7731.dns.google": No address associated with hostname

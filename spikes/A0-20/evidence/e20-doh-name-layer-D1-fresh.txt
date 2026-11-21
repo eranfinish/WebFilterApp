@@ -1,0 +1,5 @@
+D1 (dohNames on), fresh real DoH name + control:
+11-21 20:43:05.207 14026 14073 I A020    : A020 dns blocked name=1dot1dot1dot1.cloudflare-dns.com
+11-21 20:43:05.212 14026 14073 I A020    : A020 dns blocked name=1dot1dot1dot1.cloudflare-dns.com
+11-21 20:43:05.213 14689 15048 I A020P   : op=dns uid=10148 -> FAIL UnknownHostException: Unable to resolve host "1dot1dot1dot1.cloudflare-dns.com": No address associated with hostname
+11-21 20:43:08.410 14689 15057 I A020P   : op=dns uid=10148 -> OK 104.20.26.136, 172.66.157.237, 2606:4700:10::6814:1a88, 2606:4700:10::ac42:9ded

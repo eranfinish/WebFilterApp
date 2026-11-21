@@ -1,0 +1,10 @@
+case=q5-portscope-8130-blocked blocklist=[10.0.2.2:8130] url=http://10.0.2.2:8130/index.html
+chrome_pid_before=9395
+Broadcast completed: result=0, data="SET mode=array t0=1795292352431 blocklist=[10.0.2.2:8130] allowlist=[]"
+Broadcast completed: result=0, data="restrictions=URLBlocklist=[10.0.2.2:8130]"
+navigated_at_ms=1795292374958
+chrome_pid_after=9395
+fg: com.android.chrome/org.chromium.chrome.browser.ChromeTabbedActivity
+url_bar: 
+screen: text="10.0.2.2" text="10.0.2.2 is blocked" text="Your organization doesn’t allow you to view this site" text="10.0.2.2:8130/index.html" 
+--- server log lines for this case:

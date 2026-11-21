@@ -1,0 +1,10 @@
+case=q6yt-direct-watch-rule blocklist=[m.youtube.com/watch] allowlist=[] url=https://m.youtube.com/watch?v=EnkWqUk2aA8
+chrome_pid_before=9395
+Broadcast completed: result=0, data="SET mode=array t0=1795295754276 blocklist=[m.youtube.com/watch] allowlist=[]"
+Broadcast completed: result=0, data="restrictions=URLBlocklist=[m.youtube.com/watch]"
+navigated_at_ms=1795295772637
+chrome_pid_after=9395
+fg: com.android.chrome/org.chromium.chrome.browser.ChromeTabbedActivity
+url_bar:  text="m.youtube.com/watch?v=EnkWqUk2aA8"
+screen: text="m.youtube.com" text="m.youtube.com is blocked" text="Your organization doesn’t allow you to view this site" text="m.youtube.com/watch?v=EnkWqUk2aA8" 
+--- server log lines for this case:

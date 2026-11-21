@@ -1,0 +1,1 @@
+Broadcast completed: result=0, data="SET mode=array t0=1795295009828 blocklist=[10.0.2.2:8130] allowlist=[10.0.2.2:8131]"

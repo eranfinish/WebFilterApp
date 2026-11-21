@@ -1,0 +1,11 @@
+case=q4-udm-rule-control-search.html blocklist=[10.0.2.2:8131/search.html?udm=2] allowlist=[] url=http://10.0.2.2:8131/search.html
+chrome_pid_before=9395
+Broadcast completed: result=0, data="SET mode=array t0=1795293027348 blocklist=[10.0.2.2:8131/search.html?udm=2] allowlist=[]"
+Broadcast completed: result=0, data="restrictions=URLBlocklist=[10.0.2.2:8131/search.html?udm=2]"
+navigated_at_ms=1795293046344
+chrome_pid_after=9395
+fg: com.android.chrome/org.chromium.chrome.browser.ChromeTabbedActivity
+url_bar:  text="10.0.2.2:8131/search.html"
+screen: text="ALLOWED search.html" text="ALLOWED search.html" text="10.0.2.2:8131/search.html" 
+--- server log lines for this case:
+{"ts":"2026-11-21T20:30:46.599Z","port":8131,"method":"GET","host":"10.0.2.2:8131","path":"/search.html","query":"","referer":"","dest":"","ua":"Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome"}

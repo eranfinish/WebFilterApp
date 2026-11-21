@@ -1,0 +1,2 @@
+11-21 20:35:29.869 14026 14073 I A020    : A020 syn 185.15.59.224:80 srcPort=35926
+11-21 20:35:30.124 14358 14508 I A020P   : op=http_host uid=10148 -> net[handle=432902426637 wifi iface=wlan0] OK ip=185.15.59.224 host=en.wikipedia.org status="HTTP/1.1 301 Moved Permanently" ms=255

@@ -1,0 +1,23 @@
+== cmdline file
+_ --disable-fre --no-first-run --disable-sync
+== launch
+Starting: Intent { act=android.intent.action.VIEW dat=about: pkg=com.android.chrome }
+Status: ok
+LaunchState: COLD
+Activity: com.android.chrome/org.chromium.chrome.browser.ChromeTabbedActivity
+TotalTime: 9789
+WaitTime: 9859
+Complete
+== focus
+text=""
+text=""
+text=""
+text=""
+text=""
+text=""
+text="Pixel Launcher isn't responding"
+text=""
+text=""
+text=""
+text="Close app"
+text="Wait"

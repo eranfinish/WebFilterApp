@@ -1,0 +1,2 @@
+11-21 20:35:39.020 14026 14073 I A020    : A020 syn 185.15.59.224:80 srcPort=35928
+11-21 20:35:39.191 14358 14522 I A020P   : op=http_host uid=10148 -> default-route OK ip=185.15.59.224 host=en.wikipedia.org status="HTTP/1.1 301 Moved Permanently" ms=179

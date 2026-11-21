@@ -1,0 +1,12 @@
+== chrome_clear (DO active)
+Broadcast completed: result=0, data="CLEARED t0=1795295973247"
+Broadcast completed: result=0, data="restrictions="
+== owner
+User 0: admin=com.webfilter.spike.a03b/.AdminReceiver,DeviceOwner
+== chrome://policy after clear
+policy-count-words: 2
+text="No policies set"
+text="No policies set"
+== chrome versionName
+    versionName=145.0.7632.218
+  Current WebView package (name, version): (com.google.android.webview, 145.0.7632.218)

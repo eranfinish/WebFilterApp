@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Spike A0.3b. testOnly lets adb install -t it and lets dpm remove-active-admin remove the owner. -->
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <uses-permission android:name="android.permission.INTERNET" />
+
+    <application
+        android:label="A0.3b DPC+WV"
+        android:allowBackup="false"
+        android:usesCleartextTraffic="true"
+        android:testOnly="true">
+
+        <receiver
+            android:name=".AdminReceiver"
+            android:exported="true"
+            android:permission="android.permission.BIND_DEVICE_ADMIN">
+            <meta-data
+                android:name="android.app.device_admin"
+                android:resource="@xml/device_admin" />
+            <intent-filter>
+                <action android:name="android.app.action.DEVICE_ADMIN_ENABLED" />
+            </intent-filter>
+        </receiver>
+
+        <!-- Test harness entry point for Chrome policies, driven by `am broadcast -n`. -->
+        <receiver
+            android:name=".CmdReceiver"
+            android:exported="true" />
+
+        <!-- Our own WebView browser under test, started with am start (extras url and deny). -->
+        <activity
+            android:name=".WebTestActivity"
+            android:exported="true"
+            android:configChanges="orientation|screenSize|keyboardHidden" />
+    </application>
+</manifest>

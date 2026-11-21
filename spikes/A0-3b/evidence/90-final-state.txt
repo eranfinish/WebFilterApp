@@ -1,0 +1,49 @@
+== devices (both emulators)
+List of devices attached
+emulator-5580	device
+emulator-5590	device
+
+== users
+Users:
+	UserInfo{0:Owner:4c13} running
+== accounts
+  Accounts: 0
+== owners
+== a03b installed count
+0
+== chrome versionName
+    versionName=145.0.7632.218
+== webview
+  Current WebView package (name, version): (com.google.android.webview, 145.0.7632.218)
+== device_provisioned / user_setup_complete
+1
+1
+== screen settings we changed (original screen_off_timeout NOT recorded before change)
+2147483647
+Control the power manager
+
+usage: svc power stayon [true|false|usb|ac|wireless|dock]
+         Set the 'keep awake while plugged in' setting.
+       svc power reboot --no-wait [reason]
+         Perform a runtime shutdown and reboot device with specified reason.
+       svc power shutdown
+         Perform a runtime shutdown and power off the device.
+       svc power forcesuspend [t]
+         Force the system into suspend, ignoring all wakelocks.
+         t - Number of milliseconds to wait before issuing force-suspend.
+             Helps with devices that can't suspend while plugged in.
+             Defaults to 0.
+             When using a delay, you must use the nohup shell modifier:
+             'adb shell nohup svc power forcesuspend [time]'
+         Use caution; this is dangerous. It puts the device to sleep
+         immediately without giving apps or the system an opportunity to
+         save their state.
+
+== chrome debug-app / cmdline file
+ls: /data/local/tmp/chrome-command-line: No such file or directory
+== servers on 8130/8131
+end
+== after emu kill
+List of devices attached
+emulator-5590	device
+

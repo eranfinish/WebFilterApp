@@ -1,0 +1,1 @@
+11-21 20:31:39.243 14026 14026 I A020    : STATS pid=14026 running=true dns_relayed=2 tcp_closed=3 tcp_connect_ok=4 tcp_in_bytes_accepted=4 tcp_no_conn_rst=2 tcp_out_bytes_sent=2 tcp_rst_sent=2 tcp_syn=4 udp_in=2 udp_out=2 v6_rejected=8

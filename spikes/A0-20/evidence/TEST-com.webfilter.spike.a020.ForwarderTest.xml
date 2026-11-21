@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.webfilter.spike.a020.ForwarderTest" tests="8" skipped="0" failures="0" errors="0" timestamp="2026-11-21T20:19:36" hostname="ERAN-PC3" time="0.377">
+  <properties/>
+  <testcase name="udp443IsRejectedWithIcmpPortUnreachable" classname="com.webfilter.spike.a020.ForwarderTest" time="0.094"/>
+  <testcase name="tcpHandshakeDataAndCloseThroughRealSocket" classname="com.webfilter.spike.a020.ForwarderTest" time="0.186"/>
+  <testcase name="connectFailureAnswersWithReset" classname="com.webfilter.spike.a020.ForwarderTest" time="0.045"/>
+  <testcase name="dnsForBlockedNameGetsNxdomainLocally" classname="com.webfilter.spike.a020.ForwarderTest" time="0.005"/>
+  <testcase name="tcpToPrivateDnsIsResetNotDropped" classname="com.webfilter.spike.a020.ForwarderTest" time="0.001"/>
+  <testcase name="ipv6IsRejectedWithIcmpv6" classname="com.webfilter.spike.a020.ForwarderTest" time="0.011"/>
+  <testcase name="udpEchoThroughRealSocket" classname="com.webfilter.spike.a020.ForwarderTest" time="0.021"/>
+  <testcase name="unknownProtocolIsRejectedWithIcmp" classname="com.webfilter.spike.a020.ForwarderTest" time="0.01"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

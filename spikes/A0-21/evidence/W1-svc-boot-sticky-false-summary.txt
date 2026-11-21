@@ -1,0 +1,2 @@
+W1-svc-boot-sticky-false kill=1795295009850 establish=1795295010066 offline_to_establish_ms=216 first_ok_after_kill_ms=1795295010129 offline_to_first_ok_ms=279 first_fail_ms=1795295009877 eacces_samples=1 ok_before_establish=0
+restart: onStartCommand startId=2 flags=0 retry=false

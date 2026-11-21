@@ -1,0 +1,11 @@
+case=q5-block-page-8130 blocklist=[10.0.2.2:8130] url=http://10.0.2.2:8130/index.html
+chrome_pid_before=9395
+Broadcast completed: result=0, data="SET mode=array t0=1795292462262 blocklist=[10.0.2.2:8130] allowlist=[]"
+Broadcast completed: result=0, data="restrictions=URLBlocklist=[10.0.2.2:8130]"
+navigated_at_ms=1795292480601
+chrome_pid_after=9395
+fg: com.android.chrome/org.chromium.chrome.browser.ChromeTabbedActivity
+url_bar:  text="10.0.2.2:8130/index.html"
+screen: text="10.0.2.2" text="10.0.2.2 is blocked" text="Your organization doesn’t allow you to view this site" text="10.0.2.2:8130/index.html" 
+screenshot=/c/Projests/WebFilterApp/WebFilterApp/spikes/A0-3b/evidence/case-q5-block-page-8130.png
+--- server log lines for this case:

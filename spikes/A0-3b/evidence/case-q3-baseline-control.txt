@@ -1,0 +1,10 @@
+case=q3-baseline-control blocklist=[-] url=http://10.0.2.2:8131/embed-control.html
+Broadcast completed: result=0, data="restrictions="
+navigated_at_ms=1795292051454
+fg: com.android.chrome/org.chromium.chrome.browser.ChromeTabbedActivity
+screen: text="EMBED-CONTROL iframe=load img=load script=load" text="iframe=load img=load script=load" text="FRAME content" text="FRAME content" text="img" text="10.0.2.2:8131/embed-control.html" 
+--- server log lines for this case:
+{"ts":"2026-11-21T20:14:17.675Z","port":8131,"method":"GET","host":"10.0.2.2:8131","path":"/embed-control.html","query":"","referer":"","dest":"","ua":"Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome"}
+{"ts":"2026-11-21T20:14:17.943Z","port":8131,"method":"GET","host":"10.0.2.2:8131","path":"/frame.html","query":"?t=1795292056929&k=iframe","referer":"http://10.0.2.2:8131/embed-control.html","dest":"","ua":"Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome"}
+{"ts":"2026-11-21T20:14:17.953Z","port":8131,"method":"GET","host":"10.0.2.2:8131","path":"/s.js","query":"?t=1795292056929&k=script","referer":"http://10.0.2.2:8131/embed-control.html","dest":"","ua":"Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome"}
+{"ts":"2026-11-21T20:14:18.136Z","port":8131,"method":"GET","host":"10.0.2.2:8131","path":"/img.svg","query":"?t=1795292056929&k=img","referer":"http://10.0.2.2:8131/embed-control.html","dest":"","ua":"Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome"}

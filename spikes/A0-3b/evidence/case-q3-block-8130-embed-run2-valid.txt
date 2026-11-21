@@ -1,0 +1,13 @@
+case=q3-block-8130-embed blocklist=[10.0.2.2:8130] url=http://10.0.2.2:8131/embed.html
+chrome not running before case: relaunching
+chrome_pid_before=9395
+Broadcast completed: result=0, data="SET mode=array t0=1795292168239 blocklist=[10.0.2.2:8130] allowlist=[]"
+Broadcast completed: result=0, data="restrictions=URLBlocklist=[10.0.2.2:8130]"
+navigated_at_ms=1795292187906
+chrome_pid_after=9395
+fg: com.android.chrome/org.chromium.chrome.browser.ChromeTabbedActivity
+screen: text="EMBED iframe=load img=load script=load" text="iframe=load img=load script=load" text="10.0.2.2" text="img" text="10.0.2.2:8131/embed.html" 
+--- server log lines for this case:
+{"ts":"2026-11-21T20:16:38.013Z","port":8131,"method":"GET","host":"10.0.2.2:8131","path":"/embed.html","query":"","referer":"","dest":"","ua":"Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome"}
+{"ts":"2026-11-21T20:16:38.125Z","port":8130,"method":"GET","host":"10.0.2.2:8130","path":"/s.js","query":"?t=1795292197092&k=script","referer":"http://10.0.2.2:8131/","dest":"","ua":"Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome"}
+{"ts":"2026-11-21T20:16:38.143Z","port":8130,"method":"GET","host":"10.0.2.2:8130","path":"/img.svg","query":"?t=1795292197092&k=img","referer":"http://10.0.2.2:8131/","dest":"","ua":"Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome"}

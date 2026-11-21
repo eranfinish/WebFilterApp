@@ -1,0 +1,8 @@
+q1 run=1
+Broadcast completed: result=0, data="SET mode=array t0=1795293297129 blocklist=[10.0.2.2:8130] allowlist=[]"
+host_before_broadcast_ms=1795293297817 host_after_broadcast_ms=1795293298226
+server_lines_for_run=43
+run=1 allowed_attempts_logged=12 host_before=1795293297817 host_after=1795293298226
+last_allowed_n=11 last_allowed_host_ms=1795293297811
+first_allowed_n=0 (run started polling before the rule)
+latency_from_call_start_ms in [0, 494] (last allowed attempt was -6 ms after call start)

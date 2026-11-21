@@ -1,0 +1,1 @@
+A2-alarm-boot-sticky-false kill=1795295561960 establish=1795295565285 offline_to_establish_ms=3325 first_ok_after_kill_ms=1795295565473 offline_to_first_ok_ms=3513 first_fail_ms=1795295561971 eacces_samples=14 ok_before_establish=0

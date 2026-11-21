@@ -1,0 +1,9 @@
+﻿A0.20 corrections (runs recorded as invalid or superseded, kept on disk for transparency)
+
+1. INVALID: e20-08 and e20-09 "raw ... --es port 853/53/8853". The helper passed port as a string (--es), the probe read it with getIntExtra and used its default 443. Those runs connected to port 443. Corrected by e20-12 (--ei port) and e20-11/e20-12 with the SYN trace.
+
+2. SUPERSEDED: e20-03, e20-05, e20-06, e20-07 "bindProcessToNetwork lets the app out". The conclusion was based on forwarder counters, and the probe's HttpURLConnection reused a pooled connection (Android keeps its own pool even with http.keepAlive=false), so no new SYN appeared. With the SYN trace and raw sockets (no pool), the same bindProcessToNetwork requests go through the tunnel: see e20-17 (wifi and cell, SYN logged, srcPort per request). Escape NOT confirmed.
+
+3. SUPERSEDED: e20-14-B/C (HttpURLConnection, bindProcess to wifi and cell, no SYN). Same pooling artifact (the request reused the socket opened by the control in e20-14-A). Raw-socket check e20-17 is the valid one.
+
+Valid evidence: the trace (A020 syn ...) from the forwarder in :vpn, with the raw probe op (http_host, net_connect) and the probe's uid 10148.

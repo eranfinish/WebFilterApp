@@ -1,0 +1,30 @@
+<!doctype html><meta charset="utf-8"><title>EMBED-CONTROL pending</title>
+<body>
+<p id="st">EMBED-CONTROL pending</p>
+<iframe id="f" width="200" height="60" src=""></iframe>
+<img id="im" width="20" height="20" src="">
+<script id="sc"></script>
+<script>
+// Control for Q3: the same page, but its sub-resources come from the page's own origin (port 8131).
+var T = Date.now();
+var r = {iframe: 'pending', img: 'pending', script: 'pending'};
+function done() {
+  var s = 'iframe=' + r.iframe + ' img=' + r.img + ' script=' + r.script;
+  document.getElementById('st').textContent = s;
+  document.title = 'EMBED-CONTROL ' + s;
+}
+var f = document.getElementById('f');
+f.onload = function () { r.iframe = 'load'; };
+f.onerror = function () { r.iframe = 'error'; };
+f.src = 'http://10.0.2.2:8131/frame.html?t=' + T + '&k=iframe';
+var im = document.getElementById('im');
+im.onload = function () { r.img = 'load'; };
+im.onerror = function () { r.img = 'error'; };
+im.src = 'http://10.0.2.2:8131/img.svg?t=' + T + '&k=img';
+var sc = document.getElementById('sc');
+sc.onload = function () { r.script = 'load'; };
+sc.onerror = function () { r.script = 'error'; };
+sc.src = 'http://10.0.2.2:8131/s.js?t=' + T + '&k=script';
+setTimeout(done, 6000);
+</script>
+</body>

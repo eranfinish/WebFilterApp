@@ -1,0 +1,5 @@
+INVALID RUN: the Device Owner record stayed bound to a021 but DevicePolicyManager reported 'No active admin', so lockdown_on and start were refused and no tunnel was up (no :vpn process). Both downloads therefore went over the normal network; this run does NOT test the tunnel. Probe uid was 10149 on this reinstall.
+== http://example.org/
+11-21 21:37:10.290  5230  5346 I A021P   : op=download uid=10149 -> download id=17 url=http://example.org/ status=SUCCESSFUL reason=0
+== http://en.wikipedia.org/
+11-21 21:37:47.680  5230  5473 I A021P   : op=download uid=10149 -> download id=18 url=http://en.wikipedia.org/ status=SUCCESSFUL reason=0

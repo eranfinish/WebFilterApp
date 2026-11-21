@@ -1,0 +1,5 @@
+Broadcast completed: result=0, data="SET mode=array t0=1795295792658 blocklist=[m.youtube.com/watch] allowlist=[]"
+results url_bar:  text="m.youtube.com/results?search_query=nature"
+candidate: 83 1026 6kgN5uo3fzAOOQFJHpbKOI8n2-6rAOwsTHlG0guKXK7G8X8NsY6LuL3nu_aB
+after-tap url_bar:  text="m.youtube.com/@FreeDocumentaryNature"
+fg: com.android.chrome/org.chromium.chrome.browser.ChromeTabbedActivity

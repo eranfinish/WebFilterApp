@@ -1,0 +1,1 @@
+11-21 20:50:47.936   552   566 I ActivityManager: Process com.webfilter.spike.a021:vpn (pid 17009) has died: cch+5 CEM 

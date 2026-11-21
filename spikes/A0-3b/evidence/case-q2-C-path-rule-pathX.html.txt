@@ -1,0 +1,11 @@
+case=q2-C-path-rule-pathX.html blocklist=[10.0.2.2:8131/path.html] allowlist=[] url=http://10.0.2.2:8131/pathX.html
+chrome_pid_before=9395
+Broadcast completed: result=0, data="SET mode=array t0=1795292776138 blocklist=[10.0.2.2:8131/path.html] allowlist=[]"
+Broadcast completed: result=0, data="restrictions=URLBlocklist=[10.0.2.2:8131/path.html]"
+navigated_at_ms=1795292794502
+chrome_pid_after=9395
+fg: com.android.chrome/org.chromium.chrome.browser.ChromeTabbedActivity
+url_bar:  text="10.0.2.2:8131/pathX.html"
+screen: text="ALLOWED pathX.html" text="ALLOWED pathX.html" text="10.0.2.2:8131/pathX.html" 
+--- server log lines for this case:
+{"ts":"2026-11-21T20:26:39.577Z","port":8131,"method":"GET","host":"10.0.2.2:8131","path":"/pathX.html","query":"","referer":"","dest":"","ua":"Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome"}

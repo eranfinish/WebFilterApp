@@ -1,0 +1,3 @@
+11-21 20:34:11.441 14026 14073 I A020    : A020 dns blocked name=en.wikipedia.org
+11-21 20:34:11.443 14026 14073 I A020    : A020 dns blocked name=en.wikipedia.org
+11-21 20:34:11.444 14358 14423 I A020P   : op=net_bindproc uid=10148 -> net[handle=432902426637 wifi iface=wlan0] bindProcess FAIL UnknownHostException: Unable to resolve host "en.wikipedia.org": No address associated with hostname

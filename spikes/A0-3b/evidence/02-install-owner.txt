@@ -1,0 +1,16 @@
+== precheck
+Users:
+	UserInfo{0:Owner:4c13} running
+  Accounts: 0
+== install
+Performing Streamed Install
+Success
+== set-device-owner
+Success: Device owner set to package com.webfilter.spike.a03b/.AdminReceiver
+Active admin set to component com.webfilter.spike.a03b/.AdminReceiver
+exit=0
+== list-owners
+User 0: admin=com.webfilter.spike.a03b/.AdminReceiver,DeviceOwner
+== status op
+Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a03b/.CmdReceiver (has extras) }
+Broadcast completed: result=0, data="owner=true admin=true t=1795291701504"

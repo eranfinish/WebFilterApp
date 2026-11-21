@@ -1,0 +1,2 @@
+11-21 20:32:30.324 14026 14073 I A020    : A020 syn 104.20.26.136:80 srcPort=46216
+11-21 20:32:30.840 14144 14251 I A020P   : op=net_bindproc uid=10148 -> net[handle=432902426637 wifi iface=wlan0] bindProcess OK code=200 bytes=577

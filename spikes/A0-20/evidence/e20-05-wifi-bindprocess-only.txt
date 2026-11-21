@@ -1,0 +1,1 @@
+11-21 20:24:57.663 13246 13345 I A020P   : op=net_bindproc uid=10148 -> net[handle=432902426637 wifi iface=wlan0] bindProcess OK code=200 bytes=577

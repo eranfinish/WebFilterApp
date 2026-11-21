@@ -1,0 +1,1 @@
+11-21 20:26:08.525 12958 12958 I A020    : STATS pid=12958 running=true dns_blocked=2 dns_relayed=16 tcp853_rst=1 tcp_client_rst=1 tcp_closed=12 tcp_connect_ok=14 tcp_in_bytes_accepted=186 tcp_out_bytes_sent=2434 tcp_rst_sent=1 tcp_syn=14 udp443_rejected=12 udp_in=16 udp_out=16 v6_rejected=30

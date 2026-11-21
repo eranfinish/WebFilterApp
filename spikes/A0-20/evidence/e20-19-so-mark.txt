@@ -1,0 +1,2 @@
+11-21 20:37:31.952 14358 14629 I A020P   : op=so_mark uid=10148 -> SO_MARK=0x20001 FAIL errno=1 setsockopt failed: EPERM (Operation not permitted)
+11-21 20:37:34.291 14358 14635 I A020P   : op=so_mark uid=10148 -> SO_MARK=0x1 FAIL errno=1 setsockopt failed: EPERM (Operation not permitted)

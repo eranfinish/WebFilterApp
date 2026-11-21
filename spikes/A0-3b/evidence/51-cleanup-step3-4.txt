@@ -1,0 +1,12 @@
+== remove-active-admin
+Success: Admin removed ComponentInfo{com.webfilter.spike.a03b/com.webfilter.spike.a03b.AdminReceiver}
+== list-owners
+== force-stop after owner removed (app still installed)
+pid_before=15953
+pid_after=
+== uninstall
+Success
+== clear debug app + command-line file
+ls: /data/local/tmp/chrome-command-line: No such file or directory
+== packages/owners now
+0

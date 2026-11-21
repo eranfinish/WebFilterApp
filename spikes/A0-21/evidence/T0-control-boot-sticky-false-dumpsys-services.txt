@@ -1,0 +1,64 @@
+ACTIVITY MANAGER SERVICES (dumpsys activity services)
+  Last ANR service:
+ServiceRecord{ecf5269 u0 com.google.android.gms/com.google.android.location.internal.GoogleLocationManagerService}
+    intent={act=com.android.location.service.GeofenceProvider cmp=com.google.android.gms/com.google.android.location.internal.GoogleLocationManagerService}
+    packageName=com.google.android.gms
+    processName=com.google.android.gms.persistent
+    baseDir=/product/priv-app/PrebuiltGmsCore/PrebuiltGmsCore.apk
+    dataDir=/data/user/0/com.google.android.gms
+    app=ProcessRecord{5fafd19 4446:com.google.android.gms.persistent/u0a97}
+    allowWhileInUsePermissionInFgs=true
+    recentCallingPackage=com.google.android.gms
+    recentCallingUid=10097
+    allowStartForeground=10
+    startForegroundCount=0
+    infoAllowStartForeground=[callingPackage: android; callingUid: 1000; uidState: PER ; intent: Intent { act=com.android.location.service.GeofenceProvider cmp=com.google.android.gms/com.google.android.location.internal.GoogleLocationManagerService }; code:PROC_STATE_PERSISTENT; tempAllowListReason:<null>; targetSdkVersion:31; callerTargetSdkVersion:31; startForegroundCount:0; bindFromPackage:null]
+    createTime=-8m18s890ms startingBgTimeout=--
+    lastActivity=-24s422ms restartTime=-46s656ms createdFromFg=false
+    startRequested=true delayedStop=false stopIfKilled=false callStart=true lastStartId=30
+    executeNesting=4 executeFg=true executingStart=-24s412ms
+    restartCount=1 restartDelay=+58d6h15m23s689ms nextRestartTime=+58d6h24m54s625ms crashCount=0
+    Delivered Starts:
+    #0 id=28 dur=-28s870ms dc=1
+      intent=Intent { cmp=com.google.android.gms/com.google.android.location.internal.GoogleLocationManagerService (has extras) }
+    #1 id=29 dur=-26s235ms dc=1
+      intent=Intent { cmp=com.google.android.gms/com.google.android.location.internal.GoogleLocationManagerService (has extras) }
+    #2 id=30 dur=-24s412ms dc=1
+      intent=Intent { cmp=com.google.android.gms/com.google.android.location.internal.GoogleLocationManagerService (has extras) }
+    Bindings:
+    * IntentBindRecord{81f5950 CREATE}:
+      intent={act=com.google.android.location.internal.GoogleLocationManagerService.START pkg=com.google.android.gms}
+      binder=null
+      requested=true received=false hasBound=true doRebind=false
+      * Client AppBindRecord{e4ffb02 ProcessRecord{5fafd19 4446:com.google.android.gms.persistent/u0a97}}
+        Per-process Connections:
+          ConnectionRecord{e3f5c39 u0 CR WACT CAPS com.google.android.gms/com.google.android.location.internal.GoogleLocationManagerService:@8505c00}
+    * IntentBindRecord{911d84e CREATE}:
+      intent={act=com.android.location.service.GeofenceProvider cmp=com.google.android.gms/com.google.android.location.internal.GoogleLocationManagerService}
+      binder=android.os.BinderProxy@c14ac13
+      requested=true received=true hasBound=true doRebind=false
+      * Client AppBindRecord{5a8ba7c ProcessRecord{f81f0e 552:system/1000}}
+        Per-process Connections:
+          ConnectionRecord{ca8cf0 u0 CR !FG !VIS com.google.android.gms/com.google.android.location.internal.GoogleLocationManagerService:@5319133}
+    All Connections:
+      ConnectionRecord{ca8cf0 u0 CR !FG !VIS com.google.android.gms/com.google.android.location.internal.GoogleLocationManagerService:@5319133}
+      ConnectionRecord{e3f5c39 u0 CR WACT CAPS com.google.android.gms/com.google.android.location.internal.GoogleLocationManagerService:@8505c00}
+
+  User 0 active services:
+  * ServiceRecord{416edd3 u0 com.webfilter.spike.a021/.vpn.TunVpnService}
+    intent={act=android.net.VpnService pkg=com.webfilter.spike.a021}
+    packageName=com.webfilter.spike.a021
+    processName=com.webfilter.spike.a021:vpn
+    permission=android.permission.BIND_VPN_SERVICE
+    baseDir=/data/app/~~TchaKm7tDJkiSb319vHy8Q==/com.webfilter.spike.a021-_hOv3r_FwH8RwTTTTdG_pQ==/base.apk
+    dataDir=/data/user/0/com.webfilter.spike.a021
+    app=null
+    allowWhileInUsePermissionInFgs=true
+    recentCallingPackage=android
+    recentCallingUid=10149
+    allowStartForeground=10
+    startForegroundCount=0
+    infoAllowStartForeground=[callingPackage: android; callingUid: 1000; uidState: PER ; intent: Intent { act=android.net.VpnService pkg=com.webfilter.spike.a021 }; code:PROC_STATE_PERSISTENT; tempAllowListReason:<null>; targetSdkVersion:36; callerTargetSdkVersion:31; startForegroundCount:0; bindFromPackage:null]
+    createTime=-2m41s476ms startingBgTimeout=--
+    lastActivity=-58s183ms restartTime=-58s302ms createdFromFg=true
+    startRequested=true delayedStop=false stopIfKilled=true callStart=true lastStartId=2

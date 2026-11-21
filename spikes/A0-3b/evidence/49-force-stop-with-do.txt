@@ -1,0 +1,8 @@
+== before force-stop (DO active)
+15953
+== force-stop
+rc=0
+== pidof after
+15953
+== dumpsys processes count
+22

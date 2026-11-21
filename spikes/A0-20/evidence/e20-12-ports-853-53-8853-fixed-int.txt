@@ -1,0 +1,7 @@
+11-21 20:31:55.025 14026 14073 I A020    : A020 syn 1.1.1.1:853 srcPort=39128
+11-21 20:31:55.027 14144 14219 I A020P   : op=raw uid=10148 -> FAIL ConnectException: failed to connect to /1.1.1.1 (port 853) from /10.8.0.2 (port 39128) after 5000ms: isConnected failed: ECONNREFUSED (Connection refused) after 5 ms
+11-21 20:32:00.451 14026 14073 I A020    : A020 syn 8.8.8.8:53 srcPort=49126
+11-21 20:32:00.453 14144 14225 I A020P   : op=raw uid=10148 -> FAIL ConnectException: failed to connect to /8.8.8.8 (port 53) from /10.8.0.2 (port 49126) after 5000ms: isConnected failed: ECONNREFUSED (Connection refused) after 3 ms
+11-21 20:32:05.847 14026 14073 I A020    : A020 syn 1.1.1.1:8853 srcPort=52466
+11-21 20:32:06.865 14144 14231 I A020P   : op=raw uid=10148 -> CONNECTED in 1018 ms
+11-21 20:32:10.855 14026 14232 I A020    : A020 tcp connect failed 168296450:52466>16843009:8853: SocketTimeoutException failed to connect to /1.1.1.1 (port 8853) from /10.0.2.16 (port 41271) after 5000ms
