@@ -1,0 +1,7 @@
+# Plan check before the control user and (b): user limit (read-only)
+== pm get-max-users
+Maximum supported users: 4
+== pm list users
+Users:
+	UserInfo{0:Owner:c13} running
+	UserInfo{10:kid-test:410} running

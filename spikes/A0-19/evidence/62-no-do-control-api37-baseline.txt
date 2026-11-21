@@ -1,0 +1,29 @@
+# NO-DO CONTROL, emulator-5580 (Medium_Phone_API_37.0, Android 17 / API 37). No Device Owner anywhere. Device UTC. Baseline, read-only. Account names not saved.
+== release / sdk / build
+ro.build.version.release=17
+ro.build.version.sdk=37
+ro.build.display.id=CE2A.260420.051.A2
+ro.build.fingerprint=google/sdk_gphone64_x86_64/emu64xa:17/CE2A.260420.051.A2/16418371:user/release-keys
+ro.product.model=sdk_gphone64_x86_64
+== owners (expect none)
+== users
+Users:
+	UserInfo{0:Owner:4c13} running
+== pm get-max-users
+Maximum supported switchable users: 4
+== accounts (count per user)
+User UserInfo{0:Owner:4c13}: |   Accounts: 0
+== versions: GMS / Chrome / YouTube / Play Store / Play Games
+-- com.google.android.gms: versionName=26.45.31 (260800-1020418964) | present: package:com.google.android.gms.supervision
+package:com.google.android.gms
+-- com.android.chrome: versionName=145.0.7632.218 | present: package:com.android.chrome
+-- com.google.android.youtube: versionName=21.18.164 | present: package:com.google.android.youtube
+-- com.android.vending: versionName=54.2.12-34 [0] [PR] 1019424474 | present: package:com.android.vending
+-- com.google.android.play.games:  | present: 
+-- com.google.android.apps.kids:  | present: 
+== memory
+MemTotal:        4005316 kB
+MemAvailable:    2365032 kB
+SwapFree:        2643548 kB
+== host free memory
+host free MB: 4095

@@ -1,0 +1,13 @@
+# DPM admin state now (read-only). Owners and admins per user.
+8:  Device Owner: 
+9:    admin=ComponentInfo{com.webfilter.spike.a19/com.webfilter.spike.a19.AdminReceiver}
+15:  Profile Owner (User 10): 
+16:    admin=ComponentInfo{com.webfilter.spike.a19/com.webfilter.spike.a19.AdminReceiver}
+23:  Enabled Device Admins (User 0, provisioningState: 3):
+85:        2: com.google.android.gms
+117:  Enabled Device Admins (User 10, provisioningState: 0):
+167:    com.google.android.gms/.kids.account.receiver.ProfileOwnerReceiver:
+286:      1: com.google.android.gms
+309:      1: com.google.android.gms
+322:      1: com.google.android.gms
+354:      2: com.google.android.gms

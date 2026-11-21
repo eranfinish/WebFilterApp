@@ -1,0 +1,54 @@
+# A0.22 after the parent's report (u11 Chrome: ynet and malware.testcategory.com both open). Marker 11-21 18:47:31 UTC. Read-only.
+== current user: 11
+== 1. Private DNS status per network (dumpsys connectivity)
+
+NetworkAgentInfo{network{100} UsePrivateDns: true PrivateDnsServerName: family.cloudflare-dns.com ValidatedPrivateDnsAddresses: [1.0.0.3,1.1.1.3] 
+NetworkAgentInfo{network{101} UsePrivateDns: true PrivateDnsServerName: family.cloudflare-dns.com ValidatedPrivateDnsAddresses: [1.0.0.3,1.1.1.3]
+== 2. DnsResolver / netd / DoT / DoH lines since marker (all uids, filtered)
+11-21 18:47:32.272   963   963 D ImsResolver: maybeAddedImsService, packageName: com.google.android.apps.docs
+11-21 18:47:32.894   560   714 W DnsManager: updatePrivateDns(101, PrivateDnsConfig{true:family.cloudflare-dns.com/[/2606:4700:4700::1113, /2606:4700:4700::1003, /1.0.0.3, /1.1.1.3]})
+11-21 18:47:41.275  5892  7105 I serviceentitlement: (REDACTED) [DynamicCarrierIdOtaIntentOperation] SIM loaded for subId %d. Recomputing Carrier ID.
+11-21 18:47:42.104  5892  7105 W serviceentitlement: [DynamicCarrierIdResolver] Failed reflectively calling getCertsFromCarrierPrivilegeAccessRules. [CONTEXT service_id=359 ]
+11-21 18:47:42.104  5892  7105 W serviceentitlement: 	at com.google.android.gms.serviceentitlement.service.DynamicCarrierIdOtaIntentOperation.b(:com.google.android.gms@264531032@26.45.31 (190800-1020418964):166)
+11-21 18:47:42.107  5892  7105 I serviceentitlement: (REDACTED) [DynamicCarrierIdResolver] Dynamic Carrier ID resolved for subId: %d. CarrierId: %d, SpecificId: %d
+11-21 18:47:42.774  5892  6505 I ModuleSetResolution: Computing pending module set with APKs: [[Appsearch.optional:264531100800], [IdentityCredentialsPlatform.optional:264531100800], [Kids.optional:264531100800], [MapsCo
+11-21 18:47:43.315  7056  7168 I Finsky  : [216] VerifyApps: Resolving target for ADI Warn Mode activity
+11-21 18:47:43.594  5892  7131 E Dck     : Could not get ProviderInfo when resolving the content provider authority. [CONTEXT service_id=289 ]
+11-21 18:47:44.288   963   963 D ImsResolver: maybeAddedImsService, packageName: com.google.android.gms
+11-21 18:47:46.798  4213  5891 I FontLog : (REDACTED) Query [%s] resolved to %s
+11-21 18:47:53.301   963   963 D ImsResolver: maybeAddedImsService, packageName: com.google.android.gms
+11-21 18:47:57.807   963   963 D ImsResolver: maybeAddedImsService, packageName: com.google.android.gms
+11-21 18:48:15.712   560   714 W DnsManager: updatePrivateDns(101, PrivateDnsConfig{true:family.cloudflare-dns.com/[/2606:4700:4700::1003, /2606:4700:4700::1113, /1.0.0.3, /1.1.1.3]})
+11-21 18:48:43.034  4213  5906 I FontLog : (REDACTED) Query [%s] resolved to %s
+11-21 18:48:43.125  4213  5906 I FontLog : (REDACTED) Query [%s] resolved to %s
+11-21 18:49:12.193  4213  4233 I FontLog : (REDACTED) Query [%s] resolved to %s
+11-21 18:49:12.328  4213  4233 I FontLog : (REDACTED) Query [%s] resolved to %s
+11-21 18:49:34.862   560   714 W DnsManager: updatePrivateDns(101, PrivateDnsConfig{true:family.cloudflare-dns.com/[/2606:4700:4700::1003, /2606:4700:4700::1113, /1.0.0.3, /1.1.1.3]})
+11-21 18:49:58.832  4213  4230 I FontLog : (REDACTED) Query [%s] resolved to %s
+11-21 18:49:58.859  4213  4230 I FontLog : (REDACTED) Query [%s] resolved to %s
+11-21 18:49:59.094  4213  9482 I ModuleSetResolution: Computing pending module set with APKs: [[Appsearch.optional:264531100800], [IdentityCredentialsPlatform.optional:264531100800], [Kids.optional:264531100800], [MapsCo
+11-21 18:50:00.048  5892  5915 I FontLog : (REDACTED) Query [%s] resolved to %s
+11-21 18:50:00.799  4213  6041 I ModuleSetResolution: Computing pending module set with APKs: [[Appsearch.optional:264531100800], [IdentityCredentialsPlatform.optional:264531100800], [Kids.optional:264531100800], [MapsCo
+11-21 18:50:01.476   963   963 I ImsResolver: Received BOOT_COMPLETED
+11-21 18:50:04.277  9937  9975 I Finsky  : [356] VerifyApps: Resolving target for ADI Warn Mode activity
+11-21 18:50:05.968   963   963 D ImsResolver: maybeAddedImsService, packageName: com.google.android.apps.docs
+11-21 18:50:06.498  5892  6175 I FontLog : (REDACTED) Query [%s] resolved to %s
+11-21 18:50:08.705  4213  4233 I FontLog : (REDACTED) Query [%s] resolved to %s
+11-21 18:50:15.579  4213  4230 I FontLog : (REDACTED) Query [%s] resolved to %s
+(end)
+== 2b. netd / DnsResolver lines mentioning u11 uid range (1[01]xxxxx)
+11-21 18:50:00.392   560  2004 D ConnectivityService: requestNetwork for uid/pid:1000/560 asUid: 1110100 activeRequest: null callbackRequest: 292 [NetworkRequest [ REQUEST id=293, [ Capabilities: INTERNET&NOT_RESTRICTED&
+11-21 18:50:01.801   560  1080 D ConnectivityService: requestNetwork for uid/pid:1000/560 asUid: 1110093 activeRequest: null callbackRequest: 294 [NetworkRequest [ REQUEST id=295, [ Capabilities: INTERNET&NOT_RESTRICTED&
+11-21 18:50:01.978   560  2010 D ConnectivityService: requestNetwork for uid/pid:1000/560 asUid: 1110096 activeRequest: null callbackRequest: 296 [NetworkRequest [ REQUEST id=297, [ Capabilities: INTERNET&NOT_RESTRICTED&
+11-21 18:50:03.096   560   891 D ConnectivityService: requestNetwork for uid/pid:1000/560 asUid: 1110070 activeRequest: null callbackRequest: 298 [NetworkRequest [ REQUEST id=299, [ Capabilities: INTERNET&NOT_RESTRICTED&
+11-21 18:50:03.844   560  2023 D ConnectivityService: requestNetwork for uid/pid:1000/560 asUid: 1110103 activeRequest: null callbackRequest: 302 [NetworkRequest [ REQUEST id=303, [ Capabilities: INTERNET&NOT_RESTRICTED&
+11-21 18:50:08.853   560  1994 D ConnectivityService: requestNetwork for uid/pid:1000/560 asUid: 1110098 activeRequest: null callbackRequest: 310 [NetworkRequest [ REQUEST id=311, [ Capabilities: INTERNET&NOT_RESTRICTED&
+11-21 18:50:23.635   560  2019 D ConnectivityService: requestNetwork for uid/pid:1000/560 asUid: 1110108 activeRequest: null callbackRequest: 349 [NetworkRequest [ REQUEST id=350, [ Capabilities: INTERNET&NOT_RESTRICTED&
+(end)
+== 3. Chrome DoH / secure DNS lines since marker
+(end)
+== 4. resolution from u0 via shell (system resolver)
+-- malware.testcategory.com: PING malware.testcategory.com (127.0.0.1) 56(84) bytes of data.
+-- www.ynet.co.il: PING e12476.dscb.akamaiedge.net (23.221.30.50) 56(84) bytes of data.
+== Chrome processes in u11 (count)
+6

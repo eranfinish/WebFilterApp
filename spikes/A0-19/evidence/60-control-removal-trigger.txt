@@ -1,0 +1,104 @@
+# pid 26254 (u11 GMS) events 13:37:50 to 13:38:30 UTC, just before the control account removal at 13:38:25. Names redacted.
+11-20 13:37:50.047 26254 31246 I Auth    : (REDACTED) [BroadcastManager] [BroadcastManager] Broadcasting bad device management=%s
+11-20 13:37:50.129 26254 32075 I Authzen : [AccountChangeProcessingIntentOperation] Received onHandleIntent() call: Intent { act=com.google.android.gms.auth.GOOGLE_ACCOUNT_CHANGE cat=[com.google.android.gms.auth.category.ACCOUNT_A
+11-20 13:37:50.129 26254 32075 I Authzen : [AccountChangeProcessingIntentOperation] Handling added account: <ELLIDED:-580049465>
+11-20 13:37:50.131 26254 31246 W Auth    : [BroadcastManager] [BroadcastManager] No device or profile owner found for bad device management broadcast. [CONTEXT service_id=343 ]
+11-20 13:37:50.132 26254 31246 E Auth    : [DataStatusChecker] Signature check failed. The calling package is not google signed. [CONTEXT service_id=343 ]
+11-20 13:37:50.132 26254 31246 E Auth    : java.lang.SecurityException: GoogleCertificatesRslt: callingPackage not found (go/gsrlt)
+11-20 13:37:50.132 26254 31246 E Auth    : 	at bqjo.b(:<email><email> (190800-1020418964):34)
+11-20 13:37:50.132 26254 31246 E Auth    : 	at bqju.d(:<email><email> (190800-1020418964):15)
+11-20 13:37:50.132 26254 31246 E Auth    : 	at brct.a(:<email><email> (190800-1020418964):12)
+11-20 13:37:50.132 26254 31246 E Auth    : 	at brct.c(:<email><email> (190800-1020418964):1)
+11-20 13:37:50.132 26254 31246 E Auth    : 	at alfo.a(:<email><email> (190800-1020418964):356)
+11-20 13:37:50.132 26254 31246 E Auth    : 	at alfn.y(:<email><email> (190800-1020418964):38)
+11-20 13:37:50.132 26254 31246 E Auth    : 	at alfn.s(:<email><email> (190800-1020418964):24)
+11-20 13:37:50.132 26254 31246 E Auth    : 	at amdd.b(:<email><email> (190800-1020418964):916)
+11-20 13:37:50.132 26254 31246 E Auth    : 	at amdb.a(:<email><email> (190800-1020418964):612)
+11-20 13:37:50.132 26254 31246 E Auth    : 	at amda.b(:<email><email> (190800-1020418964):128)
+11-20 13:37:50.132 26254 31246 E Auth    : 	at afin.h(:<email><email> (190800-1020418964):1024)
+11-20 13:37:50.132 26254 31246 E Auth    : 	at afin.d(:<email><email> (190800-1020418964):1)
+11-20 13:37:50.132 26254 31246 E Auth    : 	at albp.a(:<email><email> (190800-1020418964):33)
+11-20 13:37:50.132 26254 31246 E Auth    : 	at albv.n(:<email><email> (190800-1020418964):34)
+11-20 13:37:50.132 26254 31246 E Auth    : 	at albv.p(:<email><email> (190800-1020418964):64)
+11-20 13:37:50.132 26254 31246 E Auth    : 	at iohr.e(:<email><email> (190800-1020418964):33)
+11-20 13:37:50.132 26254 31246 E Auth    : 	at iohr.d(:<email><email> (190800-1020418964):76)
+11-20 13:37:50.132 26254 31246 E Auth    : 	at iohr.a(:<email><email> (190800-1020418964):25)
+11-20 13:37:50.132 26254 31246 E Auth    : 	at iogn.call(:<email><email> (190800-1020418964):39)
+11-20 13:37:50.132 26254 31246 E Auth    : 	at icad.call(:<email><email> (190800-1020418964):17)
+11-20 13:37:50.132 26254 31246 E Auth    : 	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+11-20 13:37:50.132 26254 31246 E Auth    : 	at bshl.d(:<email><email> (190800-1020418964):50)
+11-20 13:37:50.132 26254 31246 E Auth    : 	at bshl.c(:<email><email> (190800-1020418964):5)
+11-20 13:37:50.132 26254 31246 E Auth    : 	at bshl.run(:<email><email> (190800-1020418964):32)
+11-20 13:37:50.132 26254 31246 E Auth    : 	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1167)
+11-20 13:37:50.132 26254 31246 E Auth    : 	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:641)
+11-20 13:37:50.132 26254 31246 E Auth    : 	at bsnm.run(:<email><email> (190800-1020418964):8)
+11-20 13:37:50.132 26254 31246 E Auth    : 	at java.lang.Thread.run(Thread.java:920)
+11-20 13:37:50.132 26254 31246 E Auth    : Caused by: android.content.pm.PackageManager$NameNotFoundException
+11-20 13:37:50.132 26254 31246 E Auth    : 	at bqjg.a(:<email><email> (190800-1020418964):84)
+11-20 13:37:50.132 26254 31246 E Auth    : 	at bqju.a(:<email><email> (190800-1020418964):265)
+11-20 13:37:50.132 26254 31246 E Auth    : 	at bqju.d(:<email><email> (190800-1020418964):11)
+11-20 13:37:50.132 26254 31246 E Auth    : 	... 26 more
+11-20 13:37:50.165 26254 31987 I Auth    : (REDACTED) [BroadcastManager] [BroadcastManager] Broadcasting bad device management=%s
+11-20 13:37:50.167 26254 31987 W Auth    : [BroadcastManager] [BroadcastManager] No device or profile owner found for bad device management broadcast. [CONTEXT service_id=343 ]
+11-20 13:37:50.179 26254 31987 E Auth    : [DataStatusChecker] Signature check failed. The calling package is not google signed. [CONTEXT service_id=343 ]
+11-20 13:37:50.179 26254 31987 E Auth    : java.lang.SecurityException: GoogleCertificatesRslt: callingPackage not found (go/gsrlt)
+11-20 13:37:50.179 26254 31987 E Auth    : 	at bqjo.b(:<email><email> (190800-1020418964):34)
+11-20 13:37:50.179 26254 31987 E Auth    : 	at bqju.d(:<email><email> (190800-1020418964):15)
+11-20 13:37:50.179 26254 31987 E Auth    : 	at brct.a(:<email><email> (190800-1020418964):12)
+11-20 13:37:50.179 26254 31987 E Auth    : 	at brct.c(:<email><email> (190800-1020418964):1)
+11-20 13:37:50.179 26254 31987 E Auth    : 	at alfo.a(:<email><email> (190800-1020418964):356)
+11-20 13:37:50.179 26254 31987 E Auth    : 	at alfn.y(:<email><email> (190800-1020418964):38)
+11-20 13:37:50.179 26254 31987 E Auth    : 	at alfn.s(:<email><email> (190800-1020418964):24)
+11-20 13:37:50.179 26254 31987 E Auth    : 	at amdd.b(:<email><email> (190800-1020418964):916)
+11-20 13:37:50.179 26254 31987 E Auth    : 	at amdb.a(:<email><email> (190800-1020418964):612)
+11-20 13:37:50.179 26254 31987 E Auth    : 	at amda.b(:<email><email> (190800-1020418964):128)
+11-20 13:37:50.179 26254 31987 E Auth    : 	at afin.h(:<email><email> (190800-1020418964):1024)
+11-20 13:37:50.179 26254 31987 E Auth    : 	at afin.d(:<email><email> (190800-1020418964):1)
+11-20 13:37:50.179 26254 31987 E Auth    : 	at albp.a(:<email><email> (190800-1020418964):33)
+11-20 13:37:50.179 26254 31987 E Auth    : 	at albv.n(:<email><email> (190800-1020418964):34)
+11-20 13:37:50.179 26254 31987 E Auth    : 	at albv.p(:<email><email> (190800-1020418964):64)
+11-20 13:37:50.179 26254 31987 E Auth    : 	at iohr.e(:<email><email> (190800-1020418964):33)
+11-20 13:37:50.179 26254 31987 E Auth    : 	at iohr.d(:<email><email> (190800-1020418964):76)
+(end)
+-- KidsAuth / Supervision / WebView / Close lines 13:36:31-13:38:30 (any pid)
+11-20 13:36:31.118 28561 28561 I FlowTypeDeriver: (REDACTED) Received intent [action=`%s`, categories=`%s`]
+11-20 13:36:31.124 28561 28561 I FlowTypeDeriver: (REDACTED) Derived flow type: `%s`
+11-20 13:36:31.173 26254 30187 I Auth    : [DataStatusChecker]  Canceling DM notification because of DM suppression [CONTEXT service_id=343 ]
+11-20 13:36:31.241 28561 28561 I KidsAuth: [KidsAuthSetupChimeraActivity] Supervised account found on the device [CONTEXT service_id=42 ]
+11-20 13:36:31.348 28561 28561 I KidsAuth: [SupervisionCoreUtils] Onboarding on Supervision Core APK is not eligible for devices with API version below T. [CONTEXT service_id=42 ]
+11-20 13:36:31.392 26254 30426 I Auth    : [DataStatusChecker]  Canceling DM notification because of DM suppression [CONTEXT service_id=343 ]
+11-20 13:36:31.453 28561 28561 I FlowTypeDeriver: (REDACTED) Received intent [action=`%s`, categories=`%s`]
+11-20 13:36:31.453 28561 28561 I FlowTypeDeriver: (REDACTED) Derived flow type: `%s`
+11-20 13:36:31.453 28561 28561 I KidsAuth: [OnboardingFlowObserver] Flow started. [CONTEXT service_id=42 ]
+11-20 13:36:31.518 26254 26291 I Auth    : [DataStatusChecker]  Canceling DM notification because of DM suppression [CONTEXT service_id=343 ]
+11-20 13:36:31.524 28561 28610 I FlowTypeDeriver: (REDACTED) Received intent [action=`%s`, categories=`%s`]
+11-20 13:36:31.524 28561 28610 I FlowTypeDeriver: (REDACTED) Derived flow type: `%s`
+11-20 13:36:31.556 28561 28561 I KidsAuth: [KidsAuthSetupChimeraActivity] Starting Webview Fragment [CONTEXT service_id=42 ]
+11-20 13:36:31.593 28561 28561 I BaseWebViewFragment: Webview multi-profile feature disabled, using default profile. [CONTEXT service_id=42 ]
+11-20 13:36:32.242 26254 30238 I Auth    : [DataStatusChecker]  Canceling DM notification because of DM suppression [CONTEXT service_id=343 ]
+11-20 13:36:32.262 26254 30187 I KidsAuth: (REDACTED) [SupervisionSetupChimeraService] [%s] Processing command[id=%s][flags=%s]: %s
+11-20 13:36:32.447 26254 30235 I KidsAuth: [SupervisionCoreUtils] Onboarding on Supervision Core APK is not eligible for devices with API version below T. [CONTEXT service_id=42 ]
+11-20 13:36:32.635 28561 28561 I SetupLibrary: [GlifLayout] Using setup design GlifLayout to init for KidsAuthSetupActivity
+11-20 13:36:33.018 28561 28561 E SetupLibrary: [PartnerCustomizationLayout] Attribute sucUsePartnerResource not found in ComponentInfo{com.google.android.gms/com.google.android.gms.kids.auth.KidsAuthSetupActivity}
+11-20 13:36:33.148 28561 28561 I SetupLibrary: [GlifLayout] Using setup design GlifLoadingLayout to init for KidsAuthSetupActivity
+11-20 13:36:33.291 26254 30248 I KidsAuth: (REDACTED) [SupervisionSetupChimeraService] Next state: %s
+11-20 13:36:33.387 26254 26266 I Auth    : [DataStatusChecker]  Canceling DM notification because of DM suppression [CONTEXT service_id=343 ]
+11-20 13:36:33.398 28561 28561 W SetupLibrary: [GlifLoadingLayout] SUWLoadingScreen: B4CD5CC3:com.google.android.gms:com.google.android.gms.kids.auth.KidsAuthSetupActivity:com.google.android.gms.auth.account.HANDLE_MANAGED
+11-20 13:36:33.485 28561 28561 I BaseWebViewFragment: Starting the Onboarding WebView [CONTEXT service_id=42 ]
+11-20 13:36:33.745 26254 30238 I Auth    : [DataStatusChecker]  Canceling DM notification because of DM suppression [CONTEXT service_id=343 ]
+11-20 13:36:34.116 26254 26301 I Auth    : [DataStatusChecker]  Canceling DM notification because of DM suppression [CONTEXT service_id=343 ]
+11-20 13:36:34.615 26254 26301 I Auth    : [DataStatusChecker]  Canceling DM notification because of DM suppression [CONTEXT service_id=343 ]
+11-20 13:36:34.629 26254 30248 I Auth    : [DataStatusChecker]  Canceling DM notification because of DM suppression [CONTEXT service_id=343 ]
+11-20 13:36:34.771 28561 28610 I KidsAuth: (REDACTED) [OnboardingUrlFactory] Created onboarding flow URL: %s
+11-20 13:36:35.168 26254 29129 I Auth    : [DataStatusChecker]  Canceling DM notification because of DM suppression [CONTEXT service_id=343 ]
+11-20 13:36:35.309 26254 30429 I Auth    : [DataStatusChecker]  Canceling DM notification because of DM suppression [CONTEXT service_id=343 ]
+11-20 13:36:35.336 26254 26266 I Auth    : [DataStatusChecker]  Canceling DM notification because of DM suppression [CONTEXT service_id=343 ]
+11-20 13:36:36.327 26254 30502 I Auth    : [DataStatusChecker]  Canceling DM notification because of DM suppression [CONTEXT service_id=343 ]
+11-20 13:36:36.767 26254 30130 I Auth    : [DataStatusChecker]  Canceling DM notification because of DM suppression [CONTEXT service_id=343 ]
+11-20 13:36:36.887 26254 26266 I Auth    : [DataStatusChecker]  Canceling DM notification because of DM suppression [CONTEXT service_id=343 ]
+11-20 13:36:37.026 26254 29226 I Auth    : [DataStatusChecker]  Canceling DM notification because of DM suppression [CONTEXT service_id=343 ]
+11-20 13:36:37.083 26254 26291 I Auth    : [DataStatusChecker]  Canceling DM notification because of DM suppression [CONTEXT service_id=343 ]
+11-20 13:36:37.419 26254 26266 I Auth    : [DataStatusChecker]  Canceling DM notification because of DM suppression [CONTEXT service_id=343 ]
+11-20 13:36:37.522 26254 26301 I Auth    : [DataStatusChecker]  Canceling DM notification because of DM suppression [CONTEXT service_id=343 ]
+11-20 13:36:37.625 26254 29129 I Auth    : [DataStatusChecker]  Canceling DM notification because of DM suppression [CONTEXT service_id=343 ]
+(end)

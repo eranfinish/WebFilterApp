@@ -1,0 +1,30 @@
+== what hid com.google.android.youtube in u11 (setApplicationHidden / hidden)
+11-21 16:47:59.383 26254 15255 I HideAppProcessorV2: (REDACTED) Applying policy using DPM for package: %s
+11-21 16:47:59.389 26254 15255 I HideAppProcessorV2: (REDACTED) Applying policy using DPM for package: %s
+11-21 16:47:59.394 26254 15255 I HideAppProcessorV2: (REDACTED) Applying policy using DPM for package: %s
+11-21 16:47:59.400 26254 15255 I HideAppProcessorV2: (REDACTED) Applying policy using DPM for package: %s
+11-21 16:47:59.404 26254 15255 I HideAppProcessorV2: (REDACTED) Applying policy using DPM for package: %s
+11-21 16:47:59.409 26254 15255 I HideAppProcessorV2: (REDACTED) Applying policy using DPM for package: %s
+11-21 16:47:59.415 26254 15255 I HideAppProcessorV2: (REDACTED) Applying policy using DPM for package: %s
+11-21 16:48:23.633 15342 15342 W s.youtube.musi: Accessing hidden field Ljava/util/Collections$SynchronizedCollection;->mutex:Ljava/lang/Object; (max-target-o, reflection, denied)
+11-21 16:48:23.634 15342 15342 W s.youtube.musi: Accessing hidden method Ljava/util/Collections$SynchronizedSet;-><init>(Ljava/util/Set;Ljava/lang/Object;)V (max-target-o, reflection, denied)
+11-21 16:48:23.634 15342 15342 W s.youtube.musi: Accessing hidden method Ljava/util/Collections$SynchronizedCollection;-><init>(Ljava/util/Collection;Ljava/lang/Object;)V (max-target-o, reflection, denied)
+(end hide lines)
+== any u11 youtube process start (ActivityTaskManager START u11 youtube, or Start proc ...youtube/u11)
+11-20 13:38:51.176   535   564 I ActivityManager: Start proc 1591:com.google.android.youtube/u11a120 for broadcast {com.google.android.youtube/com.google.android.libraries.notifications.entrypoints.ac
+11-20 14:11:03.097   535   564 I ActivityManager: Start proc 5781:com.google.android.youtube/u11a120 for broadcast {com.google.android.youtube/com.google.android.libraries.notifications.entrypoints.ac
+11-20 14:14:22.124   535   564 I ActivityManager: Start proc 7414:com.google.android.youtube/u11a120 for broadcast {com.google.android.youtube/com.google.android.libraries.notifications.entrypoints.ph
+11-21 16:40:44.877   535   564 I ActivityManager: Start proc 10445:com.google.android.youtube/u11a120 for broadcast {com.google.android.youtube/androidx.work.impl.background.systemalarm.RescheduleRece
+11-21 16:47:05.892   535   634 I ActivityTaskManager: START u11 {act=android.intent.action.MAIN cat=[android.intent.category.LAUNCHER] flg=0x10200000 cmp=com.google.android.apps.youtube.music/.activit
+(end start lines)
+== last YouTube start in any user
+11-20 13:16:21.959 ActivityTaskManager: START u10
+11-20 13:16:23.060 ActivityTaskManager: START u10
+(end)
+
+Summary (written after the check):
+- com.google.android.youtube is installed in u11 but HIDDEN (dumpsys package: "User 11: installed=true hidden=true").
+- The hide came from GMS, not from us: HideAppProcessorV2 "Applying policy using DPM for package" at 2026-11-21 16:47:59 (pid 26254 = u11 GMS), after the parent's marker (16:47:25 UTC).
+- What the parent launched after the marker: com.google.android.apps.youtube.music (YouTube Music), START u11 at 16:47:05 — not YouTube. YouTube Music logged "Could not register for notifications with InnerTube: Precondition check failed". No u11 YouTube process started after the setup. The last YouTube start in any user is 2026-11-20 13:16:21 (u10, kid-test).
+- The YouTube process running now (pid 16041) belongs to user 10 (kid-test), not user 11.
+- Token requests after the marker: none logged. Before the marker on 2026-11-21 the token failures were NETWORK_ERROR (16:38–16:39), not THIRD_PARTY.

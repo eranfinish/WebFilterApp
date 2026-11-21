@@ -1,0 +1,51 @@
+== status INSIDE user 10 (read-only op)
+Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a19/.CmdReceiver (has extras) }
+Broadcast completed: result=0, data="myUser=UserHandle{10} pkg=com.webfilter.spike.a19 isAdminActive=true isDeviceOwnerApp=false isProfileOwnerApp=true"
+== A19 lines (all)
+11-20 11:50:35.900  4902  4902 I A19     : onEnabled user=UserHandle{0}
+11-20 11:50:40.191  4902  4902 I A19     : op=status result=myUser=UserHandle{0} pkg=com.webfilter.spike.a19 isAdminActive=true isDeviceOwnerApp=true isProfileOwnerApp=false
+11-20 11:50:46.554  4902  4902 I A19     : op=create result=OK created name=kid-test id=10 handle=UserHandle{10}
+11-20 11:50:57.769  4902  4902 I A19     : op=start result=startUserInBackground id=10 result=0
+11-20 11:51:00.383  5593  5593 I A19     : onEnabled user=UserHandle{10}
+11-20 11:53:35.876 10428 10428 I A19     : op=status result=myUser=UserHandle{10} pkg=com.webfilter.spike.a19 isAdminActive=true isDeviceOwnerApp=false isProfileOwnerApp=true
+11-20 11:53:50.277 10963 10963 I A19     : op=status result=myUser=UserHandle{10} pkg=com.webfilter.spike.a19 isAdminActive=true isDeviceOwnerApp=false isProfileOwnerApp=true
+11-20 11:54:02.316 10963 10963 I A19     : op=status result=myUser=UserHandle{10} pkg=com.webfilter.spike.a19 isAdminActive=true isDeviceOwnerApp=false isProfileOwnerApp=true
+11-20 11:54:21.162 11484 11484 I A19     : op=start result=startUserInBackground id=10 result=0
+11-20 11:54:23.520 11484 11484 I A19     : op=switch result=switchUser id=10 result=true
+== DevicePolicyManager lines in the last part
+11-20 11:50:45.961   535  4720 I SettingsState: 	at android.app.admin.IDevicePolicyManager$Stub.onTransact(IDevicePolicyManager.java:4491)
+11-20 11:50:46.513   535  4720 I DevicePolicyManager: Profile owner set: ComponentInfo{com.webfilter.spike.a19/com.webfilter.spike.a19.AdminReceiver} on user 10
+11-20 11:50:46.865   535   535 D DevicePolicyManager: handleNewUserCreated(): ignoring for user 10 due to <email>
+11-20 11:50:46.867   535   535 D DevicePolicyManager: User id 10 not affiliated.
+11-20 11:50:46.869   535   535 I DevicePolicyManager: There are unaffiliated users, network logging will be paused if enabled.
+11-20 11:50:46.869   535   535 I DevicePolicyManager: Not org-owned managed profile device, security logging will be paused if enabled.
+11-20 11:50:57.768   535   833 I DevicePolicyManager: Started used 10 in background
+11-20 11:50:58.578   535   564 I SystemServerTimingAsync: ssm.onStartUser-10_com.android.server.devicepolicy.DevicePolicyManagerService$Lifecycle
+11-20 11:50:59.164   535   564 I SystemServerTimingAsync: ssm.onUnlockingUser-10_com.android.server.devicepolicy.DevicePolicyManagerService$Lifecycle
+11-20 11:50:59.535   535   564 I SystemServerTimingAsync: ssm.onUnlockedUser-10_com.android.server.devicepolicy.DevicePolicyManagerService$Lifecycle
+11-20 11:50:59.535   535   564 I DevicePolicyManager: Dispatching ACTION_SHOW_NEW_USER_DISCLAIMER intent
+11-20 11:50:59.634   535   564 W SystemServiceManager: Service com.android.server.devicepolicy.DevicePolicyManagerService$Lifecycle took 99 ms in onUnlockedUser-10
+11-20 11:54:21.162   535  4792 I DevicePolicyManager: Started used 10 in background
+11-20 11:54:26.563   535   564 I SystemServerTimingAsync: ssm.onSwitchUser-10_com.android.server.devicepolicy.DevicePolicyManagerService$Lifecycle
+11-20 11:54:38.074   535   544 I system_server: JIT allocated 98KB for compiled code of boolean android.app.admin.IDevicePolicyManager$Stub.onTransact(int, android.os.Parcel, android.os.Parcel, int)
+11-20 11:54:38.075   535   544 I system_server: Compiler allocated 5105KB to compile boolean android.app.admin.IDevicePolicyManager$Stub.onTransact(int, android.os.Parcel, android.os.Parcel, int)
+11-20 11:54:42.043   535   840 I DevicePolicyManager: Packages subject to suspension: com.google.android.youtube,com.android.contacts,com.android.camera2,com.android.stk,com.google.android.deskclock,com.google.android.gm,com.google.android.apps.docs,com.google.android.apps.maps,com.android.chrome,or
+11-20 11:54:42.044   535   840 D DevicePolicyManager: skipping PersonalAppsSuspensionHelper.dump() for user 10
+11-20 12:54:07.206   535  5157 I DevicePolicyManager: Packages subject to suspension: com.google.android.youtube,com.android.contacts,com.android.camera2,com.android.stk,com.google.android.deskclock,com.google.android.gm,com.google.android.apps.docs,com.google.android.apps.maps,com.android.chrome,or
+11-20 12:54:07.206   535  5157 D DevicePolicyManager: skipping PersonalAppsSuspensionHelper.dump() for user 10
+== KidsAuth lines (last 15)
+11-20 11:43:58.118  1092  3783 I KidsAuth: (REDACTED) [KidsAuthInitIntentOperation] Received intent to recover supervision setup: %s
+11-20 11:43:58.148  1092  1632 I KidsAuth: (REDACTED) [SupervisionSetupChimeraService] [%s] Processing command[id=%s][flags=%s]: %s
+11-20 11:43:58.151  1092  1632 I KidsAuth: [SupervisionSetupState] No active setup found, moving to Idle. [CONTEXT service_id=42 ]
+11-20 11:43:58.152  1092  1632 I KidsAuth: (REDACTED) [SupervisionSetupChimeraService] Next state: %s
+11-20 11:43:58.172  1092  1092 I KidsAuth: [SupervisionSetupChimeraService] Service stopped [CONTEXT service_id=42 ]
+11-20 11:51:14.356  5445  5742 I KidsAuth: (REDACTED) [KidsAuthInitIntentOperation] Received intent to recover supervision setup: %s
+11-20 11:51:14.425  5445  5849 I KidsAuth: (REDACTED) [SupervisionSetupChimeraService] [%s] Processing command[id=%s][flags=%s]: %s
+11-20 11:51:14.429  5445  5849 I KidsAuth: [SupervisionSetupState] No active setup found, moving to Idle. [CONTEXT service_id=42 ]
+11-20 11:51:14.431  5445  5849 I KidsAuth: (REDACTED) [SupervisionSetupChimeraService] Next state: %s
+11-20 11:51:14.453  5445  5445 I KidsAuth: [SupervisionSetupChimeraService] Service stopped [CONTEXT service_id=42 ]
+11-20 11:53:02.447  7851  9288 I KidsAuth: (REDACTED) [KidsAuthInitIntentOperation] Received intent to recover supervision setup: %s
+11-20 11:53:04.144  7851  8917 I KidsAuth: (REDACTED) [SupervisionSetupChimeraService] [%s] Processing command[id=%s][flags=%s]: %s
+11-20 11:53:04.171  7851  8917 I KidsAuth: [SupervisionSetupState] No active setup found, moving to Idle. [CONTEXT service_id=42 ]
+11-20 11:53:04.172  7851  8917 I KidsAuth: (REDACTED) [SupervisionSetupChimeraService] Next state: %s
+11-20 11:53:05.306  7851  7851 I KidsAuth: [SupervisionSetupChimeraService] Service stopped [CONTEXT service_id=42 ]

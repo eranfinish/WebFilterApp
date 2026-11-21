@@ -1,0 +1,10 @@
+# Reinstall (worker-thread version) and set Private DNS. Owners checked.
+Performing Streamed Install
+Success
+== owners: User  0: admin=com.webfilter.spike.a19/.AdminReceiver,DeviceOwner,Affiliated
+== before: private_dns_mode=null specifier=null
+== dns-set
+Broadcast completed: result=0, data="set FAILED java.lang.SecurityException: operation not allowed when device has unaffiliated users; mode=OPPORTUNISTIC host=null"
+== dns-status
+Broadcast completed: result=0, data="mode=OPPORTUNISTIC host=null"
+== settings after: private_dns_mode=null specifier=null

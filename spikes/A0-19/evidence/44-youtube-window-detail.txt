@@ -1,0 +1,11 @@
+== YouTube tag lines 13:17:50-13:19:05 (non-trace, first 60)
+== all lines with 400 / server / problem / retry in window
+11-20 13:18:30.102 15301 16425 W ProcessReaper: Memory state is: 400
+== GMS 'bad device management' / device key lines (first 6)
+11-20 13:17:55.794  4294 16348 W Auth    : [DeviceKeyStore] Cannot load key: Device key file not found. [CONTEXT service_id=343 ]
+11-20 13:17:56.294  4294 16348 W Auth    : [AppCertManager] Exception while requesting key: [CONTEXT service_id=343 ]
+11-20 13:17:56.294  4294 16348 W Auth    : [DeviceKeyStore] Cannot load key: Device key file not found. [CONTEXT service_id=343 ]
+11-20 13:17:56.402  4294 16348 I Auth    : (REDACTED) [BroadcastManager] [BroadcastManager] Broadcasting bad device management=%s
+== last YouTube activity line
+11-20 13:17:13.501 16041 16139 W YouTube : 	at xyk.run(PG:12)
+11-20 13:17:13.501 16041 16139 W YouTube : 	... 4 more

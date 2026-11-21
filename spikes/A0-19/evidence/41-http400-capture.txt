@@ -1,0 +1,17 @@
+# Logcat from the last ~6 minutes (device UTC), read-only, for the HTTP 400 report. Emails redacted.
+== current focus
+    mResumedActivity: ActivityRecord{775ccaf u10 com.google.android.youtube/com.google.android.apps.youtube.app.watchwhile.WatchWhileActivity
+== lines with HTTP 400 / invalid_request / disallowed / 400 / reauth / sign-in / WebView / MinuteMaid / AccountReauth
+11-20 13:17:01.163  1082  1082 W ThreadPoolForeg: type=1400 audit(0.0:202): avc: denied { write } for name="traced_producer" dev="tmpfs" ino=559 scontext=u:r:gmscore_app:s0:c512,c768 tcontext=u:object_r:traced_producer_socket:s0 tclass=sock
+11-20 13:17:25.591  4294  4294 W ThreadPoolForeg: type=1400 audit(0.0:203): avc: denied { write } for name="traced_producer" dev="tmpfs" ino=559 scontext=u:r:gmscore_app:s0:c522,c768 tcontext=u:object_r:traced_producer_socket:s0 tclass=sock
+11-20 13:17:31.195  1082  1082 W ThreadPoolForeg: type=1400 audit(0.0:204): avc: denied { write } for name="traced_producer" dev="tmpfs" ino=559 scontext=u:r:gmscore_app:s0:c512,c768 tcontext=u:object_r:traced_producer_socket:s0 tclass=sock
+11-20 13:17:55.619  4294  4294 W ThreadPoolForeg: type=1400 audit(0.0:205): avc: denied { write } for name="traced_producer" dev="tmpfs" ino=559 scontext=u:r:gmscore_app:s0:c522,c768 tcontext=u:object_r:traced_producer_socket:s0 tclass=sock
+11-20 13:17:56.171 16375 16375 W Binder:16375_1: type=1400 audit(0.0:206): avc: denied { read } for name="u:object_r:system_adbd_prop:s0" dev="tmpfs" ino=244 scontext=u:r:gmscore_app:s0:c522,c768 tcontext=u:object_r:system_adbd_prop:s0 tcla
+11-20 13:17:56.175 16375 16375 W Binder:16375_1: type=1400 audit(0.0:207): avc: denied { read } for name="u:object_r:adbd_prop:s0" dev="tmpfs" ino=55 scontext=u:r:gmscore_app:s0:c522,c768 tcontext=u:object_r:adbd_prop:s0 tclass=file permiss
+11-20 13:17:56.404  4294 16348 W Auth    : [ReauthNotificationManager] Unhandled DM status: THIRD_PARTY_DEVICE_MANAGEMENT_REQUIRED [CONTEXT service_id=343 ]
+11-20 13:17:56.425  4294 16348 I Auth    : (REDACTED) [GetToken] GetToken failed for app=%s with userRecoverable status: %s 
+11-20 13:17:56.427  4294 16348 W Auth    : [ChimeraGetToken] exception while trying to fetch auth tokens for app=com.google.android.gms, scope=oauth2:https://www.googleapis.com/auth/chromesync [CONTEXT service_id=153 ]
+11-20 13:17:56.427  4294 16348 W Auth    : amcv: GetToken failed with status code and recovery intent: ThirdPartyDeviceManagementRequired
+11-20 13:17:56.427  4294 16348 W Auth    : [GoogleAuthUtil] [GoogleAuthUtil] error status:THIRD_PARTY_DEVICE_MANAGEMENT_REQUIRED with method:getTokenWithDetails
+11-20 13:17:56.450  4294 16348 W SyncManager: bomj: Authentication exception
+11-20 13:17:56.450  4294 16348 W SyncManager: Caused by: com.google.android.gms.auth.UserRecoverableAuthException: ThirdPartyDeviceManagementRequired

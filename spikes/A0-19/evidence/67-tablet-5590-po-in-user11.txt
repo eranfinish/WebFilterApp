@@ -1,0 +1,16 @@
+# Tablet_A12: when Family Link became PO in user 11, and which user each token-failure pid belongs to (read-only). Device UTC.
+== pid owners: 4294=u10_a97 26254=u11_a97 17389=u11_a104 4912=u11_a121 4578=u11_a124 4590=u11_a125
+== token failures since 14:05 by pid (with owner)
+pid 17389 (u11_a104): 6
+pid 26254 (u11_a97): 241
+pid 4578 (u11_a124): 17
+pid 4590 (u11_a125): 1
+pid 4912 (u11_a121): 126
+== PO / setProfileOwner / DeviceAdminAdd / SET_PROFILE_OWNER lines since 13:55 UTC
+11-20 13:59:54.807  2114  3870 I Finsky  : [1995] AF: appUsageCollection is disabled because isAppUsageCollectionEnabled() returned false, or was cancelled, or failed.
+11-20 14:10:47.009   535  3970 I ActivityTaskManager: START u11 {act=android.app.action.SET_PROFILE_OWNER cmp=com.android.settings/.applications.specialaccess.deviceadmin.ProfileOwnerAdd (has extras)} from uid 1110097
+11-20 14:10:51.377   535  2439 I DevicePolicyManager: Profile owner set: ComponentInfo{com.google.android.gms/com.google.android.gms.kids.account.receiver.ProfileOwnerReceiver} on user 11
+11-20 14:10:56.096  5485  5524 I FA      : App measurement disabled by setAnalyticsCollectionEnabled(false)
+11-20 14:11:14.364 26254 26254 I ProfileOwnerChimeraRece: (REDACTED) onEnabled: intent = %s
+11-20 14:11:14.744  5781  5983 I FA      : App measurement disabled by setAnalyticsCollectionEnabled(false)
+(end)

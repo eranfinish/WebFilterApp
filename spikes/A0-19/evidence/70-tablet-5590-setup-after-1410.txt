@@ -1,0 +1,46 @@
+# Tablet_A12 after 14:10 UTC: setup-related events and last token refusal (read-only). Names redacted.
+== last ThirdParty refusal: 14:12:13.292
+== KidsAuth / Supervision / OnboardingFlow / Webview lines 14:12-14:14:31
+11-20 14:12:02.490 26254  6139 W Auth    : amcv: GetToken failed with status code and recovery intent: ThirdPartyDeviceManagementRequired
+11-20 14:12:05.292 26254  5300 W Auth    : amcv: GetToken failed with status code and recovery intent: ThirdPartyDeviceManagementRequired
+11-20 14:12:06.412  5368  5421 W .apps.wellbein: ClassLoaderContext classpath size mismatch. expected=17, found=2 (DLC[];PCL[base.apk*1218917255:base.apk!classes2.dex*3607215179:base.apk!classes3.dex*
+11-20 14:12:09.297  5368  5827 W WellbeingSettingsProvid: Call failed: get_actions
+11-20 14:12:09.297  5368  5827 W WellbeingSettingsProvid: java.util.concurrent.TimeoutException: Waited 5000 milliseconds (plus 11 milliseconds, 617900 nanoseconds delay) for <email>[status=PENDING, i
+11-20 14:12:09.297  5368  5827 W WellbeingSettingsProvid: 	at mjw.get(PG:50)
+11-20 14:12:09.297  5368  5827 W WellbeingSettingsProvid: 	at mly.get(PG:2)
+11-20 14:12:09.297  5368  5827 W WellbeingSettingsProvid: 	at com.google.android.apps.wellbeing.api.impl.WellbeingSettingsProvider.h(PG:1)
+11-20 14:12:09.297  5368  5827 W WellbeingSettingsProvid: 	at com.google.android.apps.wellbeing.api.impl.WellbeingSettingsProvider.call(PG:9)
+11-20 14:12:09.297  5368  5827 W WellbeingSettingsProvid: 	at android.content.ContentProvider.call(ContentProvider.java:2464)
+11-20 14:12:09.297  5368  5827 W WellbeingSettingsProvid: 	at android.content.ContentProvider$Transport.call(ContentProvider.java:512)
+11-20 14:12:09.297  5368  5827 W WellbeingSettingsProvid: 	at android.content.ContentProviderNative.onTransact(ContentProviderNative.java:295)
+11-20 14:12:09.297  5368  5827 W WellbeingSettingsProvid: 	at android.os.Binder.execTransactInternal(Binder.java:1179)
+11-20 14:12:09.297  5368  5827 W WellbeingSettingsProvid: 	at android.os.Binder.execTransact(Binder.java:1143)
+11-20 14:12:09.877 26254 26324 W Auth    : amcv: GetToken failed with status code and recovery intent: ThirdPartyDeviceManagementRequired
+11-20 14:12:12.567 26254 26304 W Auth    : amcv: GetToken failed with status code and recovery intent: ThirdPartyDeviceManagementRequired
+11-20 14:12:12.568 26254 26304 W Auth    : [GmsAccountAuthenticatorImpl] error status while fetching token:ThirdPartyDeviceManagementRequired [CONTEXT service_id=343 ]
+11-20 14:12:13.291 26254 26304 W Auth    : amcv: GetToken failed with status code and recovery intent: ThirdPartyDeviceManagementRequired
+11-20 14:12:13.292 26254 26304 W Auth    : [GmsAccountAuthenticatorImpl] error status while fetching token:ThirdPartyDeviceManagementRequired [CONTEXT service_id=343 ]
+11-20 14:13:01.999  2114  2212 E Finsky  : [1869] AU2: RequiredVehicleState is missing.
+11-20 14:13:01.999  2114  2212 E Finsky  : [1869] AU2: RequiredInteractivityState is missing.
+11-20 14:13:01.999  2114  2212 E Finsky  : [1869] AU2: RequiredBatteryLevel is missing.
+11-20 14:13:02.005  2114  2212 E Finsky  : [1869] AU2: RequiredVehicleState is missing.
+11-20 14:13:02.005  2114  2212 E Finsky  : [1869] AU2: RequiredBatteryLevel is missing.
+11-20 14:13:12.105 28561 28979 I WebViewBridge: Called fetchReviewAppsList(). [CONTEXT service_id=42 ]
+11-20 14:13:13.130  2114  2212 E Finsky  : [1869] AU2: RequiredVehicleState is missing.
+11-20 14:13:13.130  2114  2212 E Finsky  : [1869] AU2: RequiredBatteryLevel is missing.
+11-20 14:13:13.161  2114  2212 E Finsky  : [1869] AU2: RequiredVehicleState is missing.
+11-20 14:13:13.162  2114  2212 E Finsky  : [1869] AU2: RequiredVehicleState is missing.
+11-20 14:13:13.162  2114  2212 E Finsky  : [1869] AU2: RequiredBatteryLevel is missing.
+11-20 14:13:13.163  2114  2212 E Finsky  : [1869] AU2: RequiredVehicleState is missing.
+11-20 14:13:13.176  2114  2212 E Finsky  : [1869] AU2: RequiredVehicleState is missing.
+11-20 14:13:13.176  2114  2212 E Finsky  : [1869] AU2: RequiredBatteryLevel is missing.
+11-20 14:13:13.176  2114  2212 E Finsky  : [1869] AU2: RequiredVehicleState is missing.
+11-20 14:13:13.177  2114  2212 E Finsky  : [1869] AU2: RequiredVehicleState is missing.
+11-20 14:13:13.177  2114  2212 E Finsky  : [1869] AU2: RequiredBatteryLevel is missing.
+11-20 14:13:13.178  2114  2212 E Finsky  : [1869] AU2: RequiredVehicleState is missing.
+11-20 14:13:13.186  2114  2212 E Finsky  : [1869] AU2: RequiredVehicleState is missing.
+11-20 14:13:13.187  2114  2212 E Finsky  : [1869] AU2: RequiredBatteryLevel is missing.
+11-20 14:13:13.187  2114  2212 E Finsky  : [1869] AU2: RequiredVehicleState is missing.
+(end)
+== Family Link app in any user (installed later?)
+(end)

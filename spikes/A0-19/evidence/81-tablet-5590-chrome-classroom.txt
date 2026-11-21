@@ -1,0 +1,59 @@
+# Tablet_A12 (5590): Chrome in u11 after the 16:55:50 UTC marker (11-21 16:55:50). Read-only. Names redacted.
+== current user: 0
+== owners
+3 owners:
+User  0: admin=com.webfilter.spike.a19/.AdminReceiver,DeviceOwner,Affiliated
+User 10: admin=com.webfilter.spike.a19/.AdminReceiver,ProfileOwner
+User 11: admin=com.google.android.gms/.kids.account.receiver.ProfileOwnerReceiver,ProfileOwner
+== accounts per user
+User UserInfo{0:Owner:c13}: |   Accounts: 0
+User UserInfo{10:kid-test:410}: |   Accounts: 0
+User UserInfo{11:control:410}: |   Accounts: 1
+== Chrome processes (ps -> user)
+u0_a115 5179 com.android.chrome
+u0_a115 5278 com.android.chrome:privileged_process0
+u0_a115 8581 com.android.chrome_zygote
+u0_i91 11224 com.android.chrome:sandboxed_process0:org.chromium.content.app.SandboxedProce
+u0_i3 11588 com.android.chrome:sandboxed_process0:org.chromium.content.app.SandboxedProce
+u0_i4 11615 com.android.chrome:sandboxed_process0:org.chromium.content.app.SandboxedProce
+== Chrome starts since marker (START / Start proc)
+16:56:00.901 ActivityManager: Start
+16:56:13.104 ActivityManager: Start
+16:57:02.979 ActivityManager: Start
+17:02:05.058 ActivityManager: Start
+17:12:07.432 ActivityManager: Start
+17:16:44.308 ActivityManager: Start
+17:17:26.275 ActivityManager: Start
+17:17:26.405 ActivityManager: Start
+(end)
+== token results since marker (GMS and apps), by type
+(end)
+== Chrome / classroom log lines since marker (any pid, first 20)
+11-21 16:56:00.901   532   560 I ActivityManager: Start proc 5817:com.android.chrome:sandboxed_process0:org.chromium.content.app.SandboxedProcessService0:7/u0ai7 for  {com.android.chrome/org.chromium.
+11-21 16:56:02.960   532  1372 I ActivityManager: Killing 5817:com.android.chrome:sandboxed_process0:org.chromium.content.app.SandboxedProcessService0:7/u0a115i-8993 (adj 0): isolated not needed
+11-21 16:56:13.104   532   560 I ActivityManager: Start proc 5843:com.android.chrome:sandboxed_process0:org.chromium.content.app.SandboxedProcessService0:8/u0ai8 for  {com.android.chrome/org.chromium.
+11-21 16:56:13.230   532   849 I ActivityManager: Killing 5843:com.android.chrome:sandboxed_process0:org.chromium.content.app.SandboxedProcessService0:8/u0a115i-8992 (adj 0): isolated not needed
+11-21 16:57:02.979   532   560 I ActivityManager: Start proc 5895:com.android.chrome:sandboxed_process0:org.chromium.content.app.SandboxedProcessService0:9/u0ai9 for  {com.android.chrome/org.chromium.
+11-21 16:57:05.028   532   849 I ActivityManager: Killing 5895:com.android.chrome:sandboxed_process0:org.chromium.content.app.SandboxedProcessService0:9/u0a115i-8991 (adj 0): isolated not needed
+11-21 17:02:05.058   532   560 I ActivityManager: Start proc 6067:com.android.chrome:sandboxed_process0:org.chromium.content.app.SandboxedProcessService0:10/u0ai10 for  {com.android.chrome/org.chromiu
+11-21 17:02:07.145   532   545 I ActivityManager: Killing 6067:com.android.chrome:sandboxed_process0:org.chromium.content.app.SandboxedProcessService0:10/u0a115i-8990 (adj 0): isolated not needed
+11-21 17:12:07.432   532   560 I ActivityManager: Start proc 6461:com.android.chrome:sandboxed_process0:org.chromium.content.app.SandboxedProcessService0:11/u0ai11 for  {com.android.chrome/org.chromiu
+11-21 17:12:09.785   532   694 I ActivityManager: Killing 6461:com.android.chrome:sandboxed_process0:org.chromium.content.app.SandboxedProcessService0:11/u0a115i-8989 (adj 0): isolated not needed
+11-21 17:16:34.617  5179  5179 D InputMethodManager: showSoftInput() view=org.chromium.chrome.browser.omnibox.UrlBarApi26{46e7690 VFED..CL. .F.P.... 80,6-1950,74 #7f0b0787 app:id/url_bar aid=107374182
+11-21 17:16:39.295  5179  5179 D InputMethodManager: showSoftInput() view=org.chromium.chrome.browser.omnibox.UrlBarApi26{46e7690 VFED..CL. .F.P.... 80,6-1950,74 #7f0b0787 app:id/url_bar aid=107374182
+11-21 17:16:39.847  5179  5179 D InputMethodManager: showSoftInput() view=org.chromium.chrome.browser.omnibox.UrlBarApi26{46e7690 VFED..CL. .F.P.... 80,6-1950,74 #7f0b0787 app:id/url_bar aid=107374182
+11-21 17:16:43.693  5179  5179 D InputMethodManager: showSoftInput() view=org.chromium.chrome.browser.omnibox.UrlBarApi26{46e7690 VFED..CL. .F...... 80,6-1950,74 #7f0b0787 app:id/url_bar aid=107374182
+11-21 17:16:43.867  1253  1253 I AndroidIME: AbstractIme.onActivate():86 LatinIme.onActivate() : EditorInfo = inputType=URI imeActionName=GO dump=[inputType=0x11 imeOptions=0x12000002 privateImeOption
+11-21 17:16:44.308   532   560 I ActivityManager: Start proc 6555:com.android.chrome:sandboxed_process0:org.chromium.content.app.SandboxedProcessService0:12/u0ai12 for  {com.android.chrome/org.chromiu
+11-21 17:16:56.139  5179  5179 D InputMethodManager: showSoftInput() view=org.chromium.chrome.browser.omnibox.UrlBarApi26{46e7690 VFED..CL. .F...... 80,6-1950,74 #7f0b0787 app:id/url_bar aid=107374182
+11-21 17:16:56.214  1253  1253 I AndroidIME: AbstractIme.onActivate():86 LatinIme.onActivate() : EditorInfo = inputType=URI imeActionName=GO dump=[inputType=0x11 imeOptions=0x12000002 privateImeOption
+11-21 17:16:57.609  1253  1253 I AndroidIME: AbstractIme.onActivate():86 LatinIme.onActivate() : EditorInfo = inputType=URI imeActionName=GO dump=[inputType=0x11 imeOptions=0x12000002 privateImeOption
+11-21 17:17:26.275   532   560 I ActivityManager: Start proc 6597:com.android.chrome:sandboxed_process0:org.chromium.content.app.SandboxedProcessService0:13/u0ai13 for  {com.android.chrome/org.chromiu
+(end)
+
+Summary (read-only):
+- Which user's Chrome ran: user 0 only. Chrome main process is pid 5179 (u0_a115); its sandboxed renderers are u0_i* processes. No Chrome process of user 10 or user 11 appears in ps after the 16:55:50 UTC marker. Chrome was started several times from 16:56 to 17:17 in user 0.
+- Account state: user 0 = 0 accounts, user 10 = 0, user 11 = 1 (type com.google, unchanged). The Google account is in user 11, but the Chrome that ran was in user 0, which has no Google account.
+- Token results since the marker: none logged (no success, no THIRD_PARTY_DEVICE_MANAGEMENT_REQUIRED, no NETWORK_ERROR) for GMS or any app. Because user 0 has no account, no token request for the child account was made in this window.
+- What the page showed: not in the logs. The Chrome log shows an omnibox input (URI, GO action) at 17:16:34–17:16:57, consistent with the parent typing a URL. The parent's report is needed to say whether the page showed signed-in, a sign-in prompt, or an error.
+- Consequence: this Chrome run does not test the supervised account. It is the user-0 state (signed out, no account). Chrome 91 on this image is also old.

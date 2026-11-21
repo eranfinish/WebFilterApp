@@ -1,0 +1,59 @@
+# Tablet_A12 (5590) after relaunch: user restrictions per user (read-only), and what shell can reach
+== current user: 0
+== users and states
+4:  UserInfo{0:null:c13} serialNo=0 isPrimary=true
+22:  UserInfo{10:kid-test:410} serialNo=12 isPrimary=false
+42:  UserInfo{11:control:410} serialNo=13 isPrimary=false
+== restrictions blocks (lines mentioning restrictions, per user section)
+UserInfo{0:null:c13} serialNo=0 isPrim |     Restrictions:
+UserInfo{0:null:c13} serialNo=0 isPrim |       no_add_managed_profile
+UserInfo{0:null:c13} serialNo=0 isPrim |     Device policy global restrictions:
+UserInfo{0:null:c13} serialNo=0 isPrim |     Device policy local restrictions:
+UserInfo{0:null:c13} serialNo=0 isPrim |     Effective restrictions:
+UserInfo{0:null:c13} serialNo=0 isPrim |       no_add_managed_profile
+UserInfo{10:kid-test:410} serialNo=12  |     Restrictions:
+UserInfo{10:kid-test:410} serialNo=12  |       no_sms
+UserInfo{10:kid-test:410} serialNo=12  |       no_outgoing_calls
+UserInfo{10:kid-test:410} serialNo=12  |     Device policy global restrictions:
+UserInfo{10:kid-test:410} serialNo=12  |     Device policy local restrictions:
+UserInfo{10:kid-test:410} serialNo=12  |     Effective restrictions:
+UserInfo{10:kid-test:410} serialNo=12  |       no_sms
+UserInfo{10:kid-test:410} serialNo=12  |       no_outgoing_calls
+UserInfo{11:control:410} serialNo=13 i |     Restrictions:
+UserInfo{11:control:410} serialNo=13 i |       no_sms
+UserInfo{11:control:410} serialNo=13 i |       no_outgoing_calls
+UserInfo{11:control:410} serialNo=13 i |     Device policy global restrictions:
+UserInfo{11:control:410} serialNo=13 i |     Device policy local restrictions:
+UserInfo{11:control:410} serialNo=13 i |         no_install_unknown_sources
+UserInfo{11:control:410} serialNo=13 i |         no_config_location
+UserInfo{11:control:410} serialNo=13 i |         no_remove_user
+UserInfo{11:control:410} serialNo=13 i |         no_debugging_features
+UserInfo{11:control:410} serialNo=13 i |         no_config_credentials
+UserInfo{11:control:410} serialNo=13 i |         no_config_date_time
+UserInfo{11:control:410} serialNo=13 i |     Effective restrictions:
+UserInfo{11:control:410} serialNo=13 i |       no_sms
+UserInfo{11:control:410} serialNo=13 i |       no_install_unknown_sources
+UserInfo{11:control:410} serialNo=13 i |       no_config_location
+UserInfo{11:control:410} serialNo=13 i |       no_remove_user
+UserInfo{11:control:410} serialNo=13 i |       no_debugging_features
+UserInfo{11:control:410} serialNo=13 i |       no_config_credentials
+UserInfo{11:control:410} serialNo=13 i |       no_outgoing_calls
+UserInfo{11:control:410} serialNo=13 i |       no_config_date_time
+UserInfo{11:control:410} serialNo=13 i |   Guest restrictions:
+UserInfo{11:control:410} serialNo=13 i |     no_sms
+UserInfo{11:control:410} serialNo=13 i |     no_install_unknown_sources
+UserInfo{11:control:410} serialNo=13 i |     no_config_wifi
+UserInfo{11:control:410} serialNo=13 i |     no_config_credentials
+UserInfo{11:control:410} serialNo=13 i |     no_outgoing_calls
+(end restrictions)
+== shell attempt against u11 (expected denial)
+
+Exception occurred while executing 'list':
+
+Exception occurred while executing 'switch-user':
+
+Notes (after the restriction read):
+- user 11 (control) local device-policy restrictions: no_install_unknown_sources, no_config_location, no_remove_user, no_debugging_features, no_config_credentials, no_config_date_time. user 11's effective set also includes no_sms, no_outgoing_calls. user 11 guest restrictions: no_sms, no_install_unknown_sources, no_config_wifi, no_config_credentials, no_outgoing_calls.
+- The local restrictions are set in the user whose PO is GMS (Family Link). The owner list shows user 11 = GMS PO. The restriction list is consistent with a PO-set policy; no_debugging_features is the one that blocks shell access to user 11.
+- Shell commands against user 11 are now denied (pm list packages --user 11 and am switch-user 11 both raise SecurityException in the output above). Shell can still read device-wide logcat, dumpsys account and dpm list-owners.
+- Current user: 0. Users 10 and 11 are stopped (not running) after the relaunch.

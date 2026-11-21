@@ -1,0 +1,333 @@
+# Capture after the parent's (c) YouTube result (read-only). Device clock UTC. Emails redacted; account names not saved.
+== owners
+2 owners:
+User  0: admin=com.webfilter.spike.a19/.AdminReceiver,DeviceOwner,Affiliated
+User 10: admin=com.webfilter.spike.a19/.AdminReceiver,ProfileOwner
+== status inside user 10
+Broadcast completed: result=0, data="myUser=UserHandle{10} pkg=com.webfilter.spike.a19 isAdminActive=true isDeviceOwnerApp=false isProfileOwnerApp=true"
+== accounts (count, type only)
+  Accounts: 0
+  Accounts: 1
+      3 type=com.google
+      2 type=com.google.android.gm.exchange
+      2 type=com.google.android.gm.legacyimap
+      2 type=com.google.android.gm.pop3
+      1 type=com.google.work
+== resumed
+    mResumedActivity: ActivityRecord{775ccaf u10 com.google.android.youtube/com.google.android.apps.youtube.app.watchwhile.WatchWhileActivity
+== logcat since 13:15 UTC: YouTube / GoogleAuthUtil / getToken / AccountReauth / kids / supervision
+11-20 13:15:30.772  4294  8255 E Auth    : [DataStatusChecker] Signature check failed. The calling package is not google signed. [CONTEXT service_id=343 ]
+11-20 13:15:30.775  4294  8255 W Auth    : [ReauthNotificationManager] Unhandled DM status: THIRD_PARTY_DEVICE_MANAGEMENT_REQUIRED [CONTEXT service_id=343 ]
+11-20 13:15:30.832   707   707 D InterruptionStateProvider: No bubble up: not allowed to bubble: 10|com.google.android.gms|0|com.google.android.gms.auth.TokenNotificationManager:24b418c07b93d27d176259fe5c1b11c3:com.google|1010097
+11-20 13:15:30.837   707   707 D InterruptionStateProvider: No heads up: unimportant notification: 10|com.google.android.gms|0|com.google.android.gms.auth.TokenNotificationManager:24b418c07b93d27d176259fe5c1b11c3:com.google|1010097
+11-20 13:15:30.872  4294  8255 I Auth    : (REDACTED) [GetToken] GetToken failed for app=%s with userRecoverable status: %s 
+11-20 13:15:30.874  4294  8255 W Auth    : [ChimeraGetToken] exception while trying to fetch auth tokens for app=com.google.android.googlequicksearchbox, scope=oauth2:https://www.google.com/accounts/OAuthLogin https://www.googleapis.com/aut
+11-20 13:15:30.874  4294  8255 W Auth    : amcv: GetToken failed with status code and recovery intent: ThirdPartyDeviceManagementRequired
+11-20 13:15:30.877  4473 15863 W Auth    : [GoogleAuthUtil] GoogleAuthUtil
+11-20 13:15:30.878  4473 15863 W GoogleAuthUtil: Error when getting token
+11-20 13:15:30.878  4473 15863 W GoogleAuthUtil: com.google.android.gms.auth.UserRecoverableAuthException: ThirdPartyDeviceManagementRequired
+11-20 13:15:30.878  4473 15863 W GoogleAuthUtil: 	at com.google.android.gms.auth.m.e(SourceFile:17)
+11-20 13:15:30.878  4473 15863 W GoogleAuthUtil: 	at com.google.android.gms.auth.g.a(SourceFile:12)
+11-20 13:15:30.878  4473 15863 W GoogleAuthUtil: 	at com.google.android.gms.auth.m.g(SourceFile:11)
+11-20 13:15:30.878  4473 15863 W GoogleAuthUtil: 	at com.google.android.gms.auth.m.f(SourceFile:20)
+11-20 13:15:30.878  4473 15863 W GoogleAuthUtil: 	at com.google.android.libraries.gcoreclient.e.a.b.d(SourceFile:3)
+11-20 13:15:30.878  4473 15863 W GoogleAuthUtil: 	at com.google.android.apps.gsa.search.core.google.gaia.k.c(SourceFile:3)
+11-20 13:15:30.878  4473 15863 W GoogleAuthUtil: 	at com.google.android.apps.gsa.search.core.google.gaia.h.c(SourceFile:3)
+11-20 13:15:30.878  4473 15863 W GoogleAuthUtil: 	at com.google.android.apps.gsa.search.core.google.gaia.e.e(SourceFile:14)
+11-20 13:15:30.878  4473 15863 W GoogleAuthUtil: 	at com.google.android.apps.gsa.search.core.google.gaia.e.c(SourceFile:1)
+11-20 13:15:30.878  4473 15863 W GoogleAuthUtil: 	at com.google.android.apps.gsa.search.core.google.gaia.ag.call(SourceFile:3)
+11-20 13:15:30.878  4473 15863 W GoogleAuthUtil: 	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+11-20 13:15:30.878  4473 15863 W GoogleAuthUtil: 	at com.google.android.apps.gsa.shared.util.c.a.e.run(SourceFile:2)
+11-20 13:15:30.878  4473 15863 W GoogleAuthUtil: 	at com.google.android.apps.gsa.shared.util.c.a.ay.run(SourceFile:1)
+11-20 13:15:30.878  4473 15863 W GoogleAuthUtil: 	at com.google.android.apps.gsa.shared.util.c.a.ay.run(SourceFile:1)
+11-20 13:15:30.878  4473 15863 W GoogleAuthUtil: 	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1167)
+11-20 13:15:30.878  4473 15863 W GoogleAuthUtil: 	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:641)
+11-20 13:15:30.878  4473 15863 W GoogleAuthUtil: 	at java.lang.Thread.run(Thread.java:920)
+11-20 13:15:30.878  4473 15863 W GoogleAuthUtil: 	at com.google.android.apps.gsa.shared.util.c.a.h.run(SourceFile:4)
+11-20 13:15:30.961  4294  4591 E Auth    : [DataStatusChecker] Signature check failed. The calling package is not google signed. [CONTEXT service_id=343 ]
+11-20 13:15:30.964  4294  4591 W Auth    : [ReauthNotificationManager] Unhandled DM status: THIRD_PARTY_DEVICE_MANAGEMENT_REQUIRED [CONTEXT service_id=343 ]
+11-20 13:15:31.026  4294  4591 I Auth    : (REDACTED) [GetToken] GetToken failed for app=%s with userRecoverable status: %s 
+11-20 13:15:31.027  4294  4591 W Auth    : [ChimeraGetToken] exception while trying to fetch auth tokens for app=com.google.android.gm, scope=oauth2:https://mail.google.com/ https://www.googleapis.com/auth/gmail.ads https://www.googleapis.c
+11-20 13:15:31.027  4294  4591 W Auth    : amcv: GetToken failed with status code and recovery intent: ThirdPartyDeviceManagementRequired
+11-20 13:15:31.027 15301 15873 W Auth    : [GoogleAuthUtil] GoogleAuthUtil
+11-20 13:15:31.028   707   707 D InterruptionStateProvider: No bubble up: not allowed to bubble: 10|com.google.android.gms|0|com.google.android.gms.auth.TokenNotificationManager:24b418c07b93d27d176259fe5c1b11c3:com.google|1010097
+11-20 13:15:31.029   707   707 D InterruptionStateProvider: No heads up: unimportant notification: 10|com.google.android.gms|0|com.google.android.gms.auth.TokenNotificationManager:24b418c07b93d27d176259fe5c1b11c3:com.google|1010097
+11-20 13:15:53.368   535  1554 I DevicePolicyManager: Packages subject to suspension: com.google.android.youtube,com.android.contacts,com.android.camera2,com.android.stk,com.google.android.deskclock,com.google.android.gm,com.google.android.
+11-20 13:15:55.795 15961 15961 I A19     : op=status result=myUser=UserHandle{10} pkg=com.webfilter.spike.a19 isAdminActive=true isDeviceOwnerApp=false isProfileOwnerApp=true
+11-20 13:16:08.835  9725  9725 I KidsAuth: [OnboardingFlowObserver] Flow has been abandoned. [CONTEXT service_id=42 ]
+11-20 13:16:08.861  4294 12560 I KidsAuth: (REDACTED) [SupervisionSetupChimeraService] [%s] Processing command[id=%s][flags=%s]: %s
+11-20 13:16:09.236  4294 12560 I KidsAuth: (REDACTED) [SupervisionSetupChimeraService] Next state: %s
+11-20 13:16:11.425  4294 11933 E Auth    : [DataStatusChecker] Signature check failed. The calling package is not google signed. [CONTEXT service_id=343 ]
+11-20 13:16:11.432  4294 11933 W Auth    : [ReauthNotificationManager] Unhandled DM status: THIRD_PARTY_DEVICE_MANAGEMENT_REQUIRED [CONTEXT service_id=343 ]
+11-20 13:16:11.460   707   707 D InterruptionStateProvider: No bubble up: not allowed to bubble: 10|com.google.android.gms|0|com.google.android.gms.auth.TokenNotificationManager:24b418c07b93d27d176259fe5c1b11c3:com.google|1010097
+11-20 13:16:11.461   707   707 D InterruptionStateProvider: No heads up: unimportant notification: 10|com.google.android.gms|0|com.google.android.gms.auth.TokenNotificationManager:24b418c07b93d27d176259fe5c1b11c3:com.google|1010097
+11-20 13:16:11.475  4294 11933 I Auth    : (REDACTED) [GetToken] GetToken failed for app=%s with userRecoverable status: %s 
+11-20 13:16:11.477  4294 11933 W Auth    : [ChimeraGetToken] exception while trying to fetch auth tokens for app=com.google.android.googlequicksearchbox, scope=oauth2:https://www.googleapis.com/auth/assistant https://www.googleapis.com/auth
+11-20 13:16:11.477  4294 11933 W Auth    : amcv: GetToken failed with status code and recovery intent: ThirdPartyDeviceManagementRequired
+11-20 13:16:11.480  4473 15881 W Auth    : [GoogleAuthUtil] GoogleAuthUtil
+11-20 13:16:11.673  4294 11933 E Auth    : [DataStatusChecker] Signature check failed. The calling package is not google signed. [CONTEXT service_id=343 ]
+11-20 13:16:11.678  4294 11933 W Auth    : [ReauthNotificationManager] Unhandled DM status: THIRD_PARTY_DEVICE_MANAGEMENT_REQUIRED [CONTEXT service_id=343 ]
+11-20 13:16:11.735  4294 15684 E Auth    : [DataStatusChecker] Signature check failed. The calling package is not google signed. [CONTEXT service_id=343 ]
+11-20 13:16:11.740  4294 15684 W Auth    : [ReauthNotificationManager] Unhandled DM status: THIRD_PARTY_DEVICE_MANAGEMENT_REQUIRED [CONTEXT service_id=343 ]
+11-20 13:16:11.753   707   707 D InterruptionStateProvider: No bubble up: not allowed to bubble: 10|com.google.android.gms|0|com.google.android.gms.auth.TokenNotificationManager:24b418c07b93d27d176259fe5c1b11c3:com.google|1010097
+11-20 13:16:11.761  4294 11933 I Auth    : (REDACTED) [GetToken] GetToken failed for app=%s with userRecoverable status: %s 
+11-20 13:16:11.761   707   707 D InterruptionStateProvider: No heads up: unimportant notification: 10|com.google.android.gms|0|com.google.android.gms.auth.TokenNotificationManager:24b418c07b93d27d176259fe5c1b11c3:com.google|1010097
+11-20 13:16:11.766  4294 11933 W Auth    : [ChimeraGetToken] exception while trying to fetch auth tokens for app=com.google.android.googlequicksearchbox, scope=oauth2:https://www.googleapis.com/auth/assistant https://www.googleapis.com/auth
+11-20 13:16:11.766  4294 11933 W Auth    : amcv: GetToken failed with status code and recovery intent: ThirdPartyDeviceManagementRequired
+11-20 13:16:11.770  4473 15856 W Auth    : [GoogleAuthUtil] GoogleAuthUtil
+11-20 13:16:11.802  4473  4793 W A       : Fetch failed. Renderable stream failure reason: AUTHENTICATION_ERROR
+11-20 13:16:11.831  4294 15684 I Auth    : (REDACTED) [GetToken] GetToken failed for app=%s with userRecoverable status: %s 
+11-20 13:16:11.832  4294 15684 W Auth    : [ChimeraGetToken] exception while trying to fetch auth tokens for app=com.google.android.gms, scope=oauth2:https://www.googleapis.com/auth/peopleapi.legacy.readwrite https://www.googleapis.com/auth
+11-20 13:16:11.832  4294 15684 W Auth    : amcv: GetToken failed with status code and recovery intent: ThirdPartyDeviceManagementRequired
+11-20 13:16:11.835  4294 15684 W Auth    : [GoogleAuthUtil] [GoogleAuthUtil] error status:THIRD_PARTY_DEVICE_MANAGEMENT_REQUIRED with method:getTokenWithDetails
+11-20 13:16:11.854   707   707 D InterruptionStateProvider: No bubble up: not allowed to bubble: 10|com.google.android.gms|0|com.google.android.gms.auth.TokenNotificationManager:24b418c07b93d27d176259fe5c1b11c3:com.google|1010097
+11-20 13:16:11.858   707   707 D InterruptionStateProvider: No heads up: unimportant notification: 10|com.google.android.gms|0|com.google.android.gms.auth.TokenNotificationManager:24b418c07b93d27d176259fe5c1b11c3:com.google|1010097
+11-20 13:16:12.033  4294 15085 E Auth    : [DataStatusChecker] Signature check failed. The calling package is not google signed. [CONTEXT service_id=343 ]
+11-20 13:16:12.042  4294 15085 W Auth    : [ReauthNotificationManager] Unhandled DM status: THIRD_PARTY_DEVICE_MANAGEMENT_REQUIRED [CONTEXT service_id=343 ]
+11-20 13:16:12.107   707   707 D InterruptionStateProvider: No bubble up: not allowed to bubble: 10|com.google.android.gms|0|com.google.android.gms.auth.TokenNotificationManager:24b418c07b93d27d176259fe5c1b11c3:com.google|1010097
+11-20 13:16:12.113   707   707 D InterruptionStateProvider: No heads up: unimportant notification: 10|com.google.android.gms|0|com.google.android.gms.auth.TokenNotificationManager:24b418c07b93d27d176259fe5c1b11c3:com.google|1010097
+11-20 13:16:12.119  4294 15085 I Auth    : (REDACTED) [GetToken] GetToken failed for app=%s with userRecoverable status: %s 
+11-20 13:16:12.120  4294 15085 W Auth    : [ChimeraGetToken] exception while trying to fetch auth tokens for app=com.google.android.gms, scope=oauth2:https://www.googleapis.com/auth/peopleapi.legacy.readwrite https://www.googleapis.com/auth
+11-20 13:16:12.120  4294 15085 W Auth    : amcv: GetToken failed with status code and recovery intent: ThirdPartyDeviceManagementRequired
+11-20 13:16:12.120  4294 15085 W Auth    : [GoogleAuthUtil] [GoogleAuthUtil] error status:THIRD_PARTY_DEVICE_MANAGEMENT_REQUIRED with method:getTokenWithDetails
+11-20 13:16:12.161  4294 15010 W AsyncOperation: OperationException[Status{statusCode=Sync failed with an authentication error!, resolution=null}]
+11-20 13:16:12.164  4473  4489 E OneGoogle: com.google.android.libraries.onegoogle.owners.mdi.MdiOwnersLoader$MdiException: com.google.android.gms.common.api.n: 38003: Sync failed with an authentication error!
+11-20 13:16:12.164  4473  4489 E OneGoogle: Caused by: com.google.android.gms.common.api.n: 38003: Sync failed with an authentication error!
+11-20 13:16:12.336  4294 12560 E Auth    : [DataStatusChecker] Signature check failed. The calling package is not google signed. [CONTEXT service_id=343 ]
+11-20 13:16:12.352  4294 12560 W Auth    : [ReauthNotificationManager] Unhandled DM status: THIRD_PARTY_DEVICE_MANAGEMENT_REQUIRED [CONTEXT service_id=343 ]
+11-20 13:16:12.423   707   707 D InterruptionStateProvider: No bubble up: not allowed to bubble: 10|com.google.android.gms|0|com.google.android.gms.auth.TokenNotificationManager:24b418c07b93d27d176259fe5c1b11c3:com.google|1010097
+11-20 13:16:12.429   707   707 D InterruptionStateProvider: No heads up: unimportant notification: 10|com.google.android.gms|0|com.google.android.gms.auth.TokenNotificationManager:24b418c07b93d27d176259fe5c1b11c3:com.google|1010097
+11-20 13:16:12.438  4294 12560 I Auth    : (REDACTED) [GetToken] GetToken failed for app=%s with userRecoverable status: %s 
+11-20 13:16:12.441  4294 12560 W Auth    : [ChimeraGetToken] exception while trying to fetch auth tokens for app=com.google.android.gms, scope=oauth2:https://www.googleapis.com/auth/peopleapi.legacy.readwrite https://www.googleapis.com/auth
+11-20 13:16:12.441  4294 12560 W Auth    : amcv: GetToken failed with status code and recovery intent: ThirdPartyDeviceManagementRequired
+11-20 13:16:12.443  4294 12560 W Auth    : [GoogleAuthUtil] [GoogleAuthUtil] error status:THIRD_PARTY_DEVICE_MANAGEMENT_REQUIRED with method:getTokenWithDetails
+11-20 13:16:12.574  4294 15085 E Auth    : [DataStatusChecker] Signature check failed. The calling package is not google signed. [CONTEXT service_id=343 ]
+11-20 13:16:12.577  4294 15085 W Auth    : [ReauthNotificationManager] Unhandled DM status: THIRD_PARTY_DEVICE_MANAGEMENT_REQUIRED [CONTEXT service_id=343 ]
+11-20 13:16:12.592   707   707 D InterruptionStateProvider: No bubble up: not allowed to bubble: 10|com.google.android.gms|0|com.google.android.gms.auth.TokenNotificationManager:24b418c07b93d27d176259fe5c1b11c3:com.google|1010097
+11-20 13:16:12.593   707   707 D InterruptionStateProvider: No heads up: unimportant notification: 10|com.google.android.gms|0|com.google.android.gms.auth.TokenNotificationManager:24b418c07b93d27d176259fe5c1b11c3:com.google|1010097
+11-20 13:16:12.596  4294 15085 I Auth    : (REDACTED) [GetToken] GetToken failed for app=%s with userRecoverable status: %s 
+11-20 13:16:12.596  4294 15085 W Auth    : [ChimeraGetToken] exception while trying to fetch auth tokens for app=com.google.android.gms, scope=oauth2:https://www.googleapis.com/auth/peopleapi.legacy.readwrite https://www.googleapis.com/auth
+11-20 13:16:12.596  4294 15085 W Auth    : amcv: GetToken failed with status code and recovery intent: ThirdPartyDeviceManagementRequired
+11-20 13:16:12.596  4294 15085 W Auth    : [GoogleAuthUtil] [GoogleAuthUtil] error status:THIRD_PARTY_DEVICE_MANAGEMENT_REQUIRED with method:getTokenWithDetails
+11-20 13:16:12.623  4294 15010 W AsyncOperation: OperationException[Status{statusCode=Sync failed with an authentication error!, resolution=null}]
+11-20 13:16:12.625  4473  4489 E OneGoogle: com.google.android.libraries.onegoogle.owners.mdi.MdiOwnersLoader$MdiException: com.google.android.gms.common.api.n: 38003: Sync failed with an authentication error!
+11-20 13:16:12.625  4473  4489 E OneGoogle: Caused by: com.google.android.gms.common.api.n: 38003: Sync failed with an authentication error!
+11-20 13:16:12.851  4294 15684 E Auth    : [DataStatusChecker] Signature check failed. The calling package is not google signed. [CONTEXT service_id=343 ]
+11-20 13:16:12.854  4294 15684 W Auth    : [ReauthNotificationManager] Unhandled DM status: THIRD_PARTY_DEVICE_MANAGEMENT_REQUIRED [CONTEXT service_id=343 ]
+11-20 13:16:12.889   707   707 D InterruptionStateProvider: No bubble up: not allowed to bubble: 10|com.google.android.gms|0|com.google.android.gms.auth.TokenNotificationManager:24b418c07b93d27d176259fe5c1b11c3:com.google|1010097
+11-20 13:16:12.896   707   707 D InterruptionStateProvider: No heads up: unimportant notification: 10|com.google.android.gms|0|com.google.android.gms.auth.TokenNotificationManager:24b418c07b93d27d176259fe5c1b11c3:com.google|1010097
+11-20 13:16:12.905  4294 15684 I Auth    : (REDACTED) [GetToken] GetToken failed for app=%s with userRecoverable status: %s 
+11-20 13:16:12.905  4294 15684 W Auth    : [ChimeraGetToken] exception while trying to fetch auth tokens for app=com.google.android.gms, scope=oauth2:https://www.googleapis.com/auth/peopleapi.legacy.readwrite https://www.googleapis.com/auth
+11-20 13:16:12.905  4294 15684 W Auth    : amcv: GetToken failed with status code and recovery intent: ThirdPartyDeviceManagementRequired
+11-20 13:16:12.905  4294 15684 W Auth    : [GoogleAuthUtil] [GoogleAuthUtil] error status:THIRD_PARTY_DEVICE_MANAGEMENT_REQUIRED with method:getTokenWithDetails
+11-20 13:16:13.057  4294 16032 E Auth    : [DataStatusChecker] Signature check failed. The calling package is not google signed. [CONTEXT service_id=343 ]
+11-20 13:16:13.060  4294 16032 W Auth    : [ReauthNotificationManager] Unhandled DM status: THIRD_PARTY_DEVICE_MANAGEMENT_REQUIRED [CONTEXT service_id=343 ]
+11-20 13:16:13.138   707   707 D InterruptionStateProvider: No bubble up: not allowed to bubble: 10|com.google.android.gms|0|com.google.android.gms.auth.TokenNotificationManager:24b418c07b93d27d176259fe5c1b11c3:com.google|1010097
+11-20 13:16:13.143   707   707 D InterruptionStateProvider: No heads up: unimportant notification: 10|com.google.android.gms|0|com.google.android.gms.auth.TokenNotificationManager:24b418c07b93d27d176259fe5c1b11c3:com.google|1010097
+11-20 13:16:13.150  4294 16032 I Auth    : (REDACTED) [GetToken] GetToken failed for app=%s with userRecoverable status: %s 
+11-20 13:16:13.151  4294 16032 W Auth    : [ChimeraGetToken] exception while trying to fetch auth tokens for app=com.google.android.gms, scope=oauth2:https://www.googleapis.com/auth/peopleapi.legacy.readwrite https://www.googleapis.com/auth
+11-20 13:16:13.151  4294 16032 W Auth    : amcv: GetToken failed with status code and recovery intent: ThirdPartyDeviceManagementRequired
+11-20 13:16:13.151  4294 16032 W Auth    : [GoogleAuthUtil] [GoogleAuthUtil] error status:THIRD_PARTY_DEVICE_MANAGEMENT_REQUIRED with method:getTokenWithDetails
+11-20 13:16:13.176  4294 15010 W AsyncOperation: OperationException[Status{statusCode=Sync failed with an authentication error!, resolution=null}]
+11-20 13:16:13.180  4473  4489 E OneGoogle: com.google.android.libraries.onegoogle.owners.mdi.MdiOwnersLoader$MdiException: com.google.android.gms.common.api.n: 38003: Sync failed with an authentication error!
+11-20 13:16:13.180  4473  4489 E OneGoogle: Caused by: com.google.android.gms.common.api.n: 38003: Sync failed with an authentication error!
+11-20 13:16:21.959   535   752 I ActivityTaskManager: START u10 {act=android.intent.action.MAIN cat=[android.intent.category.LAUNCHER] flg=0x10200000 cmp=com.google.android.youtube/.app.honeycomb.Shell$HomeActivity bnds=[521,862][1027,1080]
+11-20 13:16:22.029   535   564 I ActivityManager: Start proc 16041:com.google.android.youtube/u10a120 for pre-top-activity {com.google.android.youtube/com.google.android.youtube.app.honeycomb.Shell$HomeActivity}
+11-20 13:16:22.181 16041 16041 D nativeloader: classloader namespace configured for unbundled product apk. library_path=/product/app/YouTube/lib/x86_64:/product/app/YouTube/YouTube.apk!/lib/x86_64:/product/lib64:/system/product/lib64
+11-20 13:16:22.224 16041 16041 V GraphicsEnvironment: ANGLE Developer option for 'com.google.android.youtube' set to: 'default'
+11-20 13:16:22.512 16041 16075 W YouTube : Fetching the Gservices key 'failsafe_clear_cache_release_13_02' before the end of the bulk initialization
+11-20 13:16:22.556   535  4609 D ConnectivityService: requestNetwork for uid/pid:1010120/16041 activeRequest: null callbackRequest: 416 [NetworkRequest [ REQUEST id=417, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED&NOT_VCN_MANAGED Uid: 1
+11-20 13:16:22.560   535   639 D WifiNetworkFactory: got request NetworkRequest [ REQUEST id=417, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED&NOT_VCN_MANAGED Uid: 1010120 RequestorUid: 1010120 RequestorPkg: com.google.android.youtube] ]
+11-20 13:16:22.561   535   639 D UntrustedWifiNetworkFactory: got request NetworkRequest [ REQUEST id=417, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED&NOT_VCN_MANAGED Uid: 1010120 RequestorUid: 1010120 RequestorPkg: com.google.android.y
+11-20 13:16:22.561   535   639 D OemPaidWifiNetworkFactory: got request NetworkRequest [ REQUEST id=417, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED&NOT_VCN_MANAGED Uid: 1010120 RequestorUid: 1010120 RequestorPkg: com.google.android.you
+11-20 13:16:22.862   535   752 D ConnectivityService: requestNetwork for uid/pid:1010120/16041 activeRequest: null callbackRequest: 418 [NetworkRequest [ REQUEST id=419, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED&NOT_VCN_MANAGED Uid: 1
+11-20 13:16:22.865   535   639 D WifiNetworkFactory: got request NetworkRequest [ REQUEST id=419, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED&NOT_VCN_MANAGED Uid: 1010120 RequestorUid: 1010120 RequestorPkg: com.google.android.youtube] ]
+11-20 13:16:22.865   535   639 D UntrustedWifiNetworkFactory: got request NetworkRequest [ REQUEST id=419, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED&NOT_VCN_MANAGED Uid: 1010120 RequestorUid: 1010120 RequestorPkg: com.google.android.y
+11-20 13:16:22.865   535   639 D OemPaidWifiNetworkFactory: got request NetworkRequest [ REQUEST id=419, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED&NOT_VCN_MANAGED Uid: 1010120 RequestorUid: 1010120 RequestorPkg: com.google.android.you
+11-20 13:16:23.060   535  1554 I ActivityTaskManager: START u10 {act=android.intent.action.MAIN cat=[android.intent.category.LAUNCHER] flg=0x4000000 cmp=com.google.android.youtube/com.google.android.apps.youtube.app.watchwhile.WatchWhileAct
+11-20 13:16:23.098 16041 16141 I hixt    : Unable to retrieve flag snapshot for com.google.android.gms.providerinstaller#com.google.android.youtube, using defaults.
+11-20 13:16:23.316 16041 16118 W android.youtub: ClassLoaderContext classpath size mismatch. expected=17, found=5 (DLC[];PCL[base.apk*1218917255:base.apk!classes2.dex*3607215179:base.apk!classes3.dex*147300619:base.apk!classes4.dex*37697799
+11-20 13:16:23.381 16041 16070 W android.youtub: ClassLoaderContext classpath size mismatch. expected=17, found=5 (DLC[];PCL[base.apk*1218917255:base.apk!classes2.dex*3607215179:base.apk!classes3.dex*147300619:base.apk!classes4.dex*37697799
+11-20 13:16:23.482 16041 16141 W hixt    : Failed to update snapshot for com.google.android.gms.providerinstaller#com.google.android.youtube flags may be stale.
+11-20 13:16:23.482 16041 16141 W hixt    : java.io.IOException: Unable to create parent directories of /data/user/10/com.google.android.gms/files/phenotype/shared/com.google.android.gms.providerinstaller#com.google.android.youtube.pb
+11-20 13:16:23.514   535  1554 D ConnectivityService: requestNetwork for uid/pid:1010120/16041 activeRequest: null callbackRequest: 421 [NetworkRequest [ REQUEST id=422, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED&NOT_VCN_MANAGED Uid: 1
+11-20 13:16:23.532   535   639 D WifiNetworkFactory: got request NetworkRequest [ REQUEST id=422, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED&NOT_VCN_MANAGED Uid: 1010120 RequestorUid: 1010120 RequestorPkg: com.google.android.youtube] ]
+11-20 13:16:23.532   535   639 D UntrustedWifiNetworkFactory: got request NetworkRequest [ REQUEST id=422, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED&NOT_VCN_MANAGED Uid: 1010120 RequestorUid: 1010120 RequestorPkg: com.google.android.y
+11-20 13:16:23.532   535   639 D OemPaidWifiNetworkFactory: got request NetworkRequest [ REQUEST id=422, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED&NOT_VCN_MANAGED Uid: 1010120 RequestorUid: 1010120 RequestorPkg: com.google.android.you
+11-20 13:16:23.553   535   581 E VerityUtils: Failed to measure fs-verity, errno 1: /product/app/YouTube/YouTube.apk
+11-20 13:16:23.547   535   535 W PackageManagerB: type=1400 audit(0.0:198): avc: denied { ioctl } for path="/product/app/YouTube/YouTube.apk" dev="dm-2" ino=132 ioctlcmd=0x6686 scontext=u:r:system_server:s0 tcontext=u:object_r:system_file:s
+11-20 13:16:23.614 16041 16163 I FA      :   adb shell setprop debug.firebase.analytics.app com.google.android.youtube
+11-20 13:16:24.015 16041 16083 W android.youtub: ClassLoaderContext classpath size mismatch. expected=17, found=5 (DLC[];PCL[base.apk*1218917255:base.apk!classes2.dex*3607215179:base.apk!classes3.dex*147300619:base.apk!classes4.dex*37697799
+11-20 13:16:24.078   535  4609 D ConnectivityService: requestNetwork for uid/pid:1010120/16041 activeRequest: null callbackRequest: 423 [NetworkRequest [ REQUEST id=424, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED&NOT_VCN_MANAGED Uid: 1
+11-20 13:16:24.084   535   639 D WifiNetworkFactory: got request NetworkRequest [ REQUEST id=424, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED&NOT_VCN_MANAGED Uid: 1010120 RequestorUid: 1010120 RequestorPkg: com.google.android.youtube] ]
+11-20 13:16:24.085   535   639 D UntrustedWifiNetworkFactory: got request NetworkRequest [ REQUEST id=424, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED&NOT_VCN_MANAGED Uid: 1010120 RequestorUid: 1010120 RequestorPkg: com.google.android.y
+11-20 13:16:24.085   535   639 D OemPaidWifiNetworkFactory: got request NetworkRequest [ REQUEST id=424, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED&NOT_VCN_MANAGED Uid: 1010120 RequestorUid: 1010120 RequestorPkg: com.google.android.you
+11-20 13:16:24.489   535   552 I ActivityTaskManager: Displayed com.google.android.youtube/com.google.android.apps.youtube.app.watchwhile.WatchWhileActivity: +2s517ms
+11-20 13:16:24.489   535   552 I ActivityTaskManager: Fully drawn com.google.android.youtube/com.google.android.apps.youtube.app.watchwhile.WatchWhileActivity: +2s517ms
+11-20 13:16:24.881  4294  7390 E Auth    : [DataStatusChecker] Signature check failed. The calling package is not google signed. [CONTEXT service_id=343 ]
+11-20 13:16:24.936  4294  7390 W Auth    : [ReauthNotificationManager] Unhandled DM status: THIRD_PARTY_DEVICE_MANAGEMENT_REQUIRED [CONTEXT service_id=343 ]
+11-20 13:16:24.943   535   552 D CompanionDeviceManagerService: onPackageModified(packageName = com.google.android.youtube)
+11-20 13:16:24.952   535  4668 W InputManager-JNI: Input channel object 'd6e6d0 Splash Screen com.google.android.youtube (client)' was disposed without first being removed with the input manager!
+11-20 13:16:24.968  4934  4934 D MediaPlayerList: Name of package changed: com.google.android.youtube
+11-20 13:16:25.221   863   863 D ImsResolver: maybeAddedImsService, packageName: com.google.android.youtube
+11-20 13:16:25.257   707   707 D InterruptionStateProvider: No bubble up: not allowed to bubble: 10|com.google.android.gms|0|com.google.android.gms.auth.TokenNotificationManager:24b418c07b93d27d176259fe5c1b11c3:com.google|1010097
+11-20 13:16:25.260   707   707 D InterruptionStateProvider: No heads up: unimportant notification: 10|com.google.android.gms|0|com.google.android.gms.auth.TokenNotificationManager:24b418c07b93d27d176259fe5c1b11c3:com.google|1010097
+11-20 13:16:25.261  4294  7390 I Auth    : (REDACTED) [GetToken] GetToken failed for app=%s with userRecoverable status: %s 
+11-20 13:16:25.264  4294  7390 W Auth    : [ChimeraGetToken] exception while trying to fetch auth tokens for app=com.google.android.youtube, scope=oauth2:https://www.googleapis.com/auth/accounts.reauth https://www.googleapis.com/auth/youtub
+11-20 13:16:25.264  4294  7390 W Auth    : amcv: GetToken failed with status code and recovery intent: ThirdPartyDeviceManagementRequired
+11-20 13:16:25.271 16041 16120 W Auth    : [GoogleAuthUtil] GoogleAuthUtil
+11-20 13:16:25.701  4294  7390 E Auth    : [DataStatusChecker] Signature check failed. The calling package is not google signed. [CONTEXT service_id=343 ]
+11-20 13:16:25.711  4294  7390 W Auth    : [ReauthNotificationManager] Unhandled DM status: THIRD_PARTY_DEVICE_MANAGEMENT_REQUIRED [CONTEXT service_id=343 ]
+11-20 13:16:25.733   707   707 D InterruptionStateProvider: No bubble up: not allowed to bubble: 10|com.google.android.gms|0|com.google.android.gms.auth.TokenNotificationManager:24b418c07b93d27d176259fe5c1b11c3:com.google|1010097
+11-20 13:16:25.735   707   707 D InterruptionStateProvider: No heads up: unimportant notification: 10|com.google.android.gms|0|com.google.android.gms.auth.TokenNotificationManager:24b418c07b93d27d176259fe5c1b11c3:com.google|1010097
+11-20 13:16:25.747  4294  7390 I Auth    : (REDACTED) [GetToken] GetToken failed for app=%s with userRecoverable status: %s 
+11-20 13:16:25.747  4294  7390 W Auth    : [ChimeraGetToken] exception while trying to fetch auth tokens for app=com.google.android.youtube, scope=oauth2:https://www.googleapis.com/auth/accounts.reauth https://www.googleapis.com/auth/youtub
+11-20 13:16:25.747  4294  7390 W Auth    : amcv: GetToken failed with status code and recovery intent: ThirdPartyDeviceManagementRequired
+11-20 13:16:25.748 16041 16120 W Auth    : [GoogleAuthUtil] GoogleAuthUtil
+11-20 13:16:26.214 16041 16041 E YouTube : Null interactionLoggingScreen found when removeInteractionLoggingScreen.
+11-20 13:16:27.189 16041 16139 W YouTube : Could not register for notifications with InnerTube: 
+11-20 13:16:27.189 16041 16139 W YouTube : zxc: ylz: Precondition check failed.
+11-20 13:16:27.189 16041 16139 W YouTube : 	at ytm.apply(PG:57)
+11-20 13:16:27.189 16041 16139 W YouTube : 	at xrp.t(PG:5)
+11-20 13:16:27.189 16041 16139 W YouTube : 	at xrp.d(PG:2)
+11-20 13:16:27.189 16041 16139 W YouTube : 	at zwu.d(PG:4)
+11-20 13:16:27.189 16041 16139 W YouTube : 	at afdl.c(PG:51)
+11-20 13:16:27.189 16041 16139 W YouTube : 	at afdl.j(PG:38)
+11-20 13:16:27.189 16041 16139 W YouTube : 	at afdl.d(PG:3)
+11-20 13:16:27.189 16041 16139 W YouTube : 	at afdj.run(Unknown Source:2)
+11-20 13:16:27.189 16041 16139 W YouTube : 	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:462)
+11-20 13:16:27.189 16041 16139 W YouTube : 	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+11-20 13:16:27.189 16041 16139 W YouTube : 	at rvk.run(PG:4)
+11-20 13:16:27.189 16041 16139 W YouTube : 	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1167)
+11-20 13:16:27.189 16041 16139 W YouTube : 	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:641)
+11-20 13:16:27.189 16041 16139 W YouTube : 	at rvh.run(PG:2)
+11-20 13:16:27.189 16041 16139 W YouTube : 	at hmu.run(PG:4)
+11-20 13:16:27.189 16041 16139 W YouTube : 	at java.lang.Thread.run(Thread.java:920)
+11-20 13:16:27.189 16041 16139 W YouTube : Caused by: ylz: Precondition check failed.
+11-20 13:16:27.189 16041 16139 W YouTube : 	at zvt.d(PG:5)
+11-20 13:16:27.189 16041 16139 W YouTube : 	at xzj.c(PG:18)
+11-20 13:16:27.189 16041 16139 W YouTube : 	at xyk.run(PG:17)
+11-20 13:16:27.189 16041 16139 W YouTube : 	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1167)
+11-20 13:16:27.189 16041 16139 W YouTube : 	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:641)
+11-20 13:16:27.189 16041 16139 W YouTube : 	at xqz.run(PG:12)
+11-20 13:16:27.189 16041 16139 W YouTube : 	... 1 more
+11-20 13:16:27.189 16041 16139 W YouTube : Caused by: bsk
+11-20 13:16:27.189 16041 16139 W YouTube : 	at xyk.run(PG:12)
+11-20 13:16:27.189 16041 16139 W YouTube : 	... 4 more
+11-20 13:16:28.444 16041 16139 W YouTube : Could not register for notifications with InnerTube: 
+11-20 13:16:28.444 16041 16139 W YouTube : zxc: ylz: Precondition check failed.
+11-20 13:16:28.444 16041 16139 W YouTube : 	at ytm.apply(PG:57)
+11-20 13:16:28.444 16041 16139 W YouTube : 	at xrp.t(PG:5)
+11-20 13:16:28.444 16041 16139 W YouTube : 	at xrp.d(PG:2)
+11-20 13:16:28.444 16041 16139 W YouTube : 	at zwu.d(PG:4)
+11-20 13:16:28.444 16041 16139 W YouTube : 	at afdl.c(PG:51)
+11-20 13:16:28.444 16041 16139 W YouTube : 	at afdl.j(PG:38)
+11-20 13:16:28.444 16041 16139 W YouTube : 	at afdl.d(PG:3)
+11-20 13:16:28.444 16041 16139 W YouTube : 	at afdj.run(Unknown Source:2)
+11-20 13:16:28.444 16041 16139 W YouTube : 	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:462)
+11-20 13:16:28.444 16041 16139 W YouTube : 	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+11-20 13:16:28.444 16041 16139 W YouTube : 	at rvk.run(PG:4)
+11-20 13:16:28.444 16041 16139 W YouTube : 	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1167)
+11-20 13:16:28.444 16041 16139 W YouTube : 	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:641)
+11-20 13:16:28.444 16041 16139 W YouTube : 	at rvh.run(PG:2)
+11-20 13:16:28.444 16041 16139 W YouTube : 	at hmu.run(PG:4)
+11-20 13:16:28.444 16041 16139 W YouTube : 	at java.lang.Thread.run(Thread.java:920)
+11-20 13:16:28.444 16041 16139 W YouTube : Caused by: ylz: Precondition check failed.
+11-20 13:16:28.444 16041 16139 W YouTube : 	at zvt.d(PG:5)
+11-20 13:16:28.444 16041 16139 W YouTube : 	at xzj.c(PG:18)
+11-20 13:16:28.444 16041 16139 W YouTube : 	at xyk.run(PG:17)
+11-20 13:16:28.444 16041 16139 W YouTube : 	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1167)
+11-20 13:16:28.444 16041 16139 W YouTube : 	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:641)
+11-20 13:16:28.444 16041 16139 W YouTube : 	at xqz.run(PG:12)
+11-20 13:16:28.444 16041 16139 W YouTube : 	... 1 more
+11-20 13:16:28.444 16041 16139 W YouTube : Caused by: bsk
+11-20 13:16:28.444 16041 16139 W YouTube : 	at xyk.run(PG:12)
+11-20 13:16:28.444 16041 16139 W YouTube : 	... 4 more
+11-20 13:16:31.322 16041 16139 W YouTube : Could not register for notifications with InnerTube: 
+11-20 13:16:31.322 16041 16139 W YouTube : zxc: ylz: Precondition check failed.
+11-20 13:16:31.322 16041 16139 W YouTube : 	at ytm.apply(PG:57)
+11-20 13:16:31.322 16041 16139 W YouTube : 	at xrp.t(PG:5)
+11-20 13:16:31.322 16041 16139 W YouTube : 	at xrp.d(PG:2)
+11-20 13:16:31.322 16041 16139 W YouTube : 	at zwu.d(PG:4)
+11-20 13:16:31.322 16041 16139 W YouTube : 	at afdl.c(PG:51)
+11-20 13:16:31.322 16041 16139 W YouTube : 	at afdl.j(PG:38)
+11-20 13:16:31.322 16041 16139 W YouTube : 	at afdl.d(PG:3)
+11-20 13:16:31.322 16041 16139 W YouTube : 	at afdj.run(Unknown Source:2)
+11-20 13:16:31.322 16041 16139 W YouTube : 	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:462)
+11-20 13:16:31.322 16041 16139 W YouTube : 	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+11-20 13:16:31.322 16041 16139 W YouTube : 	at rvk.run(PG:4)
+11-20 13:16:31.322 16041 16139 W YouTube : 	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1167)
+11-20 13:16:31.322 16041 16139 W YouTube : 	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:641)
+11-20 13:16:31.322 16041 16139 W YouTube : 	at rvh.run(PG:2)
+11-20 13:16:31.322 16041 16139 W YouTube : 	at hmu.run(PG:4)
+11-20 13:16:31.322 16041 16139 W YouTube : 	at java.lang.Thread.run(Thread.java:920)
+11-20 13:16:31.322 16041 16139 W YouTube : Caused by: ylz: Precondition check failed.
+11-20 13:16:31.322 16041 16139 W YouTube : 	at zvt.d(PG:5)
+11-20 13:16:31.322 16041 16139 W YouTube : 	at xzj.c(PG:18)
+11-20 13:16:31.322 16041 16139 W YouTube : 	at xyk.run(PG:17)
+11-20 13:16:31.322 16041 16139 W YouTube : 	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1167)
+11-20 13:16:31.322 16041 16139 W YouTube : 	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:641)
+11-20 13:16:31.322 16041 16139 W YouTube : 	at xqz.run(PG:12)
+11-20 13:16:31.322 16041 16139 W YouTube : 	... 1 more
+11-20 13:16:31.322 16041 16139 W YouTube : Caused by: bsk
+11-20 13:16:31.322 16041 16139 W YouTube : 	at xyk.run(PG:12)
+11-20 13:16:31.322 16041 16139 W YouTube : 	... 4 more
+11-20 13:16:39.412 16041 16139 W YouTube : Could not register for notifications with InnerTube: 
+11-20 13:16:39.412 16041 16139 W YouTube : zxc: ylz: Precondition check failed.
+11-20 13:16:39.412 16041 16139 W YouTube : 	at ytm.apply(PG:57)
+11-20 13:16:39.412 16041 16139 W YouTube : 	at xrp.t(PG:5)
+11-20 13:16:39.412 16041 16139 W YouTube : 	at xrp.d(PG:2)
+11-20 13:16:39.412 16041 16139 W YouTube : 	at zwu.d(PG:4)
+11-20 13:16:39.412 16041 16139 W YouTube : 	at afdl.c(PG:51)
+11-20 13:16:39.412 16041 16139 W YouTube : 	at afdl.j(PG:38)
+11-20 13:16:39.412 16041 16139 W YouTube : 	at afdl.d(PG:3)
+11-20 13:16:39.412 16041 16139 W YouTube : 	at afdj.run(Unknown Source:2)
+11-20 13:16:39.412 16041 16139 W YouTube : 	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:462)
+11-20 13:16:39.412 16041 16139 W YouTube : 	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+11-20 13:16:39.412 16041 16139 W YouTube : 	at rvk.run(PG:4)
+11-20 13:16:39.412 16041 16139 W YouTube : 	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1167)
+11-20 13:16:39.412 16041 16139 W YouTube : 	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:641)
+11-20 13:16:39.412 16041 16139 W YouTube : 	at rvh.run(PG:2)
+11-20 13:16:39.412 16041 16139 W YouTube : 	at hmu.run(PG:4)
+11-20 13:16:39.412 16041 16139 W YouTube : 	at java.lang.Thread.run(Thread.java:920)
+11-20 13:16:39.412 16041 16139 W YouTube : Caused by: ylz: Precondition check failed.
+11-20 13:16:39.412 16041 16139 W YouTube : 	at zvt.d(PG:5)
+11-20 13:16:39.412 16041 16139 W YouTube : 	at xzj.c(PG:18)
+11-20 13:16:39.412 16041 16139 W YouTube : 	at xyk.run(PG:17)
+11-20 13:16:39.412 16041 16139 W YouTube : 	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1167)
+11-20 13:16:39.412 16041 16139 W YouTube : 	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:641)
+11-20 13:16:39.412 16041 16139 W YouTube : 	at xqz.run(PG:12)
+11-20 13:16:39.412 16041 16139 W YouTube : 	... 1 more
+11-20 13:16:39.412 16041 16139 W YouTube : Caused by: bsk
+11-20 13:16:39.412 16041 16139 W YouTube : 	at xyk.run(PG:12)
+11-20 13:16:39.412 16041 16139 W YouTube : 	... 4 more
+11-20 13:16:51.352 16041 16139 W YouTube : Could not register for notifications with InnerTube: 
+11-20 13:16:51.352 16041 16139 W YouTube : zxc: ylz: Precondition check failed.
+11-20 13:16:51.352 16041 16139 W YouTube : 	at ytm.apply(PG:57)
+11-20 13:16:51.352 16041 16139 W YouTube : 	at xrp.t(PG:5)
+11-20 13:16:51.352 16041 16139 W YouTube : 	at xrp.d(PG:2)
+11-20 13:16:51.352 16041 16139 W YouTube : 	at zwu.d(PG:4)
+11-20 13:16:51.352 16041 16139 W YouTube : 	at afdl.c(PG:51)
+11-20 13:16:51.352 16041 16139 W YouTube : 	at afdl.j(PG:38)
+11-20 13:16:51.352 16041 16139 W YouTube : 	at afdl.d(PG:3)
+11-20 13:16:51.352 16041 16139 W YouTube : 	at afdj.run(Unknown Source:2)
+11-20 13:16:51.352 16041 16139 W YouTube : 	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:462)
+11-20 13:16:51.352 16041 16139 W YouTube : 	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+11-20 13:16:51.352 16041 16139 W YouTube : 	at rvk.run(PG:4)
+11-20 13:16:51.352 16041 16139 W YouTube : 	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1167)
+11-20 13:16:51.352 16041 16139 W YouTube : 	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:641)
+11-20 13:16:51.352 16041 16139 W YouTube : 	at rvh.run(PG:2)
+11-20 13:16:51.352 16041 16139 W YouTube : 	at hmu.run(PG:4)
+11-20 13:16:51.352 16041 16139 W YouTube : 	at java.lang.Thread.run(Thread.java:920)
+11-20 13:16:51.352 16041 16139 W YouTube : Caused by: ylz: Precondition check failed.
+11-20 13:16:51.352 16041 16139 W YouTube : 	at zvt.d(PG:5)
+11-20 13:16:51.352 16041 16139 W YouTube : 	at xzj.c(PG:18)
+11-20 13:16:51.352 16041 16139 W YouTube : 	at xyk.run(PG:17)
+11-20 13:16:51.352 16041 16139 W YouTube : 	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1167)
+11-20 13:16:51.352 16041 16139 W YouTube : 	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:641)
+11-20 13:16:51.352 16041 16139 W YouTube : 	at xqz.run(PG:12)
+11-20 13:16:51.352 16041 16139 W YouTube : 	... 1 more
+11-20 13:16:51.352 16041 16139 W YouTube : Caused by: bsk
+11-20 13:16:51.352 16041 16139 W YouTube : 	at xyk.run(PG:12)
+11-20 13:16:51.352 16041 16139 W YouTube : 	... 4 more
+(end logcat filter)

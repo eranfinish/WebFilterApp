@@ -1,0 +1,13 @@
+# NO-DO phone (5580) final check: marker 11-21 17:58:01 UTC. Read-only. Names redacted.
+== owners
+User 10: admin=com.google.android.gms.supervision/com.google.android.gms.kids.account.receiver.ProfileOwnerReceiver,ProfileOwner
+== current user: 10
+== accounts per user (count)
+User UserInfo{0:Owner:4c13}: |   Accounts: 0
+User UserInfo{10:plainkid:410}: |   Accounts: 1
+== YouTube / Chrome processes now (ps -> user)
+u0_a168 3637 com.android.chrome
+u10_a168 8077 com.android.chrome
+(end)
+== token results since marker (to be read after the parent's report)
+(marker set; see the later capture)

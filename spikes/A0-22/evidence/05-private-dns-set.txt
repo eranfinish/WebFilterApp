@@ -1,0 +1,13 @@
+# Global Private DNS from the DO (A0.22). Device UTC 18:21:38.
+== before: settings global private_dns_mode=null specifier=null
+== dns-status before
+Broadcast completed: result=0, data="mode=OPPORTUNISTIC host=null"
+== dns-set (family.cloudflare-dns.com)
+Broadcast completed: result=0, data="set mode=OPPORTUNISTIC host=null"
+== dns-status after
+Broadcast completed: result=0, data="mode=OPPORTUNISTIC host=null"
+== settings after: private_dns_mode=null specifier=null
+== logcat A19 lines (dns)
+11-21 18:21:38.152 12779 12779 I A19     : op=dns-status result=mode=OPPORTUNISTIC host=null
+11-21 18:21:38.372 12779 12779 I A19     : op=dns-set result=set mode=OPPORTUNISTIC host=null
+11-21 18:21:41.766 12779 12779 I A19     : op=dns-status result=mode=OPPORTUNISTIC host=null

@@ -1,0 +1,137 @@
+# YouTube / InnerTube / HTTP status from 13:17:50 UTC (device clock), read-only. Emails redacted.
+== last device line: 13:19:01.247
+11-20 13:17:55.744 16354 16354 I GoogleHttpClient: GMS http client unavailable, use old client
+11-20 13:17:55.794  4294 16348 W Auth    : [DeviceKeyStore] Cannot load key: Device key file not found. [CONTEXT service_id=343 ]
+11-20 13:17:56.294  4294 16348 W Auth    : [AppCertManager] Exception while requesting key: [CONTEXT service_id=343 ]
+11-20 13:17:56.294  4294 16348 W Auth    : java.util.concurrent.ExecutionException: dpof: Parsing Exception
+11-20 13:17:56.294  4294 16348 W Auth    : 	at ikpv.k(:<email><email> (190800-1020418964):21)
+11-20 13:17:56.294  4294 16348 W Auth    : 	at ikqd.u(:<email><email> (190800-1020418964):73)
+11-20 13:17:56.294  4294 16348 W Auth    : 	at arcl.b(:<email><email> (190800-1020418964):416)
+11-20 13:17:56.294  4294 16348 W Auth    : 	at arcj.a(:<email><email> (190800-1020418964):110)
+11-20 13:17:56.294  4294 16348 W Auth    : 	at arcf.a(:<email><email> (190800-1020418964):3)
+11-20 13:17:56.294  4294 16348 W Auth    : 	at arch.a(:<email><email> (190800-1020418964):58)
+11-20 13:17:56.294  4294 16348 W Auth    : 	at arch.b(:<email><email> (190800-1020418964):17)
+11-20 13:17:56.294  4294 16348 W Auth    : 	at bsaa.m(:<email><email> (190800-1020418964):13)
+11-20 13:17:56.294  4294 16348 W Auth    : 	at bsao.h(:<email><email> (190800-1020418964):10)
+11-20 13:17:56.294  4294 16348 W Auth    : 	at boum.invoke(:<email><email> (190800-1020418964):69)
+11-20 13:17:56.294  4294 16348 W Auth    : 	at boua.a(:<email><email> (190800-1020418964):5)
+11-20 13:17:56.294  4294 16348 W Auth    : 	at bovi.a(:<email><email> (190800-1020418964):1)
+11-20 13:17:56.294  4294 16348 W Auth    : 	at boul.invoke(:<email><email> (190800-1020418964):19)
+11-20 13:17:56.294  4294 16348 W Auth    : 	at bove.o(:<email><email> (190800-1020418964):26)
+11-20 13:17:56.294  4294 16348 W Auth    : 	at bove.i(:<email><email> (190800-1020418964):6)
+11-20 13:17:56.294  4294 16348 W Auth    : 	at boxw.f(:<email><email> (190800-1020418964):37)
+11-20 13:17:56.294  4294 16348 W Auth    : 	at boxw.c(:<email><email> (190800-1020418964):4)
+11-20 13:17:56.294  4294 16348 W Auth    : 	at bozu.a(:<email><email> (190800-1020418964):390)
+11-20 13:17:56.294  4294 16348 W Auth    : 	at boyf.b(:<email><email> (190800-1020418964):161)
+11-20 13:17:56.294  4294 16348 W Auth    : 	at bsgc.onPerformSync(:<email><email> (190800-1020418964):25)
+11-20 13:17:56.294  4294 16348 W Auth    : 	at android.content.AbstractThreadedSyncAdapter$SyncThread.run(AbstractThreadedSyncAdapter.java:334)
+11-20 13:17:56.294  4294 16348 W Auth    : Caused by: dpof: Parsing Exception
+11-20 13:17:56.294  4294 16348 W Auth    : 	at dppg.kl(:<email><email> (190800-1020418964):15)
+11-20 13:17:56.294  4294 16348 W Auth    : 	at ikso.run(:<email><email> (190800-1020418964):55)
+11-20 13:17:56.294  4294 16348 W Auth    : 	at bshl.d(:<email><email> (190800-1020418964):50)
+11-20 13:17:56.294  4294 16348 W Auth    : 	at bshl.c(:<email><email> (190800-1020418964):27)
+11-20 13:17:56.294  4294 16348 W Auth    : 	at bshl.run(:<email><email> (190800-1020418964):32)
+11-20 13:17:56.294  4294 16348 W Auth    : 	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1167)
+11-20 13:17:56.294  4294 16348 W Auth    : 	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:641)
+11-20 13:17:56.294  4294 16348 W Auth    : 	at bsnm.run(:<email><email> (190800-1020418964):8)
+11-20 13:17:56.294  4294 16348 W Auth    : 	at java.lang.Thread.run(Thread.java:920)
+11-20 13:17:56.294  4294 16348 W Auth    : Caused by: jlfu: Protocol message end-group tag did not match expected tag.
+11-20 13:17:56.294  4294 16348 W Auth    : 	at jlhl.a(:<email><email> (190800-1020418964):56)
+11-20 13:17:56.294  4294 16348 W Auth    : 	at jlgk.i(:<email><email> (190800-1020418964):427)
+11-20 13:17:56.294  4294 16348 W Auth    : 	at jlev.R(:<email><email> (190800-1020418964):22)
+11-20 13:17:56.294  4294 16348 W Auth    : 	at jleq.q(:<email><email> (190800-1020418964):3)
+11-20 13:17:56.294  4294 16348 W Auth    : 	at jlcs.e(:<email><email> (190800-1020418964):7)
+11-20 13:17:56.294  4294 16348 W Auth    : 	at jlcs.b(:<email><email> (190800-1020418964):1)
+11-20 13:17:56.294  4294 16348 W Auth    : 	at jlcs.m(:<email><email> (190800-1020418964):1)
+11-20 13:17:56.294  4294 16348 W Auth    : 	at dppf.a(:<email><email> (190800-1020418964):11)
+11-20 13:17:56.294  4294 16348 W Auth    : 	at dppj.call(:<email><email> (190800-1020418964):8)
+11-20 13:17:56.294  4294 16348 W Auth    : 	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+11-20 13:17:56.294  4294 16348 W Auth    : 	at bshl.d(:<email><email> (190800-1020418964):50)
+11-20 13:17:56.294  4294 16348 W Auth    : 	at bshl.c(:<email><email> (190800-1020418964):5)
+11-20 13:17:56.294  4294 16348 W Auth    : 	... 5 more
+11-20 13:17:56.294  4294 16348 W Auth    : [DeviceKeyStore] Cannot load key: Device key file not found. [CONTEXT service_id=343 ]
+11-20 13:17:56.402  4294 16348 I Auth    : (REDACTED) [BroadcastManager] [BroadcastManager] Broadcasting bad device management=%s
+11-20 13:17:56.403  4294 16348 E Auth    : [DataStatusChecker] Signature check failed. The calling package is not google signed. [CONTEXT service_id=343 ]
+11-20 13:17:56.403  4294 16348 E Auth    : java.lang.SecurityException: GoogleCertificatesRslt: callingPackage not found (go/gsrlt)
+11-20 13:17:56.403  4294 16348 E Auth    : 	at bqjo.b(:<email><email> (190800-1020418964):34)
+11-20 13:17:56.403  4294 16348 E Auth    : 	at bqju.d(:<email><email> (190800-1020418964):15)
+11-20 13:17:56.403  4294 16348 E Auth    : 	at brct.a(:<email><email> (190800-1020418964):12)
+11-20 13:17:56.403  4294 16348 E Auth    : 	at brct.c(:<email><email> (190800-1020418964):1)
+11-20 13:17:56.403  4294 16348 E Auth    : 	at alfo.a(:<email><email> (190800-1020418964):356)
+11-20 13:17:56.403  4294 16348 E Auth    : 	at alfn.y(:<email><email> (190800-1020418964):38)
+11-20 13:17:56.403  4294 16348 E Auth    : 	at alfn.s(:<email><email> (190800-1020418964):24)
+11-20 13:17:56.403  4294 16348 E Auth    : 	at amdd.b(:<email><email> (190800-1020418964):916)
+11-20 13:17:56.403  4294 16348 E Auth    : 	at amdb.a(:<email><email> (190800-1020418964):612)
+11-20 13:17:56.403  4294 16348 E Auth    : 	at amda.b(:<email><email> (190800-1020418964):128)
+11-20 13:17:56.403  4294 16348 E Auth    : 	at afin.h(:<email><email> (190800-1020418964):1024)
+11-20 13:17:56.403  4294 16348 E Auth    : 	at afin.d(:<email><email> (190800-1020418964):1)
+11-20 13:17:56.403  4294 16348 E Auth    : 	at albp.a(:<email><email> (190800-1020418964):33)
+11-20 13:17:56.403  4294 16348 E Auth    : 	at albv.n(:<email><email> (190800-1020418964):34)
+11-20 13:17:56.403  4294 16348 E Auth    : 	at albv.p(:<email><email> (190800-1020418964):64)
+11-20 13:17:56.403  4294 16348 E Auth    : 	at albv.f(:<email><email> (190800-1020418964):4)
+11-20 13:17:56.403  4294 16348 E Auth    : 	at bsbl.b(:<email><email> (190800-1020418964):38)
+11-20 13:17:56.403  4294 16348 E Auth    : 	at bsaa.n(:<email><email> (190800-1020418964):37)
+11-20 13:17:56.403  4294 16348 E Auth    : 	at bsao.H(:<email><email> (190800-1020418964):5)
+11-20 13:17:56.403  4294 16348 E Auth    : 	at bsao.h(:<email><email> (190800-1020418964):14)
+11-20 13:17:56.403  4294 16348 E Auth    : 	at boum.invoke(:<email><email> (190800-1020418964):69)
+11-20 13:17:56.403  4294 16348 E Auth    : 	at boua.a(:<email><email> (190800-1020418964):5)
+11-20 13:17:56.403  4294 16348 E Auth    : 	at bovi.a(:<email><email> (190800-1020418964):1)
+11-20 13:17:56.403  4294 16348 E Auth    : 	at boul.invoke(:<email><email> (190800-1020418964):19)
+11-20 13:17:56.403  4294 16348 E Auth    : 	at bove.o(:<email><email> (190800-1020418964):26)
+11-20 13:17:56.403  4294 16348 E Auth    : 	at bove.i(:<email><email> (190800-1020418964):6)
+11-20 13:17:56.403  4294 16348 E Auth    : 	at boxw.f(:<email><email> (190800-1020418964):37)
+11-20 13:17:56.403  4294 16348 E Auth    : 	at boxw.c(:<email><email> (190800-1020418964):4)
+11-20 13:17:56.403  4294 16348 E Auth    : 	at bozu.a(:<email><email> (190800-1020418964):390)
+11-20 13:17:56.403  4294 16348 E Auth    : 	at boyf.b(:<email><email> (190800-1020418964):161)
+11-20 13:17:56.403  4294 16348 E Auth    : 	at bsgc.onPerformSync(:<email><email> (190800-1020418964):25)
+11-20 13:17:56.403  4294 16348 E Auth    : 	at android.content.AbstractThreadedSyncAdapter$SyncThread.run(AbstractThreadedSyncAdapter.java:334)
+11-20 13:17:56.403  4294 16348 E Auth    : Caused by: android.content.pm.PackageManager$NameNotFoundException
+11-20 13:17:56.403  4294 16348 E Auth    : 	at bqjg.a(:<email><email> (190800-1020418964):84)
+11-20 13:17:56.403  4294 16348 E Auth    : 	at bqju.a(:<email><email> (190800-1020418964):265)
+11-20 13:17:56.403  4294 16348 E Auth    : 	at bqju.d(:<email><email> (190800-1020418964):11)
+11-20 13:17:56.403  4294 16348 E Auth    : 	... 30 more
+11-20 13:17:56.404  4294 16348 I Auth    : [DataStatusChecker] Notify DM notification [CONTEXT service_id=343 ]
+11-20 13:17:56.404  4294 16348 W Auth    : [ReauthNotificationManager] Unhandled DM status: THIRD_PARTY_DEVICE_MANAGEMENT_REQUIRED [CONTEXT service_id=343 ]
+11-20 13:17:56.425  4294 16348 I Auth    : (REDACTED) [GetToken] GetToken failed for app=%s with userRecoverable status: %s 
+11-20 13:17:56.427  4294 16348 W Auth    : [ChimeraGetToken] exception while trying to fetch auth tokens for app=com.google.android.gms, scope=oauth2:https://www.googleapis.com/auth/chromesync [CONTEXT service_id=153 ]
+11-20 13:17:56.427  4294 16348 W Auth    : amcv: GetToken failed with status code and recovery intent: ThirdPartyDeviceManagementRequired
+11-20 13:17:56.427  4294 16348 W Auth    : 	at amda.b(:<email><email> (190800-1020418964):312)
+11-20 13:17:56.427  4294 16348 W Auth    : 	at afin.h(:<email><email> (190800-1020418964):1024)
+11-20 13:17:56.427  4294 16348 W Auth    : 	at afin.d(:<email><email> (190800-1020418964):1)
+11-20 13:17:56.427  4294 16348 W Auth    : 	at albp.a(:<email><email> (190800-1020418964):33)
+11-20 13:17:56.427  4294 16348 W Auth    : 	at albv.n(:<email><email> (190800-1020418964):34)
+11-20 13:17:56.427  4294 16348 W Auth    : 	at albv.p(:<email><email> (190800-1020418964):64)
+11-20 13:17:56.427  4294 16348 W Auth    : 	at albv.f(:<email><email> (190800-1020418964):4)
+11-20 13:17:56.427  4294 16348 W Auth    : 	at bsbl.b(:<email><email> (190800-1020418964):38)
+11-20 13:17:56.427  4294 16348 W Auth    : 	at bsaa.n(:<email><email> (190800-1020418964):37)
+11-20 13:17:56.427  4294 16348 W Auth    : 	at bsao.H(:<email><email> (190800-1020418964):5)
+11-20 13:17:56.427  4294 16348 W Auth    : 	at bsao.h(:<email><email> (190800-1020418964):14)
+11-20 13:17:56.427  4294 16348 W Auth    : 	at boum.invoke(:<email><email> (190800-1020418964):69)
+11-20 13:17:56.427  4294 16348 W Auth    : 	at boua.a(:<email><email> (190800-1020418964):5)
+11-20 13:17:56.427  4294 16348 W Auth    : 	at bovi.a(:<email><email> (190800-1020418964):1)
+11-20 13:17:56.427  4294 16348 W Auth    : 	at boul.invoke(:<email><email> (190800-1020418964):19)
+11-20 13:17:56.427  4294 16348 W Auth    : 	at bove.o(:<email><email> (190800-1020418964):26)
+11-20 13:17:56.427  4294 16348 W Auth    : 	at bove.i(:<email><email> (190800-1020418964):6)
+11-20 13:17:56.427  4294 16348 W Auth    : 	at boxw.f(:<email><email> (190800-1020418964):37)
+11-20 13:17:56.427  4294 16348 W Auth    : 	at boxw.c(:<email><email> (190800-1020418964):4)
+11-20 13:17:56.427  4294 16348 W Auth    : 	at bozu.a(:<email><email> (190800-1020418964):390)
+11-20 13:17:56.427  4294 16348 W Auth    : 	at boyf.b(:<email><email> (190800-1020418964):161)
+11-20 13:17:56.427  4294 16348 W Auth    : 	at bsgc.onPerformSync(:<email><email> (190800-1020418964):25)
+11-20 13:17:56.427  4294 16348 W Auth    : 	at android.content.AbstractThreadedSyncAdapter$SyncThread.run(AbstractThreadedSyncAdapter.java:334)
+11-20 13:17:56.427  4294 16348 W Auth    : [GoogleAuthUtil] [GoogleAuthUtil] error status:THIRD_PARTY_DEVICE_MANAGEMENT_REQUIRED with method:getTokenWithDetails
+11-20 13:18:30.119   535   752 D ConnectivityService: ConnectivityService NetworkRequestInfo binderDied(uid/pid:1010121/15301, <email>)
+11-20 13:18:30.119   535  4181 D ConnectivityService: ConnectivityService NetworkRequestInfo binderDied(uid/pid:1010121/15301, <email>)
+11-20 13:18:30.119   535   646 D ConnectivityService: releasing NetworkRequest [ REQUEST id=407, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED&NOT_VCN_MANAGED Uid: 1010121 RequestorUid: 1010121 RequestorPkg: com.google.android.gm] ] (rele
+11-20 13:18:30.186   535   837 D ConnectivityService: ConnectivityService NetworkRequestInfo binderDied(uid/pid:1010124/14992, <email>)
+11-20 13:18:30.187   535   646 D ConnectivityService: releasing NetworkRequest [ REQUEST id=399, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED&NOT_VCN_MANAGED Uid: 1010124 RequestorUid: 1010124 RequestorPkg: com.google.android.calendar] ]
+11-20 13:18:30.189   535  1555 D ConnectivityService: ConnectivityService NetworkRequestInfo binderDied(uid/pid:1010124/14992, <email>)
+(end)
+== counts from 13:17:50
+0
+
+Summary (written after the capture):
+- YouTube's last log line in the buffer is at 13:17:13 (InnerTube registration stack trace). From 13:17:50 to 13:19:01 (buffer end) there is no YouTube tag output and no InnerTube message. The 28 InnerTube failures in evidence/42 end before 13:17:13.
+- No HTTP status code 4xx appears in any YouTube, InnerTube, HttpURLConnection, OkHttp or Cronet line in the window. The only "400" match is "Memory state is: 400" (ProcessReaper, 13:18:30), which is not an HTTP status.
+- So the "There was a problem with the server [400]" the parent saw at about 13:18 UTC (device 1:18) is NOT in the logcat buffer. The app does not log that error.
+- GMS side in the same window (13:17:55–13:17:56): "DeviceKeyStore: Cannot load key: Device key file not found", "AppCertManager: Exception while requesting key ... dpof: Parsing Exception", and "BroadcastManager: Broadcasting bad device management". This supports the THIRD_PARTY_DEVICE_MANAGEMENT_REQUIRED interpretation in evidence/39, but does not prove it.
+- Not determined: the 400's exact source, HTTP request, and URL. A network capture would be needed (not available here without a proxy).

@@ -1,0 +1,14 @@
+# Global Private DNS from the DO (A0.22), after the INTERNET permission. Device UTC 18:22:27.
+== before: settings private_dns_mode=null specifier=null
+== dns-set
+Broadcast completed: result=0, data="EXC android.os.NetworkOnMainThreadException: null"
+== dns-status
+Broadcast completed: result=0, data="mode=OPPORTUNISTIC host=null"
+== settings after: private_dns_mode=null specifier=null
+== log lines (A19 and PrivateDns)
+11-21 18:21:38.366 12779 12779 W NetworkUtils: TLS handshake to family.cloudflare-dns.com failed.
+11-21 18:21:38.366 12779 12779 W NetworkUtils: 	at android.net.PrivateDnsConnectivityChecker.canConnectToPrivateDnsServer(PrivateDnsConnectivityChecker.java:50)
+11-21 18:21:38.372 12779 12779 I A19     : op=dns-set result=set mode=OPPORTUNISTIC host=null
+11-21 18:21:41.766 12779 12779 I A19     : op=dns-status result=mode=OPPORTUNISTIC host=null
+11-21 18:22:27.888 12929 12929 I A19     : op=dns-set result=EXC android.os.NetworkOnMainThreadException: null
+11-21 18:22:32.230 12929 12929 I A19     : op=dns-status result=mode=OPPORTUNISTIC host=null

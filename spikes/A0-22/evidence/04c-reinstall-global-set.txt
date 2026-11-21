@@ -1,0 +1,4 @@
+# Reinstall (global-set op) and owners check
+Performing Streamed Install
+Success
+owners: User  0: admin=com.webfilter.spike.a19/.AdminReceiver,DeviceOwner,Affiliated

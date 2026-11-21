@@ -1,0 +1,134 @@
+# Per-user account state now (names not saved), and sign-in events from 13:32 UTC. Read-only.
+== per-user account count
+User UserInfo{0:Owner:c13}: |   Accounts: 0
+User UserInfo{10:kid-test:410}: |   Accounts: 0
+User UserInfo{11:control:410}: |   Accounts: 1
+== account types per user (type only)
+User user 0 | type=com.google
+User user 0 | type=com.google
+User user 10 | type=com.google
+User user 10 | type=com.google
+User user 11 | type=com.google
+User user 11 | type=com.google
+User user 11 | type=com.google
+== sign-in / MinuteMaid / ErrorActivity / 400 / ThirdParty / WebView errors from 13:32:00 (excluding audit and trace noise)
+11-20 13:33:06.122 28655 29174 I WebViewFactory: Loading com.google.android.webview version 91.0.4472.114 (code 447211487)
+11-20 13:33:06.232   535   564 I ActivityManager: Start proc 29181:com.google.android.webview:webview_service/u0a116 for service {com.google.android.webview/org.chromium.android_webview.services.VariationsSeedServer}
+11-20 13:33:06.434   535  4112 I ActivityManager: Killing 28618:com.google.android.webview:webview_service/u11a116 (adj 975): empty #17
+11-20 13:33:09.320 28561 28561 D InputMethodManager: showSoftInput() view=com.google.android.gms.auth.login.CustomWebView{85d9b59 VFEDHVC.. .F...... 0,0-2560,1504 aid=1073741824} flags=0 reason=SHOW_SOFT_INPUT
+11-20 13:33:09.484   535  4112 D ContentCapturePerUserService: Notified activity assist data for activity: Token{e2c4a14 ActivityRecord{6e5d2bd u11 com.google.android.gms/.auth.uiflows.minutemaid.MinuteMaidActivity t1100005}} with
+11-20 13:33:49.416   535  4094 D ContentCapturePerUserService: Notified activity assist data for activity: Token{e2c4a14 ActivityRecord{6e5d2bd u11 com.google.android.gms/.auth.uiflows.minutemaid.MinuteMaidActivity t1100005}} with
+11-20 13:33:49.424 28561 28561 D InputMethodManager: showSoftInput() view=com.google.android.gms.auth.login.CustomWebView{85d9b59 VFEDHVC.. .F...... 0,0-2560,748 aid=1073741824} flags=0 reason=SHOW_SOFT_INPUT
+11-20 13:34:14.737 27292 27536 E chromium: [ERROR:gpu_process_host.cc(1002)] GPU process exited unexpectedly: exit_code=0
+11-20 13:34:14.737 27292 27536 W chromium: [WARNING:gpu_process_host.cc(1316)] The GPU process has crashed 1 time(s)
+11-20 13:34:22.642 28561 28561 D InputMethodManager: showSoftInput() view=com.google.android.gms.auth.login.CustomWebView{85d9b59 VFEDHVC.. .F...... 0,0-2560,1504 aid=1073741824} flags=0 reason=SHOW_SOFT_INPUT
+11-20 13:34:22.647   535  4094 D ContentCapturePerUserService: Notified activity assist data for activity: Token{e2c4a14 ActivityRecord{6e5d2bd u11 com.google.android.gms/.auth.uiflows.minutemaid.MinuteMaidActivity t1100005}} with
+11-20 13:34:23.061 28561 28561 E chromium: [ERROR:web_contents_delegate.cc(225)] WebContentsDelegate::CheckMediaAccessPermission: Not supported.
+11-20 13:34:23.061 28561 28561 E chromium: [ERROR:web_contents_delegate.cc(225)] WebContentsDelegate::CheckMediaAccessPermission: Not supported.
+11-20 13:34:23.077 28561 28689 E cr_VideoCapture: 	at vq0.i(chromium-TrichromeWebViewGoogle6432.apk-stable-447211487:4)
+11-20 13:34:23.077 28561 28689 E cr_VideoCapture: 	at org.chromium.media.VideoCaptureFactory.isLegacyOrDeprecatedDevice(chromium-TrichromeWebViewGoogle6432.apk-stable-447211487:1)
+11-20 13:34:23.077 28561 28689 E cr_VideoCapture: 	at org.chromium.media.VideoCaptureFactory.getDeviceName(chromium-TrichromeWebViewGoogle6432.apk-stable-447211487:1)
+11-20 13:34:23.080 28561 28689 E cr_VideoCapture: 	at vq0.i(chromium-TrichromeWebViewGoogle6432.apk-stable-447211487:4)
+11-20 13:34:23.080 28561 28689 E cr_VideoCapture: 	at org.chromium.media.VideoCaptureFactory.isLegacyOrDeprecatedDevice(chromium-TrichromeWebViewGoogle6432.apk-stable-447211487:1)
+11-20 13:34:23.080 28561 28689 E cr_VideoCapture: 	at org.chromium.media.VideoCaptureFactory.getDeviceId(chromium-TrichromeWebViewGoogle6432.apk-stable-447211487:1)
+11-20 13:34:23.081 28561 28689 E cr_VideoCapture: 	at vq0.i(chromium-TrichromeWebViewGoogle6432.apk-stable-447211487:4)
+11-20 13:34:23.081 28561 28689 E cr_VideoCapture: 	at org.chromium.media.VideoCaptureFactory.isLegacyOrDeprecatedDevice(chromium-TrichromeWebViewGoogle6432.apk-stable-447211487:1)
+11-20 13:34:23.081 28561 28689 E cr_VideoCapture: 	at org.chromium.media.VideoCaptureFactory.getCaptureApiType(chromium-TrichromeWebViewGoogle6432.apk-stable-447211487:1)
+11-20 13:34:23.085 28561 28689 E cr_VideoCapture: 	at vq0.i(chromium-TrichromeWebViewGoogle6432.apk-stable-447211487:4)
+11-20 13:34:23.085 28561 28689 E cr_VideoCapture: 	at org.chromium.media.VideoCaptureFactory.isLegacyOrDeprecatedDevice(chromium-TrichromeWebViewGoogle6432.apk-stable-447211487:1)
+11-20 13:34:23.085 28561 28689 E cr_VideoCapture: 	at org.chromium.media.VideoCaptureFactory.getFacingMode(chromium-TrichromeWebViewGoogle6432.apk-stable-447211487:1)
+11-20 13:34:36.475   535  1555 D ContentCapturePerUserService: Notified activity assist data for activity: Token{e2c4a14 ActivityRecord{6e5d2bd u11 com.google.android.gms/.auth.uiflows.minutemaid.MinuteMaidActivity t1100005}} with
+11-20 13:34:45.598 28561 28561 D InputMethodManager: showSoftInput() view=com.google.android.gms.auth.login.CustomWebView{85d9b59 VFEDHVC.. .F...... 0,0-2560,1504 aid=1073741824} flags=0 reason=SHOW_SOFT_INPUT
+11-20 13:34:45.635   535  4094 D ContentCapturePerUserService: Notified activity assist data for activity: Token{e2c4a14 ActivityRecord{6e5d2bd u11 com.google.android.gms/.auth.uiflows.minutemaid.MinuteMaidActivity t1100005}} with
+11-20 13:34:49.530 28561 28561 D InputMethodManager: showSoftInput() view=com.google.android.gms.auth.login.CustomWebView{85d9b59 VFEDHVC.. .F...... 0,0-2560,1504 aid=1073741824} flags=0 reason=SHOW_SOFT_INPUT
+11-20 13:34:51.660   535   827 D ContentCapturePerUserService: Notified activity assist data for activity: Token{e2c4a14 ActivityRecord{6e5d2bd u11 com.google.android.gms/.auth.uiflows.minutemaid.MinuteMaidActivity t1100005}} with
+11-20 13:35:10.032 28561 28561 E chromium: [ERROR:web_contents_delegate.cc(225)] WebContentsDelegate::CheckMediaAccessPermission: Not supported.
+11-20 13:35:10.032 28561 28561 E chromium: [ERROR:web_contents_delegate.cc(225)] WebContentsDelegate::CheckMediaAccessPermission: Not supported.
+11-20 13:35:10.035 28561 28689 E cr_VideoCapture: 	at vq0.i(chromium-TrichromeWebViewGoogle6432.apk-stable-447211487:4)
+11-20 13:35:10.035 28561 28689 E cr_VideoCapture: 	at org.chromium.media.VideoCaptureFactory.isLegacyOrDeprecatedDevice(chromium-TrichromeWebViewGoogle6432.apk-stable-447211487:1)
+11-20 13:35:10.035 28561 28689 E cr_VideoCapture: 	at org.chromium.media.VideoCaptureFactory.getDeviceName(chromium-TrichromeWebViewGoogle6432.apk-stable-447211487:1)
+11-20 13:35:10.037 28561 28689 E cr_VideoCapture: 	at vq0.i(chromium-TrichromeWebViewGoogle6432.apk-stable-447211487:4)
+11-20 13:35:10.037 28561 28689 E cr_VideoCapture: 	at org.chromium.media.VideoCaptureFactory.isLegacyOrDeprecatedDevice(chromium-TrichromeWebViewGoogle6432.apk-stable-447211487:1)
+11-20 13:35:10.037 28561 28689 E cr_VideoCapture: 	at org.chromium.media.VideoCaptureFactory.getDeviceId(chromium-TrichromeWebViewGoogle6432.apk-stable-447211487:1)
+11-20 13:35:10.038 28561 28689 E cr_VideoCapture: 	at vq0.i(chromium-TrichromeWebViewGoogle6432.apk-stable-447211487:4)
+11-20 13:35:10.038 28561 28689 E cr_VideoCapture: 	at org.chromium.media.VideoCaptureFactory.isLegacyOrDeprecatedDevice(chromium-TrichromeWebViewGoogle6432.apk-stable-447211487:1)
+11-20 13:35:10.038 28561 28689 E cr_VideoCapture: 	at org.chromium.media.VideoCaptureFactory.getCaptureApiType(chromium-TrichromeWebViewGoogle6432.apk-stable-447211487:1)
+11-20 13:35:10.040 28561 28689 E cr_VideoCapture: 	at vq0.i(chromium-TrichromeWebViewGoogle6432.apk-stable-447211487:4)
+11-20 13:35:10.040 28561 28689 E cr_VideoCapture: 	at org.chromium.media.VideoCaptureFactory.isLegacyOrDeprecatedDevice(chromium-TrichromeWebViewGoogle6432.apk-stable-447211487:1)
+11-20 13:35:10.040 28561 28689 E cr_VideoCapture: 	at org.chromium.media.VideoCaptureFactory.getFacingMode(chromium-TrichromeWebViewGoogle6432.apk-stable-447211487:1)
+11-20 13:35:10.349 28561 28561 E chromium: [ERROR:web_contents_delegate.cc(225)] WebContentsDelegate::CheckMediaAccessPermission: Not supported.
+11-20 13:35:10.349 28561 28561 E chromium: [ERROR:web_contents_delegate.cc(225)] WebContentsDelegate::CheckMediaAccessPermission: Not supported.
+11-20 13:35:10.351 28561 28689 E cr_VideoCapture: 	at vq0.i(chromium-TrichromeWebViewGoogle6432.apk-stable-447211487:4)
+11-20 13:35:10.351 28561 28689 E cr_VideoCapture: 	at org.chromium.media.VideoCaptureFactory.isLegacyOrDeprecatedDevice(chromium-TrichromeWebViewGoogle6432.apk-stable-447211487:1)
+11-20 13:35:10.351 28561 28689 E cr_VideoCapture: 	at org.chromium.media.VideoCaptureFactory.getDeviceName(chromium-TrichromeWebViewGoogle6432.apk-stable-447211487:1)
+11-20 13:35:10.354 28561 28689 E cr_VideoCapture: 	at vq0.i(chromium-TrichromeWebViewGoogle6432.apk-stable-447211487:4)
+11-20 13:35:10.354 28561 28689 E cr_VideoCapture: 	at org.chromium.media.VideoCaptureFactory.isLegacyOrDeprecatedDevice(chromium-TrichromeWebViewGoogle6432.apk-stable-447211487:1)
+11-20 13:35:10.354 28561 28689 E cr_VideoCapture: 	at org.chromium.media.VideoCaptureFactory.getDeviceId(chromium-TrichromeWebViewGoogle6432.apk-stable-447211487:1)
+11-20 13:35:10.355 28561 28689 E cr_VideoCapture: 	at vq0.i(chromium-TrichromeWebViewGoogle6432.apk-stable-447211487:4)
+11-20 13:35:10.355 28561 28689 E cr_VideoCapture: 	at org.chromium.media.VideoCaptureFactory.isLegacyOrDeprecatedDevice(chromium-TrichromeWebViewGoogle6432.apk-stable-447211487:1)
+11-20 13:35:10.355 28561 28689 E cr_VideoCapture: 	at org.chromium.media.VideoCaptureFactory.getCaptureApiType(chromium-TrichromeWebViewGoogle6432.apk-stable-447211487:1)
+11-20 13:35:10.357 28561 28689 E cr_VideoCapture: 	at vq0.i(chromium-TrichromeWebViewGoogle6432.apk-stable-447211487:4)
+11-20 13:35:10.357 28561 28689 E cr_VideoCapture: 	at org.chromium.media.VideoCaptureFactory.isLegacyOrDeprecatedDevice(chromium-TrichromeWebViewGoogle6432.apk-stable-447211487:1)
+11-20 13:35:10.357 28561 28689 E cr_VideoCapture: 	at org.chromium.media.VideoCaptureFactory.getFacingMode(chromium-TrichromeWebViewGoogle6432.apk-stable-447211487:1)
+11-20 13:36:07.400 29575 29660 I Finsky:background: [1649] CronetEngine is present. Using Cronet for the networking stack.
+11-20 13:36:08.676   535   827 I ActivityManager: Killing 27518:com.google.android.webview:sandboxed_process0:org.chromium.content.app.SandboxedProcessService0:0/u10a104i3 (adj 985): empty #17
+11-20 13:36:16.668 28561 28979 I Auth    : [MinuteMaid, MinuteMaidJsBridge] addAccount(...) [CONTEXT service_id=343 ]
+11-20 13:36:16.956 26254 26266 I Auth    : [AddAccountOperation] Initializing sign-in [CONTEXT service_id=153 ]
+11-20 13:36:17.099 26254 26266 I Auth    : [AddAccountOperation] Fetching token from auth code with GMS network stack. [CONTEXT service_id=153 ]
+11-20 13:36:17.676 26254 26266 I Auth    : [AddAccountOperation] Handling AddAccountResponse. [CONTEXT service_id=153 ]
+11-20 13:36:17.679 26254 26266 I Auth    : (REDACTED) [AddAccountOperation] possible Seed account with hasUsername=%s 
+11-20 13:36:17.719 26254 29129 I Auth    : [AddAccountOperation] Successfully updated account name and Gaia ID in DB [CONTEXT service_id=153 ]
+11-20 13:36:17.732 26254 26266 I Auth    : (REDACTED) [AddAccountHelper] Adding account with %d allowlisted packages
+11-20 13:36:17.859 26254 26266 I Auth    : [AddAccountHelper] Account added successfully to AccountManager [CONTEXT service_id=343 ]
+11-20 13:36:18.938 26254 26266 I Auth    : [AuthAccountManager] Account added successfully. [CONTEXT service_id=343 ]
+11-20 13:36:19.264 26254 26266 I Auth    : [AddAccountOperation] Finished adding account. [CONTEXT service_id=153 ]
+11-20 13:36:19.359 26254 26266 I Auth    : [AddAccountOperation] Add account completed successfully [CONTEXT service_id=153 ]
+11-20 13:36:19.363 28561 28925 I Auth    : (REDACTED) [AddAccountTask] DmStatus =%s; isEligibleForUnmanagedWorkProfile = %s
+11-20 13:36:19.479   535   692 E SyncManager: SYNC_OP_STATE_INVALID: disallowed by settings/network
+11-20 13:36:20.626 26254 26322 W Auth    : 	at alqo.a(:<email><email> (190800-1020418964):400)
+11-20 13:36:20.662 26254 26322 I Auth    : (REDACTED) [GetToken] GetToken failed for app=%s with non recoverable status code: %s 
+11-20 13:36:20.743 26254 26322 W Auth    : amcv: GetToken failed with status code: NetworkError
+11-20 13:36:20.743 26254 26322 W Auth    : 	at alqo.a(:<email><email> (190800-1020418964):400)
+11-20 13:36:20.755 26254 26382 W NearbyShared: java.io.IOException: GetToken failed with status code: NetworkError
+11-20 13:36:22.168 28561 28925 I Auth    : [AddAccountTask] Added account successfully. [CONTEXT service_id=343 ]
+11-20 13:36:22.180 28561 28561 I Auth    : [AddAccountTask] Delivering result. [CONTEXT service_id=343 ]
+11-20 13:36:22.180 28561 28561 I Auth    : (REDACTED) [AddAccountLoader] Got result: %s
+11-20 13:36:22.776 28561 28979 I Auth    : [MinuteMaidFragment] onCloseView() called from JS bridge
+11-20 13:36:22.879 28561 28979 W Auth    : [AddAccount, ControlledChimeraActivity] finishCalled for ControlledActivity, resultCode=3, name=MinuteMaidActivity, controller=AddAccountController [CONTEXT service_id=343 ]
+11-20 13:36:23.151 28561 28979 I Auth    : [AddAccountController] [AddAccount, AddAccountController] Checking for Desktop managed account warning [CONTEXT service_id=153 ]
+11-20 13:36:23.352   535  4109 I ActivityTaskManager: START u11 {flg=0x2000000 cmp=com.google.android.gms/.auth.uiflows.addaccount.WrapperControlledActivity (has extras)} from uid 1110097
+11-20 13:36:24.935 26254 26267 I Auth    : (REDACTED) [GetToken] GetToken failed for app=%s with userRecoverable status: %s 
+11-20 13:36:24.978 26254 26267 W Auth    : amcv: GetToken failed with status code and recovery intent: ThirdPartyDeviceManagementRequired
+11-20 13:36:24.978 26254 26267 W Auth    : [GmsAccountAuthenticatorImpl] error status while fetching token:ThirdPartyDeviceManagementRequired [CONTEXT service_id=343 ]
+11-20 13:36:25.313   535   753 I ActivityTaskManager: START u11 {act=com.google.android.gms.auth.account.HANDLE_MANAGED cmp=com.google.android.gms/.kids.auth.KidsAuthSetupActivity (has extras)} from uid 1110097
+11-20 13:36:25.696 29487 29649 D Volley  : [1679] anps.a: HTTP response for request=<[ ] https://play-fe.googleapis.com/fdfe/sync 0x4be64f9b NORMAL 1> [lifetime=6602], [size=368], [rc=200], [retryCount=0]
+11-20 13:36:26.523 26254 30130 I Auth    : (REDACTED) [GetToken] GetToken failed for app=%s with userRecoverable status: %s 
+11-20 13:36:26.523 26254 30130 W Auth    : amcv: GetToken failed with status code and recovery intent: ThirdPartyDeviceManagementRequired
+11-20 13:36:26.524 26254 30130 W Auth    : [GmsAccountAuthenticatorImpl] error status while fetching token:ThirdPartyDeviceManagementRequired [CONTEXT service_id=343 ]
+11-20 13:36:27.834 26254 30130 I Auth    : (REDACTED) [GetToken] GetToken failed for app=%s with userRecoverable status: %s 
+11-20 13:36:27.838 26254 30130 W Auth    : amcv: GetToken failed with status code and recovery intent: ThirdPartyDeviceManagementRequired
+11-20 13:36:27.838 26254 30130 W Auth    : [GmsAccountAuthenticatorImpl] error status while fetching token:ThirdPartyDeviceManagementRequired [CONTEXT service_id=343 ]
+11-20 13:36:29.567 26254 30130 I Auth    : (REDACTED) [GetToken] GetToken failed for app=%s with userRecoverable status: %s 
+11-20 13:36:29.567 26254 30130 W Auth    : amcv: GetToken failed with status code and recovery intent: ThirdPartyDeviceManagementRequired
+11-20 13:36:29.567 26254 30130 W Auth    : [GmsAccountAuthenticatorImpl] error status while fetching token:ThirdPartyDeviceManagementRequired [CONTEXT service_id=343 ]
+11-20 13:36:30.389 26254 26267 I Auth    : (REDACTED) [GetToken] GetToken failed for app=%s with userRecoverable status: %s 
+11-20 13:36:30.389 26254 26267 W Auth    : amcv: GetToken failed with status code and recovery intent: ThirdPartyDeviceManagementRequired
+11-20 13:36:30.390 26254 26267 W Auth    : [GmsAccountAuthenticatorImpl] error status while fetching token:ThirdPartyDeviceManagementRequired [CONTEXT service_id=343 ]
+11-20 13:36:30.480 26254 26291 I Auth    : (REDACTED) [GetToken] GetToken failed for app=%s with userRecoverable status: %s 
+11-20 13:36:30.480 26254 26291 W Auth    : amcv: GetToken failed with status code and recovery intent: ThirdPartyDeviceManagementRequired
+11-20 13:36:30.701 26254 29129 I Auth    : (REDACTED) [GetToken] GetToken failed for app=%s with userRecoverable status: %s 
+11-20 13:36:30.701 26254 29129 W Auth    : amcv: GetToken failed with status code and recovery intent: ThirdPartyDeviceManagementRequired
+11-20 13:36:30.907   535   552 I ActivityTaskManager: Displayed com.google.android.gms/.kids.auth.KidsAuthSetupActivity: +7s570ms
+11-20 13:36:31.241 28561 28561 I KidsAuth: [KidsAuthSetupChimeraActivity] Supervised account found on the device [CONTEXT service_id=42 ]
+11-20 13:36:31.272 26254 30187 I Auth    : (REDACTED) [GetToken] GetToken failed for app=%s with userRecoverable status: %s 
+11-20 13:36:31.275 26254 30187 W Auth    : amcv: GetToken failed with status code and recovery intent: ThirdPartyDeviceManagementRequired
+11-20 13:36:31.348 28561 28561 I KidsAuth: [SupervisionCoreUtils] Onboarding on Supervision Core APK is not eligible for devices with API version below T. [CONTEXT service_id=42 ]
+11-20 13:36:31.453 28561 28561 I KidsAuth: [OnboardingFlowObserver] Flow started. [CONTEXT service_id=42 ]
+11-20 13:36:31.537   194   194 I lowmemorykiller: Kill 'com.google.android.webview:sandboxed_process0:org.chromium.content.app.Sandbo' (3786), uid 99000, oom_score_adj 990 to free 36308kB rss, 36896kB swap; reason: low watermark i
+11-20 13:36:31.556 28561 28561 I KidsAuth: [KidsAuthSetupChimeraActivity] Starting Webview Fragment [CONTEXT service_id=42 ]
+11-20 13:36:31.568 26254 30426 I Auth    : (REDACTED) [GetToken] GetToken failed for app=%s with userRecoverable status: %s 
+11-20 13:36:31.568 26254 30426 W Auth    : amcv: GetToken failed with status code and recovery intent: ThirdPartyDeviceManagementRequired
+11-20 13:36:31.571 26254 30426 W Auth    : [GmsAccountAuthenticatorImpl] error status while fetching token:ThirdPartyDeviceManagementRequired [CONTEXT service_id=343 ]
+11-20 13:36:31.593 28561 28561 I BaseWebViewFragment: Webview multi-profile feature disabled, using default profile. [CONTEXT service_id=42 ]
+11-20 13:36:31.799   535  4001 I ActivityManager: Process com.google.android.webview:sandboxed_process0:org.chromium.content.app.SandboxedProcessService0:0 (pid 3786) has died: cch+90 CACC
+11-20 13:36:32.122   535   983 W InputManager-JNI: Input channel object 'c5f5541 com.google.android.gms/com.google.android.gms.auth.uiflows.minutemaid.MinuteMaidActivity (client)' was disposed without first being removed with the 

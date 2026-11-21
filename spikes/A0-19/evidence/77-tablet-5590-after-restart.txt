@@ -1,0 +1,22 @@
+# Tablet_A12 (5590) after the restart seen ~17:0x UTC (new emulator pid, no -no-snapshot-load). Read-only. Names redacted.
+boot_completed=1 boot_id=bc614861-69dd-427c-a489-f82d62a89dc2
+== current user: 0
+== users
+Users:
+	UserInfo{0:Owner:c13} running
+	UserInfo{10:kid-test:410}
+	UserInfo{11:control:410}
+== owners
+3 owners:
+User  0: admin=com.webfilter.spike.a19/.AdminReceiver,DeviceOwner,Affiliated
+User 10: admin=com.webfilter.spike.a19/.AdminReceiver,ProfileOwner
+User 11: admin=com.google.android.gms/.kids.account.receiver.ProfileOwnerReceiver,ProfileOwner
+== accounts per user
+User UserInfo{0:Owner:c13}: |   Accounts: 0
+User UserInfo{10:kid-test:410}: |   Accounts: 0
+User UserInfo{11:control:410}: |   Accounts: 1
+== YouTube hidden in u11
+    User 11: installed=true hidden=true suspended=false distractionFlags=0 stopped=false notLaunched=false enabled=1 instant=false virtual=false
+== memory
+MemAvailable:     706412 kB
+SwapFree:        1322072 kB

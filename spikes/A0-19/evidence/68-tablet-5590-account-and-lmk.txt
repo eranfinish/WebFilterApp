@@ -1,0 +1,23 @@
+== account add and removal events since 14:00 UTC (pids: u11 GMS = 26254)
+14:10:21.400 535 I AccountManagerService: the accounts changed, sending
+14:10:21.405 26254 I Auth : [AddAccountHelper] Account added
+14:10:21.794 535 I AccountManagerService: the accounts changed, sending
+14:10:22.635 26254 I Auth : [AuthAccountManager] Account added
+14:10:22.889 28561 I Auth : [AddAccountTask] Added account
+(end)
+== lowmemorykiller since 14:05 UTC
+11-20 14:11:16.942   194   194 I lowmemorykiller: Kill 'com.google.android.apps.photos' (4482), uid 1010126, oom_score_adj 985 to free 45188kB rss, 35024kB swap; 
+11-20 14:11:37.633   194   194 I lowmemorykiller: Kill 'com.android.chrome' (4558), uid 1110115, oom_score_adj 975 to free 39324kB rss, 30804kB swap; 
+11-20 14:11:38.092   194   194 I lowmemorykiller: Kill 'com.android.settings' (2419), uid 1000, oom_score_adj 970 to free 40660kB rss, 45032kB swap; 
+11-20 14:11:38.106   194   194 I lowmemorykiller: Kill 'com.google.android.webview:sandboxed_process0:org.chromium.content.app.Sandbo' (9788), uid 1099001, oom_score_adj 960 to free 35000kB rss, 64796
+(end)
+== DM status suppression / bad device management broadcast (u11 pid 26254) since 14:10
+11-20 14:10:23.315 26254 32334 I Auth    : (REDACTED) [BroadcastManager] [BroadcastManager] Broadcasting bad device management=%s
+11-20 14:10:23.327 26254 32334 W Auth    : [BroadcastManager] [BroadcastManager] No device or profile owner found for bad device management broadcast. [CONTEXT service_id=343 ]
+11-20 14:10:24.260 26254  4050 I Auth    : (REDACTED) [BroadcastManager] [BroadcastManager] Broadcasting bad device management=%s
+11-20 14:10:24.293 26254  4050 W Auth    : [BroadcastManager] [BroadcastManager] No device or profile owner found for bad device management broadcast. [CONTEXT service_id=343 ]
+11-20 14:10:25.633 26254  4413 I Auth    : (REDACTED) [BroadcastManager] [BroadcastManager] Broadcasting bad device management=%s
+11-20 14:10:25.671 26254  4413 W Auth    : [BroadcastManager] [BroadcastManager] No device or profile owner found for bad device management broadcast. [CONTEXT service_id=343 ]
+11-20 14:10:26.684 26254 30686 I Auth    : (REDACTED) [BroadcastManager] [BroadcastManager] Broadcasting bad device management=%s
+11-20 14:10:26.701 26254 30686 W Auth    : [BroadcastManager] [BroadcastManager] No device or profile owner found for bad device management broadcast. [CONTEXT service_id=343 ]
+(end)

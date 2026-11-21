@@ -1,0 +1,74 @@
+# Control-run attribution by process owner (u10 = kid-test, u11 = control). Read-only, from 13:25:30 UTC.
+pid 4294 owner: u10_a97   pid 20349 owner: u11_a97   pid 21965 owner: 
+== GetToken failures by pid since 13:25:30
+pid 4294 (u10_a97): 23
+== account-related / supervision lines since 13:25:30 by pid (u11 = pid 20349 or 21965)
+11-20 13:25:39.256 20349 20349 I Fido    : [AuthenticatorChimeraService] Unregistered the broadcast receiver [CONTEXT service_id=287 ]
+11-20 13:25:49.266 20349 20882 I NearbyDiscovery: (REDACTED) DiscoveryController, showNotification, itemSize=%s
+11-20 13:25:50.746 20349 20882 I NearbyDiscovery: (REDACTED) DiscoveryController, showNotification, itemSize=%s
+11-20 13:25:54.194 20349 20486 I Backup  : [GmsBackupAccountManager] Backup account not found in gmscore.
+11-20 13:26:05.724 20349 20370 W Auth    : [GaiaServicesFlagManager] Failed to convert account to GoogleAccount: MissingAccount. Returning false. [CONTEXT service_id=343 ]
+11-20 13:26:05.746 20349 20370 W Auth    : [GaiaServicesFlagManager] Failed to convert account to GoogleAccount: MissingAccount. Returning false. [CONTEXT service_id=343 ]
+11-20 13:26:06.897 20349 21722 I Auth    : [DeviceAccountTaskService] Scheduling Keystore alias cleanup [CONTEXT service_id=316 ]
+11-20 13:26:06.949 20349 21722 I Auth    : [DarkLaunchTaskService] Cancelling dark launch periodic health check [CONTEXT service_id=343 ]
+11-20 13:26:07.029 20349 21804 E CastAuth: [CastAuthModuleInitIntent] Feature is not available, reason = CastAuth feature is disabled on this 1p device.. [CONTEXT service_id=360 ]
+11-20 13:26:08.612 20349 20564 W Auth    : [GaiaServicesFlagManager] Failed to convert account to GoogleAccount: MissingAccount. Returning false. [CONTEXT service_id=343 ]
+11-20 13:26:08.630 20349 20361 W Auth    : [GaiaServicesFlagManager] Failed to convert account to GoogleAccount: MissingAccount. Returning false. [CONTEXT service_id=343 ]
+11-20 13:26:16.223 20349 22179 I KidsAuth: (REDACTED) [KidsAuthInitIntentOperation] Received intent to recover supervision setup: %s
+11-20 13:26:16.265 20349 21795 I Auth    : [WorkAccountChimeraService] update authenticator enabled for boot or update [CONTEXT service_id=343 ]
+11-20 13:26:17.011 20349 20902 I KidsAuth: (REDACTED) [SupervisionSetupChimeraService] [%s] Processing command[id=%s][flags=%s]: %s
+11-20 13:26:17.070 20349 20486 I Auth    : [WorkAccountServiceImpl] init work authenticator [CONTEXT service_id=343 ]
+11-20 13:26:17.222 20349 21795 I Auth    : [GoogleAccountDataTaskService] No accounts had their LSTs written to app data. [CONTEXT service_id=343 ]
+11-20 13:26:17.222 20349 21795 I Auth    : [GoogleAccountDataTaskService] Scheduling periodic task to migrate LSTs to app data. [CONTEXT service_id=343 ]
+11-20 13:26:17.279 21965 22201 W Auth    : [GoogleAuthUtil] GoogleAuthUtil
+11-20 13:26:17.309 20349 20902 I KidsAuth: [SupervisionSetupState] No active setup found, moving to Idle. [CONTEXT service_id=42 ]
+11-20 13:26:17.309 20349 20902 I KidsAuth: (REDACTED) [SupervisionSetupChimeraService] Next state: %s
+11-20 13:26:17.321 20349 20349 I KidsAuth: [SupervisionSetupChimeraService] Service stopped [CONTEXT service_id=42 ]
+11-20 13:26:17.323 20349 22178 W Auth    : [AccountStateSyncAdapterInitIntentOperation] Initializing periodic tasks, IntentAction=android.intent.action.BOOT_COMPLETED, InitRuntimeState=2 [CONTEXT service_id=343 ]
+11-20 13:26:17.327 20349 22179 I Auth    : (REDACTED) [SupervisedAccountIntentOperation] onHandleIntent: %s
+11-20 13:26:17.356 21965 22201 E Notifications: Job finished with PERMANENT_FAILURE. Job ID: '111001001', key: 'RPC_STORE_TARGET'
+11-20 13:26:17.356 21965 22201 E Notifications: com.google.android.gms.auth.UserRecoverableAuthException: ThirdPartyDeviceManagementRequired
+11-20 13:26:17.356 21965 22201 E Notifications: 	at cal.pwl.f(PG:20)
+11-20 13:26:17.356 21965 22201 E Notifications: 	at cal.pwg.a(Unknown Source:20)
+11-20 13:26:17.356 21965 22201 E Notifications: 	at cal.pwl.h(PG:12)
+11-20 13:26:17.356 21965 22201 E Notifications: 	at cal.pwl.g(PG:32)
+11-20 13:26:17.356 21965 22201 E Notifications: 	at cal.szl.a(PG:24)
+11-20 13:26:17.356 21965 22201 E Notifications: 	at cal.szj.h(PG:2)
+11-20 13:26:17.356 21965 22201 E Notifications: 	at cal.sri.h(PG:11)
+11-20 13:26:17.356 21965 22201 E Notifications: 	at cal.sth.a(PG:4)
+11-20 13:26:17.356 21965 22201 E Notifications: 	at cal.ste.e(PG:6)
+11-20 13:26:17.356 21965 22201 E Notifications: 	at cal.snk.run(Unknown Source:1)
+11-20 13:26:17.356 21965 22201 E Notifications: 	at cal.eiw.run(Unknown Source:1)
+11-20 13:26:17.356 21965 22201 E Notifications: 	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:462)
+11-20 13:26:17.356 21965 22201 E Notifications: 	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+11-20 13:26:17.356 21965 22201 E Notifications: 	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:301)
+11-20 13:26:17.356 21965 22201 E Notifications: 	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1167)
+11-20 13:26:17.356 21965 22201 E Notifications: 	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:641)
+11-20 13:26:17.356 21965 22201 E Notifications: 	at cal.eiu.run(Unknown Source:7)
+11-20 13:26:17.356 21965 22201 E Notifications: 	at java.lang.Thread.run(Thread.java:920)
+11-20 13:26:17.530 20349 22178 I Auth    : [AuthManaged, PasswordComplexityHelperImpl] Updating password complexity components state.
+11-20 13:26:17.530 20349 22178 I Auth    : [AuthManaged, PasswordComplexityHelperImpl] Disabling com.google.android.gms.auth.managed.admin.DeviceAdminReceiver
+11-20 13:26:17.540 20349 22178 I Auth    : [AuthManaged, PasswordComplexityHelperImpl] Disabling com.google.android.gms.auth.managed.ui.SetNewPasswordActivity
+11-20 13:26:17.741 20349 22178 I Auth    : [AuthManaged, AuthManagedModuleInitIntentOperation] enabling com.google.android.gms.auth.managed.ui.EmmActivity
+11-20 13:26:17.743 20349 22178 I Auth    : [AuthManaged, AuthManagedModuleInitIntentOperation] enabling com.google.android.gms.auth.managed.ui.PhoneskyDpcInstallActivity
+11-20 13:26:17.745 20349 22178 W Auth    : [AuthManaged, SettingsSecurityDeviceOwnerChimeraActivity] device owner: n/a
+11-20 13:26:17.745 20349 22178 I Auth    : [AuthManaged, AuthManagedModuleInitIntentOperation] disabling com.google.android.gms.auth.managed.ui.SettingsSecurityDeviceOwnerActivity
+11-20 13:26:17.752 20349 22178 I Auth    : [AuthManaged, PasswordComplexityHelperImpl] Updating password complexity components state.
+11-20 13:26:17.752 20349 22178 I Auth    : [AuthManaged, PasswordComplexityHelperImpl] Disabling com.google.android.gms.auth.managed.admin.DeviceAdminReceiver
+11-20 13:26:17.753 20349 22178 I Auth    : [AuthManaged, PasswordComplexityHelperImpl] Disabling com.google.android.gms.auth.managed.ui.SetNewPasswordActivity
+11-20 13:26:17.880 20349 22178 I BackupNotificationsSche: Scheduled backup notifications task successfully. [CONTEXT service_id=229 ]
+11-20 13:26:17.880 20349 22290 I Authzen : [AuthZenEventHandler] Handling event: android.intent.action.BOOT_COMPLETED
+11-20 13:26:17.892 20349 22290 I Authzen : [TransactionCache] Clearing transaction cache
+11-20 13:26:17.909 20349 20349 I ProximityAuth: [MessageProcessorManager] MessageProcessorManager instantiated for user UserHandle{11}
+11-20 13:26:18.003 20349 20349 I ProximityAuth: [PhoneHubService] Handling intent for PhoneHubChimeraService.
+11-20 13:26:18.007 20349 20902 I ProximityAuth: [AccountEligibilityMediator] checkEligibleAccountsCrossProfile not enabled, checking accounts in current profile.
+11-20 13:26:18.012 20349 20902 I ProximityAuth: [PhoneHubService] No enabled account, stopping service
+
+Summary (control run, parent's first dialog and state at ~13:28 UTC):
+- Attribution: pid 4294 = user 10 (kid-test). Its 23 THIRD_PARTY_DEVICE_MANAGEMENT_REQUIRED token failures since 13:25:30 are kid-test's account, not the control user's.
+- pid 20349 = user 11 (control). Before the account: "GaiaServicesFlagManager: MissingAccount" (13:26:05-08), so no account in user 11 yet.
+- user 11 supervision: KidsAuth "Received intent to recover supervision setup" 13:26:16 and SupervisedAccountIntentOperation 13:26:17 (pid 20349). This is the GMS setup after a supervised account is added. It is not yet a confirmed account add in user 11.
+- user 11 GMS AuthManaged: "device owner: n/a" (13:26:17). GMS does not see a device owner in user 11. Our DO is on user 0; this is a GMS view, not a DPM result.
+- pid 21965 (owner not identified in ps): Notifications job RPC_STORE_TARGET PERMANENT_FAILURE, ThirdPartyDeviceManagementRequired (13:26:17).
+- Family Link as PO in user 11: not seen yet (no PO-set line for user 11). Still to check after the parent's report.
+- YouTube in user 11: not checked yet.

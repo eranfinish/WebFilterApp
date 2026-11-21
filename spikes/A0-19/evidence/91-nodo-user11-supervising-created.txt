@@ -1,0 +1,19 @@
+# NO-DO phone (5580): user 11 created at 2026-11-21 17:59:29 UTC (SUPERVISING profile). Log lines from the buffer (system_server, vold). Read-only.
+11-21 17:58:30.960   761   761 W Looper  : Slow dispatch took 155ms main app=system_server main=true group=FOREGROUND h=com.android.server.pm.UserManagerService$MainHandler c=null m=1
+11-21 17:59:29.445   761   897 D SystemServerTiming: createUser-0
+11-21 17:59:29.446   761   897 I UserManagerService: Creating user 11 of type android.os.usertype.profile.SUPERVISING with flags 4096 (PROFILE)
+11-21 17:59:29.600   761   897 D SystemServerTiming: createUserStorageKeys
+11-21 17:59:29.831   351   351 I vold    : Created DE key for user 11
+11-21 17:59:29.854   351   351 I vold    : Created CE key for user 11
+11-21 17:59:29.864   351   351 D vold    : fscrypt_prepare_user_storage for volume null, user 11, flags 1
+11-21 17:59:30.096   761   897 I LockSettingsService: Initializing synthetic password for user 11
+11-21 17:59:30.110   761   897 I SyntheticPasswordManager: Creating LSKF-based protector 3454caef1e4e4af0 for user 11
+11-21 17:59:30.355   351   351 I vold    : Stored CE key for new user 11
+11-21 17:59:30.451   761   897 I LockSettingsService: Successfully initialized synthetic password for user 11
+11-21 17:59:31.372   761   897 W UserManagerService: getUserInfo: unknown user #11
+(end)
+== users now
+Users:
+	UserInfo{0:Owner:4c13} running
+	UserInfo{10:plainkid:410} running
+	UserInfo{11:Supervising:1000}

@@ -1,0 +1,18 @@
+# Typo check (A0.22), from u0 via shell: does maleware.testcategory.com resolve to a real address? Read-only.
+== current user: 11
+-- maleware.testcategory.com (A): PING maleware.testcategory.com (104.18.4.35) 56(84) bytes of data.
+-- maleware.testcategory.com (AAAA via ping6): PING maleware.testcategory.com(2606:4700::6812:523) 56 data bytes
+-- malware.testcategory.com (A): PING malware.testcategory.com (127.0.0.1) 56(84) bytes of data.
+-- malware.testcategory.com (AAAA via ping6): PING malware.testcategory.com(::) 56 data bytes
+== host check, Cloudflare Families (1.1.1.3), plain DNS:
+
+Host, plain DNS to 1.1.1.3 (Cloudflare Families):
+- maleware.testcategory.com (A) -> 104.18.5.35, 104.18.4.35 (real addresses)
+- malware.testcategory.com (A) -> 0.0.0.0 (blocked answer)
+
+Device (shell, ping/ping6):
+- maleware.testcategory.com (A) -> 104.18.4.35; (AAAA) -> 2606:4700::6812:523 (real)
+- malware.testcategory.com (A) -> 127.0.0.1; (AAAA) -> ::
+
+Note: the shell check ran while the current user was 11 (am get-current-user), not u0 as requested. DNS is device-wide, so the result does not depend on the user.
+Conclusion: the typo name resolves to real addresses, consistent with the advisor's reading that the page the parent saw was reached through the typo host "maleware.testcategory.com" (Cloudflare Gateway test page). The earlier "malware opens" report in u11 is marked invalid.

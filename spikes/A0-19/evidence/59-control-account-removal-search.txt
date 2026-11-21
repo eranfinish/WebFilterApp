@@ -1,0 +1,42 @@
+# Whole-buffer search for account removal (names redacted). Read-only.
+-- removal-tagged lines anywhere in the buffer:
+141529:11-20 13:29:06.092  4294 26308 I Auth    : [GoogleAccountDataServiceImpl] removeAccount() -> success [CONTEXT service_id=153 ]
+141531:11-20 13:29:06.097  4294 26308 I KidsAccountUtils: (REDACTED) Removed account with reason %s
+143040:11-20 13:29:15.363   535   564 I ActivityManager: Start proc 27577:com.android.vending/u10a103 for broadcast {com.android.vending/com.google.android.libraries.phenotype.client.stable.AccountRemovedBroadcastReceive
+143210:11-20 13:29:17.394   535   564 I ActivityManager: Start proc 27655:com.google.android.googlequicksearchbox/u10a104 for broadcast {com.google.android.googlequicksearchbox/com.google.android.libraries.phenotype.clie
+143277:11-20 13:29:18.151   535   564 I ActivityManager: Start proc 27695:com.google.android.setupwizard/u10a92 for broadcast {com.google.android.setupwizard/com.google.android.libraries.phenotype.client.stable.AccountRe
+143299:11-20 13:29:18.385   535   564 I ActivityManager: Start proc 27721:com.google.android.tts/u10a108 for broadcast {com.google.android.tts/com.google.android.libraries.phenotype.client.stable.AccountRemovedBroadcastR
+179840:11-20 13:38:25.567 26254 32614 I Auth    : [GoogleAccountDataServiceImpl] removeAccount() -> success [CONTEXT service_id=153 ]
+184388:11-20 13:38:52.881   535   564 I ActivityManager: Start proc 1836:com.android.vending/u11a103 for broadcast {com.android.vending/com.google.android.libraries.phenotype.client.stable.AccountRemovedBroadcastReceiver
+184548:11-20 13:38:54.527   535   564 I ActivityManager: Start proc 1914:com.google.android.googlequicksearchbox/u11a104 for broadcast {com.google.android.googlequicksearchbox/com.google.android.libraries.phenotype.clien
+185281:11-20 13:38:55.550   535   564 I ActivityManager: Start proc 1959:com.google.android.setupwizard/u11a92 for broadcast {com.google.android.setupwizard/com.google.android.libraries.phenotype.client.stable.AccountRem
+185298:11-20 13:38:55.672   535   564 I ActivityManager: Start proc 1988:com.google.android.tts/u11a108 for broadcast {com.google.android.tts/com.google.android.libraries.phenotype.client.stable.AccountRemovedBroadcastRe
+(end)
+-- LOGIN_ACCOUNTS_CHANGED broadcasts from AccountManagerService (times) since 13:30:
+13:36:17.778 AccountManagerService: Visibility was
+13:36:17.823 AccountManagerService: the accounts
+13:36:18.148 AccountManagerService: the accounts
+13:36:20.368 AccountManagerService: the accounts
+13:36:41.890 AccountManagerService: the accounts
+13:38:25.302 AccountManagerService: the accounts
+(end)
+-- 'Account added' vs 'removed' GMS lines in u11 pid 26254 since 13:36:00:
+11-20 13:36:17.859 26254 26266 I Auth    : [AddAccountHelper] Account added successfully to AccountManager [CONTEXT service_id=343 ]
+11-20 13:36:18.938 26254 26266 I Auth    : [AuthAccountManager] Account added successfully. [CONTEXT service_id=343 ]
+11-20 13:36:27.600 26254 30392 W SubscribedFeeds: SubscribedFeeds sync disabled, ignoring request and removing sync. [CONTEXT service_id=250 ]
+11-20 13:37:07.292 26254 31065 I HeterodyneSyncer: (REDACTED) Removed %d invalid users
+11-20 13:37:43.446 26254 31656 I PaymentsSuwIntentOp: Account added has already been processed
+11-20 13:37:53.402 26254 32081 I AccountsChangedIntentOp: No new deleted accounts
+11-20 13:37:53.447 26254 32186 I StorageManagementAccoun: No new removed accounts
+11-20 13:37:57.034 26254 31667 I LSRAccountChange: Dropping account change broadcast, no accounts removed. [CONTEXT service_id=277 ]
+11-20 13:38:00.043 26254 32280 I PaymentsSuwIntentOp: Account added has already been processed
+11-20 13:38:10.040 26254 32442 I DeletedNullContactsCleanup: Scheduling the service.
+(end)
+-- last removal-related text, pid 26254 (any time):
+11-20 13:38:58.535 26254  2105 I TapAndPay: Google account removal detected, starting account grooming [CONTEXT service_id=79 ]
+11-20 13:38:58.711 26254  2138 I Multidevice: (REDACTED) [AccountChangeIntentOperation] Removal of account: %s
+11-20 13:38:58.872 26254  2133 I AccountChangesIntOp: Looks like an account has been removed or became supervised. [CONTEXT service_id=284 ]
+11-20 13:38:59.256 26254  2137 I Multidevice: [AccountChangeIntentOperation] Finished removing account [CONTEXT service_id=348 ]
+11-20 13:38:59.288 26254  2112 I FSA2_ContactsSyncIntentOp: Clearing FSA2 sync status preference for removed account
+11-20 13:39:10.140 26254 32614 I HeterodyneSyncer: (REDACTED) Removed %d invalid users
+(end)

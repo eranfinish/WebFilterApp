@@ -1,0 +1,14 @@
+== packages user 10 (before install-existing)
+-- com.google.android.gms: package:com.google.android.gms
+-- com.google.android.gsf: package:com.google.android.gsf
+-- com.android.vending: package:com.android.vending
+-- com.android.chrome: package:com.android.chrome
+-- com.google.android.youtube: package:com.google.android.youtube
+-- com.google.android.play.games: 
+-- com.webfilter.spike.a19: package:com.webfilter.spike.a19
+== installed-but-not-enabled check user 10 (-u)
+-- com.google.android.gms: package:com.google.android.gms
+-- com.android.chrome: package:com.android.chrome
+-- com.google.android.youtube: package:com.google.android.youtube
+== total packages user 10: 179
+== total packages user 0: 179

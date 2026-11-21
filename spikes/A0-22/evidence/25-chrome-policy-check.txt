@@ -1,0 +1,32 @@
+# Chrome policy lines for u11 (logcat) and dumpsys policy lookup. Read-only.
+== logcat lines mentioning Chrome policy / DnsOverHttps / managed / PolicyService (since 18:47:31)
+11-21 18:47:31.802   911  6310 D NetworkMonitor/101: PROBE_HTTP http://connectivitycheck.gstatic.com/generate_204 time=232ms ret=204 request={Connection=[close], User-Agent=[Mozilla/5.0 (X11; Linux x8
+11-21 18:47:32.026   911  6309 D NetworkMonitor/101: PROBE_HTTPS https://www.google.com/generate_204 time=456ms ret=204 request={Connection=[close], User-Agent=[Mozilla/5.0 (X11; Linux x86_64) AppleWe
+11-21 18:47:32.153   911  6363 D NetworkMonitor/101: PROBE_HTTP http://connectivitycheck.gstatic.com/generate_204 time=63ms ret=204 request={Connection=[close], User-Agent=[Mozilla/5.0 (X11; Linux x86
+11-21 18:47:32.762   911  6362 D NetworkMonitor/101: PROBE_HTTPS https://www.google.com/generate_204 time=614ms ret=204 request={Connection=[close], User-Agent=[Mozilla/5.0 (X11; Linux x86_64) AppleWe
+11-21 18:47:41.194   560   568 I system_server: JIT allocated 98KB for compiled code of boolean android.app.admin.IDevicePolicyManager$Stub.onTransact(int, android.os.Parcel, android.os.Parcel, int)
+11-21 18:47:41.194   560   568 I system_server: Compiler allocated 5105KB to compile boolean android.app.admin.IDevicePolicyManager$Stub.onTransact(int, android.os.Parcel, android.os.Parcel, int)
+11-21 18:47:42.394  5892  6469 I GmsSyncPolicyEngine: (REDACTED) Periodic sync %d disabled by policy, cancelled.
+11-21 18:47:42.751  4213  6080 E TimeLimitCheckingIntent: 	at android.app.admin.IDevicePolicyManager$Stub$Proxy.setLockTaskPackages(IDevicePolicyManager.java:11683)
+11-21 18:47:42.751  4213  6080 E TimeLimitCheckingIntent: 	at android.app.admin.DevicePolicyManager.setLockTaskPackages(DevicePolicyManager.java:10049)
+11-21 18:47:43.899  5892  6842 I EnterpriseLoader: [ConditionsChecker] ZT config not present. [CONTEXT service_id=225 ]
+11-21 18:47:45.788  5892  6211 W PhBaseOp: fyiu: 29547: Stale snapshot for com.google.android.gms.enterprise(new configuration available)
+11-21 18:47:45.789  5892  6211 W AsyncOperation: OperationException[Status{statusCode=Stale snapshot for com.google.android.gms.enterprise(new configuration available), resolution=null}]
+11-21 18:47:46.378  5892  6844 I GmsSyncPolicyEngine: (REDACTED) Periodic sync %d disabled by policy, cancelled.
+11-21 18:47:46.461  5892  6844 I GmsSyncPolicyEngine: (REDACTED) Periodic sync %d disabled
+11-21 18:47:52.672  4213  6080 E TimeLimitCheckingIntent: 	at android.app.admin.IDevicePolicyManager$Stub$Proxy.setLockTaskPackages(IDevicePolicyManager.java:11683)
+(end logcat)
+== dumpsys user (u11) restrictions that could affect Chrome (device policy)
+    Restrictions:
+      no_sms
+      no_outgoing_calls
+    Device policy global restrictions:
+    Device policy local restrictions:
+        no_install_unknown_sources
+        no_config_location
+        no_remove_user
+        no_debugging_features
+        no_config_credentials
+        no_config_date_time
+    Effective restrictions:
+(end)

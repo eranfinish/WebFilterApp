@@ -1,0 +1,57 @@
+# TCP connections from the kernel table (/proc/net/tcp*), by owner uid. Read-only. Remote port 853 = DoT; 443 to a DoH resolver IP = possible DoH.
+== remote port 853 (DoT), any uid:
+uid=0 remote=03000001:0355 state=06
+uid=0 remote=03000001:0355 state=06
+(end 853)
+== connections to 1.1.1.1, 1.0.0.1, 1.1.1.3, 1.0.0.3, 8.8.8.8, 8.8.4.4 (any port), with uid
+(see below)
+== TCP rows owned by u11 uids (1110000-1119999), with remote address:port and state
+      1 uid=1110097 remote=0475D9AC:01BB state=01
+      2 uid=1110097 remote=0477D9AC:01BB state=01
+      1 uid=1110104 remote=0000000000000000FFFF00000475D9AC:01BB state=01
+      1 uid=1110104 remote=0471D9AC:01BB state=01
+      1 uid=1110104 remote=7826EFD8:01BB state=01
+      1 uid=1110113 remote=00000000000000000000000000000000:0000 state=0A
+      2 uid=1110113 remote=0472D9AC:01BB state=01
+      3 uid=1110113 remote=824BFA8E:01BB state=01
+      2 uid=1110113 remote=C64BFA8E:01BB state=01
+      1 uid=1110115 remote=16E2CC8F:01BB state=01
+      1 uid=1110115 remote=23051268:0050 state=01
+      1 uid=1110115 remote=23051268:0050 state=08
+      1 uid=1110115 remote=23051268:01BB state=01
+      1 uid=1110115 remote=29291268:01BB state=01
+      1 uid=1110115 remote=2CC16597:01BB state=01
+      1 uid=1110115 remote=321EDD17:01BB state=01
+      1 uid=1110115 remote=3E716F22:01BB state=01
+      1 uid=1110115 remote=49501068:01BB state=01
+      1 uid=1110115 remote=4E4BFA8E:01BB state=01
+      1 uid=1110115 remote=5E09FA8E:01BB state=01
+      1 uid=1110115 remote=61769912:01BB state=01
+      1 uid=1110115 remote=678E5836:01BB state=08
+      2 uid=1110115 remote=71F5E00D:01BB state=01
+      1 uid=1110115 remote=7B236822:0050 state=01
+      1 uid=1110115 remote=814BFA8E:01BB state=01
+      1 uid=1110115 remote=96D82422:01BB state=01
+      1 uid=1110115 remote=A24BFA8E:01BB state=01
+      1 uid=1110115 remote=A64AE45B:01BB state=01
+      1 uid=1110115 remote=C11A1268:01BB state=01
+      1 uid=1110115 remote=C628DF34:01BB state=01
+(end u11 rows)
+== count of u11 rows: 40
+== u11 rows with remote port 443 or 853 (DoH/DoT candidates): 36
+== all distinct remote IPs of any uid on port 443 (first 15, decoded)
+0.0.0.0
+0.0.0.0
+0.0.0.0
+0.0.0.0
+0.0.0.0
+0.0.0.0
+172.217.113.4
+172.217.114.4
+172.217.117.4
+172.217.118.4
+172.217.119.4
+142.251.145.6
+168.151.55.7
+142.251.155.7
+143.204.226.22

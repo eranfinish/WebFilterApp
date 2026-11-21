@@ -1,0 +1,81 @@
+== auth / YouTube / chromium lines after 13:16:30 UTC (filtered by tag, audit excluded)
+11-20 13:16:31.322 16041 16139 W YouTube : Could not register for notifications with InnerTube: 
+11-20 13:16:31.322 16041 16139 W YouTube : zxc: ylz: Precondition check failed.
+11-20 13:16:31.322 16041 16139 W YouTube : 	at ytm.apply(PG:57)
+11-20 13:16:31.322 16041 16139 W YouTube : 	at xrp.t(PG:5)
+11-20 13:16:31.322 16041 16139 W YouTube : 	at xrp.d(PG:2)
+11-20 13:16:31.322 16041 16139 W YouTube : 	at zwu.d(PG:4)
+11-20 13:16:31.322 16041 16139 W YouTube : 	at afdl.c(PG:51)
+11-20 13:16:31.322 16041 16139 W YouTube : 	at afdl.j(PG:38)
+11-20 13:16:31.322 16041 16139 W YouTube : 	at afdl.d(PG:3)
+11-20 13:16:31.322 16041 16139 W YouTube : 	at afdj.run(Unknown Source:2)
+11-20 13:16:31.322 16041 16139 W YouTube : 	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:462)
+11-20 13:16:31.322 16041 16139 W YouTube : 	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+11-20 13:16:31.322 16041 16139 W YouTube : 	at rvk.run(PG:4)
+11-20 13:16:31.322 16041 16139 W YouTube : 	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1167)
+11-20 13:16:31.322 16041 16139 W YouTube : 	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:641)
+11-20 13:16:31.322 16041 16139 W YouTube : 	at rvh.run(PG:2)
+11-20 13:16:31.322 16041 16139 W YouTube : 	at hmu.run(PG:4)
+11-20 13:16:31.322 16041 16139 W YouTube : 	at java.lang.Thread.run(Thread.java:920)
+11-20 13:16:31.322 16041 16139 W YouTube : Caused by: ylz: Precondition check failed.
+11-20 13:16:31.322 16041 16139 W YouTube : 	at zvt.d(PG:5)
+11-20 13:16:31.322 16041 16139 W YouTube : 	at xzj.c(PG:18)
+11-20 13:16:31.322 16041 16139 W YouTube : 	at xyk.run(PG:17)
+11-20 13:16:31.322 16041 16139 W YouTube : 	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1167)
+11-20 13:16:31.322 16041 16139 W YouTube : 	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:641)
+11-20 13:16:31.322 16041 16139 W YouTube : 	at xqz.run(PG:12)
+11-20 13:16:31.322 16041 16139 W YouTube : 	... 1 more
+11-20 13:16:31.322 16041 16139 W YouTube : Caused by: bsk
+11-20 13:16:31.322 16041 16139 W YouTube : 	at xyk.run(PG:12)
+11-20 13:16:31.322 16041 16139 W YouTube : 	... 4 more
+11-20 13:16:39.412 16041 16139 W YouTube : Could not register for notifications with InnerTube: 
+11-20 13:16:39.412 16041 16139 W YouTube : zxc: ylz: Precondition check failed.
+11-20 13:16:39.412 16041 16139 W YouTube : 	at ytm.apply(PG:57)
+11-20 13:16:39.412 16041 16139 W YouTube : 	at xrp.t(PG:5)
+11-20 13:16:39.412 16041 16139 W YouTube : 	at xrp.d(PG:2)
+11-20 13:16:39.412 16041 16139 W YouTube : 	at zwu.d(PG:4)
+11-20 13:16:39.412 16041 16139 W YouTube : 	at afdl.c(PG:51)
+11-20 13:16:39.412 16041 16139 W YouTube : 	at afdl.j(PG:38)
+11-20 13:16:39.412 16041 16139 W YouTube : 	at afdl.d(PG:3)
+11-20 13:16:39.412 16041 16139 W YouTube : 	at afdj.run(Unknown Source:2)
+11-20 13:16:39.412 16041 16139 W YouTube : 	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:462)
+11-20 13:16:39.412 16041 16139 W YouTube : 	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+11-20 13:16:39.412 16041 16139 W YouTube : 	at rvk.run(PG:4)
+11-20 13:16:39.412 16041 16139 W YouTube : 	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1167)
+11-20 13:16:39.412 16041 16139 W YouTube : 	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:641)
+11-20 13:16:39.412 16041 16139 W YouTube : 	at rvh.run(PG:2)
+11-20 13:16:39.412 16041 16139 W YouTube : 	at hmu.run(PG:4)
+11-20 13:16:39.412 16041 16139 W YouTube : 	at java.lang.Thread.run(Thread.java:920)
+11-20 13:16:39.412 16041 16139 W YouTube : Caused by: ylz: Precondition check failed.
+11-20 13:16:39.412 16041 16139 W YouTube : 	at zvt.d(PG:5)
+11-20 13:16:39.412 16041 16139 W YouTube : 	at xzj.c(PG:18)
+11-20 13:16:39.412 16041 16139 W YouTube : 	at xyk.run(PG:17)
+11-20 13:16:39.412 16041 16139 W YouTube : 	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1167)
+11-20 13:16:39.412 16041 16139 W YouTube : 	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:641)
+11-20 13:16:39.412 16041 16139 W YouTube : 	at xqz.run(PG:12)
+11-20 13:16:39.412 16041 16139 W YouTube : 	... 1 more
+11-20 13:16:39.412 16041 16139 W YouTube : Caused by: bsk
+11-20 13:16:39.412 16041 16139 W YouTube : 	at xyk.run(PG:12)
+11-20 13:16:39.412 16041 16139 W YouTube : 	... 4 more
+11-20 13:16:51.352 16041 16139 W YouTube : Could not register for notifications with InnerTube: 
+11-20 13:16:51.352 16041 16139 W YouTube : zxc: ylz: Precondition check failed.
+11-20 13:16:51.352 16041 16139 W YouTube : 	at ytm.apply(PG:57)
+11-20 13:16:51.352 16041 16139 W YouTube : 	at xrp.t(PG:5)
+11-20 13:16:51.352 16041 16139 W YouTube : 	at xrp.d(PG:2)
+11-20 13:16:51.352 16041 16139 W YouTube : 	at zwu.d(PG:4)
+11-20 13:16:51.352 16041 16139 W YouTube : 	at afdl.c(PG:51)
+11-20 13:16:51.352 16041 16139 W YouTube : 	at afdl.j(PG:38)
+11-20 13:16:51.352 16041 16139 W YouTube : 	at afdl.d(PG:3)
+11-20 13:16:51.352 16041 16139 W YouTube : 	at afdj.run(Unknown Source:2)
+11-20 13:16:51.352 16041 16139 W YouTube : 	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:462)
+11-20 13:16:51.352 16041 16139 W YouTube : 	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+11-20 13:16:51.352 16041 16139 W YouTube : 	at rvk.run(PG:4)
+11-20 13:16:51.352 16041 16139 W YouTube : 	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1167)
+11-20 13:16:51.352 16041 16139 W YouTube : 	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:641)
+11-20 13:16:51.352 16041 16139 W YouTube : 	at rvh.run(PG:2)
+11-20 13:16:51.352 16041 16139 W YouTube : 	at hmu.run(PG:4)
+11-20 13:16:51.352 16041 16139 W YouTube : 	at java.lang.Thread.run(Thread.java:920)
+11-20 13:16:51.352 16041 16139 W YouTube : Caused by: ylz: Precondition check failed.
+11-20 13:16:51.352 16041 16139 W YouTube : 	at zvt.d(PG:5)
+11-20 13:16:51.352 16041 16139 W YouTube : 	at xzj.c(PG:18)
+11-20 13:16:51.352 16041 16139 W YouTube : 	at xyk.run(PG:17)

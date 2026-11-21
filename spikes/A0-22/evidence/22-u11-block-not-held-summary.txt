@@ -1,0 +1,10 @@
+A0.22: the parent reports (u11 Chrome) that ynet and malware.testcategory.com both open. Read-only checks since marker 11-21 18:47:31 UTC.
+
+1. Private DNS per network (dumpsys connectivity): both networks UsePrivateDns: true, PrivateDnsServerName family.cloudflare-dns.com, ValidatedPrivateDnsAddresses [1.0.0.3,1.1.1.3].
+2. netd / DnsResolver: DnsManager updatePrivateDns(101, ...) with family.cloudflare-dns.com repeats (18:47:32, 18:48:15, 18:49:34). No DoT error lines. ConnectivityService requestNetwork lines for u11 uids (1110xxx) only. Android does not log individual DNS queries here.
+3. DoT on the wire: /proc/net/tcp shows two connections to 1.0.0.3:853 owned by uid 0 (netd, the system resolver). The system DoT path is in use.
+4. Chrome in u11 (uid 1110115, 40 TCP rows): remote addresses are ordinary Google/CDN IPs on 443 and 80. No connection to 1.1.1.1, 1.0.0.1, 1.1.1.3, 1.0.0.3, 8.8.8.8 or 8.8.4.4. No DoH or secure-DNS lines in logcat ("DnsOverHttps", "doh", "secure dns": none).
+5. System resolution from u0 (shell ping): malware.testcategory.com -> 127.0.0.1 (A); AAAA via ping6 -> "::". ynet -> 23.221.30.50. So the system resolver still answers the blocked name with unusable addresses.
+6. Host resolver 1.1.1.3 (Cloudflare Families, plain DNS): malware.testcategory.com -> 0.0.0.0.
+
+Not explained: how Chrome in u11 loaded malware.testcategory.com. The device's system resolver returns 127.0.0.1 and ::, and no DoH connection from u11 is visible in the kernel table. Needed from the parent: what the page showed (page content or an error such as connection refused), the Chrome Secure DNS setting (chrome://settings/security), and chrome://net-internals/#dns (its DNS mode).

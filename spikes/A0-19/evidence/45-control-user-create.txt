@@ -1,0 +1,18 @@
+# Control user: limit, then creation with a plain pm create-user (no PO, our DO stays on user 0). Device UTC; read-only except the creation.
+== 1. pm get-max-users
+Maximum supported users: 4
+== users before
+Users:
+	UserInfo{0:Owner:c13} running
+	UserInfo{10:kid-test:410} running
+== 2. pm create-user control
+Success: created user id 11
+== users after
+Users:
+	UserInfo{0:Owner:c13} running
+	UserInfo{10:kid-test:410} running
+	UserInfo{11:control:400}
+== owners after create
+2 owners:
+User  0: admin=com.webfilter.spike.a19/.AdminReceiver,DeviceOwner,Affiliated
+User 10: admin=com.webfilter.spike.a19/.AdminReceiver,ProfileOwner

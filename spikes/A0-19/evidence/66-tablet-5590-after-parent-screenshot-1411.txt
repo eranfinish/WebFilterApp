@@ -1,0 +1,38 @@
+# Tablet_A12 (emulator-5590) read-only capture after the parent's 14:11 UTC screenshot. Device UTC. Account names redacted.
+== current user: 11
+== users
+Users:
+	UserInfo{0:Owner:c13} running
+	UserInfo{10:kid-test:410} running
+	UserInfo{11:control:410} running
+== owners
+3 owners:
+User  0: admin=com.webfilter.spike.a19/.AdminReceiver,DeviceOwner,Affiliated
+User 10: admin=com.webfilter.spike.a19/.AdminReceiver,ProfileOwner
+User 11: admin=com.google.android.gms/.kids.account.receiver.ProfileOwnerReceiver,ProfileOwner
+== accounts per user (count; type only)
+User UserInfo{0:Owner:c13}: |   Accounts: 0
+User UserInfo{10:kid-test:410}: |   Accounts: 0
+User UserInfo{11:control:410}: |   Accounts: 1
+      1 User user 11 | type=com.google
+== device admins (device_policy, per user)
+Enabled Device Admins (User 0, provisioningState: 3): |     com.webfilter.spike.a19/.AdminReceiver:
+Enabled Device Admins (User 10, provisioningState: 0): |     com.webfilter.spike.a19/.AdminReceiver:
+Enabled Device Admins (User 10, provisioningState: 0): |     com.google.android.gms/.kids.account.receiver.ProfileOwnerReceiver:
+Enabled Device Admins (User 11, provisioningState: 0): |     com.google.android.gms/.kids.account.receiver.ProfileOwnerReceiver:
+== apps.kids installed? (per user)
+user 0:  (none = none)
+user 10:  (none = none)
+user 11:  (none = none)
+== token errors since 14:05 UTC (THIRD_PARTY_DEVICE_MANAGEMENT_REQUIRED / GetToken failed)
+391
+      6 17389
+    241 26254
+     17 4578
+      1 4590
+    126 4912
+== memory now
+MemTotal:        2015356 kB
+MemAvailable:     351420 kB
+SwapFree:         219932 kB
+== lowmemorykiller since 14:05 UTC: 4

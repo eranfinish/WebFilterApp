@@ -1,0 +1,5 @@
+# Redaction check 2026-11-20T14:56:48+02:00
+# Scanned: evidence/ (excluding this 21-* file), app/src, gradle files.
+# Patterns: an email-like string, the mail-domain word, and the Windows account name.
+# Hits: 0
+# Not a name: the word 'Finish' in incidentd lines (logcat), counted separately.

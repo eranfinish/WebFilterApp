@@ -1,0 +1,5 @@
+# Change reported by the starting session on the no-DO control phone (5580): stylus_handwriting_enabled. Unrelated to supervision. Verified read-only.
+== stylus_handwriting_enabled (secure, user 10): 0
+== current user: 10
+== owners (expect none in this control)
+exit=0

@@ -1,0 +1,8 @@
+# Build output and local tooling only. Evidence is kept.
+build/
+app/build/
+.gradle/
+.kotlin/
+local.properties
+*.apk
+*.aab

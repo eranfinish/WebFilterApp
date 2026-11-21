@@ -1,0 +1,28 @@
+# setProfileOwner / owner-set / admin-enabled events since 13:00 UTC (read-only, from the device log buffer)
+-- 'Profile owner set' or setProfileOwner or 'Admin is already added' or onEnabled since 13:00:
+      1 11-20 13:00:21.883  9522  9639 I FA      : App measurement disabled by setAnalyticsCollectionEnabled(false)
+      1 11-20 13:02:36.958 11010 11114 I FA      : App measurement disabled by setAnalyticsCollectionEnabled(false)
+      1 11-20 13:02:44.629 11373 11551 I FA      : App measurement disabled by setAnalyticsCollectionEnabled(false)
+      1 11-20 13:03:22.191  4294  4294 I ProfileOwnerChimeraRece: (REDACTED) onEnabled: intent = %s
+      1 11-20 13:03:22.228  4294  4294 E IntentOperation: No such module intent operation: .kids.operations.KidsSystemIntentOperation for action: android.app.action.DEVICE_ADMIN_ENABLED
+      1 11-20 13:03:39.623 12995 13140 I FA      : App measurement disabled by setAnalyticsCollectionEnabled(false)
+      1 11-20 13:03:52.254  9344  9344 W DeviceAdminAdd: 	at android.app.admin.DevicePolicyManager.setActiveAdmin(DevicePolicyManager.java:7571)
+      1 11-20 13:03:52.254  9344  9344 W DeviceAdminAdd: 	at android.app.admin.DevicePolicyManager.setActiveAdmin(DevicePolicyManager.java:7583)
+      1 11-20 13:03:52.254  9344  9344 W DeviceAdminAdd: 	at android.app.admin.IDevicePolicyManager$Stub$Proxy.setActiveAdmin(IDevicePolicyManager.java:8710)
+      1 11-20 13:03:52.254  9344  9344 W DeviceAdminAdd: 	at com.android.server.devicepolicy.DevicePolicyManagerService.lambda$setActiveAdmin$7$DevicePolicyManagerService(DevicePolicyManagerService.java:3433)
+      1 11-20 13:03:52.254  9344  9344 W DeviceAdminAdd: 	at com.android.server.devicepolicy.DevicePolicyManagerService.setActiveAdmin(DevicePolicyManagerService.java:3429)
+      1 11-20 13:03:52.254  9344  9344 W DeviceAdminAdd: java.lang.IllegalArgumentException: Admin is already added
+      1 11-20 13:04:00.917  9344  9344 W DeviceAdminAdd: 	at android.app.admin.DevicePolicyManager.setActiveAdmin(DevicePolicyManager.java:7571)
+      1 11-20 13:04:00.917  9344  9344 W DeviceAdminAdd: 	at android.app.admin.DevicePolicyManager.setActiveAdmin(DevicePolicyManager.java:7583)
+      1 11-20 13:04:00.917  9344  9344 W DeviceAdminAdd: 	at android.app.admin.IDevicePolicyManager$Stub$Proxy.setActiveAdmin(IDevicePolicyManager.java:8710)
+      1 11-20 13:04:00.917  9344  9344 W DeviceAdminAdd: 	at com.android.server.devicepolicy.DevicePolicyManagerService.lambda$setActiveAdmin$7$DevicePolicyManagerService(DevicePolicyManagerService.java:3433)
+      1 11-20 13:04:00.917  9344  9344 W DeviceAdminAdd: 	at com.android.server.devicepolicy.DevicePolicyManagerService.setActiveAdmin(DevicePolicyManagerService.java:3429)
+      1 11-20 13:04:00.917  9344  9344 W DeviceAdminAdd: java.lang.IllegalArgumentException: Admin is already added
+      1 11-20 13:04:09.233 13669 13806 I FA      : App measurement disabled by setAnalyticsCollectionEnabled(false)
+      1 11-20 13:04:11.913  9344  9344 W DeviceAdminAdd: 	at android.app.admin.DevicePolicyManager.setActiveAdmin(DevicePolicyManager.java:7571)
+      1 11-20 13:04:11.913  9344  9344 W DeviceAdminAdd: 	at android.app.admin.DevicePolicyManager.setActiveAdmin(DevicePolicyManager.java:7583)
+      1 11-20 13:04:11.913  9344  9344 W DeviceAdminAdd: 	at android.app.admin.IDevicePolicyManager$Stub$Proxy.setActiveAdmin(IDevicePolicyManager.java:8710)
+      1 11-20 13:04:11.913  9344  9344 W DeviceAdminAdd: 	at com.android.server.devicepolicy.DevicePolicyManagerService.lambda$setActiveAdmin$7$DevicePolicyManagerService(DevicePolicyManagerService.java:3433)
+      1 11-20 13:04:11.913  9344  9344 W DeviceAdminAdd: 	at com.android.server.devicepolicy.DevicePolicyManagerService.setActiveAdmin(DevicePolicyManagerService.java:3429)
+      1 11-20 13:04:11.913  9344  9344 W DeviceAdminAdd: java.lang.IllegalArgumentException: Admin is already added
+-- total 'Profile owner set' lines in buffer: 0

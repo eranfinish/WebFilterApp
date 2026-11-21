@@ -1,0 +1,68 @@
+# kid-test (pid 4294 = u10) GMS events 13:24-13:29:30 UTC before the account removal at 13:29:06. Read-only. Account names redacted.
+11-20 13:24:25.941  4294  9750 W Auth    : [GaiaServicesFlagManager] Failed to convert account to GoogleAccount: MissingAccount. Returning false. [CONTEXT service_id=343 ]
+11-20 13:24:25.957  4294  7477 W Auth    : [GaiaServicesFlagManager] Failed to convert account to GoogleAccount: MissingAccount. Returning false. [CONTEXT service_id=343 ]
+11-20 13:24:26.185  4294 16032 E Auth    : [DataStatusChecker] Signature check failed. The calling package is not google signed. [CONTEXT service_id=343 ]
+11-20 13:24:26.186  4294 16032 W Auth    : [ReauthNotificationManager] Unhandled DM status: THIRD_PARTY_DEVICE_MANAGEMENT_REQUIRED [CONTEXT service_id=343 ]
+11-20 13:24:26.244  4294 16032 I Auth    : (REDACTED) [GetToken] GetToken failed for app=%s with userRecoverable status: %s 
+11-20 13:24:26.244  4294 16032 W Auth    : amcv: GetToken failed with status code and recovery intent: ThirdPartyDeviceManagementRequired
+11-20 13:24:26.245  4294 16032 W Auth    : [GoogleAuthUtil] [GoogleAuthUtil] error status:THIRD_PARTY_DEVICE_MANAGEMENT_REQUIRED with method:getTokenWithDetails
+11-20 13:24:26.380  4294 16686 E Auth    : [DataStatusChecker] Signature check failed. The calling package is not google signed. [CONTEXT service_id=343 ]
+11-20 13:24:26.383  4294 16686 W Auth    : [ReauthNotificationManager] Unhandled DM status: THIRD_PARTY_DEVICE_MANAGEMENT_REQUIRED [CONTEXT service_id=343 ]
+11-20 13:24:26.403  4294 16686 I Auth    : (REDACTED) [GetToken] GetToken failed for app=%s with userRecoverable status: %s 
+11-20 13:24:26.404  4294 16686 W Auth    : amcv: GetToken failed with status code and recovery intent: ThirdPartyDeviceManagementRequired
+11-20 13:24:26.404  4294 16686 W Auth    : [GoogleAuthUtil] [GoogleAuthUtil] error status:THIRD_PARTY_DEVICE_MANAGEMENT_REQUIRED with method:getTokenWithDetails
+11-20 13:24:26.522  4294  7390 E Auth    : [DataStatusChecker] Signature check failed. The calling package is not google signed. [CONTEXT service_id=343 ]
+11-20 13:24:26.528  4294  7390 W Auth    : [ReauthNotificationManager] Unhandled DM status: THIRD_PARTY_DEVICE_MANAGEMENT_REQUIRED [CONTEXT service_id=343 ]
+11-20 13:24:26.554  4294  7390 I Auth    : (REDACTED) [GetToken] GetToken failed for app=%s with userRecoverable status: %s 
+11-20 13:24:26.555  4294  7390 W Auth    : amcv: GetToken failed with status code and recovery intent: ThirdPartyDeviceManagementRequired
+11-20 13:24:36.269  4294 12677 E Auth    : [DataStatusChecker] Signature check failed. The calling package is not google signed. [CONTEXT service_id=343 ]
+11-20 13:24:36.271  4294 12677 W Auth    : [ReauthNotificationManager] Unhandled DM status: THIRD_PARTY_DEVICE_MANAGEMENT_REQUIRED [CONTEXT service_id=343 ]
+11-20 13:24:36.282  4294  7477 E Auth    : [DataStatusChecker] Signature check failed. The calling package is not google signed. [CONTEXT service_id=343 ]
+11-20 13:24:36.285  4294  7477 W Auth    : [ReauthNotificationManager] Unhandled DM status: THIRD_PARTY_DEVICE_MANAGEMENT_REQUIRED [CONTEXT service_id=343 ]
+11-20 13:24:36.303  4294 12677 I Auth    : (REDACTED) [GetToken] GetToken failed for app=%s with userRecoverable status: %s 
+11-20 13:24:36.303  4294 12677 W Auth    : amcv: GetToken failed with status code and recovery intent: ThirdPartyDeviceManagementRequired
+11-20 13:24:36.323  4294  7477 I Auth    : (REDACTED) [GetToken] GetToken failed for app=%s with userRecoverable status: %s 
+11-20 13:24:36.324  4294  7477 W Auth    : amcv: GetToken failed with status code and recovery intent: ThirdPartyDeviceManagementRequired
+11-20 13:24:36.477  4294  7477 E Auth    : [DataStatusChecker] Signature check failed. The calling package is not google signed. [CONTEXT service_id=343 ]
+11-20 13:24:36.482  4294  7477 W Auth    : [ReauthNotificationManager] Unhandled DM status: THIRD_PARTY_DEVICE_MANAGEMENT_REQUIRED [CONTEXT service_id=343 ]
+11-20 13:24:36.512  4294  7477 I Auth    : (REDACTED) [GetToken] GetToken failed for app=%s with userRecoverable status: %s 
+11-20 13:24:36.512  4294  7477 W Auth    : amcv: GetToken failed with status code and recovery intent: ThirdPartyDeviceManagementRequired
+11-20 13:24:36.563  4294 12677 E Auth    : [DataStatusChecker] Signature check failed. The calling package is not google signed. [CONTEXT service_id=343 ]
+11-20 13:24:36.565  4294 12677 W Auth    : [ReauthNotificationManager] Unhandled DM status: THIRD_PARTY_DEVICE_MANAGEMENT_REQUIRED [CONTEXT service_id=343 ]
+11-20 13:24:36.586  4294 12677 I Auth    : (REDACTED) [GetToken] GetToken failed for app=%s with userRecoverable status: %s 
+11-20 13:24:36.586  4294 12677 W Auth    : amcv: GetToken failed with status code and recovery intent: ThirdPartyDeviceManagementRequired
+11-20 13:24:46.564  4294 11933 E Auth    : [DataStatusChecker] Signature check failed. The calling package is not google signed. [CONTEXT service_id=343 ]
+11-20 13:24:46.567  4294 11933 W Auth    : [ReauthNotificationManager] Unhandled DM status: THIRD_PARTY_DEVICE_MANAGEMENT_REQUIRED [CONTEXT service_id=343 ]
+11-20 13:24:46.591  4294 12677 E Auth    : [DataStatusChecker] Signature check failed. The calling package is not google signed. [CONTEXT service_id=343 ]
+11-20 13:24:46.594  4294 12677 W Auth    : [ReauthNotificationManager] Unhandled DM status: THIRD_PARTY_DEVICE_MANAGEMENT_REQUIRED [CONTEXT service_id=343 ]
+11-20 13:24:46.620  4294 11933 I Auth    : (REDACTED) [GetToken] GetToken failed for app=%s with userRecoverable status: %s 
+11-20 13:24:46.624  4294 11933 W Auth    : amcv: GetToken failed with status code and recovery intent: ThirdPartyDeviceManagementRequired
+11-20 13:24:46.697  4294 12677 I Auth    : (REDACTED) [GetToken] GetToken failed for app=%s with userRecoverable status: %s 
+11-20 13:24:46.698  4294 12677 W Auth    : amcv: GetToken failed with status code and recovery intent: ThirdPartyDeviceManagementRequired
+11-20 13:24:46.833  4294 11933 E Auth    : [DataStatusChecker] Signature check failed. The calling package is not google signed. [CONTEXT service_id=343 ]
+11-20 13:24:46.837  4294 11933 W Auth    : [ReauthNotificationManager] Unhandled DM status: THIRD_PARTY_DEVICE_MANAGEMENT_REQUIRED [CONTEXT service_id=343 ]
+11-20 13:24:46.864  4294 11933 I Auth    : (REDACTED) [GetToken] GetToken failed for app=%s with userRecoverable status: %s 
+11-20 13:24:46.864  4294 11933 W Auth    : amcv: GetToken failed with status code and recovery intent: ThirdPartyDeviceManagementRequired
+11-20 13:25:01.541  4294  4294 I MagicTether: (REDACTED) [LaunchUtils] Instant Wifi for status account: name: %s | type: %s | isLaunched: %s
+11-20 13:25:01.545  4294  4294 I MagicTether: (REDACTED) [LaunchUtils] Instant Wifi for status account: name: %s | type: %s | isLaunched: %s
+11-20 13:25:01.551  4294  4294 I MagicTether: (REDACTED) [LaunchUtils] Instant Wifi for status account: name: %s | type: %s | isLaunched: %s
+11-20 13:25:01.557  4294  4294 I MagicTether: (REDACTED) [LaunchUtils] Instant Wifi for status account: name: %s | type: %s | isLaunched: %s
+11-20 13:25:02.904  4294 16871 I ProximityAuth: [PhoneHubService] No enabled account, stopping service
+11-20 13:25:05.251  4294  4294 I MagicTether: (REDACTED) [LaunchUtils] Instant Wifi for status account: name: %s | type: %s | isLaunched: %s
+11-20 13:25:06.130  4294 12560 I ProximityAuth: [PhoneHubService] No enabled account, stopping service
+11-20 13:25:17.508  4294  4294 I MagicTether: (REDACTED) [LaunchUtils] Instant Wifi for status account: name: %s | type: %s | isLaunched: %s
+11-20 13:25:17.800  4294 18870 I ProximityAuth: [PhoneHubService] No enabled account, stopping service
+11-20 13:25:19.580  4294 16870 I ProximityAuth: [PhoneHubService] No enabled account, stopping service
+11-20 13:25:19.688  4294 18662 I MagicTether: (REDACTED) [LaunchUtils] Instant Wifi for status account: name: %s | type: %s | isLaunched: %s
+11-20 13:25:20.113  4294  4294 I MagicTether: (REDACTED) [LaunchUtils] Instant Wifi for status account: name: %s | type: %s | isLaunched: %s
+11-20 13:25:20.135  4294  4294 I MagicTether: (REDACTED) [LaunchUtils] Instant Wifi for status account: name: %s | type: %s | isLaunched: %s
+11-20 13:25:20.169  4294 18870 I MagicTether: (REDACTED) [LaunchUtils] Instant Wifi for status account: name: %s | type: %s | isLaunched: %s
+11-20 13:25:20.171  4294 18870 I MagicTether: (REDACTED) [LaunchUtils] Instant Wifi for status account: name: %s | type: %s | isLaunched: %s
+11-20 13:25:20.176  4294 18870 I MagicTether: (REDACTED) [LaunchUtils] Instant Wifi for status account: name: %s | type: %s | isLaunched: %s
+(end)
+== owners now
+2 owners:
+User  0: admin=com.webfilter.spike.a19/.AdminReceiver,DeviceOwner,Affiliated
+User 10: admin=com.webfilter.spike.a19/.AdminReceiver,ProfileOwner
+== status inside user 10 (read-only)
+Broadcast completed: result=0, data="myUser=UserHandle{10} pkg=com.webfilter.spike.a19 isAdminActive=true isDeviceOwnerApp=false isProfileOwnerApp=true"

@@ -1,0 +1,11 @@
+== create kid-test (createAndManageUser, PO = our DPC, SKIP_SETUP_WIZARD | LEAVE_ALL_SYSTEM_APPS_ENABLED)
+Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a19/.CmdReceiver (has extras) }
+Broadcast completed: result=0, data="OK created name=kid-test id=10 handle=UserHandle{10}"
+== users
+Users:
+	UserInfo{0:Owner:c13} running
+	UserInfo{10:kid-test:400}
+== owners
+2 owners:
+User  0: admin=com.webfilter.spike.a19/.AdminReceiver,DeviceOwner,Affiliated
+User 10: admin=com.webfilter.spike.a19/.AdminReceiver,ProfileOwner

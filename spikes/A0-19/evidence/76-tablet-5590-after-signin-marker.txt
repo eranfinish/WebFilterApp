@@ -1,0 +1,16 @@
+# Tablet_A12 (5590): token results after the marker 11-21 16:50:13 UTC (read-only, names redacted)
+== accounts per user
+User UserInfo{0:Owner:c13}: |   Accounts: 0
+User UserInfo{10:kid-test:410}: |   Accounts: 0
+User UserInfo{11:control:410}: |   Accounts: 1
+== owners
+3 owners:
+User  0: admin=com.webfilter.spike.a19/.AdminReceiver,DeviceOwner,Affiliated
+User 10: admin=com.webfilter.spike.a19/.AdminReceiver,ProfileOwner
+User 11: admin=com.google.android.gms/.kids.account.receiver.ProfileOwnerReceiver,ProfileOwner
+== token results since marker, by type (GMS and apps)
+(end token counts)
+== Chrome / classroom / Chromium lines since marker (first 15)
+(end)
+== YouTube hidden in u11 (still?)
+    User 11: installed=true hidden=true suspended=false distractionFlags=0 stopped=false notLaunched=false enabled=1 instant=false virtual=false

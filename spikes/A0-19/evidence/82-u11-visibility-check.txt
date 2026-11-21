@@ -1,0 +1,13 @@
+# Can shell see user 11 (5590)? Read-only checks. Names redacted.
+== 1. ps -A: processes owned by u11_* (count and names)
+u11 process count: 0
+u11 Chrome in ps: 0
+== 2. logcat lines with a u11 uid (11xxxxx, 1110xxx-1119xxx)
+lines with uid 11xxxxx in logcat: 4
+== 3. dumpsys activity processes / recents for u11 Chrome
+processes section mentions u11 Chrome: 0
+recents mention chrome: 12
+  * Recent #0: Task{69efa60 #64 type=standard A=10115:com.android.chrome U=0 visible=true mode=fullscreen translucent=false sz=1}
+    affinity=10115:com.android.chrome
+    intent={act=android.intent.action.MAIN cat=[android.intent.category.LAUNCHER] flg=0x10200000 cmp=com.android.chrome/com.google.android.apps.chrome.Main}
+activities mention u11 chrome: 0

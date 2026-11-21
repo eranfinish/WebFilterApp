@@ -1,0 +1,7 @@
+# A0.22 step 1: re-apply Private DNS through the DO setGlobalSetting (not the shell). Device UTC 18:28:06.
+== before: mode=opportunistic specifier=[]
+Broadcast completed: result=0, data="OK setGlobalSetting(private_dns_mode, hostname) returned without exception"
+Broadcast completed: result=0, data="OK setGlobalSetting(private_dns_specifier, family.cloudflare-dns.com) returned without exception"
+== after: mode=hostname specifier=family.cloudflare-dns.com
+== DPM read-back
+Broadcast completed: result=0, data="mode=PROVIDER_HOSTNAME host=family.cloudflare-dns.com"

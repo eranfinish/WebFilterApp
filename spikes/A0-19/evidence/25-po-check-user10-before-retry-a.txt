@@ -1,0 +1,16 @@
+# Read-only PO check inside user 10 before retry-a (status op only)
+== current user: 10
+== user 10 running state
+Users:
+	UserInfo{0:Owner:c13} running
+	UserInfo{10:kid-test:410} running
+== status inside user 10
+Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a19/.CmdReceiver (has extras) }
+Broadcast completed: result=0, data="myUser=UserHandle{10} pkg=com.webfilter.spike.a19 isAdminActive=true isDeviceOwnerApp=false isProfileOwnerApp=true"
+== owners
+2 owners:
+User  0: admin=com.webfilter.spike.a19/.AdminReceiver,DeviceOwner,Affiliated
+User 10: admin=com.webfilter.spike.a19/.AdminReceiver,ProfileOwner
+== accounts (count)
+  Accounts: 0
+  Accounts: 0

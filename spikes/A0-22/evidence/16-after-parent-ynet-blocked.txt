@@ -1,0 +1,39 @@
+# A0.22 capture after the parent's report (ynet opens, malware.testcategory.com blocked). Marker 11-21 18:30:58 UTC. Read-only.
+== current user: 0
+== user 11 state (dumpsys user):
+    State: -1
+== u11 processes in ps (count): 0
+== processes of u11 Chrome in ps: 0
+== START lines for u11 since marker: 0
+== Chrome starts since marker by user:       2 START u0 
+== DNS / resolution lines since marker (Chrome, DnsResolver, NetworkUtils, dns)
+11-21 18:31:13.428  1097  1203 I FontLog : (REDACTED) Query [%s] resolved to %s
+11-21 18:31:20.987  1097 16907 E Dck     : Could not get ProviderInfo when resolving the content provider authority. [CONTEXT service_id=289 ]
+11-21 18:31:29.610 16207 16207 W Finsky  : [2] STU: Failed to get storage stats for package 'com.google.android.resolv' (1601: Error getting stats: android.content.pm.PackageManager.NameNotFoundException)
+11-21 18:31:30.278 11983 17134 W Finsky:background: [161] IQ: Resolved conflict: [Package:com.android.chrome, isid:t0wBP-mIQxK03vZky81Eqg] state:SCHEDULED. oldConstraints=[(REQ_CHARGING, REQ_DEVICE_IDLE, REQ_GEARHEAD_PRO
+11-21 18:31:30.314 11983 17134 W Finsky:background: [161] IQ: Resolved conflict: [Package:com.google.android.apps.docs, isid:UpM3Ia8ZQeCh1sKug8jWGw] state:SCHEDULED. oldConstraints=[(REQ_CHARGING, REQ_DEVICE_IDLE, REQ_GE
+11-21 18:31:30.338 11983 17134 W Finsky:background: [161] IQ: Resolved conflict: [Package:com.google.android.apps.maps, isid:nDPfFfgNRn2Gn5unMsVIbw] state:SCHEDULED. oldConstraints=[(REQ_CHARGING, REQ_DEVICE_IDLE, REQ_GE
+11-21 18:31:30.360 11983 17134 W Finsky:background: [161] IQ: Resolved conflict: [Package:com.google.android.apps.messaging, isid:mHBvN59vTx2w6C3-C0r7Yg] state:SCHEDULED. oldConstraints=[(REQ_CHARGING, REQ_DEVICE_IDLE, R
+11-21 18:31:30.382 11983 17134 W Finsky:background: [161] IQ: Resolved conflict: [Package:com.google.android.apps.photos, isid:wgWq0R4JToKW89NoHfwVjg] state:SCHEDULED. oldConstraints=[(REQ_CHARGING, REQ_DEVICE_IDLE, REQ_
+11-21 18:31:30.410 11983 17134 W Finsky:background: [161] IQ: Resolved conflict: [Package:com.google.android.apps.wellbeing, isid:hRrSpv-9Q-u4KXk8YEtV1w] state:SCHEDULED. oldConstraints=[(REQ_CHARGING, REQ_DEVICE_IDLE, R
+11-21 18:31:30.428 11983 17134 W Finsky:background: [161] IQ: Resolved conflict: [Package:com.google.android.apps.youtube.music, isid:B9yIGuCLSdOrQUL3M_qIiA] state:SCHEDULED. oldConstraints=[(REQ_CHARGING, REQ_DEVICE_IDL
+11-21 18:31:30.445 11983 17134 W Finsky:background: [161] IQ: Resolved conflict: [Package:com.google.android.calendar, isid:BtUzv7_HSo6AZkDYAg3oKQ] state:SCHEDULED. oldConstraints=[(REQ_CHARGING, REQ_DEVICE_IDLE, REQ_GEA
+11-21 18:31:30.469 11983 17134 W Finsky:background: [161] IQ: Resolved conflict: [Package:com.google.android.gm, isid:yd5w-IgYTMOK1YDhjrv3wg] state:SCHEDULED. oldConstraints=[(REQ_CHARGING, REQ_DEVICE_IDLE, REQ_GEARHEAD_
+11-21 18:31:30.486 11983 17134 W Finsky:background: [161] IQ: Resolved conflict: [Package:com.google.android.googlequicksearchbox, isid:ZQdKv_k6T6yKsw1ch35DGg] state:SCHEDULED. oldConstraints=[(REQ_CHARGING, REQ_DEVICE_I
+11-21 18:31:30.502 11983 17134 W Finsky:background: [161] IQ: Resolved conflict: [Package:com.google.android.inputmethod.latin, isid:rzuoolpVRSKKA3HXM2Xq9g] state:SCHEDULED. oldConstraints=[(REQ_CHARGING, REQ_DEVICE_IDLE
+11-21 18:31:30.515 11983 17134 W Finsky:background: [161] IQ: Resolved conflict: [Package:com.google.android.partnersetup, isid:UNXu-j3uRfew-HY5dlunaw] state:SCHEDULED. oldConstraints=[(REQ_CHARGING, REQ_DEVICE_IDLE, REQ
+11-21 18:31:30.540 11983 17134 W Finsky:background: [161] IQ: Resolved conflict: [Package:com.google.android.tts, isid:LcmMORj5SdeqHXZnfdgHlA] state:SCHEDULED. oldConstraints=[(REQ_CHARGING, REQ_DEVICE_IDLE, REQ_GEARHEAD
+11-21 18:31:30.582 11983 17134 W Finsky:background: [161] IQ: Resolved conflict: [Package:com.google.android.webview, isid:1fBH5nZHTkya0n5eIY_PBg] state:SCHEDULED. oldConstraints=[(REQ_CHARGING, REQ_DEVICE_IDLE, REQ_GEAR
+11-21 18:31:30.596 11983 17134 W Finsky:background: [161] IQ: Resolved conflict: [Package:com.google.android.youtube, isid:9jTa3hKJT9KHiGUYOvA8uA] state:SCHEDULED. oldConstraints=[(REQ_CHARGING, REQ_DEVICE_IDLE, REQ_GEAR
+11-21 18:31:40.284  1097  1610 I FontLog : (REDACTED) Query [%s] resolved to %s
+11-21 18:31:40.332  1097  1610 I FontLog : (REDACTED) Query [%s] resolved to %s
+11-21 18:31:45.903  1097  1610 I FontLog : (REDACTED) Query [%s] resolved to %s
+11-21 18:31:45.946  1097  1610 I FontLog : (REDACTED) Query [%s] resolved to %s
+11-21 18:31:45.956  1097  1610 I FontLog : (REDACTED) Query [%s] resolved to %s
+11-21 18:32:21.419   862   862 D ImsResolver: maybeAddedImsService, packageName: com.google.android.apps.docs
+11-21 18:32:22.118   862   862 D ImsResolver: maybeAddedImsService, packageName: com.google.android.apps.docs
+(end)
+== DoT / private DNS in effect now
+      2 PrivateDnsServerName: family.cloudflare-dns.com
+      2 UsePrivateDns: true
+== settings: mode=hostname specifier=family.cloudflare-dns.com

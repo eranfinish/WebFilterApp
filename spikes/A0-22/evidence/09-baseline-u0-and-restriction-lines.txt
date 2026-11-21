@@ -1,0 +1,14 @@
+# A0.22 baseline (read-only), device UTC 18:24:30. Pre-change in u0 for the Private DNS question; the DISALLOW restriction was applied earlier (18:23 UTC).
+== current user: 0
+== focus: mCurrentFocus=u0 com.android.chrome/com.google.android.apps.chrome.Main}
+== private DNS settings: mode=null specifier=null
+== owners: User  0: admin=com.webfilter.spike.a19/.AdminReceiver,DeviceOwner,Affiliated
+== exact dumpsys lines for disallow_config_private_dns (u0 section):
+13:    Device policy global restrictions:
+14:      disallow_config_private_dns
+15:    Device policy local restrictions:
+19:      disallow_config_private_dns
+== u0 global block (exact, 3 lines after the header):
+    Device policy global restrictions:
+      disallow_config_private_dns
+    Device policy local restrictions:

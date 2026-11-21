@@ -1,0 +1,44 @@
+# (a) DevicePolicyManager.setGlobalSetting for the Private DNS keys (DO only). Device UTC 18:25:13.
+== before: private_dns_mode=null specifier=null
+== set private_dns_mode=hostname
+Broadcast completed: result=0, data="OK setGlobalSetting(private_dns_mode, hostname) returned without exception"
+== set private_dns_specifier=family.cloudflare-dns.com
+Broadcast completed: result=0, data="OK setGlobalSetting(private_dns_specifier, family.cloudflare-dns.com) returned without exception"
+== after: private_dns_mode=hostname specifier=family.cloudflare-dns.com
+== A19 log lines for global-set
+11-21 18:25:13.482 13219 13219 I A19     : op=global-set result=OK setGlobalSetting(private_dns_mode, hostname) returned without exception
+11-21 18:25:13.773 13219 13219 I A19     : op=global-set result=OK setGlobalSetting(private_dns_specifier, family.cloudflare-dns.com) returned without exception
+== dns-status (DPM read-back) while the settings are set
+Broadcast completed: result=0, data="mode=PROVIDER_HOSTNAME host=family.cloudflare-dns.com"
+== REVERT (restore the baseline: both keys were unset/null before the test)
+Deleted 0 rows
+Deleted 0 rows
+== after revert: private_dns_mode=hostname specifier=family.cloudflare-dns.com
+== dns-status after revert
+Broadcast completed: result=0, data="mode=PROVIDER_HOSTNAME host=family.cloudflare-dns.com"
+== REVERT via the DO (setGlobalSetting): mode -> opportunistic, specifier -> empty
+Broadcast completed: result=0, data="OK setGlobalSetting(private_dns_mode, opportunistic) returned without exception"
+	at android.os.Binder.execTransact(Binder.java:1143)
+== settings after DO revert: mode=opportunistic specifier=family.cloudflare-dns.com
+== dns-status after DO revert
+Broadcast completed: result=0, data="mode=OPPORTUNISTIC host=family.cloudflare-dns.com"
+NOTE: baseline keys were unset (null). DPM reports OPPORTUNISTIC/host=null for both, but the stored values are not null. The shell 'settings delete' returned 'Deleted 0 rows' and did not remove them.
+== REVERT specifier -> empty (sentinel <empty>)
+/system/bin/sh: syntax error: unexpected EOF
+== settings now: mode=opportunistic specifier=family.cloudflare-dns.com
+== dns-status now
+Broadcast completed: result=0, data="mode=OPPORTUNISTIC host=family.cloudflare-dns.com"
+== REVERT specifier -> empty (sentinel escaped)
+Broadcast completed: result=0, data="OK setGlobalSetting(private_dns_specifier, ) returned without exception"
+== settings now: mode=opportunistic specifier=[]
+== dns-status now
+Broadcast completed: result=0, data="mode=OPPORTUNISTIC host="
+
+SUMMARY (A0.22 test a):
+- setGlobalSetting(admin, "private_dns_mode", "hostname") -> returned OK, no exception.
+- setGlobalSetting(admin, "private_dns_specifier", "family.cloudflare-dns.com") -> returned OK, no exception.
+- Read-back: settings get global private_dns_mode = hostname; private_dns_specifier = family.cloudflare-dns.com. DPM getGlobalPrivateDnsMode = PROVIDER_HOSTNAME; host = family.cloudflare-dns.com.
+- So the setGlobalSetting path accepted both keys while setGlobalPrivateDnsModeSpecifiedHost was refused for "unaffiliated users".
+- Revert: shell "settings delete global ..." printed "Deleted 0 rows" (no effect). DO revert: mode -> opportunistic (OK); specifier -> "" (OK via sentinel \<empty\>).
+- Final state: private_dns_mode = opportunistic, private_dns_specifier = "" (empty). DPM: OPPORTUNISTIC, host "". NOT identical to the baseline (both keys null/unset). Baseline DPM read: OPPORTUNISTIC, host null.
+- Not tested: whether the family resolver was actually used or whether an adult-category domain was blocked while the mode was hostname (no lookups were run in that window).

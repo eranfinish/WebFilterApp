@@ -1,0 +1,6 @@
+Decisions relayed by the starting session (Advisor Opus), from the parent's own words, received after step (a) instructions were sent:
+
+1. If step (a) fails or is refused, one control user may be created with a plain `pm create-user` (no Profile Owner of ours), and step (a) is repeated there. The parent enters the account again.
+2. Play Games stays "not tested". No external APK is installed. For step (c), YouTube and any game already on the image are used.
+
+Status when recorded: waiting for the parent's report on step (a). Steps (b) and (c) have not started.

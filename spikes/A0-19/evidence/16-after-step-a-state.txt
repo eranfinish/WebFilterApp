@@ -1,0 +1,31 @@
+# State after the parent's step (a); read-only. Names and emails redacted.
+== stay-on (user 0 global, expect 7 after svc power stayon true)
+7
+== wakefulness
+  mWakefulness=Awake
+== focus
+  mCurrentFocus=Window{5bc0015 u10 com.google.android.gms/com.google.android.gms.auth.uiflows.addaccount.ErrorActivity}
+== dpm list-owners
+2 owners:
+User  0: admin=com.webfilter.spike.a19/.AdminReceiver,DeviceOwner,Affiliated
+User 10: admin=com.webfilter.spike.a19/.AdminReceiver,ProfileOwner
+== users
+Users:
+	UserInfo{0:Owner:c13} running
+	UserInfo{10:kid-test:410} running
+== accounts: count per user and account TYPE (names redacted)
+  Accounts: 0
+    ServiceInfo: AuthenticatorDescription {type=com.google.android.gm.pop3}, ComponentInfo{com.google.android.gm/com.android.email.service.Pop3AuthenticatorService}, uid 10121
+    ServiceInfo: AuthenticatorDescription {type=com.google}, ComponentInfo{com.google.android.gms/com.google.android.gms.auth.account.authenticator.GoogleAccountAuthenticatorService}, uid 10097
+    ServiceInfo: AuthenticatorDescription {type=com.google.android.gm.exchange}, ComponentInfo{com.google.android.gm/com.android.email.service.EasAuthenticatorService}, uid 10121
+    ServiceInfo: AuthenticatorDescription {type=com.google.android.gm.legacyimap}, ComponentInfo{com.google.android.gm/com.android.email.service.LegacyImapAuthenticatorService}, uid 10121
+  Accounts: 0
+    ServiceInfo: AuthenticatorDescription {type=com.google.android.gm.pop3}, ComponentInfo{com.google.android.gm/com.android.email.service.Pop3AuthenticatorService}, uid 1010121
+    ServiceInfo: AuthenticatorDescription {type=com.google}, ComponentInfo{com.google.android.gms/com.google.android.gms.auth.account.authenticator.GoogleAccountAuthenticatorService}, uid 1010097
+    ServiceInfo: AuthenticatorDescription {type=com.google.android.gm.exchange}, ComponentInfo{com.google.android.gm/com.android.email.service.EasAuthenticatorService}, uid 1010121
+    ServiceInfo: AuthenticatorDescription {type=com.google.android.gm.legacyimap}, ComponentInfo{com.google.android.gm/com.android.email.service.LegacyImapAuthenticatorService}, uid 1010121
+== owners of accounts in dumpsys (type only)
+      2 type=com.google
+      2 type=com.google.android.gm.exchange
+      2 type=com.google.android.gm.legacyimap
+      2 type=com.google.android.gm.pop3

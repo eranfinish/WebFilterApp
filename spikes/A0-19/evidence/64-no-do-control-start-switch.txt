@@ -1,0 +1,16 @@
+# NO-DO CONTROL (API 37): start user 10, switch, screen timeout, wake, dismiss keyguard. No DO, nothing installed by us.
+== start user 10
+Success: user started
+== switch to user 10
+current user: 10
+== screen_off_timeout user 10 = 1800000
+value: 1800000
+== wake + dismiss keyguard
+wakefulness: mWakefulness=Awake
+focus: mCurrentFocus=u0 android}
+== owners (expect none)
+exit=0
+== users
+Users:
+	UserInfo{0:Owner:4c13} running
+	UserInfo{10:plainkid:400} running

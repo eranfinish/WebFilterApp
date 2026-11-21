@@ -1,0 +1,25 @@
+# NO-DO phone (5580) final: token results since the marker 11-21 17:58:01 UTC, owners, accounts, processes. Read-only. Names redacted.
+== owners
+User 10: admin=com.google.android.gms.supervision/com.google.android.gms.kids.account.receiver.ProfileOwnerReceiver,ProfileOwner
+== accounts per user (count)
+User UserInfo{0:Owner:4c13}: |   Accounts: 0
+User UserInfo{10:plainkid:410}: |   Accounts: 1
+User UserInfo{11:Supervising:1000}: |   Accounts: 0
+== token results since marker, by pid owner and message
+pid 13164 (): 1
+pid 7617 (u10_a224): 23
+(by pid, end)
+      9 GetToken failed for app=%s with userRecoverable status
+      9 GetToken failed with status code and recovery intent
+      1 No account for auth token
+     14 ThirdPartyDeviceManagementRequired
+(by message, end)
+== last refusal since marker: 17:58:15.269
+== processes: YouTube and Chrome now
+u0_a168 3637 com.android.chrome
+u10_a186 18367 com.google.android.youtube
+u10_a168 18558 com.android.chrome
+u10_a168 18631 com.android.chrome:privileged_process0
+u10_a168 18687 com.android.chrome_zygote
+u10_i22 18698 com.android.chrome:sandboxed_process0:org.chromium.content.app.SandboxedProcessService0:0
+== buffer last line: 11-21 18:07:00.148

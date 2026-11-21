@@ -1,0 +1,46 @@
+# PowerManagerService / stay-on / dismiss events after 11:50 (device UTC). Redacted (emails).
+11-20 11:43:29.364   535   535 I SystemServiceManager: Starting com.android.server.power.PowerManagerService
+11-20 11:43:29.393   535   535 I SystemServerTiming: OnBootPhase_100_com.android.server.power.PowerManagerService
+11-20 11:43:31.080   535   535 I SystemServerTiming: OnBootPhase_200_com.android.server.power.PowerManagerService
+11-20 11:43:32.054   535   535 I SystemServerTiming: OnBootPhase_480_com.android.server.power.PowerManagerService
+11-20 11:43:32.069   535   535 I SystemServerTiming: OnBootPhase_500_com.android.server.power.PowerManagerService
+11-20 11:43:32.111   535   535 I SystemServerTiming: MakePowerManagerServiceReady
+11-20 11:43:32.191   535   535 I SystemServerTiming: OnBootPhase_520_com.android.server.power.PowerManagerService
+11-20 11:43:32.250   535   535 I SystemServerTiming: OnBootPhase_550_com.android.server.power.PowerManagerService
+11-20 11:43:32.588   535   535 I SystemServerTiming: OnBootPhase_600_com.android.server.power.PowerManagerService
+11-20 11:43:32.765   535   535 I SystemServerTiming: ssm.onStartUser-0_com.android.server.power.PowerManagerService
+11-20 11:43:36.665   535   556 I ActivityManagerTiming: OnBootPhase_1000_com.android.server.power.PowerManagerService
+11-20 11:43:36.899   535   564 I SystemServerTimingAsync: ssm.onUnlockingUser-0_com.android.server.power.PowerManagerService
+11-20 11:43:37.126   535   564 I SystemServerTimingAsync: ssm.onUnlockedUser-0_com.android.server.power.PowerManagerService
+11-20 11:50:57.752   535   564 I SystemServerTimingAsync: ssm.onStartUser-10_com.android.server.power.PowerManagerService
+11-20 11:50:59.132   535   564 I SystemServerTimingAsync: ssm.onUnlockingUser-10_com.android.server.power.PowerManagerService
+11-20 11:50:59.532   535   564 I SystemServerTimingAsync: ssm.onUnlockedUser-10_com.android.server.power.PowerManagerService
+11-20 11:54:24.934   535   564 I SystemServerTimingAsync: ssm.onSwitchUser-10_com.android.server.power.PowerManagerService
+11-20 11:54:35.824   535   579 I PowerManagerService: Powering off display group due to timeout (groupId= 0, uid= 1000)...
+11-20 11:54:35.826   535   579 I PowerManagerService: Going to sleep due to timeout (uid 1000)...
+11-20 11:54:35.863   535   579 I PowerManagerService: Sleeping display group (groupId=0, uid=1000)...
+11-20 11:54:35.863   535   579 I PowerManagerService: Sleeping (uid 1000)...
+11-20 12:08:12.838   535  2627 I PowerManagerService: Powering on display group fromAsleep (groupId=0, uid=1000, reason=WAKE_REASON_WAKE_KEY, details=android.policy:KEY)...
+11-20 12:08:12.838   535  2627 I PowerManagerService: Waking up from Asleep (uid=1000, reason=WAKE_REASON_WAKE_KEY, details=android.policy:KEY)...
+11-20 12:08:13.317   535   579 W PowerManagerService: Screen on took 487 ms
+11-20 12:41:24.653   535   579 I PowerManagerService: Powering off display group due to timeout (groupId= 0, uid= 1000)...
+11-20 12:41:24.654   535   579 I PowerManagerService: Going to sleep due to timeout (uid 1000)...
+11-20 12:41:24.685   535   579 I PowerManagerService: Sleeping display group (groupId=0, uid=1000)...
+11-20 12:41:24.685   535   579 I PowerManagerService: Sleeping (uid 1000)...
+11-20 12:54:14.587   535  3939 I PowerManagerService: Powering on display group fromAsleep (groupId=0, uid=1000, reason=WAKE_REASON_WAKE_KEY, details=android.policy:KEY)...
+11-20 12:54:14.587   535  3939 I PowerManagerService: Waking up from Asleep (uid=1000, reason=WAKE_REASON_WAKE_KEY, details=android.policy:KEY)...
+11-20 12:54:15.133   535   579 W PowerManagerService: Screen on took 557 ms
+
+Timeline (device clock = UTC; local = UTC+2), from the lines above and the earlier evidence:
+- 11:50:46  kid-test created (evidence/06).
+- 11:54:35  screen off by timeout (uid 1000). Before the parent's step (a).
+- 12:08:12  WAKE #1: WAKE_REASON_WAKE_KEY, reason android.policy:KEY. Matches the parent's first black-screen report.
+- 12:10:55  MinuteMaidActivity displayed (evidence/17).
+- 12:41:24  screen off by timeout again (uid 1000). The 30-minute screen_off_timeout was set after wake #1.
+- 12:53:26  system bugreport starts (dumpstate -S, calling_uid -1, no package; evidence/19). The display is still asleep.
+- 12:53:55  WebView renderer crash, didCrash: true. Display asleep since 12:41:24, bugreport running since 12:53:26.
+- 12:53:55  ErrorActivity started (evidence/17).
+- 12:54:14  WAKE #2: WAKE_REASON_WAKE_KEY, reason android.policy:KEY (after the crash, not before).
+- stay-on change (svc power stayon true): after 12:54:14 per the starting session; not in logcat as a PowerManager event.
+
+Finding: the renderer crash happened while the display was asleep and while a system bugreport ran. It did not happen at a wake.

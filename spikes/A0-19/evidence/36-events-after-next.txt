@@ -1,0 +1,35 @@
+# Events since 13:05:30 UTC (after the Allow capture), read-only. Next was pressed by the parent before this. Emails redacted.
+11-20 13:05:03.117  4294 14446 I SupervisionStateMachine: Platform supervision is not available on this device. [CONTEXT service_id=42 ]
+11-20 13:05:03.392  4294 14446 W SupervisionStateUtils: State no profile owner [CONTEXT service_id=42 ]
+11-20 13:05:03.440  4294 14425 I SupervisionEnforcementS: (REDACTED) %s State Machine evaluation: current state: %s, trigger action: %s
+11-20 13:05:03.440  4294 14446 I SupervisionStateUtils: (REDACTED) State recover:%s
+11-20 13:05:09.074  4294 14508 I SupervisionStateMachine: Platform supervision is not available on this device. [CONTEXT service_id=42 ]
+11-20 13:05:09.223  4294 14508 W SupervisionStateUtils: State no profile owner [CONTEXT service_id=42 ]
+11-20 13:05:09.281  4294 12560 I SupervisionEnforcementS: (REDACTED) %s State Machine evaluation: current state: %s, trigger action: %s
+11-20 13:05:09.282  4294 14508 I SupervisionStateUtils: (REDACTED) State recover:%s
+11-20 13:05:20.070   535   685 I ActivityManager: Killing 14366:com.webfilter.spike.a19/u10a147 (adj 975): empty #17
+11-20 13:10:59.962  9725  9890 I WebViewBridge: Called activateProfileOwner(). [CONTEXT service_id=42 ]
+11-20 13:10:59.970  9725  9725 I KidsAuth: [DeviceSetupBaseViewModel] Can't remove additional accounts. Ensuring device has only one account. [CONTEXT service_id=42 ]
+11-20 13:10:59.998  9725  9725 I KidsAuth: [SupervisionCoreUtils] Onboarding on Supervision Core APK is not eligible for devices with API version below T. [CONTEXT service_id=42 ]
+11-20 13:11:00.043   535   983 I ActivityTaskManager: START u10 {act=android.app.action.SET_PROFILE_OWNER cmp=com.android.settings/.applications.specialaccess.deviceadmin.ProfileOwnerAdd (has extras)} from uid 1010097
+11-20 13:11:01.025   535   552 I ActivityTaskManager: Displayed com.android.settings/.applications.specialaccess.deviceadmin.ProfileOwnerAdd: +923ms
+11-20 13:11:02.247   535  4109 W InputManager-JNI: Input channel object 'de8837d com.android.settings/com.android.settings.applications.specialaccess.deviceadmin.ProfileOwnerAdd (client)' was disposed without first being removed w
+11-20 13:11:02.415  9725  9725 I KidsAuth: [SupervisionCoreUtils] Onboarding on Supervision Core APK is not eligible for devices with API version below T. [CONTEXT service_id=42 ]
+11-20 13:11:02.609   535  2814 W InputManager-JNI: Input channel object '4627c1f com.android.settings/com.android.settings.applications.specialaccess.deviceadmin.ProfileOwnerAdd (client)' was disposed without first being removed w
+11-20 13:13:56.539  9725  9890 I WebViewBridge: Called activateProfileOwner(). [CONTEXT service_id=42 ]
+11-20 13:13:56.543  9725  9725 I KidsAuth: [DeviceSetupBaseViewModel] Can't remove additional accounts. Ensuring device has only one account. [CONTEXT service_id=42 ]
+11-20 13:13:56.548  9725  9725 I KidsAuth: [SupervisionCoreUtils] Onboarding on Supervision Core APK is not eligible for devices with API version below T. [CONTEXT service_id=42 ]
+11-20 13:13:56.551   535   983 I ActivityTaskManager: START u10 {act=android.app.action.SET_PROFILE_OWNER cmp=com.android.settings/.applications.specialaccess.deviceadmin.ProfileOwnerAdd (has extras)} from uid 1010097
+11-20 13:13:56.665   535   552 I ActivityTaskManager: Displayed com.android.settings/.applications.specialaccess.deviceadmin.ProfileOwnerAdd: +108ms
+11-20 13:14:03.610   535  4109 W InputManager-JNI: Input channel object 'e48824d com.android.settings/com.android.settings.applications.specialaccess.deviceadmin.ProfileOwnerAdd (client)' was disposed without first being removed w
+11-20 13:14:03.684  9725  9725 I KidsAuth: [SupervisionCoreUtils] Onboarding on Supervision Core APK is not eligible for devices with API version below T. [CONTEXT service_id=42 ]
+11-20 13:14:03.749   535  4109 W InputManager-JNI: Input channel object 'd70ae05 com.android.settings/com.android.settings.applications.specialaccess.deviceadmin.ProfileOwnerAdd (client)' was disposed without first being removed w
+(end)
+last device line: 13:14:20.110
+
+Timeline (device UTC) written after the capture:
+- 13:05:03 and 13:05:09: GMS supervision state machine evaluations, "no profile owner" (no dialog).
+- 13:05:20: our app process killed as idle (normal).
+- 13:10:59: activateProfileOwner() -> Settings ProfileOwnerAdd. The first activation after the pause. Taken as the parent's Next press (parent's report; the tap time itself is not in the log). Loop resumes.
+- 13:13:56: activateProfileOwner() again -> ProfileOwnerAdd. The loop continues until Cancel.
+- 13:14:20: last line in the buffer read. The dialog is still on screen; Cancel not yet pressed (per the starting session).

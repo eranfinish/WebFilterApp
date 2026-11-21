@@ -1,0 +1,52 @@
+# baseline emulator-5590 (Tablet_A12), captured 2026-11-20T13:43:50+02:00
+== adb devices
+List of devices attached
+emulator-5590          device product:sdk_gphone64_x86_64 model:sdk_gphone64_x86_64 device:emulator64_x86_64_arm64 transport_id:6
+
+== release/sdk/product
+ro.build.version.release=12
+ro.build.version.sdk=31
+ro.build.display.id=SE1A.211212.001.B1
+ro.build.fingerprint=google/sdk_gphone64_x86_64/emulator64_x86_64_arm64:12/SE1A.211212.001.B1/8023802:user/release-keys
+ro.product.model=sdk_gphone64_x86_64
+ro.product.device=emulator64_x86_64_arm64
+ro.product.manufacturer=Google
+ro.hardware=ranchu
+== boot_id
+0224ee3d-c4ba-4447-9a93-ea7997045d2a
+== users
+Users:
+	UserInfo{0:Owner:c13} running
+== owners
+no owners
+== provisioned
+device_provisioned=1
+user_setup_complete=1
+== accounts (count of AccountInfo lines, names not saved)
+1
+  Accounts: 0
+== versions of supervision-relevant packages
+-- com.google.android.gms
+    versionName=26.45.31 (190800-1020418964)
+package:com.google.android.gms
+-- com.google.android.gsf
+    versionName=12
+package:com.google.android.gsf
+-- com.android.vending
+    versionName=54.2.12-31 [0] [PR] 1019424474
+package:com.android.vending
+-- com.android.chrome
+    versionName=91.0.4472.114
+package:com.android.chrome
+-- com.google.android.youtube
+    versionName=16.25.39
+package:com.google.android.youtube
+-- com.google.android.play.games
+  Unable to find package: com.google.android.play.games
+== packages in user 0 matching kids|family|supervis|youtube|play.games
+package:com.google.android.youtube
+package:com.android.vending
+package:com.android.chrome
+package:com.google.android.gms
+package:com.google.android.gsf
+package:com.google.android.apps.youtube.music

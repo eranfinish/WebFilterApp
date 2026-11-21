@@ -1,0 +1,125 @@
+# After the parent's Close (control run). Read-only. Device UTC. Account names redacted.
+== owners
+2 owners:
+User  0: admin=com.webfilter.spike.a19/.AdminReceiver,DeviceOwner,Affiliated
+User 10: admin=com.webfilter.spike.a19/.AdminReceiver,ProfileOwner
+== per-user account count
+User UserInfo{0:Owner:c13}: |   Accounts: 0
+User UserInfo{10:kid-test:410}: |   Accounts: 0
+User UserInfo{11:control:410}: |   Accounts: 0
+== account add/remove events on u11 (pid 26254 / 28561 / 29xxx-31xxx range) and any removal, 13:36:00-13:45:00
+11-20 13:36:05.776 29487 29512 I Finsky  : [1634] Finished reading experiment flags from file [0tGUNCGIkbk4o6-fQ335kUYSKwVj4lusnHT-A5Dsy08] numFlags=2849.
+11-20 13:36:05.776 29487 29510 I Finsky  : [1632] Finished reading experiment flags from file [Se-xCc4LzNyh3UrKMIU2sUf-PUKz4oQEbpKZDMuaFno] numFlags=2190.
+11-20 13:36:06.033 29487 29528 I Finsky  : [1648] SCH: canceling system job 9104
+11-20 13:36:06.047 29487 29528 I Finsky  : [1648] SCH: canceling system job 9106
+11-20 13:36:06.082 29487 29525 I Finsky  : [1645] Finished loading 0 libraries.
+11-20 13:36:06.583 29487 29624 I Finsky  : [1673] Finished completion of 0 sessions. Successful: 0. Failed: 0.
+11-20 13:36:06.644 29487 29529 I Finsky  : [1649] SCH: jobFinished: 10-26. TimeElapsed: 323ms.
+11-20 13:36:06.697 29575 29575 I Finsky:background: [2] Finished reading experiment flags from file [0tGUNCGIkbk4o6-fQ335kUYSKwVj4lusnHT-A5Dsy08] numFlags=2849.
+11-20 13:36:06.849 29575 29575 I Finsky:background: [2] Finished reading experiment flags from file [Se-xCc4LzNyh3UrKMIU2sUf-PUKz4oQEbpKZDMuaFno] numFlags=2190.
+11-20 13:36:06.892 29487 29525 I Finsky  : [1645] SCH: jobFinished: 10-11. TimeElapsed: 654ms.
+11-20 13:36:07.035 29620 29665 I Finsky  : [1641] Finished reading experiment flags from file [Se-xCc4LzNyh3UrKMIU2sUf-PUKz4oQEbpKZDMuaFno] numFlags=2190.
+11-20 13:36:07.044 29620 29620 I Finsky  : [2] Finished reading experiment flags from file [0tGUNCGIkbk4o6-fQ335kUYSKwVj4lusnHT-A5Dsy08] numFlags=2849.
+11-20 13:36:07.047 29620 29664 I Finsky  : [1640] Finished reading experiment flags from file [0tGUNCGIkbk4o6-fQ335kUYSKwVj4lusnHT-A5Dsy08] numFlags=2849.
+11-20 13:36:07.536 29620 29678 I Finsky  : [1650] Finished loading 0 libraries.
+11-20 13:36:07.836 29575 29764 I Finsky:background: [1673] SCH: Canceling job 3-6
+11-20 13:36:07.860 29575 29764 I Finsky:background: [1673] SCH: Canceling job 3-7
+11-20 13:36:08.159 29575 29764 I Finsky:background: [1673] SCH: Canceling job 3-8
+11-20 13:36:08.269 29575 29764 I Finsky:background: [1673] SCH: Canceling job 3-9
+11-20 13:36:08.300 29575 29764 I Finsky:background: [1673] SCH: Canceling job 3-10
+11-20 13:36:08.499 29781 29781 I Finsky:background: [2] Finished reading experiment flags from file [0tGUNCGIkbk4o6-fQ335kUYSKwVj4lusnHT-A5Dsy08] numFlags=2849.
+11-20 13:36:08.518 29781 29781 I Finsky:background: [2] Finished reading experiment flags from file [Se-xCc4LzNyh3UrKMIU2sUf-PUKz4oQEbpKZDMuaFno] numFlags=2190.
+11-20 13:36:08.671 29487 29524 I Finsky  : [1644] SCH: jobFinished: 10-123. TimeElapsed: 2430ms.
+11-20 13:36:08.778 29781 29852 I Finsky:background: [1671] SCH: Canceling job 3-63
+11-20 13:36:08.807 29781 29852 I Finsky:background: [1671] SCH: Canceling job 3-64
+11-20 13:36:08.912 29781 29852 I Finsky:background: [1671] SCH: Canceling job 3-65
+11-20 13:36:08.957 29781 29852 I Finsky:background: [1671] SCH: Canceling job 3-66
+11-20 13:36:16.456 29487 29513 I Finsky  : [1635] Finished writing experiment flags into file [4dEVOh7DlClE42ly_19Hs7FqnnFOj9O0dm-zzWqGxeo], numFlags=2190.
+11-20 13:36:17.849 29487 29487 I Finsky  : [2] [GRCS] GmsRequestContextSyncerAccountChangeListener not enabled, aborting...
+11-20 13:36:19.264 26254 26266 I Auth    : [AddAccountOperation] Finished adding account. [CONTEXT service_id=153 ]
+11-20 13:36:20.267 29421 29903 I ContactDirectoryManager: deleted 0 stale rows which don't have any relevant directory
+11-20 13:36:20.413 29974 30060 E NotificationAccessor: Cannot delete notification channel. Channel not found.
+11-20 13:36:20.414 29974 30060 E NotificationAccessor: Cannot delete notification channel. Channel not found.
+11-20 13:36:20.417 29974 30060 E NotificationAccessor: Cannot delete notification channel. Channel not found.
+11-20 13:36:20.418 29974 30060 E NotificationAccessor: Cannot delete notification channel. Channel not found.
+11-20 13:36:20.418 29974 30060 E NotificationAccessor: Cannot delete notification channel. Channel not found.
+11-20 13:36:22.776 28561 28979 I Auth    : [MinuteMaidFragment] onCloseView() called from JS bridge
+11-20 13:36:23.213 26254 30224 I Auth    : [DataStatusChecker]  Canceling DM notification because of DM suppression [CONTEXT service_id=343 ]
+11-20 13:36:24.281 29487 29524 I Finsky  : [1644] Successfully cleared Stream data store DB via deleteDatabase: /data/user/11/com.android.vending/cache/streamdatastore/streamdatastore.db
+11-20 13:36:24.628 26254 29129 E Icing   : Aborting indexing of corpus com.google.android.gms-internal.3p:MobileApplication
+11-20 13:36:25.313   535   753 I ActivityTaskManager: START u11 {act=com.google.android.gms.auth.account.HANDLE_MANAGED cmp=com.google.android.gms/.kids.auth.KidsAuthSetupActivity (has extras)} from uid 1110097
+11-20 13:36:26.218 26254 30130 I Auth    : [DataStatusChecker]  Canceling DM notification because of DM suppression [CONTEXT service_id=343 ]
+11-20 13:36:27.784 26254 30130 I Auth    : [DataStatusChecker]  Canceling DM notification because of DM suppression [CONTEXT service_id=343 ]
+11-20 13:36:27.812 28561 28561 E SetupLibrary: [PartnerCustomizationLayout] Attribute sucUsePartnerResource not found in ComponentInfo{com.google.android.gms/com.google.android.gms.kids.auth.KidsAuthSetupActivity}
+11-20 13:36:28.201 28561 28561 I SetupLibrary: [GlifLayout] Using setup design GlifLayout to init for KidsAuthSetupActivity
+11-20 13:36:29.100 26254 30130 I Auth    : [DataStatusChecker]  Canceling DM notification because of DM suppression [CONTEXT service_id=343 ]
+11-20 13:36:29.874 28561 28561 I SetupLibrary: [GlifLayout] Using setup design GlifLoadingLayout to init for KidsAuthSetupActivity
+11-20 13:36:30.346 26254 26267 I Auth    : [DataStatusChecker]  Canceling DM notification because of DM suppression [CONTEXT service_id=343 ]
+11-20 13:36:30.410 26254 26291 I Auth    : [DataStatusChecker]  Canceling DM notification because of DM suppression [CONTEXT service_id=343 ]
+11-20 13:36:30.449 26254 29129 I Auth    : [DataStatusChecker]  Canceling DM notification because of DM suppression [CONTEXT service_id=343 ]
+11-20 13:36:30.522 28561 28561 W SetupLibrary: [GlifLoadingLayout] SUWLoadingScreen: B4CD5CC3:com.google.android.gms:com.google.android.gms.kids.auth.KidsAuthSetupActivity:com.google.android.gms.auth.account.HANDLE_MANAGED
+11-20 13:36:30.867 29487 29487 I Finsky  : [2] SCH: jobFinished: 34-3. TimeElapsed: 2622ms.
+11-20 13:36:30.907   535   552 I ActivityTaskManager: Displayed com.google.android.gms/.kids.auth.KidsAuthSetupActivity: +7s570ms
+11-20 13:36:31.173 26254 30187 I Auth    : [DataStatusChecker]  Canceling DM notification because of DM suppression [CONTEXT service_id=343 ]
+11-20 13:36:31.241 28561 28561 I KidsAuth: [KidsAuthSetupChimeraActivity] Supervised account found on the device [CONTEXT service_id=42 ]
+11-20 13:36:31.348 28561 28561 I KidsAuth: [SupervisionCoreUtils] Onboarding on Supervision Core APK is not eligible for devices with API version below T. [CONTEXT service_id=42 ]
+11-20 13:36:31.392 26254 30426 I Auth    : [DataStatusChecker]  Canceling DM notification because of DM suppression [CONTEXT service_id=343 ]
+11-20 13:36:31.453 28561 28561 I KidsAuth: [OnboardingFlowObserver] Flow started. [CONTEXT service_id=42 ]
+11-20 13:36:31.518 26254 26291 I Auth    : [DataStatusChecker]  Canceling DM notification because of DM suppression [CONTEXT service_id=343 ]
+11-20 13:36:31.556 28561 28561 I KidsAuth: [KidsAuthSetupChimeraActivity] Starting Webview Fragment [CONTEXT service_id=42 ]
+11-20 13:36:32.152   535  4643 D SearchUiPerUserService: Removing all callbacks for session Id=com.google.android.apps.nexuslauncher:c97d159a-a4d7-4e63-b7dd-00f701dee80a,0 and 0 callbacks.
+11-20 13:36:32.242 26254 30238 I Auth    : [DataStatusChecker]  Canceling DM notification because of DM suppression [CONTEXT service_id=343 ]
+11-20 13:36:32.262 26254 30187 I KidsAuth: (REDACTED) [SupervisionSetupChimeraService] [%s] Processing command[id=%s][flags=%s]: %s
+11-20 13:36:32.447 26254 30235 I KidsAuth: [SupervisionCoreUtils] Onboarding on Supervision Core APK is not eligible for devices with API version below T. [CONTEXT service_id=42 ]
+11-20 13:36:32.635 28561 28561 I SetupLibrary: [GlifLayout] Using setup design GlifLayout to init for KidsAuthSetupActivity
+11-20 13:36:33.018 28561 28561 E SetupLibrary: [PartnerCustomizationLayout] Attribute sucUsePartnerResource not found in ComponentInfo{com.google.android.gms/com.google.android.gms.kids.auth.KidsAuthSetupActivity}
+11-20 13:36:33.123   535   535 W Looper  : Slow dispatch took 112ms main h=com.android.server.alarm.AlarmManagerService$AlarmHandler c=android.app.PendingIntent$<email> m=0
+11-20 13:36:33.148 28561 28561 I SetupLibrary: [GlifLayout] Using setup design GlifLoadingLayout to init for KidsAuthSetupActivity
+11-20 13:36:33.291 26254 30248 I KidsAuth: (REDACTED) [SupervisionSetupChimeraService] Next state: %s
+11-20 13:36:33.387 26254 26266 I Auth    : [DataStatusChecker]  Canceling DM notification because of DM suppression [CONTEXT service_id=343 ]
+11-20 13:36:33.398 28561 28561 W SetupLibrary: [GlifLoadingLayout] SUWLoadingScreen: B4CD5CC3:com.google.android.gms:com.google.android.gms.kids.auth.KidsAuthSetupActivity:com.google.android.gms.auth.account.HANDLE_MANAGED
+11-20 13:36:33.745 26254 30238 I Auth    : [DataStatusChecker]  Canceling DM notification because of DM suppression [CONTEXT service_id=343 ]
+11-20 13:36:34.116 26254 26301 I Auth    : [DataStatusChecker]  Canceling DM notification because of DM suppression [CONTEXT service_id=343 ]
+11-20 13:36:34.615 26254 26301 I Auth    : [DataStatusChecker]  Canceling DM notification because of DM suppression [CONTEXT service_id=343 ]
+11-20 13:36:34.629 26254 30248 I Auth    : [DataStatusChecker]  Canceling DM notification because of DM suppression [CONTEXT service_id=343 ]
+11-20 13:36:34.771 28561 28610 I KidsAuth: (REDACTED) [OnboardingUrlFactory] Created onboarding flow URL: %s
+11-20 13:36:34.933 29487 29529 I Finsky  : [1649] Finished loading 1 libraries.
+11-20 13:36:35.168 26254 29129 I Auth    : [DataStatusChecker]  Canceling DM notification because of DM suppression [CONTEXT service_id=343 ]
+11-20 13:36:35.309 26254 30429 I Auth    : [DataStatusChecker]  Canceling DM notification because of DM suppression [CONTEXT service_id=343 ]
+11-20 13:36:35.336 26254 26266 I Auth    : [DataStatusChecker]  Canceling DM notification because of DM suppression [CONTEXT service_id=343 ]
+11-20 13:36:36.327 26254 30502 I Auth    : [DataStatusChecker]  Canceling DM notification because of DM suppression [CONTEXT service_id=343 ]
+(end)
+== Family Link / apps.kids / PO / install events on u11, 13:36-13:45
+11-20 13:36:06.241 29487 29528 I Finsky  : [1648] Running split install cleaner
+11-20 13:36:06.585 29487 29528 I Finsky  : [1648] VerifyApps: Verifier app is not installed
+11-20 13:36:06.689 29544 29544 I CarUiInstaller: CarUiInstaller started for com.google.android.gsf
+11-20 13:36:07.230 29575 29659 I Finsky:background: [1648] IQ: start evaluating install requests.
+11-20 13:36:07.327 29575 29681 I Finsky:background: [1655] IV2: IQv2 is disabled. Recovering all active installs: []
+11-20 13:36:07.352 29575 29686 I Finsky:background: [1659] IQ: Pruning inactive install requests
+11-20 13:36:07.478 29575 29659 I Finsky:background: [1648] IQ: 0 scheduled install statuses found to proceed. 
+11-20 13:36:07.527 29575 29660 I Finsky:background: [1649] PlayInstallAPI: Registering Play install service listener.
+11-20 13:36:07.673 29487 29487 I Finsky  : [2] Connecting InstallListener to SplitInstallService broadcaster...
+11-20 13:36:07.770 29620 29693 I Finsky  : [1655] VerifyApps: Verifier app is not installed
+11-20 13:36:08.403 29575 29672 I Finsky:background: [1654] IQ: start evaluating install requests.
+11-20 13:36:08.422 29575 29672 I Finsky:background: [1654] IQ: 0 scheduled install statuses found to proceed. 
+11-20 13:36:08.580 29781 29820 I Finsky:background: [1648] IQ: start evaluating install requests.
+11-20 13:36:08.592 29781 29830 I Finsky:background: [1658] IQ: Pruning inactive install requests
+11-20 13:36:08.598 29781 29824 I Finsky:background: [1652] IV2: IQv2 is disabled. Recovering all active installs: []
+11-20 13:36:08.598 29781 29820 I Finsky:background: [1648] IQ: 0 scheduled install statuses found to proceed. 
+11-20 13:36:08.610 29620 29620 I Finsky  : [2] Connecting InstallListener to SplitInstallService broadcaster...
+11-20 13:36:08.618 29487 29524 W Finsky  : [1644] PSR: Package com.google.android.appsearch not installed
+11-20 13:36:08.636 29487 29524 W Finsky  : [1644] PSR: Package com.android.i18n not installed
+11-20 13:36:08.639 29487 29524 W Finsky  : [1644] PSR: Package com.android.apex.cts.shim not installed
+11-20 13:36:08.656 29487 29524 W Finsky  : [1644] PSR: Package com.google.android.telephony not installed
+11-20 13:36:08.658 29487 29524 W Finsky  : [1644] PSR: Package com.google.android.runtime not installed
+11-20 13:36:08.663 29487 29524 W Finsky  : [1644] PSR: Package com.google.android.vndk.v31 not installed
+11-20 13:36:08.721 29781 29825 I Finsky:background: [1653] PlayInstallAPI: Registering Play install service listener.
+11-20 13:36:09.001 29781 29823 I Finsky:background: [1651] IQ: start evaluating install requests.
+11-20 13:36:09.015 29781 29823 I Finsky:background: [1651] IQ: 0 scheduled install statuses found to proceed. 
+11-20 13:36:19.495 29974 30051 W GAv4    : CampaignTrackingReceiver is not registered, not exported or is disabled. Installation campaign tracking is not possible. See http://goo.gl/8Rd3yj for instructions.
+11-20 13:36:21.995 30199 30199 I CarUiInstaller: CarUiInstaller started for com.google.android.permissioncontroller
+11-20 13:36:23.248 28561 28979 I SyntheticOperationsLogg: (REDACTED) SyntheticOperationsLogger unable to log "%s"'s use of "%s" because installOperationsCollector never executed
+11-20 13:36:25.893 29974 30056 W DynamiteModule: Local module descriptor class for com.google.android.gms.providerinstaller.dynamite not found.
+(end)
+== u11 device admins (device_policy dump)
+(end)

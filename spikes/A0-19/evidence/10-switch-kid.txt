@@ -1,0 +1,10 @@
+== switch to user 10 (switchUser)
+Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a19/.CmdReceiver (has extras) }
+Broadcast completed: result=0, data="switchUser id=10 result=true"
+rc=0
+== users (current user marker)
+Users:
+	UserInfo{0:Owner:c13} running
+	UserInfo{10:kid-test:410} running
+== am get-current-user
+10

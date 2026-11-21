@@ -1,0 +1,56 @@
+== YouTube installed in u11? (pm list -u, and dumpsys)
+
+Exception occurred while executing 'list':
+java.lang.SecurityException: Shell does not have permission to access user 11
+ com.android.server.am.ActivityManagerService.handleIncomingUser:11907 android.app.ActivityManager.handleIncomingUser:4018 com.android.server.pm.PackageManagerShellCommand.translateUserId:3130 
+	at com.android.server.am.UserController.handleIncomingUser(UserController.java:2109)
+	at com.android.server.am.ActivityManagerService.handleIncomingUser(ActivityManagerService.java:11907)
+	at android.app.ActivityManager.handleIncomingUser(ActivityManager.java:4018)
+	at com.android.server.pm.PackageManagerShellCommand.translateUserId(PackageManagerShellCommand.java:3130)
+	at com.android.server.pm.PackageManagerShellCommand.runListPackages(PackageManagerShellCommand.java:863)
+	at com.android.server.pm.PackageManagerShellCommand.runList(PackageManagerShellCommand.java:656)
+	at com.android.server.pm.PackageManagerShellCommand.onCommand(PackageManagerShellCommand.java:183)
+	at com.android.modules.utils.BasicShellCommandHandler.exec(BasicShellCommandHandler.java:97)
+	at android.os.ShellCommand.exec(ShellCommand.java:38)
+	at com.android.server.pm.PackageManagerService.onShellCommand(PackageManagerService.java:24616)
+	at android.os.Binder.shellCommand(Binder.java:950)
+	at android.os.Binder.onTransact(Binder.java:834)
+	at android.content.pm.IPackageManager$Stub.onTransact(IPackageManager.java:4818)
+	at com.android.server.pm.PackageManagerService.onTransact(PackageManagerService.java:8506)
+	at android.os.Binder.execTransactInternal(Binder.java:1184)
+	at android.os.Binder.execTransact(Binder.java:1143)
+    versionName=16.25.39
+    User 0: ceDataInode=122888 installed=true hidden=false suspended=false distractionFlags=0 stopped=false notLaunched=false enabled=1 instant=false virtual=false
+    User 10: ceDataInode=483338 installed=true hidden=false suspended=false distractionFlags=0 stopped=false notLaunched=false enabled=1 instant=false virtual=false
+    User 11: ceDataInode=501266 installed=true hidden=true suspended=false distractionFlags=0 stopped=false notLaunched=false enabled=1 instant=false virtual=false
+== YouTube process in u11 now
+u10_a120     16041   335 15171844 26716 0                   0 S com.google.android.youtube
+== all log lines since marker mentioning youtube (date-aware, first 25)
+11-21 16:47:28.394   535  3970 W InputManager-JNI: Input channel object 'ab9ab19 com.google.android.apps.youtube.music/com.google.android.apps.youtube.music.activities.MusicActivity (client)' was disp
+11-21 16:47:29.971 13820 14103 W YouTubeMusic: Could not register for notifications with InnerTube: 
+11-21 16:47:29.971 13820 14103 W YouTubeMusic: tcg: sgv: Precondition check failed.
+11-21 16:47:29.971 13820 14103 W YouTubeMusic: 	at tbw.apply(Unknown Source:4)
+11-21 16:47:29.971 13820 14103 W YouTubeMusic: 	at rnl.o(PG:5)
+11-21 16:47:29.971 13820 14103 W YouTubeMusic: 	at rnl.b(PG:2)
+11-21 16:47:29.971 13820 14103 W YouTubeMusic: 	at tby.d(PG:4)
+11-21 16:47:29.971 13820 14103 W YouTubeMusic: 	at xas.c(PG:51)
+11-21 16:47:29.971 13820 14103 W YouTubeMusic: 	at xas.j(PG:38)
+11-21 16:47:29.971 13820 14103 W YouTubeMusic: 	at xas.d(PG:3)
+11-21 16:47:29.971 13820 14103 W YouTubeMusic: 	at xap.run(Unknown Source:2)
+11-21 16:47:29.971 13820 14103 W YouTubeMusic: 	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:462)
+11-21 16:47:29.971 13820 14103 W YouTubeMusic: 	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+11-21 16:47:29.971 13820 14103 W YouTubeMusic: 	at nvu.run(PG:1)
+11-21 16:47:29.971 13820 14103 W YouTubeMusic: 	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1167)
+11-21 16:47:29.971 13820 14103 W YouTubeMusic: 	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:641)
+11-21 16:47:29.971 13820 14103 W YouTubeMusic: 	at nvp.run(PG:2)
+11-21 16:47:29.971 13820 14103 W YouTubeMusic: 	at nvh.run(PG:3)
+11-21 16:47:29.971 13820 14103 W YouTubeMusic: 	at java.lang.Thread.run(Thread.java:920)
+11-21 16:47:29.971 13820 14103 W YouTubeMusic: Caused by: sgv: Precondition check failed.
+11-21 16:47:29.971 13820 14103 W YouTubeMusic: 	at tau.e(PG:5)
+11-21 16:47:29.971 13820 14103 W YouTubeMusic: 	at rux.c(PG:18)
+11-21 16:47:29.971 13820 14103 W YouTubeMusic: 	at rty.run(PG:17)
+11-21 16:47:29.971 13820 14103 W YouTubeMusic: 	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1167)
+11-21 16:47:29.971 13820 14103 W YouTubeMusic: 	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:641)
+(end)
+== current focus
+    mResumedActivity: ActivityRecord{9808848 u11 com.google.android.apps.nexuslauncher/.NexusLauncherActivity

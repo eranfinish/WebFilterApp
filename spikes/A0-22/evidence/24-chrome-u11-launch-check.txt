@@ -1,0 +1,38 @@
+# Chrome launch user since marker 11-21 18:47:31 UTC, and u11 Chrome uids. Read-only. Parent report: exact malware.testcategory.com blocked in Chrome in u11.
+== current user: 11
+== Chrome START lines since marker (user)
+18:48:12.521 560 2017
+18:48:47.990 560 574
+(end START)
+== Chrome main processes in ps (user, pid, uid)
+u0_a115 2950
+u11_a115 5494
+(end ps)
+== uid of the Chrome main process in u11 (uid from ps user name prefix)
+u0_a115
+u11_a115
+== Chrome activity lines with uid 1110115 since marker
+11-21 18:47:33.132  6396  6396 F DEBUG   : uid: 1110115
+11-21 18:47:33.237   560   595 I libprocessgroup: Successfully killed process cgroup uid 1110115 pid 6225 in 44ms
+11-21 18:47:33.246   560  2025 D CompatibilityChangeReporter: Compat change id reported: 135634846; UID 1110115; state: DISABLED
+11-21 18:47:33.249   560   594 D CompatibilityChangeReporter: Compat change id reported: 143937733; UID 1110115; state: ENABLED
+11-21 18:47:33.383  6439  6439 D CompatibilityChangeReporter: Compat change id reported: 171979766; UID 1110115; state: DISABLED
+(end uid)
+== DNS resolution for the exact name, u11 (ping, device): PING malware.testcategory.com (127.0.0.1) 56(84) bytes of data.
+== full START lines for Chrome since 18:47:31
+11-21 18:48:12.521   560  2017 I ActivityTaskManager: START u11 {act=android.intent.action.MAIN cat=[android.intent.category.LAUNCHER] flg=0x10200000 cmp=com.android.chrome/com.google.android.apps.chrome.Main bnds=[1500,1197][1940
+11-21 18:48:47.990   560   574 I ActivityTaskManager: START u11 {act=android.intent.action.MAIN cat=[android.intent.category.LAUNCHER] flg=0x10200000 cmp=com.android.chrome/com.google.android.apps.chrome.Main bnds=[1500,1197][1940
+(end)
+== pid 5494 (u11 Chrome main) start proc line
+11-21 18:47:19.625   560   594 I ActivityManager: Start proc 5494:com.android.chrome/u11a115 for pre-top-activity {com.android.chrome/com.google.android.apps.chrome.Main}
+(end)
+== pid 2950 (u0 Chrome main) start proc line
+11-21 18:46:42.663   560   594 I ActivityManager: Start proc 2950:com.android.chrome/u0a115 for pre-top-activity {com.android.chrome/com.google.android.apps.chrome.Main}
+(end)
+
+SUMMARY (A0.22, Chrome launch user):
+- The Chrome START lines since the 18:47:31 UTC marker are both "START u11" (18:48:12.521 and 18:48:47.990), cmp com.android.chrome/com.google.android.apps.chrome.Main.
+- The u11 Chrome main process is pid 5494, "Start proc 5494:com.android.chrome/u11a115" at 18:47:19.625 (before the marker; the process ran into the window). Its uid is 1110115 (the uid shown in the DEBUG/compat lines since the marker).
+- The u0 Chrome main process (pid 2950, u0a115) started at 18:46:42, before the marker.
+- The parent's report: the exact malware.testcategory.com is blocked in Chrome in u11. Recorded as a parent report. The device check confirms the system resolver answers 127.0.0.1 for that name.
+- Caveat: the process start for pid 5494 predates the marker by 12 seconds; the blocked load is attributed to the u11 Chrome process that was running in the window.

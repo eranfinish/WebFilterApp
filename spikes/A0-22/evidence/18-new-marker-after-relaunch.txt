@@ -1,0 +1,12 @@
+# A0.22 new marker after the relaunch with -gpu swiftshader_indirect: 11-21 18:47:31 UTC. Read-only.
+boot_completed=1
+== current user: 11
+== owners
+3 owners:
+User  0: admin=com.webfilter.spike.a19/.AdminReceiver,DeviceOwner,Affiliated
+User 10: admin=com.webfilter.spike.a19/.AdminReceiver,ProfileOwner
+User 11: admin=com.google.android.gms/.kids.account.receiver.ProfileOwnerReceiver,ProfileOwner
+== settings: mode=hostname specifier=family.cloudflare-dns.com
+== DISALLOW (u0 global):
+    Device policy global restrictions:
+      disallow_config_private_dns

@@ -1,0 +1,31 @@
+# NO-DO control, emulator-5580 (API 37, no Device Owner on the device). State and token results after the marker 11-21 16:58:12 UTC. Read-only. Names redacted.
+== owners
+User 10: admin=com.google.android.gms.supervision/com.google.android.gms.kids.account.receiver.ProfileOwnerReceiver,ProfileOwner
+== current user: 10
+== accounts per user (count; type only)
+User UserInfo{0:Owner:4c13}: |   Accounts: 0
+User UserInfo{10:plainkid:410}: |   Accounts: 1
+      1 User user 10 | type=com.google
+== token results since the marker, by message (counts)
+      2 Account added successfully
+      1 Added account successfully
+    182 GetToken failed for app=%s with userRecoverable status
+    189 GetToken failed with status code and recovery intent
+     16 No account for auth token
+    300 ThirdPartyDeviceManagementRequired
+(end)
+== Family Link / GMS supervision lines since marker (first 10)
+11-21 17:19:44.139   761  4319 E RoleControllerServiceImpl: Default/fallback role holder package doesn't qualify for the role, package: com.google.android.gms.supervision, role: android.app.role.SYSTE
+11-21 17:19:48.159   761   807 I AppBindingService: [Supervision app] feature disabled
+11-21 17:19:53.379   761   807 I AppBindingService: [Supervision app] feature disabled
+11-21 17:19:53.388   761  4319 E RoleControllerServiceImpl: Default/fallback role holder package doesn't qualify for the role, package: com.google.android.gms.supervision, role: android.app.role.SYSTE
+11-21 17:19:55.221   761  4705 E RoleControllerServiceImpl: Default/fallback role holder package doesn't qualify for the role, package: com.google.android.gms.supervision, role: android.app.role.SYSTE
+11-21 17:19:56.724   761   807 I AppBindingService: [Supervision app] feature disabled
+11-21 17:19:57.156   761  4319 E RoleControllerServiceImpl: Default/fallback role holder package doesn't qualify for the role, package: com.google.android.gms.supervision, role: android.app.role.SYSTE
+11-21 17:19:57.905   761   807 I AppBindingService: [Supervision app] feature disabled
+11-21 17:20:21.832   761  4705 E RoleControllerServiceImpl: Default/fallback role holder package doesn't qualify for the role, package: com.google.android.gms.supervision, role: android.app.role.SYSTE
+11-21 17:20:21.999   761   807 I AppBindingService: [Supervision app] feature disabled
+(end)
+== memory
+MemAvailable:    1585684 kB
+SwapFree:        1372840 kB

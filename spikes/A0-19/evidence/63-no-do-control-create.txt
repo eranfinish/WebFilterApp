@@ -1,0 +1,9 @@
+# NO-DO CONTROL, emulator-5580 (API 37): create plain secondary user, start, switch. No Device Owner, nothing of ours installed. Device UTC.
+== owners raw (dpm list-owners, exit code and output)
+exit=0
+== pm create-user
+Success: created user id 10
+== users
+Users:
+	UserInfo{0:Owner:4c13} running
+	UserInfo{10:plainkid:400}

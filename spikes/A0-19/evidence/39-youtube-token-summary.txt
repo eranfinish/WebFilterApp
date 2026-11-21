@@ -1,0 +1,18 @@
+(c) result, YouTube in kid-test. Device clock UTC; local = UTC+2. Read-only capture. No taps by this spike.
+
+Parent's report (from screenshot, no personal data): after Home (13:16:08 "onboarding flow abandoned"), YouTube shows "There was a problem signing in to your account" with SIGN IN, and behind it an error page with RETRY. Warning triangle in the status bar.
+
+Logs since 13:15:
+- Every Google token request for the child account fails with THIRD_PARTY_DEVICE_MANAGEMENT_REQUIRED (GetToken userRecoverable). 12 such failures from 13:15:30 to 13:16:13.
+  Per app: com.google.android.gms (6), com.google.android.googlequicksearchbox (3), com.google.android.youtube (2), com.google.android.gm (1).
+  Scopes include oauth2 assistant, peopleapi, mail and accounts.reauth.
+- GoogleAuthUtil: "error status:THIRD_PARTY_DEVICE_MANAGEMENT_REQUIRED with method:getTokenWithDetails".
+- ReauthNotificationManager: "Unhandled DM status: THIRD_PARTY_DEVICE_MANAGEMENT_REQUIRED" (12 times). The channel is AccountReauth (see evidence/37).
+- DataStatusChecker: "Signature check failed. The calling package is not google signed." (12 times in the same window).
+- OneGoogle MdiOwnersLoader: "Sync failed with an authentication error" (38003).
+- YouTube itself: two accounts.reauth token failures at 13:16:25.
+- The GMS KidsAuth flow was abandoned at 13:16:08 (Home). Supervision state machine again "State no profile owner".
+
+Interpretation (not yet proven): Google's account services refuse tokens for this account because the device is managed by a third-party device-management app (our DPC, owner and PO). The status name is THIRD_PARTY_DEVICE_MANAGEMENT_REQUIRED. The YouTube dialog is a symptom of this. Not tested: whether the same account gets tokens on a device without our DPC. A control would need the device-management app removed (needs parent's OK) or a second user with no PO (not yet approved for this step).
+
+Not determined: whether the parent pressed SIGN IN (not yet); whether Chrome and Play Store work (next, per the approved order).

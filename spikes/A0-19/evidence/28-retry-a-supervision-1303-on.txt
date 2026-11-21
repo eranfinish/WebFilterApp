@@ -1,0 +1,140 @@
+11-20 13:03:00.028   535   837 W ActivityTaskManager: Duplicate finish request for r=ActivityRecord{f49ac77 u10 com.android.settings/.applications.specialaccess.deviceadmin.ProfileOwnerAdd t1000012 f}}
+11-20 13:03:00.446  9725  9725 I KidsAuth: [SupervisionCoreUtils] Onboarding on Supervision Core APK is not eligible for devices with API version below T. [CONTEXT service_id=42 ]
+11-20 13:03:00.677   535   549 W InputManager-JNI: Input channel object '48c0222 com.android.settings/com.android.settings.applications.specialaccess.deviceadmin.ProfileOwnerAdd (client)' was disposed without first being removed with the in
+11-20 13:03:01.962  4294 12100 I GmsKidsJobSchedulerImpl: (REDACTED) Canceling job %s
+11-20 13:03:01.974  4294 12100 I KidsJobScheduler: (REDACTED) schedule job %s
+11-20 13:03:02.217  4294 12100 I KidsJobScheduler: (REDACTED) schedule job %s
+11-20 13:03:05.548  9827  9895 I PhenotypeBackgroundRecv: Successfully stored update snapshot for com.google.android.setupwizard
+11-20 13:03:05.564  9827  9895 I PhenotypeBackgroundRecv: Successfully stored update snapshot for com.google.android.libraries.consentverifier#com.google.android.setupwizard
+11-20 13:03:07.748 11954 12003 E GoogleApiManager: java.lang.SecurityException: com.android.vending is not allowed to access service# 468 with visibility ZERO_PARTY
+11-20 13:03:09.654 11954 11954 I Finsky  : [2] setup::PAI: Deferred PAI is not allowed
+11-20 13:03:10.683 12376 12440 E GoogleApiManager: java.lang.SecurityException: com.android.vending is not allowed to access service# 468 with visibility ZERO_PARTY
+11-20 13:03:19.082 12234 12566 E GoogleApiManager: java.lang.SecurityException: com.android.vending is not allowed to access service# 468 with visibility ZERO_PARTY
+11-20 13:03:19.260 11954 12001 W Finsky  : [517] PreloadClasses: Unable to load [androidx.compose.ui.platform.ViewCompositionStrategy$DisposeOnViewTreeLifecycleDestroyed$installFor$1, androidx.compose.ui.platform.AndroidUiDispatcher$Compani
+11-20 13:03:20.432 12234 12566 E GoogleApiManager: java.lang.SecurityException: com.android.vending is not allowed to access service# 468 with visibility ZERO_PARTY
+11-20 13:03:22.191  4294  4294 I ProfileOwnerChimeraRece: (REDACTED) onEnabled: intent = %s
+11-20 13:03:22.228  4294  4294 E IntentOperation: No such module intent operation: .kids.operations.KidsSystemIntentOperation for action: android.app.action.DEVICE_ADMIN_ENABLED
+11-20 13:03:22.547   535  4094 W BroadcastQueue: Background execution not allowed: receiving Intent { act=android.intent.action.DROPBOX_ENTRY_ADDED flg=0x10 (has extras) } to com.google.android.gms/.stats.service.DropBoxEntryAddedReceiver
+11-20 13:03:22.556   535   563 W BroadcastQueue: Background execution not allowed: receiving Intent { act=android.intent.action.DROPBOX_ENTRY_ADDED flg=0x10 (has extras) } to com.google.android.gms/.stats.service.DropBoxEntryAddedReceiver
+11-20 13:03:24.693   535   564 I ActivityManager: Start proc 12734:com.google.android.setupwizard:remote/u10a92 for content provider {com.google.android.setupwizard/com.google.android.setupwizard.deviceorigin.provider.DeviceOriginProvider}
+11-20 13:03:25.498 12734 12734 D nativeloader: classloader namespace configured for unbundled product apk. library_path=/product/priv-app/SetupWizardPrebuilt/lib/x86_64:/product/priv-app/SetupWizardPrebuilt/SetupWizardPrebuilt.apk!/lib/x86_
+11-20 13:03:25.541 12734 12734 V GraphicsEnvironment: ANGLE Developer option for 'com.google.android.setupwizard' set to: 'default'
+11-20 13:03:25.555   535  4001 I RescueParty: Starting to observe: [android, com.google.android.permissioncontroller, com.google.android.setupwizard, com.google.android.gms, com.android.phone, com.android.providers.blockednumber, com.androi
+11-20 13:03:25.557   535   562 D PackageWatchdog: rescue-party-observer added the following packages to monitor [android, com.google.android.permissioncontroller, com.google.android.setupwizard, com.google.android.gms, com.android.phone, co
+11-20 13:03:25.655 12734 12748 E SetupWizard: [DeviceOriginProvider] Cannot query unsupported key=restore_attempts_count
+11-20 13:03:27.510  4294 12638 I Dck     : Dck module condition - downloadAllowed: false [CONTEXT service_id=289 ]
+11-20 13:03:30.005 12376 12437 W Finsky  : [535] PreloadClasses: Unable to load [androidx.compose.ui.platform.ViewCompositionStrategy$DisposeOnViewTreeLifecycleDestroyed$installFor$1, androidx.compose.ui.platform.AndroidUiDispatcher$Compani
+11-20 13:03:31.436 11954 11988 I Finsky  : [504] Installer package name of package com.android.simappdialog.auto_generated_rro_product__ is 
+11-20 13:03:31.437 11954 11988 I Finsky  : [504] Installer package name of package com.android.simappdialog is 
+11-20 13:03:31.439 11954 11988 I Finsky  : [504] Installer package name of package com.webfilter.spike.a19 is 
+11-20 13:03:31.440 11954 11988 I Finsky  : [504] Installer package name of package com.google.android.setupwizard is 
+11-20 13:03:31.443 11954 11988 I Finsky  : [504] Installer package name of package com.android.vpndialogs is 
+11-20 13:03:31.512  9725  9890 I WebViewBridge: Called activateProfileOwner(). [CONTEXT service_id=42 ]
+11-20 13:03:31.577  9725  9725 I KidsAuth: [DeviceSetupBaseViewModel] Can't remove additional accounts. Ensuring device has only one account. [CONTEXT service_id=42 ]
+11-20 13:03:31.627  9725  9725 I KidsAuth: [SupervisionCoreUtils] Onboarding on Supervision Core APK is not eligible for devices with API version below T. [CONTEXT service_id=42 ]
+11-20 13:03:31.739   535   832 I ActivityTaskManager: START u10 {act=android.app.action.SET_PROFILE_OWNER cmp=com.android.settings/.applications.specialaccess.deviceadmin.ProfileOwnerAdd (has extras)} from uid 1010097
+11-20 13:03:32.525   535   552 I ActivityTaskManager: Displayed com.android.settings/.applications.specialaccess.deviceadmin.ProfileOwnerAdd: +748ms
+11-20 13:03:37.108 12234 12296 I Finsky:background: [523] IV2::TV: allowMeteredNetwork=false for [Package=com.google.android.verifier, isid=U_UOXm40S4qWmE-bkdVLJg]
+11-20 13:03:39.528   535  1325 W BroadcastQueue: Background execution not allowed: receiving Intent { act=android.intent.action.DROPBOX_ENTRY_ADDED flg=0x10 (has extras) } to com.google.android.gms/.stats.service.DropBoxEntryAddedReceiver
+11-20 13:03:39.532   535   563 W BroadcastQueue: Background execution not allowed: receiving Intent { act=android.intent.action.DROPBOX_ENTRY_ADDED flg=0x10 (has extras) } to com.google.android.gms/.stats.service.DropBoxEntryAddedReceiver
+11-20 13:03:40.599  4294 12917 I ModuleSetResolution: Computing pending module set with APKs: [[Appsearch.optional:264531100800], [IdentityCredentialsPlatform.optional:264531100800], [Kids.optional:264531100800], [MapsCoreDynamite.integ:264
+11-20 13:03:40.616  4294 12917 I ModuleSetResolution: Pending container module APKs: [[Appsearch.optional:264531100800], [IdentityCredentialsPlatform.optional:264531100800], [Kids.optional:264531100800], [MapsCoreDynamite.integ:264320700100
+11-20 13:03:41.079  4294 11264 I ModuleSetResolution: Computing pending module set with APKs: [[Appsearch.optional:264531100800], [IdentityCredentialsPlatform.optional:264531100800], [Kids.optional:264531100800], [MapsCoreDynamite.integ:264
+11-20 13:03:41.095  4294 11264 I ModuleSetResolution: Pending container module APKs: [[Appsearch.optional:264531100800], [IdentityCredentialsPlatform.optional:264531100800], [Kids.optional:264531100800], [MapsCoreDynamite.integ:264320700100
+11-20 13:03:41.154 12234 12310 I Finsky:background: [533] IV2::TV: allowMeteredNetwork=false for [Package=com.google.ar.core, isid=J34I2f84Q3WhqAfvxFFshQ]
+11-20 13:03:41.380 11954 11988 I Finsky  : [504] VerifyApps AdvancedProtection: Allowing install because there are no Advanced Protection users
+11-20 13:03:41.380 11954 11954 I Finsky  : [2] VerifyApps AdvancedProtection: Reported Advanced Protection verification result: ALLOW
+11-20 13:03:41.383 11954 11988 I Finsky  : [504] VerifyApps: Returning package verification result id=0, result=ALLOW
+11-20 13:03:43.962   535  2418 I ActivityManager: Killing 9827:com.google.android.setupwizard/u10a92 (adj 965): empty #17
+11-20 13:03:44.727   535  2844 W BroadcastQueue: Background execution not allowed: receiving Intent { act=android.intent.action.PACKAGE_ADDED dat=package:com.google.android.verifier flg=0x4000010 (has extras) } to com.google.android.package
+11-20 13:03:44.729   535   563 W BroadcastQueue: Background execution not allowed: receiving Intent { act=android.intent.action.PACKAGE_ADDED dat=package:com.google.android.verifier flg=0x4000010 (has extras) } to com.android.vending/com.go
+11-20 13:03:44.767   535   563 W BroadcastQueue: Background execution not allowed: receiving Intent { act=android.intent.action.PACKAGE_ADDED dat=package:com.google.android.verifier flg=0x4000010 (has extras) } to com.android.vending/com.go
+11-20 13:03:44.767   535   563 W BroadcastQueue: Background execution not allowed: receiving Intent { act=android.intent.action.PACKAGE_ADDED dat=package:com.google.android.verifier flg=0x4000010 (has extras) } to com.google.android.gms/.ga
+11-20 13:03:44.767   535   563 W BroadcastQueue: Background execution not allowed: receiving Intent { act=android.intent.action.PACKAGE_ADDED dat=package:com.google.android.verifier flg=0x4000010 (has extras) } to com.google.android.gms/.ch
+11-20 13:03:44.767   535   563 W BroadcastQueue: Background execution not allowed: receiving Intent { act=android.intent.action.PACKAGE_ADDED dat=package:com.google.android.verifier flg=0x4000010 (has extras) } to com.google.android.googleq
+11-20 13:03:45.033  4294 13217 I Auth    : (REDACTED) [SupervisedAccountIntentOperation] onHandleIntent: %s
+11-20 13:03:45.125  4294 12917 I Dck     : Dck module condition - downloadAllowed: false [CONTEXT service_id=289 ]
+11-20 13:03:45.221 12234 12960 I Finsky:background: [578] Session is stale, session is not alive: getNames not allowed after destruction
+11-20 13:03:45.583  4294 12917 I KidsJobScheduler: (REDACTED) schedule job %s
+11-20 13:03:45.796 11954 12003 E GoogleApiManager: java.lang.SecurityException: com.android.vending is not allowed to access service# 468 with visibility ZERO_PARTY
+11-20 13:03:45.824  4294 12917 I KidsJobScheduler: (REDACTED) schedule job %s
+11-20 13:03:45.889  4294 12917 I SupervisionStateMachine: Platform supervision is not available on this device. [CONTEXT service_id=42 ]
+11-20 13:03:46.048  4294 12917 W SupervisionStateUtils: State no profile owner [CONTEXT service_id=42 ]
+11-20 13:03:46.118  4294 12560 I SupervisionEnforcementS: (REDACTED) %s State Machine evaluation: current state: %s, trigger action: %s
+11-20 13:03:46.138  4294 12917 I SupervisionStateUtils: (REDACTED) State recover:%s
+11-20 13:03:46.163  4294 12917 I KidsJobScheduler: (REDACTED) schedule job %s
+11-20 13:03:52.254  9344  9344 W DeviceAdminAdd: Exception trying to activate admin ComponentInfo{com.google.android.gms/com.google.android.gms.kids.account.receiver.ProfileOwnerReceiver}
+11-20 13:03:52.254  9344  9344 W DeviceAdminAdd: 	at android.app.admin.IDevicePolicyManager$Stub$Proxy.setActiveAdmin(IDevicePolicyManager.java:8710)
+11-20 13:03:52.254  9344  9344 W DeviceAdminAdd: 	at android.app.admin.DevicePolicyManager.setActiveAdmin(DevicePolicyManager.java:7571)
+11-20 13:03:52.254  9344  9344 W DeviceAdminAdd: 	at android.app.admin.DevicePolicyManager.setActiveAdmin(DevicePolicyManager.java:7583)
+11-20 13:03:52.254  9344  9344 W DeviceAdminAdd: 	at com.android.server.devicepolicy.DevicePolicyManagerService.lambda$setActiveAdmin$7$DevicePolicyManagerService(DevicePolicyManagerService.java:3433)
+11-20 13:03:52.254  9344  9344 W DeviceAdminAdd: 	at com.android.server.devicepolicy.DevicePolicyManagerService$$ExternalSyntheticLambda22.runOrThrow(Unknown Source:12)
+11-20 13:03:52.254  9344  9344 W DeviceAdminAdd: 	at com.android.server.devicepolicy.DevicePolicyManagerService$Injector.binderWithCleanCallingIdentity(DevicePolicyManagerService.java:1517)
+11-20 13:03:52.254  9344  9344 W DeviceAdminAdd: 	at com.android.server.devicepolicy.DevicePolicyManagerService.setActiveAdmin(DevicePolicyManagerService.java:3429)
+11-20 13:03:52.680   535   621 W InputDispatcher: Untrusted touch due to occlusion by com.android.settings/1001000 (obscuring opacity = 1.00, maximum allowed = 0.80)
+11-20 13:03:52.681   535   621 D InputDispatcher:     * type=APPLICATION, package=com.android.settings/1001000, id=330, mode=USE_OPACITY, alpha=1.00, frame=[700,546][1860,1005], touchableRegion=<empty>, window={com.android.settings/com.andr
+11-20 13:03:52.681   535   621 D InputDispatcher:     * type=FIRST_APPLICATION_WINDOW, package=com.android.settings/1001000, id=331, mode=USE_OPACITY, alpha=1.00, frame=[700,573][1860,931], touchableRegion=<empty>, window={com.android.setti
+11-20 13:03:52.681   535   621 D InputDispatcher:     * [TOUCHED] type=FIRST_APPLICATION_WINDOW, package=com.google.android.gms/1010097, id=298, mode=BLOCK_UNTRUSTED, alpha=1.00, frame=[0,0][2560,1600], touchableRegion=[0,0][2560,1600], win
+11-20 13:03:52.703   535   752 W InputManager-JNI: Input channel object 'ce80b6f com.android.settings/com.android.settings.applications.specialaccess.deviceadmin.ProfileOwnerAdd (client)' was disposed without first being removed with the in
+11-20 13:03:52.836   535  2417 W ActivityTaskManager: Duplicate finish request for r=ActivityRecord{af33a31 u10 com.android.settings/.applications.specialaccess.deviceadmin.ProfileOwnerAdd t1000012 f}}
+11-20 13:03:52.885  9725  9725 I KidsAuth: [SupervisionCoreUtils] Onboarding on Supervision Core APK is not eligible for devices with API version below T. [CONTEXT service_id=42 ]
+11-20 13:03:53.376   535  4112 W InputManager-JNI: Input channel object '8cff967 com.android.settings/com.android.settings.applications.specialaccess.deviceadmin.ProfileOwnerAdd (client)' was disposed without first being removed with the in
+11-20 13:03:56.413 12734 13227 E SetupWizard: [DeviceOriginProvider] Cannot query unsupported key=restore_attempts_count
+11-20 13:03:58.723  9725  9890 I WebViewBridge: Called activateProfileOwner(). [CONTEXT service_id=42 ]
+11-20 13:03:58.730  9725  9725 I KidsAuth: [DeviceSetupBaseViewModel] Can't remove additional accounts. Ensuring device has only one account. [CONTEXT service_id=42 ]
+11-20 13:03:58.764  9725  9725 I KidsAuth: [SupervisionCoreUtils] Onboarding on Supervision Core APK is not eligible for devices with API version below T. [CONTEXT service_id=42 ]
+11-20 13:03:58.800   535   832 I ActivityTaskManager: START u10 {act=android.app.action.SET_PROFILE_OWNER cmp=com.android.settings/.applications.specialaccess.deviceadmin.ProfileOwnerAdd (has extras)} from uid 1010097
+11-20 13:03:59.424   535   552 I ActivityTaskManager: Displayed com.android.settings/.applications.specialaccess.deviceadmin.ProfileOwnerAdd: +586ms
+11-20 13:04:00.908   535   564 I ActivityManager: Start proc 13429:com.google.android.setupwizard/u10a92 for broadcast {com.google.android.setupwizard/com.google.android.libraries.phenotype.client.stable.PhenotypeUpdateBackgroundBroadcastRe
+11-20 13:04:00.917  9344  9344 W DeviceAdminAdd: Exception trying to activate admin ComponentInfo{com.google.android.gms/com.google.android.gms.kids.account.receiver.ProfileOwnerReceiver}
+11-20 13:04:00.917  9344  9344 W DeviceAdminAdd: 	at android.app.admin.IDevicePolicyManager$Stub$Proxy.setActiveAdmin(IDevicePolicyManager.java:8710)
+11-20 13:04:00.917  9344  9344 W DeviceAdminAdd: 	at android.app.admin.DevicePolicyManager.setActiveAdmin(DevicePolicyManager.java:7571)
+11-20 13:04:00.917  9344  9344 W DeviceAdminAdd: 	at android.app.admin.DevicePolicyManager.setActiveAdmin(DevicePolicyManager.java:7583)
+11-20 13:04:00.917  9344  9344 W DeviceAdminAdd: 	at com.android.server.devicepolicy.DevicePolicyManagerService.lambda$setActiveAdmin$7$DevicePolicyManagerService(DevicePolicyManagerService.java:3433)
+11-20 13:04:00.917  9344  9344 W DeviceAdminAdd: 	at com.android.server.devicepolicy.DevicePolicyManagerService$$ExternalSyntheticLambda22.runOrThrow(Unknown Source:12)
+11-20 13:04:00.917  9344  9344 W DeviceAdminAdd: 	at com.android.server.devicepolicy.DevicePolicyManagerService$Injector.binderWithCleanCallingIdentity(DevicePolicyManagerService.java:1517)
+11-20 13:04:00.917  9344  9344 W DeviceAdminAdd: 	at com.android.server.devicepolicy.DevicePolicyManagerService.setActiveAdmin(DevicePolicyManagerService.java:3429)
+11-20 13:04:00.966   535  1554 W InputManager-JNI: Input channel object '9cbfc4c com.android.settings/com.android.settings.applications.specialaccess.deviceadmin.ProfileOwnerAdd (client)' was disposed without first being removed with the in
+11-20 13:04:01.016   535   753 W ActivityTaskManager: Duplicate finish request for r=ActivityRecord{7db898f u10 com.android.settings/.applications.specialaccess.deviceadmin.ProfileOwnerAdd t1000012 f}}
+11-20 13:04:01.017  9725  9725 I KidsAuth: [SupervisionCoreUtils] Onboarding on Supervision Core APK is not eligible for devices with API version below T. [CONTEXT service_id=42 ]
+11-20 13:04:01.449   535   832 W InputManager-JNI: Input channel object '2cb88e4 com.android.settings/com.android.settings.applications.specialaccess.deviceadmin.ProfileOwnerAdd (client)' was disposed without first being removed with the in
+11-20 13:04:01.475 13429 13429 D nativeloader: classloader namespace configured for unbundled product apk. library_path=/product/priv-app/SetupWizardPrebuilt/lib/x86_64:/product/priv-app/SetupWizardPrebuilt/SetupWizardPrebuilt.apk!/lib/x86_
+11-20 13:04:01.522 13429 13429 V GraphicsEnvironment: ANGLE Developer option for 'com.google.android.setupwizard' set to: 'default'
+11-20 13:04:01.940 13429 13467 I PhenotypeBackgroundRecv: Successfully stored update snapshot for com.google.android.setupwizard
+11-20 13:04:03.084  9725  9890 I WebViewBridge: Called activateProfileOwner(). [CONTEXT service_id=42 ]
+11-20 13:04:03.194  9725  9725 I KidsAuth: [DeviceSetupBaseViewModel] Can't remove additional accounts. Ensuring device has only one account. [CONTEXT service_id=42 ]
+11-20 13:04:03.233  9725  9725 I KidsAuth: [SupervisionCoreUtils] Onboarding on Supervision Core APK is not eligible for devices with API version below T. [CONTEXT service_id=42 ]
+11-20 13:04:03.265   535   832 I ActivityTaskManager: START u10 {act=android.app.action.SET_PROFILE_OWNER cmp=com.android.settings/.applications.specialaccess.deviceadmin.ProfileOwnerAdd (has extras)} from uid 1010097
+11-20 13:04:03.646   535   552 I ActivityTaskManager: Displayed com.android.settings/.applications.specialaccess.deviceadmin.ProfileOwnerAdd: +313ms
+11-20 13:04:05.443   535  2844 W InputManager-JNI: Input channel object '1e8f68d com.android.settings/com.android.settings.applications.specialaccess.deviceadmin.ProfileOwnerAdd (client)' was disposed without first being removed with the in
+11-20 13:04:05.580  9725  9725 I KidsAuth: [SupervisionCoreUtils] Onboarding on Supervision Core APK is not eligible for devices with API version below T. [CONTEXT service_id=42 ]
+11-20 13:04:05.772   535  2814 W InputManager-JNI: Input channel object '5a36a45 com.android.settings/com.android.settings.applications.specialaccess.deviceadmin.ProfileOwnerAdd (client)' was disposed without first being removed with the in
+11-20 13:04:07.930  9725  9890 I WebViewBridge: Called activateProfileOwner(). [CONTEXT service_id=42 ]
+11-20 13:04:07.932  9725  9725 I KidsAuth: [DeviceSetupBaseViewModel] Can't remove additional accounts. Ensuring device has only one account. [CONTEXT service_id=42 ]
+11-20 13:04:08.030  9725  9725 I KidsAuth: [SupervisionCoreUtils] Onboarding on Supervision Core APK is not eligible for devices with API version below T. [CONTEXT service_id=42 ]
+11-20 13:04:08.049   535   549 I ActivityTaskManager: START u10 {act=android.app.action.SET_PROFILE_OWNER cmp=com.android.settings/.applications.specialaccess.deviceadmin.ProfileOwnerAdd (has extras)} from uid 1010097
+11-20 13:04:08.406   535   552 I ActivityTaskManager: Displayed com.android.settings/.applications.specialaccess.deviceadmin.ProfileOwnerAdd: +313ms
+11-20 13:04:11.913  9344  9344 W DeviceAdminAdd: Exception trying to activate admin ComponentInfo{com.google.android.gms/com.google.android.gms.kids.account.receiver.ProfileOwnerReceiver}
+11-20 13:04:11.913  9344  9344 W DeviceAdminAdd: 	at android.app.admin.IDevicePolicyManager$Stub$Proxy.setActiveAdmin(IDevicePolicyManager.java:8710)
+11-20 13:04:11.913  9344  9344 W DeviceAdminAdd: 	at android.app.admin.DevicePolicyManager.setActiveAdmin(DevicePolicyManager.java:7571)
+11-20 13:04:11.913  9344  9344 W DeviceAdminAdd: 	at android.app.admin.DevicePolicyManager.setActiveAdmin(DevicePolicyManager.java:7583)
+11-20 13:04:11.913  9344  9344 W DeviceAdminAdd: 	at com.android.server.devicepolicy.DevicePolicyManagerService.lambda$setActiveAdmin$7$DevicePolicyManagerService(DevicePolicyManagerService.java:3433)
+11-20 13:04:11.913  9344  9344 W DeviceAdminAdd: 	at com.android.server.devicepolicy.DevicePolicyManagerService$$ExternalSyntheticLambda22.runOrThrow(Unknown Source:12)
+11-20 13:04:11.913  9344  9344 W DeviceAdminAdd: 	at com.android.server.devicepolicy.DevicePolicyManagerService$Injector.binderWithCleanCallingIdentity(DevicePolicyManagerService.java:1517)
+11-20 13:04:11.913  9344  9344 W DeviceAdminAdd: 	at com.android.server.devicepolicy.DevicePolicyManagerService.setActiveAdmin(DevicePolicyManagerService.java:3429)
+11-20 13:04:11.960   535  2417 W InputManager-JNI: Input channel object 'e3c3845 com.android.settings/com.android.settings.applications.specialaccess.deviceadmin.ProfileOwnerAdd (client)' was disposed without first being removed with the in
+11-20 13:04:12.027  9725  9725 I KidsAuth: [SupervisionCoreUtils] Onboarding on Supervision Core APK is not eligible for devices with API version below T. [CONTEXT service_id=42 ]
+11-20 13:04:12.029   535  4094 W ActivityTaskManager: Duplicate finish request for r=ActivityRecord{377451 u10 com.android.settings/.applications.specialaccess.deviceadmin.ProfileOwnerAdd t1000012 f}}
+11-20 13:04:12.351   535  2417 W InputManager-JNI: Input channel object 'dab58c0 com.android.settings/com.android.settings.applications.specialaccess.deviceadmin.ProfileOwnerAdd (client)' was disposed without first being removed with the in
+11-20 13:04:50.413 12234 12310 I Finsky:background: [533] IV2::TV: allowMeteredNetwork=false for [Package=com.google.android.contactkeys, isid=MaI52-TeQ9WnZs4Re-mYwA]
+11-20 13:04:51.596   535   753 I ActivityManager: Killing 12734:com.google.android.setupwizard:remote/u10a92 (adj 975): empty #17
+11-20 13:04:52.651   535  2418 I ActivityManager: Killing 13429:com.google.android.setupwizard/u10a92 (adj 965): empty #17
+11-20 13:04:53.005 11954 11998 I Finsky  : [514] VerifyApps: [ADV] Added the Verifier app to the temp allowlist for PT30S
+11-20 13:04:53.029 14015 14075 E GoogleApiManager: java.lang.SecurityException: com.android.vending is not allowed to access service# 468 with visibility ZERO_PARTY
+11-20 13:04:54.832 11954 11998 I Finsky  : [514] VerifyApps: [ADV] Enforced verdict for com.google.ar.core: VERIFICATION_ALLOW
+11-20 13:04:54.832 11954 11998 I Finsky  : [514] VerifyApps: [ADV] Policy enforced for com.google.ar.core (id=1). Verdict: VERIFICATION_ALLOW
+11-20 13:04:54.908 11954 11988 I Finsky  : [504] VerifyApps AdvancedProtection: Allowing install because there are no Advanced Protection users
+11-20 13:04:54.908 11954 11954 I Finsky  : [2] VerifyApps AdvancedProtection: Reported Advanced Protection verification result: ALLOW
+11-20 13:04:54.930 11954 11988 I Finsky  : [504] VerifyApps: Returning package verification result id=1, result=ALLOW
+11-20 13:04:55.107   535   563 W BroadcastQueue: Background execution not allowed: receiving Intent { act=android.intent.action.DROPBOX_ENTRY_ADDED flg=0x10 (has extras) } to com.google.android.gms/.stats.service.DropBoxEntryAddedReceiver
+11-20 13:04:55.107   535   563 W BroadcastQueue: Background execution not allowed: receiving Intent { act=android.intent.action.DROPBOX_ENTRY_ADDED flg=0x10 (has extras) } to com.google.android.gms/.stats.service.DropBoxEntryAddedReceiver

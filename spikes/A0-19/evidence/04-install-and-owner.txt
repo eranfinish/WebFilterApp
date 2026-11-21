@@ -1,0 +1,18 @@
+== precheck users
+Users:
+	UserInfo{0:Owner:c13} running
+== precheck owners
+no owners
+== install (-t: testOnly)
+Performing Streamed Install
+Success
+== set-device-owner
+Success: Device owner set to package com.webfilter.spike.a19/.AdminReceiver
+Active admin set to component com.webfilter.spike.a19/.AdminReceiver
+exit=0
+== list-owners after
+1 owner:
+User  0: admin=com.webfilter.spike.a19/.AdminReceiver,DeviceOwner,Affiliated
+== users after
+Users:
+	UserInfo{0:Owner:c13} running

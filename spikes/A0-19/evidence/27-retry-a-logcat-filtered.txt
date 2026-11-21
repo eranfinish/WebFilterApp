@@ -1,0 +1,365 @@
+11-20 13:00:08.180   419   427 D PermissionCache: checking android.permission.ACCESS_SURFACE_FLINGER for uid=1001000 => granted (691 us)
+11-20 13:00:20.127   535   564 I ActivityManager: Start proc 9492:com.webfilter.spike.a19/u10a147 for broadcast {com.webfilter.spike.a19/com.webfilter.spike.a19.CmdReceiver}
+11-20 13:00:20.214  9492  9492 V GraphicsEnvironment: ANGLE Developer option for 'com.webfilter.spike.a19' set to: 'default'
+11-20 13:00:20.225  9492  9492 I A19     : op=status result=myUser=UserHandle{10} pkg=com.webfilter.spike.a19 isAdminActive=true isDeviceOwnerApp=false isProfileOwnerApp=true
+11-20 13:00:23.307   535  4643 I ActivityTaskManager: START u10 {act=android.settings.ADD_ACCOUNT_SETTINGS cmp=com.android.settings/.accounts.AddAccountSettings (has extras)} from uid 1001000
+11-20 13:00:28.298  4294  4319 I Auth    : [GmsAccountAuthenticatorImpl] Prewarming auth UI process upon addAccount call [CONTEXT service_id=343 ]
+11-20 13:00:29.073   535   549 I ActivityTaskManager: START u10 {act=com.google.android.accounts.AccountIntro cat=[FLAG_ACTIVITY_FORWARD_RESULT,categoryhack:sessionid=68ac66bf-7e69-4914-8123-c777bc814569,defaultPendingIntent] flg=0x2000000 cmp=com.go
+11-20 13:00:29.361  9725  9725 I Auth    : [CommonAuth,ManagedAccountUtil] No activities matched action com.google.android.gms.auth.addaccount.DM_PRE_ADD_ACCOUNT
+11-20 13:00:29.366   535  1595 I ActivityTaskManager: START u10 {flg=0x2000000 cmp=com.google.android.gms/.auth.uiflows.addaccount.WrapperControlledActivity (has extras)} from uid 1010097
+11-20 13:00:29.524  9827  9847 W SetupLibrary: [SetupCompatServiceInvoker] logMetric failed since service reference is null. Are the permissions valid?
+11-20 13:00:29.645   535   549 I ActivityTaskManager: START u10 {act=com.google.android.gms.auth.addaccount.PRE_ADD_ACCOUNT cmp=com.google.android.gms/.auth.uiflows.addaccount.PreAddAccountActivity (has extras)} from uid 1010097
+11-20 13:00:29.685   419   861 W ServiceManager: Permission failure: android.permission.ACCESS_SURFACE_FLINGER from uid=1010097 pid=9725
+11-20 13:00:29.685   419   861 D PermissionCache: checking android.permission.ACCESS_SURFACE_FLINGER for uid=1010097 => denied (368 us)
+11-20 13:00:29.686   419   861 W ServiceManager: Permission failure: android.permission.ROTATE_SURFACE_FLINGER from uid=1010097 pid=9725
+11-20 13:00:29.686   419   861 D PermissionCache: checking android.permission.ROTATE_SURFACE_FLINGER for uid=1010097 => denied (626 us)
+11-20 13:00:29.929  9725  9725 I SetupLibrary: [GlifLayout] Using setup design braz to init for PreAddAccountActivity
+11-20 13:00:30.060  9725  9725 I Auth    : [PreAddAccountActivity] PreAddAccountChimeraActivity.onStart() called. [CONTEXT service_id=343 ]
+11-20 13:00:30.069  9725  9725 W Auth    : [AddAccount, PreAddAccountActivity] Failed to check resources [CONTEXT service_id=343 ]
+11-20 13:00:30.069  9725  9725 W Auth    : 	at com.google.android.gms.auth.uiflows.addaccount.PreAddAccountChimeraActivity.H(:<email><email> (190800-1020418964):34)
+11-20 13:00:30.069  9725  9725 W Auth    : 	at com.google.android.gms.auth.uiflows.addaccount.PreAddAccountChimeraActivity.onStart(:<email><email> (190800-1020418964):17)
+11-20 13:00:30.070  9725  9725 W Auth    : [PreAddAccountState] setPhenotypeSync done [CONTEXT service_id=343 ]
+11-20 13:00:30.071  9725  9725 W Auth    : [PreAddAccountState] setKeyAttestationCheckFailed done with result=false [CONTEXT service_id=343 ]
+11-20 13:00:30.224  9725  9725 I Auth    : (REDACTED) [PreAddAccountActivity] setPsEducationRequired=%s received from ViewModel.
+11-20 13:00:30.224  9725  9725 W Auth    : [PreAddAccountState] setPsEducationRequired done with result=false [CONTEXT service_id=343 ]
+11-20 13:00:30.224  9725  9725 I Auth    : [PreAddAccountActivity] Account seed event received from ViewModel. [CONTEXT service_id=343 ]
+11-20 13:00:30.226  9725  9725 W Auth    : [PreAddAccountState] setAccountSeedingResult done [CONTEXT service_id=343 ]
+11-20 13:00:30.227  9725  9725 I Auth    : (REDACTED) [PreAddAccountActivity] Checkin event=%s received from ViewModel.
+11-20 13:00:30.227  9725  9725 W Auth    : [PreAddAccountState] setCheckinResult done with result=true [CONTEXT service_id=343 ]
+11-20 13:00:30.243  9725  9725 I Auth    : (REDACTED) [PreAddAccountActivity] FrpSnapshot cached event=%s received from ViewModel.
+11-20 13:00:30.244  9725  9725 W Auth    : [PreAddAccountState] setFrpSnapshot done with result= FrpSnapshot[supported=false,required=false,ls=false] [CONTEXT service_id=343 ]
+11-20 13:00:30.245  9725  9725 W Auth    : [PreAddAccountState] setChallengeResult done with result=true [CONTEXT service_id=343 ]
+11-20 13:00:30.245  9725  9725 W Auth    : [PreAddAccountState] PreAddAccountState check done. Running callback to finish [CONTEXT service_id=343 ]
+11-20 13:00:30.251  9725  9725 W Auth    : [AddAccount, PreAddAccountActivity] finish(resultCode, data) called with result=RESULT_OK [CONTEXT service_id=343 ]
+11-20 13:00:30.267   535   552 I ActivityTaskManager: Displayed com.google.android.gms/.auth.uiflows.addaccount.PreAddAccountActivity: +1s561ms
+11-20 13:00:30.861   535   549 W InputManager-JNI: Input channel object 'e7932c8 com.android.settings/com.android.settings.accounts.AddAccountSettings (client)' was disposed without first being removed with the input manager!
+11-20 13:00:31.039  9725  9725 W Auth    : [PreAddAccountChimeraActivity] finish(resultCode, data) called from Handler after delay with resultCode=-1
+11-20 13:00:31.039  9725  9725 W Auth    : [AddAccount, ControlledChimeraActivity] finishCalled for ControlledActivity, resultCode=-1, name=PreAddAccountActivity, and null controller [CONTEXT service_id=343 ]
+11-20 13:00:31.099  9725  9725 W Auth    : [AddAccount, ControlledChimeraActivity] finishCalled for ControlledActivity, resultCode=-1, name=WrapperControlledActivity, controller=AddAccountController [CONTEXT service_id=343 ]
+11-20 13:00:31.143   535   549 I ActivityTaskManager: START u10 {flg=0x2000000 cmp=com.google.android.gms/.auth.uiflows.minutemaid.MinuteMaidActivity (has extras)} from uid 1010097
+11-20 13:00:31.232  9725  9725 I Auth    : (REDACTED) [MinuteMaid, MinuteMaidActivity] network type: %d
+11-20 13:00:31.274  9725  9725 I SetupLibrary: [GlifLayout] Using setup design braz to init for MinuteMaidActivity
+11-20 13:00:31.297  9725  9725 I Auth    : (REDACTED) [MinuteMaidFragment] shouldDrawStatusBarInWebview: %b, useNativeNavigationBar: %b, isTablet: %b, deviceType=%s, theme: %s
+11-20 13:00:31.299  9725  9725 I Auth    : [MinuteMaidFragment] SMS disallowed for this user
+11-20 13:00:31.504  9725  9857 I Auth    : [MinuteMaidFragment] Telephony features not available on device
+11-20 13:00:31.751   535   552 I ActivityTaskManager: Displayed com.google.android.gms/.auth.uiflows.minutemaid.MinuteMaidActivity: +605ms
+11-20 13:00:31.829  9725  9725 I Auth    : (REDACTED) [MinuteMaidFragment] colorScheme: %s
+11-20 13:00:31.831  9725  9725 I Auth    : (REDACTED) [MinuteMaidFragment] paletteColors: %s
+11-20 13:00:31.842  9725  9725 W Auth    : [MinuteMaidFragment] com.google.android.androidforwork is not installed on system
+11-20 13:00:31.850  9725  9725 I Auth    : (REDACTED) [MinuteMaidFragment] isSuw: %b, oemCustomizationParamsEnabled: %b
+11-20 13:00:31.859  9725  9725 I Auth    : (REDACTED) [MinuteMaidFragment] mm url : %s
+11-20 13:00:32.084   535   549 W InputManager-JNI: Input channel object 'dbbc816 com.google.android.gms/com.google.android.gms.auth.uiflows.addaccount.WrapperControlledActivity (client)' was disposed without first being removed with the input manager
+11-20 13:00:32.391   535  1595 W InputManager-JNI: Input channel object 'e8460a1 com.google.android.gms/com.google.android.gms.auth.uiflows.addaccount.PreAddAccountActivity (client)' was disposed without first being removed with the input manager!
+11-20 13:00:35.414  9725  9725 E chromium: [ERROR:web_contents_delegate.cc(225)] WebContentsDelegate::CheckMediaAccessPermission: Not supported.
+11-20 13:00:35.414  9725  9725 E chromium: [ERROR:web_contents_delegate.cc(225)] WebContentsDelegate::CheckMediaAccessPermission: Not supported.
+11-20 13:00:35.424   465  2440 W ServiceManager: Permission failure: android.permission.CAMERA_OPEN_CLOSE_LISTENER from uid=1010097 pid=9725
+11-20 13:00:35.597  9725  9725 E chromium: [ERROR:web_contents_delegate.cc(225)] WebContentsDelegate::CheckMediaAccessPermission: Not supported.
+11-20 13:00:35.598  9725  9725 E chromium: [ERROR:web_contents_delegate.cc(225)] WebContentsDelegate::CheckMediaAccessPermission: Not supported.
+11-20 13:00:41.097   419   427 W ServiceManager: Permission failure: android.permission.ACCESS_SURFACE_FLINGER from uid=1010119 pid=5647
+11-20 13:00:41.098   419   427 D PermissionCache: checking android.permission.ACCESS_SURFACE_FLINGER for uid=1010119 => denied (313 us)
+11-20 13:00:41.098   419   427 W ServiceManager: Permission failure: android.permission.ROTATE_SURFACE_FLINGER from uid=1010119 pid=5647
+11-20 13:00:41.098   419   427 D PermissionCache: checking android.permission.ROTATE_SURFACE_FLINGER for uid=1010119 => denied (335 us)
+11-20 13:00:57.075  9725  9725 E chromium: [ERROR:web_contents_delegate.cc(225)] WebContentsDelegate::CheckMediaAccessPermission: Not supported.
+11-20 13:00:57.075  9725  9725 E chromium: [ERROR:web_contents_delegate.cc(225)] WebContentsDelegate::CheckMediaAccessPermission: Not supported.
+11-20 13:01:09.439  9725  9725 E chromium: [ERROR:web_contents_delegate.cc(225)] WebContentsDelegate::CheckMediaAccessPermission: Not supported.
+11-20 13:01:09.439  9725  9725 E chromium: [ERROR:web_contents_delegate.cc(225)] WebContentsDelegate::CheckMediaAccessPermission: Not supported.
+11-20 13:01:09.659  9725  9725 E chromium: [ERROR:web_contents_delegate.cc(225)] WebContentsDelegate::CheckMediaAccessPermission: Not supported.
+11-20 13:01:09.660  9725  9725 E chromium: [ERROR:web_contents_delegate.cc(225)] WebContentsDelegate::CheckMediaAccessPermission: Not supported.
+11-20 13:02:14.601  9725  9890 I Auth    : [MinuteMaid, MinuteMaidJsBridge] addAccount(...) [CONTEXT service_id=343 ]
+11-20 13:02:14.693  4294  4319 I Auth    : [AddAccountOperation] Initializing sign-in [CONTEXT service_id=153 ]
+11-20 13:02:14.751  4294  4319 I Auth    : [AddAccountOperation] Fetching token from auth code with GMS network stack. [CONTEXT service_id=153 ]
+11-20 13:02:15.798  4294  4319 I Auth    : [AddAccountOperation] Handling AddAccountResponse. [CONTEXT service_id=153 ]
+11-20 13:02:15.800  4294  4319 I Auth    : (REDACTED) [AddAccountOperation] possible Seed account with hasUsername=%s 
+11-20 13:02:15.818  4294  5086 I Auth    : [AddAccountOperation] Successfully updated account name and Gaia ID in DB [CONTEXT service_id=153 ]
+11-20 13:02:15.826  4294  4319 I Auth    : (REDACTED) [AddAccountHelper] Adding account with %d allowlisted packages
+11-20 13:02:15.872  4294  4319 I Auth    : [AddAccountHelper] Account added successfully to AccountManager [CONTEXT service_id=343 ]
+11-20 13:02:16.293  4294  4319 I Auth    : [AddAccountOperation] Finished adding account. [CONTEXT service_id=153 ]
+11-20 13:02:16.325  4294  4319 I Auth    : [AddAccountOperation] Add account completed successfully [CONTEXT service_id=153 ]
+11-20 13:02:16.428   535  1325 I ActivityManager: Killing 2513:com.google.android.permissioncontroller/u0a138 (adj 985): empty #17
+11-20 13:02:16.460  9725  9857 I Auth    : (REDACTED) [AddAccountTask] DmStatus =%s; isEligibleForUnmanagedWorkProfile = %s
+11-20 13:02:16.591  9725  9857 I Auth    : [AddAccountTask] Added account successfully. [CONTEXT service_id=343 ]
+11-20 13:02:16.600  9725  9725 I Auth    : [AddAccountTask] Delivering result. [CONTEXT service_id=343 ]
+11-20 13:02:16.600  9725  9725 I Auth    : (REDACTED) [AddAccountLoader] Got result: %s
+11-20 13:02:16.677  9725  9890 I Auth    : [MinuteMaidFragment] onCloseView() called from JS bridge
+11-20 13:02:16.677  9725  9890 W Auth    : [AddAccount, ControlledChimeraActivity] finishCalled for ControlledActivity, resultCode=3, name=MinuteMaidActivity, controller=AddAccountController [CONTEXT service_id=343 ]
+11-20 13:02:16.715  9725  9890 I Auth    : [AddAccountController] [AddAccount, AddAccountController] Checking for Desktop managed account warning [CONTEXT service_id=153 ]
+11-20 13:02:16.782  9725  9890 I Auth    : [CommonAuth,ManagedAccountUtil] Kids MDM flow:false
+11-20 13:02:16.839   535   752 I ActivityTaskManager: START u10 {flg=0x2000000 cmp=com.google.android.gms/.auth.uiflows.addaccount.WrapperControlledActivity (has extras)} from uid 1010097
+11-20 13:02:17.287   535   837 I ActivityTaskManager: START u10 {act=com.google.android.gms.auth.account.HANDLE_MANAGED cmp=com.google.android.gms/.kids.auth.KidsAuthSetupActivity (has extras)} from uid 1010097
+11-20 13:02:18.315  9725  9725 E SetupLibrary: [PartnerCustomizationLayout] Attribute sucUsePartnerResource not found in ComponentInfo{com.google.android.gms/com.google.android.gms.kids.auth.KidsAuthSetupActivity}
+11-20 13:02:18.579  9725  9725 I SetupLibrary: [GlifLayout] Using setup design GlifLayout to init for KidsAuthSetupActivity
+11-20 13:02:18.989  9725  9725 I SetupLibrary: [GlifLayout] Using setup design GlifLoadingLayout to init for KidsAuthSetupActivity
+11-20 13:02:19.253  7613  7627 I PermissionControllerServiceImpl: Updating user sensitive for uid 1010125
+11-20 13:02:19.258  7613  7627 I PermissionControllerServiceImpl: Updating user sensitive for uid 1010097
+11-20 13:02:19.267  9725  9725 W SetupLibrary: [GlifLoadingLayout] SUWLoadingScreen: B4CD5CC3:com.google.android.gms:com.google.android.gms.kids.auth.KidsAuthSetupActivity:com.google.android.gms.auth.account.HANDLE_MANAGED
+11-20 13:02:19.288 10075 10083 W ogle.android.g: Suspending all threads took: 6.804ms
+11-20 13:02:19.490   535   552 I ActivityTaskManager: Displayed com.google.android.gms/.kids.auth.KidsAuthSetupActivity: +2s644ms
+11-20 13:02:20.358   535  2418 W InputManager-JNI: Input channel object 'e46efbe com.google.android.gms/com.google.android.gms.auth.uiflows.minutemaid.MinuteMaidActivity (client)' was disposed without first being removed with the input manager!
+11-20 13:02:20.408  7613  9751 I PermissionControllerServiceImpl: Updating user sensitive for uid 1010103
+11-20 13:02:20.480  9725  9725 I KidsAuth: [KidsAuthSetupChimeraActivity] Supervised account found on the device [CONTEXT service_id=42 ]
+11-20 13:02:20.509  9725  9725 I KidsAuth: [SupervisionCoreUtils] Onboarding on Supervision Core APK is not eligible for devices with API version below T. [CONTEXT service_id=42 ]
+11-20 13:02:20.526  9725  9725 I KidsAuth: [OnboardingFlowObserver] Flow started. [CONTEXT service_id=42 ]
+11-20 13:02:20.632  9725  9725 I KidsAuth: [KidsAuthSetupChimeraActivity] Starting Webview Fragment [CONTEXT service_id=42 ]
+11-20 13:02:20.682   535  2418 W PermissionManagerService: Datasource <email> protecting data with platform defined runtime permission android.permission.READ_CONTACTS while not having android.permission.UPDATE_APP_OPS_STATS
+11-20 13:02:20.852  4294  4294 W ChimeraUtils: Module com.google.android.gms.kids_auth missing resource null(0)
+11-20 13:02:20.859  4294  4294 W ChimeraUtils: Module com.google.android.gms.kids_auth missing resource null(0)
+11-20 13:02:20.863  4294  4294 W ChimeraUtils: Module com.google.android.gms.kids_auth missing resource null(0)
+11-20 13:02:20.864  4294  4294 W ChimeraUtils: Module com.google.android.gms.kids_auth missing resource null(0)
+11-20 13:02:20.867  4294  5086 I KidsAuth: (REDACTED) [SupervisionSetupChimeraService] [%s] Processing command[id=%s][flags=%s]: %s
+11-20 13:02:20.883  4294  4535 I KidsAuth: [SupervisionCoreUtils] Onboarding on Supervision Core APK is not eligible for devices with API version below T. [CONTEXT service_id=42 ]
+11-20 13:02:21.027  9725  9725 I SetupLibrary: [GlifLayout] Using setup design GlifLayout to init for KidsAuthSetupActivity
+11-20 13:02:21.082   535  2480 W ServiceManager: Permission failure: android.permission.HIGH_SAMPLING_RATE_SENSORS from uid=1010114 pid=10257
+11-20 13:02:21.130  9725  9725 E SetupLibrary: [PartnerCustomizationLayout] Attribute sucUsePartnerResource not found in ComponentInfo{com.google.android.gms/com.google.android.gms.kids.auth.KidsAuthSetupActivity}
+11-20 13:02:21.333  9725  9725 I SetupLibrary: [GlifLayout] Using setup design GlifLoadingLayout to init for KidsAuthSetupActivity
+11-20 13:02:21.456  4294  4294 D BoundBrokerSvc: onBind: Intent { act=com.google.android.gms.kids.service.START pkg=com.google.android.gms }
+11-20 13:02:21.456  4294  4294 D BoundBrokerSvc: Loading bound service for intent: Intent { act=com.google.android.gms.kids.service.START pkg=com.google.android.gms }
+11-20 13:02:21.456  4294  4294 I BndSvcConfigHelper: No bound-service is registered for action: com.google.android.gms.kids.service.START
+11-20 13:02:21.456  4294  4294 I BoundBrokerSvc: Bound service not available for: Intent { act=com.google.android.gms.kids.service.START pkg=com.google.android.gms }
+11-20 13:02:21.456  4294  4294 I GmsApiChimeraSvc: Handling missing api service for: com.google.android.gms.kids.service.START
+11-20 13:02:21.511  9725  9725 W SetupLibrary: [GlifLoadingLayout] SUWLoadingScreen: B4CD5CC3:com.google.android.gms:com.google.android.gms.kids.auth.KidsAuthSetupActivity:com.google.android.gms.auth.account.HANDLE_MANAGED
+11-20 13:02:21.616  4294  4573 I GmsApiChimeraSvc: Using MissingApiServiceBroker for com.google.android.gms.kids.service.START due to missing BoundService implementation
+11-20 13:02:21.656  4294 10012 I KidsAuth: (REDACTED) [SupervisionSetupChimeraService] Next state: %s
+11-20 13:02:22.002  9725  9778 I KidsAuth: (REDACTED) [OnboardingUrlFactory] Created onboarding flow URL: %s
+11-20 13:02:22.771 10146 10163 I Finsky  : [437] Module info request for [{Kids.optional:264531100800:}] modules from package com.google.android.gms v=264531032 hasAccount:true authEnabled:false
+11-20 13:02:23.453 10110 10128 W droid.apps.doc: Suspending all threads took: 6.414ms
+11-20 13:02:23.981 10146 10155 W android.vendin: Suspending all threads took: 20.688ms
+11-20 13:02:24.142  4294 10418 I GmsDebugLogger: [53] +kids:6
+11-20 13:02:24.231  4294 10418 I ChimeraConfigurator: Starting update, reason: 4 urgentFeatures: kids:6
+11-20 13:02:24.507 10559 10616 W Bugle   : TelephonySyncManager: no permission to sync.
+11-20 13:02:24.511  4294 10418 I ChimeraConfigurator: Detected pending changes for urgent request: [kids]. Pending module sets: container:2645319190800+kids+kids_dashboard+kids_transparency
+11-20 13:02:24.531  4294 10418 I GmsDebugLogger: [54] Kids.optional_264531100800_2.apk
+11-20 13:02:24.602 10273 10285 W viders.calenda: Suspending all threads took: 14.563ms
+11-20 13:02:26.628  4294  4294 D BoundBrokerSvc: onUnbind: Intent { act=com.google.android.gms.kids.service.START pkg=com.google.android.gms }
+11-20 13:02:28.257 10146 10155 W android.vendin: Suspending all threads took: 7.220ms
+11-20 13:02:28.275  4294  5086 I GmsDebugLogger: [56] Kids.optional_264531100800_2.apk
+11-20 13:02:30.117   535   543 I system_server: JIT allocated 98KB for compiled code of boolean android.app.admin.IDevicePolicyManager$Stub.onTransact(int, android.os.Parcel, android.os.Parcel, int)
+11-20 13:02:30.118   535   543 I system_server: Compiler allocated 5105KB to compile boolean android.app.admin.IDevicePolicyManager$Stub.onTransact(int, android.os.Parcel, android.os.Parcel, int)
+11-20 13:02:30.510 10847 10855 W ding:backgroun: Suspending all threads took: 16.543ms
+11-20 13:02:31.375 10075 10083 W ogle.android.g: Suspending all threads took: 20.522ms
+11-20 13:02:32.227  9725  9725 I KidsAuth: [DeviceSetupBaseViewModel] Can't remove additional accounts. Ensuring device has only one account. [CONTEXT service_id=42 ]
+11-20 13:02:32.238  9725  9725 I KidsAuth: [SupervisionCoreUtils] Onboarding on Supervision Core APK is not eligible for devices with API version below T. [CONTEXT service_id=42 ]
+11-20 13:02:32.444  4294  4309 W gle.android.gm: Suspending all threads took: 5.057ms
+11-20 13:02:32.967   535   832 I ActivityManager: Killing 9492:com.webfilter.spike.a19/u10a147 (adj 975): empty #17
+11-20 13:02:33.519  7613  9751 I PermissionControllerServiceImpl: Updating user sensitive for uid 1010097
+11-20 13:02:33.757  4294  5086 I GmsDebugLogger: [20] [Kids.optional:264531100800]
+11-20 13:02:33.796  4294  5086 I ModuleSetResolution: Computing pending module set with APKs: [[Appsearch.optional:264531100800], [IdentityCredentialsPlatform.optional:264531100800], [Kids.optional:264531100800], [MapsCoreDynamite.integ:2643207001008
+11-20 13:02:33.797  4294  5086 I ModuleSetResolution: Pending container module APKs: [[Appsearch.optional:264531100800], [IdentityCredentialsPlatform.optional:264531100800], [Kids.optional:264531100800], [MapsCoreDynamite.integ:264320700100800], [Mlk
+11-20 13:02:33.968  4294  5086 I ChimeraCfgMgr: Updating module config: container:2645319190800+appsearch_impl+identity_credentials_platform+maps_core+mlkit.ocr.common+vision.ocr,tflite_dynamite:2640104055100800+tflite_dynamite -> container:264531919
+11-20 13:02:34.036  4294  5086 I GmsDebugLogger: [83] 0 [kids]
+11-20 13:02:34.067  4294 10798 I KidsAuth: (REDACTED) [SupervisionBinaryDownloaderImpl] Supervision Binary download result: %s (in %s)
+11-20 13:02:34.075  4294 10798 I KidsAuth: (REDACTED) [SupervisionSetupChimeraService] [%s] Processing command[id=%s][flags=%s]: %s
+11-20 13:02:34.095  4294 10798 I KidsAuth: (REDACTED) [SupervisionSetupChimeraService] Next state: %s
+11-20 13:02:34.767  4294  4294 D BoundBrokerSvc: onBind: Intent { act=com.google.android.gms.kids.INVALIDATION_SERVICE dat=chimera-action: cmp=com.google.android.gms/.chimera.PersistentInternalBoundBrokerService }
+11-20 13:02:34.767  4294  4294 D BoundBrokerSvc: Loading bound service for intent: Intent { act=com.google.android.gms.kids.INVALIDATION_SERVICE dat=chimera-action: cmp=com.google.android.gms/.chimera.PersistentInternalBoundBrokerService }
+11-20 13:02:34.877  4294 10418 I KidsJobScheduler: (REDACTED) schedule job %s
+11-20 13:02:34.901  4294 10745 I SupervisionStateMachine: Platform supervision is not available on this device. [CONTEXT service_id=42 ]
+11-20 13:02:35.029  4294 10745 W SupervisionStateUtils: State no profile owner [CONTEXT service_id=42 ]
+11-20 13:02:35.113  4294 10418 I KidsJobScheduler: (REDACTED) schedule job %s
+11-20 13:02:35.199  4294 10798 I SupervisionEnforcementS: (REDACTED) %s State Machine evaluation: current state: %s, trigger action: %s
+11-20 13:02:35.202  4294 10745 I SupervisionStateUtils: (REDACTED) State recover:%s
+11-20 13:02:35.229  4294 10745 I KidsJobScheduler: (REDACTED) schedule job %s
+11-20 13:02:35.297  4294 10418 I SupervisionStateMachine: Platform supervision is not available on this device. [CONTEXT service_id=42 ]
+11-20 13:02:35.329  4294 10418 W SupervisionStateUtils: State no profile owner [CONTEXT service_id=42 ]
+11-20 13:02:35.347  4294 10524 I SupervisionEnforcementS: (REDACTED) %s State Machine evaluation: current state: %s, trigger action: %s
+11-20 13:02:35.349  4294 10418 I GmsKidsJobSchedulerImpl: (REDACTED) Canceling job %s
+11-20 13:02:35.350  4294 10418 I KidsJobScheduler: (REDACTED) schedule job %s
+11-20 13:02:35.408  4294 10418 I SupervisionStateMachine: Platform supervision is not available on this device. [CONTEXT service_id=42 ]
+11-20 13:02:35.458  4294 10418 W SupervisionStateUtils: State no profile owner [CONTEXT service_id=42 ]
+11-20 13:02:35.520  4294 10012 I SupervisionEnforcementS: (REDACTED) %s State Machine evaluation: current state: %s, trigger action: %s
+11-20 13:02:35.524  4294 10418 I SupervisionStateUtils: (REDACTED) State recover:%s
+11-20 13:02:35.573  4294 10418 I KidsJobScheduler: (REDACTED) schedule job %s
+11-20 13:02:35.735  7613  9751 I PermissionControllerServiceImpl: Updating user sensitive for uid 1010097
+11-20 13:02:37.332 10075 10083 W ogle.android.g: Suspending all threads took: 10.359ms
+11-20 13:02:39.358   863  1216 E DatabaseUtils: java.lang.SecurityException: No permission to access APN settings
+11-20 13:02:39.358   863  1216 E DatabaseUtils: 	at com.android.providers.telephony.TelephonyProvider.checkPermission(TelephonyProvider.java:4788)
+11-20 13:02:39.358   863  1216 E DatabaseUtils: 	at com.android.providers.telephony.TelephonyProvider.checkPermissionCompat(TelephonyProvider.java:4805)
+11-20 13:02:39.360  4294 11238 E RequestContextBuilder: java.lang.SecurityException: No permission to access APN settings
+11-20 13:02:39.360  4294 11238 E RequestContextBuilder: 	at hycb.invokeSuspend(:<email><email> (190800-1020418964):39)
+11-20 13:02:39.485   465   465 W ServiceManager: Permission failure: android.permission.SYSTEM_CAMERA from uid=1010097 pid=4294
+11-20 13:02:39.487   465   465 W ServiceManager: Permission failure: android.permission.SYSTEM_CAMERA from uid=1010097 pid=4294
+11-20 13:02:39.488   465   465 W ServiceManager: Permission failure: android.permission.SYSTEM_CAMERA from uid=1010097 pid=4294
+11-20 13:02:39.489   465   465 W ServiceManager: Permission failure: android.permission.SYSTEM_CAMERA from uid=1010097 pid=4294
+11-20 13:02:39.543  4294  7454 W ocrDataLoader: 	at hycb.invokeSuspend(:<email><email> (190800-1020418964):39)
+11-20 13:02:39.638   465   465 W ServiceManager: Permission failure: android.permission.SYSTEM_CAMERA from uid=1010097 pid=4294
+11-20 13:02:39.639   465   465 W ServiceManager: Permission failure: android.permission.SYSTEM_CAMERA from uid=1010097 pid=4294
+11-20 13:02:39.640   465   465 W ServiceManager: Permission failure: android.permission.SYSTEM_CAMERA from uid=1010097 pid=4294
+11-20 13:02:39.641   465   465 W ServiceManager: Permission failure: android.permission.SYSTEM_CAMERA from uid=1010097 pid=4294
+11-20 13:02:40.662  4473  4732 W A       : isEligible(): Absent status for permission VOICE_AND_AUDIO_ACTIVITY. Calling ensureCachedSettingsLoaded().
+11-20 13:02:40.695  4473  4732 W A       : Absent status for permission VOICE_AND_AUDIO_ACTIVITY. Calling ensureCachedSettingsLoaded().
+11-20 13:02:40.725  4473  4732 W A       : isEligible(): Absent status for permission WEB_AND_APP_ACTIVITY. Calling ensureCachedSettingsLoaded().
+11-20 13:02:40.726  4473  4732 W A       : Absent status for permission WEB_AND_APP_ACTIVITY. Calling ensureCachedSettingsLoaded().
+11-20 13:02:40.729  4473  4732 W A       : isEligible(): Absent status for permission SUPPLEMENTAL_WEB_AND_APP_ACTIVITY. Calling ensureCachedSettingsLoaded().
+11-20 13:02:40.730  4473  4732 W A       : Absent status for permission SUPPLEMENTAL_WEB_AND_APP_ACTIVITY. Calling ensureCachedSettingsLoaded().
+11-20 13:02:40.732  4473  4732 W A       : isEligible(): Absent status for permission DEVICE_APPS. Calling ensureCachedSettingsLoaded().
+11-20 13:02:40.736  4473  4732 W A       : Absent status for permission DEVICE_APPS. Calling ensureCachedSettingsLoaded().
+11-20 13:02:40.739  4473  4732 W A       : isEligible(): Absent status for permission DEVICE_CONTACTS. Calling ensureCachedSettingsLoaded().
+11-20 13:02:40.740  4473  4732 W A       : Absent status for permission DEVICE_CONTACTS. Calling ensureCachedSettingsLoaded().
+11-20 13:02:42.731  4473 11223 W A       : Absent status for permission DEVICE_INFORMATION. Calling ensureCachedSettingsLoaded().
+11-20 13:02:42.732  4473 11223 W A       : Absent status for permission SUPPLEMENTAL_WEB_AND_APP_ACTIVITY. Calling ensureCachedSettingsLoaded().
+11-20 13:02:43.558   465   465 W ServiceManager: Permission failure: android.permission.SYSTEM_CAMERA from uid=1010120 pid=11373
+11-20 13:02:43.559   465   465 W ServiceManager: Permission failure: android.permission.SYSTEM_CAMERA from uid=1010120 pid=11373
+11-20 13:02:43.566   465   465 W ServiceManager: Permission failure: android.permission.SYSTEM_CAMERA from uid=1010120 pid=11373
+11-20 13:02:43.566   465   465 W ServiceManager: Permission failure: android.permission.SYSTEM_CAMERA from uid=1010120 pid=11373
+11-20 13:02:45.890  4294 11607 I Auth    : (REDACTED) [SupervisedAccountIntentOperation] onHandleIntent: %s
+11-20 13:02:45.949  4294 11607 I Auth    : (REDACTED) [SupervisedAccountIntentOperation] Kids Module requested. Urgent: %s
+11-20 13:02:46.016  4294 11607 I GmsDebugLogger: [101] +kids:0
+11-20 13:02:49.639  4294 11686 I SupervisionStateMachine: Platform supervision is not available on this device. [CONTEXT service_id=42 ]
+11-20 13:02:49.738  4294 11686 W SupervisionStateUtils: State no profile owner [CONTEXT service_id=42 ]
+11-20 13:02:49.810  4294 10798 I SupervisionEnforcementS: (REDACTED) %s State Machine evaluation: current state: %s, trigger action: %s
+11-20 13:02:49.812  4294 11686 I SupervisionStateUtils: (REDACTED) State recover:%s
+11-20 13:02:49.886  4294 11686 I KidsJobScheduler: (REDACTED) schedule job %s
+11-20 13:02:50.216  4294 11648 I Auth    : (REDACTED) [SupervisedAccountIntentOperation] onHandleIntent: %s
+11-20 13:02:50.225  4294 11686 I SupervisionStateMachine: Platform supervision is not available on this device. [CONTEXT service_id=42 ]
+11-20 13:02:50.414  4294 11648 I Auth    : (REDACTED) [SupervisedAccountIntentOperation] Kids Module requested. Urgent: %s
+11-20 13:02:50.453  4294 11686 W SupervisionStateUtils: State no profile owner [CONTEXT service_id=42 ]
+11-20 13:02:50.612  4294 10542 I SupervisionEnforcementS: (REDACTED) %s State Machine evaluation: current state: %s, trigger action: %s
+11-20 13:02:50.695  4294 11686 I SetupUtils: Not transferring ownership because the device is not NORMAL/SUPERVISED [CONTEXT service_id=42 ]
+11-20 13:02:50.840  7613  7627 I PermissionControllerServiceImpl: Updating user sensitive for uid 1010097
+11-20 13:02:51.054  4294  4309 W gle.android.gm: Suspending all threads took: 50.278ms
+11-20 13:02:56.749  4294 11607 W gle.android.gm: Verification of void com.google.android.gms.kids.operations.SecondaryAccountAddedIntentOperation.onHandleIntent(android.content.Intent) took 138.247ms (6379.88 bytecodes/s) (22384B approximate peak all
+11-20 13:02:57.117  4294 10012 E Auth    : 	at bsxr.invokeSuspend(:<email><email> (190800-1020418964):17)
+11-20 13:02:57.194  4294  4309 W gle.android.gm: Suspending all threads took: 9.970ms
+11-20 13:02:57.235   535  1595 I ActivityManager: Background started FGS: Allowed [callingPackage: com.android.vending; callingUid: 1010103; uidState: RCVR; intent: Intent { dat=vpaservice://installrequiredfornewaccount cmp=com.android.vending/com.go
+11-20 13:02:58.648  4294 11607 W ParseMdlUpdatesCfg: com.google.android.gms.auth_account_base.KIDS_ONBOARDING_SOURCE not allowed to pause.
+11-20 13:02:58.977 10075 10083 W ogle.android.g: Suspending all threads took: 9.880ms
+11-20 13:02:59.035  4294 10012 W Auth    : 	at bsxr.invokeSuspend(:<email><email> (190800-1020418964):17)
+11-20 13:03:00.446  9725  9725 I KidsAuth: [SupervisionCoreUtils] Onboarding on Supervision Core APK is not eligible for devices with API version below T. [CONTEXT service_id=42 ]
+11-20 13:03:01.962  4294 12100 I GmsKidsJobSchedulerImpl: (REDACTED) Canceling job %s
+11-20 13:03:01.974  4294 12100 I KidsJobScheduler: (REDACTED) schedule job %s
+11-20 13:03:02.217  4294 12100 I KidsJobScheduler: (REDACTED) schedule job %s
+11-20 13:03:04.590   465  4096 W ServiceManager: Permission failure: android.permission.SYSTEM_CAMERA from uid=1010097 pid=4294
+11-20 13:03:04.598   465  4096 W ServiceManager: Permission failure: android.permission.SYSTEM_CAMERA from uid=1010097 pid=4294
+11-20 13:03:04.605   465  4096 W ServiceManager: Permission failure: android.permission.SYSTEM_CAMERA from uid=1010097 pid=4294
+11-20 13:03:04.607   465  4096 W ServiceManager: Permission failure: android.permission.SYSTEM_CAMERA from uid=1010097 pid=4294
+11-20 13:03:04.712  4294  4309 W gle.android.gm: Suspending all threads took: 11.823ms
+11-20 13:03:06.297  4473  4793 W A       : 	at com.google.android.apps.search.googleapp.permissions.udcdataservice.ulr.n.apply(SourceFile:2)
+11-20 13:03:07.180 11954 11962 W android.vendin: Suspending all threads took: 7.934ms
+11-20 13:03:07.396  7613  9751 I PermissionControllerServiceImpl: Updating user sensitive for uid 1010097
+11-20 13:03:12.321 11954 11962 W android.vendin: Suspending all threads took: 19.597ms
+11-20 13:03:14.989  4294  4309 W gle.android.gm: Suspending all threads took: 19.776ms
+11-20 13:03:16.496  4294  7482 I AppDoctorManager: Updating appdoctor Uri Permissions. [CONTEXT service_id=256 ]
+11-20 13:03:17.217  4473  4484 W earchbox:searc: Suspending all threads took: 18.218ms
+11-20 13:03:18.793  4294 12636 I NearbySharing: Granted slice and uri permissions to android
+11-20 13:03:18.819  4294 12636 I NearbySharing: Granted slice and uri permissions to com.google.android.apps.nbu.files
+11-20 13:03:19.064   535   634 I RescueParty: Starting to observe: [com.google.android.permissioncontroller], updated namespace: permissions
+11-20 13:03:19.065   535   562 D PackageWatchdog: rescue-party-observer added the following packages to monitor [com.google.android.permissioncontroller]
+11-20 13:03:22.228  4294  4294 E IntentOperation: No such module intent operation: .kids.operations.KidsSystemIntentOperation for action: android.app.action.DEVICE_ADMIN_ENABLED
+11-20 13:03:22.344 11954 11962 W android.vendin: Suspending all threads took: 6.457ms
+11-20 13:03:23.859 11954 11962 W android.vendin: Suspending all threads took: 9.948ms
+11-20 13:03:24.994 11954 11962 W android.vendin: Suspending all threads took: 14.621ms
+11-20 13:03:25.555   535  4001 I RescueParty: Starting to observe: [android, com.google.android.permissioncontroller, com.google.android.setupwizard, com.google.android.gms, com.android.phone, com.android.providers.blockednumber, com.android.systemui
+11-20 13:03:25.557   535   562 D PackageWatchdog: rescue-party-observer added the following packages to monitor [android, com.google.android.permissioncontroller, com.google.android.setupwizard, com.google.android.gms, com.android.phone, com.android.
+11-20 13:03:26.533   535   548 I RescueParty: Starting to observe: [android, com.google.android.permissioncontroller], updated namespace: app_hibernation
+11-20 13:03:26.572   535   562 D PackageWatchdog: rescue-party-observer added the following packages to monitor [android, com.google.android.permissioncontroller]
+11-20 13:03:27.853  4294  4309 W gle.android.gm: Suspending all threads took: 17.501ms
+11-20 13:03:30.177 11954 11962 W android.vendin: Suspending all threads took: 12.051ms
+11-20 13:03:30.235 11954 11962 W android.vendin: Suspending all threads took: 13.857ms
+11-20 13:03:30.733 12234 12252 W ding:backgroun: Suspending all threads took: 5.065ms
+11-20 13:03:31.439 11954 11988 I Finsky  : [504] Installer package name of package com.webfilter.spike.a19 is 
+11-20 13:03:31.439 11954 11988 I Finsky  : [504] Installer package name of package com.google.android.permissioncontroller is 
+11-20 13:03:31.441 11954 11988 I Finsky  : [504] Installer package name of package com.google.android.packageinstaller is 
+11-20 13:03:31.441 11954 11988 I Finsky  : [504] Installer package name of package com.google.android.overlay.permissioncontroller is 
+11-20 13:03:31.443 11954 11988 I Finsky  : [504] Installer package name of package com.google.android.networkstack.permissionconfig is 
+11-20 13:03:31.577  9725  9725 I KidsAuth: [DeviceSetupBaseViewModel] Can't remove additional accounts. Ensuring device has only one account. [CONTEXT service_id=42 ]
+11-20 13:03:31.627  9725  9725 I KidsAuth: [SupervisionCoreUtils] Onboarding on Supervision Core APK is not eligible for devices with API version below T. [CONTEXT service_id=42 ]
+11-20 13:03:33.849  7613  7629 I PermissionControllerServiceImpl: Updating user sensitive for uid 1010125
+11-20 13:03:38.281   465   841 W ServiceManager: Permission failure: android.permission.SYSTEM_CAMERA from uid=1010120 pid=12995
+11-20 13:03:38.291   465   841 W ServiceManager: Permission failure: android.permission.SYSTEM_CAMERA from uid=1010120 pid=12995
+11-20 13:03:38.295   465   841 W ServiceManager: Permission failure: android.permission.SYSTEM_CAMERA from uid=1010120 pid=12995
+11-20 13:03:38.297   465   841 W ServiceManager: Permission failure: android.permission.SYSTEM_CAMERA from uid=1010120 pid=12995
+11-20 13:03:40.599  4294 12917 I ModuleSetResolution: Computing pending module set with APKs: [[Appsearch.optional:264531100800], [IdentityCredentialsPlatform.optional:264531100800], [Kids.optional:264531100800], [MapsCoreDynamite.integ:2643207001008
+11-20 13:03:40.616  4294 12917 I ModuleSetResolution: Pending container module APKs: [[Appsearch.optional:264531100800], [IdentityCredentialsPlatform.optional:264531100800], [Kids.optional:264531100800], [MapsCoreDynamite.integ:264320700100800], [Mlk
+11-20 13:03:41.002   465   841 W ServiceManager: Permission failure: android.permission.SYSTEM_CAMERA from uid=1010097 pid=4294
+11-20 13:03:41.003   465   841 W ServiceManager: Permission failure: android.permission.SYSTEM_CAMERA from uid=1010097 pid=4294
+11-20 13:03:41.003   465   841 W ServiceManager: Permission failure: android.permission.SYSTEM_CAMERA from uid=1010097 pid=4294
+11-20 13:03:41.003   465   841 W ServiceManager: Permission failure: android.permission.SYSTEM_CAMERA from uid=1010097 pid=4294
+11-20 13:03:41.079  4294 11264 I ModuleSetResolution: Computing pending module set with APKs: [[Appsearch.optional:264531100800], [IdentityCredentialsPlatform.optional:264531100800], [Kids.optional:264531100800], [MapsCoreDynamite.integ:2643207001008
+11-20 13:03:41.095  4294 11264 I ModuleSetResolution: Pending container module APKs: [[Appsearch.optional:264531100800], [IdentityCredentialsPlatform.optional:264531100800], [Kids.optional:264531100800], [MapsCoreDynamite.integ:264320700100800], [Mlk
+11-20 13:03:41.377 11954 11988 W Finsky  : [504] VerifyApps: Couldn't open the manifest for /data/app/vmdl275788986.tmp/base.digests. Error: java.io.FileNotFoundException: /data/app/vmdl275788986.tmp/base.digests (Permission denied)
+11-20 13:03:41.465   535   584 I PackageManager: Permission ownership changed. Updating all permissions.
+11-20 13:03:44.607   535   564 I ActivityManager: Start proc 13245:com.google.android.permissioncontroller/u0a138 for service {com.google.android.permissioncontroller/com.android.permissioncontroller.permission.service.PermissionControllerServiceImpl
+11-20 13:03:44.727   535  2844 W BroadcastQueue: Background execution not allowed: receiving Intent { act=android.intent.action.PACKAGE_ADDED dat=package:com.google.android.verifier flg=0x4000010 (has extras) } to com.google.android.packageinstaller/
+11-20 13:03:44.768   535   563 I ActivityManager: com.google.android.packageinstaller is exempt from freezer
+11-20 13:03:44.855   535   564 I ActivityManager: Start proc 13270:com.google.android.packageinstaller/u10a67 for broadcast {com.google.android.packageinstaller/com.android.packageinstaller.PackageInstalledReceiver}
+11-20 13:03:44.989 13270 13270 V GraphicsEnvironment: ANGLE Developer option for 'com.google.android.packageinstaller' set to: 'default'
+11-20 13:03:45.018  7613  7629 I PermissionControllerServiceImpl: Updating user sensitive for uid 1010148
+11-20 13:03:45.033  4294 13217 I Auth    : (REDACTED) [SupervisedAccountIntentOperation] onHandleIntent: %s
+11-20 13:03:45.140 13245 13245 V GraphicsEnvironment: ANGLE Developer option for 'com.google.android.permissioncontroller' set to: 'default'
+11-20 13:03:45.172   535  2844 D PackageInstallerSession: Ignoring abandon after commit relinquished control
+11-20 13:03:45.195 13245 13245 I CarUiInstaller: CarUiInstaller started for com.google.android.permissioncontroller
+11-20 13:03:45.583  4294 12917 I KidsJobScheduler: (REDACTED) schedule job %s
+11-20 13:03:45.592  4294 13217 I NearbyDiscovery: (REDACTED) processGrantSlicePermission: %s
+11-20 13:03:45.726 13245 13295 W ContextImpl: Failed to ensure /data/user_de/10/com.google.android.permissioncontroller/files: mkdir failed: EACCES (Permission denied)
+11-20 13:03:45.695 13245 13245 W com.google.android.permissioncontroller: type=1400 audit(0.0:131): avc: denied { search } for comm=4173796E635461736B202331 name="10" dev="dm-5" ino=434251 scontext=u:r:permissioncontroller_app:s0:c138,c256,c512,c768 
+11-20 13:03:45.768 13245 13295 E BackupHelper: Could not parse delayed permissions
+11-20 13:03:45.768 13245 13295 E BackupHelper: java.io.FileNotFoundException: /data/user_de/10/com.google.android.permissioncontroller/files/delayed_restore_permissions.xml: open failed: EACCES (Permission denied)
+11-20 13:03:45.768 13245 13295 E BackupHelper: 	at com.android.permissioncontroller.permission.service.BackupHelper.restoreDelayedState(BackupHelper.java:338)
+11-20 13:03:45.768 13245 13295 E BackupHelper: 	at com.android.permissioncontroller.permission.service.PermissionControllerServiceImpl.onRestoreDelayedRuntimePermissionsBackup(PermissionControllerServiceImpl.java:419)
+11-20 13:03:45.768 13245 13295 E BackupHelper: 	at com.android.permissioncontroller.permission.service.PermissionControllerServiceImpl.lambda$onApplyStagedRuntimePermissionBackup$4(PermissionControllerServiceImpl.java:413)
+11-20 13:03:45.768 13245 13295 E BackupHelper: 	at com.android.permissioncontroller.permission.service.PermissionControllerServiceImpl.$r8$lambda$d0Nn-xRapZQvoyXU4vSZgmIHAHQ(Unknown Source:0)
+11-20 13:03:45.768 13245 13295 E BackupHelper: 	at com.android.permissioncontroller.permission.service.PermissionControllerServiceImpl$$ExternalSyntheticLambda5.run(Unknown Source:8)
+11-20 13:03:45.768 13245 13295 E BackupHelper: Caused by: android.system.ErrnoException: open failed: EACCES (Permission denied)
+11-20 13:03:45.719 13245 13245 W com.google.android.permissioncontroller: type=1400 audit(0.0:132): avc: denied { search } for comm=4173796E635461736B202331 name="10" dev="dm-5" ino=434251 scontext=u:r:permissioncontroller_app:s0:c138,c256,c512,c768 
+11-20 13:03:45.719 13245 13245 W com.google.android.permissioncontroller: type=1400 audit(0.0:133): avc: denied { search } for comm=4173796E635461736B202331 name="10" dev="dm-5" ino=434251 scontext=u:r:permissioncontroller_app:s0:c138,c256,c512,c768 
+11-20 13:03:45.824  4294 12917 I KidsJobScheduler: (REDACTED) schedule job %s
+11-20 13:03:45.719 13245 13245 W com.google.android.permissioncontroller: type=1400 audit(0.0:134): avc: denied { search } for comm=4173796E635461736B202331 name="10" dev="dm-5" ino=434251 scontext=u:r:permissioncontroller_app:s0:c138,c256,c512,c768 
+11-20 13:03:45.889  4294 12917 I SupervisionStateMachine: Platform supervision is not available on this device. [CONTEXT service_id=42 ]
+11-20 13:03:46.048  4294 12917 W SupervisionStateUtils: State no profile owner [CONTEXT service_id=42 ]
+11-20 13:03:46.118  4294 12560 I SupervisionEnforcementS: (REDACTED) %s State Machine evaluation: current state: %s, trigger action: %s
+11-20 13:03:46.138  4294 12917 I SupervisionStateUtils: (REDACTED) State recover:%s
+11-20 13:03:46.163  4294 12917 I KidsJobScheduler: (REDACTED) schedule job %s
+11-20 13:03:46.233  1082  1158 I AppLinksAsyncVerifierV2: (REDACTED) Verification result: checking for a statement with source %s, relation delegate_permission/common.handle_all_urls, and target %s --> %b.
+11-20 13:03:46.241  1082  6938 I AppLinksAsyncVerifierV2: (REDACTED) Verification result: checking for a statement with source %s, relation delegate_permission/common.handle_all_urls, and target %s --> %b.
+11-20 13:03:51.099   535  4112 W ContentProviderHelper: Slow operation: 74ms so far, now at getContentProviderImpl: before checkContentProviderPermission
+11-20 13:03:51.099   535  4112 W ContentProviderHelper: Slow operation: 74ms so far, now at getContentProviderImpl: after checkContentProviderPermission
+11-20 13:03:52.254  9344  9344 W DeviceAdminAdd: Exception trying to activate admin ComponentInfo{com.google.android.gms/com.google.android.gms.kids.account.receiver.ProfileOwnerReceiver}
+11-20 13:03:52.254  9344  9344 W DeviceAdminAdd: 	at android.app.admin.IDevicePolicyManager$Stub$Proxy.setActiveAdmin(IDevicePolicyManager.java:8710)
+11-20 13:03:52.254  9344  9344 W DeviceAdminAdd: 	at android.app.admin.DevicePolicyManager.setActiveAdmin(DevicePolicyManager.java:7571)
+11-20 13:03:52.254  9344  9344 W DeviceAdminAdd: 	at android.app.admin.DevicePolicyManager.setActiveAdmin(DevicePolicyManager.java:7583)
+11-20 13:03:52.254  9344  9344 W DeviceAdminAdd: 	at com.android.server.devicepolicy.DevicePolicyManagerService.lambda$setActiveAdmin$7$DevicePolicyManagerService(DevicePolicyManagerService.java:3433)
+11-20 13:03:52.254  9344  9344 W DeviceAdminAdd: 	at com.android.server.devicepolicy.DevicePolicyManagerService$$ExternalSyntheticLambda22.runOrThrow(Unknown Source:12)
+11-20 13:03:52.254  9344  9344 W DeviceAdminAdd: 	at com.android.server.devicepolicy.DevicePolicyManagerService$Injector.binderWithCleanCallingIdentity(DevicePolicyManagerService.java:1517)
+11-20 13:03:52.254  9344  9344 W DeviceAdminAdd: 	at com.android.server.devicepolicy.DevicePolicyManagerService.setActiveAdmin(DevicePolicyManagerService.java:3429)
+11-20 13:03:52.681   535   621 D InputDispatcher:     * [TOUCHED] type=FIRST_APPLICATION_WINDOW, package=com.google.android.gms/1010097, id=298, mode=BLOCK_UNTRUSTED, alpha=1.00, frame=[0,0][2560,1600], touchableRegion=[0,0][2560,1600], window={2e6c7
+11-20 13:03:52.885  9725  9725 I KidsAuth: [SupervisionCoreUtils] Onboarding on Supervision Core APK is not eligible for devices with API version below T. [CONTEXT service_id=42 ]
+11-20 13:03:57.876 11954 11954 W Finsky  : [2] STU: Failed to get storage stats for package 'com.google.android.permission' (1601: Error getting stats: android.content.pm.PackageManager.NameNotFoundException)
+11-20 13:03:58.730  9725  9725 I KidsAuth: [DeviceSetupBaseViewModel] Can't remove additional accounts. Ensuring device has only one account. [CONTEXT service_id=42 ]
+11-20 13:03:58.764  9725  9725 I KidsAuth: [SupervisionCoreUtils] Onboarding on Supervision Core APK is not eligible for devices with API version below T. [CONTEXT service_id=42 ]
+11-20 13:04:00.807  4294 13405 I NearbySharing: Granted slice and uri permissions to android
+11-20 13:04:00.816  4294 13405 I NearbySharing: Granted slice and uri permissions to com.google.android.apps.nbu.files
+11-20 13:04:00.917  9344  9344 W DeviceAdminAdd: Exception trying to activate admin ComponentInfo{com.google.android.gms/com.google.android.gms.kids.account.receiver.ProfileOwnerReceiver}
+11-20 13:04:00.917  9344  9344 W DeviceAdminAdd: 	at android.app.admin.IDevicePolicyManager$Stub$Proxy.setActiveAdmin(IDevicePolicyManager.java:8710)
+11-20 13:04:00.917  9344  9344 W DeviceAdminAdd: 	at android.app.admin.DevicePolicyManager.setActiveAdmin(DevicePolicyManager.java:7571)
+11-20 13:04:00.917  9344  9344 W DeviceAdminAdd: 	at android.app.admin.DevicePolicyManager.setActiveAdmin(DevicePolicyManager.java:7583)
+11-20 13:04:00.917  9344  9344 W DeviceAdminAdd: 	at com.android.server.devicepolicy.DevicePolicyManagerService.lambda$setActiveAdmin$7$DevicePolicyManagerService(DevicePolicyManagerService.java:3433)
+11-20 13:04:00.917  9344  9344 W DeviceAdminAdd: 	at com.android.server.devicepolicy.DevicePolicyManagerService$$ExternalSyntheticLambda22.runOrThrow(Unknown Source:12)
+11-20 13:04:00.917  9344  9344 W DeviceAdminAdd: 	at com.android.server.devicepolicy.DevicePolicyManagerService$Injector.binderWithCleanCallingIdentity(DevicePolicyManagerService.java:1517)
+11-20 13:04:00.917  9344  9344 W DeviceAdminAdd: 	at com.android.server.devicepolicy.DevicePolicyManagerService.setActiveAdmin(DevicePolicyManagerService.java:3429)
+11-20 13:04:01.017  9725  9725 I KidsAuth: [SupervisionCoreUtils] Onboarding on Supervision Core APK is not eligible for devices with API version below T. [CONTEXT service_id=42 ]
+11-20 13:04:03.194  9725  9725 I KidsAuth: [DeviceSetupBaseViewModel] Can't remove additional accounts. Ensuring device has only one account. [CONTEXT service_id=42 ]
+11-20 13:04:03.233  9725  9725 I KidsAuth: [SupervisionCoreUtils] Onboarding on Supervision Core APK is not eligible for devices with API version below T. [CONTEXT service_id=42 ]
+11-20 13:04:04.363 13474 13491 W Bugle   : TelephonySyncManager: no permission to sync.
+11-20 13:04:05.580  9725  9725 I KidsAuth: [SupervisionCoreUtils] Onboarding on Supervision Core APK is not eligible for devices with API version below T. [CONTEXT service_id=42 ]
+11-20 13:04:07.648  7613  7627 I PermissionControllerServiceImpl: Updating user sensitive for uid 1010125
+11-20 13:04:07.932  9725  9725 I KidsAuth: [DeviceSetupBaseViewModel] Can't remove additional accounts. Ensuring device has only one account. [CONTEXT service_id=42 ]
+11-20 13:04:08.030  9725  9725 I KidsAuth: [SupervisionCoreUtils] Onboarding on Supervision Core APK is not eligible for devices with API version below T. [CONTEXT service_id=42 ]
+11-20 13:04:08.507   465   465 W ServiceManager: Permission failure: android.permission.SYSTEM_CAMERA from uid=1010120 pid=13669
+11-20 13:04:08.512   465   465 W ServiceManager: Permission failure: android.permission.SYSTEM_CAMERA from uid=1010120 pid=13669
+11-20 13:04:08.515   465   465 W ServiceManager: Permission failure: android.permission.SYSTEM_CAMERA from uid=1010120 pid=13669
+11-20 13:04:08.517   465   465 W ServiceManager: Permission failure: android.permission.SYSTEM_CAMERA from uid=1010120 pid=13669
+11-20 13:04:11.913  9344  9344 W DeviceAdminAdd: Exception trying to activate admin ComponentInfo{com.google.android.gms/com.google.android.gms.kids.account.receiver.ProfileOwnerReceiver}
+11-20 13:04:11.913  9344  9344 W DeviceAdminAdd: 	at android.app.admin.IDevicePolicyManager$Stub$Proxy.setActiveAdmin(IDevicePolicyManager.java:8710)
+11-20 13:04:11.913  9344  9344 W DeviceAdminAdd: 	at android.app.admin.DevicePolicyManager.setActiveAdmin(DevicePolicyManager.java:7571)
+11-20 13:04:11.913  9344  9344 W DeviceAdminAdd: 	at android.app.admin.DevicePolicyManager.setActiveAdmin(DevicePolicyManager.java:7583)
+11-20 13:04:11.913  9344  9344 W DeviceAdminAdd: 	at com.android.server.devicepolicy.DevicePolicyManagerService.lambda$setActiveAdmin$7$DevicePolicyManagerService(DevicePolicyManagerService.java:3433)
+11-20 13:04:11.913  9344  9344 W DeviceAdminAdd: 	at com.android.server.devicepolicy.DevicePolicyManagerService$$ExternalSyntheticLambda22.runOrThrow(Unknown Source:12)
+11-20 13:04:11.913  9344  9344 W DeviceAdminAdd: 	at com.android.server.devicepolicy.DevicePolicyManagerService$Injector.binderWithCleanCallingIdentity(DevicePolicyManagerService.java:1517)
+11-20 13:04:11.913  9344  9344 W DeviceAdminAdd: 	at com.android.server.devicepolicy.DevicePolicyManagerService.setActiveAdmin(DevicePolicyManagerService.java:3429)
+11-20 13:04:12.027  9725  9725 I KidsAuth: [SupervisionCoreUtils] Onboarding on Supervision Core APK is not eligible for devices with API version below T. [CONTEXT service_id=42 ]
+11-20 13:04:20.165   535  2480 I ActivityManager: Killing 13270:com.google.android.packageinstaller/u10a67 (adj 975): empty #17
+11-20 13:04:25.464   535   548 I ActivityManager: Killing 13245:com.google.android.permissioncontroller/u0a138 (adj 985): empty #17
+11-20 13:04:52.739 11954 12061 I Finsky  : [557] VerifyApps: [ADV] Resolved session ID 1591262828 via PackageInstaller fallback for com.google.ar.core (id=1)
+11-20 13:04:53.957  7613  7629 I PermissionControllerServiceImpl: Updating user sensitive for uid 1010148
+11-20 13:04:54.849 11954 11988 W Finsky  : [504] VerifyApps: Couldn't open the manifest for /data/app/vmdl1591262828.tmp/base.digests. Error: java.io.FileNotFoundException: /data/app/vmdl1591262828.tmp/base.digests (Permission denied)
+11-20 13:04:55.471 12234 12252 W ding:backgroun: Suspending all threads took: 6.863ms
+11-20 13:04:55.659   535   584 I PackageManager: Permission ownership changed. Updating all permissions.

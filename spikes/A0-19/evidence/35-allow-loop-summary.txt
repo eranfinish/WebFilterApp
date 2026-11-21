@@ -1,0 +1,30 @@
+Family Link loop after the supervised account was added in kid-test. Device clock UTC. Read-only capture. No taps by this spike.
+
+Sequence (what the screen showed, from the parent via the starting session):
+  supervised account -> Google asks to install Family Link parental controls and manage the device -> Allow -> dialog returns in a loop.
+  Later: the dialog is gone; the underlying Google page ("Set up supervision"-type title) shows a Next button; Next not pressed.
+
+Log timeline:
+- 13:02:15  account added to AccountManager in user 10 (one account, type com.google; user 0 has none).
+- 13:02:32  first WebViewBridge activateProfileOwner() -> Settings SET_PROFILE_OWNER (DeviceAdminAdd screen).
+- 13:03:22.191  GMS kids.account.receiver.ProfileOwnerReceiver onEnabled (DEVICE_ADMIN_ENABLED). This is the first successful activation: GMS became an ACTIVE DEVICE ADMIN in user 10. Inferred to follow the first Allow press (Settings does not log a success).
+- 13:03:31, 13:03:58, 13:04:03, 13:04:07  more activateProfileOwner() calls, each opening DeviceAdminAdd again.
+- 13:03:52, 13:04:00, 13:04:11  DeviceAdminAdd.addAndFinish (Allow button handler) -> setActiveAdmin for GMS ProfileOwnerReceiver fails with IllegalArgumentException: "Admin is already added" (DevicePolicyManagerService.setActiveAdmin). Each failure returns to the GMS screen, which calls activateProfileOwner again. This is the loop.
+- After 13:04:11  no further activateProfileOwner in the buffer read at 13:05. No "Profile owner set" in the buffer.
+
+Why it failed: the Settings path that Family Link uses only calls setActiveAdmin. It never calls setProfileOwner (DPM refuses to make a second owner while ours is set). So GMS's component is already an admin and cannot be added again. The loop is not an error in setProfileOwner; setProfileOwner was never reached.
+
+Checks after the Allow loop (13:05 UTC):
+- dpm list-owners: user 0 = DeviceOwner (ours); user 10 = ProfileOwner (ours). UNCHANGED.
+- status inside user 10 (read-only broadcast): isProfileOwnerApp=true, isAdminActive=true. UNCHANGED.
+- accounts: user 10 has 1 account (type com.google); user 0 has 0. No new account after the Allow presses.
+- dumpsys device_policy, Enabled Device Admins (User 10): our AdminReceiver AND com.google.android.gms/.kids.account.receiver.ProfileOwnerReceiver (uid 1010097). GMS's policies in that entry: limit-password, watch-login, force-lock, expire-password, encrypted-storage, disable-camera, disable-keyguard-features. Our DPC is still the owner; GMS is a second active admin in the same user.
+- Focus: KidsAuthSetupActivity in u10 (GMS), dialog gone.
+
+Not determined:
+- Which button the parent pressed on each occasion. Only that the loop follows the Allow path, consistent with the parent's report.
+- The exact tap time (no touch content in the log).
+- Whether the disable-camera / force-lock policies from GMS are enforced on the child's user (not tested).
+
+Update (relayed by the starting session, parent's report): the parent pressed Allow. The activateProfileOwner calls above are therefore the Allow path. Confirmed by the parent, not inferred from the log.
+Next (approved order): 1. parent presses Next once on the "Set up supervision" page, then Cancel if the loop returns; capture state. 2. (c) YouTube, Chrome to classroom.google.com, Play Store in kid-test. 3. (b) Chrome sign-in without a device account (needs a user with no device account; decision later).

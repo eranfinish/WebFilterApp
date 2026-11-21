@@ -1,0 +1,8 @@
+== 3. start user 11 and switch
+Success: user started
+current user: 11
+== users
+Users:
+	UserInfo{0:Owner:c13} running
+	UserInfo{10:kid-test:410} running
+	UserInfo{11:control:410} running

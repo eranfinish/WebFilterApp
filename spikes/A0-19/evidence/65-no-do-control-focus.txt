@@ -1,0 +1,4 @@
+== focus and resumed activity (after switch)
+  mCurrentFocus=null
+  mFocusedApp=ActivityRecord{46671891 u10 com.google.android.apps.nexuslauncher/.NexusLauncherActivity t1000002}
+== current user: 10

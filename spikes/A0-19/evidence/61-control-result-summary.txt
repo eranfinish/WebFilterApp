@@ -1,0 +1,33 @@
+Control run (user 11 "control", no Profile Owner of ours; our Device Owner on user 0). Device UTC; local = UTC+2. Read-only evidence. Account names redacted.
+
+Timeline (control, user 11, GMS pid 26254 = u11 GMS):
+- 13:31:47–50  Add account: PreAddAccount, MinuteMaid (web sign-in) displayed.
+- 13:36:17.859 "Account added successfully to AccountManager" (one account, com.google).
+- 13:36:20    Token fetch right after add: network error (CronetUrlRequest net::ERR_FAILED) from the GMS network stack.
+- 13:36:24–38 Token requests fail with THIRD_PARTY_DEVICE_MANAGEMENT_REQUIRED (many lines, pid 26254).
+- 13:36:25    KidsAuthSetupActivity (HANDLE_MANAGED). 13:36:31 "Supervised account found on the device". 13:36:31 "Starting Webview Fragment". 13:36:33 "Starting the Onboarding WebView". 13:36:34 onboarding URL created.
+- 13:37:50    "Handling added account" (AccountChangeProcessing). GMS BroadcastManager: "No device or profile owner found for bad device management broadcast" (twice).
+- Parent (reported): the 400 "Something went wrong" appeared after the parent-approval step; the parent pressed Close.
+- 13:38:25.567 removeAccount() -> success (GoogleAccountDataServiceImpl, pid 26254). The account is removed.
+- 13:38:58    GMS: "Looks like an account has been removed or became supervised" (AccountChangesIntOp).
+
+Account state after the removal (dumpsys account, per user header): user 0 = 0, user 10 = 0, user 11 = 0.
+
+Owners after the removal: user 0 = DeviceOwner (ours), user 10 = ProfileOwner (ours). Unchanged.
+Device admins in user 11: none listed by DPM.
+
+Did Family Link try to become PO in user 11? No SET_PROFILE_OWNER, setActiveAdmin, DeviceAdminAdd or setProfileOwner line for user 11 in 13:36–13:39:38. No attempt seen.
+Did Family Link install anything in user 11? No apps.kids package in user 11; no install event for a Family Link package in the window (only Play auto-update noise).
+Was there an abort log? No explicit "abandoned" or abort line in the window. The removal reason is redacted by GMS ("Removed account with reason %s" in the kid-test case; in the control case the removeAccount line has no reason).
+
+Kid-test (user 10) for comparison: the account was removed at 13:29:06 by the same GMS path (GoogleAccountDataServiceImpl.removeAccount -> success; KidsAccountUtils "Removed account with reason"). Before that, the Family Link loop (Settings SET_PROFILE_OWNER -> DeviceAdminAdd -> setActiveAdmin failed "Admin is already added") was the PO-specific attempt.
+
+Reading:
+1. A supervised account can be added as a device account in both users (kid-test and control). It is not refused at the add step.
+2. In both users, token requests for that account then fail with THIRD_PARTY_DEVICE_MANAGEMENT_REQUIRED. The control shows this without our Profile Owner in that user, so the Device Owner (device-wide, on user 0) is enough for the refusal in this run. One run only; not a full control of other variables.
+3. Family Link's attempt to become PO is PO-specific: in kid-test it looped on setActiveAdmin with our PO present. In control it never tried; it went to the WebView onboarding and ended in a 400 after the parent-approval step.
+4. In both users GMS removed the supervised account after the supervision flow did not complete. The removal reason is redacted, so this is an observed pattern, not a confirmed cause.
+5. The parent's Google account in user 0 is absent in both runs (user 0 = 0 accounts). The control reproduced the refusal with that same condition, so the missing parent account is not separated from the device-wide Device Owner by these data. Next variable per the plan: the parent's account on user 0 (needs the parent's go-ahead).
+6. GMS in user 11 reports "No device or profile owner found" while DPM reports our Device Owner. This mismatch is worth a dedicated check before reaching conclusions about GMS's logic.
+
+Memory note: lowmemorykiller killed the KidsAuth WebView renderer at 13:36:31 (MemAvailable about 380 MB). The onboarding WebView was started again at 13:36:33. The effect of the memory pressure on the 400 is not separated from Google's response.

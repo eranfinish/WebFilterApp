@@ -1,0 +1,36 @@
+# State before the step (a) retry, read-only. Config change and relaunch done by the starting session (not by this spike).
+== adb
+List of devices attached
+emulator-5590          device product:sdk_gphone64_x86_64 model:sdk_gphone64_x86_64 device:emulator64_x86_64_arm64 transport_id:13
+
+== hw.keyboard in AVD config (name-free)
+/c/Users/Eran Finish/.android/avd/Tablet_A12.avd/hardware-qemu.ini:hw.keyboard = true
+/c/Users/Eran Finish/.android/avd/Tablet_A12.avd/hardware-qemu.ini:hw.keyboard.lid = true
+/c/Users/Eran Finish/.android/avd/Tablet_A12.avd/hardware-qemu.ini:hw.keyboard.charmap = qwerty2
+/c/Users/Eran Finish/.android/avd/Tablet_A12.avd/config.ini:hw.keyboard=yes
+/c/Users/Eran Finish/.android/avd/Tablet_A12.avd/config.ini:hw.keyboard.charmap=qwerty2
+/c/Users/Eran Finish/.android/avd/Tablet_A12.avd/config.ini:hw.keyboard.lid=yes
+== owners
+2 owners:
+User  0: admin=com.webfilter.spike.a19/.AdminReceiver,DeviceOwner,Affiliated
+User 10: admin=com.webfilter.spike.a19/.AdminReceiver,ProfileOwner
+== users
+Users:
+	UserInfo{0:Owner:c13} running
+	UserInfo{10:kid-test:410} running
+== current user
+10
+== wakefulness / focus
+  mWakefulness=Awake
+  mCurrentFocus=u10 com.google.android.apps.nexuslauncher/com.google.android.apps.nexuslauncher.NexusLauncherActivity}
+== keyboard type
+    KeyboardType: 0
+    KeyboardType: 0
+    KeyboardType: 0
+== stay-on / timeout
+stay_on=7 timeout_u10=1800000
+== accounts (count)
+  Accounts: 0
+  Accounts: 0
+== capture-C running?
+-rw-r--r-- 1 Eran Finish 197121 3646560 Nov 20 14:59 /c/Users/ERANFI~1/AppData/Local/Temp/claude/7b223732537811f1/d8410d31-9c6d-4fca-b3f1-7463d5c9c841/scratchpad/capture-C.txt

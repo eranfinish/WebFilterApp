@@ -1,0 +1,387 @@
+# Control run (user 11) from 13:30 UTC: u11 GMS / WebView / addaccount / KidsAuth / ThirdParty / 400. Attribution by pid (ps). Emails redacted; account names not saved.
+== u11 processes (ps)
+u11_a146     16992   335 13816876 35624 0                   0 S com.google.android.ext.services
+u11_a140     17042   335 13848996 38708 0                   0 S com.google.android.providers.media.module
+u11_system   17112   335 13868452 35824 0                   0 S com.android.keychain
+u11_a130     17119   335 13904264 54684 0                   0 S com.google.android.apps.nexuslauncher
+u11_a104     17389   335 82287132 110808 0                  0 S com.google.android.googlequicksearchbox:search
+u11_a104     17838   335 14698556 39060 0                   0 S com.google.android.googlequicksearchbox:interactor
+u11_a136     18405   335 13904048 36956 0                   0 S com.android.systemui
+u11_bluetooth 18958  335 14007116 36788 0                   0 S com.android.bluetooth
+u11_a119     22137   335 14172568 50736 0                   0 S com.google.android.inputmethod.latin
+u11_system   22602   335 13958992 42164 0                   0 S com.android.settings
+u11_a98      25456   335 13888144 41204 0                   0 S com.google.android.apps.messaging:rcs
+u11_a97      26254   335 14787724 290936 0                  0 S com.google.android.gms
+u11_a97      27953   335 13831876 43188 0                   0 S com.google.process.gservices
+u11_a97      28484   335 14113904 66532 0                   0 S com.google.android.gms.unstable
+u11_a97      28561   335 48145568 72724 0                   0 S com.google.android.gms.ui
+u11_a92      28705   335 13833512 43492 0                   0 S com.google.android.setupwizard
+u11_a58      29421   335 13824708 47124 0                   0 S android.process.acore
+u11_a97      29544   335 13826176 43204 0                   0 S com.google.process.gapps
+u11_a103     29575   335 14150144 44004 0                   0 S com.android.vending:background
+u11_a121     29935   335 15047840 76148 0                   0 S com.google.android.gm
+u11_a124     29955   335 14354748 67404 0                   0 S com.google.android.calendar
+u11_a71      30027   335 13821208 43776 0                   0 S com.android.providers.calendar
+u11_a138     30199   335 13898276 47876 0                   0 S com.google.android.permissioncontroller
+u11_i9005    30488   813 51678516 49488 0                   0 S com.google.android.webview:sandboxed_process0:org.chromium.content.app.Sandbo
+u11_a125     31073   335 14330488 137356 0                  0 S com.google.android.apps.docs
+u11_i9006    31110   813 13890036 50568 0                   0 S com.google.android.webview:sandboxed_process0:org.chromium.content.app.Sandbo
+u11_a104     31159   335 48368232 58232 0                   0 S com.google.android.googlequicksearchbox:privileged_process0
+u11_a120     31352   335 15072088 155056 0                  0 S com.google.android.youtube
+u11_a115     31460   335 13876596 64248 0                   0 S com.android.chrome
+u11_a114     31546   335 14817976 122968 0                  0 S com.google.android.apps.maps
+u11_a98      31600   335 13971808 103848 0                  0 S com.google.android.apps.messaging
+u11_a126     31676   335 14598876 107436 0                  0 S com.google.android.apps.photos
+u11_a102     31734   335 13919844 91964 0                   0 S com.google.android.apps.restore
+u11_a100     31797   335 13843492 73900 0                   0 S com.google.android.apps.wellbeing
+== owners
+2 owners:
+User  0: admin=com.webfilter.spike.a19/.AdminReceiver,DeviceOwner,Affiliated
+User 10: admin=com.webfilter.spike.a19/.AdminReceiver,ProfileOwner
+== account counts (u0, u10, u11) and types
+  Accounts: 0
+  Accounts: 0
+  Accounts: 1
+== u11 GMS and u11 WebView-tagged lines since 13:30:00
+11-20 13:30:01.987 17389 17921 I WorkerManager: dispose()
+11-20 13:30:01.997 17389 17921 W A       : Queue length for executor EventBus is now 11. Perhaps some tasks are too long, or the pool is too small.
+11-20 13:30:11.359 28484 28484 W id.gms.unstabl: Unexpected CPU variant for X86 using defaults: x86_64
+11-20 13:30:11.365 28484 28484 E id.gms.unstabl: Not starting debugger since process cannot load the jdwp agent.
+11-20 13:30:11.375 28484 28484 D CompatibilityChangeReporter: Compat change id reported: 171979766; UID 1110097; state: ENABLED
+11-20 13:30:11.519 28484 28484 W id.gms.unstabl: JIT profile information will not be recorded: profile file does not exist.
+11-20 13:30:11.519 28484 28484 W id.gms.unstabl: JIT profile information will not be recorded: profile file does not exist.
+11-20 13:30:11.665 28484 28484 V GraphicsEnvironment: ANGLE Developer option for 'com.google.android.gms' set to: 'default'
+11-20 13:30:11.666 28484 28484 V GraphicsEnvironment: Neither updatable production driver nor prerelease driver is supported.
+11-20 13:30:11.668 28484 28484 D NetworkSecurityConfig: Using Network Security Config from resource network_security_config debugBuild: false
+11-20 13:30:11.672 28484 28484 D NetworkSecurityConfig: Using Network Security Config from resource network_security_config debugBuild: false
+11-20 13:30:11.973 28484 28484 V NativeCrypto: Registering com/google/android/gms/org/conscrypt/NativeCrypto's 336 native methods...
+11-20 13:30:12.004 28484 28484 I ProviderInstaller: Installed default security provider GmsCore_OpenSSL
+11-20 13:30:12.016 28484 28510 I Watchcat: Started
+11-20 13:30:12.021 28484 28510 I GMS_MM_Logger: (REDACTED) Start time: %s
+11-20 13:30:12.023 28484 28510 I GMS_MM_Logger: Started.
+11-20 13:30:12.067 28484 28496 I TracingHelper: (REDACTED) Mismatched RequestContext found for module %s. Module id from RequestContext is %s
+11-20 13:30:12.079 26254 26254 D BoundBrokerSvc: onRebind: Intent { act=com.google.android.gms.libs.gmscorelogger.service.START dat=chimera-action: cmp=com.google.android.gms/.chimera.PersistentDirectBootAwareApiService }
+11-20 13:30:12.179 26254 26254 D BoundBrokerSvc: onBind: Intent { act=com.google.android.gms.checkin.START pkg=com.google.android.gms }
+11-20 13:30:12.181 26254 26254 D BoundBrokerSvc: Loading bound service for intent: Intent { act=com.google.android.gms.checkin.START pkg=com.google.android.gms }
+11-20 13:30:12.187 26254 26301 I Checkin : [CheckinApiChimeraService] onGetService
+11-20 13:30:12.255 28484 28496 W libc    : Access denied finding property "persist.adb.tls_server.enable"
+11-20 13:30:12.255 28484 28496 W libc    : Access denied finding property "service.adb.tls.port"
+11-20 13:30:12.276 26254 26349 W GmsUrlRequestImpl: [https://android.googleapis.com/auth/devicekey] Content-Type header is overwritten.
+11-20 13:30:12.416 26254 26349 W Auth    : [AppCertManager] Exception while requesting key: [CONTEXT service_id=343 ]
+11-20 13:30:12.416 26254 26349 W Auth    : java.util.concurrent.ExecutionException: dpof: Parsing Exception
+11-20 13:30:12.416 26254 26349 W Auth    : 	at ikpv.k(:<email><email> (190800-1020418964):21)
+11-20 13:30:12.416 26254 26349 W Auth    : 	at ikqd.u(:<email><email> (190800-1020418964):73)
+11-20 13:30:12.416 26254 26349 W Auth    : 	at arcl.b(:<email><email> (190800-1020418964):416)
+11-20 13:30:12.416 26254 26349 W Auth    : 	at arcj.b(:<email><email> (190800-1020418964):38)
+11-20 13:30:12.416 26254 26349 W Auth    : 	at arce.a(:<email><email> (190800-1020418964):1)
+11-20 13:30:12.416 26254 26349 W Auth    : 	at arch.a(:<email><email> (190800-1020418964):58)
+11-20 13:30:12.416 26254 26349 W Auth    : 	at alxe.call(:<email><email> (190800-1020418964):55)
+11-20 13:30:12.416 26254 26349 W Auth    : 	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+11-20 13:30:12.416 26254 26349 W Auth    : 	at bshl.d(:<email><email> (190800-1020418964):50)
+11-20 13:30:12.416 26254 26349 W Auth    : 	at bshl.c(:<email><email> (190800-1020418964):5)
+11-20 13:30:12.416 26254 26349 W Auth    : 	at bshl.run(:<email><email> (190800-1020418964):32)
+11-20 13:30:12.416 26254 26349 W Auth    : 	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1167)
+11-20 13:30:12.416 26254 26349 W Auth    : 	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:641)
+11-20 13:30:12.416 26254 26349 W Auth    : 	at bsnm.run(:<email><email> (190800-1020418964):8)
+11-20 13:30:12.416 26254 26349 W Auth    : 	at java.lang.Thread.run(Thread.java:920)
+11-20 13:30:12.416 26254 26349 W Auth    : Caused by: dpof: Parsing Exception
+11-20 13:30:12.416 26254 26349 W Auth    : 	at dppg.kl(:<email><email> (190800-1020418964):15)
+11-20 13:30:12.416 26254 26349 W Auth    : 	at ikso.run(:<email><email> (190800-1020418964):55)
+11-20 13:30:12.416 26254 26349 W Auth    : 	at bshl.d(:<email><email> (190800-1020418964):50)
+11-20 13:30:12.416 26254 26349 W Auth    : 	at bshl.c(:<email><email> (190800-1020418964):27)
+11-20 13:30:12.416 26254 26349 W Auth    : 	... 5 more
+11-20 13:30:12.416 26254 26349 W Auth    : Caused by: jlfu: Protocol message end-group tag did not match expected tag.
+11-20 13:30:12.416 26254 26349 W Auth    : 	at jlhl.a(:<email><email> (190800-1020418964):56)
+11-20 13:30:12.416 26254 26349 W Auth    : 	at jlgk.i(:<email><email> (190800-1020418964):427)
+11-20 13:30:12.416 26254 26349 W Auth    : 	at jlev.R(:<email><email> (190800-1020418964):22)
+11-20 13:30:12.416 26254 26349 W Auth    : 	at jleq.q(:<email><email> (190800-1020418964):3)
+11-20 13:30:12.416 26254 26349 W Auth    : 	at jlcs.e(:<email><email> (190800-1020418964):7)
+11-20 13:30:12.416 26254 26349 W Auth    : 	at jlcs.b(:<email><email> (190800-1020418964):1)
+11-20 13:30:12.416 26254 26349 W Auth    : 	at jlcs.m(:<email><email> (190800-1020418964):1)
+11-20 13:30:12.416 26254 26349 W Auth    : 	at dppf.a(:<email><email> (190800-1020418964):11)
+11-20 13:30:12.416 26254 26349 W Auth    : 	at dppj.call(:<email><email> (190800-1020418964):8)
+11-20 13:30:12.416 26254 26349 W Auth    : 	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+11-20 13:30:12.416 26254 26349 W Auth    : 	at bshl.d(:<email><email> (190800-1020418964):50)
+11-20 13:30:12.416 26254 26349 W Auth    : 	at bshl.c(:<email><email> (190800-1020418964):5)
+11-20 13:30:12.416 26254 26349 W Auth    : 	... 5 more
+11-20 13:30:12.501 26254 26262 I gle.android.gm: Background concurrent copying GC freed 159537(8156KB) AllocSpace objects, 42(3900KB) LOS objects, 49% free, 15MB/30MB, paused 590us,72us total 115.663ms
+11-20 13:30:27.124 26254 26254 D BoundBrokerSvc: onUnbind: Intent { act=com.google.android.gms.libs.gmscorelogger.service.START dat=chimera-action: cmp=com.google.android.gms/.chimera.PersistentDirectBootAwareApiService }
+11-20 13:30:27.239 26254 26254 D BoundBrokerSvc: onUnbind: Intent { act=com.google.android.gms.checkin.START pkg=com.google.android.gms }
+11-20 13:31:03.775 17389 17389 I BgTaskExecutorImpl: Starting EXCLUSIVE background task UPLOAD_ASSISTANT_DEVICE_SETTINGS.
+11-20 13:31:03.881 17389 21987 W LocationOracle: getBestLocation(): no location is available
+11-20 13:31:03.883 17389 28536 I NetworkRecognitionRnr: Using pair HTTP connection
+11-20 13:31:03.888 17389 17729 I A       : [Upload] Connected
+11-20 13:31:03.895 17389 17729 I NetworkRecognitionRnr: Using pair HTTP connection
+11-20 13:31:03.897 17389 17921 I MicroDetectionState: Should stop hotword detection immediately - true
+11-20 13:31:03.898 17389 17389 E A       : onError
+11-20 13:31:03.898 17389 17389 E A       : com.google.android.apps.gsa.shared.speech.a.n: errorCode: 65561, engine: 2
+11-20 13:31:03.898 17389 17389 E A       : 	at com.google.android.apps.gsa.staticplugins.di.a.e.a(SourceFile:3)
+11-20 13:31:03.898 17389 17389 E A       : 	at com.google.android.apps.gsa.s3.n.gF(SourceFile:1)
+11-20 13:31:03.898 17389 17389 E A       : 	at com.google.ce.g.a.f.f(SourceFile:2)
+11-20 13:31:03.898 17389 17389 E A       : 	at com.google.android.apps.gsa.speech.k.a.g.d(SourceFile:21)
+11-20 13:31:03.898 17389 17389 E A       : 	at com.google.android.apps.gsa.speech.k.a.g.jG(SourceFile:6)
+11-20 13:31:03.898 17389 17389 E A       : 	at com.google.android.apps.gsa.s3.o.d(SourceFile:15)
+11-20 13:31:03.898 17389 17389 E A       : 	at com.google.android.apps.gsa.s3.p.run(SourceFile:1)
+11-20 13:31:03.898 17389 17389 E A       : 	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:462)
+11-20 13:31:03.898 17389 17389 E A       : 	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+11-20 13:31:03.898 17389 17389 E A       : 	at com.google.android.apps.gsa.shared.util.c.a.e.run(SourceFile:2)
+11-20 13:31:03.898 17389 17389 E A       : 	at com.google.android.apps.gsa.shared.util.c.a.ay.run(SourceFile:1)
+11-20 13:31:03.898 17389 17389 E A       : 	at com.google.android.apps.gsa.shared.util.c.a.ay.run(SourceFile:1)
+11-20 13:31:03.898 17389 17389 E A       : 	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1167)
+11-20 13:31:03.898 17389 17389 E A       : 	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:641)
+11-20 13:31:03.898 17389 17389 E A       : 	at java.lang.Thread.run(Thread.java:920)
+11-20 13:31:03.898 17389 17389 E A       : 	at com.google.android.apps.gsa.shared.util.c.a.h.run(SourceFile:4)
+11-20 13:31:03.898 17389 17389 E A       : Caused by: com.google.android.apps.gsa.shared.speech.a.p: errorCode: 65586, engine: 2
+11-20 13:31:03.898 17389 17389 E A       : 	... 15 more
+11-20 13:31:03.898 17389 17389 E A       : Caused by: com.google.android.apps.gsa.shared.speech.a.l: errorCode: 401, engine: 2
+11-20 13:31:03.898 17389 17389 E A       : 	at com.google.android.apps.gsa.assistant.shared.m.h.a(SourceFile:5)
+11-20 13:31:03.898 17389 17389 E A       : 	at com.google.android.apps.gsa.s3.producers.j.gX(SourceFile:2)
+11-20 13:31:03.898 17389 17389 E A       : 	at com.google.android.apps.gsa.speech.k.a.g.d(SourceFile:15)
+11-20 13:31:03.898 17389 17389 E A       : 	... 12 more
+11-20 13:31:03.898 17389 21913 I A       : [Upload] Connected
+11-20 13:31:03.902 17389 17389 W A       : Failed to sync device settings.
+11-20 13:31:03.902 17389 17389 I A       : Retrying to sync device settings.
+11-20 13:31:03.911 26254 26254 D BoundBrokerSvc: onBind: Intent { act=com.google.android.gms.herrevad.services.LightweightNetworkQualityAndroidService.START pkg=com.google.android.gms }
+11-20 13:31:03.911 26254 26254 D BoundBrokerSvc: Loading bound service for intent: Intent { act=com.google.android.gms.herrevad.services.LightweightNetworkQualityAndroidService.START pkg=com.google.android.gms }
+11-20 13:31:03.911 26254 26254 I BndSvcConfigHelper: No bound-service is registered for action: com.google.android.gms.herrevad.services.LightweightNetworkQualityAndroidService.START
+11-20 13:31:03.911 26254 26254 I BoundBrokerSvc: Bound service not available for: Intent { act=com.google.android.gms.herrevad.services.LightweightNetworkQualityAndroidService.START pkg=com.google.android.gms }
+11-20 13:31:03.911 26254 26254 I GmsApiChimeraSvc: Handling missing api service for: com.google.android.gms.herrevad.services.LightweightNetworkQualityAndroidService.START
+11-20 13:31:03.913 17389 17621 W CronetNetworkRqstWrppr: Upload request without a content type.
+11-20 13:31:03.914 17389 17621 W CronetNetworkRqstWrppr: Upload request without a content type.
+11-20 13:31:03.923 26254 26301 I GmsApiChimeraSvc: Using MissingApiServiceBroker for com.google.android.gms.herrevad.services.LightweightNetworkQualityAndroidService.START due to missing BoundService implementation
+11-20 13:31:06.538 26254 26349 I NearbySharing: Network state changed: NetworkState(isRestricted=false, isOnline=true, isCongested=false, isMetered=false, isWifiConnected=true)
+11-20 13:31:08.970 26254 26254 D BoundBrokerSvc: onUnbind: Intent { act=com.google.android.gms.herrevad.services.LightweightNetworkQualityAndroidService.START pkg=com.google.android.gms }
+11-20 13:31:22.128 18958 19362 W BtGatt.ScanManager: Moving scan client to opportunistic (scannerId 5)
+11-20 13:31:22.301 18958 19362 W BtGatt.ScanManager: Moving scan client to opportunistic (scannerId 6)
+11-20 13:31:26.832 26254 26378 I NearbyDiscovery: FastPair: isDestroyable: Scanner is alive. [CONTEXT service_id=265 ]
+11-20 13:31:26.832 26254 26378 I NearbyDiscovery: DiscoveryService: Skip stopSelf(), fast pair controller is not destroyable. [CONTEXT service_id=265 ]
+11-20 13:31:46.259 22602 22819 D EGL_emulation: app_time_stats: avg=15800.63ms min=2.34ms max=268495.75ms count=17
+11-20 13:31:46.548 26254 26349 I NearbySharing: Network state changed: NetworkState(isRestricted=false, isOnline=true, isCongested=false, isMetered=false, isWifiConnected=true)
+11-20 13:31:46.632 26254 26254 D BoundBrokerSvc: onBind: Intent { act=com.google.android.gms.checkin.START pkg=com.google.android.gms }
+11-20 13:31:46.633 26254 26254 D BoundBrokerSvc: Loading bound service for intent: Intent { act=com.google.android.gms.checkin.START pkg=com.google.android.gms }
+11-20 13:31:46.636 26254 26320 I Checkin : [CheckinApiChimeraService] onGetService
+11-20 13:31:46.661 26254 26304 I Auth    : [GmsAccountAuthenticatorImpl] Prewarming auth UI process upon addAccount call [CONTEXT service_id=343 ]
+11-20 13:31:46.765 22602 23015 I OpenGLRenderer: Davey! duration=271811ms; Flags=1, FrameTimelineVsyncId=134172, IntendedVsync=1749346512058, Vsync=1749479845386, InputEventId=0, HandleInputStart=1749482793353, AnimationStart=1749
+11-20 13:31:46.774 28561 28561 W .android.gms.u: Unexpected CPU variant for X86 using defaults: x86_64
+11-20 13:31:46.777 28561 28561 E .android.gms.u: Not starting debugger since process cannot load the jdwp agent.
+11-20 13:31:46.794 26254 26304 I ZZZOnboardingGraph: ElgI////////////ARD///////////8BGhxBY2NvdW50SW50cm9BY3Rpdml0eUNvbnRyYWN0IN/hn8mfNCobY29tLmdvb2dsZS5hbmRyb2lkLmdtcy9hdXRo
+11-20 13:31:46.806 28561 28561 D CompatibilityChangeReporter: Compat change id reported: 171979766; UID 1110097; state: ENABLED
+11-20 13:31:46.845 22137 22137 I GoogleInputMethodService: GoogleInputMethodService.onFinishInput():3420 
+11-20 13:31:46.875 22137 22137 I GoogleInputMethodService: GoogleInputMethodService.onStartInput():2002 
+11-20 13:31:46.878 22137 22137 I DeviceUnlockedTag: DeviceUnlockedTag.notifyDeviceLockStatusChanged():31 Notify device unlocked.
+11-20 13:31:46.884 22137 22137 I GoogleInputMethodService: GoogleInputMethodService.refreshDefaultThemePhenotypeFlags():2466 default theme may be changed.
+11-20 13:31:46.886 22137 22137 I NormalModeController: NormalModeController.getKeyboardBodyViewHolderPaddingBottom():109 currentPrimeKeyboardType:SOFT systemPaddingBottom:-1
+11-20 13:31:46.906 22137 22137 I GoogleInputMethodService: GoogleInputMethodService.initializeKeyboardTheme():1399 Apply keyboard theme: theme_border_stylesheet_googleblue_materiallight_builtin_google_blue_light.binarypb_land
+11-20 13:31:46.945 28561 28561 W .android.gms.u: JIT profile information will not be recorded: profile file does not exist.
+11-20 13:31:46.945 28561 28561 W .android.gms.u: JIT profile information will not be recorded: profile file does not exist.
+11-20 13:31:46.952 28561 28561 V GraphicsEnvironment: ANGLE Developer option for 'com.google.android.gms' set to: 'default'
+11-20 13:31:46.952 28561 28561 V GraphicsEnvironment: Neither updatable production driver nor prerelease driver is supported.
+11-20 13:31:46.954 28561 28561 D NetworkSecurityConfig: Using Network Security Config from resource network_security_config debugBuild: false
+11-20 13:31:46.955 28561 28561 D NetworkSecurityConfig: Using Network Security Config from resource network_security_config debugBuild: false
+11-20 13:31:46.999 22137 22144 I putmethod.lati: JIT allocated 112KB for compiled code of boolean elt.a(jtl, java.lang.Object[])
+11-20 13:31:47.001 22137 22144 I putmethod.lati: Compiler allocated 5502KB to compile boolean elt.a(jtl, java.lang.Object[])
+11-20 13:31:47.011 22137 22137 I KeyboardViewUtil: KeyboardViewUtil.getKeyboardHeightRatio():166 systemKeyboardHeightRatio:1.000000; userKeyboardHeightRatio:1.000000.
+11-20 13:31:47.027 22137 22137 I AndroidIME: KeyboardViewManager.updateKeyboardBackgroundFrameVisibility():342 Set background frame visibility. old:8, new:8
+11-20 13:31:47.027 22137 22137 I NormalModeController: NormalModeController.getKeyboardBodyViewHolderPaddingBottom():109 currentPrimeKeyboardType:SOFT systemPaddingBottom:-1
+11-20 13:31:47.027 22137 22137 I NormalModeController: NormalModeController.getKeyboardBodyViewHolderPaddingBottom():109 currentPrimeKeyboardType:SOFT systemPaddingBottom:-1
+11-20 13:31:47.096 22137 22147 W SP      : File ref is being finalized but wasn't closed, file: main_en_us_2021062100_1[4]
+11-20 13:31:47.096 22137 22147 W SP      : File ref is being finalized but wasn't closed, file: main_en_840_2021081100_1[2]
+11-20 13:31:47.124 28561 28561 V NativeCrypto: Registering com/google/android/gms/org/conscrypt/NativeCrypto's 336 native methods...
+11-20 13:31:47.142 28561 28561 I ProviderInstaller: Installed default security provider GmsCore_OpenSSL
+11-20 13:31:47.258 22602 22819 D OpenGLRenderer: endAllActiveAnimators on 0x78f80b454eb0 (RippleDrawable) with handle 0x78f71b38c360
+11-20 13:31:47.260 28561 28594 I GMS_MM_Logger: (REDACTED) Start time: %s
+11-20 13:31:47.264 28561 28597 D CompatibilityChangeReporter: Compat change id reported: 160794467; UID 1110097; state: ENABLED
+11-20 13:31:47.265 28561 28594 I GMS_MM_Logger: Started.
+11-20 13:31:47.298 28561 28600 I AuthWarmUpUi: (REDACTED) Pre-warming UI process start delay: %d ms
+11-20 13:31:47.298 28561 28600 I AuthWarmUpUi: Warming up auth_account UI process and WebView native library [CONTEXT service_id=153 ]
+11-20 13:31:47.315 28561 28606 D libEGL  : loaded /vendor/lib64/egl/libEGL_emulation.so
+11-20 13:31:47.320 28561 28606 D libEGL  : loaded /vendor/lib64/egl/libGLESv1_CM_emulation.so
+11-20 13:31:47.323 28561 28606 D libEGL  : loaded /vendor/lib64/egl/libGLESv2_emulation.so
+11-20 13:31:47.429 28561 28561 I WebViewFactory: Loading com.google.android.webview version 91.0.4472.114 (code 447211487)
+11-20 13:31:47.527 28561 28561 I TracingHelper: (REDACTED) Mismatched RequestContext found for module %s. Module id from RequestContext is %s
+11-20 13:31:47.548 26254 26254 D BoundBrokerSvc: onRebind: Intent { act=com.google.android.gms.libs.gmscorelogger.service.START dat=chimera-action: cmp=com.google.android.gms/.chimera.PersistentDirectBootAwareApiService }
+11-20 13:31:47.555 28561 28561 I cr_LibraryLoader: Loaded native library version number "91.0.4472.114"
+11-20 13:31:47.556 28561 28561 I cr_CachingUmaRecorder: Flushed 5 samples from 5 histograms.
+11-20 13:31:47.617 26254 26254 D BoundBrokerSvc: onBind: Intent { act=com.google.android.gms.safetynet.service.START pkg=com.google.android.gms }
+11-20 13:31:47.617 26254 26254 D BoundBrokerSvc: Loading bound service for intent: Intent { act=com.google.android.gms.safetynet.service.START pkg=com.google.android.gms }
+11-20 13:31:47.848 28561 28561 I AuthWarmUpUi: (REDACTED) Successfully prewarmed WebView native library in %d ms
+11-20 13:31:47.902 28561 28561 I ZZZOnboardingGraph: KnkIq+HLv7L6sbWYARIcQWNjb3VudEludHJvQWN0aXZpdHlDb250cmFjdBoqCihjb20uZ29vZ2xlLmFuZHJvaWQuYWNjb3VudHMuQWNjb3VudEludHJvILzqn8mfNCobY29tLmdvb2dsZS5hbmRyb2lkLmdtcy9hdXRo
+11-20 13:31:47.905 28561 28561 I ZZZOnboardingGraph: Mk0Iq+HLv7L6sbWYARIcQWNjb3VudEludHJvQWN0aXZpdHlDb250cmFjdBjB6p/JnzQiG2NvbS5nb29nbGUuYW5kcm9pZC5nbXMvYXV0aA==
+11-20 13:31:47.916 28561 28561 I DynamiteModule: Considering local module com.google.android.gms.googlecertificates:7 and remote module com.google.android.gms.googlecertificates:0
+11-20 13:31:47.916 28561 28561 I DynamiteModule: Selected local version of com.google.android.gms.googlecertificates
+11-20 13:31:47.929 28561 28561 I SyntheticOperationsLogg: (REDACTED) SyntheticOperationsLogger unable to log "%s"'s use of "%s" because installOperationsCollector never executed
+11-20 13:31:47.940 28561 28561 I Auth    : [CommonAuth,ManagedAccountUtil] No activities matched action com.google.android.gms.auth.addaccount.DM_PRE_ADD_ACCOUNT
+11-20 13:31:47.944 28561 28561 I Auth    : (REDACTED) [IntentResolveHelper] Found activity to handle action %s
+11-20 13:31:48.008 28561 28561 W PartnerConfigHelper: Emulator detected, bypassing system app check for partner provider.
+11-20 13:31:48.053 28705 28705 W oid.setupwizar: Unexpected CPU variant for X86 using defaults: x86_64
+11-20 13:31:48.059 28705 28705 E oid.setupwizar: Not starting debugger since process cannot load the jdwp agent.
+11-20 13:31:48.094 28705 28705 D CompatibilityChangeReporter: Compat change id reported: 171979766; UID 1110092; state: ENABLED
+11-20 13:31:48.116 28705 28705 D nativeloader: classloader namespace configured for unbundled product apk. library_path=/product/priv-app/SetupWizardPrebuilt/lib/x86_64:/product/priv-app/SetupWizardPrebuilt/SetupWizardPrebuilt.apk
+11-20 13:31:48.164 28705 28705 V GraphicsEnvironment: ANGLE Developer option for 'com.google.android.setupwizard' set to: 'default'
+11-20 13:31:48.164 28705 28705 V GraphicsEnvironment: Neither updatable production driver nor prerelease driver is supported.
+11-20 13:31:48.165 28705 28705 D NetworkSecurityConfig: No Network Security Config specified, using platform default
+11-20 13:31:48.166 28705 28705 D NetworkSecurityConfig: No Network Security Config specified, using platform default
+11-20 13:31:48.250 28561 28561 I PartnerConfigHelper: isGlifExpressiveStyleEnabled is false
+11-20 13:31:48.251 28561 28561 W PartnerConfigHelper: Emulator detected, bypassing system app check for partner provider.
+11-20 13:31:48.277 28705 28705 D PrimesApiImpl: Primes instant initialization
+11-20 13:31:48.321 28561 28561 W PartnerConfigHelper: Emulator detected, bypassing system app check for partner provider.
+11-20 13:31:48.326 28561 28561 W PartnerConfigHelper: Emulator detected, bypassing system app check for partner provider.
+11-20 13:31:48.330 28561 28561 W PartnerConfigHelper: Emulator detected, bypassing system app check for partner provider.
+11-20 13:31:48.336 28561 28561 W PartnerConfigHelper: Emulator detected, bypassing system app check for partner provider.
+11-20 13:31:48.337 28561 28561 I PartnerConfigHelper: isGlifExpressiveStyleEnabled is false
+11-20 13:31:48.342 28561 28561 I SetupLibrary: [IntrinsicSizeFrameLayout] CardViewIntrinsicAttribute(0, 1120)
+11-20 13:31:48.343 28561 28561 W PartnerConfigHelper: Emulator detected, bypassing system app check for partner provider.
+11-20 13:31:48.367 28561 28561 I PartnerConfigHelper: PartnerConfigsBundle=107
+11-20 13:31:48.367 28561 28561 W PartnerConfigHelper: Emulator detected, bypassing system app check for partner provider.
+11-20 13:31:48.367 28705 28741 I SetupLibrary: [SetupCompatServiceProvider] State changed: NOT_STARTED -> BIND_FAILED
+11-20 13:31:48.367 28705 28741 E SetupLibrary: [SetupCompatServiceProvider] Context#bindService did not succeed.
+11-20 13:31:48.367 28705 28741 W SetupLibrary: [SetupCompatServiceInvoker] logMetric failed since service reference is null. Are the permissions valid?
+11-20 13:31:48.377 28561 28561 I SetupLibrary: [IntrinsicSizeFrameLayout] CardViewIntrinsicPartnerConfig(1344, 1120)
+11-20 13:31:48.377 28561 28561 W PartnerConfigHelper: Emulator detected, bypassing system app check for partner provider.
+11-20 13:31:48.391 28561 28561 D CompatibilityChangeReporter: Compat change id reported: 171228096; UID 1110097; state: ENABLED
+11-20 13:31:48.426 28561 28561 W PartnerConfigHelper: Emulator detected, bypassing system app check for partner provider.
+11-20 13:31:48.435 28561 28561 W PartnerConfigHelper: Emulator detected, bypassing system app check for partner provider.
+11-20 13:31:48.438 28561 28561 W PartnerConfigHelper: Emulator detected, bypassing system app check for partner provider.
+11-20 13:31:48.453 28561 28561 W PartnerConfigHelper: Emulator detected, bypassing system app check for partner provider.
+11-20 13:31:48.455 28561 28561 W PartnerConfigHelper: Emulator detected, bypassing system app check for partner provider.
+11-20 13:31:48.457 28561 28561 W PartnerConfigHelper: Emulator detected, bypassing system app check for partner provider.
+11-20 13:31:48.461 28561 28561 W PartnerConfigHelper: Emulator detected, bypassing system app check for partner provider.
+11-20 13:31:48.470 28561 28561 W PartnerConfigHelper: Emulator detected, bypassing system app check for partner provider.
+11-20 13:31:48.472 28561 28561 W PartnerConfigHelper: Emulator detected, bypassing system app check for partner provider.
+11-20 13:31:48.475 28561 28561 I PartnerConfigHelper: isGlifExpressiveStyleEnabled is false
+11-20 13:31:48.475 28561 28561 W PartnerConfigHelper: Emulator detected, bypassing system app check for partner provider.
+11-20 13:31:48.478 28561 28561 W PartnerConfigHelper: Emulator detected, bypassing system app check for partner provider.
+11-20 13:31:48.479 28561 28561 I PartnerConfigHelper: isGlifExpressiveStyleEnabled is false
+11-20 13:31:48.480 28561 28561 W PartnerConfigHelper: Emulator detected, bypassing system app check for partner provider.
+11-20 13:31:48.482 28561 28561 W PartnerConfigHelper: Emulator detected, bypassing system app check for partner provider.
+11-20 13:31:48.484 28561 28561 W PartnerConfigHelper: Emulator detected, bypassing system app check for partner provider.
+11-20 13:31:48.486 28561 28561 I PartnerConfigHelper: isGlifExpressiveStyleEnabled is false
+11-20 13:31:48.487 28561 28561 W PartnerConfigHelper: Emulator detected, bypassing system app check for partner provider.
+11-20 13:31:48.489 28561 28561 W PartnerConfigHelper: Emulator detected, bypassing system app check for partner provider.
+11-20 13:31:48.490 28561 28561 W PartnerConfigHelper: Emulator detected, bypassing system app check for partner provider.
+11-20 13:31:48.492 28561 28561 W PartnerConfigHelper: Emulator detected, bypassing system app check for partner provider.
+11-20 13:31:48.494 28561 28561 W PartnerConfigHelper: Emulator detected, bypassing system app check for partner provider.
+11-20 13:31:48.496 28561 28561 W PartnerConfigHelper: Emulator detected, bypassing system app check for partner provider.
+11-20 13:31:48.497 28561 28561 W PartnerConfigHelper: Emulator detected, bypassing system app check for partner provider.
+(end u11 pid lines)
+== MinuteMaid / addaccount / ThirdParty / 400 / KidsAuth / WebView (any pid) since 13:30:00
+11-20 13:30:12.276 26254 26349 W GmsUrlRequestImpl: [https://android.googleapis.com/auth/devicekey] Content-Type header is overwritten.
+11-20 13:30:27.793 28212 28331 I PlayCommon: [1596] Connecting to server for timestamp: https://play.googleapis.com/play/log/timestamp
+11-20 13:30:28.543 28212 28331 I PlayCommon: [1596] Connecting to server: https://play.googleapis.com/play/log?format=raw&proto_v2=true
+11-20 13:30:32.654  4294 26308 I SelfRptRegSyncer: No unsupervised accounts found, so self reporting is off. [CONTEXT service_id=284 ]
+11-20 13:31:03.883 17389 28536 I NetworkRecognitionRnr: Using pair HTTP connection
+11-20 13:31:03.895 17389 17729 I NetworkRecognitionRnr: Using pair HTTP connection
+11-20 13:31:06.233   781 28542 D NetworkMonitor/101: PROBE_HTTP http://connectivitycheck.gstatic.com/generate_204 time=140ms ret=204 request={Connection=[close], User-Agent=[Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTM
+11-20 13:31:06.365   781 28541 D NetworkMonitor/101: PROBE_HTTPS https://www.google.com/generate_204 time=274ms ret=204 request={Connection=[close], User-Agent=[Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko
+11-20 13:31:46.661 26254 26304 I Auth    : [GmsAccountAuthenticatorImpl] Prewarming auth UI process upon addAccount call [CONTEXT service_id=343 ]
+11-20 13:31:47.371   535   983 I ActivityTaskManager: START u11 {act=com.google.android.accounts.AccountIntro cat=[FLAG_ACTIVITY_FORWARD_RESULT,defaultPendingIntent,categoryhack:sessionid=dace8b4e-7a31-4af0-9bd6-4d710bb92ddf] flg=
+11-20 13:31:47.940 28561 28561 I Auth    : [CommonAuth,ManagedAccountUtil] No activities matched action com.google.android.gms.auth.addaccount.DM_PRE_ADD_ACCOUNT
+11-20 13:31:47.950   535  1555 I ActivityTaskManager: START u11 {flg=0x2000000 cmp=com.google.android.gms/.auth.uiflows.addaccount.WrapperControlledActivity (has extras)} from uid 1110097
+11-20 13:31:48.174 27292 28721 I NetworkRecognitionRnr: Using pair HTTP connection
+11-20 13:31:48.237 27292 27429 I NetworkRecognitionRnr: Using pair HTTP connection
+11-20 13:31:48.571   535  4181 I ActivityTaskManager: START u11 {act=com.google.android.gms.auth.addaccount.PRE_ADD_ACCOUNT cmp=com.google.android.gms/.auth.uiflows.addaccount.PreAddAccountActivity (has extras)} from uid 1110097
+11-20 13:31:48.953 28655 28755 I MicroDataManager: Location for model with model type: 2 and locale: en-US, is : https://www.gstatic.com/android-search/hotword/x_google/0b06a49fe5a853c080ada268feeb6882/hotword.data
+11-20 13:31:49.073 28655 28746 I NetworkRecognitionRnr: Using pair HTTP connection
+11-20 13:31:49.270 28561 28561 I SetupLibrary: [GlifLayout] Using setup design braz to init for PreAddAccountActivity
+11-20 13:31:49.493 28842 28842 I GoogleHttpClient: GMS http client unavailable, use old client
+11-20 13:31:49.544 28655 28819 I NetworkRecognitionRnr: Using pair HTTP connection
+11-20 13:31:49.620 28561 28561 I Auth    : [PreAddAccountActivity] PreAddAccountChimeraActivity.onStart() called. [CONTEXT service_id=343 ]
+11-20 13:31:49.631 28561 28561 W Auth    : [AddAccount, PreAddAccountActivity] Failed to check resources [CONTEXT service_id=343 ]
+11-20 13:31:49.631 28561 28561 W Auth    : 	at com.google.android.gms.auth.uiflows.addaccount.PreAddAccountChimeraActivity.H(:<email><email> (190800-1020418964):34)
+11-20 13:31:49.631 28561 28561 W Auth    : 	at com.google.android.gms.auth.uiflows.addaccount.PreAddAccountChimeraActivity.onStart(:<email><email> (190800-1020418964):17)
+11-20 13:31:49.632 28561 28561 W Auth    : [PreAddAccountState] setPhenotypeSync done [CONTEXT service_id=343 ]
+11-20 13:31:49.633 28561 28561 W Auth    : [PreAddAccountState] setKeyAttestationCheckFailed done with result=false [CONTEXT service_id=343 ]
+11-20 13:31:49.932 28655 28751 I MicroDataManager: MicroDataManager InitializationTask. googleHotwordData is null: true, hotwordModel is null: false , sourceLocationOfCurrentHotwordModel https://www.gstatic.com/android-search/hotw
+11-20 13:31:50.008 28561 28561 I Auth    : (REDACTED) [PreAddAccountActivity] setPsEducationRequired=%s received from ViewModel.
+11-20 13:31:50.021 28561 28561 W Auth    : [PreAddAccountState] setPsEducationRequired done with result=false [CONTEXT service_id=343 ]
+11-20 13:31:50.061 28561 28561 I Auth    : [PreAddAccountActivity] Account seed event received from ViewModel. [CONTEXT service_id=343 ]
+11-20 13:31:50.062 28561 28561 W Auth    : [PreAddAccountState] setAccountSeedingResult done [CONTEXT service_id=343 ]
+11-20 13:31:50.066 28561 28561 I Auth    : (REDACTED) [PreAddAccountActivity] Checkin event=%s received from ViewModel.
+11-20 13:31:50.066 28561 28561 W Auth    : [PreAddAccountState] setCheckinResult done with result=true [CONTEXT service_id=343 ]
+11-20 13:31:50.152 28561 28561 I Auth    : (REDACTED) [PreAddAccountActivity] FrpSnapshot cached event=%s received from ViewModel.
+11-20 13:31:50.154 28561 28561 W Auth    : [PreAddAccountState] setFrpSnapshot done with result= FrpSnapshot[supported=false,required=false,ls=false] [CONTEXT service_id=343 ]
+11-20 13:31:50.159 28561 28561 W Auth    : [PreAddAccountState] setChallengeResult done with result=true [CONTEXT service_id=343 ]
+11-20 13:31:50.160 28561 28561 W Auth    : [PreAddAccountState] PreAddAccountState check done. Running callback to finish [CONTEXT service_id=343 ]
+11-20 13:31:50.168 28561 28561 W Auth    : [AddAccount, PreAddAccountActivity] finish(resultCode, data) called with result=RESULT_OK [CONTEXT service_id=343 ]
+11-20 13:31:50.268   535   552 I ActivityTaskManager: Displayed com.google.android.gms/.auth.uiflows.addaccount.PreAddAccountActivity: +3s158ms
+11-20 13:31:50.574 28561 28561 W Auth    : [PreAddAccountChimeraActivity] finish(resultCode, data) called from Handler after delay with resultCode=-1
+11-20 13:31:50.575 28561 28561 W Auth    : [AddAccount, ControlledChimeraActivity] finishCalled for ControlledActivity, resultCode=-1, name=PreAddAccountActivity, and null controller [CONTEXT service_id=343 ]
+11-20 13:31:50.643 28561 28561 W Auth    : [AddAccount, ControlledChimeraActivity] finishCalled for ControlledActivity, resultCode=-1, name=WrapperControlledActivity, controller=AddAccountController [CONTEXT service_id=343 ]
+11-20 13:31:50.664   781 28909 D NetworkMonitor/101: PROBE_HTTP http://connectivitycheck.gstatic.com/generate_204 time=112ms ret=204 request={Connection=[close], User-Agent=[Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTM
+11-20 13:31:50.697   535  4094 I ActivityTaskManager: START u11 {flg=0x2000000 cmp=com.google.android.gms/.auth.uiflows.minutemaid.MinuteMaidActivity (has extras)} from uid 1110097
+11-20 13:31:50.814 28561 28561 I Auth    : (REDACTED) [MinuteMaid, MinuteMaidActivity] network type: %d
+11-20 13:31:50.977 28561 28561 I SetupLibrary: [GlifLayout] Using setup design braz to init for MinuteMaidActivity
+11-20 13:31:51.134 28561 28561 I Auth    : (REDACTED) [MinuteMaidFragment] shouldDrawStatusBarInWebview: %b, useNativeNavigationBar: %b, isTablet: %b, deviceType=%s, theme: %s
+11-20 13:31:51.150 28561 28561 I Auth    : [MinuteMaidFragment] SMS disallowed for this user
+11-20 13:31:51.277   781 28908 D NetworkMonitor/101: PROBE_HTTPS https://www.google.com/generate_204 time=694ms ret=204 request={Connection=[close], User-Agent=[Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko
+11-20 13:31:51.858   535   552 I ActivityTaskManager: Displayed com.google.android.gms/.auth.uiflows.minutemaid.MinuteMaidActivity: +1s155ms
+11-20 13:31:51.900 28561 28925 I Auth    : [MinuteMaidFragment] Telephony features not available on device
+11-20 13:31:51.912   535  1555 W InputManager-JNI: Input channel object '5972047 com.android.settings/com.android.settings.accounts.AddAccountSettings (client)' was disposed without first being removed with the input manager!
+11-20 13:31:51.930   535  4181 W InputManager-JNI: Input channel object 'db22654 com.google.android.gms/com.google.android.gms.auth.uiflows.addaccount.WrapperControlledActivity (client)' was disposed without first being removed wi
+11-20 13:31:51.995 28561 28561 I Auth    : (REDACTED) [MinuteMaidFragment] colorScheme: %s
+11-20 13:31:51.995 28561 28561 I Auth    : (REDACTED) [MinuteMaidFragment] paletteColors: %s
+11-20 13:31:52.027 28561 28561 W Auth    : [MinuteMaidFragment] com.google.android.androidforwork is not installed on system
+11-20 13:31:52.039 28561 28561 I Auth    : (REDACTED) [MinuteMaidFragment] isSuw: %b, oemCustomizationParamsEnabled: %b
+11-20 13:31:52.085   781 28936 D NetworkMonitor/101: PROBE_HTTP http://connectivitycheck.gstatic.com/generate_204 time=58ms ret=204 request={Connection=[close], User-Agent=[Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML
+11-20 13:31:52.114 28561 28561 I Auth    : (REDACTED) [MinuteMaidFragment] mm url : %s
+11-20 13:31:52.578   781 28935 D NetworkMonitor/101: PROBE_HTTPS https://www.google.com/generate_204 time=542ms ret=204 request={Connection=[close], User-Agent=[Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko
+11-20 13:31:52.588   535  1555 W InputManager-JNI: Input channel object '7476332 com.google.android.gms/com.google.android.gms.auth.uiflows.addaccount.PreAddAccountActivity (client)' was disposed without first being removed with t
+11-20 13:31:58.892 28561 28561 E chromium: [ERROR:web_contents_delegate.cc(225)] WebContentsDelegate::CheckMediaAccessPermission: Not supported.
+11-20 13:31:58.892 28561 28561 E chromium: [ERROR:web_contents_delegate.cc(225)] WebContentsDelegate::CheckMediaAccessPermission: Not supported.
+11-20 13:31:59.137 28561 28561 E chromium: [ERROR:web_contents_delegate.cc(225)] WebContentsDelegate::CheckMediaAccessPermission: Not supported.
+11-20 13:31:59.137 28561 28561 E chromium: [ERROR:web_contents_delegate.cc(225)] WebContentsDelegate::CheckMediaAccessPermission: Not supported.
+11-20 13:32:00.341 28655 28821 W earchbox:searc: ClassLoaderContext classpath size mismatch. expected=17, found=0 (DLC[];PCL[base.apk*1218917255:base.apk!classes2.dex*3607215179:base.apk!classes3.dex*147300619:base.apk!classes4.de
+11-20 13:32:00.376 28655 28821 W earchbox:searc: ClassLoaderContext classpath size mismatch. expected=17, found=10 (DLC[];PCL[base.apk*1218917255:base.apk!classes2.dex*3607215179:base.apk!classes3.dex*147300619:base.apk!classes4.d
+11-20 13:32:44.119 26254 26325 W GmsUrlRequestImpl: [https://android.googleapis.com/auth/devicekey] Content-Type header is overwritten.
+11-20 13:32:57.198 26254 26329 I SelfRptRegSyncer: No unsupervised accounts found, so self reporting is off. [CONTEXT service_id=284 ]
+11-20 13:32:59.690 29011 29144 W .apps.messagin: ClassLoaderContext classpath size mismatch. expected=17, found=0 (DLC[];PCL[base.apk*1218917255:base.apk!classes2.dex*3607215179:base.apk!classes3.dex*147300619:base.apk!classes4.de
+11-20 13:32:59.766 29011 29144 W .apps.messagin: ClassLoaderContext classpath size mismatch. expected=17, found=5 (DLC[];PCL[base.apk*1218917255:base.apk!classes2.dex*3607215179:base.apk!classes3.dex*147300619:base.apk!classes4.de
+11-20 13:33:09.484   535  4112 D ContentCapturePerUserService: Notified activity assist data for activity: Token{e2c4a14 ActivityRecord{6e5d2bd u11 com.google.android.gms/.auth.uiflows.minutemaid.MinuteMaidActivity t1100005}} with
+11-20 13:33:09.943 22137 22191 I SuperDelight: SuperDelightManager.getDelightMetadataUriAndVersion():1080 getDelightMetadataUriAndVersion(): Phenotype : 2021093005 : https://www.gstatic.com/android/keyboard/dictionarypack/Yellowja
+11-20 13:33:09.971 22137 22191 I SuperDelight: SuperDelightManager.getDelightMetadataUriAndVersion():1080 getDelightMetadataUriAndVersion(): Phenotype : 2021093005 : https://www.gstatic.com/android/keyboard/dictionarypack/Yellowja
+11-20 13:33:10.508 22137 22189 I SP      : Registering kc_tflite_model.2021051801, url: https://www.gstatic.com/android/keyboard/kc_triggering_model/superpacks-manifest-20210408_161418.json, constraints: W:*:*:*, flags: bg, reques
+11-20 13:33:11.242 22137 22189 I SP      : Registering next-word-predictor.20210507, url: https://www.gstatic.com/android/keyboard/next_word_predictor/prod/superpacks-manifest-20210413_163718.json, constraints: *:*:*:*, flags: *, 
+11-20 13:33:11.244 22137 22189 I SP      : Requesting download of URL https://www.gstatic.com/android/keyboard/kc_triggering_model/superpacks-manifest-20210408_161418.json to kc_tflite_model-2021051801.fetched (constraints: W:b:u:
+11-20 13:33:11.371 22137 22191 I SuperDelight: SuperDelightManager.getDelightMetadataUriAndVersion():1080 getDelightMetadataUriAndVersion(): Phenotype : 2021093005 : https://www.gstatic.com/android/keyboard/dictionarypack/Yellowja
+11-20 13:33:11.377 22137 22189 I SP      : Registering expressive_concepts_triggering.2020112917, url: https://www.gstatic.com/android/keyboard/modelpack/expressive_concepts_triggering/2020112917/superpacks_manifest.json, constrai
+11-20 13:33:11.384 22137 22189 I SP      : Requesting download of URL https://www.gstatic.com/android/keyboard/next_word_predictor/prod/superpacks-manifest-20210413_163718.json to next-word-predictor-20210507.fetched (constraints:
+11-20 13:33:11.386 22137 22191 I SuperDelight: SuperDelightManager.getDelightMetadataUriAndVersion():1080 getDelightMetadataUriAndVersion(): Phenotype : 2021093005 : https://www.gstatic.com/android/keyboard/dictionarypack/Yellowja
+11-20 13:33:11.895 22137 22189 I SP      : Requesting download of URL https://www.gstatic.com/android/keyboard/modelpack/expressive_concepts_triggering/2020112917/superpacks_manifest.json to expressive_concepts_triggering-20201129
+11-20 13:33:12.390 22137 22189 I SP      : Requesting download of URL https://www.gstatic.com/android/keyboard/kc_triggering_model/tflite-kc-20210408_161418.zip to tflite-kc-20210408_161418.zip.fetched (constraints: m:b:u:l)
+11-20 13:33:12.508 22137 22189 I SP      : Requesting download of URL https://www.gstatic.com/android/keyboard/next_word_predictor/prod/tflite-nwp-9343e8ce723e0b22aa8e2733a7d475be.zip to tflite-nwp-9343e8ce723e0b22aa8e2733a7d475be
+11-20 13:33:12.570 22137 22189 I SP      : Requesting download of URL https://www.gstatic.com/android/keyboard/modelpack/expressive_concepts_triggering/2020112917/en.zip to 2020112917_en.zip.fetched (constraints: m:b:u:l)
+11-20 13:33:49.416   535  4094 D ContentCapturePerUserService: Notified activity assist data for activity: Token{e2c4a14 ActivityRecord{6e5d2bd u11 com.google.android.gms/.auth.uiflows.minutemaid.MinuteMaidActivity t1100005}} with
+11-20 13:34:14.737 27292 27536 E chromium: [ERROR:gpu_process_host.cc(1002)] GPU process exited unexpectedly: exit_code=0
+11-20 13:34:22.647   535  4094 D ContentCapturePerUserService: Notified activity assist data for activity: Token{e2c4a14 ActivityRecord{6e5d2bd u11 com.google.android.gms/.auth.uiflows.minutemaid.MinuteMaidActivity t1100005}} with
+11-20 13:34:23.061 28561 28561 E chromium: [ERROR:web_contents_delegate.cc(225)] WebContentsDelegate::CheckMediaAccessPermission: Not supported.
+11-20 13:34:23.061 28561 28561 E chromium: [ERROR:web_contents_delegate.cc(225)] WebContentsDelegate::CheckMediaAccessPermission: Not supported.
+11-20 13:34:36.475   535  1555 D ContentCapturePerUserService: Notified activity assist data for activity: Token{e2c4a14 ActivityRecord{6e5d2bd u11 com.google.android.gms/.auth.uiflows.minutemaid.MinuteMaidActivity t1100005}} with
+11-20 13:34:45.635   535  4094 D ContentCapturePerUserService: Notified activity assist data for activity: Token{e2c4a14 ActivityRecord{6e5d2bd u11 com.google.android.gms/.auth.uiflows.minutemaid.MinuteMaidActivity t1100005}} with
+11-20 13:34:51.660   535   827 D ContentCapturePerUserService: Notified activity assist data for activity: Token{e2c4a14 ActivityRecord{6e5d2bd u11 com.google.android.gms/.auth.uiflows.minutemaid.MinuteMaidActivity t1100005}} with
+11-20 13:35:10.032 28561 28561 E chromium: [ERROR:web_contents_delegate.cc(225)] WebContentsDelegate::CheckMediaAccessPermission: Not supported.
+11-20 13:35:10.032 28561 28561 E chromium: [ERROR:web_contents_delegate.cc(225)] WebContentsDelegate::CheckMediaAccessPermission: Not supported.
+11-20 13:35:10.349 28561 28561 E chromium: [ERROR:web_contents_delegate.cc(225)] WebContentsDelegate::CheckMediaAccessPermission: Not supported.
+11-20 13:35:10.349 28561 28561 E chromium: [ERROR:web_contents_delegate.cc(225)] WebContentsDelegate::CheckMediaAccessPermission: Not supported.
+11-20 13:36:04.930 17389 29477 I NetworkRecognitionRnr: Using pair HTTP connection
+11-20 13:36:04.974 17389 29478 I NetworkRecognitionRnr: Using pair HTTP connection
+11-20 13:36:06.399 29487 29528 I Finsky  : [1648] playLoggingServerUrl: https://play.googleapis.com/play/log
+11-20 13:36:06.399 29487 29528 I Finsky  : [1648] playLoggingServerTimestampUrl: https://play.googleapis.com/play/log/timestamp
+11-20 13:36:06.672 29544 29544 I GoogleHttpClient: GMS http client unavailable, use old client
+11-20 13:36:07.400 29575 29660 I Finsky:background: [1649] CronetEngine is present. Using Cronet for the networking stack.
+11-20 13:36:07.868   781 29700 D NetworkMonitor/101: PROBE_HTTP http://connectivitycheck.gstatic.com/generate_204 time=215ms ret=204 request={Connection=[close], User-Agent=[Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTM
+11-20 13:36:08.011   781 29699 D NetworkMonitor/101: PROBE_HTTPS https://www.google.com/generate_204 time=357ms ret=204 request={Connection=[close], User-Agent=[Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko
+11-20 13:36:13.918 29575 29657 I Finsky:background: [1647] playLoggingServerUrl: https://play.googleapis.com/play/log
+11-20 13:36:13.918 29575 29657 I Finsky:background: [1647] playLoggingServerTimestampUrl: https://play.googleapis.com/play/log/timestamp
+11-20 13:36:14.100 29620 29874 I Finsky  : [1690] playLoggingServerUrl: https://play.googleapis.com/play/log
+11-20 13:36:14.103 29620 29874 I Finsky  : [1690] playLoggingServerTimestampUrl: https://play.googleapis.com/play/log/timestamp
+11-20 13:36:15.594 29781 29819 I Finsky:background: [1647] playLoggingServerUrl: https://play.googleapis.com/play/log
+11-20 13:36:15.594 29781 29819 I Finsky:background: [1647] playLoggingServerTimestampUrl: https://play.googleapis.com/play/log/timestamp
+11-20 13:36:16.668 28561 28979 I Auth    : [MinuteMaid, MinuteMaidJsBridge] addAccount(...) [CONTEXT service_id=343 ]
+11-20 13:36:16.956 26254 26266 I Auth    : [AddAccountOperation] Initializing sign-in [CONTEXT service_id=153 ]
+11-20 13:36:17.099 26254 26266 I Auth    : [AddAccountOperation] Fetching token from auth code with GMS network stack. [CONTEXT service_id=153 ]
+11-20 13:36:17.676 26254 26266 I Auth    : [AddAccountOperation] Handling AddAccountResponse. [CONTEXT service_id=153 ]
+11-20 13:36:17.679 26254 26266 I Auth    : (REDACTED) [AddAccountOperation] possible Seed account with hasUsername=%s 
+11-20 13:36:17.719 26254 29129 I Auth    : [AddAccountOperation] Successfully updated account name and Gaia ID in DB [CONTEXT service_id=153 ]
+11-20 13:36:17.732 26254 26266 I Auth    : (REDACTED) [AddAccountHelper] Adding account with %d allowlisted packages
+11-20 13:36:17.859 26254 26266 I Auth    : [AddAccountHelper] Account added successfully to AccountManager [CONTEXT service_id=343 ]
+11-20 13:36:19.003 29487 29528 I Finsky  : [1648] playLoggingServerUrl: https://play.googleapis.com/play/log

@@ -1,0 +1,13 @@
+# A0.22 marker before the parent's u11 steps: 11-21 18:30:58 UTC. Read-only.
+== current user: 0
+== settings: mode=hostname specifier=family.cloudflare-dns.com
+== owners
+3 owners:
+User  0: admin=com.webfilter.spike.a19/.AdminReceiver,DeviceOwner,Affiliated
+User 10: admin=com.webfilter.spike.a19/.AdminReceiver,ProfileOwner
+User 11: admin=com.google.android.gms/.kids.account.receiver.ProfileOwnerReceiver,ProfileOwner
+== DISALLOW restriction (u0 global):
+    Device policy global restrictions:
+      disallow_config_private_dns
+== user 11 state:     State: -1
+== ynet and test domain on device: PING e12476.dscb.akamaiedge.net (23.221.30.50) 56(84) bytes of data. | PING malware.testcategory.com (127.0.0.1) 56(84) bytes of data.

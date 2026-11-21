@@ -1,0 +1,25 @@
+# Changes reported by the starting session (not made by this spike), verified read-only
+== current user
+10
+== wakefulness
+  mWakefulness=Awake
+  mWakefulnessChanging=false
+== screen_off_timeout user 10 (expect 1800000)
+1800000
+== screen_off_timeout user 0
+1800000
+== focus
+  mCurrentFocus=Window{66dec65 u10 com.google.android.gms/com.google.android.gms.auth.uiflows.minutemaid.MinuteMaidActivity}
+== owners
+2 owners:
+User  0: admin=com.webfilter.spike.a19/.AdminReceiver,DeviceOwner,Affiliated
+User 10: admin=com.webfilter.spike.a19/.AdminReceiver,ProfileOwner
+== users
+Users:
+	UserInfo{0:Owner:c13} running
+	UserInfo{10:kid-test:410} running
+
+Notes for the report (written by this spike after the checks above):
+- The three changes (wake, dismiss keyguard, screen_off_timeout for user 10) were made by the starting session, not by this spike. Verified above: mWakefulness=Awake, screen_off_timeout=1800000 for user 10.
+- The baseline (00-baseline.txt) did not record screen_off_timeout, so it is not known whether user 0 was changed. Its value is 1800000 now, the same as user 10's.
+- Focus at the time of this check: com.google.android.gms MinuteMaidActivity in user 10. This is the GMS account-setup activity, so the parent's step (a) appears to have started. Nothing was typed into the device by this spike.

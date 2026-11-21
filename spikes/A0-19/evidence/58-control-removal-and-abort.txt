@@ -1,0 +1,95 @@
+# Removal of the control user's account and the KidsAuth abort (after 13:36:36 UTC). Read-only. Names redacted.
+-- last device line: 13:39:38.240
+-- account-removal and KidsAuth/GMS abort lines from 13:36:36 onward (any pid)
+11-20 13:36:36.070 26254 29919 W AsyncOperation: Caused by: com.google.android.gms.auth.UserRecoverableAuthException: ThirdPartyDeviceManagementRequired
+11-20 13:36:36.397 26254 30502 I Auth    : (REDACTED) [GetToken] GetToken failed for app=%s with userRecoverable status: %s 
+11-20 13:36:36.398 26254 30502 W Auth    : amcv: GetToken failed with status code and recovery intent: ThirdPartyDeviceManagementRequired
+11-20 13:36:36.399 26254 30502 E InternalPeopleServiceGrpcClient: com.google.android.gms.auth.UserRecoverableAuthException: ThirdPartyDeviceManagementRequired
+11-20 13:36:36.399 26254 30502 E FSA2_GroupSyncGrpc: com.google.android.gms.auth.UserRecoverableAuthException: ThirdPartyDeviceManagementRequired
+11-20 13:36:36.592 26254 30434 E FSA2_ContactsSyncAdapter: com.google.android.gms.auth.UserRecoverableAuthException: ThirdPartyDeviceManagementRequired
+11-20 13:36:36.923 26254 30130 I Auth    : (REDACTED) [GetToken] GetToken failed for app=%s with userRecoverable status: %s 
+11-20 13:36:36.924 26254 30130 W Auth    : amcv: GetToken failed with status code and recovery intent: ThirdPartyDeviceManagementRequired
+11-20 13:36:37.070 29955 30436 W GoogleAuthUtil: com.google.android.gms.auth.UserRecoverableAuthException: ThirdPartyDeviceManagementRequired
+11-20 13:36:37.071 26254 26266 I Auth    : (REDACTED) [GetToken] GetToken failed for app=%s with userRecoverable status: %s 
+11-20 13:36:37.071 26254 26266 W Auth    : amcv: GetToken failed with status code and recovery intent: ThirdPartyDeviceManagementRequired
+11-20 13:36:37.071 26254 26266 W Auth    : [GmsAccountAuthenticatorImpl] error status while fetching token:ThirdPartyDeviceManagementRequired [CONTEXT service_id=343 ]
+11-20 13:36:37.201 26254 29226 I Auth    : (REDACTED) [GetToken] GetToken failed for app=%s with userRecoverable status: %s 
+11-20 13:36:37.208 26254 29226 W Auth    : amcv: GetToken failed with status code and recovery intent: ThirdPartyDeviceManagementRequired
+11-20 13:36:37.230 26254 26291 I Auth    : (REDACTED) [GetToken] GetToken failed for app=%s with userRecoverable status: %s 
+11-20 13:36:37.231 26254 26291 W Auth    : amcv: GetToken failed with status code and recovery intent: ThirdPartyDeviceManagementRequired
+11-20 13:36:37.266 29935 30559 W ahwi    : ahup: [/sync/st/s] 2: Unknown network error: wbd: ThirdPartyDeviceManagementRequired
+11-20 13:36:37.266 29935 30559 W ahwi    : Caused by: wbd: ThirdPartyDeviceManagementRequired
+11-20 13:36:37.267 29935 30559 W ahwn    : Network is not OK. Status=2. ahup: [/sync/st/s] 2: Unknown network error: wbd: ThirdPartyDeviceManagementRequired
+11-20 13:36:37.291 29935 30402 W atji    : ahup: [/sync/st/s] 2: Unknown network error: wbd: ThirdPartyDeviceManagementRequired
+11-20 13:36:37.291 29935 30402 W atji    : Caused by: wbd: ThirdPartyDeviceManagementRequired
+11-20 13:36:37.307 29935 30402 W atji    : Caused by: ahup: [/sync/st/s] 2: Unknown network error: wbd: ThirdPartyDeviceManagementRequired
+11-20 13:36:37.307 29935 30402 W atji    : Caused by: wbd: ThirdPartyDeviceManagementRequired
+11-20 13:36:37.308 29935 30402 E akzr    : Caused by: ahup: [/sync/st/s] 2: Unknown network error: wbd: ThirdPartyDeviceManagementRequired
+11-20 13:36:37.308 29935 30402 E akzr    : Caused by: wbd: ThirdPartyDeviceManagementRequired
+11-20 13:36:37.308 29935 30402 E akzr    : Caused by: ahup: [/sync/st/s] 2: Unknown network error: wbd: ThirdPartyDeviceManagementRequired
+11-20 13:36:37.308 29935 30402 E akzr    : Caused by: wbd: ThirdPartyDeviceManagementRequired
+11-20 13:36:37.309 29935 30402 E atem    : Caused by: ahup: [/sync/st/s] 2: Unknown network error: wbd: ThirdPartyDeviceManagementRequired
+11-20 13:36:37.309 29935 30402 E atem    : Caused by: wbd: ThirdPartyDeviceManagementRequired
+11-20 13:36:37.309 29935 30402 E atem    : Caused by: ahup: [/sync/st/s] 2: Unknown network error: wbd: ThirdPartyDeviceManagementRequired
+11-20 13:36:37.309 29935 30402 E atem    : Caused by: wbd: ThirdPartyDeviceManagementRequired
+11-20 13:36:37.469 29935 29935 W Gmail   : Caused by: ahup: [/sync/st/s] 2: Unknown network error: wbd: ThirdPartyDeviceManagementRequired
+11-20 13:36:37.469 29935 29935 W Gmail   : Caused by: wbd: ThirdPartyDeviceManagementRequired
+11-20 13:36:37.575 26254 26301 I Auth    : (REDACTED) [GetToken] GetToken failed for app=%s with userRecoverable status: %s 
+11-20 13:36:37.577 26254 26301 W Auth    : amcv: GetToken failed with status code and recovery intent: ThirdPartyDeviceManagementRequired
+11-20 13:36:37.579 29955 30436 W GoogleAuthUtil: com.google.android.gms.auth.UserRecoverableAuthException: ThirdPartyDeviceManagementRequired
+11-20 13:36:37.620 26254 26266 I Auth    : (REDACTED) [GetToken] GetToken failed for app=%s with userRecoverable status: %s 
+11-20 13:36:37.621 26254 26266 W Auth    : amcv: GetToken failed with status code and recovery intent: ThirdPartyDeviceManagementRequired
+11-20 13:36:37.647 29955 30315 W PlatformNetworkImpl: Caused by: com.google.android.gms.auth.UserRecoverableAuthException: ThirdPartyDeviceManagementRequired
+11-20 13:36:37.753 26254 29129 I Auth    : (REDACTED) [GetToken] GetToken failed for app=%s with userRecoverable status: %s 
+11-20 13:36:37.754 26254 29129 W Auth    : amcv: GetToken failed with status code and recovery intent: ThirdPartyDeviceManagementRequired
+11-20 13:36:38.071 26254 29919 W AsyncOperation: Caused by: com.google.android.gms.auth.UserRecoverableAuthException: ThirdPartyDeviceManagementRequired
+11-20 13:36:38.271 26254 30130 I Auth    : (REDACTED) [GetToken] GetToken failed for app=%s with userRecoverable status: %s 
+11-20 13:36:38.273 26254 30130 W Auth    : amcv: GetToken failed with status code and recovery intent: ThirdPartyDeviceManagementRequired
+11-20 13:36:38.305 26254 30130 W Auth    : [GmsAccountAuthenticatorImpl] error status while fetching token:ThirdPartyDeviceManagementRequired [CONTEXT service_id=343 ]
+11-20 13:36:38.438 26254 26329 I Auth    : (REDACTED) [GetToken] GetToken failed for app=%s with userRecoverable status: %s 
+11-20 13:36:38.443 26254 26329 W Auth    : amcv: GetToken failed with status code and recovery intent: ThirdPartyDeviceManagementRequired
+11-20 13:36:41.890   535  4181 I AccountManagerService: the accounts changed, sending broadcast of android.accounts.LOGIN_ACCOUNTS_CHANGED
+11-20 13:36:45.495 26254 30130 I Auth    : (REDACTED) [GetToken] GetToken failed for app=%s with userRecoverable status: %s 
+11-20 13:36:45.500 26254 29856 I Auth    : (REDACTED) [GetToken] GetToken failed for app=%s with userRecoverable status: %s 
+11-20 13:36:45.500 26254 29856 W Auth    : amcv: GetToken failed with status code and recovery intent: ThirdPartyDeviceManagementRequired
+11-20 13:36:45.511 26254 26304 I Auth    : (REDACTED) [GetToken] GetToken failed for app=%s with userRecoverable status: %s 
+11-20 13:36:45.511 26254 26304 W Auth    : amcv: GetToken failed with status code and recovery intent: ThirdPartyDeviceManagementRequired
+11-20 13:36:45.551 26254 26266 I Auth    : (REDACTED) [GetToken] GetToken failed for app=%s with userRecoverable status: %s 
+11-20 13:36:45.563 26254 30130 W Auth    : amcv: GetToken failed with status code and recovery intent: ThirdPartyDeviceManagementRequired
+11-20 13:36:45.570 26254 26266 W Auth    : amcv: GetToken failed with status code and recovery intent: ThirdPartyDeviceManagementRequired
+11-20 13:36:45.572 29935 30641 W ahwi    : ahup: [/sync/st/s] 2: Unknown network error: wbd: ThirdPartyDeviceManagementRequired
+11-20 13:36:45.572 29935 30641 W ahwi    : Caused by: wbd: ThirdPartyDeviceManagementRequired
+11-20 13:36:45.574 29935 30644 W ahwn    : Network is not OK. Status=2. ahup: [/sync/st/s] 2: Unknown network error: wbd: ThirdPartyDeviceManagementRequired
+11-20 13:36:45.579 29935 30631 W atji    : ahup: [/sync/st/s] 2: Unknown network error: wbd: ThirdPartyDeviceManagementRequired
+11-20 13:36:45.579 29935 30631 W atji    : Caused by: wbd: ThirdPartyDeviceManagementRequired
+11-20 13:36:45.588 29955 30568 E Notifications: com.google.android.gms.auth.UserRecoverableAuthException: ThirdPartyDeviceManagementRequired
+11-20 13:36:45.596 29935 30633 W atji    : Caused by: ahup: [/sync/st/s] 2: Unknown network error: wbd: ThirdPartyDeviceManagementRequired
+11-20 13:36:45.596 29935 30633 W atji    : Caused by: wbd: ThirdPartyDeviceManagementRequired
+11-20 13:36:45.596 29955 30627 W GoogleAuthUtil: com.google.android.gms.auth.UserRecoverableAuthException: ThirdPartyDeviceManagementRequired
+11-20 13:36:45.597 29935 30633 E akzr    : Caused by: ahup: [/sync/st/s] 2: Unknown network error: wbd: ThirdPartyDeviceManagementRequired
+11-20 13:36:45.597 29935 30633 E akzr    : Caused by: wbd: ThirdPartyDeviceManagementRequired
+11-20 13:36:45.597 29935 30633 E akzr    : Caused by: ahup: [/sync/st/s] 2: Unknown network error: wbd: ThirdPartyDeviceManagementRequired
+11-20 13:36:45.597 29935 30633 E akzr    : Caused by: wbd: ThirdPartyDeviceManagementRequired
+11-20 13:36:45.603 26254 30459 I Auth    : (REDACTED) [GetToken] GetToken failed for app=%s with userRecoverable status: %s 
+11-20 13:36:45.607 26254 30676 I Auth    : (REDACTED) [GetToken] GetToken failed for app=%s with userRecoverable status: %s 
+11-20 13:36:45.607 26254 30676 W Auth    : amcv: GetToken failed with status code and recovery intent: ThirdPartyDeviceManagementRequired
+11-20 13:36:45.614 29955 30670 W ApiaryChimeImpl: Caused by: com.google.android.gms.auth.UserRecoverableAuthException: ThirdPartyDeviceManagementRequired
+11-20 13:36:45.627 26254 30459 W Auth    : amcv: GetToken failed with status code and recovery intent: ThirdPartyDeviceManagementRequired
+11-20 13:36:45.640 29935 30633 E atem    : Caused by: ahup: [/sync/st/s] 2: Unknown network error: wbd: ThirdPartyDeviceManagementRequired
+11-20 13:36:45.640 29935 30633 E atem    : Caused by: wbd: ThirdPartyDeviceManagementRequired
+11-20 13:36:45.640 29935 30633 E atem    : Caused by: ahup: [/sync/st/s] 2: Unknown network error: wbd: ThirdPartyDeviceManagementRequired
+11-20 13:36:45.640 29935 30633 E atem    : Caused by: wbd: ThirdPartyDeviceManagementRequired
+11-20 13:36:45.699 29935 29935 W Gmail   : Caused by: ahup: [/sync/st/s] 2: Unknown network error: wbd: ThirdPartyDeviceManagementRequired
+11-20 13:36:45.699 29935 29935 W Gmail   : Caused by: wbd: ThirdPartyDeviceManagementRequired
+11-20 13:36:45.708 29955 30669 E Notifications: com.google.android.gms.auth.UserRecoverableAuthException: ThirdPartyDeviceManagementRequired
+11-20 13:36:45.792 26254 26291 I Auth    : (REDACTED) [GetToken] GetToken failed for app=%s with userRecoverable status: %s 
+11-20 13:36:45.792 26254 26291 W Auth    : amcv: GetToken failed with status code and recovery intent: ThirdPartyDeviceManagementRequired
+11-20 13:36:45.793 26254 26291 W Auth    : [GmsAccountAuthenticatorImpl] error status while fetching token:ThirdPartyDeviceManagementRequired [CONTEXT service_id=343 ]
+11-20 13:36:45.847 29935 30632 W atji    : Caused by: ahup: [/sync/st/s] 2: Unknown network error: wbd: ThirdPartyDeviceManagementRequired
+11-20 13:36:45.847 29935 30632 W atji    : Caused by: wbd: ThirdPartyDeviceManagementRequired
+11-20 13:36:45.854 29935 29935 W alec    : Caused by: ahup: [/sync/st/s] 2: Unknown network error: wbd: ThirdPartyDeviceManagementRequired
+11-20 13:36:45.854 29935 29935 W alec    : Caused by: wbd: ThirdPartyDeviceManagementRequired
+11-20 13:36:45.876 29935 29935 E akyr    : ajiz: NETWORK_ERROR: Network error: [/sync/st/s] 2: Unknown network error: wbd: ThirdPartyDeviceManagementRequired
+11-20 13:36:45.876 29935 29935 E akyr    : Caused by: ahup: [/sync/st/s] 2: Unknown network error: wbd: ThirdPartyDeviceManagementRequired
+(end)
+-- count of 'Canceling DM notification' after 13:36:36 (DM suppression, not removal): 177

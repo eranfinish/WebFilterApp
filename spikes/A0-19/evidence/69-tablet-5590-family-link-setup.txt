@@ -1,0 +1,25 @@
+# Tablet_A12 (5590) capture during the Family Link setup, read-only. Device UTC. Names redacted.
+== owners
+3 owners:
+User  0: admin=com.webfilter.spike.a19/.AdminReceiver,DeviceOwner,Affiliated
+User 10: admin=com.webfilter.spike.a19/.AdminReceiver,ProfileOwner
+User 11: admin=com.google.android.gms/.kids.account.receiver.ProfileOwnerReceiver,ProfileOwner
+== current user: 11
+== accounts per user (count)
+User UserInfo{0:Owner:c13}: |   Accounts: 0
+User UserInfo{10:kid-test:410}: |   Accounts: 0
+User UserInfo{11:control:410}: |   Accounts: 1
+== apps.kids / familylink installs (per user)
+user 0: 
+user 10: 
+user 11: 
+== kids/family installs logged since 14:10 (PackageInstaller / Finsky install of kids packages)
+(end)
+== token failures THIRD_PARTY since 14:13 UTC, by pid owner
+== token SUCCESS lines since 14:13 (GetToken ok / token granted)
+(end)
+== DevicePolicy / ProfileOwner / setActiveAdmin since 14:13 UTC
+(end)
+== memory now
+MemAvailable:     402372 kB
+SwapFree:         252776 kB

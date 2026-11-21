@@ -1,0 +1,138 @@
+== user lifecycle events for user 11 (start, switch, stop) since 16:50 UTC
+11-21 16:54:07.920   202   202 D vold    : Installed de key for user 11
+11-21 16:54:15.320   466   466 D installd: Found valid user 11
+11-21 16:54:15.435   532   532 I SystemServerTiming: StartUserManagerService
+11-21 16:54:16.692   532   622 I EventHub: New device: id=10, fd=189, path='/dev/input/event13', name='virtio_input_multi_touch_11', classes=TOUCH | TOUCH_MT | SWITCH, configuration='/vendor/usr/idc/v
+11-21 16:54:17.766   532   532 D NotificationAssistants: Approving default notification assistant for user 11
+11-21 16:54:20.200   532   532 I SystemServerTiming: ssm.StartUser-0
+11-21 16:54:20.200   532   532 I SystemServiceManager: Calling onStartUser 0
+11-21 16:54:20.200   532   532 I SystemServerTiming: ssm.onStartUser-0_com.android.server.security.FileIntegrityService
+11-21 16:54:20.200   532   532 I SystemServerTiming: ssm.onStartUser-0_com.android.server.pm.Installer
+11-21 16:54:20.200   532   532 I SystemServerTiming: ssm.onStartUser-0_com.android.server.os.DeviceIdentifiersPolicyService
+11-21 16:54:20.200   532   532 I SystemServerTiming: ssm.onStartUser-0_com.android.server.uri.UriGrantsManagerService$Lifecycle
+11-21 16:54:20.200   532   532 I SystemServerTiming: ssm.onStartUser-0_com.android.server.powerstats.PowerStatsService
+11-21 16:54:20.200   532   532 I SystemServerTiming: ssm.onStartUser-0_com.android.server.wm.ActivityTaskManagerService$Lifecycle
+11-21 16:54:20.200   532   532 I SystemServerTiming: ssm.onStartUser-0_com.android.server.am.ActivityManagerService$Lifecycle
+11-21 16:54:20.200   532   532 I SystemServerTiming: ssm.onStartUser-0_com.android.server.pm.DataLoaderManagerService
+11-21 16:54:20.200   532   532 I SystemServerTiming: ssm.onStartUser-0_com.android.server.power.PowerManagerService
+11-21 16:54:20.200   532   532 I SystemServerTiming: ssm.onStartUser-0_com.android.server.power.ThermalManagerService
+11-21 16:54:20.200   532   532 I SystemServerTiming: ssm.onStartUser-0_com.android.server.power.hint.HintManagerService
+11-21 16:54:20.200   532   532 I SystemServerTiming: ssm.onStartUser-0_com.android.server.recoverysystem.RecoverySystemService$Lifecycle
+11-21 16:54:20.200   532   532 I SystemServerTiming: ssm.onStartUser-0_com.android.server.lights.LightsService
+11-21 16:54:20.200   532   532 I SystemServerTiming: ssm.onStartUser-0_com.android.server.display.DisplayManagerService
+11-21 16:54:20.200   532   532 I SystemServerTiming: ssm.onStartUser-0_com.android.server.pm.verify.domain.DomainVerificationService
+11-21 16:54:20.200   532   532 I SystemServerTiming: ssm.onStartUser-0_com.android.server.pm.PackageInstallerService$Lifecycle
+11-21 16:54:20.200   532   532 I SystemServerTiming: ssm.onStartUser-0_com.android.server.pm.UserManagerService$LifeCycle
+11-21 16:54:20.200   532   532 I SystemServerTiming: ssm.onStartUser-0_com.android.server.om.OverlayManagerService
+11-21 16:54:20.200   532   532 I SystemServerTiming: ssm.onStartUser-0_com.android.server.SensorPrivacyService
+11-21 16:54:20.200   532   532 I SystemServerTiming: ssm.onStartUser-0_com.android.server.sensors.SensorService
+11-21 16:54:20.200   532   532 I SystemServerTiming: ssm.onStartUser-0_com.android.server.SystemConfigService
+11-21 16:54:20.200   532   532 I SystemServerTiming: ssm.onStartUser-0_com.android.server.BatteryService
+11-21 16:54:20.200   532   532 I SystemServerTiming: ssm.onStartUser-0_com.android.server.usage.UsageStatsService
+(end lifecycle)
+== any u11 activity-manager line since 16:55 (START u11 or Start proc ...u11)
+(end u11 activity)
+== Chrome starts since 16:55 by user prefix
+      3 /u0a115
+      3 /u0ai0
+      3 /u0ai1
+      2 /u0ai10
+      2 /u0ai11
+      2 /u0ai12
+      2 /u0ai13
+      2 /u0ai14
+      2 /u0ai15
+      2 /u0ai16
+      2 /u0ai17
+      2 /u0ai18
+      2 /u0ai19
+      3 /u0ai2
+      2 /u0ai20
+      2 /u0ai21
+      2 /u0ai22
+      2 /u0ai23
+      2 /u0ai24
+      2 /u0ai25
+      2 /u0ai26
+      2 /u0ai27
+      2 /u0ai28
+      2 /u0ai29
+      3 /u0ai3
+      1 /u0ai30
+      1 /u0ai31
+      1 /u0ai32
+      1 /u0ai33
+      1 /u0ai34
+      1 /u0ai35
+      1 /u0ai36
+      1 /u0ai37
+      1 /u0ai38
+      1 /u0ai39
+      3 /u0ai4
+      1 /u0ai40
+      1 /u0ai41
+      1 /u0ai42
+      1 /u0ai43
+      1 /u0ai44
+      1 /u0ai45
+      1 /u0ai46
+      1 /u0ai47
+      1 /u0ai48
+      1 /u0ai49
+      3 /u0ai5
+      1 /u0ai50
+      1 /u0ai51
+      1 /u0ai52
+      1 /u0ai53
+      1 /u0ai54
+      1 /u0ai55
+      1 /u0ai56
+      1 /u0ai57
+      1 /u0ai58
+      1 /u0ai59
+      3 /u0ai6
+      1 /u0ai60
+      1 /u0ai61
+      1 /u0ai62
+      1 /u0ai63
+      1 /u0ai64
+      1 /u0ai65
+      1 /u0ai66
+      1 /u0ai67
+      1 /u0ai68
+      1 /u0ai69
+      3 /u0ai7
+      1 /u0ai70
+      1 /u0ai71
+      1 /u0ai72
+      1 /u0ai73
+      1 /u0ai74
+      1 /u0ai75
+      1 /u0ai76
+      1 /u0ai77
+      1 /u0ai78
+      1 /u0ai79
+      3 /u0ai8
+      1 /u0ai80
+      1 /u0ai81
+      1 /u0ai82
+      1 /u0ai83
+      1 /u0ai84
+      1 /u0ai85
+      1 /u0ai86
+      1 /u0ai87
+      1 /u0ai88
+      1 /u0ai89
+      3 /u0ai9
+      1 /u0ai90
+      1 /u0ai91
+      1 /u0ai92
+      1 /u0ai93
+      1 /u0ai94
+      1 /u0ai95
+      1 /u0ai96
+      1 /u0ai97
+      1 /u0ai98
+      1 /u0ai99
+      1 START u0
+(end chrome)

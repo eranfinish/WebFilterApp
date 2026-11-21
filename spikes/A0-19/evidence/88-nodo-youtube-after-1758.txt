@@ -1,0 +1,34 @@
+# NO-DO phone (5580): YouTube in plainkid after the marker 11-21 17:58:01 UTC. Read-only.
+== YouTube processes now (ps -> user)
+u10_a186 18367 com.google.android.youtube
+== YouTube starts since marker (user)
+18:03:49.844 ActivityTaskManager: START
+18:03:49.891 ActivityManager: Start
+(end)
+== token results since marker, by message
+      9 GetToken failed for app=%s with userRecoverable status
+      9 GetToken failed with status code and recovery intent
+      1 No account for auth token
+     14 ThirdPartyDeviceManagementRequired
+(end)
+== YouTube-tagged errors since marker (first 12, names redacted)
+11-21 17:58:17.899 13164 13269 I Finsky  : [80] UCtl: Capture account null for next update of com.google.android.youtube
+11-21 17:58:20.463 13164 13276 I Finsky  : [82] UCtl: Capture account null for next update of com.google.android.youtube
+11-21 18:03:49.844  1123  1172 V WindowManagerShell: Transition requested (#136): <email> TransitionRequestInfo { type = OPEN, triggerTask = TaskInfo{userId=10 taskId=1000014 effec
+11-21 18:03:49.974   761   795 V WindowManager: Sent Transition (#136) createdAt=11-21 18:03:49.815 via request=TransitionRequestInfo { type = OPEN, triggerTask = TaskInfo{userId=1
+11-21 18:04:00.400   761   997 D OemPaidWifiNetworkFactory: got request NetworkRequest [ REQUEST id=1031, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED&NOT_VCN_MANAGED&NOT_BANDWI
+11-21 18:04:03.523   557  5401 E AudioSystem: getInputForAttr error: Status(-1, EX_SECURITY): 'getInputForAttr: AttributionSourceState{pid: 18367, uid: 1010186, deviceId: 0, packag
+11-21 18:04:03.549   557  5401 E AudioSystem: getInputForAttr error: Status(-1, EX_SECURITY): 'getInputForAttr: AttributionSourceState{pid: 18367, uid: 1010186, deviceId: 0, packag
+11-21 18:04:03.608   557  5401 E AudioSystem: getInputForAttr error: Status(-1, EX_SECURITY): 'getInputForAttr: AttributionSourceState{pid: 18367, uid: 1010186, deviceId: 0, packag
+11-21 18:04:33.544   557  5401 E AudioSystem: getInputForAttr error: Status(-1, EX_SECURITY): 'getInputForAttr: AttributionSourceState{pid: 18367, uid: 1010186, deviceId: 0, packag
+11-21 18:04:33.563   557  5401 E AudioSystem: getInputForAttr error: Status(-1, EX_SECURITY): 'getInputForAttr: AttributionSourceState{pid: 18367, uid: 1010186, deviceId: 0, packag
+11-21 18:04:33.587   557  5401 E AudioSystem: getInputForAttr error: Status(-1, EX_SECURITY): 'getInputForAttr: AttributionSourceState{pid: 18367, uid: 1010186, deviceId: 0, packag
+(end)
+== GPU / display errors since marker (flicker context)
+11-21 17:58:01.069 12778 12966 I HWUI    : Davey! duration=773ms; Flags=1, FrameTimelineVsyncId=505214, IntendedVsync=5850914106648, Vsync=5851480773292, InputE
+11-21 17:58:01.099 12778 12966 I HWUI    : Davey! duration=833ms; Flags=1, FrameTimelineVsyncId=505214, IntendedVsync=5850914106648, Vsync=5851480773292, InputE
+11-21 17:58:11.060  6350  9432 I GFXSTREAM: [eglDisplay.cpp(297)] Opening libGLESv1_CM_emulation.so
+11-21 17:58:11.061  6350  9432 I GFXSTREAM: [eglDisplay.cpp(297)] Opening libGLESv2_emulation.so
+11-21 17:58:11.061  6350  9432 W libc    : Access denied finding property "vendor.mesa.virtgpu.kumquat"
+11-21 17:58:15.328 16889 16987 I GFXSTREAM: [eglDisplay.cpp(297)] Opening libGLESv1_CM_emulation.so
+(end)

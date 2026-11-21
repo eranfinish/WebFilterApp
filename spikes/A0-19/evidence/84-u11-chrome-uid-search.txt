@@ -1,0 +1,51 @@
+== Chrome uid 1110115 (u11 Chrome) lines anywhere in the buffer
+4
+11-21 16:54:25.748   532   642 D WifiNetworkFactory: got request NetworkRequest [ REQUEST id=19, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED&NOT_VCN_MANAGED Uid: 1110115 RequestorUid: 1000 Request
+11-21 16:54:25.749   532   642 D UntrustedWifiNetworkFactory: got request NetworkRequest [ REQUEST id=19, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED&NOT_VCN_MANAGED Uid: 1110115 RequestorUid: 100
+11-21 16:54:25.750   532   642 D OemPaidWifiNetworkFactory: got request NetworkRequest [ REQUEST id=19, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED&NOT_VCN_MANAGED Uid: 1110115 RequestorUid: 1000 
+(end)
+== u11 Chrome start lines anywhere (START u11 / Start proc ...chrome/u11)
+(end)
+== all 'START u11' lines in the buffer (any package), with times
+(end)
+== last time user 11 appears in any line
+11-21 16:55:18.897   532   532 I Telecom : DefaultDialerCache: Refreshing default dialer for user 11: now com.android.dialer: DDC.oR@AGs
+11-21 17:20:04.936   532  6130 D DevicePolicyManager: skipping PersonalAppsSuspensionHelper.dump() for user 11
+(end)
+== buffer first line: 11-21 16:54:04.009   193   193 I lowmemorykiller: Using psi 
+== window 16:50:00-16:56:00 lines naming Chrome, uid 1110115, or u11 (count per tag)
+     17 I ActivityManager:
+     10 I Telecom
+      7 I Finsky:background:
+      7 I Finsky
+      7 E cr_TabState:
+      5 W PackageManager:
+      5 D WifiNetworkFactory:
+      5 D UntrustedWifiNetworkFactory:
+      5 D OemPaidWifiNetworkFactory:
+      5 D ConnectivityService:
+      4 I PhenotypeResourceReader:
+      4 I AndroidIME:
+(end)
+== Chrome (com.android.chrome / chromium) lines 16:54:00-16:56:00 (first 15)
+11-21 16:54:14.933   532   532 W PackageManager: Failed to scan /product/app/Chrome-Stub: Package com.android.chrome at /product/app/Chrome-Stub ignored: updated version 447211487 better than this 447
+11-21 16:54:15.078   532   532 W PackageManager: Relax SCAN_REQUIRE_KNOWN requirement for package com.android.chrome
+11-21 16:54:19.362   532   555 I SystemServerTimingAsync: InitThreadPoolExec:Update app-ops uidState in case package com.android.chrome changed
+11-21 16:54:19.363   532   599 I SystemServerTimingAsync: InitThreadPoolExec:Update app-ops uidState in case package com.android.chrome changed
+11-21 16:54:19.364   532   599 I SystemServerTimingAsync: InitThreadPoolExec:Update app-ops uidState in case package com.android.chrome changed
+11-21 16:54:20.050   532   532 D ConnectivityService: requestNetwork for uid/pid:1000/532 asUid: 1110115 activeRequest: null callbackRequest: 18 [NetworkRequest [ REQUEST id=19, [ Capabilities: INTERN
+11-21 16:54:20.233   532   532 V StorageManagerService: Package com.android.chrome does not have legacy storage
+11-21 16:54:20.233   532   532 V StorageManagerService: Package org.chromium.webview_shell does not have legacy storage
+11-21 16:54:25.748   532   642 D WifiNetworkFactory: got request NetworkRequest [ REQUEST id=19, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED&NOT_VCN_MANAGED Uid: 1110115 RequestorUid: 1000 Request
+11-21 16:54:25.749   532   642 D UntrustedWifiNetworkFactory: got request NetworkRequest [ REQUEST id=19, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED&NOT_VCN_MANAGED Uid: 1110115 RequestorUid: 100
+11-21 16:54:25.750   532   642 D OemPaidWifiNetworkFactory: got request NetworkRequest [ REQUEST id=19, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED&NOT_VCN_MANAGED Uid: 1110115 RequestorUid: 1000 
+11-21 16:54:45.645  2470  2470 W Finsky  : [2] No everExternallyHosted provided for com.android.chrome
+11-21 16:54:45.646  2470  2522 I Finsky  : [54] UCtl: Capture account null for next update of com.android.chrome
+11-21 16:54:45.753  2470  2470 I Finsky  : [2] UChk: package com.android.chrome has available update because at least one of the following constraints met: isAutoDeployInstall=false, canUpdateApp=true
+11-21 16:54:46.586  2470  2521 I Finsky  : [53] AU2: building with PhoneBasic for com.android.chrome
+(end)
+== token lines in the buffer (from 16:54:04), before and after the marker
+THIRD_PARTY lines in buffer: 0
+GetToken / token lines 16:54:04-16:55:50: 94
+GetToken / token lines after 16:55:50: 10
+last THIRD_PARTY earlier (from the 11-20 snapshot): 2026-11-20 14:12:13 UTC

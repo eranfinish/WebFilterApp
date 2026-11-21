@@ -1,0 +1,22 @@
+# Memory now and lowmemorykiller events around the control sign-in (read-only)
+MemTotal:        2015356 kB
+MemFree:          236888 kB
+MemAvailable:     383548 kB
+SwapTotal:       1511512 kB
+SwapFree:         251440 kB
+== lowmemorykiller kills since 13:20 UTC
+11-20 13:36:31.537   194   194 I lowmemorykiller: Kill 'com.google.android.webview:sandboxed_process0:org.chromium.content.app.Sandbo' (3786), uid 99000, oom_score_adj 990 to free 36308kB rss, 36896kB swap; reason: low watermark i
+11-20 13:36:31.539   194   194 I lowmemorykiller: Kill 'com.google.android.apps.nexuslauncher' (1008), uid 10130, oom_score_adj 980 to free 44580kB rss, 53868kB swap; reason: low watermark is breached and swap is low (137896kB < 1
+11-20 13:36:48.731   194   194 I lowmemorykiller: Kill 'com.google.android.googlequicksearchbox:search' (28655), uid 10104, oom_score_adj 985 to free 50684kB rss, 50868kB swap; reason: low watermark is breached and swap is low (15
+(end)
+== webview sandbox deaths since 13:20
+11-20 13:25:05.261   535  2480 I ActivityManager: Process com.android.bluetooth (pid 4934) has died: fg  SVC 
+11-20 13:25:24.821   535  4181 I ActivityManager: Process com.google.android.apps.maps:server_recovery_process (pid 19931) has died: cch+5 CEM 
+11-20 13:25:31.372   535  2480 I ActivityManager: Process com.google.android.gms (pid 17089) has died: fg  IMPF
+11-20 13:28:22.227   535   548 I ActivityManager: Process com.google.android.gms (pid 20349) has died: fg  BTOP
+11-20 13:36:31.799   535  4001 I ActivityManager: Process com.google.android.webview:sandboxed_process0:org.chromium.content.app.SandboxedProcessService0:0 (pid 3786) has died: cch+90 CACC
+11-20 13:36:32.027   535  4181 I ActivityManager: Process com.google.android.apps.nexuslauncher (pid 1008) has died: cch+80 CAC 
+11-20 13:36:40.669   535   983 I ActivityManager: Process com.google.android.apps.wellbeing (pid 22532) has died: prev LAST
+11-20 13:36:48.824   535   983 I ActivityManager: Process com.google.android.googlequicksearchbox:search (pid 28655) has died: cch+85 CEM 
+11-20 13:38:00.395   535  4668 I ActivityManager: Process com.google.android.apps.maps:server_recovery_process (pid 32354) has died: cch+5 CEM 
+(end)

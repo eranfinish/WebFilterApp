@@ -1,0 +1,20 @@
+# Loop counts from 13:00:05 UTC to now (device logcat buffer), read-only
+activateProfileOwner calls (WebViewBridge): 5
+5
+SET_PROFILE_OWNER starts (Settings ProfileOwnerAdd): 5
+GMS ProfileOwnerReceiver setActiveAdmin exceptions (DeviceAdminAdd): 3
+Times of activateProfileOwner calls:
+  13:02:32.173
+  13:03:31.512
+  13:03:58.723
+  13:04:03.084
+  13:04:07.930
+== last device line time: 13:05:29.734
+== dpm list-owners NOW
+2 owners:
+User  0: admin=com.webfilter.spike.a19/.AdminReceiver,DeviceOwner,Affiliated
+User 10: admin=com.webfilter.spike.a19/.AdminReceiver,ProfileOwner
+== status inside user 10 NOW (read-only)
+Broadcast completed: result=0, data="myUser=UserHandle{10} pkg=com.webfilter.spike.a19 isAdminActive=true isDeviceOwnerApp=false isProfileOwnerApp=true"
+== activity resumed NOW
+    mResumedActivity: ActivityRecord{d6c0f72 u10 com.google.android.gms/.kids.auth.KidsAuthSetupActivity

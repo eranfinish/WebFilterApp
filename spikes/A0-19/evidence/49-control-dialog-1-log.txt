@@ -1,0 +1,83 @@
+# Control run: parent's screenshot description (from the starting session, no personal data), and the log since 13:25:30 UTC.
+Screen at about 13:27 UTC (device 1:27), user 11: 'Add an account' lists Exchange, Google, Personal (IMAP), Personal (POP3); footer 'This device is managed by your organization.' The parent chose Google.
+== log since 13:25:30 (account / device management / DPM / supervision / Family Link)
+11-20 13:25:40.090  4294 20422 W Auth    : [ReauthNotificationManager] Unhandled DM status: THIRD_PARTY_DEVICE_MANAGEMENT_REQUIRED [CONTEXT service_id=343 ]
+11-20 13:25:41.476  4294 20422 I Auth    : (REDACTED) [GetToken] GetToken failed for app=%s with userRecoverable status: %s 
+11-20 13:25:41.482  4294 20422 W Auth    : amcv: GetToken failed with status code and recovery intent: ThirdPartyDeviceManagementRequired
+11-20 13:25:41.482  4294 20422 W Auth    : [GoogleAuthUtil] [GoogleAuthUtil] error status:THIRD_PARTY_DEVICE_MANAGEMENT_REQUIRED with method:getTokenWithDetails
+11-20 13:25:41.947  4294 20422 E InternalPeopleServiceGrpcClient: com.google.android.gms.auth.UserRecoverableAuthException: ThirdPartyDeviceManagementRequired
+11-20 13:25:41.947  4294 20422 E FSA2_GroupSyncGrpc: com.google.android.gms.auth.UserRecoverableAuthException: ThirdPartyDeviceManagementRequired
+11-20 13:25:43.339  4294 20081 E FSA2_ContactsSyncAdapter: com.google.android.gms.auth.UserRecoverableAuthException: ThirdPartyDeviceManagementRequired
+11-20 13:25:44.905  4294 18662 W Auth    : [ReauthNotificationManager] Unhandled DM status: THIRD_PARTY_DEVICE_MANAGEMENT_REQUIRED [CONTEXT service_id=343 ]
+11-20 13:25:46.612  4294 18662 I Auth    : (REDACTED) [GetToken] GetToken failed for app=%s with userRecoverable status: %s 
+11-20 13:25:46.613  4294 18662 W Auth    : amcv: GetToken failed with status code and recovery intent: ThirdPartyDeviceManagementRequired
+11-20 13:25:46.625  4294 18662 W Auth    : [GoogleAuthUtil] [GoogleAuthUtil] error status:THIRD_PARTY_DEVICE_MANAGEMENT_REQUIRED with method:getTokenWithDetails
+11-20 13:25:47.423  4294 18662 W Auth    : [ReauthNotificationManager] Unhandled DM status: THIRD_PARTY_DEVICE_MANAGEMENT_REQUIRED [CONTEXT service_id=343 ]
+11-20 13:25:47.938  4294 18662 I Auth    : (REDACTED) [GetToken] GetToken failed for app=%s with userRecoverable status: %s 
+11-20 13:25:47.948  4294 18662 W Auth    : amcv: GetToken failed with status code and recovery intent: ThirdPartyDeviceManagementRequired
+11-20 13:25:47.949  4294 18662 W Auth    : [GoogleAuthUtil] [GoogleAuthUtil] error status:THIRD_PARTY_DEVICE_MANAGEMENT_REQUIRED with method:getTokenWithDetails
+11-20 13:25:49.583  4294  7482 W Auth    : [ReauthNotificationManager] Unhandled DM status: THIRD_PARTY_DEVICE_MANAGEMENT_REQUIRED [CONTEXT service_id=343 ]
+11-20 13:25:49.806  4294  7482 I Auth    : (REDACTED) [GetToken] GetToken failed for app=%s with userRecoverable status: %s 
+11-20 13:25:49.808  4294  7482 W Auth    : amcv: GetToken failed with status code and recovery intent: ThirdPartyDeviceManagementRequired
+11-20 13:25:49.990  4294 18870 W AsyncOperation: Caused by: com.google.android.gms.auth.UserRecoverableAuthException: ThirdPartyDeviceManagementRequired
+11-20 13:25:51.153  4294 18870 W Auth    : [ReauthNotificationManager] Unhandled DM status: THIRD_PARTY_DEVICE_MANAGEMENT_REQUIRED [CONTEXT service_id=343 ]
+11-20 13:25:51.281  4294 18870 I Auth    : (REDACTED) [GetToken] GetToken failed for app=%s with userRecoverable status: %s 
+11-20 13:25:51.311  4294 18870 W Auth    : amcv: GetToken failed with status code and recovery intent: ThirdPartyDeviceManagementRequired
+11-20 13:25:51.313  4294 18870 W Auth    : [GoogleAuthUtil] [GoogleAuthUtil] error status:THIRD_PARTY_DEVICE_MANAGEMENT_REQUIRED with method:getTokenWithDetails
+11-20 13:25:52.117  4294 18870 W Auth    : [ReauthNotificationManager] Unhandled DM status: THIRD_PARTY_DEVICE_MANAGEMENT_REQUIRED [CONTEXT service_id=343 ]
+11-20 13:25:52.237  4294 18870 I Auth    : (REDACTED) [GetToken] GetToken failed for app=%s with userRecoverable status: %s 
+11-20 13:25:52.237  4294 18870 W Auth    : amcv: GetToken failed with status code and recovery intent: ThirdPartyDeviceManagementRequired
+11-20 13:25:52.237  4294 18870 W Auth    : [GoogleAuthUtil] [GoogleAuthUtil] error status:THIRD_PARTY_DEVICE_MANAGEMENT_REQUIRED with method:getTokenWithDetails
+11-20 13:25:52.739  4294 20616 W AsyncOperation: Caused by: com.google.android.gms.auth.UserRecoverableAuthException: ThirdPartyDeviceManagementRequired
+11-20 13:25:54.455  4294 16870 W Auth    : [ReauthNotificationManager] Unhandled DM status: THIRD_PARTY_DEVICE_MANAGEMENT_REQUIRED [CONTEXT service_id=343 ]
+11-20 13:25:55.154  4294 16870 I Auth    : (REDACTED) [GetToken] GetToken failed for app=%s with userRecoverable status: %s 
+11-20 13:25:55.163  4294 16870 W Auth    : amcv: GetToken failed with status code and recovery intent: ThirdPartyDeviceManagementRequired
+11-20 13:25:55.167  4294 16870 W Auth    : [GoogleAuthUtil] [GoogleAuthUtil] error status:THIRD_PARTY_DEVICE_MANAGEMENT_REQUIRED with method:getTokenWithDetails
+11-20 13:25:55.456  4294 16870 W Auth    : [ReauthNotificationManager] Unhandled DM status: THIRD_PARTY_DEVICE_MANAGEMENT_REQUIRED [CONTEXT service_id=343 ]
+11-20 13:25:55.528  4294 16870 I Auth    : (REDACTED) [GetToken] GetToken failed for app=%s with userRecoverable status: %s 
+11-20 13:25:55.528  4294 16870 W Auth    : amcv: GetToken failed with status code and recovery intent: ThirdPartyDeviceManagementRequired
+11-20 13:25:55.529  4294 16870 W Auth    : [GoogleAuthUtil] [GoogleAuthUtil] error status:THIRD_PARTY_DEVICE_MANAGEMENT_REQUIRED with method:getTokenWithDetails
+11-20 13:25:55.791  4294 18662 W AsyncOperation: Caused by: com.google.android.gms.auth.UserRecoverableAuthException: ThirdPartyDeviceManagementRequired
+11-20 13:26:16.223 20349 22179 I KidsAuth: (REDACTED) [KidsAuthInitIntentOperation] Received intent to recover supervision setup: %s
+11-20 13:26:17.006  4294 11933 W Auth    : [ReauthNotificationManager] Unhandled DM status: THIRD_PARTY_DEVICE_MANAGEMENT_REQUIRED [CONTEXT service_id=343 ]
+11-20 13:26:17.011 20349 20902 I KidsAuth: (REDACTED) [SupervisionSetupChimeraService] [%s] Processing command[id=%s][flags=%s]: %s
+11-20 13:26:17.266  4294 11933 I Auth    : (REDACTED) [GetToken] GetToken failed for app=%s with userRecoverable status: %s 
+11-20 13:26:17.271  4294 11933 W Auth    : amcv: GetToken failed with status code and recovery intent: ThirdPartyDeviceManagementRequired
+11-20 13:26:17.309 20349 20902 I KidsAuth: [SupervisionSetupState] No active setup found, moving to Idle. [CONTEXT service_id=42 ]
+11-20 13:26:17.309 20349 20902 I KidsAuth: (REDACTED) [SupervisionSetupChimeraService] Next state: %s
+11-20 13:26:17.321 20349 20349 I KidsAuth: [SupervisionSetupChimeraService] Service stopped [CONTEXT service_id=42 ]
+11-20 13:26:17.327 20349 22179 I Auth    : (REDACTED) [SupervisedAccountIntentOperation] onHandleIntent: %s
+11-20 13:26:17.356 21965 22201 E Notifications: com.google.android.gms.auth.UserRecoverableAuthException: ThirdPartyDeviceManagementRequired
+11-20 13:26:22.539  4294 10523 W Auth    : [ReauthNotificationManager] Unhandled DM status: THIRD_PARTY_DEVICE_MANAGEMENT_REQUIRED [CONTEXT service_id=343 ]
+11-20 13:26:26.321  4294 10523 I Auth    : (REDACTED) [GetToken] GetToken failed for app=%s with userRecoverable status: %s 
+11-20 13:26:26.337  4294 10523 W Auth    : amcv: GetToken failed with status code and recovery intent: ThirdPartyDeviceManagementRequired
+11-20 13:26:26.601 21965 22435 W GoogleAuthUtil: com.google.android.gms.auth.UserRecoverableAuthException: ThirdPartyDeviceManagementRequired
+11-20 13:26:30.982  4294 10523 W Auth    : [ReauthNotificationManager] Unhandled DM status: THIRD_PARTY_DEVICE_MANAGEMENT_REQUIRED [CONTEXT service_id=343 ]
+11-20 13:26:34.007  4294 10523 I Auth    : (REDACTED) [GetToken] GetToken failed for app=%s with userRecoverable status: %s 
+11-20 13:26:34.056  4294 10523 W Auth    : amcv: GetToken failed with status code and recovery intent: ThirdPartyDeviceManagementRequired
+11-20 13:26:34.830 21965 22084 W GoogleAuthUtil: com.google.android.gms.auth.UserRecoverableAuthException: ThirdPartyDeviceManagementRequired
+11-20 13:26:52.750  4294 23456 W Auth    : [ReauthNotificationManager] Unhandled DM status: THIRD_PARTY_DEVICE_MANAGEMENT_REQUIRED [CONTEXT service_id=343 ]
+11-20 13:26:54.835  4294 23456 I Auth    : (REDACTED) [GetToken] GetToken failed for app=%s with userRecoverable status: %s 
+11-20 13:26:54.945  4294 23456 W Auth    : amcv: GetToken failed with status code and recovery intent: ThirdPartyDeviceManagementRequired
+11-20 13:26:54.945  4294 23456 W Auth    : [GoogleAuthUtil] [GoogleAuthUtil] error status:THIRD_PARTY_DEVICE_MANAGEMENT_REQUIRED with method:getTokenWithDetails
+11-20 13:26:58.558  4294 23456 W Auth    : [ReauthNotificationManager] Unhandled DM status: THIRD_PARTY_DEVICE_MANAGEMENT_REQUIRED [CONTEXT service_id=343 ]
+11-20 13:26:58.948  4294 23456 I Auth    : (REDACTED) [GetToken] GetToken failed for app=%s with userRecoverable status: %s 
+11-20 13:26:58.956  4294 23456 W Auth    : amcv: GetToken failed with status code and recovery intent: ThirdPartyDeviceManagementRequired
+11-20 13:26:58.956  4294 23456 W Auth    : [GoogleAuthUtil] [GoogleAuthUtil] error status:THIRD_PARTY_DEVICE_MANAGEMENT_REQUIRED with method:getTokenWithDetails
+11-20 13:26:59.413  4294 22094 W AsyncOperation: Caused by: com.google.android.gms.auth.UserRecoverableAuthException: ThirdPartyDeviceManagementRequired
+11-20 13:27:01.283  4294  4319 W Auth    : [ReauthNotificationManager] Unhandled DM status: THIRD_PARTY_DEVICE_MANAGEMENT_REQUIRED [CONTEXT service_id=343 ]
+11-20 13:27:01.297  4294 12677 W Auth    : [ReauthNotificationManager] Unhandled DM status: THIRD_PARTY_DEVICE_MANAGEMENT_REQUIRED [CONTEXT service_id=343 ]
+11-20 13:27:01.581  4294  4319 I Auth    : (REDACTED) [GetToken] GetToken failed for app=%s with userRecoverable status: %s 
+11-20 13:27:01.582  4294  4319 W Auth    : amcv: GetToken failed with status code and recovery intent: ThirdPartyDeviceManagementRequired
+11-20 13:27:01.603  4294 12677 I Auth    : (REDACTED) [GetToken] GetToken failed for app=%s with userRecoverable status: %s 
+11-20 13:27:01.603  4294 12677 W Auth    : amcv: GetToken failed with status code and recovery intent: ThirdPartyDeviceManagementRequired
+11-20 13:27:01.626 22757 23306 W GoogleAuthUtil: com.google.android.gms.auth.UserRecoverableAuthException: ThirdPartyDeviceManagementRequired
+11-20 13:27:01.640 22757 23398 W GoogleAuthUtil: com.google.android.gms.auth.UserRecoverableAuthException: ThirdPartyDeviceManagementRequired
+11-20 13:27:14.701   535  1595 I ActivityTaskManager: START u11 {act=android.settings.ADD_ACCOUNT_SETTINGS cmp=com.android.settings/.accounts.AddAccountSettings (has extras)} from uid 1101000
+11-20 13:27:24.762 20349 25164 I FamilyGroupEntryControl: (REDACTED) [Family Hub] Disable the entry point due to: %s.
+11-20 13:27:40.921  4294  7482 W Auth    : [ReauthNotificationManager] Unhandled DM status: THIRD_PARTY_DEVICE_MANAGEMENT_REQUIRED [CONTEXT service_id=343 ]
+11-20 13:27:41.319  4294  7482 I Auth    : (REDACTED) [GetToken] GetToken failed for app=%s with userRecoverable status: %s 
+11-20 13:27:41.323  4294  7482 W Auth    : amcv: GetToken failed with status code and recovery intent: ThirdPartyDeviceManagementRequired
+11-20 13:27:58.262  4294 26136 W Auth    : [ReauthNotificationManager] Unhandled DM status: THIRD_PARTY_DEVICE_MANAGEMENT_REQUIRED [CONTEXT service_id=343 ]
+11-20 13:27:58.342  4294 26136 I Auth    : (REDACTED) [GetToken] GetToken failed for app=%s with userRecoverable status: %s 
+11-20 13:27:58.350  4294 26136 W Auth    : amcv: GetToken failed with status code and recovery intent: ThirdPartyDeviceManagementRequired

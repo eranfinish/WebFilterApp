@@ -1,0 +1,70 @@
+# dumpsys user, raw sections for user 11 and user 0 (A0.22, after the restriction). Read-only.
+  UserInfo{11:control:410} serialNo=13 isPrimary=false
+    Type: android.os.usertype.full.SECONDARY
+    Flags: 1040 (FULL|INITIALIZED)
+    State: -1
+    Created: +1d4h58m37s942ms ago
+    Last logged in: +1d4h58m31s394ms ago
+    Last logged in fingerprint: google/sdk_gphone64_x86_64/emulator64_x86_64_arm64:12/SE1A.211212.001.B1/8023802:user/release-keys
+    Start time: <unknown>
+    Unlock time: <unknown>
+    Has profile owner: true
+    Restrictions:
+      no_sms
+      no_outgoing_calls
+    Device policy global restrictions:
+      null
+    Device policy local restrictions:
+      User Id: 11
+        no_install_unknown_sources
+        no_config_location
+        no_remove_user
+        no_debugging_features
+        no_config_credentials
+        no_config_date_time
+    Effective restrictions:
+      null
+
+Device properties:
+  Device owner id:0
+
+  Guest restrictions:
+    no_sms
+    no_install_unknown_sources
+    no_config_wifi
+    no_config_credentials
+    no_outgoing_calls
+
+  Device managed: true
+  Started users state: [0=RUNNING_UNLOCKED]
+  Cached user IDs: [0, 10, 11]
+  Cached user IDs (including pre-created): [0, 10, 11]
+
+  Max users: 4 (limit reached: false)
+  Supports switchable users: true
+  All guests ephemeral: false
+  Force ephemeral users: false
+  Is split-system user: false
+  Is headless-system mode: false
+  User version: 9
+  Owner name: Owner
+
+Number of listeners for
+  restrictions: 8
+  user lifecycle events: 1
+
+User types version: 0
+User types (8 types):
+    android.os.usertype.full.GUEST: 
+        mName: android.os.usertype.full.GUEST
+        mBaseType: FULL
+        mEnabled: true
+--- user 0 section, restrictions lines
+    Restrictions:
+      no_add_managed_profile
+    Device policy global restrictions:
+      disallow_config_private_dns
+    Device policy local restrictions:
+    Effective restrictions:
+      no_add_managed_profile
+      disallow_config_private_dns

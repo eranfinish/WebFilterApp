@@ -1,0 +1,15 @@
+== /system/etc/hosts and /etc/hosts entries for the test domains
+-- /system/etc/hosts
+127.0.0.1       localhost
+::1             ip6-localhost
+(end /system/etc/hosts)
+-- /etc/hosts
+127.0.0.1       localhost
+::1             ip6-localhost
+(end /etc/hosts)
+== a random non-existent name (should be NXDOMAIN-like, no 127.0.0.1)
+ping: unknown host zz-no-such-host-a22.example
+== DoT validation again (wlan0 section only)
+UsePrivateDns: true
+PrivateDnsServerName: family.cloudflare-dns.com
+ValidatedPrivateDnsAddresses: [1.0.0.3,1.1.1.3]

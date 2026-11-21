@@ -1,0 +1,22 @@
+# Tablet_A12 (5590) AFTER the parent opened YouTube in u11. Read-only. Device UTC after marker 16:47:25. Names redacted.
+== current user: 11
+== accounts per user (count; type only)
+User UserInfo{0:Owner:c13}: |   Accounts: 0
+User UserInfo{10:kid-test:410}: |   Accounts: 0
+User UserInfo{11:control:410}: |   Accounts: 1
+      1 User user 11 | type=com.google
+== owners
+3 owners:
+User  0: admin=com.webfilter.spike.a19/.AdminReceiver,DeviceOwner,Affiliated
+User 10: admin=com.webfilter.spike.a19/.AdminReceiver,ProfileOwner
+User 11: admin=com.google.android.gms/.kids.account.receiver.ProfileOwnerReceiver,ProfileOwner
+== token lines since the marker (date-aware), by type
+(end token counts)
+== YouTube / GMS token-related lines since marker (pid owner in u11)
+11-21 16:47:57.740 26254 15165 W RWIPackageIntentOps: Registries cleared for package: com.google.android.youtube
+11-21 16:47:57.748 26254 12203 E WorkSourceUtil: Could not find package: com.google.android.youtube
+11-21 16:47:57.790 26254 15159 I Icing   : doRemovePackageData com.google.android.youtube
+(end lines)
+== memory
+MemAvailable:     347004 kB
+SwapFree:         316804 kB

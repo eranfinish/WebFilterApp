@@ -1,0 +1,63 @@
+# Search for account removal / account-count changes for kid-test (user 10) since 13:10 UTC. Read-only.
+11-20 13:10:59.970  9725  9725 I KidsAuth: [DeviceSetupBaseViewModel] Can't remove additional accounts. Ensuring device has only one account. [CONTEXT service_id=42 ]
+11-20 13:13:56.543  9725  9725 I KidsAuth: [DeviceSetupBaseViewModel] Can't remove additional accounts. Ensuring device has only one account. [CONTEXT service_id=42 ]
+11-20 13:14:36.379  9725  9725 I KidsAuth: [DeviceSetupBaseViewModel] Can't remove additional accounts. Ensuring device has only one account. [CONTEXT service_id=42 ]
+11-20 13:29:06.036   535   685 I AccountManagerService: the accounts changed, sending broadcast of android.accounts.LOGIN_ACCOUNTS_CHANGED
+11-20 13:29:06.092  4294 26308 I Auth    : [GoogleAccountDataServiceImpl] removeAccount() -> success [CONTEXT service_id=153 ]
+11-20 13:29:06.097  4294 26308 I KidsAccountUtils: (REDACTED) Removed account with reason %s
+11-20 13:29:10.228 26736 26803 W IpcDriveCore: [TaskSchedulerLowPriority0] Cleanup removed accounts not supported for IpcDriveCore
+11-20 13:29:10.229 26736 26803 E IpcDriveCore: [TaskSchedulerLowPriority0] Failed to cleanup removed accounts, status=26
+11-20 13:29:12.343  4294  4294 I WakefulBroadcastRcvr: Processing wakeful broadcast: android.accounts.LOGIN_ACCOUNTS_CHANGED
+11-20 13:29:12.418  4294 26957 I PaymentsSuwIntentOp: Processing intent action = android.accounts.LOGIN_ACCOUNTS_CHANGED
+11-20 13:29:13.555 27292 27292 I A       : updateAppflow-SPEAKER_MODEL ACCOUNT_REMOVED HotwordAcctChangeHndlr:deleteVoiceModel
+11-20 13:29:13.570 27292 27292 W A       : speakerIdModelDeletionSource: ACCOUNT_REMOVED HotwordAcctChangeHndlr:deleteVoiceModel
+11-20 13:29:13.832 27292 27292 I Notifications: [ChimeBroadcastReceiver] Intent received for action [android.accounts.LOGIN_ACCOUNTS_CHANGED] package [com.google.android.googlequicksearchbox].
+11-20 13:29:13.840 27292 27292 I Notifications: [ChimeBroadcastReceiver] Validation OK for action [android.accounts.LOGIN_ACCOUNTS_CHANGED].
+11-20 13:29:13.851 27292 27460 I Notifications: [ChimeBroadcastReceiver] Executing action in BroadcastReceiver [android.accounts.LOGIN_ACCOUNTS_CHANGED].
+11-20 13:29:15.363   535   564 I ActivityManager: Start proc 27577:com.android.vending/u10a103 for broadcast {com.android.vending/com.google.android.libraries.phenotype.client.stable.AccountRemovedBroadcastReceiver}
+11-20 13:29:17.394   535   564 I ActivityManager: Start proc 27655:com.google.android.googlequicksearchbox/u10a104 for broadcast {com.google.android.googlequicksearchbox/com.google.android.libraries.phenotype.client.stable.Account
+11-20 13:29:18.151   535   564 I ActivityManager: Start proc 27695:com.google.android.setupwizard/u10a92 for broadcast {com.google.android.setupwizard/com.google.android.libraries.phenotype.client.stable.AccountRemovedBroadcastRec
+11-20 13:29:18.385   535   564 I ActivityManager: Start proc 27721:com.google.android.tts/u10a108 for broadcast {com.google.android.tts/com.google.android.libraries.phenotype.client.stable.AccountRemovedBroadcastReceiver}
+11-20 13:29:19.592  4294 26817 I Authzen : [AccountChangeProcessingIntentOperation] Received onHandleIntent() call: Intent { act=com.google.android.gms.auth.GOOGLE_ACCOUNT_CHANGE cat=[com.google.android.gms.auth.category.ACCOUNT_R
+11-20 13:29:20.870  4294 27786 I FSA2_ContactsSyncIntentOp: Clearing FSA2 sync status preference for removed account
+11-20 13:36:17.823   535  1554 I AccountManagerService: the accounts changed, sending broadcast of android.accounts.LOGIN_ACCOUNTS_CHANGED
+11-20 13:36:18.148   535  1555 I AccountManagerService: the accounts changed, sending broadcast of android.accounts.LOGIN_ACCOUNTS_CHANGED
+11-20 13:36:20.368   535  1555 I AccountManagerService: the accounts changed, sending broadcast of android.accounts.LOGIN_ACCOUNTS_CHANGED
+11-20 13:36:41.890   535  4181 I AccountManagerService: the accounts changed, sending broadcast of android.accounts.LOGIN_ACCOUNTS_CHANGED
+11-20 13:36:59.646 26254 26254 I WakefulBroadcastRcvr: Processing wakeful broadcast: android.accounts.LOGIN_ACCOUNTS_CHANGED
+11-20 13:36:59.876 17389 17389 I Notifications: [ChimeBroadcastReceiver] Intent received for action [android.accounts.LOGIN_ACCOUNTS_CHANGED] package [com.google.android.googlequicksearchbox].
+11-20 13:36:59.900 17389 17389 I Notifications: [ChimeBroadcastReceiver] Validation OK for action [android.accounts.LOGIN_ACCOUNTS_CHANGED].
+11-20 13:36:59.960 17389 29485 I Notifications: [ChimeBroadcastReceiver] Executing action in BroadcastReceiver [android.accounts.LOGIN_ACCOUNTS_CHANGED].
+11-20 13:37:01.152 26254 31003 I PaymentsSuwIntentOp: Processing intent action = android.accounts.LOGIN_ACCOUNTS_CHANGED
+11-20 13:37:42.626 26254 26254 I WakefulBroadcastRcvr: Processing wakeful broadcast: android.accounts.LOGIN_ACCOUNTS_CHANGED
+11-20 13:37:42.857 17389 17389 I Notifications: [ChimeBroadcastReceiver] Intent received for action [android.accounts.LOGIN_ACCOUNTS_CHANGED] package [com.google.android.googlequicksearchbox].
+11-20 13:37:42.869 17389 17389 I Notifications: [ChimeBroadcastReceiver] Validation OK for action [android.accounts.LOGIN_ACCOUNTS_CHANGED].
+11-20 13:37:42.876 17389 31032 I Notifications: [ChimeBroadcastReceiver] Executing action in BroadcastReceiver [android.accounts.LOGIN_ACCOUNTS_CHANGED].
+11-20 13:37:43.433 26254 31656 I PaymentsSuwIntentOp: Processing intent action = android.accounts.LOGIN_ACCOUNTS_CHANGED
+11-20 13:37:47.331 26254 26254 I WakefulBroadcastRcvr: Processing wakeful broadcast: android.accounts.LOGIN_ACCOUNTS_CHANGED
+11-20 13:37:47.447 17389 17389 I Notifications: [ChimeBroadcastReceiver] Intent received for action [android.accounts.LOGIN_ACCOUNTS_CHANGED] package [com.google.android.googlequicksearchbox].
+11-20 13:37:47.448 17389 17389 I Notifications: [ChimeBroadcastReceiver] Validation OK for action [android.accounts.LOGIN_ACCOUNTS_CHANGED].
+11-20 13:37:47.449 17389 31648 I Notifications: [ChimeBroadcastReceiver] Executing action in BroadcastReceiver [android.accounts.LOGIN_ACCOUNTS_CHANGED].
+11-20 13:37:49.075 26254 26254 I WakefulBroadcastRcvr: Processing wakeful broadcast: android.accounts.LOGIN_ACCOUNTS_CHANGED
+(end)
+== AccountManager broadcasts (LOGIN_ACCOUNTS_CHANGED) since 13:10 with pid:
+11-20 13:29:06.036   535   685 I AccountManagerService: the accounts changed, sending broadcast of android.accounts.LOGIN_ACCOUNTS_CHANGED
+11-20 13:29:06.074   535   564 I ActivityManager: Start proc 26677:com.android.chrome/u10a115 for broadcast {com.android.chrome/org.chromium.chrome.browser.services.AccountsChangedReceiver}
+11-20 13:29:08.695   535   564 I ActivityManager: Start proc 26985:com.google.android.apps.messaging/u10a98 for broadcast {com.google.android.apps.messaging/com.google.apps.tiktok.account.data.device.
+11-20 13:29:10.346   535   564 I ActivityManager: Start proc 27100:com.google.android.apps.restore/u10a102 for broadcast {com.google.android.apps.restore/com.google.apps.tiktok.account.data.device.Dev
+11-20 13:29:10.792 27100 27100 I GoogleRestoreDeviceAccountsChangedReceiver: DeviceAccountsChangedReceiver#onReceive
+11-20 13:29:10.914   535   564 I ActivityManager: Start proc 27141:com.google.android.apps.youtube.music/u10a113 for broadcast {com.google.android.apps.youtube.music/com.google.android.libraries.youtu
+11-20 13:29:12.343  4294  4294 I WakefulBroadcastRcvr: Processing wakeful broadcast: android.accounts.LOGIN_ACCOUNTS_CHANGED
+11-20 13:29:12.386   535   564 I ActivityManager: Start proc 27292:com.google.android.googlequicksearchbox:search/u10a104 for broadcast {com.google.android.googlequicksearchbox/com.google.android.apps
+11-20 13:29:12.418  4294 26957 I PaymentsSuwIntentOp: Processing intent action = android.accounts.LOGIN_ACCOUNTS_CHANGED
+11-20 13:29:12.548  4294 27284 I Auth    : (REDACTED) [LoginAccountsChangedChimeraIntentService] Removed GoogleAccountData for %s
+11-20 13:29:13.832 27292 27292 I Notifications: [ChimeBroadcastReceiver] Intent received for action [android.accounts.LOGIN_ACCOUNTS_CHANGED] package [com.google.android.googlequicksearchbox].
+11-20 13:29:13.840 27292 27292 I Notifications: [ChimeBroadcastReceiver] Validation OK for action [android.accounts.LOGIN_ACCOUNTS_CHANGED].
+11-20 13:29:13.851 27292 27460 I Notifications: [ChimeBroadcastReceiver] Executing action in BroadcastReceiver [android.accounts.LOGIN_ACCOUNTS_CHANGED].
+11-20 13:29:20.490  4294 27785 I AccountsChangedIntentOp: No new added accounts
+11-20 13:29:21.226 27577 27605 I Finsky  : [1526] RECEIVER_ACCOUNTS_CHANGED#logWorkEndAndFinishGoAsync: TIMEOUT_BLOCKING_RECEIVER_WATCHER
+11-20 13:29:21.801 27577 27605 I Finsky  : [1526] RECEIVER_ACCOUNTS_CHANGED#logWorkEndAndFinishGoAsync: SUCCESS
+11-20 13:36:17.823   535  1554 I AccountManagerService: the accounts changed, sending broadcast of android.accounts.LOGIN_ACCOUNTS_CHANGED
+11-20 13:36:17.897   535   564 I ActivityManager: Start proc 29909:com.android.chrome/u11a115 for broadcast {com.android.chrome/org.chromium.chrome.browser.services.AccountsChangedReceiver}
+11-20 13:36:18.148   535  1555 I AccountManagerService: the accounts changed, sending broadcast of android.accounts.LOGIN_ACCOUNTS_CHANGED
+11-20 13:36:20.368   535  1555 I AccountManagerService: the accounts changed, sending broadcast of android.accounts.LOGIN_ACCOUNTS_CHANGED

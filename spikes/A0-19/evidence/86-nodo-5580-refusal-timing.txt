@@ -1,0 +1,16 @@
+== first and last THIRD_PARTY refusal since marker
+17:47:59.623
+17:53:56.102
+== refusals per minute (since marker)
+      1 17:47
+    180 17:48
+    102 17:49
+     10 17:51
+      7 17:53
+== Profile owner set / DevicePolicy owner lines (any time in buffer)
+11-21 17:48:38.673   761  1819 I DevicePolicyManager: Profile owner set: ComponentInfo{com.google.android.gms.supervision/com.google.android.gms.kids.account.receiver.ProfileOwnerReceiver} on user 10
+== buffer first line: 11-20 12:15:13.348   351   351 I vold   
+== owners check of the GMS-PO user: GMS supervision role/feature lines count since marker: 16
+== refusals after 17:54 (buffer snapshot): 0
+== live check: 0 refusals in the last 400 lines
+== note: the refusal burst on 5580 (17:48-17:53) started 38 s after Family Link was set as PO of plainkid, and no Device Owner is on this device.

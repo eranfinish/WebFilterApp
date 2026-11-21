@@ -1,0 +1,28 @@
+== ThirdParty refusals since marker: time and pid (owner)
+17:58:01.686 7617
+17:58:02.593 7617
+17:58:02.831 7617
+17:58:03.444 7617
+17:58:04.122 7617
+17:58:04.216 7617
+17:58:13.723 7617
+17:58:14.176 7617
+17:58:14.216 7617
+17:58:14.523 7617
+17:58:14.727 7617
+17:58:14.929 7617
+17:58:15.252 7617
+17:58:15.269 7617
+(end)
+== owners of pids (from ps)
+pid 7617: u10_a224
+(end)
+== HWUI Davey (jank) count since marker, and first/last time: 9
+17:58:01.069
+18:05:34.492
+
+Summary (after the check):
+- The 14 THIRD_PARTY refusals after the 17:58:01 UTC marker all came from pid 7617 (user 10) between 17:58:01 and 17:58:15.
+- YouTube (pid 18367, user 10) started at 18:03:49 and logged no THIRD_PARTY refusal of its own in this window.
+- The HWUI "Davey" (frame timing) warnings: 9 between 17:58:01 and 18:05:34, from the GPU/display path ("GFXSTREAM", libGLESv2_emulation, virtgpu) at 17:58:11. This is consistent with the flicker the parent described, but the flicker itself is not in the log.
+- Audio input errors from the YouTube uid (EX_SECURITY, getInputForAttr) at 18:04:03 and 18:04:33: a permission issue, not the flicker.

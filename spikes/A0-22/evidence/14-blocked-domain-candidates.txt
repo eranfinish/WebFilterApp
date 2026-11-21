@@ -1,0 +1,19 @@
+A0.22 step 2: candidate blocked domains and the normal control (device UTC ~18:30).
+
+Device (u0, shell ping -c 1; resolution through the system resolver with Private DNS mode=hostname, specifier family.cloudflare-dns.com):
+- malware.testcategory.com  -> 127.0.0.1 (ping output "(127.0.0.1)")
+- phishing.testcategory.com -> 127.0.0.1
+- www.ynet.co.il            -> 23.221.30.50 (akamai; normal)
+- www.wikipedia.org         -> 185.15.59.224 (normal)
+- zz-no-such-host-a22.example -> "unknown host" (normal NXDOMAIN)
+- /system/etc/hosts and /etc/hosts contain only localhost entries (so 127.0.0.1 is not a local hosts override).
+
+Host (plain DNS to 1.1.1.3 = Cloudflare Families, Resolve-DnsName -DnsOnly):
+- malware.testcategory.com  -> 0.0.0.0
+- phishing.testcategory.com -> 0.0.0.0
+- www.ynet.co.il            -> 23.221.30.50
+
+DoT validation (dumpsys connectivity, wlan0 network 101, primary): UsePrivateDns: true; PrivateDnsServerName: family.cloudflare-dns.com; ValidatedPrivateDnsAddresses: [1.0.0.3,1.1.1.3].
+Cellular network (eth0, network 100) shows the same private DNS fields (emulator only; the tablet is Wi-Fi only).
+
+Discrepancy: the family resolver answers 0.0.0.0 for the test names; the device answers 127.0.0.1. Cause not determined. Not caused by hosts files. Not tested: whether a browser on the device connects to 127.0.0.1 and fails (expected: connection refused).

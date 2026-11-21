@@ -1,0 +1,18 @@
+Retry of step (a) in kid-test (device clock UTC; local = UTC+2). Read-only capture after the parent's report. No taps by this spike.
+
+What the logs show, in order:
+- 13:00:20  our DPC status inside user 10: isProfileOwnerApp=true, isAdminActive=true (before the account step).
+- 13:00:23  Settings ADD_ACCOUNT_SETTINGS in u10. GMS PreAddAccount, then MinuteMaid (web sign-in) displayed. No crash this time.
+- 13:02:15  "Account added successfully to AccountManager" (one account, type com.google, in u10; accounts in u0 = 0). Name not saved.
+- 13:02:17  GMS KidsAuthSetupActivity (HANDLE_MANAGED). "Supervised account found on the device".
+- 13:02:32  "Can't remove additional accounts. Ensuring device has only one account." Our app process killed as idle at 13:02:32 (normal; not a crash).
+- 13:02:35 onward  SupervisionStateMachine: "Platform supervision is not available on this device" and "State no profile owner" (GMS side).
+- 13:03:22  GMS ProfileOwnerReceiver onEnabled logged once (intent not saved).
+- 13:03:31, 13:03:58, 13:04:03, 13:04:07 (and 13:02:32)  WebViewBridge "Called activateProfileOwner()" in KidsAuth. Each opens Settings SET_PROFILE_OWNER (ProfileOwnerAdd). Each time GMS ProfileOwnerReceiver fails in DevicePolicyManagerService.setActiveAdmin (3 logged exceptions). Then the screen returns to the KidsAuth dialog. This is the loop.
+- 13:05:29  last line in the buffer. dpm list-owners and the status op still show our DPC as Profile Owner of user 10 and Device Owner of user 0.
+
+Counts (13:00:05 to 13:05:29): activateProfileOwner 5; SET_PROFILE_OWNER starts 5; GMS setActiveAdmin failures 3.
+
+Not determined: which dialog button the parent pressed. The loop calls activateProfileOwner, which is likely the "Allow" path, but this is not confirmed. A "Cancel" press would not be expected to call it.
+
+Install events: only Play Store auto-update requests (Finsky, 13:03:24-13:03:33). No Family Link package (com.google.android.apps.kids) in user 10 at 13:05. Not in the logs: any DevicePolicy event that removes or replaces our Profile Owner.

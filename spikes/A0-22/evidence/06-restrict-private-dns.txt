@@ -1,0 +1,34 @@
+# Restriction step (A0.22): DISALLOW_CONFIG_PRIVATE_DNS from the DO. Device UTC 18:23:08.
+== owners
+3 owners:
+User  0: admin=com.webfilter.spike.a19/.AdminReceiver,DeviceOwner,Affiliated
+User 10: admin=com.webfilter.spike.a19/.AdminReceiver,ProfileOwner
+User 11: admin=com.google.android.gms/.kids.account.receiver.ProfileOwnerReceiver,ProfileOwner
+== restrict-private-dns
+Broadcast completed: result=0, data="added DISALLOW_CONFIG_PRIVATE_DNS (caller user UserHandle{0})"
+== dumpsys user: device-policy restrictions (global/local) for user 0, 10, 11
+ UserInfo{0:null:c13} seria | Device policy global restrictions:
+ UserInfo{0:null:c13} seria | disallow_config_private_dns
+ UserInfo{0:null:c13} seria | Device policy local restrictions:
+ UserInfo{0:null:c13} seria | none
+ UserInfo{0:null:c13} seria | Effective restrictions:
+ UserInfo{0:null:c13} seria | no_add_managed_profile
+ UserInfo{0:null:c13} seria | disallow_config_private_dns
+ UserInfo{10:kid-test:410} | Device policy global restrictions:
+ UserInfo{10:kid-test:410} | null
+ UserInfo{10:kid-test:410} | Device policy local restrictions:
+ UserInfo{10:kid-test:410} | none
+ UserInfo{10:kid-test:410} | Effective restrictions:
+ UserInfo{10:kid-test:410} | null
+ UserInfo{11:control:410} s | Device policy global restrictions:
+ UserInfo{11:control:410} s | null
+ UserInfo{11:control:410} s | Device policy local restrictions:
+ UserInfo{11:control:410} s | no_install_unknown_sources
+ UserInfo{11:control:410} s | no_config_location
+ UserInfo{11:control:410} s | no_remove_user
+ UserInfo{11:control:410} s | no_debugging_features
+ UserInfo{11:control:410} s | no_config_credentials
+ UserInfo{11:control:410} s | no_config_date_time
+ UserInfo{11:control:410} s | Effective restrictions:
+ UserInfo{11:control:410} s | null
+(end)

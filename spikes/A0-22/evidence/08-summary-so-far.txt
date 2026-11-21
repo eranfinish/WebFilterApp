@@ -1,0 +1,17 @@
+A0.22 summary so far (Tablet_A12 / emulator-5590). Device UTC ~18:23.
+
+1. Global Private DNS from the DO (family.cloudflare-dns.com):
+   - Attempt 1 (no INTERNET permission in the DPC): the DPM connectivity check failed inside our process with EPERM (socket). Host TCP 853 is reachable (tested: 1.1.1.3, 1.0.0.3, 8.8.8.8 open), so the cause is our missing INTERNET permission (evidence/05).
+   - Attempt 2 (INTERNET added, call on the broadcast main thread): NetworkOnMainThreadException (evidence/05b).
+   - Attempt 3 (INTERNET added, call on a worker thread): SecurityException "operation not allowed when device has unaffiliated users". Global Private DNS is refused while users 10 and 11 are unaffiliated (Affiliated only on user 0). Settings private_dns_mode and specifier stay null; getGlobalPrivateDnsMode = OPPORTUNISTIC, host = null (evidence/05c).
+   - So the DNS filter layer cannot be set through the DO on this device while the child users are unaffiliated. Blocked, not tested.
+   - Shell DNS check of an adult-category domain: not run (no Private DNS applied; a check would only show the unfiltered default).
+
+2. DISALLOW_CONFIG_PRIVATE_DNS from the DO: added (evidence/06).
+   - User 0 device-policy GLOBAL restrictions: disallow_config_private_dns; effective on user 0: yes.
+   - User 11 (stopped, state -1): its own device-policy local restrictions are the Family Link set (no_install_unknown_sources, no_config_location, no_remove_user, no_debugging_features, no_config_credentials, no_config_date_time). Its effective list is not computed while it is stopped. The parent's Settings check (step 2 of the parent part) is what shows the effect in u11.
+   - Restrictions for the other items (no_factory_reset, no_safe_boot, no_add_user, no_config_vpn): not added; record only (ask before adding).
+
+3. Chrome secure DNS in u11: parent check pending.
+4. classroom in u11 after the change: parent check pending.
+5. Reachability: Private DNS is device-wide, but the emulator's network is the host's (no real Wi-Fi/cellular separation). Not tested.

@@ -1,0 +1,10 @@
+# Reinstall A0.22 DPC with INTERNET permission on 5590. Owners checked before and after.
+== owners before
+3 owners:
+User  0: admin=com.webfilter.spike.a19/.AdminReceiver,DeviceOwner,Affiliated
+== install -t -r
+Performing Streamed Install
+Success
+== owners after
+3 owners:
+User  0: admin=com.webfilter.spike.a19/.AdminReceiver,DeviceOwner,Affiliated

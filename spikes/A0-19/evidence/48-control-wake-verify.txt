@@ -1,0 +1,11 @@
+# Changes reported by the starting session on the control run (verified read-only). Not made by this spike.
+== current user: 11
+== wakefulness: mWakefulness=Awake
+== power state: mIsPowered=false
+== screen_off_timeout user 11: 1800000
+== stay_on global: 7
+== focus: mCurrentFocus=u11 com.android.settings/com.android.settings.Settings}
+== owners
+2 owners:
+User  0: admin=com.webfilter.spike.a19/.AdminReceiver,DeviceOwner,Affiliated
+User 10: admin=com.webfilter.spike.a19/.AdminReceiver,ProfileOwner

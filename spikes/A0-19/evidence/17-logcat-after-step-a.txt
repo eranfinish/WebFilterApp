@@ -1,0 +1,201 @@
+# logcat (buffer at capture time), filtered to addaccount / KidsAuth / supervision / DevicePolicy / ErrorActivity / A19. Emails redacted. Lines after the last 'Start' markers are the parent's step.
+11-20 11:50:35.775   535   582 E VerityUtils: Failed to measure fs-verity, errno 1: /data/app/~~OoJ6CuNRdv9-ERgl1_Y5eA==/com.webfilter.spike.a19-sNc2YOoGFa2F8x4i4O7vZw==/base.apk
+11-20 11:50:35.874  4902  4902 V GraphicsEnvironment: ANGLE Developer option for 'com.webfilter.spike.a19' set to: 'default'
+11-20 11:50:35.900  4902  4902 I A19     : onEnabled user=UserHandle{0}
+11-20 11:50:40.191  4902  4902 I A19     : op=status result=myUser=UserHandle{0} pkg=com.webfilter.spike.a19 isAdminActive=true isDeviceOwnerApp=true isProfileOwnerApp=false
+11-20 11:50:44.453   535  4720 D DevicePolicyManager: Adding new pending token: <email>
+11-20 11:50:45.947   535  4720 I SettingsState: 	at com.android.server.devicepolicy.DevicePolicyManagerService.createAndManageUser(DevicePolicyManagerService.java:10546)
+11-20 11:50:45.947   535  4720 I SettingsState: 	at android.app.admin.IDevicePolicyManager$Stub.onTransact$createAndManageUser$(IDevicePolicyManager.java:17510)
+11-20 11:50:45.947   535  4720 I SettingsState: 	at android.app.admin.IDevicePolicyManager$Stub.onTransact(IDevicePolicyManager.java:4491)
+11-20 11:50:45.954   535  4720 I SettingsState: 	at com.android.server.devicepolicy.DevicePolicyManagerService.createAndManageUser(DevicePolicyManagerService.java:10546)
+11-20 11:50:45.954   535  4720 I SettingsState: 	at android.app.admin.IDevicePolicyManager$Stub.onTransact$createAndManageUser$(IDevicePolicyManager.java:17510)
+11-20 11:50:45.954   535  4720 I SettingsState: 	at android.app.admin.IDevicePolicyManager$Stub.onTransact(IDevicePolicyManager.java:4491)
+11-20 11:50:45.961   535  4720 I SettingsState: 	at com.android.server.devicepolicy.DevicePolicyManagerService.createAndManageUser(DevicePolicyManagerService.java:10546)
+11-20 11:50:45.961   535  4720 I SettingsState: 	at android.app.admin.IDevicePolicyManager$Stub.onTransact$createAndManageUser$(IDevicePolicyManager.java:17510)
+11-20 11:50:45.961   535  4720 I SettingsState: 	at android.app.admin.IDevicePolicyManager$Stub.onTransact(IDevicePolicyManager.java:4491)
+11-20 11:50:46.449   535   585 W ActivityManager: Skipping broadcast of Intent { act=android.intent.action.PACKAGE_ADDED dat=package:com.webfilter.spike.a19 flg=0x4000010 (has extras) }: user 10 and its parent (if any) are stopped
+11-20 11:50:46.513   535  4720 I DevicePolicyManager: Profile owner set: ComponentInfo{com.webfilter.spike.a19/com.webfilter.spike.a19.AdminReceiver} on user 10
+11-20 11:50:46.554  4902  4902 I A19     : op=create result=OK created name=kid-test id=10 handle=UserHandle{10}
+11-20 11:50:46.865   535   535 D DevicePolicyManager: handleNewUserCreated(): ignoring for user 10 due to <email>
+11-20 11:50:46.867   535   535 D DevicePolicyManager: User id 10 not affiliated.
+11-20 11:50:46.869   535   535 I DevicePolicyManager: There are unaffiliated users, network logging will be paused if enabled.
+11-20 11:50:46.869   535   535 I DevicePolicyManager: Not org-owned managed profile device, security logging will be paused if enabled.
+11-20 11:50:57.754   535   564 I SystemServerTimingAsync: ssm.onStartUser-10_com.android.server.accounts.AccountManagerService$Lifecycle
+11-20 11:50:57.768   535   833 I DevicePolicyManager: Started used 10 in background
+11-20 11:50:57.769  4902  4902 I A19     : op=start result=startUserInBackground id=10 result=0
+11-20 11:50:58.572   535   564 V StorageManagerService: Package com.webfilter.spike.a19 does not have legacy storage
+11-20 11:50:58.578   535   564 I SystemServerTimingAsync: ssm.onStartUser-10_com.android.server.devicepolicy.DevicePolicyManagerService$Lifecycle
+11-20 11:50:58.621  5445  5445 I ModuleSetMgr: Download of container feature kids is disabled.
+11-20 11:50:58.621  5445  5445 I ModuleSetMgr: Download of container feature kids_conversation_filtering is disabled.
+11-20 11:50:58.621  5445  5445 I ModuleSetMgr: Download of container feature kids_dashboard is disabled.
+11-20 11:50:58.621  5445  5445 I ModuleSetMgr: Download of container feature kids_ensure_supervision_setup is disabled.
+11-20 11:50:58.621  5445  5445 I ModuleSetMgr: Download of container feature kids_get_parent_verification_intent is disabled.
+11-20 11:50:58.621  5445  5445 I ModuleSetMgr: Download of container feature kids_get_supported_features is disabled.
+11-20 11:50:58.621  5445  5445 I ModuleSetMgr: Download of container feature kids_resource_filtering is disabled.
+11-20 11:50:58.621  5445  5445 I ModuleSetMgr: Download of container feature kids_revoke_supervision is disabled.
+11-20 11:50:58.621  5445  5445 I ModuleSetMgr: Download of container feature kids_screentime_restriction_callback is disabled.
+11-20 11:50:58.621  5445  5445 I ModuleSetMgr: Download of container feature kids_transparency is disabled.
+11-20 11:50:59.138   535   564 I SystemServerTimingAsync: ssm.onUnlockingUser-10_com.android.server.accounts.AccountManagerService$Lifecycle
+11-20 11:50:59.148   535   620 I AccountManagerService: User 10 is unlocked - opening CE database
+11-20 11:50:59.164   535   564 I SystemServerTimingAsync: ssm.onUnlockingUser-10_com.android.server.devicepolicy.DevicePolicyManagerService$Lifecycle
+11-20 11:50:59.535   535   564 I SystemServerTimingAsync: ssm.onUnlockedUser-10_com.android.server.accounts.AccountManagerService$Lifecycle
+11-20 11:50:59.535   535   564 I SystemServerTimingAsync: ssm.onUnlockedUser-10_com.android.server.devicepolicy.DevicePolicyManagerService$Lifecycle
+11-20 11:50:59.535   535   564 I DevicePolicyManager: Dispatching ACTION_SHOW_NEW_USER_DISCLAIMER intent
+11-20 11:50:59.634   535   564 W SystemServiceManager: Service com.android.server.devicepolicy.DevicePolicyManagerService$Lifecycle took 99 ms in onUnlockedUser-10
+11-20 11:50:59.637   535   565 I ActivityManager: Start proc 5593:com.webfilter.spike.a19/u10a147 for broadcast {com.webfilter.spike.a19/com.webfilter.spike.a19.AdminReceiver}
+11-20 11:51:00.351  5593  5593 V GraphicsEnvironment: ANGLE Developer option for 'com.webfilter.spike.a19' set to: 'default'
+11-20 11:51:00.383  5593  5593 I A19     : onEnabled user=UserHandle{10}
+11-20 11:51:00.590  5445  5673 I ModuleSetMgr: Download of container feature kids is disabled.
+11-20 11:51:00.590  5445  5673 I ModuleSetMgr: Download of container feature kids_conversation_filtering is disabled.
+11-20 11:51:00.590  5445  5673 I ModuleSetMgr: Download of container feature kids_dashboard is disabled.
+11-20 11:51:00.590  5445  5673 I ModuleSetMgr: Download of container feature kids_ensure_supervision_setup is disabled.
+11-20 11:51:00.590  5445  5673 I ModuleSetMgr: Download of container feature kids_get_parent_verification_intent is disabled.
+11-20 11:51:00.590  5445  5673 I ModuleSetMgr: Download of container feature kids_get_supported_features is disabled.
+11-20 11:51:00.590  5445  5673 I ModuleSetMgr: Download of container feature kids_resource_filtering is disabled.
+11-20 11:51:00.590  5445  5673 I ModuleSetMgr: Download of container feature kids_revoke_supervision is disabled.
+11-20 11:51:00.590  5445  5673 I ModuleSetMgr: Download of container feature kids_screentime_restriction_callback is disabled.
+11-20 11:51:00.590  5445  5673 I ModuleSetMgr: Download of container feature kids_transparency is disabled.
+11-20 11:51:01.553  5445  5720 I ModuleSetMgr: Download of container feature kids is disabled.
+11-20 11:51:01.553  5445  5720 I ModuleSetMgr: Download of container feature kids_conversation_filtering is disabled.
+11-20 11:51:01.553  5445  5720 I ModuleSetMgr: Download of container feature kids_dashboard is disabled.
+11-20 11:51:01.553  5445  5720 I ModuleSetMgr: Download of container feature kids_ensure_supervision_setup is disabled.
+11-20 11:51:01.553  5445  5720 I ModuleSetMgr: Download of container feature kids_get_parent_verification_intent is disabled.
+11-20 11:51:01.553  5445  5720 I ModuleSetMgr: Download of container feature kids_get_supported_features is disabled.
+11-20 11:51:01.553  5445  5720 I ModuleSetMgr: Download of container feature kids_resource_filtering is disabled.
+11-20 11:51:01.553  5445  5720 I ModuleSetMgr: Download of container feature kids_revoke_supervision is disabled.
+11-20 11:51:01.553  5445  5720 I ModuleSetMgr: Download of container feature kids_screentime_restriction_callback is disabled.
+11-20 11:51:01.553  5445  5720 I ModuleSetMgr: Download of container feature kids_transparency is disabled.
+11-20 11:51:01.818  5445  5738 I Auth    : (REDACTED) [SupervisedAccountIntentOperation] onHandleIntent: %s
+11-20 11:51:01.866  5445  5770 I ModuleSetMgr: Download of container feature kids is disabled.
+11-20 11:51:01.866  5445  5770 I ModuleSetMgr: Download of container feature kids_conversation_filtering is disabled.
+11-20 11:51:01.866  5445  5770 I ModuleSetMgr: Download of container feature kids_dashboard is disabled.
+11-20 11:51:01.866  5445  5770 I ModuleSetMgr: Download of container feature kids_ensure_supervision_setup is disabled.
+11-20 11:51:01.866  5445  5770 I ModuleSetMgr: Download of container feature kids_get_parent_verification_intent is disabled.
+11-20 11:51:01.866  5445  5770 I ModuleSetMgr: Download of container feature kids_get_supported_features is disabled.
+11-20 11:51:01.866  5445  5770 I ModuleSetMgr: Download of container feature kids_resource_filtering is disabled.
+11-20 11:51:01.866  5445  5770 I ModuleSetMgr: Download of container feature kids_revoke_supervision is disabled.
+11-20 11:51:01.866  5445  5770 I ModuleSetMgr: Download of container feature kids_screentime_restriction_callback is disabled.
+11-20 11:51:01.866  5445  5770 I ModuleSetMgr: Download of container feature kids_transparency is disabled.
+11-20 11:51:01.931  5445  5855 I Auth    : (REDACTED) [SupervisedAccountIntentOperation] onHandleIntent: %s
+11-20 11:51:02.456  5445  5896 I ModuleSetMgr: Download of container feature kids is disabled.
+11-20 11:51:02.456  5445  5896 I ModuleSetMgr: Download of container feature kids_conversation_filtering is disabled.
+11-20 11:51:02.456  5445  5896 I ModuleSetMgr: Download of container feature kids_dashboard is disabled.
+11-20 11:51:02.456  5445  5896 I ModuleSetMgr: Download of container feature kids_ensure_supervision_setup is disabled.
+11-20 11:51:02.456  5445  5896 I ModuleSetMgr: Download of container feature kids_get_parent_verification_intent is disabled.
+11-20 11:51:02.456  5445  5896 I ModuleSetMgr: Download of container feature kids_get_supported_features is disabled.
+11-20 11:51:02.456  5445  5896 I ModuleSetMgr: Download of container feature kids_resource_filtering is disabled.
+11-20 11:51:02.456  5445  5896 I ModuleSetMgr: Download of container feature kids_revoke_supervision is disabled.
+11-20 11:51:02.456  5445  5896 I ModuleSetMgr: Download of container feature kids_screentime_restriction_callback is disabled.
+11-20 11:51:02.456  5445  5896 I ModuleSetMgr: Download of container feature kids_transparency is disabled.
+11-20 11:51:14.046  5445  5633 I Backup  : [GmsBackupAccountManager] Backup account not found in gmscore.
+11-20 11:51:14.356  5445  5742 I KidsAuth: (REDACTED) [KidsAuthInitIntentOperation] Received intent to recover supervision setup: %s
+11-20 11:51:14.419  5445  5445 W ChimeraUtils: Module com.google.android.gms.kids_auth missing resource null(0)
+11-20 11:51:14.419  5445  5445 W ChimeraUtils: Module com.google.android.gms.kids_auth missing resource null(0)
+11-20 11:51:14.419  5445  5445 W ChimeraUtils: Module com.google.android.gms.kids_auth missing resource null(0)
+11-20 11:51:14.419  5445  5445 W ChimeraUtils: Module com.google.android.gms.kids_auth missing resource null(0)
+11-20 11:51:14.425  5445  5849 I KidsAuth: (REDACTED) [SupervisionSetupChimeraService] [%s] Processing command[id=%s][flags=%s]: %s
+11-20 11:51:14.429  5445  5849 I KidsAuth: [SupervisionSetupState] No active setup found, moving to Idle. [CONTEXT service_id=42 ]
+11-20 11:51:14.431  5445  5849 I KidsAuth: (REDACTED) [SupervisionSetupChimeraService] Next state: %s
+11-20 11:51:14.453  5445  5445 I KidsAuth: [SupervisionSetupChimeraService] Service stopped [CONTEXT service_id=42 ]
+11-20 11:51:14.575   535  1664 I ActivityManager: Killing 4902:com.webfilter.spike.a19/u0a147 (adj 975): empty #17
+11-20 11:51:15.445   535  1785 I ActivityManager: Killing 5593:com.webfilter.spike.a19/u10a147 (adj 985): empty #17
+11-20 11:52:52.223  5367  5367 I HibernationPolicy: user 10 is a profileowner. Running hibernation job.
+11-20 11:53:02.447  7851  9288 I KidsAuth: (REDACTED) [KidsAuthInitIntentOperation] Received intent to recover supervision setup: %s
+11-20 11:53:03.736  7851  7851 W ChimeraUtils: Module com.google.android.gms.kids_auth missing resource null(0)
+11-20 11:53:03.738  7851  7851 W ChimeraUtils: Module com.google.android.gms.kids_auth missing resource null(0)
+11-20 11:53:03.845  7851  7851 W ChimeraUtils: Module com.google.android.gms.kids_auth missing resource null(0)
+11-20 11:53:03.847  7851  7851 W ChimeraUtils: Module com.google.android.gms.kids_auth missing resource null(0)
+11-20 11:53:04.144  7851  8917 I KidsAuth: (REDACTED) [SupervisionSetupChimeraService] [%s] Processing command[id=%s][flags=%s]: %s
+11-20 11:53:04.171  7851  8917 I KidsAuth: [SupervisionSetupState] No active setup found, moving to Idle. [CONTEXT service_id=42 ]
+11-20 11:53:04.172  7851  8917 I KidsAuth: (REDACTED) [SupervisionSetupChimeraService] Next state: %s
+11-20 11:53:05.306  7851  7851 I KidsAuth: [SupervisionSetupChimeraService] Service stopped [CONTEXT service_id=42 ]
+11-20 11:53:05.382  7851  8881 I Auth    : (REDACTED) [SupervisedAccountIntentOperation] onHandleIntent: %s
+11-20 11:53:10.478  7851  9641 I Backup  : [GmsBackupAccountManager] Backup account not found in gmscore.
+11-20 11:53:10.483  7851  8881 I Backup  : [GmsBackupAccountManager] Backup account not found in gmscore.
+11-20 11:53:11.512  7851  9641 I Backup  : [GmsBackupAccountManager] Backup account not found in gmscore.
+11-20 11:53:18.178  7851  9665 I SyncSupervisedSharingSt: No supervised accounts found, skipping periodic sync [CONTEXT service_id=277 ]
+11-20 11:53:33.988  5940  6073 I Finsky  : [154] ItemStore: Not cached: com.webfilter.spike.a19
+11-20 11:53:35.036  5940  6073 E Finsky  : [154] ItemStore: getItems RPC failed for item com.webfilter.spike.a19
+11-20 11:53:35.461   535   565 I ActivityManager: Start proc 10428:com.webfilter.spike.a19/u10a147 for broadcast {com.webfilter.spike.a19/com.webfilter.spike.a19.CmdReceiver}
+11-20 11:53:35.838 10428 10428 V GraphicsEnvironment: ANGLE Developer option for 'com.webfilter.spike.a19' set to: 'default'
+11-20 11:53:35.876 10428 10428 I A19     : op=status result=myUser=UserHandle{10} pkg=com.webfilter.spike.a19 isAdminActive=true isDeviceOwnerApp=false isProfileOwnerApp=true
+11-20 11:53:46.755   535  3784 I ActivityManager: Killing 10428:com.webfilter.spike.a19/u10a147 (adj 975): empty #17
+11-20 11:53:50.030   535   565 I ActivityManager: Start proc 10963:com.webfilter.spike.a19/u10a147 for broadcast {com.webfilter.spike.a19/com.webfilter.spike.a19.CmdReceiver}
+11-20 11:53:50.225 10963 10963 V GraphicsEnvironment: ANGLE Developer option for 'com.webfilter.spike.a19' set to: 'default'
+11-20 11:53:50.277 10963 10963 I A19     : op=status result=myUser=UserHandle{10} pkg=com.webfilter.spike.a19 isAdminActive=true isDeviceOwnerApp=false isProfileOwnerApp=true
+11-20 11:53:52.271   535 10770 I PackageDexOptimizer: Running dexopt (dexoptNeeded=1) on: /data/app/~~OoJ6CuNRdv9-ERgl1_Y5eA==/com.webfilter.spike.a19-sNc2YOoGFa2F8x4i4O7vZw==/base.apk pkg=com.webfilter.spike.a19 isa=x86_64 dexoptFlags=boot_complete,debuggable,public,enable_hidden_api_checks targetFilter=extract oatDir=/data/app/~~OoJ6CuNRdv9-ERgl1_Y5eA==/com.webfilter.spike.a19-sNc2YOoGFa2F8x4i4O7vZw==/oat classLoaderContext=PCL[]{}
+11-20 11:53:52.295   459   459 V installd: DexInv: --- BEGIN '/data/app/~~OoJ6CuNRdv9-ERgl1_Y5eA==/com.webfilter.spike.a19-sNc2YOoGFa2F8x4i4O7vZw==/base.apk' ---
+11-20 11:53:52.295   459   459 V installd: Running /apex/com.android.art/bin/dex2oat64 in=base.apk out=/data/app/~~OoJ6CuNRdv9-ERgl1_Y5eA==/com.webfilter.spike.a19-sNc2YOoGFa2F8x4i4O7vZw==/oat/x86_64/base.odex
+11-20 11:53:52.639 11053 11053 W dex2oat64: /apex/com.android.art/bin/dex2oat64 --zip-fd=7 --zip-location=base.apk --oat-fd=8 --oat-location=/data/app/~~OoJ6CuNRdv9-ERgl1_Y5eA==/com.webfilter.spike.a19-sNc2YOoGFa2F8x4i4O7vZw==/oat/x86_64/base.odex --input-vdex-fd=-1 --output-vdex-fd=9 --swap-fd=10 --classpath-dir=/data/app/~~OoJ6CuNRdv9-ERgl1_Y5eA==/com.webfilter.spike.a19-sNc2YOoGFa2F8x4i4O7vZw== --class-loader-context=PCL[]{} --compact-dex-level=none --instruction-set=x86_64 --instruction-set-features=default --instruction-set-variant=x86_64 --compiler-filter=extract --compilation-reason=post-boot --max-image-block-size=524288 --resolve-startup-const-strings=true --debuggable --generate-mini-debug-info --runtime-arg -Xtarget-sdk-version:31 --runtime-arg -Xhidden-api-policy:enabled --runtime-arg -Xms64m --runtime-arg -Xmx512m
+11-20 11:53:52.639 11053 11053 I dex2oat64: /apex/com.android.art/bin/dex2oat64 --input-vdex-fd=-1 --output-vdex-fd=9 --classpath-dir=/data/app/~~OoJ6CuNRdv9-ERgl1_Y5eA==/com.webfilter.spike.a19-sNc2YOoGFa2F8x4i4O7vZw== --class-loader-context=PCL[]{} --compact-dex-level=none --compiler-filter=extract --compilation-reason=post-boot --max-image-block-size=524288 --resolve-startup-const-strings=true --debuggable --generate-mini-debug-info
+11-20 11:53:52.986   459   459 V installd: DexInv: --- END '/data/app/~~OoJ6CuNRdv9-ERgl1_Y5eA==/com.webfilter.spike.a19-sNc2YOoGFa2F8x4i4O7vZw==/base.apk' (success) ---
+11-20 11:54:02.316 10963 10963 I A19     : op=status result=myUser=UserHandle{10} pkg=com.webfilter.spike.a19 isAdminActive=true isDeviceOwnerApp=false isProfileOwnerApp=true
+11-20 11:54:18.614   535 10770 I BackgroundDexOptService: Pinning optimized code {com.webfilter.spike.a19}
+11-20 11:54:20.694   535   565 I ActivityManager: Start proc 11484:com.webfilter.spike.a19/u0a147 for broadcast {com.webfilter.spike.a19/com.webfilter.spike.a19.CmdReceiver}
+11-20 11:54:20.947 11484 11484 V GraphicsEnvironment: ANGLE Developer option for 'com.webfilter.spike.a19' set to: 'default'
+11-20 11:54:21.162   535  4792 I DevicePolicyManager: Started used 10 in background
+11-20 11:54:21.162 11484 11484 I A19     : op=start result=startUserInBackground id=10 result=0
+11-20 11:54:23.192   535  1664 I ActivityManager: Killing 10963:com.webfilter.spike.a19/u10a147 (adj 975): empty #17
+11-20 11:54:23.520 11484 11484 I A19     : op=switch result=switchUser id=10 result=true
+11-20 11:54:24.484  7851  9978 I Backup  : [GmsBackupAccountManager] Backup account not found in gmscore.
+11-20 11:54:26.527   535   564 I SystemServerTimingAsync: ssm.onSwitchUser-10_com.android.server.accounts.AccountManagerService$Lifecycle
+11-20 11:54:26.563   535   564 I SystemServerTimingAsync: ssm.onSwitchUser-10_com.android.server.devicepolicy.DevicePolicyManagerService$Lifecycle
+11-20 11:54:38.074   535   544 I system_server: JIT allocated 98KB for compiled code of boolean android.app.admin.IDevicePolicyManager$Stub.onTransact(int, android.os.Parcel, android.os.Parcel, int)
+11-20 11:54:38.075   535   544 I system_server: Compiler allocated 5105KB to compile boolean android.app.admin.IDevicePolicyManager$Stub.onTransact(int, android.os.Parcel, android.os.Parcel, int)
+11-20 11:54:39.288   535   565 I ActivityManager: Start proc 12048:com.google.android.gms.ui/u10a97 for broadcast {com.google.android.gms/com.google.android.gms.auth.uiflows.addaccount.setupwizard.SetupWizardPreferencesClearingReceiver}
+11-20 11:54:42.024   535   840 W PackageManager: Cannot suspend package "com.webfilter.spike.a19": has an active device admin
+11-20 11:54:42.043   535   840 I DevicePolicyManager: Packages subject to suspension: com.google.android.youtube,com.android.contacts,com.android.camera2,com.android.stk,com.google.android.deskclock,com.google.android.gm,com.google.android.apps.docs,com.google.android.apps.maps,com.android.chrome,org.chromium.webview_shell,com.google.android.apps.photos,com.google.android.calendar,com.google.android.documentsui,com.google.android.apps.youtube.music
+11-20 11:54:42.044   535   840 D DevicePolicyManager: skipping PersonalAppsSuspensionHelper.dump() for user 10
+11-20 11:54:59.788   535   840 I ActivityManager: Killing 11484:com.webfilter.spike.a19/u0a147 (adj 975): empty #17
+11-20 12:08:17.455   535   952 W PackageManager: Cannot suspend package "com.webfilter.spike.a19": has an active device admin
+11-20 12:08:42.455  7851  8033 I Backup  : [GmsBackupAccountManager] Backup account not found in gmscore.
+11-20 12:10:50.835  7851  8073 I Auth    : [GmsAccountAuthenticatorImpl] Prewarming auth UI process upon addAccount call [CONTEXT service_id=343 ]
+11-20 12:10:52.022   535   550 I ActivityTaskManager: START u10 {act=com.google.android.accounts.AccountIntro cat=[FLAG_ACTIVITY_FORWARD_RESULT,defaultPendingIntent,categoryhack:sessionid=771964d1-bb71-458b-98a5-737bdb64f787] flg=0x2000000 cmp=com.google.android.gms/.auth.uiflows.addaccount.AccountIntroActivity (has extras)} from uid 1010097
+11-20 12:10:52.356 15360 15360 I Auth    : [CommonAuth,ManagedAccountUtil] No activities matched action com.google.android.gms.auth.addaccount.DM_PRE_ADD_ACCOUNT
+11-20 12:10:52.361   535   550 I ActivityTaskManager: START u10 {flg=0x2000000 cmp=com.google.android.gms/.auth.uiflows.addaccount.WrapperControlledActivity (has extras)} from uid 1010097
+11-20 12:10:52.924   535  1785 I ActivityTaskManager: START u10 {act=com.google.android.gms.auth.addaccount.PRE_ADD_ACCOUNT cmp=com.google.android.gms/.auth.uiflows.addaccount.PreAddAccountActivity (has extras)} from uid 1010097
+11-20 12:10:53.247 15360 15360 I SetupLibrary: [GlifLayout] Using setup design braz to init for PreAddAccountActivity
+11-20 12:10:53.537 15360 15360 I Auth    : [PreAddAccountActivity] PreAddAccountChimeraActivity.onStart() called. [CONTEXT service_id=343 ]
+11-20 12:10:53.552 15360 15360 W Auth    : [AddAccount, PreAddAccountActivity] Failed to check resources [CONTEXT service_id=343 ]
+11-20 12:10:53.552 15360 15360 W Auth    : 	at com.google.android.gms.auth.uiflows.addaccount.PreAddAccountChimeraActivity.H(:<email><email> (190800-1020418964):34)
+11-20 12:10:53.552 15360 15360 W Auth    : 	at com.google.android.gms.auth.uiflows.addaccount.PreAddAccountChimeraActivity.onStart(:<email><email> (190800-1020418964):17)
+11-20 12:10:53.558 15360 15360 W Auth    : [PreAddAccountState] setPhenotypeSync done [CONTEXT service_id=343 ]
+11-20 12:10:53.562 15360 15360 W Auth    : [PreAddAccountState] setKeyAttestationCheckFailed done with result=false [CONTEXT service_id=343 ]
+11-20 12:10:53.792 15360 15360 I Auth    : (REDACTED) [PreAddAccountActivity] setPsEducationRequired=%s received from ViewModel.
+11-20 12:10:53.792 15360 15360 W Auth    : [PreAddAccountState] setPsEducationRequired done with result=false [CONTEXT service_id=343 ]
+11-20 12:10:53.813 15360 15360 I Auth    : [PreAddAccountActivity] Account seed event received from ViewModel. [CONTEXT service_id=343 ]
+11-20 12:10:53.814 15360 15360 W Auth    : [PreAddAccountState] setAccountSeedingResult done [CONTEXT service_id=343 ]
+11-20 12:10:53.815 15360 15360 I Auth    : (REDACTED) [PreAddAccountActivity] Checkin event=%s received from ViewModel.
+11-20 12:10:53.815 15360 15360 W Auth    : [PreAddAccountState] setCheckinResult done with result=true [CONTEXT service_id=343 ]
+11-20 12:10:53.941 15360 15360 I Auth    : (REDACTED) [PreAddAccountActivity] FrpSnapshot cached event=%s received from ViewModel.
+11-20 12:10:53.942 15360 15360 W Auth    : [PreAddAccountState] setFrpSnapshot done with result= FrpSnapshot[supported=false,required=false,ls=false] [CONTEXT service_id=343 ]
+11-20 12:10:53.954 15360 15360 W Auth    : [PreAddAccountState] setChallengeResult done with result=true [CONTEXT service_id=343 ]
+11-20 12:10:53.955 15360 15360 W Auth    : [PreAddAccountState] PreAddAccountState check done. Running callback to finish [CONTEXT service_id=343 ]
+11-20 12:10:53.968 15360 15360 W Auth    : [AddAccount, PreAddAccountActivity] finish(resultCode, data) called with result=RESULT_OK [CONTEXT service_id=343 ]
+11-20 12:10:54.437 15360 15360 W Auth    : [PreAddAccountChimeraActivity] finish(resultCode, data) called from Handler after delay with resultCode=-1
+11-20 12:10:54.438 15360 15360 W Auth    : [AddAccount, ControlledChimeraActivity] finishCalled for ControlledActivity, resultCode=-1, name=PreAddAccountActivity, and null controller [CONTEXT service_id=343 ]
+11-20 12:10:54.529 15360 15360 W Auth    : [AddAccount, ControlledChimeraActivity] finishCalled for ControlledActivity, resultCode=-1, name=WrapperControlledActivity, controller=AddAccountController [CONTEXT service_id=343 ]
+11-20 12:10:54.593   535   848 I ActivityTaskManager: START u10 {flg=0x2000000 cmp=com.google.android.gms/.auth.uiflows.minutemaid.MinuteMaidActivity (has extras)} from uid 1010097
+11-20 12:10:54.725 15360 15360 I Auth    : (REDACTED) [MinuteMaid, MinuteMaidActivity] network type: %d
+11-20 12:10:54.965 15360 15360 I SetupLibrary: [GlifLayout] Using setup design braz to init for MinuteMaidActivity
+11-20 12:10:55.048 15360 15360 I Auth    : (REDACTED) [MinuteMaidFragment] shouldDrawStatusBarInWebview: %b, useNativeNavigationBar: %b, isTablet: %b, deviceType=%s, theme: %s
+11-20 12:10:55.053 15360 15360 I Auth    : [MinuteMaidFragment] SMS disallowed for this user
+11-20 12:10:55.367 15360 15558 I Auth    : [MinuteMaidFragment] Telephony features not available on device
+11-20 12:10:55.584   535   553 I ActivityTaskManager: Displayed com.google.android.gms/.auth.uiflows.minutemaid.MinuteMaidActivity: +988ms
+11-20 12:10:55.710 15360 15360 I Auth    : (REDACTED) [MinuteMaidFragment] colorScheme: %s
+11-20 12:10:55.710 15360 15360 I Auth    : (REDACTED) [MinuteMaidFragment] paletteColors: %s
+11-20 12:10:55.747 15360 15360 W Auth    : [MinuteMaidFragment] com.google.android.androidforwork is not installed on system
+11-20 12:10:55.758 15360 15360 I Auth    : (REDACTED) [MinuteMaidFragment] isSuw: %b, oemCustomizationParamsEnabled: %b
+11-20 12:10:55.773 15360 15360 I Auth    : (REDACTED) [MinuteMaidFragment] mm url : %s
+11-20 12:10:55.864   535   848 W InputManager-JNI: Input channel object '765f4f5 com.google.android.gms/com.google.android.gms.auth.uiflows.addaccount.WrapperControlledActivity (client)' was disposed without first being removed with the input manager!
+11-20 12:10:56.212   535   706 W InputManager-JNI: Input channel object 'f17cb24 com.google.android.gms/com.google.android.gms.auth.uiflows.addaccount.PreAddAccountActivity (client)' was disposed without first being removed with the input manager!
+11-20 12:53:55.430 15360 15360 E Auth    : [MinuteMaidFragment] WebView render process gone, didCrash: true, priority: 2
+11-20 12:53:55.468 15360 15360 W Auth    : [MinuteMaid, MinuteMaidActivity] Error from MinuteMaidFragment: Render process gone, didCrash: true, with priority 2 [CONTEXT service_id=343 ]
+11-20 12:53:55.491 15360 15360 W Auth    : [AddAccount, ControlledChimeraActivity] finishCalled for ControlledActivity, resultCode=2, name=MinuteMaidActivity, controller=AddAccountController [CONTEXT service_id=343 ]
+11-20 12:53:55.614   535  3784 I ActivityTaskManager: START u10 {flg=0x2000000 cmp=com.google.android.gms/.auth.uiflows.addaccount.ErrorActivity (has extras)} from uid 1010097
+11-20 12:53:56.069 15360 15360 I SetupLibrary: [GlifLayout] Using setup design braz to init for ErrorActivity
+11-20 12:53:56.241   535  3939 W InputManager-JNI: Input channel object '66dec65 com.google.android.gms/com.google.android.gms.auth.uiflows.minutemaid.MinuteMaidActivity (client)' was disposed without first being removed with the input manager!
+11-20 12:53:56.258   535   563 W UsageStatsService: Unexpected activity event reported! (com.google.android.gms/com.google.android.gms.auth.uiflows.minutemaid.MinuteMaidActivity event : 23 instanceId : 204294903)
+11-20 12:54:07.204   535  5157 W PackageManager: Cannot suspend package "com.webfilter.spike.a19": has an active device admin
+11-20 12:54:07.206   535  5157 I DevicePolicyManager: Packages subject to suspension: com.google.android.youtube,com.android.contacts,com.android.camera2,com.android.stk,com.google.android.deskclock,com.google.android.gm,com.google.android.apps.docs,com.google.android.apps.maps,com.android.chrome,org.chromium.webview_shell,com.google.android.apps.photos,com.google.android.calendar,com.google.android.documentsui,com.google.android.apps.youtube.music
+11-20 12:54:07.206   535  5157 D DevicePolicyManager: skipping PersonalAppsSuspensionHelper.dump() for user 10

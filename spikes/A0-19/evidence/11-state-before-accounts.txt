@@ -1,0 +1,13 @@
+== dpm list-owners
+2 owners:
+User  0: admin=com.webfilter.spike.a19/.AdminReceiver,DeviceOwner,Affiliated
+User 10: admin=com.webfilter.spike.a19/.AdminReceiver,ProfileOwner
+== pm list users
+Users:
+	UserInfo{0:Owner:c13} running
+	UserInfo{10:kid-test:410} running
+== settings device_provisioned / user_setup_complete (user 0)
+1 / 1
+== accounts count (names not saved)
+  Accounts: 0
+  Accounts: 0

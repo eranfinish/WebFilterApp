@@ -1,0 +1,7 @@
+== status (user 0)
+Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a19/.CmdReceiver (has extras) }
+Broadcast completed: result=0, data="myUser=UserHandle{0} pkg=com.webfilter.spike.a19 isAdminActive=true isDeviceOwnerApp=true isProfileOwnerApp=false"
+== logcat A19
+--------- beginning of main
+11-20 11:50:35.900  4902  4902 I A19     : onEnabled user=UserHandle{0}
+11-20 11:50:40.191  4902  4902 I A19     : op=status result=myUser=UserHandle{0} pkg=com.webfilter.spike.a19 isAdminActive=true isDeviceOwnerApp=true isProfileOwnerApp=false

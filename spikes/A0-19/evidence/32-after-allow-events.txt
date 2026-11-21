@@ -1,0 +1,203 @@
+11-20 13:04:00.917  9344  9344 W DeviceAdminAdd: Exception trying to activate admin ComponentInfo{com.google.android.gms/com.google.android.gms.kids.account.receiver.ProfileOwnerReceiver}
+11-20 13:04:00.917  9344  9344 W DeviceAdminAdd: java.lang.IllegalArgumentException: Admin is already added
+11-20 13:04:00.917  9344  9344 W DeviceAdminAdd: 	at android.os.Parcel.createExceptionOrNull(Parcel.java:2429)
+11-20 13:04:00.917  9344  9344 W DeviceAdminAdd: 	at android.os.Parcel.createException(Parcel.java:2409)
+11-20 13:04:00.917  9344  9344 W DeviceAdminAdd: 	at android.os.Parcel.readException(Parcel.java:2392)
+11-20 13:04:00.917  9344  9344 W DeviceAdminAdd: 	at android.os.Parcel.readException(Parcel.java:2334)
+11-20 13:04:00.917  9344  9344 W DeviceAdminAdd: 	at android.app.admin.IDevicePolicyManager$Stub$Proxy.setActiveAdmin(IDevicePolicyManager.java:8710)
+11-20 13:04:00.917  9344  9344 W DeviceAdminAdd: 	at android.app.admin.DevicePolicyManager.setActiveAdmin(DevicePolicyManager.java:7571)
+11-20 13:04:00.917  9344  9344 W DeviceAdminAdd: 	at android.app.admin.DevicePolicyManager.setActiveAdmin(DevicePolicyManager.java:7583)
+11-20 13:04:00.917  9344  9344 W DeviceAdminAdd: 	at com.android.settings.applications.specialaccess.deviceadmin.DeviceAdminAdd.addAndFinish(DeviceAdminAdd.java:497)
+11-20 13:04:00.917  9344  9344 W DeviceAdminAdd: 	at com.android.settings.applications.specialaccess.deviceadmin.DeviceAdminAdd$2.onClick(DeviceAdminAdd.java:325)
+11-20 13:04:00.917  9344  9344 W DeviceAdminAdd: 	at androidx.appcompat.app.AlertController$ButtonHandler.handleMessage(AlertController.java:167)
+11-20 13:04:00.917  9344  9344 W DeviceAdminAdd: 	at android.os.Handler.dispatchMessage(Handler.java:106)
+11-20 13:04:00.917  9344  9344 W DeviceAdminAdd: 	at android.os.Looper.loopOnce(Looper.java:201)
+11-20 13:04:00.917  9344  9344 W DeviceAdminAdd: 	at android.os.Looper.loop(Looper.java:288)
+11-20 13:04:00.917  9344  9344 W DeviceAdminAdd: 	at android.app.ActivityThread.main(ActivityThread.java:7839)
+11-20 13:04:00.917  9344  9344 W DeviceAdminAdd: 	at java.lang.reflect.Method.invoke(Native Method)
+11-20 13:04:00.917  9344  9344 W DeviceAdminAdd: 	at com.android.internal.os.RuntimeInit$MethodAndArgsCaller.run(RuntimeInit.java:548)
+11-20 13:04:00.917  9344  9344 W DeviceAdminAdd: 	at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:1003)
+11-20 13:04:00.917  9344  9344 W DeviceAdminAdd: Caused by: android.os.RemoteException: Remote stack trace:
+11-20 13:04:00.917  9344  9344 W DeviceAdminAdd: 	at com.android.server.devicepolicy.DevicePolicyManagerService.lambda$setActiveAdmin$7$DevicePolicyManagerService(DevicePolicyManagerService.java:3433)
+11-20 13:04:00.917  9344  9344 W DeviceAdminAdd: 	at com.android.server.devicepolicy.DevicePolicyManagerService$$ExternalSyntheticLambda22.runOrThrow(Unknown Source:12)
+11-20 13:04:00.917  9344  9344 W DeviceAdminAdd: 	at android.os.Binder.withCleanCallingIdentity(Binder.java:390)
+11-20 13:04:00.917  9344  9344 W DeviceAdminAdd: 	at com.android.server.devicepolicy.DevicePolicyManagerService$Injector.binderWithCleanCallingIdentity(DevicePolicyManagerService.java:1517)
+11-20 13:04:00.917  9344  9344 W DeviceAdminAdd: 	at com.android.server.devicepolicy.DevicePolicyManagerService.setActiveAdmin(DevicePolicyManagerService.java:3429)
+11-20 13:04:00.917  9344  9344 W DeviceAdminAdd: 
+11-20 13:04:00.966   535  1554 W InputManager-JNI: Input channel object '9cbfc4c com.android.settings/com.android.settings.applications.specialaccess.deviceadmin.ProfileOwnerAdd (client)' was disposed without first being removed with the in
+11-20 13:04:01.016   535   753 W ActivityTaskManager: Duplicate finish request for r=ActivityRecord{7db898f u10 com.android.settings/.applications.specialaccess.deviceadmin.ProfileOwnerAdd t1000012 f}}
+11-20 13:04:01.017  9725  9725 I KidsAuth: [SupervisionCoreUtils] Onboarding on Supervision Core APK is not eligible for devices with API version below T. [CONTEXT service_id=42 ]
+11-20 13:04:01.449   535   832 W InputManager-JNI: Input channel object '2cb88e4 com.android.settings/com.android.settings.applications.specialaccess.deviceadmin.ProfileOwnerAdd (client)' was disposed without first being removed with the in
+11-20 13:04:03.084  9725  9890 I WebViewBridge: Called activateProfileOwner(). [CONTEXT service_id=42 ]
+11-20 13:04:03.194  9725  9725 I KidsAuth: [DeviceSetupBaseViewModel] Can't remove additional accounts. Ensuring device has only one account. [CONTEXT service_id=42 ]
+11-20 13:04:03.233  9725  9725 I KidsAuth: [SupervisionCoreUtils] Onboarding on Supervision Core APK is not eligible for devices with API version below T. [CONTEXT service_id=42 ]
+11-20 13:04:03.265   535   832 I ActivityTaskManager: START u10 {act=android.app.action.SET_PROFILE_OWNER cmp=com.android.settings/.applications.specialaccess.deviceadmin.ProfileOwnerAdd (has extras)} from uid 1010097
+11-20 13:04:03.646   535   552 I ActivityTaskManager: Displayed com.android.settings/.applications.specialaccess.deviceadmin.ProfileOwnerAdd: +313ms
+11-20 13:04:04.328 13474 13493 I Bugle   : RcsAvailabilityUtilForProvisioningEngineV2: updateAvailabilityAsync, hint: NO_HINT
+11-20 13:04:04.431 13474 13493 I BugleRcsEngine: [581] akyy.e: RcsProvisioningManager: combineConfigurationWithAvailability, simId = redacted-pii:sim_id[20-chars], hasConfig = false
+11-20 13:04:04.432 13474 13493 W BugleRcsEngine: [581] akyy.e: RcsProvisioningManager: combineConfigurationWithAvailability, RCS is not available (RcsAvailability{mAvailability=BUGLE_LOADING_AVAILABILITY_IN_PROGRESS (Bugle client is still l
+11-20 13:04:04.441 13474 13495 I BugleRcsProvisioning: RcsAvailabilityUpdaterLocal: [SR]: SingleRegistration capability, singleRegistrationCapability: false, simId: redacted-pii:sim_id[20-chars], subId: 1
+11-20 13:04:04.447 13474 13493 I BugleRcsEngine: [581] akyy.e: RcsProvisioningManager: combineConfigurationWithAvailability, simId = redacted-pii:sim_id[20-chars], hasConfig = false
+11-20 13:04:04.448 13474 13493 W BugleRcsEngine: [581] akyy.e: RcsProvisioningManager: combineConfigurationWithAvailability, RCS is not available (RcsAvailability{mAvailability=BUGLE_LOADING_AVAILABILITY_IN_PROGRESS (Bugle client is still l
+11-20 13:04:04.471 13474 13493 I BugleRcsProvisioning: BugleSystemBindingManager: onBuglePhenotypeFlagChanged
+11-20 13:04:04.472 13474 13493 I BugleRcsProvisioning: BugleSystemBindingManager: onCsLibPhenotypeUpdated
+11-20 13:04:04.515 13474 13492 I BugleRcsProvisioning: RcsAvailabilityUpdaterLocal: [SR]: SingleRegistration capability, singleRegistrationCapability: false, simId: redacted-pii:sim_id[20-chars], subId: 1
+11-20 13:04:04.605 13474 13500 I Bugle   : RcsAvailabilityUtilForProvisioningEngineV2: updateAvailabilityAsync, hint: NO_HINT
+11-20 13:04:04.612 13474 13492 I BugleRcsProvisioning: RcsAvailabilityUpdaterLocal: [SR]: SingleRegistration configuration, singleRegistrationRcsConfigAvailableAndEnabled: false, simId: redacted-pii:sim_id[20-chars]
+11-20 13:04:04.612 13474 13492 I BugleRcsProvisioning: RcsAvailabilityUpdaterLocal: updateRcsAvailability, currentAvailability: 1, newAvailability: 9, hint: NO_HINT
+11-20 13:04:04.613 13474 13495 I BugleRcsProvisioning: RcsAvailabilityUpdaterLocal: [SR]: SingleRegistration configuration, singleRegistrationRcsConfigAvailableAndEnabled: false, simId: redacted-pii:sim_id[20-chars]
+11-20 13:04:04.614 13474 13495 I BugleRcsProvisioning: RcsAvailabilityUpdaterLocal: updateRcsAvailability, currentAvailability: 1, newAvailability: 9, hint: NO_HINT
+11-20 13:04:04.623 13474 13493 I BugleRcsProvisioning: RcsAvailabilityUpdaterLocal: [SR]: SingleRegistration capability, singleRegistrationCapability: false, simId: redacted-pii:sim_id[20-chars], subId: 1
+11-20 13:04:04.627 13474 13493 I BugleRcsProvisioning: RcsAvailabilityUpdaterLocal: [SR]: SingleRegistration configuration, singleRegistrationRcsConfigAvailableAndEnabled: false, simId: redacted-pii:sim_id[20-chars]
+11-20 13:04:04.628 13474 13493 I BugleRcsProvisioning: RcsAvailabilityUpdaterLocal: updateRcsAvailability, currentAvailability: 1, newAvailability: 9, hint: NO_HINT
+11-20 13:04:05.443   535  2844 W InputManager-JNI: Input channel object '1e8f68d com.android.settings/com.android.settings.applications.specialaccess.deviceadmin.ProfileOwnerAdd (client)' was disposed without first being removed with the in
+11-20 13:04:05.580  9725  9725 I KidsAuth: [SupervisionCoreUtils] Onboarding on Supervision Core APK is not eligible for devices with API version below T. [CONTEXT service_id=42 ]
+11-20 13:04:05.772   535  2814 W InputManager-JNI: Input channel object '5a36a45 com.android.settings/com.android.settings.applications.specialaccess.deviceadmin.ProfileOwnerAdd (client)' was disposed without first being removed with the in
+11-20 13:04:07.930  9725  9890 I WebViewBridge: Called activateProfileOwner(). [CONTEXT service_id=42 ]
+11-20 13:04:07.932  9725  9725 I KidsAuth: [DeviceSetupBaseViewModel] Can't remove additional accounts. Ensuring device has only one account. [CONTEXT service_id=42 ]
+11-20 13:04:08.030  9725  9725 I KidsAuth: [SupervisionCoreUtils] Onboarding on Supervision Core APK is not eligible for devices with API version below T. [CONTEXT service_id=42 ]
+11-20 13:04:08.049   535   549 I ActivityTaskManager: START u10 {act=android.app.action.SET_PROFILE_OWNER cmp=com.android.settings/.applications.specialaccess.deviceadmin.ProfileOwnerAdd (has extras)} from uid 1010097
+11-20 13:04:08.406   535   552 I ActivityTaskManager: Displayed com.android.settings/.applications.specialaccess.deviceadmin.ProfileOwnerAdd: +313ms
+11-20 13:04:09.547  4246  4736 I CarrierServices: [87] ProvisioningEventReceiver.d: Received Provisioning Event: [Bugle information (100)]
+11-20 13:04:09.587  4246  4736 I CarrierServices: [87] ProvisioningEventReceiver.d: JibeService is not running
+11-20 13:04:09.588  4246  4736 W CarrierServices: [87] ProvisioningEventReceiver.d: Event is not a valid user action. Discarding it.
+11-20 13:04:11.913  9344  9344 W DeviceAdminAdd: Exception trying to activate admin ComponentInfo{com.google.android.gms/com.google.android.gms.kids.account.receiver.ProfileOwnerReceiver}
+11-20 13:04:11.913  9344  9344 W DeviceAdminAdd: java.lang.IllegalArgumentException: Admin is already added
+11-20 13:04:11.913  9344  9344 W DeviceAdminAdd: 	at android.os.Parcel.createExceptionOrNull(Parcel.java:2429)
+11-20 13:04:11.913  9344  9344 W DeviceAdminAdd: 	at android.os.Parcel.createException(Parcel.java:2409)
+11-20 13:04:11.913  9344  9344 W DeviceAdminAdd: 	at android.os.Parcel.readException(Parcel.java:2392)
+11-20 13:04:11.913  9344  9344 W DeviceAdminAdd: 	at android.os.Parcel.readException(Parcel.java:2334)
+11-20 13:04:11.913  9344  9344 W DeviceAdminAdd: 	at android.app.admin.IDevicePolicyManager$Stub$Proxy.setActiveAdmin(IDevicePolicyManager.java:8710)
+11-20 13:04:11.913  9344  9344 W DeviceAdminAdd: 	at android.app.admin.DevicePolicyManager.setActiveAdmin(DevicePolicyManager.java:7571)
+11-20 13:04:11.913  9344  9344 W DeviceAdminAdd: 	at android.app.admin.DevicePolicyManager.setActiveAdmin(DevicePolicyManager.java:7583)
+11-20 13:04:11.913  9344  9344 W DeviceAdminAdd: 	at com.android.settings.applications.specialaccess.deviceadmin.DeviceAdminAdd.addAndFinish(DeviceAdminAdd.java:497)
+11-20 13:04:11.913  9344  9344 W DeviceAdminAdd: 	at com.android.settings.applications.specialaccess.deviceadmin.DeviceAdminAdd$2.onClick(DeviceAdminAdd.java:325)
+11-20 13:04:11.913  9344  9344 W DeviceAdminAdd: 	at androidx.appcompat.app.AlertController$ButtonHandler.handleMessage(AlertController.java:167)
+11-20 13:04:11.913  9344  9344 W DeviceAdminAdd: 	at android.os.Handler.dispatchMessage(Handler.java:106)
+11-20 13:04:11.913  9344  9344 W DeviceAdminAdd: 	at android.os.Looper.loopOnce(Looper.java:201)
+11-20 13:04:11.913  9344  9344 W DeviceAdminAdd: 	at android.os.Looper.loop(Looper.java:288)
+11-20 13:04:11.913  9344  9344 W DeviceAdminAdd: 	at android.app.ActivityThread.main(ActivityThread.java:7839)
+11-20 13:04:11.913  9344  9344 W DeviceAdminAdd: 	at java.lang.reflect.Method.invoke(Native Method)
+11-20 13:04:11.913  9344  9344 W DeviceAdminAdd: 	at com.android.internal.os.RuntimeInit$MethodAndArgsCaller.run(RuntimeInit.java:548)
+11-20 13:04:11.913  9344  9344 W DeviceAdminAdd: 	at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:1003)
+11-20 13:04:11.913  9344  9344 W DeviceAdminAdd: Caused by: android.os.RemoteException: Remote stack trace:
+11-20 13:04:11.913  9344  9344 W DeviceAdminAdd: 	at com.android.server.devicepolicy.DevicePolicyManagerService.lambda$setActiveAdmin$7$DevicePolicyManagerService(DevicePolicyManagerService.java:3433)
+11-20 13:04:11.913  9344  9344 W DeviceAdminAdd: 	at com.android.server.devicepolicy.DevicePolicyManagerService$$ExternalSyntheticLambda22.runOrThrow(Unknown Source:12)
+11-20 13:04:11.913  9344  9344 W DeviceAdminAdd: 	at android.os.Binder.withCleanCallingIdentity(Binder.java:390)
+11-20 13:04:11.913  9344  9344 W DeviceAdminAdd: 	at com.android.server.devicepolicy.DevicePolicyManagerService$Injector.binderWithCleanCallingIdentity(DevicePolicyManagerService.java:1517)
+11-20 13:04:11.913  9344  9344 W DeviceAdminAdd: 	at com.android.server.devicepolicy.DevicePolicyManagerService.setActiveAdmin(DevicePolicyManagerService.java:3429)
+11-20 13:04:11.913  9344  9344 W DeviceAdminAdd: 
+11-20 13:04:11.960   535  2417 W InputManager-JNI: Input channel object 'e3c3845 com.android.settings/com.android.settings.applications.specialaccess.deviceadmin.ProfileOwnerAdd (client)' was disposed without first being removed with the in
+11-20 13:04:12.027  9725  9725 I KidsAuth: [SupervisionCoreUtils] Onboarding on Supervision Core APK is not eligible for devices with API version below T. [CONTEXT service_id=42 ]
+11-20 13:04:12.029   535  4094 W ActivityTaskManager: Duplicate finish request for r=ActivityRecord{377451 u10 com.android.settings/.applications.specialaccess.deviceadmin.ProfileOwnerAdd t1000012 f}}
+11-20 13:04:12.351   535  2417 W InputManager-JNI: Input channel object 'dab58c0 com.android.settings/com.android.settings.applications.specialaccess.deviceadmin.ProfileOwnerAdd (client)' was disposed without first being removed with the in
+11-20 13:04:18.188 13474 13491 I Bugle   : RcsAvailabilityUtilForProvisioningEngineV2: updateAvailabilityAsync, hint: NO_HINT
+11-20 13:04:18.208 13474 13492 I BugleRcsProvisioning: RcsAvailabilityUpdaterLocal: [SR]: SingleRegistration capability, singleRegistrationCapability: false, simId: redacted-pii:sim_id[20-chars], subId: 1
+11-20 13:04:18.211  4246  4736 I CarrierServices: [87] ProvisioningEventReceiver.d: Received Provisioning Event: [Bugle information (100)]
+11-20 13:04:18.211  4246  4736 I CarrierServices: [87] ProvisioningEventReceiver.d: JibeService is not running
+11-20 13:04:18.211  4246  4736 W CarrierServices: [87] ProvisioningEventReceiver.d: Event is not a valid user action. Discarding it.
+11-20 13:04:18.213 13474 13492 I BugleRcsProvisioning: RcsAvailabilityUpdaterLocal: [SR]: SingleRegistration configuration, singleRegistrationRcsConfigAvailableAndEnabled: false, simId: redacted-pii:sim_id[20-chars]
+11-20 13:04:18.531 13474 13493 I Bugle   : RcsAvailabilityUtilForProvisioningEngineV2: updateAvailabilityAsync, hint: NO_HINT
+11-20 13:04:18.544 13474 13492 I BugleRcsProvisioning: RcsAvailabilityUpdaterLocal: updateRcsAvailability, currentAvailability: 9, newAvailability: 2, hint: NO_HINT
+11-20 13:04:18.566 13474 13493 I BugleRcsProvisioning: RcsAvailabilityUpdaterLocal: [SR]: SingleRegistration capability, singleRegistrationCapability: false, simId: redacted-pii:sim_id[20-chars], subId: 1
+11-20 13:04:18.572 13474 13493 I BugleRcsProvisioning: RcsAvailabilityUpdaterLocal: [SR]: SingleRegistration configuration, singleRegistrationRcsConfigAvailableAndEnabled: false, simId: redacted-pii:sim_id[20-chars]
+11-20 13:04:18.574 13474 13493 I BugleRcsProvisioning: RcsAvailabilityUpdaterLocal: updateRcsAvailability, currentAvailability: 2, newAvailability: 2, hint: NO_HINT
+11-20 13:04:18.575 13474 13492 I BugleRcsProvisioning: RcsProvisioningTrigger: onRcsAvailabilityUpdate : availability is updated to RCS is disabled for this carrier by Google, lastAvailability is null, simId hash = 6952279876933284313, isPe
+11-20 13:04:18.575 13474 13492 I BugleRcsEngine: [580] jtw.a: RcsProvisioningManager: Receive onRcsAvailabilityUpdate, SIM = redacted-pii:sim_id[20-chars], availability = RcsAvailability{mAvailability=DISABLED_VIA_GSERVICES (RCS is disabled
+11-20 13:04:18.586 13474 13493 I BugleRcsProvisioning: RcsProvisioningTrigger: onRcsAvailabilityUpdate : availability is updated to RCS is disabled for this carrier by Google, lastAvailability is null, simId hash = 6952279876933284313, isPe
+11-20 13:04:18.587 13474 13492 I BugleRcsProvisioning: RcsProvisioningTrigger: onRcsAvailabilityUpdate : isPreviousDisabled = true, isCurrentDisabled = true
+11-20 13:04:18.588 13474 13493 I BugleRcsEngine: [581] jtw.a: RcsProvisioningManager: Receive onRcsAvailabilityUpdate, SIM = redacted-pii:sim_id[20-chars], availability = RcsAvailability{mAvailability=DISABLED_VIA_GSERVICES (RCS is disabled
+11-20 13:04:18.589 13474 13493 I BugleRcsProvisioning: RcsProvisioningTrigger: onRcsAvailabilityUpdate : isPreviousDisabled = true, isCurrentDisabled = true
+11-20 13:04:18.630 13474 13492 I BugleRcsProvisioning: BugleSystemBindingManager: onCsLibPhenotypeUpdated
+11-20 13:04:18.666 13474 13492 I Bugle   : RcsAvailabilityUtilForProvisioningEngineV2: onCsLibPhenotypeUpdated
+11-20 13:04:18.668 13474 13492 I BugleRcsProvisioning: RcsProvisioningTrigger: onCsLibPhenotypeUpdated, enableProvisioningTaskInBugle = true
+11-20 13:04:18.669 13474 13492 I BugleRcsProvisioning: RcsProvisioningTrigger: updateRcsAvailability : hint = CSLIB_PHENOTYPE_UPDATE
+11-20 13:04:18.670 13474 13492 I Bugle   : RcsAvailabilityUtilForProvisioningEngineV2: updateAvailabilityAsync, hint: CSLIB_PHENOTYPE_UPDATE
+11-20 13:04:18.670 13474 13492 I Bugle   : RcsAvailabilityUtilForProvisioningEngineV2: swapAvailabilityUpdater, provisioningTaskInBugle: true, activeRcsAvailabilityUpdater: uts
+11-20 13:04:18.674 13474 13493 I BugleRcsProvisioning: RcsAvailabilityUpdaterLocal: [SR]: SingleRegistration capability, singleRegistrationCapability: false, simId: redacted-pii:sim_id[20-chars], subId: 1
+11-20 13:04:18.675 13474 13493 I BugleRcsProvisioning: RcsAvailabilityUpdaterLocal: [SR]: SingleRegistration configuration, singleRegistrationRcsConfigAvailableAndEnabled: false, simId: redacted-pii:sim_id[20-chars]
+11-20 13:04:18.675 13474 13493 I BugleRcsProvisioning: RcsAvailabilityUpdaterLocal: updateRcsAvailability, currentAvailability: 2, newAvailability: 2, hint: CSLIB_PHENOTYPE_UPDATE
+11-20 13:04:18.676 13474 13493 I BugleRcsProvisioning: RcsProvisioningTrigger: onRcsAvailabilityUpdate : availability is updated to RCS is disabled for this carrier by Google, lastAvailability is RCS is disabled for this carrier by Google, 
+11-20 13:04:18.717 13474 13495 I BugleRcsProvisioning: RcsProvisioningTrigger: Schedule provisioning on app startup
+11-20 13:04:18.721 13474 13495 I BugleRcsProvisioning: RcsProvisioningTrigger: schedule provisioning
+11-20 13:04:18.782 13474 13495 I BugleRcsEngine: [583] jsj.run: Skipping provisioning scheduling since RCS is disabled
+11-20 13:04:19.093 13474 13495 I BugleRcsProvisioning: BugleSystemBindingManager: onBuglePhenotypeFlagChanged
+11-20 13:04:19.095 13474 13495 I BugleRcsProvisioning: BugleSystemBindingManager: onCsLibPhenotypeUpdated
+11-20 13:04:19.127  4246  4736 I CarrierServices: [87] ProvisioningEventReceiver.d: Received Provisioning Event: [Bugle information (100)]
+11-20 13:04:19.127  4246  4736 I CarrierServices: [87] ProvisioningEventReceiver.d: JibeService is not running
+11-20 13:04:19.127  4246  4736 W CarrierServices: [87] ProvisioningEventReceiver.d: Event is not a valid user action. Discarding it.
+11-20 13:04:20.165   535  2480 I ActivityManager: Killing 13270:com.google.android.packageinstaller/u10a67 (adj 975): empty #17
+11-20 13:04:50.104 12234 12297 I Finsky:background: [524] IQ: Requesting install request=package_name=com.google.android.contactkeys, pm_package_name=com.google.android.contactkeys, version=23555, priority=2, reason=auto_update, account_nam
+11-20 13:04:52.739 11954 12061 I Finsky  : [557] VerifyApps: [ADV] Resolved session ID 1591262828 via PackageInstaller fallback for com.google.ar.core (id=1)
+11-20 13:04:58.971 14366 14366 I A19     : op=status result=myUser=UserHandle{10} pkg=com.webfilter.spike.a19 isAdminActive=true isDeviceOwnerApp=false isProfileOwnerApp=true
+11-20 13:04:59.657   535  4668 W BroadcastQueue: Background execution not allowed: receiving Intent { act=android.intent.action.PACKAGE_ADDED dat=package:com.google.ar.core flg=0x4000010 (has extras) } to com.google.android.packageinstaller
+11-20 13:04:59.658   535   563 I ActivityManager: com.google.android.packageinstaller is exempt from freezer
+11-20 13:04:59.717   535   564 I ActivityManager: Start proc 14400:com.google.android.packageinstaller/u10a67 for broadcast {com.google.android.packageinstaller/com.android.packageinstaller.PackageInstalledReceiver}
+11-20 13:04:59.892 14400 14400 V GraphicsEnvironment: ANGLE Developer option for 'com.google.android.packageinstaller' set to: 'default'
+11-20 13:05:00.606  4294 14431 I Auth    : (REDACTED) [SupervisedAccountIntentOperation] onHandleIntent: %s
+11-20 13:05:00.807   535   837 D PackageInstallerSession: Ignoring abandon after commit relinquished control
+11-20 13:05:03.117  4294 14446 I SupervisionStateMachine: Platform supervision is not available on this device. [CONTEXT service_id=42 ]
+11-20 13:05:03.392  4294 14446 W SupervisionStateUtils: State no profile owner [CONTEXT service_id=42 ]
+11-20 13:05:03.440  4294 14425 I SupervisionEnforcementS: (REDACTED) %s State Machine evaluation: current state: %s, trigger action: %s
+11-20 13:05:03.440  4294 14446 I SupervisionStateUtils: (REDACTED) State recover:%s
+11-20 13:05:03.464 11954 12061 I Finsky  : [557] VerifyApps: [ADV] Resolved session ID 1029278807 via PackageInstaller fallback for com.google.android.contactkeys (id=2)
+11-20 13:05:07.330   535   685 W BroadcastQueue: Background execution not allowed: receiving Intent { act=android.intent.action.PACKAGE_ADDED dat=package:com.google.android.contactkeys flg=0x4000010 (has extras) } to com.google.android.pack
+11-20 13:05:08.245  4294 14509 I Auth    : (REDACTED) [SupervisedAccountIntentOperation] onHandleIntent: %s
+11-20 13:05:09.074  4294 14508 I SupervisionStateMachine: Platform supervision is not available on this device. [CONTEXT service_id=42 ]
+11-20 13:05:09.223  4294 14508 W SupervisionStateUtils: State no profile owner [CONTEXT service_id=42 ]
+11-20 13:05:09.281  4294 12560 I SupervisionEnforcementS: (REDACTED) %s State Machine evaluation: current state: %s, trigger action: %s
+11-20 13:05:09.282  4294 14508 I SupervisionStateUtils: (REDACTED) State recover:%s
+11-20 13:05:19.081 14700 14719 I Bugle   : RcsAvailabilityUtilForProvisioningEngineV2: updateAvailabilityAsync, hint: NO_HINT
+11-20 13:05:19.092 14700 14719 I BugleRcsEngine: [647] akyy.e: RcsProvisioningManager: combineConfigurationWithAvailability, simId = redacted-pii:sim_id[20-chars], hasConfig = false
+11-20 13:05:19.095 14700 14719 W BugleRcsEngine: [647] akyy.e: RcsProvisioningManager: combineConfigurationWithAvailability, RCS is not available (RcsAvailability{mAvailability=BUGLE_LOADING_AVAILABILITY_IN_PROGRESS (Bugle client is still l
+11-20 13:05:19.096 14700 14719 I BugleRcsEngine: [647] akyy.e: RcsProvisioningManager: combineConfigurationWithAvailability, simId = redacted-pii:sim_id[20-chars], hasConfig = false
+11-20 13:05:19.097 14700 14719 W BugleRcsEngine: [647] akyy.e: RcsProvisioningManager: combineConfigurationWithAvailability, RCS is not available (RcsAvailability{mAvailability=BUGLE_LOADING_AVAILABILITY_IN_PROGRESS (Bugle client is still l
+11-20 13:05:19.098 14700 14719 I BugleRcsProvisioning: BugleSystemBindingManager: onBuglePhenotypeFlagChanged
+11-20 13:05:19.098 14700 14719 I BugleRcsProvisioning: BugleSystemBindingManager: onCsLibPhenotypeUpdated
+11-20 13:05:19.118 14700 14720 I BugleRcsProvisioning: RcsAvailabilityUpdaterLocal: [SR]: SingleRegistration capability, singleRegistrationCapability: false, simId: redacted-pii:sim_id[20-chars], subId: 1
+11-20 13:05:19.135  4246  4736 I CarrierServices: [87] ProvisioningEventReceiver.d: Received Provisioning Event: [Bugle information (100)]
+11-20 13:05:19.136  4246  4736 I CarrierServices: [87] ProvisioningEventReceiver.d: JibeService is not running
+11-20 13:05:19.136  4246  4736 W CarrierServices: [87] ProvisioningEventReceiver.d: Event is not a valid user action. Discarding it.
+11-20 13:05:19.138 14700 14729 I Bugle   : RcsAvailabilityUtilForProvisioningEngineV2: updateAvailabilityAsync, hint: NO_HINT
+11-20 13:05:19.143 14700 14720 I BugleRcsProvisioning: RcsAvailabilityUpdaterLocal: [SR]: SingleRegistration configuration, singleRegistrationRcsConfigAvailableAndEnabled: false, simId: redacted-pii:sim_id[20-chars]
+11-20 13:05:19.144 14700 14720 I BugleRcsProvisioning: RcsAvailabilityUpdaterLocal: updateRcsAvailability, currentAvailability: 1, newAvailability: 9, hint: NO_HINT
+11-20 13:05:19.146 14700 14717 I BugleRcsProvisioning: RcsAvailabilityUpdaterLocal: [SR]: SingleRegistration capability, singleRegistrationCapability: false, simId: redacted-pii:sim_id[20-chars], subId: 1
+11-20 13:05:19.147 14700 14717 I BugleRcsProvisioning: RcsAvailabilityUpdaterLocal: [SR]: SingleRegistration configuration, singleRegistrationRcsConfigAvailableAndEnabled: false, simId: redacted-pii:sim_id[20-chars]
+11-20 13:05:19.147 14700 14717 I BugleRcsProvisioning: RcsAvailabilityUpdaterLocal: updateRcsAvailability, currentAvailability: 1, newAvailability: 9, hint: NO_HINT
+11-20 13:05:19.151 14700 14719 I BugleRcsProvisioning: RcsAvailabilityUpdaterLocal: [SR]: SingleRegistration capability, singleRegistrationCapability: false, simId: redacted-pii:sim_id[20-chars], subId: 1
+11-20 13:05:19.151 14700 14719 I BugleRcsProvisioning: RcsAvailabilityUpdaterLocal: [SR]: SingleRegistration configuration, singleRegistrationRcsConfigAvailableAndEnabled: false, simId: redacted-pii:sim_id[20-chars]
+11-20 13:05:19.156 14700 14719 I BugleRcsProvisioning: RcsAvailabilityUpdaterLocal: updateRcsAvailability, currentAvailability: 9, newAvailability: 9, hint: NO_HINT
+11-20 13:05:20.070   535   685 I ActivityManager: Killing 14366:com.webfilter.spike.a19/u10a147 (adj 975): empty #17
+11-20 13:05:31.688 14811 14811 I A19     : op=status result=myUser=UserHandle{10} pkg=com.webfilter.spike.a19 isAdminActive=true isDeviceOwnerApp=false isProfileOwnerApp=true
+11-20 13:05:33.615 14700 14719 I Bugle   : RcsAvailabilityUtilForProvisioningEngineV2: updateAvailabilityAsync, hint: NO_HINT
+11-20 13:05:33.649 14700 14718 I BugleRcsProvisioning: RcsAvailabilityUpdaterLocal: [SR]: SingleRegistration capability, singleRegistrationCapability: false, simId: redacted-pii:sim_id[20-chars], subId: 1
+11-20 13:05:33.651 14700 14718 I BugleRcsProvisioning: RcsAvailabilityUpdaterLocal: [SR]: SingleRegistration configuration, singleRegistrationRcsConfigAvailableAndEnabled: false, simId: redacted-pii:sim_id[20-chars]
+11-20 13:05:33.671 14700 14718 I BugleRcsProvisioning: RcsAvailabilityUpdaterLocal: updateRcsAvailability, currentAvailability: 9, newAvailability: 9, hint: NO_HINT
+11-20 13:05:33.679  4246  4736 I CarrierServices: [87] ProvisioningEventReceiver.d: Received Provisioning Event: [Bugle information (100)]
+11-20 13:05:33.679  4246  4736 I CarrierServices: [87] ProvisioningEventReceiver.d: JibeService is not running
+11-20 13:05:33.679  4246  4736 W CarrierServices: [87] ProvisioningEventReceiver.d: Event is not a valid user action. Discarding it.
+11-20 13:05:34.088 14700 14720 I Bugle   : RcsAvailabilityUtilForProvisioningEngineV2: updateAvailabilityAsync, hint: NO_HINT
+11-20 13:05:34.105 14700 14718 I BugleRcsProvisioning: RcsAvailabilityUpdaterLocal: [SR]: SingleRegistration capability, singleRegistrationCapability: false, simId: redacted-pii:sim_id[20-chars], subId: 1
+11-20 13:05:34.113 14700 14718 I BugleRcsProvisioning: RcsAvailabilityUpdaterLocal: [SR]: SingleRegistration configuration, singleRegistrationRcsConfigAvailableAndEnabled: false, simId: redacted-pii:sim_id[20-chars]
+11-20 13:05:34.119 14700 14718 I BugleRcsProvisioning: RcsAvailabilityUpdaterLocal: updateRcsAvailability, currentAvailability: 9, newAvailability: 2, hint: NO_HINT
+11-20 13:05:34.122 14700 14717 I BugleRcsProvisioning: RcsProvisioningTrigger: onRcsAvailabilityUpdate : availability is updated to RCS is disabled for this carrier by Google, lastAvailability is null, simId hash = 6952279876933284313, isPe
+11-20 13:05:34.127 14700 14717 I BugleRcsEngine: [645] jtw.a: RcsProvisioningManager: Receive onRcsAvailabilityUpdate, SIM = redacted-pii:sim_id[20-chars], availability = RcsAvailability{mAvailability=DISABLED_VIA_GSERVICES (RCS is disabled
+11-20 13:05:34.127 14700 14717 I BugleRcsProvisioning: RcsProvisioningTrigger: onRcsAvailabilityUpdate : isPreviousDisabled = true, isCurrentDisabled = true
+11-20 13:05:34.165 14700 14718 I BugleRcsProvisioning: RcsProvisioningTrigger: Schedule provisioning on app startup
+11-20 13:05:34.166 14700 14720 I BugleRcsProvisioning: BugleSystemBindingManager: onCsLibPhenotypeUpdated
+11-20 13:05:34.188 14700 14720 I Bugle   : RcsAvailabilityUtilForProvisioningEngineV2: onCsLibPhenotypeUpdated
+11-20 13:05:34.188 14700 14720 I BugleRcsProvisioning: RcsProvisioningTrigger: onCsLibPhenotypeUpdated, enableProvisioningTaskInBugle = true
+11-20 13:05:34.189 14700 14720 I BugleRcsProvisioning: RcsProvisioningTrigger: updateRcsAvailability : hint = CSLIB_PHENOTYPE_UPDATE
+11-20 13:05:34.196 14700 14720 I Bugle   : RcsAvailabilityUtilForProvisioningEngineV2: updateAvailabilityAsync, hint: CSLIB_PHENOTYPE_UPDATE
+11-20 13:05:34.196 14700 14720 I Bugle   : RcsAvailabilityUtilForProvisioningEngineV2: swapAvailabilityUpdater, provisioningTaskInBugle: true, activeRcsAvailabilityUpdater: uts
+11-20 13:05:34.259 14700 14718 I BugleRcsProvisioning: RcsProvisioningTrigger: schedule provisioning
+11-20 13:05:34.260 14700 14719 I BugleRcsProvisioning: RcsAvailabilityUpdaterLocal: [SR]: SingleRegistration capability, singleRegistrationCapability: false, simId: redacted-pii:sim_id[20-chars], subId: 1
+11-20 13:05:34.265 14700 14719 I BugleRcsProvisioning: RcsAvailabilityUpdaterLocal: [SR]: SingleRegistration configuration, singleRegistrationRcsConfigAvailableAndEnabled: false, simId: redacted-pii:sim_id[20-chars]
+11-20 13:05:34.265 14700 14720 I BugleRcsEngine: [648] jsj.run: Skipping provisioning scheduling since RCS is disabled
+11-20 13:05:34.266 14700 14719 I BugleRcsProvisioning: RcsAvailabilityUpdaterLocal: updateRcsAvailability, currentAvailability: 2, newAvailability: 2, hint: CSLIB_PHENOTYPE_UPDATE
+11-20 13:05:34.269 14700 14720 I BugleRcsProvisioning: BugleSystemBindingManager: onBuglePhenotypeFlagChanged
+11-20 13:05:34.269 14700 14720 I BugleRcsProvisioning: BugleSystemBindingManager: onCsLibPhenotypeUpdated
+11-20 13:05:34.272 14700 14719 I BugleRcsProvisioning: RcsProvisioningTrigger: onRcsAvailabilityUpdate : availability is updated to RCS is disabled for this carrier by Google, lastAvailability is RCS is disabled for this carrier by Google, 
+11-20 13:05:34.295  4246  4736 I CarrierServices: [87] ProvisioningEventReceiver.d: Received Provisioning Event: [Bugle information (100)]
+11-20 13:05:34.295  4246  4736 I CarrierServices: [87] ProvisioningEventReceiver.d: JibeService is not running
+11-20 13:05:34.295  4246  4736 W CarrierServices: [87] ProvisioningEventReceiver.d: Event is not a valid user action. Discarding it.

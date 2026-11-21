@@ -1,0 +1,17 @@
+# Reinstall A0.22 DPC over the A0.19 one on Tablet_A12 (5590). Same package and component, so the Device Owner must survive. Read-only checks before/after.
+== owners before
+3 owners:
+User  0: admin=com.webfilter.spike.a19/.AdminReceiver,DeviceOwner,Affiliated
+User 10: admin=com.webfilter.spike.a19/.AdminReceiver,ProfileOwner
+User 11: admin=com.google.android.gms/.kids.account.receiver.ProfileOwnerReceiver,ProfileOwner
+== install -t -r
+Performing Streamed Install
+Success
+== owners after
+3 owners:
+User  0: admin=com.webfilter.spike.a19/.AdminReceiver,DeviceOwner,Affiliated
+User 10: admin=com.webfilter.spike.a19/.AdminReceiver,ProfileOwner
+User 11: admin=com.google.android.gms/.kids.account.receiver.ProfileOwnerReceiver,ProfileOwner
+== status op (user 0)
+Broadcast completed: result=0, data="myUser=UserHandle{0} pkg=com.webfilter.spike.a19 isAdminActive=true isDeviceOwnerApp=true isProfileOwnerApp=false"
+== current user: 0

@@ -1,0 +1,18 @@
+# Capture after the parent's Allow tap; read-only. Device clock UTC. Emails redacted; account names not saved.
+== owners
+2 owners:
+User  0: admin=com.webfilter.spike.a19/.AdminReceiver,DeviceOwner,Affiliated
+User 10: admin=com.webfilter.spike.a19/.AdminReceiver,ProfileOwner
+== users / current
+Users:
+	UserInfo{0:Owner:c13} running
+	UserInfo{10:kid-test:410} running
+10
+== status inside user 10
+Broadcast completed: result=0, data="myUser=UserHandle{10} pkg=com.webfilter.spike.a19 isAdminActive=true isDeviceOwnerApp=false isProfileOwnerApp=true"
+== account counts and types (names redacted)
+  Accounts: 0
+  Accounts: 1
+  Accounts: 1 | Account {name=<redacted>
+== resumed activity
+    mResumedActivity: ActivityRecord{d6c0f72 u10 com.google.android.gms/.kids.auth.KidsAuthSetupActivity

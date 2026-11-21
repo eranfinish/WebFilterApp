@@ -1,0 +1,50 @@
+# Control run summary (u11). Device UTC. Read-only.
+== family-link related packages in u11 (apps.kids / familylink / kids):  (none = none)
+== family-link related packages in u10:  (none = none)
+== owners now (only ours)
+2 owners:
+User  0: admin=com.webfilter.spike.a19/.AdminReceiver,DeviceOwner,Affiliated
+User 10: admin=com.webfilter.spike.a19/.AdminReceiver,ProfileOwner
+== device admins in u11 (from device_policy dump)
+(end)
+== u11 events, 13:36:17 to 13:37:00 (account add, token, KidsAuth, WebView)
+11-20 13:36:17.099 26254 26266 I Auth    : [AddAccountOperation] Fetching token from auth code with GMS network stack. [CONTEXT service_id=153 ]
+11-20 13:36:17.676 26254 26266 I Auth    : [AddAccountOperation] Handling AddAccountResponse. [CONTEXT service_id=153 ]
+11-20 13:36:17.679 26254 26266 I Auth    : (REDACTED) [AddAccountOperation] possible Seed account with hasUsername=%s 
+11-20 13:36:17.719 26254 29129 I Auth    : [AddAccountOperation] Successfully updated account name and Gaia ID in DB [CONTEXT service_id=153 ]
+11-20 13:36:17.732 26254 26266 I Auth    : (REDACTED) [AddAccountHelper] Adding account with %d allowlisted packages
+11-20 13:36:17.859 26254 26266 I Auth    : [AddAccountHelper] Account added successfully to AccountManager [CONTEXT service_id=343 ]
+11-20 13:36:18.093 26254 26266 I Auth    : [AuthAccountManager] LST set in GoogleAccountDataStore. Clearing password. [CONTEXT service_id=343 ]
+11-20 13:36:18.938 26254 26266 I Auth    : [AuthAccountManager] Account added successfully. [CONTEXT service_id=343 ]
+11-20 13:36:19.264 26254 26266 I Auth    : [AddAccountOperation] Finished adding account. [CONTEXT service_id=153 ]
+11-20 13:36:19.359 26254 26266 I Auth    : [AddAccountOperation] Add account completed successfully [CONTEXT service_id=153 ]
+11-20 13:36:19.363 28561 28925 I Auth    : (REDACTED) [AddAccountTask] DmStatus =%s; isEligibleForUnmanagedWorkProfile = %s
+11-20 13:36:20.574 26254 29918 W Auth    : Caused by: m1.hu: Exception in CronetUrlRequest: net::ERR_FAILED, ErrorCode=11, InternalErrorCode=-2, Retryable=false
+11-20 13:36:20.574 26254 29918 W Auth    : 	at org.chromium.net.impl.CronetUrlRequest.onError(:<email><email> (190800-0):83)
+11-20 13:36:20.626 26254 26322 W Auth    : brai: Error when calling server using GmsNetworkStack.
+11-20 13:36:20.626 26254 26322 W Auth    : 	at alqo.a(:<email><email> (190800-1020418964):400)
+11-20 13:36:20.626 26254 26322 W Auth    : Caused by: brai: Error requesting token.
+11-20 13:36:20.626 26254 26322 W Auth    : Caused by: m1.hu: Exception in CronetUrlRequest: net::ERR_FAILED, ErrorCode=11, InternalErrorCode=-2, Retryable=false
+11-20 13:36:20.626 26254 26322 W Auth    : 	at org.chromium.net.impl.CronetUrlRequest.onError(:<email><email> (190800-0):83)
+11-20 13:36:20.627 26254 26322 W Auth    : [RequestTokenManager] Message is Error when calling server using GmsNetworkStack. [CONTEXT service_id=343 ]
+11-20 13:36:20.662 26254 26322 I Auth    : (REDACTED) [GetToken] GetToken failed for app=%s with non recoverable status code: %s 
+11-20 13:36:20.743 26254 26322 W Auth    : [GetTokenOperation] exception while trying to fetch auth tokens for app=com.google.android.gms [CONTEXT service_id=343 ]
+11-20 13:36:20.743 26254 26322 W Auth    : amcv: GetToken failed with status code: NetworkError
+11-20 13:36:20.743 26254 26322 W Auth    : 	at alqo.a(:<email><email> (190800-1020418964):400)
+11-20 13:36:20.755 26254 26382 W NearbyShared: java.io.IOException: GetToken failed with status code: NetworkError
+11-20 13:36:22.168 28561 28925 I Auth    : [AddAccountTask] Added account successfully. [CONTEXT service_id=343 ]
+11-20 13:36:22.180 28561 28561 I Auth    : [AddAccountTask] Delivering result. [CONTEXT service_id=343 ]
+11-20 13:36:22.180 28561 28561 I Auth    : (REDACTED) [AddAccountLoader] Got result: %s
+11-20 13:36:22.521 26254 26267 E Auth    : 	at android.accounts.AbstractAccountAuthenticator$Transport.getAuthToken(AbstractAccountAuthenticator.java:245)
+11-20 13:36:22.521 26254 26267 E Auth    : 	at android.accounts.IAccountAuthenticator$Stub.onTransact(IAccountAuthenticator.java:284)
+11-20 13:36:22.776 28561 28979 I Auth    : [MinuteMaidFragment] onCloseView() called from JS bridge
+11-20 13:36:22.879 28561 28979 W Auth    : [AddAccount, ControlledChimeraActivity] finishCalled for ControlledActivity, resultCode=3, name=MinuteMaidActivity, controller=AddAccountController [CONTEXT 
+11-20 13:36:23.151 28561 28979 I Auth    : [AddAccountController] [AddAccount, AddAccountController] Checking for Desktop managed account warning [CONTEXT service_id=153 ]
+11-20 13:36:23.309 28561 28979 I Auth    : [CommonAuth,ManagedAccountUtil] Kids MDM flow:false
+11-20 13:36:24.935 26254 26267 I Auth    : (REDACTED) [GetToken] GetToken failed for app=%s with userRecoverable status: %s 
+11-20 13:36:24.978 26254 26267 W Auth    : [ChimeraGetToken] exception while trying to fetch auth tokens for app=com.google.android.gms, scope=oauth2:https://www.googleapis.com/auth/drive https://www.
+11-20 13:36:24.978 26254 26267 W Auth    : amcv: GetToken failed with status code and recovery intent: ThirdPartyDeviceManagementRequired
+11-20 13:36:24.978 26254 26267 W Auth    : 	at android.accounts.AbstractAccountAuthenticator$Transport.getAuthToken(AbstractAccountAuthenticator.java:245)
+11-20 13:36:24.978 26254 26267 W Auth    : 	at android.accounts.IAccountAuthenticator$Stub.onTransact(IAccountAuthenticator.java:284)
+11-20 13:36:24.978 26254 26267 W Auth    : [GmsAccountAuthenticatorImpl] error status while fetching token:ThirdPartyDeviceManagementRequired [CONTEXT service_id=343 ]
+11-20 13:36:24.989 26254 30130 W Auth    : [GaiaServicesFlagManager] Failed to convert account to GoogleAccount: MissingAccount. Returning false. [CONTEXT service_id=343 ]

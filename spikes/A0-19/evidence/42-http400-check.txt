@@ -1,0 +1,11 @@
+HTTP 400 check, read-only. Device clock UTC; local = UTC+2. Buffer read at device time 13:17:56.450.
+
+Parent's report: after pressing SIGN IN in YouTube, the screen shows "מקבל 400" (HTTP 400). The starting session is confirming which screen.
+
+Logcat results (whole buffer read):
+- Lines matching HTTP 400 / status code 400 / invalid_request / disallowed / BadRequest: 4, all unrelated: "SMS disallowed for this user" (MinuteMaid, 13:00:31) and three "SYNC_OP_STATE_INVALID: disallowed by settings/network" (SyncManager, 13:02). None is an HTTP status.
+- SELinux audit lines with "type=1400" (these are NOT HTTP 400; they are audit records): 204. Excluded.
+- YouTube "Could not register for notifications with InnerTube: Precondition check failed": 28 occurrences (13:16:31 onward).
+- Last auth-related events in the buffer: THIRD_PARTY_DEVICE_MANAGEMENT_REQUIRED token failures (GMS chromesync scope) at 13:17:56.
+
+Interpretation: no HTTP 400 is logged by the app or by GMS in this buffer. The 400 is either a server response that the app does not log, or it happened after the last line above. Not determined which. A new capture after the next SIGN IN press would settle the timing.
