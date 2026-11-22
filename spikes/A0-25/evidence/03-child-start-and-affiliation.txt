@@ -1,0 +1,5 @@
+== start-user 10
+Success: user started
+== status user10
+Broadcast completed: result=0, data="myUser=UserHandle{10} pkg=com.webfilter.spike.a25 isAdminActive=true isDeviceOwnerApp=false isProfileOwnerApp=true isAffiliatedUser=false"
+== affiliate user10

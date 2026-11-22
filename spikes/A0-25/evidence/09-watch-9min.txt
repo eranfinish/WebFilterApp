@@ -1,0 +1,16 @@
+# watch +9 min (utc 2026-11-21T23:26:33Z); counts only
+accounts:   Accounts: 0   Accounts: 1 
+owners:
+2 owners:
+User  0: admin=com.webfilter.spike.a25/.AdminReceiver,DeviceOwner,Affiliated
+User 10: admin=com.webfilter.spike.a25/.AdminReceiver,ProfileOwner,Affiliated
+THIRD_PARTY_DEVICE_MANAGEMENT_REQUIRED: 0
+SET_PROFILE_OWNER: 0
+BadAuthentication: 0
+Removed account: 1
+Account removed: 0
+Skip pausing module updates: 1
+No unsupervised accounts found: 1
+# note: the "Removed account" match above is "No new removed accounts" (StorageManagementAccount, 22:52:04 UTC), not a removal.
+# Exact count of "Removed account with reason": 0 (checked at 23:26 UTC). The account is still present in user 10 about 35 min after it was added.
+# Supervision status: still UNKNOWN until the parent answers.

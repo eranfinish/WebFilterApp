@@ -1,0 +1,70 @@
+A0-24 evidence 10. Emulator crash on the host, cold reboot, and state after boot.
+No names or emails in this file.
+
+== Crash (reported by the starting session; host event log, not the spike) ==
+Time: about 13:20 local host time (11:20 UTC), 2026-11-22.
+Windows APPCRASH: qemu-system-x86_64.exe, faulting module igxelpicd64.dll (Intel GPU driver),
+exception 0xc0000005. Host graphics fault, not an Android failure.
+The emulator process was lost; the device was not reachable until relaunch.
+
+== Relaunch ==
+Command: -avd Medium_Phone_API_37.0 -port 5580 -gpu swiftshader_indirect -no-snapshot
+Cold boot from userdata (no snapshot load). Boot took about 48 s.
+The original launch flags are in STATE.md (port 5580, 3072 MB, -crash-report-mode disabled,
+-no-metrics); the -gpu and -no-snapshot values above are as reported by the starting session.
+The relaunch was done by the starting session.
+
+== State after cold boot (read-only checks, 2026-11-22 11:24 GMT, uptime 2 min) ==
+adb devices: emulator-5580 device (emulator-5590 also attached, not touched)
+dpm list-owners:
+  User 0: com.webfilter.spike.a24/.AdminReceiver, DeviceOwner
+  User 10: com.google.android.gms.supervision ProfileOwnerReceiver, ProfileOwner
+settings global: private_dns_mode=hostname, private_dns_specifier=family.cloudflare-dns.com
+accounts (dumpsys account, counts only): one row with 0 accounts, one with 1 account
+  (same counts as before the crash: user 0 = 0, user 10 = 1)
+am get-current-user: 0
+disallow_config_private_dns: listed in dumpsys user (global and effective lines)
+THIRD_PARTY_DEVICE_MANAGEMENT_REQUIRED lines in the current logcat buffer: 0.
+  The cold boot cleared the logcat buffer, so this count covers only the time since boot.
+  The earlier 99 lines are in evidence/08 and evidence/09.
+
+== Second restart (about 11:38 UTC, 2026-11-22) ==
+Cause: the parent's manual switch to fl-kid hung on the user-switch loading screen
+(swiftshader rendering, high load). The parent asked for a restart.
+Action (by the starting session): adb emu kill, then relaunch with
+-gpu angle_indirect -no-snapshot (avoids the Intel OpenGL driver that crashed).
+boot_completed came after about 18 s.
+
+State re-checked read-only after this boot (11:39 GMT, uptime 1 min, sys.boot_completed=1):
+  private_dns_mode=hostname, private_dns_specifier=family.cloudflare-dns.com
+  dpm list-owners: user 0 = our DPC (DeviceOwner); user 10 = Family Link supervision (ProfileOwner)
+  accounts (counts): user 0 = 0, user 10 = 1
+  am get-current-user: 0
+  THIRD_PARTY_DEVICE_MANAGEMENT_REQUIRED since this boot: 0
+The parent is switching to fl-kid by hand. Parent checks 1-6 are still pending.
+
+== Third exit (about 12:12 UTC, 2026-11-22) ==
+Windows APPCRASH: qemu-system-x86_64.exe, faulting module libgfxstream_backend.dll, exception 0xc0000005,
+while running with -gpu angle_indirect. Host graphics crash again (not Android).
+Relaunch (by the starting session): -gpu swiftshader_indirect -no-snapshot -no-boot-anim
+(same mode as the tablet, stable since 00:21 per the starting session). Boot took about 15 s; about 90 s
+of waiting until load average < 8.
+
+State re-checked read-only after this boot (12:22 GMT, uptime 2 min, sys.boot_completed=1, load average 6.28):
+  private_dns_mode=hostname, private_dns_specifier=family.cloudflare-dns.com
+  dpm list-owners: user 0 = our DPC (DeviceOwner); user 10 = Family Link supervision (ProfileOwner)
+  accounts (counts): user 0 = 0, user 10 = 1
+  am get-current-user: 0
+  THIRD_PARTY_DEVICE_MANAGEMENT_REQUIRED since this boot: 0
+The parent switches to fl-kid by hand once the system settles.
+
+== Not done ==
+am switch-user 10 was not run from shell. The shell refuses it ("Shell does not have
+permission to access user 10"; Family Link restriction). The parent switches to fl-kid by hand.
+
+== Observations ==
+- Private DNS (hostname + family.cloudflare-dns.com) and the DO on user 0 survived the crash
+  and the cold boot. The DISALLOW_CONFIG_PRIVATE_DNS restriction is listed again after boot.
+- The Family Link PO on user 10 and the account count survived the cold boot.
+- Load average was about 43 in the first two minutes after boot; the device was still settling.
+  Re-check after the parent's session if it matters for any reading.

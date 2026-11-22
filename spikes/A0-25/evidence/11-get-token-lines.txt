@@ -1,0 +1,5 @@
+# getToken lines (sanitized, first 12)
+11-21 22:51:43.147 14197 21257 W Auth    : [RequestTokenManager] getToken() -> NETWORK_ERROR. App: com.google.android.gms, Service: oauth2:https://www.googleapis.com/auth/peopleapi.legacy.readwrite https://www.googleapis.com/auth/
+11-21 22:51:43.177 14197 21257 W Auth    : [GoogleAuthUtil] [GoogleAuthUtil] error status:NETWORK_ERROR with method:getTokenWithDetails
+# error-class counts among getToken lines
+      1 error

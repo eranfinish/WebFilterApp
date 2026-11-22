@@ -1,0 +1,39 @@
+﻿== DPC resolve (user 0) malware.testcategory.com
+Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a24/.CmdReceiver (has extras) }
+Broadcast completed: result=0, data="resolve malware.testcategory.com -> 0.0.0.0,::"
+== shell ping (u0, A0.22 style) malware.testcategory.com
+PING malware.testcategory.com (127.0.0.1) 56(84) bytes of data.
+64 bytes from localhost (127.0.0.1): icmp_seq=1 ttl=64 time=3.90 ms
+
+== DPC resolve (user 0) www.ynet.co.il
+Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a24/.CmdReceiver (has extras) }
+Broadcast completed: result=0, data="resolve www.ynet.co.il -> 23.221.30.50,2001:40a8:4400:298::30bc,2001:40a8:4400:281::30bc,2001:40a8:4400:2b5::30bc"
+== shell ping (u0, A0.22 style) www.ynet.co.il
+PING e12476.dscb.akamaiedge.net (23.221.30.50) 56(84) bytes of data.
+64 bytes from a23-221-30-50.deploy.static.akamaitechnologies.com (23.221.30.50): icmp_seq=1 ttl=255 time=14.6 ms
+
+== dumpsys user restrictions (DISALLOW_CONFIG_PRIVATE_DNS, u0)
+    Device policy restrictions:
+    Effective restrictions:
+    Device policy restrictions:
+    Effective restrictions:
+  Device policy global restrictions:
+== dumpsys connectivity (PrivateDns, after restriction)
+  NetworkAgentInfo{network{101}  handle{437197393933}  ni{MOBILE[LTE] CONNECTED extra: epc.tmobile.com} created=2026-11-21T20:05:24.077Z Score(Policies : TRANSPORT_PRIMARY&EVER_EVALUATED&EVER_VALIDATED&IS_VALIDATED ; KeepConnected : 0)  created 492636 firstValidated 502195 lastValidated 502195  lp{{InterfaceName: eth0 LinkAddresses: [ 10.0.2.15/24 ] DnsAddresses: [ /10.0.2.3 ] UsePrivateDns: true PrivateDnsServerName: family.cloudflare-dns.com ValidatedPrivateDnsAddresses: [1.0.0.3,1.1.1.3] 
+  NetworkAgentInfo{network{106}  handle{458672230413}  ni{WIFI CONNECTED extra: } created=2026-11-21T23:01:28.278Z Score(Policies : TRANSPORT_PRIMARY&EVER_EVALUATED&IS_UNMETERED&EVER_VALIDATED&IS_VALIDATED ; KeepConnected : 0)  created 7367583 firstValidated 7368766 lastValidated 7368766  lp{{InterfaceName: wlan0 LinkAddresses: [ fe80::8d23:1106:d715:74cf/64,10.0.2.17/24,fec0::e139:d8bf:69bc:f790/64,fec0::cb91:7015:1b3b:cf9b/64 ] DnsAddresses: [ /fec0::3,/10.0.2.3 ] UsePrivateDns: true PrivateDnsServerName: family.cloudflare-dns.com ValidatedPrivateDnsAddresses: [1.0.0.3,1.1.1.3] 
+== host-side resolver 1.1.1.3 (A0.22 comparison)
+nslookup : Non-authoritative answer:
+At line:9 char:66
++ ...  comparison)'; $o += (nslookup malware.testcategory.com 1.1.1.3 2>&1)
++                           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (Non-authoritative answer::String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+
+Server:  family.cloudflare-dns.com
+Address:  1.1.1.3
+
+Name:    malware.testcategory.com
+Addresses:  ::
+	  0.0.0.0
+

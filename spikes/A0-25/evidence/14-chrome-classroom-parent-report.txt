@@ -1,0 +1,11 @@
+Chrome on classroom.google.com, child user 10 (parent report, relayed by the starting session)
+
+Source: parent report, relayed through the starting session (Advisor Opus). Not observed by this session's logs.
+Result: PASSED.
+Time: 10:37 UTC (device clock). The relay says "emulator time"; the device clock matches UTC here (the raw logcat's last line at this check was 10:38:16 device time, and the file was written 12:38 Israel time, UTC+2).
+Observed by the parent: the address bar showed classroom.google.com/h/st, the Classroom home page in Hebrew with an account avatar, the empty "Classes" card with "Join class" and "Create class" buttons. No error and no sign-in prompt.
+Screenshot: taken by the parent and not saved here, because it shows the account avatar.
+Account identity: not recorded (no name or email in this file).
+
+Status of the other two parent checks at the time of writing: YouTube signed in (pending), Play Store with the account (pending).
+Note: a Classroom home page with no sign-in prompt shows the account is signed in to Chrome. It does not prove a Classroom API token was issued; the token evidence is in files 11 to 13.

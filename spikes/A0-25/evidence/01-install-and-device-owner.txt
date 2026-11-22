@@ -1,0 +1,12 @@
+== install -t
+Performing Streamed Install
+Success
+== set-device-owner
+Success: Device owner set to package com.webfilter.spike.a25/.AdminReceiver
+Active admin set to component com.webfilter.spike.a25/.AdminReceiver
+exit=0
+== list-owners
+1 owner:
+User  0: admin=com.webfilter.spike.a25/.AdminReceiver,DeviceOwner,Affiliated
+== accounts
+  Accounts: 0

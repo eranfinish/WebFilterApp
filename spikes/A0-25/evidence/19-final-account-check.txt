@@ -1,0 +1,39 @@
+Final account-presence check, child user 10 (read-only adb; device clock UTC; no account identity saved)
+
+Checked at 15:33:57 UTC (device clock). Logcat main buffer read with `logcat -d`; the buffer starts at 11-21 22:21:17, so it covers the account-add window (about 22:50 to 22:52 on 11-21).
+
+Account state
+- dumpsys account: user 0 = 0 accounts, user 10 = 1 account (unchanged from the earlier counts in files 07 to 13).
+- Users 0 and 10 both running.
+- Owners: device owner on user 0 and profile owner on user 10 are both still our admin component (dumpsys device_policy).
+
+Removal and refusal signals, whole buffer since 11-21 22:21
+- THIRD_PARTY_DEVICE_MANAGEMENT_REQUIRED: 0
+- SET_PROFILE_OWNER: 0
+- "Admin is already added": 0
+- BadAuthentication: 0
+- NeedPermission: 0
+- removeAccount / "Removed account": 0
+- GoogleAuthUtil error (other than NETWORK_ERROR): 0
+
+Signals with a time (for the record)
+- NETWORK_ERROR, 11-21 22:23:23 (AsyncOperation, another component, before the add).
+- NETWORK_ERROR, 11-21 22:51:43 (RequestTokenManager getToken, add flow). Transient; connectivity checks in file 12 succeeded afterwards.
+- GMS supervision lines around the add. The process owner was checked with `adb shell ps -A -o USER,PID,NAME`: pid 14197 is user 10's GMS (u10_a96), pid 18997 is user 0's GMS (u0_a96).
+  - 11-21 22:52:03 PauseModuleUpdatesIntentOperation, pid 14197 (user 10 GMS): "Skip pausing module updates because no supervised account was added to the device". This is the child's GMS, and it agrees with "not supervised" (the message is device-wide, so it is not proof on its own).
+  - 11-21 22:52:06 SelfRptRegSyncer, pid 18997 (user 0 GMS, which has 0 accounts): "No unsupervised accounts found, so self reporting is off". This line is about user 0, not the child account, so it says nothing about user 10.
+  - 11-22 00:56:14 UTC (buffer), SelfRptRegSyncer, pid 14197 (user 10 GMS): "Starting owner key synchronization for a non-LKL account". Not a classification line.
+  - GMS never logs an explicit "unsupervised" line for user 10. Nothing in user 10's log contradicts the parent's report, and one line (22:52:03) agrees with it. The "not supervised" status still rests mainly on the parent's report (file 07).
+- Also at 22:52:04: GMS "Family Hub: Disable the entry point" and a DeviceKeyStore warning ("Device key file not found"), both benign for this check.
+- SupervisedAccountIntentOperation: disabled at each run, 11-21 22:21 onward (benign).
+
+Since the watch started at 11:37 UTC (files 18 and 19)
+- No THIRD_PARTY, SET_PROFILE_OWNER, BadAuthentication, NeedPermission, removeAccount or NETWORK_ERROR lines between 11:37 and 15:33.
+
+Memory and process events (for the Play question, see file 17)
+- lowmemorykiller at 12:02:53 (partnersetup), 12:04:45 (googlequicksearchbox:search), 12:05:02 (com.android.vending:quick_launch, about 100 MB RSS freed). Reason in each: "device is not responding" (PSI monitor), so the emulator was under memory pressure.
+- Play quick_launch process died at 12:05:02 (after the lowmemorykiller kill).
+- No kill of the Play main process or of the account's GMS process in the window.
+
+Result
+- The account is present in user 10 from the add (about 22:51 UTC on 11-21) until the last check (15:33 UTC on 11-22), with no removal and no refusal signal in the buffer. GMS logs no token success in this image, so presence is shown by the account store, not by a token success line.

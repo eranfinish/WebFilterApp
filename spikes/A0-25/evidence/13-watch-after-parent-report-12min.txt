@@ -1,0 +1,17 @@
+# watch +12 min after parent's report (utc 2026-11-21T23:39:16Z); counts only
+accounts:   Accounts: 0   Accounts: 1 
+owners:
+2 owners:
+User  0: admin=com.webfilter.spike.a25/.AdminReceiver,DeviceOwner,Affiliated
+User 10: admin=com.webfilter.spike.a25/.AdminReceiver,ProfileOwner,Affiliated
+Removed account with reason: 0
+THIRD_PARTY_DEVICE_MANAGEMENT_REQUIRED: 0
+SET_PROFILE_OWNER: 0
+BadAuthentication: 0
+NeedPermission: 0
+NETWORK_ERROR: 7
+GetToken failed: 2
+# note: NETWORK_ERROR count 7 is cumulative. Lines: one from another component at 22:23 UTC, and five from the add flow at 22:51:43 UTC (one getToken NETWORK_ERROR, then GetToken/GoogleAuthUtil failures). No new network errors after 22:51:43.
+# connectivity check at 23:xx: device pings 8.8.8.8 and www.googleapis.com OK (evidence/12).
+# GMS does not log token success here (advisor note); absence of THIRD_PARTY/BadAuthentication is recorded, success is not inferred from logs.
+# Account present in user 10 since 22:51 UTC; no removal logged through 23:39 UTC. Parent's Chrome / YouTube / Play reports still pending.

@@ -1,0 +1,16 @@
+# account status, counts only (utc 2026-11-21T23:17:11Z)
+supervision_status: not supervised (parent's report, Hebrew "לא מפוקח"; GMS line "no supervised account was added" agrees)
+--- account counts per user
+User UserInfo{0:Owner:c13}:
+  Accounts: 0
+User UserInfo{10:a25-child:410}:
+  Accounts: 1
+--- owners
+2 owners:
+User  0: admin=com.webfilter.spike.a25/.AdminReceiver,DeviceOwner,Affiliated
+User 10: admin=com.webfilter.spike.a25/.AdminReceiver,ProfileOwner,Affiliated
+--- signal counts from logcat (no names)
+THIRD_PARTY_DEVICE_MANAGEMENT_REQUIRED: 0
+supervis* lines: 118
+SET_PROFILE_OWNER lines: 0
+Removed account lines: 1

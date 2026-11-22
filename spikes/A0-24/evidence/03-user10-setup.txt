@@ -1,0 +1,12 @@
+﻿== start-user 10
+Success: user started
+== screen_off_timeout (user 10)
+1800000
+== stylus_handwriting_enabled (user 10)
+0
+== logcat buffer 16M
+== switch-user 10
+== pm list users
+Users:
+	UserInfo{0:Owner:4c13} running
+	UserInfo{10:fl-kid:400} running

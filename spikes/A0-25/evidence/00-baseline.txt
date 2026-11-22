@@ -1,0 +1,28 @@
+# baseline (utc 2026-11-21T22:31:05Z)
+--- build
+12
+31
+google/sdk_gphone64_x86_64/emulator64_x86_64_arm64:12/SE1A.211212.001.B1/8023802:user/release-keys
+--- users
+Users:
+	UserInfo{0:Owner:c13} running
+--- owners
+no owners
+--- accounts
+  Accounts: 0
+--- provisioned
+1
+1
+--- versions
+com.google.android.gms     versionName=21.24.23 (190800-396046673)
+com.android.chrome     versionName=91.0.4472.114
+com.google.android.youtube     versionName=16.25.39
+com.android.vending     versionName=54.3.07-31 [0] [PR] 1022292552
+com.google.android.gsf     versionName=12
+--- user0 enabled packages
+package:com.google.android.youtube
+package:com.android.vending
+package:com.android.chrome
+package:com.google.android.gms
+package:com.google.android.gsf
+package:com.google.android.apps.youtube.music

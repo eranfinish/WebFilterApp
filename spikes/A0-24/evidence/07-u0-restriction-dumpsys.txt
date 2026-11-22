@@ -1,0 +1,71 @@
+﻿== current user
+10
+== restriction blocks (dumpsys user, -A 8 around global/effective)
+>   UserInfo{0:null:4c13} serialNo=0 isPrimary=true
+      Type: android.os.usertype.full.SYSTEM
+      Flags: 19475 (ADMIN|FULL|INITIALIZED|MAIN|PRIMARY|SYSTEM)
+      State: RUNNING_UNLOCKED
+      Created: <unknown>
+      Last logged in: +3h15m47s851ms ago
+      Last logged in fingerprint: 21a3fdc2e100d2212c26155d577b6cbe1c6cb19a
+      Start time: +2h17m25s637ms ago
+      Unlock time: +2h16m56s677ms ago
+>     Device policy restrictions:
+        none
+>     Effective restrictions:
+        no_add_private_profile
+        no_record_audio
+        no_add_managed_profile
+        disallow_config_private_dns
+        no_add_clone_profile
+      UserProperties:
+          mPropertiesPresent=0
+          mShowInLauncher=0
+>   UserInfo{10:fl-kid:410} serialNo=10 isPrimary=false
+      Type: android.os.usertype.full.SECONDARY
+      Flags: 1040 (FULL|INITIALIZED)
+      State: RUNNING_UNLOCKED
+      Created: +46m38s962ms ago
+      Last logged in: +45m13s509ms ago
+      Last logged in fingerprint: 21a3fdc2e100d2212c26155d577b6cbe1c6cb19a
+      Start time: +45m36s353ms ago
+      Unlock time: +45m18s401ms ago
+>     Device policy restrictions:
+        no_add_private_profile
+        disallow_config_default_apps
+        no_install_unknown_sources
+        no_config_location
+        no_add_clone_profile
+        no_remove_user
+        no_debugging_features
+        no_config_credentials
+>     Effective restrictions:
+        no_add_private_profile
+        disallow_config_default_apps
+        no_sms
+        no_install_unknown_sources
+        disallow_config_private_dns
+        no_config_location
+        no_add_clone_profile
+        no_remove_user
+>   Device policy global restrictions:
+      disallow_config_private_dns
+    Guest restrictions:
+      no_sms
+      no_config_wifi_shared
+      no_install_unknown_sources
+      no_config_credentials
+      no_outgoing_calls
+  
+== grep private dns restriction key
+      no_add_private_profile
+      no_add_private_profile
+      disallow_config_private_dns
+      no_add_private_profile
+      no_add_private_profile
+      disallow_config_private_dns
+    disallow_config_private_dns
+    android.os.usertype.profile.PRIVATE: 
+        mName: android.os.usertype.profile.PRIVATE
+    8 -> android.os.usertype.profile.PRIVATE
+    com.android.privatespace: 8 

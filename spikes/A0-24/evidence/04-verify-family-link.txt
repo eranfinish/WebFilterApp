@@ -1,0 +1,45 @@
+﻿== current user
+10
+== list-owners
+User 0: admin=com.webfilter.spike.a24/.AdminReceiver,DeviceOwner
+User 10: admin=com.google.android.gms.supervision/com.google.android.gms.kids.account.receiver.ProfileOwnerReceiver,ProfileOwner
+== pm list users
+Users:
+	UserInfo{0:Owner:4c13} running
+	UserInfo{10:fl-kid:410} running
+== account count per user (no names)
+User UserInfo{0:Owner:4c13}:
+  Accounts: 0
+User UserInfo{10:fl-kid:410}:
+  Accounts: 1
+== user 10 profile owner (dpm, no shell to user 10 expected to be blocked)
+    admin=ComponentInfo{com.webfilter.spike.a24/com.webfilter.spike.a24.AdminReceiver}
+  Profile Owner (User 10): 
+    admin=ComponentInfo{com.google.android.gms.supervision/com.google.android.gms.kids.account.receiver.ProfileOwnerReceiver}
+  Admin Services:
+  Enabled Device Admins (User -1, provisioningState: 0):
+  Enabled Device Admins (User 0, provisioningState: 3):
+    com.webfilter.spike.a24/.AdminReceiver:
+      testOnlyAdmin=true
+      mAdminCanGrantSensorsPermissions=true
+      DeviceAdminInfo:
+          name=com.webfilter.spike.a24.AdminReceiver
+          permission=android.permission.BIND_DEVICE_ADMIN
+  Enabled Device Admins (User 10, provisioningState: 0):
+    com.google.android.gms.supervision/com.google.android.gms.kids.account.receiver.ProfileOwnerReceiver:
+      testOnlyAdmin=false
+      mAdminCanGrantSensorsPermissions=false
+      DeviceAdminInfo:
+          name=com.google.android.gms.kids.account.receiver.ProfileOwnerReceiver
+          permission=android.permission.BIND_DEVICE_ADMIN
+        Per-admin Policy:
+        Per-admin Policy:
+        Per-admin Policy:
+        Per-admin Policy:
+      UserRestrictionPolicyKey userRestriction_no_grant_admin
+        Per-admin Policy:
+        Per-admin Policy:
+        Per-admin Policy:
+        Per-admin Policy:
+        Per-admin Policy:
+        Per-admin Policy:

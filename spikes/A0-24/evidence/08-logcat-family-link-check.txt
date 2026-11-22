@@ -1,0 +1,12 @@
+﻿== THIRD_PARTY_DEVICE_MANAGEMENT_REQUIRED line count (whole buffer)
+99
+== account removal lines (reason hidden by GMS)
+11-21 23:07:30.498 24531 30210 I StorageManagementAccoun: No new removed accounts
+== last 5 A24 lines
+11-21 23:17:22.291 20678 20678 I A24     : op=global-set result=OK setGlobalSetting(private_dns_specifier, family.cloudflare-dns.com) returned without exception
+11-21 23:17:22.419 20678 20678 I A24     : op=dns-status result=mode=PROVIDER_HOSTNAME host=family.cloudflare-dns.com
+11-21 23:17:22.656 20678 20678 I A24     : op=restrict-private-dns result=added DISALLOW_CONFIG_PRIVATE_DNS (caller user UserHandle{0})
+11-21 23:17:38.414 20678  1814 I A24     : op=resolve result=resolve malware.testcategory.com -> 0.0.0.0,::
+11-21 23:17:38.777 20678  1838 I A24     : op=resolve result=resolve www.ynet.co.il -> 23.221.30.50,2001:40a8:4400:298::30bc,2001:40a8:4400:281::30bc,2001:40a8:4400:2b5::30bc
+== supervision lines (count only)
+1574

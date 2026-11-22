@@ -1,0 +1,15 @@
+# watch +5 min after parent's report (utc 2026-11-21T23:31:55Z); counts only
+accounts:   Accounts: 0   Accounts: 1 
+owners:
+2 owners:
+User  0: admin=com.webfilter.spike.a25/.AdminReceiver,DeviceOwner,Affiliated
+User 10: admin=com.webfilter.spike.a25/.AdminReceiver,ProfileOwner,Affiliated
+Removed account with reason: 0
+THIRD_PARTY_DEVICE_MANAGEMENT_REQUIRED: 0
+SET_PROFILE_OWNER: 0
+BadAuthentication: 0
+NeedPermission: 0
+getToken: 33
+Skip pausing module updates: 1
+No unsupervised accounts found: 1
+Account is not supervised: 0

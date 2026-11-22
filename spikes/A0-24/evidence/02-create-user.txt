@@ -1,0 +1,6 @@
+﻿== pm create-user fl-kid
+Success: created user id 10
+== pm list users
+Users:
+	UserInfo{0:Owner:4c13} running
+	UserInfo{10:fl-kid:400}

@@ -1,0 +1,46 @@
+Play Store white screen, child user 10 (investigation, adb read-only; times UTC = device clock)
+
+Report from the parent (relayed by the starting session, not observed here):
+- YouTube opens in Chrome; signed-in status not yet known.
+- YouTube app shows 400: known artifact of the 2021 YouTube app on Tablet_A12; not evidence either way.
+- Play Store opens to a blank white screen (about 11:06 device clock).
+- Notification shade: silent "Installing apps" from Play, progress almost full and stuck (about 12 h), plus "Configure physical keyboard".
+
+Checks made (read-only adb; no screenshots, no account identity saved):
+
+1. Restrictions and policy in user 10
+   - dumpsys user: user 10 "Restrictions:", "Device policy local restrictions:" and "Effective restrictions:" are all empty.
+   - Device owner (user 0) and profile owner (user 10) are both still set to our admin component; the affiliation id is still present on both.
+   - Result: no DISALLOW_INSTALL_APPS and no other restriction that touches installs or Play is set by our DPC.
+
+2. Play package state
+   - com.android.vending in user 10: installed, not hidden, not suspended, not disabled, enabled=1 (dumpsys package).
+   - com.android.vending is not in pm list packages -d for user 10 (not disabled) and is installed in user 0 too.
+   - Result: Play is not hidden, suspended or disabled by our policy.
+
+3. Play launches in user 10 (ActivityTaskManager START lines)
+   - Launches of AssetBrowserActivity (launcher) at 10:58:53, 11:00:28, 11:02:34 and 11:05:08. The last one matches the parent's 11:06 white screen.
+   - The activity was resumed at the time of the check (dumpsys activity: AssetBrowserActivity, task on display in user 10).
+   - Finsky logged "Refreshing user settings" and locale checks after the 10:58:53 and 11:05:08 launches (the 11:00 and 11:02 launches were not checked line by line), and no error line.
+
+4. Errors and crashes
+   - No E/ or W/ line from Finsky, com.android.vending or GMS between 10:55 and 11:08 except the memory-related lines below.
+   - No FATAL EXCEPTION or am_crash for com.android.vending in the buffer. Older FATAL/ANR lines (11-21 22:35 to 22:47) are from before the account was added and belong to other components (GMS, our spike app, search).
+   - Memory trim at 11:06:31: Finsky processes received "Memory trim requested to level 80" (quick_launch, background) and level 5 (main, others). Chrome's sandboxed renderer services also died at the same moment (DeadObjectException while unbinding com.android.chrome/SandboxedProcessService0). The emulator had MemAvailable about 524 MB at 11:07.
+
+5. Stuck "Installing apps" notification in user 10
+   - Notification id 42864, channel maintenance-v2, progressIndeterminate=true (progress 0/0), so it is an indeterminate Play maintenance notification, not a download with a percentage.
+   - Finsky in user 10 has one scheduled job (JOB u10a103 9043, PhoneskyJobServiceMain, a deferred 1-1337 job with long constraints). It is not running, and it was not blocked by a restriction.
+   - The "Installing apps" label is what the parent sees; the logs show no install session in progress.
+
+6. Control (Play in user 0)
+   - Not done. There is no Play launch in user 0 in the log buffer, and I did not switch users or launch Play on user 0 so as not to disturb the child session. Open item.
+
+7. Account removal watch
+   - Account count: user 0 = 0, user 10 = 1 (still present at 11:08).
+   - Counts since 10:40 for THIRD_PARTY_DEVICE_MANAGEMENT, SET_PROFILE_OWNER, BadAuthentication, NeedPermission, removeAccount, "Removed account", AccountManagerService remove, NETWORK_ERROR: all 0.
+
+Interpretation (not a conclusion):
+- Nothing in the device logs shows our policy blocking Play: no restriction, no hiding, no suspension, no disable, and no error from Finsky.
+- The white screen is not explained by a logged error. The timing does coincide with a severe memory trim (level 80) on Finsky and Chrome processes on a memory-tight emulator, which is a candidate cause.
+- The account type cannot be separated from the emulator and from our policy without the control in user 0 (open item) and a Play launch with the same account in a control profile.

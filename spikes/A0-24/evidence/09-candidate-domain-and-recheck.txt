@@ -1,0 +1,43 @@
+A0-24 evidence 09. Candidate domain for parent check 2, and recheck after the 15-minute window.
+Device: emulator-5580, Android 17 (API 37). No names or emails in this file.
+
+== Device time (shell date, 2026-11-22) ==
+10:39:03 GMT (logcat timestamps are device-local, 11-21 for the last burst)
+
+== Owners (dpm list-owners) ==
+User 0: admin=com.webfilter.spike.a24/.AdminReceiver,DeviceOwner
+User 10: admin=com.google.android.gms.supervision/...ProfileOwnerReceiver,ProfileOwner
+
+== Accounts (dumpsys account, counts only) ==
+user 0 = 0 accounts, user 10 = 1 account (unchanged from evidence 04)
+
+== Refusal log (logcat -d, all tags) ==
+THIRD_PARTY_DEVICE_MANAGEMENT_REQUIRED lines: 99 (same count as evidence 08)
+last burst: 11-21 23:09:05.067 (device time)
+no new bursts since; about 11.5 hours passed before this check. The 15-minute window has elapsed.
+
+== Candidate domains for check 2 (resolver = family.cloudflare-dns.com, 1.1.1.3) ==
+DPC resolve, user 0 (am broadcast --user 0, CmdReceiver op=resolve):
+  malware.testcategory.com  -> 0.0.0.0,::
+  phishing.testcategory.com -> 0.0.0.0,::
+  (www.ynet.co.il previously -> 23.221.30.50)
+Host nslookup via 1.1.1.3 (Windows side):
+  malware.testcategory.com  -> 0.0.0.0 / ::
+  phishing.testcategory.com -> 0.0.0.0 / ::
+Shell ping (Android toybox, device side):
+  malware.testcategory.com  -> PING ... (127.0.0.1)
+  phishing.testcategory.com -> PING ... (127.0.0.1)
+  www.ynet.co.il            -> akamai edge 23.221.30.50
+  /system/etc/hosts and /etc/hosts contain no testcategory or ynet entries.
+  => The shell ping answer (127.0.0.1) does not match the DPC resolve or the host
+     resolver (0.0.0.0 / ::). It is unexplained (same split as A0.22). The shell ping
+     cannot be used to show the block on this image. The DPC resolve is the check.
+
+Decision: malware.testcategory.com stays the check-2 domain (already sent to the parent).
+phishing.testcategory.com is the fallback if Family Link's Chrome filter also catches
+malware.testcategory.com. Both are Cloudflare test names outside Google's category lists.
+
+== Extra observation (parent's earlier attempt, not check 2) ==
+The parent opened malware.google.com in Chrome (user 10). The page was Chrome's supervised-user
+interstitial ("Ask your parent"), which is Family Link's Chrome filter. This is not evidence about
+the DNS layer. Recorded only as an extra observation.

@@ -1,0 +1,56 @@
+A0-24 evidence 11. Parent's u10 results (reported by the starting session) and the DNS check for ynet from u0.
+No names, emails or screenshots in this file.
+
+== Parent results (reported, device clock about 12:04; not verified by this session) ==
+(1) www.ynet.co.il: BLOCKED for the parent. Unexpected. The page type (connection error or Family Link "Ask your parent") is not yet known; the starting session is asking.
+(2) malware: blocked. The parent wrote "maleware" in chat; the exact name typed and the page shown are being asked.
+(3) Settings -> Private DNS locked: not reported yet.
+(4) Chrome "Use secure DNS" state: not reported yet.
+(5) classroom.google.com: opens (reported).
+(6) YouTube: signed in, in the web (m.youtube.com) and in the app (reported; two screenshots, not saved here). The app shows no 400 on API 37 (reported).
+
+== DNS check for ynet from the device (this session, read-only) ==
+DPC status (u0): mode=PROVIDER_HOSTNAME host=family.cloudflare-dns.com
+DPC resolve (u0, CmdReceiver op=resolve):
+  www.ynet.co.il -> 23.221.30.50, plus IPv6 addresses 2001:40a8:4400:...
+  ynet.co.il     -> 2.20.34.50
+Host nslookup via family.cloudflare-dns.com (1.1.1.3):
+  www.ynet.co.il -> CNAME www.ynet.co.il-v1.edgekey.net -> e12476.dscb.akamaiedge.net
+                    -> 23.221.30.50 and IPv6 (matches the DPC)
+  ynet.co.il     -> 2.20.34.50 (matches the DPC)
+Shell ping www.ynet.co.il -> 23.221.30.50 (akamai edge)
+
+Result: Cloudflare Family resolves www.ynet.co.il and ynet.co.il normally. Neither name is blocked
+at the DNS layer. Under the DNS layer, a Family Link block of ynet (for example "only approved sites"
+or explicit-site blocking in Chrome) would explain the parent's result (1). This has not been
+confirmed by the parent's page type.
+
+Note: A0.22 on API 31 under the same DNS opened ynet (reference, not re-run here).
+
+== Page types (reported by the starting session from parent screenshots, fl-kid, Chrome) ==
+- www.ynet.co.il at 12:09 device clock: Family Link "Ask your parent" interstitial.
+- "malware" check at 12:11: landed on malware.google.com (probably an omnibox autocomplete), also "Ask your parent".
+Both are Family Link Chrome-filter blocks, not DNS results. The filter is likely in "only approved sites"
+mode (ynet is blocked too). Chrome asks Family Link before DNS, so these checks cannot exercise the DNS layer.
+Earlier "malware.google.com" attempt (see evidence 09) is the same observation.
+
+== How to exercise the DNS layer for user 10 ==
+- Our DPC runs only on user 0. From shell, `am broadcast --user 0` shows the device-wide resolver (Private DNS
+  is device-wide): this is the check used here.
+- A check from user 10 itself needs our APK installed for user 10 (not done; it changes the child's profile, so
+  it needs the starting session's approval). Not needed for the device-wide result.
+- Chrome cannot be used for the DNS check while Family Link's filter blocks first.
+- Proposed clean check 2 (starting session): the parent adds malware.testcategory.com as an approved site in
+  Family Link, then types the exact address in fl-kid. A connection error (not the interstitial) would be the DNS result.
+
+== Open ==
+- Page type for (1) and the exact name for (2): pending from the parent.
+- (3) and (4): answered after this file was first written (see the update below).
+
+== Update (12:49 device clock, parent screenshot, reported by the starting session) ==
+(4) Chrome > Settings > Privacy and security > "Use secure DNS": OFF and greyed out. Subtitle: "This setting is
+disabled on managed browsers". "Use your current service provider" selected (greyed); "Choose another provider" greyed.
+Reading: Chrome treats itself as managed in fl-kid (no Chrome policy was set by this spike). Likely source:
+supervision (Family Link). Not proven. Lookups go through the system resolver (Private DNS), which matches check 2.
+Screenshot not saved.
+Check 5 sign-in: still not reported.

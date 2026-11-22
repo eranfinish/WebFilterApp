@@ -1,0 +1,28 @@
+﻿== getprop
+17
+37
+google/sdk_gphone64_x86_64/emu64xa:17/CE2A.260420.051.A2/16418371:user/release-keys
+sdk_gphone64_x86_64
+
+== list-owners
+== pm list users
+Users:
+	UserInfo{0:Owner:4c13} running
+== accounts count (no names)
+  Accounts: 0
+== device_provisioned/user_setup
+1
+1
+null
+null
+== gms/chrome versions
+    versionName=26.45.31 (260800-1020418964)
+adb.exe : Failed to write while dumping service package: Broken pipe
+At line:8 char:44
++ ... '; $out += (& $adb -s $s shell 'dumpsys package com.google.android.gm ...
++                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (Failed to write...ge: Broken pipe:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+    versionName=145.0.7632.218
+Failed to write while dumping service package: Broken pipe

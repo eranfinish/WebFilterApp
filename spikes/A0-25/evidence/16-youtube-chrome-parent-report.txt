@@ -1,0 +1,6 @@
+YouTube in Chrome, child user 10 (parent report, relayed by the starting session)
+
+Source: parent report, relayed through the starting session (Advisor Opus). Not observed by this session's logs.
+Result: PASSED (signed in).
+Time: not stated in the relay; recorded at about 11:16 UTC (device clock), the time of the relay.
+Screenshot: not saved here. Account identity: not recorded.

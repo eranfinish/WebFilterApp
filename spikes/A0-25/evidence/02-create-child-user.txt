@@ -1,0 +1,14 @@
+== status user0 (utc 2026-11-21T22:34:34Z)
+Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a25/.CmdReceiver (has extras) }
+Broadcast completed: result=0, data="myUser=UserHandle{0} pkg=com.webfilter.spike.a25 isAdminActive=true isDeviceOwnerApp=true isProfileOwnerApp=false isAffiliatedUser=true"
+== create
+Broadcasting: Intent { flg=0x400000 cmp=com.webfilter.spike.a25/.CmdReceiver (has extras) }
+Broadcast completed: result=0
+== users
+Users:
+	UserInfo{0:Owner:c13} running
+	UserInfo{10:a25-child:400}
+== owners
+2 owners:
+User  0: admin=com.webfilter.spike.a25/.AdminReceiver,DeviceOwner,Affiliated
+User 10: admin=com.webfilter.spike.a25/.AdminReceiver,ProfileOwner

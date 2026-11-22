@@ -1,0 +1,52 @@
+# log lines around the account add, user 10 (sanitized; no names). Supervision status still UNKNOWN.
+--- token/auth signals, counts
+THIRD_PARTY_DEVICE_MANAGEMENT_REQUIRED: 0
+BadAuthentication: 0
+NeedPermission: 0
+GLSUser: 211
+getToken: 33
+SupervisedAccountIntentOperation: 15
+Skip pausing module updates: 1
+No unsupervised accounts found: 1
+self reporting: 1
+--- timed lines (utc from device clock, 22:50-22:53)
+11-21 22:50:15.756 14197 14286 I Auth    : [GmsAccountAuthenticatorImpl] Prewarming auth UI process upon addAccount call [CONTEXT service_id=343 ]
+11-21 22:50:17.240 21641 21679 I AuthWarmUpUi: (REDACTED) Pre-warming UI process start delay: %d ms
+11-21 22:50:17.240 21641 21679 I AuthWarmUpUi: Warming up auth_account UI process and WebView native library [CONTEXT service_id=153 ]
+11-21 22:50:17.512   540   818 I ActivityTaskManager: START u10 {act=com.google.android.accounts.AccountIntro cat=[FLAG_ACTIVITY_FORWARD_RESULT,defaultPendingIntent,categoryhack:sessionid=467e8389-d17a-4b84-8181-d4978370
+11-21 22:50:18.981 21641 21641 I AuthWarmUpUi: (REDACTED) Successfully prewarmed WebView native library in %d ms
+11-21 22:50:19.210 21641 21641 I Auth    : [CommonAuth,ManagedAccountUtil] No activities matched action com.google.android.gms.auth.addaccount.DM_PRE_ADD_ACCOUNT
+11-21 22:50:19.216 21641 21641 I Auth    : (REDACTED) [IntentResolveHelper] Found activity to handle action %s
+11-21 22:50:22.295   540  1328 I ActivityTaskManager: START u10 {act=com.google.android.gms.auth.addaccount.PRE_ADD_ACCOUNT cmp=com.google.android.gms/.auth.uiflows.addaccount.PreAddAccountActivity (has extras)} from uid
+11-21 22:50:22.945 21641 21641 I SetupLibrary: [GlifLayout] Using setup design braz to init for PreAddAccountActivity
+11-21 22:50:23.161 21641 21641 I Auth    : [PreAddAccountActivity] PreAddAccountChimeraActivity.onStart() called. [CONTEXT service_id=343 ]
+11-21 22:50:23.204 21641 21641 W Auth    : [AddAccount, PreAddAccountActivity] Failed to check resources [CONTEXT service_id=343 ]
+11-21 22:50:23.204 21641 21641 W Auth    : android.content.res.Resources$NotFoundException: Resource ID #0x0
+11-21 22:50:23.204 21641 21641 W Auth    : 	at android.content.res.ResourcesImpl.getValue(ResourcesImpl.java:225)
+11-21 22:50:23.204 21641 21641 W Auth    : 	at android.content.res.Resources.getBoolean(Resources.java:1166)
+11-21 22:50:23.204 21641 21641 W Auth    : 	at com.google.android.gms.auth.uiflows.addaccount.PreAddAccountChimeraActivity.H(:<email>@26.45.31 (190800-1020418964):34)
+11-21 22:50:23.204 21641 21641 W Auth    : 	at com.google.android.gms.auth.uiflows.addaccount.PreAddAccountChimeraActivity.onStart(:<email>@26.45.31 (190800-1020418964):17)
+11-21 22:50:23.204 21641 21641 W Auth    : 	at agaa.public_onStart(:<email>@26.45.31 (190800-1020418964):1)
+11-21 22:50:23.204 21641 21641 W Auth    : 	at agab.onStart(:<email>@26.45.31 (190800-1020418964):5)
+11-21 22:50:23.204 21641 21641 W Auth    : 	at bkqs.onStart(:<email>@26.45.31 (190800-1020418964):16)
+11-21 22:50:23.204 21641 21641 W Auth    : 	at android.app.Instrumentation.callActivityOnStart(Instrumentation.java:1455)
+11-21 22:50:23.204 21641 21641 W Auth    : 	at android.app.Activity.performStart(Activity.java:8076)
+11-21 22:50:23.204 21641 21641 W Auth    : 	at android.app.ActivityThread.handleStartActivity(ActivityThread.java:3660)
+11-21 22:50:23.204 21641 21641 W Auth    : 	at android.app.servertransaction.TransactionExecutor.performLifecycleSequence(TransactionExecutor.java:221)
+11-21 22:50:23.204 21641 21641 W Auth    : 	at android.app.servertransaction.TransactionExecutor.cycleToPath(TransactionExecutor.java:201)
+11-21 22:50:23.204 21641 21641 W Auth    : 	at android.app.servertransaction.TransactionExecutor.executeLifecycleState(TransactionExecutor.java:173)
+11-21 22:50:23.204 21641 21641 W Auth    : 	at android.app.servertransaction.TransactionExecutor.execute(TransactionExecutor.java:97)
+11-21 22:50:23.204 21641 21641 W Auth    : 	at android.app.ActivityThread$H.handleMessage(ActivityThread.java:2210)
+11-21 22:50:23.204 21641 21641 W Auth    : 	at android.os.Handler.dispatchMessage(Handler.java:106)
+11-21 22:50:23.204 21641 21641 W Auth    : 	at android.os.Looper.loopOnce(Looper.java:201)
+11-21 22:50:23.204 21641 21641 W Auth    : 	at android.os.Looper.loop(Looper.java:288)
+11-21 22:50:23.204 21641 21641 W Auth    : 	at android.app.ActivityThread.main(ActivityThread.java:7839)
+11-21 22:50:23.204 21641 21641 W Auth    : 	at java.lang.reflect.Method.invoke(Native Method)
+11-21 22:50:23.204 21641 21641 W Auth    : 	at com.android.internal.os.RuntimeInit$MethodAndArgsCaller.run(RuntimeInit.java:548)
+11-21 22:50:23.204 21641 21641 W Auth    : 	at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:1003)
+11-21 22:50:23.207 21641 21641 W Auth    : [PreAddAccountState] setPhenotypeSync done [CONTEXT service_id=343 ]
+11-21 22:50:23.209 21641 21641 W Auth    : [PreAddAccountState] setKeyAttestationCheckFailed done with result=false [CONTEXT service_id=343 ]
+11-21 22:50:23.214 21641 21670 I Auth    : [FrpSnapshotHelper] Running getFrpSnapshot [CONTEXT service_id=341 ]
+11-21 22:50:23.576 21641 21641 I Auth    : (REDACTED) [PreAddAccountActivity] setPsEducationRequired=%s received from ViewModel.
+11-21 22:50:23.576 21641 21641 W Auth    : [PreAddAccountState] setPsEducationRequired done with result=false [CONTEXT service_id=343 ]
+11-21 22:50:23.580 21641 21641 I Auth    : (REDACTED) [PreAddAccountActivity] Checkin event=%s received from ViewModel.

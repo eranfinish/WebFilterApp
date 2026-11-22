@@ -1,0 +1,31 @@
+Play Store splash, child user 10, launch at 11:15:21 UTC (device clock). Parent report: stuck on the Play splash (logo on white, status and nav bars only), about 11:16. Read-only adb; no screenshots, no account identity.
+
+Timeline (device clock):
+- 11:14:01 to 11:14:06: the earlier Play activity is paused, stopped and removed from recents (the parent closed Chrome and Play).
+- 11:14:10 to 11:14:13: Chrome, GSF and the WebView sandbox start again.
+- 11:15:19: GMS Auth logs "returned 1 accounts" and GoogleOwnersProvider "returned 1 accounts" (the account is visible to GMS in user 10).
+- 11:15:21.241: Play AssetBrowserActivity created (wm_create_activity, new process 10446 side).
+- 11:15:21.352: performCreate. Finsky logs refreshing user settings, "Set up MAUI", locale checks, and job rescheduling. Nothing after that from Finsky in the window.
+- 11:15:31.258: "Launch timeout has expired, giving up wake lock!" (ActivityTaskManager). No "Displayed com.android.vending" line, no "Fully drawn" line.
+- 11:15:31.282 to 11:15:31.306: the googlequicksearchbox search process and the WebView sandbox process are killed with reason "remove task" (recents removal), not a memory kill.
+- 11:16:40: partnersetup and gservices are killed as empty after 1825 s (routine).
+
+What is NOT in the logs for this launch (searched 11:14 to 11:18):
+- No getToken, NETWORK_ERROR, timeout, DroidGuard, checkin, or auth error line from Finsky or GMS.
+- No E/ or W/ line from Finsky, Vending or GMS other than "Null bundle, which breaks event chain" (benign logging line).
+- No am_kill, am_low_memory or lowmemorykiller event for com.android.vending.
+- No "Memory trim requested" line in this window (the level-80 trims were at 11:06:31).
+
+Memory and network at 11:18:
+- MemAvailable 599 MB (279 MB free), up from about 524 MB at 11:07.
+- ping 8.8.8.8 and ping play.googleapis.com: 0% loss, about 11 to 16 ms.
+
+Interpretation (what the logs can and cannot show):
+- The activity starts and the Finsky process runs its startup, so Play is not blocked by a policy or package state (see evidence 15).
+- The splash does not finish within the 10 s launch window, and Finsky logs nothing after MAUI setup, so the wait is silent. The logs do not show a token request or a token result for user 10 in this image (GMS logs no token success here, as noted in evidence 13), so this session cannot confirm or rule out a token wait.
+- Memory is not starving this launch (no kill, no trim, about 600 MB available). Network reachability is fine from the device.
+- The remaining candidates are: a silent wait for an account token or Play server response inside Finsky, or a rendering or WebView fault in the splash. Neither can be separated from the logs alone.
+
+Control that does not switch the foreground user (proposed, for the parent to run):
+- In Chrome in user 10 (already used), open https://play.google.com/store with the same account already signed in. If the web store loads with the account, the account, token path and network work for Google web sign-in, which points at the Play app itself. If it also hangs or shows a sign-in error, the account or network path is the suspect.
+- Record only what the page shows: loaded or not, and any error text. No credentials are entered.

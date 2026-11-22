@@ -1,0 +1,14 @@
+== switch to user 10 (utc 2026-11-21T22:48:09Z)
+== current user
+10
+  mCurrentFocus=Window{4bbd28b u0 NotificationShade}
+== owners
+2 owners:
+User  0: admin=com.webfilter.spike.a25/.AdminReceiver,DeviceOwner,Affiliated
+User 10: admin=com.webfilter.spike.a25/.AdminReceiver,ProfileOwner,Affiliated
+Users:
+	UserInfo{0:Owner:c13} running
+	UserInfo{10:a25-child:410} running
+== accounts (counts only)
+  Accounts: 0
+  Accounts: 0

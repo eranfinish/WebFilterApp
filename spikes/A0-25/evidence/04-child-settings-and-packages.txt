@@ -1,0 +1,23 @@
+# child user 10 (utc 2026-11-21T22:47:58Z)
+--- settings before
+2147483647
+null
+--- set
+1800000
+0
+--- packages user10 (chrome/yt/play/gms/gsf)
+com.android.chrome: package:com.android.chrome
+com.google.android.youtube: package:com.google.android.youtube
+com.android.vending: package:com.android.vending
+com.google.android.gms: package:com.google.android.gms
+com.google.android.gsf: package:com.google.android.gsf
+--- user10 enabled-state
+    User 0: ceDataInode=123182 installed=true hidden=false suspended=false distractionFlags=0 stopped=false notLaunched=false enabled=0 instant=false virtual=false
+    User 10: ceDataInode=483632 installed=true hidden=false suspended=false distractionFlags=0 stopped=false notLaunched=false enabled=0 instant=false virtual=false
+    User 0: ceDataInode=0 installed=true hidden=false suspended=false distractionFlags=0 stopped=false notLaunched=false enabled=0 instant=false virtual=false
+    User 10: ceDataInode=0 installed=true hidden=false suspended=false distractionFlags=0 stopped=false notLaunched=false enabled=0 instant=false virtual=false
+--- accounts user10
+User UserInfo{0:Owner:c13}:
+  Accounts: 0
+User UserInfo{10:a25-child:410}:
+  Accounts: 0

@@ -1,0 +1,24 @@
+Web Play control and account watch, child user 10 (times UTC = device clock)
+
+1. Web Play control (parent report, relayed by the starting session; not observed here)
+   - play.google.com/store in Chrome, child user 10: LOADS (parent report, about 11:36 UTC).
+   - Sign-in state: NOT YET KNOWN. The parent has not said whether the page is signed in. Pending relay.
+   - Meaning: on its own this points away from a network fault and toward the Play app. No conclusion about the account until the sign-in answer is in.
+   - No screenshot saved. No account identity saved.
+
+2. Account and owner state at 11:37:46
+   - Accounts: user 0 = 0, user 10 = 1.
+   - Users 0 and 10 both running. Owners not changed (see evidence 15 and 17 for the owner check).
+
+3. Removal and auth signal watch, 11:30 to 11:37 (device log, whole buffer read at 11:37)
+   - THIRD_PARTY_DEVICE_MANAGEMENT 0, SET_PROFILE_OWNER 0, BadAuthentication 0, NeedPermission 0, removeAccount 0, "Removed account" 0, NETWORK_ERROR 0, am_kill 0, lowmemorykiller 0, "Memory trim" 0 (counted in 11:30 onward lines).
+
+4. Other error lines in 11:30 to 11:37 (not decisive)
+   - 11:32:50 and 11:33:00: InputManager "disposed without being removed" for the Play splash and AssetBrowserActivity windows (a side effect of the relaunches, benign by itself).
+   - 11:33:03: GMS People "Failed to load OwnerAvatar from MDI" (BasePeopleOperation, stack ending in an obfuscated "hexa" cause). This is an avatar fetch for the account owner in GMS, not a Play error. It shows GMS could not load the account avatar at that moment. Not proof of a token failure; the cause is hidden by GMS obfuscation.
+   - 11:32:59 and 11:33:03: TaskPersister "File error accessing recents directory (directory doesn't exist?)". Expected side effect of the recents clearing; not checked further.
+
+Open items:
+- The sign-in answer for the web Play page (to decide whether the account is signed in to Google in Chrome).
+- Whether the GMS OwnerAvatar failure repeats. If it does, check the token path more closely.
+- Account removal watch continues; last checked 11:37:46 (count 1).
